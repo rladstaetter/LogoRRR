@@ -1,0 +1,87 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>net.ladstatt.logboard</groupId>
+        <artifactId>pom</artifactId>
+        <version>2020.3.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>binary</artifactId>
+
+    <name>net.ladstatt.logboard.binary</name>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <main.class>net.ladstatt.logboard.LogboardBootstrapper</main.class>
+        <graalvm.home>/Users/lad/.sdkman/candidates/java/20.2.0.r11-grl</graalvm.home>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${openjfx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${openjfx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.ladstatt.logboard</groupId>
+            <artifactId>jfx</artifactId>
+            <classifier>shaded</classifier>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>11</release>
+                    <source>9</source>
+                    <target>9</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.gluonhq</groupId>
+                <artifactId>client-maven-plugin</artifactId>
+                <version>${client.plugin.version}</version>
+                <executions>
+                    <!--
+                    <execution>
+                        <id>execute-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    -->
+                    <execution>
+                        <id>execute-compile-and-link</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <target>host</target>
+                    <mainClass>${main.class}</mainClass>
+                    <verbose>true</verbose>
+                    <graalvmHome>${graalvm.home}</graalvmHome>
+                    <reflectionList>
+                        <list>net.ladstatt.logboard.LogboardController</list>
+                    </reflectionList>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+

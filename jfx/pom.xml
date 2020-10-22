@@ -1,0 +1,145 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>net.ladstatt.logboard</groupId>
+        <artifactId>pom</artifactId>
+        <version>2020.3.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>jfx</artifactId>
+
+    <name>net.ladstatt.logboard.jfx</name>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <scala.major.version>2.13</scala.major.version>
+        <scala.version>${scala.major.version}.3</scala.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${openjfx.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${openjfx.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <executions>
+                    <execution>
+                        <id>enforce-jdk</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.6.2</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>11</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>4.4.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaVersion>${scala.version}</scalaVersion>
+                    <args>
+                        <arg>-deprecation</arg>
+                        <arg>-encoding</arg>
+                        <arg>utf-8</arg>
+                        <arg>-explaintypes</arg>
+                        <arg>-feature</arg>
+                        <arg>-language:existentials</arg>
+                        <arg>-language:experimental.macros</arg>
+                        <arg>-language:higherKinds</arg>
+                        <arg>-language:implicitConversions</arg>
+                        <arg>-unchecked</arg>
+                        <arg>-Xcheckinit</arg>
+                        <arg>-Xlint:adapted-args</arg>
+                        <arg>-Xlint:constant</arg>
+                        <arg>-Xlint:delayedinit-select</arg>
+                        <arg>-Xlint:doc-detached</arg>
+                        <arg>-Xlint:inaccessible</arg>
+                        <arg>-Xlint:infer-any</arg>
+                        <arg>-Xlint:missing-interpolator</arg>
+                        <arg>-Xlint:nullary-override</arg>
+                        <arg>-Xlint:nullary-unit</arg>
+                        <arg>-Xlint:option-implicit</arg>
+                        <arg>-Xlint:package-object-classes</arg>
+                        <arg>-Xlint:poly-implicit-overload</arg>
+                        <arg>-Xlint:private-shadow</arg>
+                        <arg>-Xlint:stars-align</arg>
+                        <arg>-Xlint:type-parameter-shadow</arg>
+
+                        <arg>-Ywarn-dead-code</arg>
+                        <arg>-Ywarn-extra-implicit</arg>
+                        <arg>-Ywarn-numeric-widen</arg>
+                        <arg>-Ywarn-unused:implicits</arg>
+                        <arg>-Ywarn-unused:imports</arg>
+                        <arg>-Ywarn-unused:locals</arg>
+                        <arg>-Ywarn-unused:params</arg>
+                        <arg>-Ywarn-unused:patvars</arg>
+                        <arg>-Ywarn-unused:privates</arg>
+                        <arg>-Ywarn-value-discard</arg>
+                        <arg>-Yrangepos</arg>
+                        <!-- <arg>-Xfatal-warnings</arg> -->
+                        <!-- arg>-P:semanticdb:synthetics:on</arg -->
+                    </args>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <configuration>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                    <shadedClassifierName>shaded</shadedClassifierName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+

@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.ladstatt.logboard</groupId>
+    <artifactId>pom</artifactId>
+    <version>2020.3.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>nxs.ladstatt.logboard</name>
+
+    <properties>
+        <revision>2020.3</revision>
+        <changelist>-SNAPSHOT</changelist>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <openjfx.version>16-ea+2</openjfx.version>
+        <client.plugin.version>0.1.33</client.plugin.version>
+        <graalvm.home>/Users/lad/.sdkman/candidates/java/20.2.0.r11-grl</graalvm.home>
+    </properties>
+
+    <modules>
+        <module>jfx</module>
+        <module>binary</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <executions>
+                    <execution>
+                        <id>enforce-jdk</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.6.2</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>11</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+
