@@ -14,7 +14,6 @@
 
     <properties>
         <main.class>net.ladstatt.logboard.LogboardBootstrapper</main.class>
-        <graalvm.home>/Users/lad/.sdkman/candidates/java/20.2.0.r11-grl</graalvm.home>
     </properties>
 
     <dependencies>
