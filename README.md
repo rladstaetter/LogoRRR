@@ -6,5 +6,3 @@ For example, ERROR events are visualized as a red circle, TRACE events as grey c
 
 This project serves as a vehicle to test and learn about various aspects of JavaFX GraalVM compilation.
 
-- drag and drop s
-- 
