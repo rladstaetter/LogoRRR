@@ -1,67 +1,57 @@
 package net.ladstatt.logboard
 
 import java.net.URL
+import java.nio.file.{Files, Path}
 import java.util.ResourceBundle
 
-import javafx.animation.AnimationTimer
 import javafx.beans.property.SimpleObjectProperty
 import javafx.fxml.{FXML, Initializable}
 import javafx.scene.control.Tooltip
+import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.FlowPane
-import javafx.scene.paint.Color
-import javafx.scene.shape.Circle
-import javafx.util.Duration
 
+import scala.jdk.CollectionConverters._
 
-object ShapeColors {
-  val seq = Seq(Color.RED, Color.YELLOW, Color.GRAY, Color.GREEN)
-}
 
 class LogboardController extends Initializable {
 
-  val logEntries = new SimpleObjectProperty[Vector[String]]()
-
-  def setLogEntries(entries: Vector[String]): Unit = logEntries.set(entries)
-
-  def getLogEntries(): Vector[String] = logEntries.get()
+  val logEntries = new SimpleObjectProperty[Seq[LogEntry]]()
 
   @FXML var flowPane: FlowPane = _
-  var currIndex: Int = 0
 
-  def deduceColor(entry: String): Color = {
-    if (entry.contains("SEVERE")) {
-      Color.RED
-    } else if (entry.contains("WARNING")) {
-      Color.YELLOW
-    } else if (entry.contains("FINEST")) {
-      Color.GREY
-    } else Color.GREEN
+
+  def clearLogEntries(): Unit = {
+    Option(logEntries.get()) match {
+      case Some(entries) =>
+        for (e <- entries) {
+          e.someTooltip.foreach(t => Tooltip.uninstall(flowPane, t))
+        }
+      case None =>
+    }
+    flowPane.getChildren.clear()
   }
 
-  val animation = new AnimationTimer() {
+  def setLogEntries(entries: Seq[LogEntry]): Unit = {
+    logEntries.set(entries)
+    flowPane.getChildren.addAll(logEntries.get.map(_.rectangle): _*)
+  }
 
-    override def handle(l: Long): Unit = {
-      if (currIndex < getLogEntries.size) {
-        val entry = getLogEntries()(currIndex)
-        println(entry)
-        val color = deduceColor(entry)
-        val r = new Circle(3, color)
-        val tooltip = new Tooltip(entry)
-        tooltip.setShowDelay(new Duration(100))
-        Tooltip.install(r, tooltip)
-        if (flowPane.getChildren.size > 1000) {
-          flowPane.getChildren.clear()
-        }
-        flowPane.getChildren.add(r)
-        currIndex = currIndex + 1
-      } else {
-        stop()
-      }
+  @FXML
+  def handleDragOver(event: DragEvent): Unit = {
+    if (event.getDragboard.hasFiles) {
+      event.acceptTransferModes(TransferMode.ANY: _*)
     }
   }
 
-  override def initialize(url: URL, resourceBundle: ResourceBundle): Unit = {
-    animation.start()
+  @FXML
+  def handleDrop(event: DragEvent): Unit = {
+    val logFile: Path = event.getDragboard.getFiles.get(0).toPath
+    if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
+      clearLogEntries()
+      setLogEntries(Files.readAllLines(logFile).asScala.map(e => LogEntry(e)).toSeq)
+    }
   }
+
+  override def initialize(url: URL, resourceBundle: ResourceBundle): Unit = {}
 
 }

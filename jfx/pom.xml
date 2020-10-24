@@ -8,7 +8,6 @@
     </parent>
 
     <artifactId>jfx</artifactId>
-
     <name>net.ladstatt.logboard.jfx</name>
 
     <packaging>jar</packaging>
@@ -54,48 +53,6 @@
                 </executions>
                 <configuration>
                     <scalaVersion>${scala.version}</scalaVersion>
-                    <args>
-                        <arg>-deprecation</arg>
-                        <arg>-encoding</arg>
-                        <arg>utf-8</arg>
-                        <arg>-explaintypes</arg>
-                        <arg>-feature</arg>
-                        <arg>-language:existentials</arg>
-                        <arg>-language:experimental.macros</arg>
-                        <arg>-language:higherKinds</arg>
-                        <arg>-language:implicitConversions</arg>
-                        <arg>-unchecked</arg>
-                        <arg>-Xcheckinit</arg>
-                        <arg>-Xlint:adapted-args</arg>
-                        <arg>-Xlint:constant</arg>
-                        <arg>-Xlint:delayedinit-select</arg>
-                        <arg>-Xlint:doc-detached</arg>
-                        <arg>-Xlint:inaccessible</arg>
-                        <arg>-Xlint:infer-any</arg>
-                        <arg>-Xlint:missing-interpolator</arg>
-                        <arg>-Xlint:nullary-override</arg>
-                        <arg>-Xlint:nullary-unit</arg>
-                        <arg>-Xlint:option-implicit</arg>
-                        <arg>-Xlint:package-object-classes</arg>
-                        <arg>-Xlint:poly-implicit-overload</arg>
-                        <arg>-Xlint:private-shadow</arg>
-                        <arg>-Xlint:stars-align</arg>
-                        <arg>-Xlint:type-parameter-shadow</arg>
-
-                        <arg>-Ywarn-dead-code</arg>
-                        <arg>-Ywarn-extra-implicit</arg>
-                        <arg>-Ywarn-numeric-widen</arg>
-                        <arg>-Ywarn-unused:implicits</arg>
-                        <arg>-Ywarn-unused:imports</arg>
-                        <arg>-Ywarn-unused:locals</arg>
-                        <arg>-Ywarn-unused:params</arg>
-                        <arg>-Ywarn-unused:patvars</arg>
-                        <arg>-Ywarn-unused:privates</arg>
-                        <arg>-Ywarn-value-discard</arg>
-                        <arg>-Yrangepos</arg>
-                        <!-- <arg>-Xfatal-warnings</arg> -->
-                        <!-- arg>-P:semanticdb:synthetics:on</arg -->
-                    </args>
                 </configuration>
             </plugin>
             <plugin>

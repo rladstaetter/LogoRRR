@@ -12,10 +12,6 @@
 
     <packaging>jar</packaging>
 
-    <properties>
-        <main.class>net.ladstatt.logboard.LogboardBootstrapper</main.class>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -51,15 +47,6 @@
                 <artifactId>client-maven-plugin</artifactId>
                 <version>${client.plugin.version}</version>
                 <executions>
-                    <!--
-                    <execution>
-                        <id>execute-compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    -->
                     <execution>
                         <id>execute-compile-and-link</id>
                         <phase>package</phase>
@@ -70,11 +57,12 @@
                 </executions>
                 <configuration>
                     <target>host</target>
-                    <mainClass>${main.class}</mainClass>
+                    <mainClass>net.ladstatt.logboard.LogboardApp</mainClass>
                     <verbose>true</verbose>
                     <graalvmHome>${graalvm.home}</graalvmHome>
                     <reflectionList>
                         <list>net.ladstatt.logboard.LogboardController</list>
+                        <list>javafx.scene.input.Dragboard</list>
                     </reflectionList>
                 </configuration>
             </plugin>
