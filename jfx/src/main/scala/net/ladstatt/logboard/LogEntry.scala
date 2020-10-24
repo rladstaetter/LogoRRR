@@ -5,25 +5,49 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.util.Duration
 
-case class LogEntry(entry: String) {
-  val color: Color = {
-    if (entry.contains("SEVERE")) {
-      Color.RED
-    } else if (entry.contains("WARNING")) {
-      Color.YELLOW
-    } else if (entry.contains("FINEST")) {
-      Color.GREY
-    } else Color.GREEN
-  }
+trait LogEntry {
 
-  val rectangle: Rectangle = new Rectangle(5, 5, color)
+  def value: String
 
-  val someTooltip: Option[Tooltip] = {
-    if (color == Color.RED) {
-      val tt = new Tooltip(entry)
-      tt.setShowDelay(new Duration(100))
-      Tooltip.install(rectangle, tt)
-      Option(tt)
-    } else None
+  def rectangle: Rectangle
+
+  def someTooltip : Option[Tooltip] = None
+}
+
+class InfoLogEntry(val value: String, val rectangle: Rectangle) extends LogEntry
+
+class WarningLogEntry(val value: String, val rectangle: Rectangle) extends LogEntry
+
+class TraceLogEntry(val value: String, val rectangle: Rectangle) extends LogEntry
+
+object SevereLogEntry {
+    val duration = new Duration(100)
+
+}
+class SevereLogEntry(val value: String, val rectangle: Rectangle) extends LogEntry {
+  override val someTooltip: Option[Tooltip] = {
+    val tt = new Tooltip(value)
+    tt.setShowDelay(SevereLogEntry.duration)
+    Tooltip.install(rectangle, tt)
+    Option(tt)
   }
 }
+
+class UnknownLogEntry(val value: String, val rectangle: Rectangle) extends LogEntry
+
+object LogEntry {
+
+  def apply(line: String): LogEntry = {
+    if (line.contains("SEVERE")) {
+      new SevereLogEntry(line, new Rectangle(5, 5, Color.RED))
+    } else if (line.contains("WARNING")) {
+      new WarningLogEntry(line, new Rectangle(5, 5, Color.YELLOW))
+    } else if (line.contains("FINEST")) {
+      new TraceLogEntry(line, new Rectangle(5, 5, Color.GREY))
+    } else if (line.contains("INFO")) {
+      new InfoLogEntry(line, new Rectangle(5, 5, Color.GREEN))
+    } else new UnknownLogEntry(line, new Rectangle(5, 5, Color.BLUE))
+  }
+
+}
+

@@ -30,7 +30,7 @@ class LogboardApplication {
   def start(stage: Stage): Unit = {
     stage.setTitle("javafx-logboard")
     val fxmlLoader = mkFxmlLoader("/net/ladstatt/logboard/logboard.fxml")
-    val parent = fxmlLoader.load[ScrollPane]()
+    val parent = fxmlLoader.load[BorderPane]()
     val scene = new Scene(parent)
     stage.setScene(scene)
     stage.show()

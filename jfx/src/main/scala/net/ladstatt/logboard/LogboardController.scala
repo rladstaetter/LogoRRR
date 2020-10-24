@@ -3,37 +3,49 @@ package net.ladstatt.logboard
 import java.net.URL
 import java.nio.file.{Files, Path}
 import java.util.ResourceBundle
+import java.util.stream.Collectors
 
-import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.SimpleListProperty
+import javafx.collections.FXCollections
+import javafx.event.{ActionEvent, EventHandler}
 import javafx.fxml.{FXML, Initializable}
-import javafx.scene.control.Tooltip
+import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.FlowPane
-
-import scala.jdk.CollectionConverters._
+import javafx.stage.FileChooser
 
 
 class LogboardController extends Initializable {
 
-  val logEntries = new SimpleObjectProperty[Seq[LogEntry]]()
+  val logEntries = new SimpleListProperty[LogEntry](FXCollections.observableArrayList())
 
   @FXML var flowPane: FlowPane = _
-
+  @FXML var selectFileButton: Button = _
 
   def clearLogEntries(): Unit = {
     Option(logEntries.get()) match {
       case Some(entries) =>
-        for (e <- entries) {
-          e.someTooltip.foreach(t => Tooltip.uninstall(flowPane, t))
-        }
+        entries.filtered {
+          case _: SevereLogEntry => true
+          case _ => false
+        }.forEach(e => {
+          e.someTooltip match {
+            case Some(t) => Tooltip.uninstall(flowPane, t)
+            case None =>
+          }
+        })
       case None =>
     }
     flowPane.getChildren.clear()
   }
 
-  def setLogEntries(entries: Seq[LogEntry]): Unit = {
-    logEntries.set(entries)
-    flowPane.getChildren.addAll(logEntries.get.map(_.rectangle): _*)
+  def setLogEntries(entries: java.util.List[LogEntry]): Unit = {
+    logEntries.addAll(entries)
+
+    entries.forEach(e => {
+      flowPane.getChildren.add(e.rectangle)
+    })
+
   }
 
   @FXML
@@ -48,10 +60,26 @@ class LogboardController extends Initializable {
     val logFile: Path = event.getDragboard.getFiles.get(0).toPath
     if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
       clearLogEntries()
-      setLogEntries(Files.readAllLines(logFile).asScala.map(e => LogEntry(e)).toSeq)
+      setLogFile(logFile)
     }
   }
 
-  override def initialize(url: URL, resourceBundle: ResourceBundle): Unit = {}
+  private def setLogFile(logFile: Path): Unit = {
+    val entries = Files.readAllLines(logFile).parallelStream().map(LogEntry.apply).collect(Collectors.toList())
+    println(entries.size)
+    setLogEntries(entries)
+  }
+
+  override def initialize(url: URL, resourceBundle: ResourceBundle): Unit = {
+    selectFileButton.setOnAction((t: ActionEvent) => {
+      val c = new FileChooser()
+      c.setTitle("Select log file")
+      Option(c.showOpenDialog(null)) match {
+        case Some(file) => setLogFile(file.toPath)
+        case None =>
+      }
+    })
+
+  }
 
 }

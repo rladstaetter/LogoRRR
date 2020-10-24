@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<ScrollPane
-        xmlns="http://javafx.com/javafx"
-        xmlns:fx="http://javafx.com/fxml"
-        onDragDropped="#handleDrop" onDragOver="#handleDragOver"
-        prefHeight="450.0" prefWidth="800.0" fitToWidth="true"
-        fx:controller="net.ladstatt.logboard.LogboardController">
-    <FlowPane fx:id="flowPane" hgap="1" vgap="1"/>
-</ScrollPane>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Button?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            onDragDropped="#handleDrop"
+            onDragOver="#handleDragOver"
+            prefHeight="450.0" prefWidth="800.0"
+            fx:controller="net.ladstatt.logboard.LogboardController">
+    <top>
+        <Label text="foo"/>
+        <ToolBar>
+            <Button fx:id="selectFileButton" text="select file" />
+        </ToolBar>
+    </top>
+    <center>
+        <ScrollPane fitToWidth="true">
+            <FlowPane fx:id="flowPane" hgap="1" vgap="1"/>
+        </ScrollPane>
+    </center>
+</BorderPane>

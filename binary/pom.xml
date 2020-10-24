@@ -63,6 +63,8 @@
                     <reflectionList>
                         <list>net.ladstatt.logboard.LogboardController</list>
                         <list>javafx.scene.input.Dragboard</list>
+                        <list>javafx.scene.control.Label</list>
+                        <list>javafx.scene.control.ScrollPane</list>
                     </reflectionList>
                 </configuration>
             </plugin>
