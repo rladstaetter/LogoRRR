@@ -66,7 +66,6 @@ class LogboardController extends Initializable {
 
   private def setLogFile(logFile: Path): Unit = {
     val entries = Files.readAllLines(logFile).parallelStream().map(LogEntry.apply).collect(Collectors.toList())
-    println(entries.size)
     setLogEntries(entries)
   }
 
