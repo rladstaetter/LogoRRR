@@ -66,6 +66,12 @@
                         <list>javafx.scene.control.Label</list>
                         <list>javafx.scene.control.ScrollPane</list>
                     </reflectionList>
+                    <nativeImageArgs>
+                        <arg>--no-fallback</arg>
+                        <arg>-H:-UseServiceLoaderFeature</arg>
+                        <arg>-Dgraal.LogFile=${project.build.directory}/graal.log</arg>
+                       <!-- <arg>-report-unsupported-elements-at-runtime</arg> -->
+                    </nativeImageArgs>
                 </configuration>
             </plugin>
         </plugins>

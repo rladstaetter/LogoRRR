@@ -12,12 +12,12 @@
         <revision>2020.3</revision>
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <openjfx.version>16-ea+2</openjfx.version>
-        <client.plugin.version>0.1.33</client.plugin.version>
+        <openjfx.version>16-ea+6</openjfx.version>
+        <client.plugin.version>0.1.36</client.plugin.version>
         <!--
-        <graalvm.home>C:\Program Files\Java\graalvm-ce-java11-20.2.0</graalvm.home>
+        <graalvm.home>C:\Program Files\Java\graalvm-ce-java11-21.0.0</graalvm.home>
         -->
-        <graalvm.home>/Users/lad/.sdkman/candidates/java/20.2.0.r11-grl</graalvm.home>
+        <graalvm.home>/Users/lad/.sdkman/candidates/java/21.0.0.r11-grl</graalvm.home>
     </properties>
 
     <modules>
