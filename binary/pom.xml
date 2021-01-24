@@ -14,20 +14,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>${openjfx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>${openjfx.version}</version>
-        </dependency>
-        <dependency>
             <groupId>net.ladstatt.logboard</groupId>
             <artifactId>jfx</artifactId>
-            <classifier>shaded</classifier>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <build>
