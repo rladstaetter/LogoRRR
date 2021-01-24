@@ -1,18 +1,17 @@
 package net.ladstatt.logboard
 
-import java.net.URL
-import java.nio.file.{Files, Path}
-import java.util.ResourceBundle
-import java.util.stream.Collectors
-
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.FXCollections
-import javafx.event.{ActionEvent, EventHandler}
+import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
 import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.FlowPane
 import javafx.stage.FileChooser
+
+import java.net.URL
+import java.nio.file.{Files, Path}
+import java.util.ResourceBundle
 
 
 class LogboardController extends Initializable {
@@ -25,15 +24,14 @@ class LogboardController extends Initializable {
   def clearLogEntries(): Unit = {
     Option(logEntries.get()) match {
       case Some(entries) =>
-        entries.filtered {
-          case _: SevereLogEntry => true
-          case _ => false
-        }.forEach(e => {
-          e.someTooltip match {
-            case Some(t) => Tooltip.uninstall(flowPane, t)
-            case None =>
-          }
-        })
+        entries
+          .filtered((t: LogEntry) => t.severity == LogSeverity.Severe)
+          .forEach(e => {
+            e.someTooltip match {
+              case Some(t) => Tooltip.uninstall(flowPane, t)
+              case None =>
+            }
+          })
       case None =>
     }
     flowPane.getChildren.clear()
@@ -64,9 +62,9 @@ class LogboardController extends Initializable {
     }
   }
 
+
   private def setLogFile(logFile: Path): Unit = {
-    val entries = Files.readAllLines(logFile).parallelStream().map(LogEntry.apply).collect(Collectors.toList())
-    setLogEntries(entries)
+    setLogEntries(LogReport(logFile).entries)
   }
 
   override def initialize(url: URL, resourceBundle: ResourceBundle): Unit = {
@@ -82,3 +80,6 @@ class LogboardController extends Initializable {
   }
 
 }
+
+
+

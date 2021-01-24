@@ -1,52 +1,40 @@
 package net.ladstatt.logboard
 
 import javafx.scene.control.Tooltip
-import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.util.Duration
 
-trait LogEntry {
 
-  def value: String
+case class LogEntry(value: String, severity: LogSeverity) {
 
-  def rectangle: Rectangle
+  def rectangle: Rectangle = new Rectangle(5, 5, severity.color)
 
-  def someTooltip : Option[Tooltip] = None
-}
+  def someTooltip: Option[Tooltip] = {
+    severity match {
+      case LogSeverity.Severe =>
+        val tt = new Tooltip(value)
+        tt.setShowDelay(new Duration(100))
+        Tooltip.install(rectangle, tt)
+        Option(tt)
+      case _ => None
+    }
 
-class InfoLogEntry(val value: String, val rectangle: Rectangle) extends LogEntry
-
-class WarningLogEntry(val value: String, val rectangle: Rectangle) extends LogEntry
-
-class TraceLogEntry(val value: String, val rectangle: Rectangle) extends LogEntry
-
-object SevereLogEntry {
-    val duration = new Duration(100)
-
-}
-class SevereLogEntry(val value: String, val rectangle: Rectangle) extends LogEntry {
-  override val someTooltip: Option[Tooltip] = {
-    val tt = new Tooltip(value)
-    tt.setShowDelay(SevereLogEntry.duration)
-    Tooltip.install(rectangle, tt)
-    Option(tt)
   }
 }
 
-class UnknownLogEntry(val value: String, val rectangle: Rectangle) extends LogEntry
 
 object LogEntry {
 
   def apply(line: String): LogEntry = {
     if (line.contains("SEVERE")) {
-      new SevereLogEntry(line, new Rectangle(5, 5, Color.RED))
+      new LogEntry(line, LogSeverity.Severe)
     } else if (line.contains("WARNING")) {
-      new WarningLogEntry(line, new Rectangle(5, 5, Color.YELLOW))
+      new LogEntry(line, LogSeverity.Warning)
     } else if (line.contains("FINEST")) {
-      new TraceLogEntry(line, new Rectangle(5, 5, Color.GREY))
+      new LogEntry(line, LogSeverity.Trace)
     } else if (line.contains("INFO")) {
-      new InfoLogEntry(line, new Rectangle(5, 5, Color.GREEN))
-    } else new UnknownLogEntry(line, new Rectangle(5, 5, Color.BLUE))
+      new LogEntry(line, LogSeverity.Info)
+    } else new LogEntry(line, LogSeverity.Other)
   }
 
 }

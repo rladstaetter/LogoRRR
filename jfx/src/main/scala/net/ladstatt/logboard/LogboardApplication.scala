@@ -6,13 +6,7 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.{Parent, Scene}
 import javafx.stage.Stage
 
-/*
-object LogboardApplication {
-  def main(args: Array[String]): Unit = {
-    Application.launch(classOf[LogboardApplication], args: _*)
-  }
-}
-*/
+
 class LogboardApplication {
 
   def mkFxmlLoader(fxmlResource: String): FXMLLoader = {
