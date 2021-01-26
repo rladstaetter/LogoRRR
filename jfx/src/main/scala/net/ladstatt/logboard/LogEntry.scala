@@ -7,9 +7,9 @@ import javafx.util.Duration
 
 case class LogEntry(value: String, severity: LogSeverity) {
 
-  def rectangle: Rectangle = new Rectangle(5, 5, severity.color)
-
-  def someTooltip: Option[Tooltip] = {
+ // val rectangle: Rectangle = new Rectangle(10, 10, severity.color)
+/*
+  val someTooltip: Option[Tooltip] = {
     severity match {
       case LogSeverity.Severe =>
         val tt = new Tooltip(value)
@@ -18,8 +18,9 @@ case class LogEntry(value: String, severity: LogSeverity) {
         Option(tt)
       case _ => None
     }
-
   }
+
+ */
 }
 
 

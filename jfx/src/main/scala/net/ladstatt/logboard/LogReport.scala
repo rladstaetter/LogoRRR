@@ -10,7 +10,8 @@ object LogReport {
 
 
   def apply(logFile: Path): LogReport = {
-    new LogReport(Files.readAllLines(logFile).parallelStream().map(LogEntry.apply).collect(Collectors.toList[LogEntry]()))
+    val value = Files.readAllLines(logFile).stream().map(LogEntry.apply)
+    new LogReport(value.collect(Collectors.toList[LogEntry]()))
   }
 
 /*

@@ -14,6 +14,7 @@ object LogSeverity {
 
   case object Other extends LogSeverity(Color.BLUE)
 
+  val seq = Seq[LogSeverity](Info, Warning, Trace, Severe, Other)
 }
 
 abstract class LogSeverity(val color: Color)
