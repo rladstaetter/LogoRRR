@@ -4,14 +4,18 @@
 
 JavaFX logboard is a simple utility to display a logfile and visualise certain classes of events. 
 
-For example, ERROR events are visualized as a red circle, TRACE events as grey circless, INFO events as GREEN ones etc. 
+For example, ERROR events are visualized as red rectangles, TRACE events as grey rectangles, INFO events as green ones etc. 
 
-The idea is to start this application, and drag'n drop a logfile to it.
+The idea is to start this application and simply drag'n drop a logfile to it.
 
 ## Motivation
 
 This project serves as a vehicle to test and learn about various aspects of JavaFX GraalVM compilation.
 
+## Prerequisites
+
+You have to download a recent GraalVM installation package (I've tested it with 21.0.0.r11) and a maven distribution
+(everything starting from 3.6.3 should work).
 
 ## Building
 
@@ -31,7 +35,5 @@ For Windows:
     
     binary\target\client\x86_64-windows\net.ladstatt.logboard.binary.exe
     
-(Maybe somebody cares to try it out under Linux as well?)
-
 There are many ways to improve this application, it was primarily written to learn about GraalVM and JavaFX. For more details, check out [this blog post](https://ladstatt.blogspot.com/2020/10/compile-scala-javafx-application-with.html) which elaborates on some details of this project. 
      
