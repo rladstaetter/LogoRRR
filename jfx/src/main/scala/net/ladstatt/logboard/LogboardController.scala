@@ -1,11 +1,11 @@
 package net.ladstatt.logboard
 
-import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
+import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
-import javafx.collections.FXCollections
+import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
 import javafx.event.ActionEvent
 import javafx.fxml.{FXML, Initializable}
-import javafx.scene.control.{Button, ScrollPane}
+import javafx.scene.control.{Button, ScrollPane, Tab, TabPane}
 import javafx.scene.image.{Image, ImageView, PixelWriter, WritableImage}
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
@@ -48,58 +48,25 @@ object Painter {
   }
 
 }
+/*
+object ReportTab {
 
+  def apply(r :LogReport) : ReportTab = {
+    val rt = new ReportTab
+    rt.setUserData(rt)
+    rt
+  }
+
+}
+class ReportTab extends Tab
+*/
 class LogboardController extends Initializable with CanLog {
 
 
-  val logEntries = new SimpleListProperty[LogEntry](FXCollections.observableArrayList())
-
   @FXML var borderPane: BorderPane = _
-  @FXML var scrollPane: ScrollPane = _
-  //@FXML var flowPane: FlowPane = _
+  @FXML var tabPane: TabPane = _
   @FXML var selectFileButton: Button = _
   @FXML var logElementCanvas: ImageView = _
-
-  /*
-  def clearLogEntries(): Unit = timeR({
-    logTrace("Clearing " + flowPane.getChildren.size() + " elements ... start")
-    Option(logEntries.get()) match {
-      case Some(entries) =>
-        entries.parallelStream().forEach(e => {
-          e.someTooltip match {
-            case Some(t) =>
-              //logTrace("Uninstalling element ...")
-              Tooltip.uninstall(flowPane, t)
-            case None =>
-            // logTrace("Clearing element ...")
-          }
-        })
-      case None =>
-    }
-    logTrace("Clearing " + flowPane.getChildren.size() + " elements ... stop")
-  }, "Clearing log entries ...")
-*/
-  /*
-  def setLogEntries(entries: java.util.List[LogEntry]): Unit = {
-    logTrace("starting to add all log entries")
-    timeR(logEntries.addAll(entries), "add all log entries")
-
-    logTrace("starting to create rectangles")
-    val rectangles = timeR(entries.stream.map(_.rectangle).collect(Collectors.toList[Rectangle]()), "create rects")
-
-
-    flowPane.setVisible(false)
-    timeR(flowPane.getChildren.clear(), "clearing rectangles")
-    timeR(flowPane.getChildren.setAll(rectangles), "setting rects")
-    flowPane.setVisible(true)
-    //scrollPane.setContent(null)
-    /*
-    entries.forEach(e => {
-      flowPane.getChildren.add(e.rectangle)
-    })
-*/
-  }
-   */
 
   @FXML
   def handleDragOver(event: DragEvent): Unit = {
@@ -112,8 +79,13 @@ class LogboardController extends Initializable with CanLog {
   def handleDrop(event: DragEvent): Unit = {
     val logFile: Path = event.getDragboard.getFiles.get(0).toPath
     if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
-      setLogReport(LogReport(logFile))
+      addLogReport(LogReport(logFile))
     }
+  }
+
+  def mkObservableList[T](iterable: Iterable[T] = Nil): ObservableList[T] = {
+    val a = new util.ArrayList[T](iterable.toList.asJava)
+    FXCollections.observableList(a)
   }
 
   val squareWidthProperty = new SimpleIntegerProperty(5)
@@ -121,42 +93,61 @@ class LogboardController extends Initializable with CanLog {
 
   def getSquareWidth(): Int = squareWidthProperty.get
 
-  def setWidth(width: Int): Unit = {
-    widthProperty.set(width)
-  }
+  def setWidth(width: Int): Unit = widthProperty.set(width)
 
   def getWidth(): Int = widthProperty.get()
 
-  val logReportProperty = new SimpleObjectProperty[LogReport]()
+  val reportsProperty = new SimpleListProperty[LogReport](mkObservableList())
 
-  def getLogReport(): LogReport = logReportProperty.get()
+  def getLogReport(i: Int): LogReport = reportsProperty.get(i)
 
-  def setLogReport(l: LogReport): Unit = logReportProperty.set(l)
+  def addLogReport(l: LogReport): Unit = reportsProperty.add(l)
 
-  def paint(logReport: LogReport
+  def paint(tab: Tab
+            , logReport: LogReport
             , squareWidth: Int
             , canvasWidth: Int): Unit = {
-    scrollPane.setContent(new ImageView(Painter.paint(logReport.entries, squareWidth, canvasWidth)))
+    tab.setContent(new ScrollPane(new ImageView(Painter.paint(logReport.entries, squareWidth, canvasWidth))))
   }
 
   override def initialize(url: URL, resourceBundle: ResourceBundle): Unit = {
-
     widthProperty.addListener(new ChangeListener[Number] {
       override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
-        // println(getSquareWidth + " " + t1.intValue())
-        paint(getLogReport(), getSquareWidth(), t1.intValue)
+        for ((t, r) <- tabPane.getTabs.asScala zip reportsProperty.asScala) {
+          paint(t, r, getSquareWidth(), t1.intValue)
+        }
       }
     })
-    logReportProperty.addListener(new ChangeListener[LogReport] {
-      override def changed(observableValue: ObservableValue[_ <: LogReport], t: LogReport, t1: LogReport): Unit = {
-        paint(t1, getSquareWidth(), getWidth())
+    reportsProperty.addListener(new ListChangeListener[LogReport] {
+      override def onChanged(change: ListChangeListener.Change[_ <: LogReport]): Unit = {
+
+        while (change.next) {
+          if (change.wasAdded()) {
+            for (r <- change.getAddedSubList.asScala) {
+              val name = r.name + " (" + r.entries.size() + " entries)"
+              val tab = new Tab(name)
+              tabPane.getTabs.add(tab)
+              paint(tab, r, getSquareWidth(), getWidth())
+            }
+          }
+        }
       }
     })
+    /*
+        reportsProperty.addListener(new ChangeListener[LogReport] {
+          override def changed(observableValue: ObservableValue[_ <: LogReport], t: LogReport, t1: LogReport): Unit = {
+            for ((t, r) <- tabPane.getTabs.asScala zip reportsProperty.asScala) {
+              paint(t, t1, getSquareWidth(), getWidth())
+            }
+          }
+        })
+
+     */
     selectFileButton.setOnAction((t: ActionEvent) => {
       val c = new FileChooser()
       c.setTitle("Select log file")
       Option(c.showOpenDialog(null)) match {
-        case Some(file) => setLogReport(LogReport(file.toPath))
+        case Some(file) => addLogReport(LogReport(file.toPath))
         case None =>
       }
     })

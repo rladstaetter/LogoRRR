@@ -4,8 +4,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
 <BorderPane fx:id="borderPane"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -14,12 +15,11 @@
             prefHeight="600.0" prefWidth="1200.0"
             fx:controller="net.ladstatt.logboard.LogboardController">
     <top>
-        <Label text="foo"/>
         <ToolBar>
             <Button fx:id="selectFileButton" text="select file"/>
         </ToolBar>
     </top>
     <center>
-        <ScrollPane fx:id="scrollPane" />
+        <TabPane fx:id="tabPane"/>
     </center>
 </BorderPane>
