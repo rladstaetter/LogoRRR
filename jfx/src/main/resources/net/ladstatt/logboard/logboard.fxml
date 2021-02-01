@@ -14,11 +14,6 @@
             onDragOver="#handleDragOver"
             prefHeight="600.0" prefWidth="1200.0"
             fx:controller="net.ladstatt.logboard.LogboardController">
-    <top>
-        <ToolBar>
-            <Button fx:id="selectFileButton" text="select file"/>
-        </ToolBar>
-    </top>
     <center>
         <TabPane fx:id="tabPane"/>
     </center>

@@ -1,27 +1,6 @@
 package net.ladstatt.logboard
 
-import javafx.scene.control.Tooltip
-import javafx.scene.shape.Rectangle
-import javafx.util.Duration
 
-
-case class LogEntry(value: String, severity: LogSeverity) {
-
- // val rectangle: Rectangle = new Rectangle(10, 10, severity.color)
-/*
-  val someTooltip: Option[Tooltip] = {
-    severity match {
-      case LogSeverity.Severe =>
-        val tt = new Tooltip(value)
-        tt.setShowDelay(new Duration(100))
-        Tooltip.install(rectangle, tt)
-        Option(tt)
-      case _ => None
-    }
-  }
-
- */
-}
 
 
 object LogEntry {
@@ -40,3 +19,6 @@ object LogEntry {
 
 }
 
+case class LogEntry(value: String, severity: LogSeverity) {
+
+}
