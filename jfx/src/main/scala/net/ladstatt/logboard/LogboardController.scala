@@ -15,6 +15,7 @@ import java.nio.file.{Files, Path}
 import java.util
 import java.util.ResourceBundle
 import scala.jdk.CollectionConverters._
+import scala.util.{Failure, Success, Try}
 
 class LogboardController extends Initializable with CanLog {
 
@@ -33,7 +34,10 @@ class LogboardController extends Initializable with CanLog {
   def handleDrop(event: DragEvent): Unit = {
     val logFile: Path = event.getDragboard.getFiles.get(0).toPath
     if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
-      addLogReport(LogReport(logFile))
+      Try(LogReport(logFile)) match {
+        case Success(value) => addLogReport(value)
+        case Failure(exception) =>
+      }
     }
   }
 
