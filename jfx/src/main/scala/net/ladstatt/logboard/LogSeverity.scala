@@ -2,6 +2,9 @@ package net.ladstatt.logboard
 
 import javafx.scene.paint.Color
 
+import java.util
+import java.util.Collections
+
 object LogSeverity {
 
   case object Info extends LogSeverity("Info", Color.GREEN)
@@ -14,7 +17,12 @@ object LogSeverity {
 
   case object Other extends LogSeverity("Unclassified", Color.BLUE)
 
-  val seq = Seq[LogSeverity](Info, Warning, Trace, Severe, Other)
+  val seq = {
+    val l = new util.ArrayList[LogSeverity]()
+    Collections.addAll[LogSeverity](l, Info, Warning, Trace, Severe, Other)
+    l
+  }
+  // val seq = Seq[LogSeverity](Info, Warning, Trace, Severe, Other)
 }
 
 abstract class LogSeverity(val name: String, val color: Color)

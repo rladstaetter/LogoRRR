@@ -84,15 +84,6 @@ class LogboardController extends Initializable with CanLog {
               }
             }
           }
-          if (change.wasRemoved()) {
-            for (f <- change.getRemoved.asScala) {
-              f match {
-                case tab: ReportTab =>
-                  tab.cleanup()
-                case _ =>
-              }
-            }
-          }
         }
       }
     })
