@@ -63,11 +63,31 @@ class LogboardController extends Initializable with CanLog {
 
 
   override def initialize(url: URL, resourceBundle: ResourceBundle): Unit = {
+
+    tabPane.getSelectionModel.selectedItemProperty().addListener(new ChangeListener[Tab] {
+      override def changed(observableValue: ObservableValue[_ <: Tab], t: Tab, t1: Tab): Unit = {
+        t1 match {
+          case tab: ReportTab =>
+            if (tab.getRepaint()) {
+              tab.paint(getSquareWidth(), getWidth())
+            }
+          case _ =>
+        }
+      }
+    }
+
+    )
     widthProperty.addListener(new ChangeListener[Number] {
       override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
         for (t <- tabPane.getTabs.asScala) {
           t match {
-            case tab: ReportTab => tab.paint(getSquareWidth(), t1.intValue())
+            case tab: ReportTab => {
+              if (tab.isSelected) {
+                tab.paint(getSquareWidth(), t1.intValue())
+              } else {
+                tab.setRepaint(true)
+              }
+            }
             case _ => // do nothing
           }
         }

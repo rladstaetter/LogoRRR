@@ -1,5 +1,6 @@
 package net.ladstatt.logboard
 
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.control.{Button, ScrollPane, Tab, ToolBar}
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
@@ -16,6 +17,16 @@ object ReportTab {
 }
 
 class ReportTab extends Tab {
+  /**
+   * initially, report tab will be painted when added. per default the newly added report will be painted once.
+   * repaint property will be set to true if the report tab itself is not selected and the width of the application
+   * changes. the tab will be repainted when selected.
+   **/
+  val repaintProperty = new SimpleBooleanProperty(false)
+
+  def setRepaint(repaint: Boolean): Unit = repaintProperty.set(repaint)
+
+  def getRepaint(): Boolean = repaintProperty.get()
 
   def paint(squareWidth: Int, canvasWidth: Int): Unit = {
     val logReport = getUserData.asInstanceOf[LogReport]
