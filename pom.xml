@@ -147,9 +147,48 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                    <executions>
+                        <execution>
+                            <id>apply-enforcer-rules</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <phase>initialize</phase>
+                            <configuration>
+                                <rules>
+                                    <requireMavenVersion>
+                                        <version>[3.6.2,)</version>
+                                        <message>Check for Maven version &gt;=3.6.2 failed. Upgrade your Maven
+                                            installation.
+                                        </message>
+                                    </requireMavenVersion>
+                                    <requireJavaVersion>
+                                        <version>11</version>
+                                        <message>JDK 11 is necessary to execute build, download here:
+                                            https://www.azul.com/downloads/zulu-community/?version=java-11-lts&amp;package=jdk
+                                        </message>
+                                    </requireJavaVersion>
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
