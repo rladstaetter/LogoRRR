@@ -43,7 +43,7 @@
                         <arg>--no-fallback</arg>
                         <arg>-H:-UseServiceLoaderFeature</arg>
                         <arg>--report-unsupported-elements-at-runtime</arg>
-                        <arg>-Dgraal.LogFile=${project.build.directory}/graal.log</arg>
+                        <arg>-Dgraal.LogFile=${graalvm.log}</arg>
                     </nativeImageArgs>
                     <reflectionList>
                         <list>net.ladstatt.logboard.LogboardController</list>

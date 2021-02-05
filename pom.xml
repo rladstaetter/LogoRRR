@@ -29,6 +29,7 @@
             </activation>
             <properties>
                 <graalvm.home>C:\Program Files\Java\graalvm-ce-java11-21.0.0</graalvm.home>
+                <graalvm.log>${project.build.directory}\graal.log</graalvm.log>
             </properties>
         </profile>
         <profile>
@@ -41,6 +42,7 @@
             </activation>
             <properties>
                 <graalvm.home>/Users/lad/.sdkman/candidates/java/21.0.0.r11-grl</graalvm.home>
+                <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
             </properties>
         </profile>
     </profiles>
@@ -206,7 +208,7 @@
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <version>3.6.2</version>
+                                    <version>3.5.0</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
                                     <version>11</version>
