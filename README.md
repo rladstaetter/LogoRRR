@@ -8,6 +8,8 @@ For example, ERROR events are visualized as red rectangles, TRACE events as grey
 
 The idea is to start this application and simply drag'n drop a logfile to it.
 
+You can give it a try by downloading a [prebuilt binary for javafx-logboard](https://github.com/rladstaetter/javafx-logboard/releases/tag/21.1.1) from the releases page.
+
 ## Motivation
 
 This project serves as a vehicle to test and learn about various aspects of JavaFX GraalVM compilation.
