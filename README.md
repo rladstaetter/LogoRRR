@@ -22,7 +22,6 @@ You have to download a recent GraalVM installation package (I've tested it with 
 Given you have followed the instructions for [maven-client-plugin](https://github.com/gluonhq/client-maven-plugin) you only have to provide the path to your GraalVM installation in the main pom.xml found at the root folder of the project.
 
 
-
 ### MacOs X
 
      mvn clean install
@@ -43,6 +42,8 @@ If everything goes as planned, a binary is available here after some minutes:
 
 If you want to execute this exe on another computer you have to make sure that the Visual Studio runtime environment
 is present there (redistributables).
+
+Tip: A great tool which can be used to reduce file size for executables is [UPX](https://upx.github.io).
 
 ## Running from IntelliJ
 
