@@ -2,6 +2,7 @@ package net.ladstatt.logboard
 
 import javafx.scene.image.{PixelWriter, WritableImage}
 import javafx.scene.paint.Color
+import net.ladstatt.util.CanLog
 
 import java.nio.file.{Files, Path}
 import java.text.DecimalFormat
@@ -12,11 +13,13 @@ import scala.jdk.CollectionConverters._
 import scala.language.postfixOps
 
 
-object LogReport {
+object LogReport extends CanLog {
 
   def apply(logFile: Path): LogReport = {
     val value = Files.readAllLines(logFile).stream().map(LogEntry.apply)
-    new LogReport(logFile.getFileName.toString, value.collect(Collectors.toList[LogEntry]()))
+    val entries = value.collect(Collectors.toList[LogEntry]())
+    logTrace(s"Read ${entries.size} lines ... ")
+    new LogReport(logFile.getFileName.toString, entries)
   }
 
   private def mkPredicate(c: LogSeverity): Predicate[LogEntry] = {

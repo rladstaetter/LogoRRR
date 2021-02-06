@@ -21,7 +21,6 @@ class LogboardController extends Initializable with CanLog {
 
   @FXML var borderPane: BorderPane = _
   @FXML var tabPane: TabPane = _
-  @FXML var logElementCanvas: ImageView = _
 
   @FXML
   def handleDragOver(event: DragEvent): Unit = {
@@ -35,7 +34,8 @@ class LogboardController extends Initializable with CanLog {
     val logFile: Path = event.getDragboard.getFiles.get(0).toPath
     if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
       Try(LogReport(logFile)) match {
-        case Success(value) => addLogReport(value)
+        case Success(value) =>
+          timeR(addLogReport(value), "Displays logfile")
         case Failure(exception) =>
           System.err.println("Could not import file " + logFile.toAbsolutePath, " reason: " + exception.getMessage)
       }
