@@ -37,6 +37,7 @@ class LogboardController extends Initializable with CanLog {
       Try(LogReport(logFile)) match {
         case Success(value) => addLogReport(value)
         case Failure(exception) =>
+          System.err.println("Could not import file " + logFile.toAbsolutePath, " reason: " + exception.getMessage)
       }
     }
   }
