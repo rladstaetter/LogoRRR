@@ -9,7 +9,7 @@ object LogSeverity {
 
   case object Info extends LogSeverity("Info", Color.GREEN)
 
-  case object Warning extends LogSeverity("Warning", Color.YELLOW)
+  case object Warning extends LogSeverity("Warning", Color.ORANGE)
 
   case object Trace extends LogSeverity("Trace", Color.GREY)
 
@@ -22,7 +22,7 @@ object LogSeverity {
     Collections.addAll[LogSeverity](l, Info, Warning, Trace, Severe, Other)
     l
   }
-  // val seq = Seq[LogSeverity](Info, Warning, Trace, Severe, Other)
+
 }
 
 abstract class LogSeverity(val name: String, val color: Color)

@@ -1,10 +1,14 @@
 package net.ladstatt.logboard
 
+import javafx.scene.image.{PixelWriter, WritableImage}
+import javafx.scene.paint.Color
+
 import java.nio.file.{Files, Path}
 import java.text.DecimalFormat
 import java.util
 import java.util.function.Predicate
 import java.util.stream.Collectors
+import scala.jdk.CollectionConverters._
 import scala.language.postfixOps
 
 
@@ -43,6 +47,32 @@ case class LogReport(name: String, entries: java.util.List[LogEntry]) {
     occs.put(LogSeverity.Severe, entries.stream.filter(LogReport.severeP).count())
     occs.put(LogSeverity.Other, entries.stream.filter(LogReport.otherP).count())
     occs
+  }
+
+  def paintSquare(pw: PixelWriter, u: Int, v: Int, length: Int, c: Color): PixelWriter = {
+    for {x <- u until (u + length - 1)
+         y <- v until (v + length - 1)} {
+      pw.setColor(x, y, c)
+    }
+    pw
+  }
+
+  def paint(squareWidth: Int, canvasWidth: Int): WritableImage = {
+    val numberCols = canvasWidth / squareWidth
+    val numRows = entries.size() / numberCols
+    val height = squareWidth * numRows
+    val wi = new WritableImage(canvasWidth + squareWidth, height + squareWidth)
+    val pw = wi.getPixelWriter
+
+    for ((e, i) <- entries.asScala.zipWithIndex) {
+      paintSquare(pw, (i % numberCols) * squareWidth, (i / numberCols) * squareWidth, squareWidth.toInt, e.severity.color)
+    }
+    wi
+  }
+
+  def getEntryAt(x: Int, y: Int, squareWidth: Int, canvasWidth: Int): LogEntry = {
+    entries.get(y / squareWidth * (canvasWidth / squareWidth) + x / squareWidth)
+    entries.get(y / squareWidth * (canvasWidth / squareWidth) + x / squareWidth)
   }
 
 

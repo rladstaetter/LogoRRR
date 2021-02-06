@@ -46,8 +46,8 @@ class LogboardController extends Initializable with CanLog {
     FXCollections.observableList(a)
   }
 
-  val squareWidthProperty = new SimpleIntegerProperty(5)
-  val widthProperty = new SimpleIntegerProperty(1200)
+  val squareWidthProperty = new SimpleIntegerProperty(7)
+  val widthProperty = new SimpleIntegerProperty(1000)
 
   def getSquareWidth(): Int = squareWidthProperty.get
 
@@ -107,9 +107,6 @@ class LogboardController extends Initializable with CanLog {
         }
       }
     })
-
-    // setLogReport(LogReport(Paths.get("/Users/lad/gh/javafx-logboard/logfiles/logic.4.log")))
-    //    setLogFile(Paths.get("/Users/lad/gh/javafx-logboard/logfiles/ui-admin.0.log"))
 
   }
 
