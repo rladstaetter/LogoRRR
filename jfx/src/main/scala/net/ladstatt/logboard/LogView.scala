@@ -22,7 +22,15 @@ object LogView {
 class VisualView(logReport: LogReport, squareWidth: Int, canvasWidth: Int) extends Tab("Visual View") {
 
   val bp = new BorderPane()
-  val label = new Label("")
+  val radii = new CornerRadii(5.0)
+  val insets = new Insets(-5.0)
+
+  val label = {
+    val l = new Label("")
+    l.setPrefWidth(canvasWidth)
+    l.setStyle(s"-fx-text-fill: white; -fx-font-size: 20px;")
+    l
+  }
 
   val view = {
     val iv = new ImageView(logReport.paint(squareWidth, canvasWidth))
@@ -30,10 +38,8 @@ class VisualView(logReport: LogReport, squareWidth: Int, canvasWidth: Int) exten
       override def handle(me: MouseEvent): Unit = {
         val index = logReport.indexOf(me.getX.toInt, me.getY.toInt, squareWidth, canvasWidth)
         val entry = logReport.entries.get(index)
-        label.setText(s"L: $index ${entry.value}")
-        label.setPrefWidth(canvasWidth)
-        label.setBackground(new Background(new BackgroundFill(entry.severity.color, new CornerRadii(5.0), new Insets(-5.0))))
-        label.setStyle(s"-fx-text-fill: white; -fx-font-size: 20px;")
+        label.setBackground(new Background(new BackgroundFill(entry.severity.color, radii, insets)))
+        label.setText(s"L: ${index + 1} ${entry.value}")
       }
     })
     iv
@@ -44,6 +50,7 @@ class VisualView(logReport: LogReport, squareWidth: Int, canvasWidth: Int) exten
 
   def doRepaint(sWidth: Int, cWidth: Int): Unit = {
     view.setImage(logReport.paint(sWidth, cWidth))
+    label.setPrefWidth(cWidth)
   }
 }
 

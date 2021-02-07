@@ -5,8 +5,8 @@ import javafx.scene.control.{Button, ListView, Tab, ToolBar}
 import javafx.scene.layout.BorderPane
 
 class LogTextView(logReport: LogReport) extends Tab("Text View") {
-  def doRepaint(sWidth :Int, cWidth :Int) :Unit = ()
 
+  def doRepaint(sWidth :Int, cWidth :Int) :Unit = ()
 
   def mkListView(): ListView[LogEntry] = {
     val lv = new ListView[LogEntry]()
