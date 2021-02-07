@@ -30,7 +30,7 @@ class LogboardApplication {
     val scene = new Scene(parent)
     scene.widthProperty().addListener(new ChangeListener[Number] {
       override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
-        Option(controller).foreach(_.setWidth(t1.intValue))
+        Option(controller).foreach(_.setCanvasWidth(t1.intValue))
       }
     })
     stage.setScene(scene)

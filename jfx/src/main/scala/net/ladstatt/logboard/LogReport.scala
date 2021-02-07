@@ -37,7 +37,6 @@ object LogReport extends CanLog {
 
 case class LogReport(name: String, entries: java.util.List[LogEntry]) {
 
-
   def percentAsString(ls: LogSeverity): String = {
     LogReport.percentFormatter.format((100 * occurences.get(ls).toDouble) / entries.size().toDouble)
   }
@@ -73,8 +72,9 @@ case class LogReport(name: String, entries: java.util.List[LogEntry]) {
     wi
   }
 
+  def indexOf(x: Int, y: Int, squareWidth: Int, canvasWidth: Int) : Int = y / squareWidth * (canvasWidth / squareWidth) + x / squareWidth
+
   def getEntryAt(x: Int, y: Int, squareWidth: Int, canvasWidth: Int): LogEntry = {
-    entries.get(y / squareWidth * (canvasWidth / squareWidth) + x / squareWidth)
     entries.get(y / squareWidth * (canvasWidth / squareWidth) + x / squareWidth)
   }
 

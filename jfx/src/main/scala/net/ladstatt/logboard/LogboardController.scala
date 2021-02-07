@@ -5,7 +5,6 @@ import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
 import javafx.fxml.{FXML, Initializable}
 import javafx.scene.control.{Tab, TabPane}
-import javafx.scene.image.ImageView
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
 import net.ladstatt.util.CanLog
@@ -48,16 +47,16 @@ class LogboardController extends Initializable with CanLog {
   }
 
   val squareWidthProperty = new SimpleIntegerProperty(7)
-  val widthProperty = new SimpleIntegerProperty(1000)
+  val canvasWidthProperty = new SimpleIntegerProperty(1000)
 
   def getSquareWidth(): Int = squareWidthProperty.get
 
-  def setWidth(width: Int): Unit = widthProperty.set(width)
+  def setCanvasWidth(width: Int): Unit = canvasWidthProperty.set(width)
 
-  def getWidth(): Int = widthProperty.get()
+  def getCanvasWidth(): Int = canvasWidthProperty.get()
 
   def addLogReport(l: LogReport): Unit = {
-    val tab = ReportTab(l)
+    val tab = LogView(l, getSquareWidth(), getCanvasWidth())
     tabPane.getTabs.add(tab)
     tabPane.getSelectionModel.selectLast()
   }
@@ -68,9 +67,9 @@ class LogboardController extends Initializable with CanLog {
     tabPane.getSelectionModel.selectedItemProperty().addListener(new ChangeListener[Tab] {
       override def changed(observableValue: ObservableValue[_ <: Tab], t: Tab, t1: Tab): Unit = {
         t1 match {
-          case tab: ReportTab =>
+          case tab: LogView =>
             if (tab.getRepaint()) {
-              tab.paint(getSquareWidth(), getWidth())
+              tab.doRepaint(getSquareWidth(), getCanvasWidth())
             }
           case _ =>
         }
@@ -78,13 +77,13 @@ class LogboardController extends Initializable with CanLog {
     }
 
     )
-    widthProperty.addListener(new ChangeListener[Number] {
+    canvasWidthProperty.addListener(new ChangeListener[Number] {
       override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
         for (t <- tabPane.getTabs.asScala) {
           t match {
-            case tab: ReportTab => {
+            case tab: LogView => {
               if (tab.isSelected) {
-                tab.paint(getSquareWidth(), t1.intValue())
+                tab.doRepaint(getSquareWidth(), t1.intValue())
               } else {
                 tab.setRepaint(true)
               }
@@ -100,7 +99,7 @@ class LogboardController extends Initializable with CanLog {
           if (change.wasAdded()) {
             for (r <- change.getAddedSubList.asScala) {
               r match {
-                case reportTab: ReportTab => reportTab.paint(getSquareWidth(), getWidth())
+                case reportTab: LogView => reportTab.doRepaint(getSquareWidth(), getCanvasWidth())
                 case _ => // do nothing
               }
             }
