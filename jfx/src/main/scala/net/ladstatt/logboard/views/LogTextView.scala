@@ -1,8 +1,9 @@
-package net.ladstatt.logboard
+package net.ladstatt.logboard.views
 
 import javafx.collections.FXCollections
 import javafx.scene.control.{Button, ListView, Tab, ToolBar}
 import javafx.scene.layout.BorderPane
+import net.ladstatt.logboard.{LogEntry, LogReport, LogSeverity}
 
 class LogTextView(logReport: LogReport) extends Tab("Text View") {
 
