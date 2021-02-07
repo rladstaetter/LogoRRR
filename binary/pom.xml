@@ -45,11 +45,6 @@
                         <arg>--report-unsupported-elements-at-runtime</arg>
                         <arg>-Dgraal.LogFile=${graalvm.log}</arg>
                     </nativeImageArgs>
-                    <!--
-                        <list>net.ladstatt.logboard.LogBoardMainBorderPane</list>
-                        <list>javafx.scene.control.Label</list>
-                        <list>javafx.scene.control.ScrollPane</list>
-                    -->
                     <reflectionList>
                         <list>javafx.scene.input.Dragboard</list>
                     </reflectionList>
