@@ -28,16 +28,19 @@ object LogSeverity {
   val radii = new CornerRadii(5.0)
   val insets = new Insets(-5.0)
 
-  private def mkBackgrounds(severity: LogSeverity): Background = {
+  private def mkBackground(severity: LogSeverity): Background = {
     new Background(new BackgroundFill(severity.color, radii, insets))
   }
 
-  val backgrounds: Map[LogSeverity, Background] =
-    Map(LogSeverity.Info -> mkBackgrounds(LogSeverity.Info)
-      , LogSeverity.Trace -> mkBackgrounds(LogSeverity.Trace)
-      , LogSeverity.Warning -> mkBackgrounds(LogSeverity.Warning)
-      , LogSeverity.Severe -> mkBackgrounds(LogSeverity.Severe)
-      , LogSeverity.Other -> mkBackgrounds(LogSeverity.Other))
+  val backgrounds: util.HashMap[LogSeverity, Background] = {
+    val backgrounds = new util.HashMap[LogSeverity, Background]()
+    backgrounds.put(LogSeverity.Info, mkBackground(LogSeverity.Info))
+    backgrounds.put(LogSeverity.Trace, mkBackground(LogSeverity.Trace))
+    backgrounds.put(LogSeverity.Warning, mkBackground(LogSeverity.Warning))
+    backgrounds.put(LogSeverity.Severe, mkBackground(LogSeverity.Severe))
+    backgrounds.put(LogSeverity.Other, mkBackground(LogSeverity.Other))
+    backgrounds
+  }
 
 
 }

@@ -34,7 +34,7 @@ class LogVisualView(logReport: LogReport
 
   selectedEntry.addListener(new ChangeListener[LogEntry] {
     override def changed(observableValue: ObservableValue[_ <: LogEntry], t: LogEntry, entry: LogEntry): Unit = {
-      label.setBackground(LogSeverity.backgrounds(entry.severity))
+      label.setBackground(LogSeverity.backgrounds.get(entry.severity))
       label.setText(s"L: ${getSelectedIndex() + 1} ${entry.value}")
     }
   })
