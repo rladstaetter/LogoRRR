@@ -1,13 +1,11 @@
 package net.ladstatt.logboard.views
 
 import javafx.collections.FXCollections
-import javafx.scene.control.{Button, ListView, Tab, ToolBar}
+import javafx.scene.control.{Button, ListView, ToolBar}
 import javafx.scene.layout.BorderPane
 import net.ladstatt.logboard.{LogEntry, LogReport, LogSeverity}
 
-class LogTextView(logReport: LogReport) extends Tab("Text View") {
-
-  def doRepaint(sWidth :Int, cWidth :Int) :Unit = ()
+class LogTextView(logReport: LogReport) extends BorderPane {
 
   def mkListView(): ListView[LogEntry] = {
     val lv = new ListView[LogEntry]()
@@ -23,8 +21,6 @@ class LogTextView(logReport: LogReport) extends Tab("Text View") {
     bar
   }
 
-  val bp = new BorderPane()
-  bp.setTop(mkStatsToolbar())
-  bp.setCenter(mkListView())
-  setContent(bp)
+  setTop(mkStatsToolbar())
+  setCenter(mkListView())
 }

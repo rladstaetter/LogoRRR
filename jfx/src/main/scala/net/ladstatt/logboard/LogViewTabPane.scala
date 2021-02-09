@@ -22,9 +22,9 @@ class LogViewTabPane extends TabPane {
   getSelectionModel.selectedItemProperty().addListener(new ChangeListener[Tab] {
     override def changed(observableValue: ObservableValue[_ <: Tab], t: Tab, t1: Tab): Unit = {
       t1 match {
-        case tab: LogView =>
-          if (tab.getRepaint()) {
-            tab.doRepaint(getSquareWidth(), getCanvasWidth())
+        case logView: LogView =>
+          if (logView.getRepaint()) {
+            logView.doRepaint(getCanvasWidth())
           }
         case _ =>
       }
@@ -37,7 +37,7 @@ class LogViewTabPane extends TabPane {
         if (change.wasAdded()) {
           for (r <- change.getAddedSubList.asScala) {
             r match {
-              case reportTab: LogView => reportTab.doRepaint(getSquareWidth(), getCanvasWidth())
+              case logView: LogView => logView.doRepaint(getCanvasWidth())
               case _ => // do nothing
             }
           }

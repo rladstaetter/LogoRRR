@@ -1,32 +1,30 @@
 package net.ladstatt.logboard.views
 
 import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.control._
 import net.ladstatt.logboard.LogReport
 import net.ladstatt.util.CanLog
 
 
-object LogView {
-
-  def apply(logReport: LogReport, squareWidth: Int, canvasWidth: Int): LogView = {
-    val rt = new LogView(logReport, squareWidth, canvasWidth)
-    rt
-  }
-
-}
-
-
-
-
 class LogView(logReport: LogReport
               , squareWidth: Int
-              , canvasWidth: Int) extends Tab(logReport.name + " (" + logReport.entries.size() + " entries)") with CanLog {
+              , initialCanvasWith: Int) extends Tab(logReport.name + " (" + logReport.entries.size() + " entries)") with CanLog {
 
-  private val tabPane = new TabPane()
-  private val logVisualView = new LogVisualView(logReport, squareWidth, canvasWidth)
+  val splitPane = new SplitPane()
+  private val logVisualView = new LogVisualView(logReport, squareWidth, (initialCanvasWith * 0.5).toInt)
   private val logTextView = new LogTextView(logReport)
-  tabPane.getTabs.addAll(logVisualView, logTextView)
-  setContent(tabPane)
+  splitPane.getItems.addAll(logVisualView, logTextView)
+  setContent(splitPane)
+  splitPane.getDividers.get(0).positionProperty().addListener(new ChangeListener[Number] {
+    override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
+      val width = t1.doubleValue() * splitPane.getWidth
+      // t1 can be negative as well
+      if (isSelected && width > squareWidth) {
+        logVisualView.doRepaint(squareWidth, width.toInt)
+      }
+    }
+  })
 
   /**
    * initially, report tab will be painted when added. per default the newly added report will be painted once.
@@ -39,9 +37,7 @@ class LogView(logReport: LogReport
 
   def getRepaint(): Boolean = repaintProperty.get()
 
-
-  def doRepaint(sWidth: Int, cWidth: Int): Unit = {
-    logTextView.doRepaint(sWidth, cWidth)
-    logVisualView.doRepaint(sWidth, cWidth)
+  def doRepaint(cWidth: Int): Unit = {
+    logVisualView.doRepaint(squareWidth, cWidth)
   }
 }

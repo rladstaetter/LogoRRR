@@ -18,6 +18,7 @@ class LogBoardMainBorderPane extends BorderPane with CanLog {
   val squareWidthProperty = new SimpleIntegerProperty(7)
   val canvasWidthProperty = new SimpleIntegerProperty(1000)
 
+
   def getSquareWidth(): Int = squareWidthProperty.get
 
   def setCanvasWidth(width: Int): Unit = canvasWidthProperty.set(width)
@@ -27,16 +28,16 @@ class LogBoardMainBorderPane extends BorderPane with CanLog {
   val tabPane = new LogViewTabPane
   tabPane.canvasWidthProperty.bind(canvasWidthProperty)
   tabPane.squareWidthProperty.bind(squareWidthProperty)
-
+  /*
   canvasWidthProperty.addListener(new ChangeListener[Number] {
     override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
       for (t <- tabPane.getTabs.asScala) {
         t match {
-          case tab: LogView => {
-            if (tab.isSelected) {
-              tab.doRepaint(getSquareWidth(), t1.intValue())
+          case logView: LogView => {
+            if (logView.isSelected) {
+              logView.doRepaint(t1.intValue())
             } else {
-              tab.setRepaint(true)
+              logView.setRepaint(true)
             }
           }
           case _ => // do nothing
@@ -44,7 +45,7 @@ class LogBoardMainBorderPane extends BorderPane with CanLog {
       }
     }
   })
-
+*/
   setOnDragOver(new EventHandler[DragEvent] {
     override def handle(event: DragEvent): Unit = {
       if (event.getDragboard.hasFiles) {
@@ -59,9 +60,8 @@ class LogBoardMainBorderPane extends BorderPane with CanLog {
       if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
         Try(LogReport(logFile)) match {
           case Success(value) =>
-
             timeR({
-              tabPane.getTabs.add(views.LogView(value, getSquareWidth(), getCanvasWidth()))
+              tabPane.getTabs.add(new LogView(value, getSquareWidth(), getCanvasWidth()))
               tabPane.getSelectionModel.selectLast()
             }, "Displays logfile")
 
