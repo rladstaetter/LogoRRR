@@ -21,6 +21,13 @@ class LogTextView(logReport: LogReport) extends BorderPane {
     bar
   }
 
+  private val listView: ListView[LogEntry] = mkListView()
+
+  def selectEntryByIndex(index: Int): Unit = {
+    listView.getSelectionModel.select(index)
+    listView.scrollTo(index)
+  }
+
   setTop(mkStatsToolbar())
-  setCenter(mkListView())
+  setCenter(listView)
 }
