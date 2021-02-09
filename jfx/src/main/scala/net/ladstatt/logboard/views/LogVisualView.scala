@@ -3,18 +3,12 @@ package net.ladstatt.logboard.views
 import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event.EventHandler
-import javafx.geometry.Insets
 import javafx.scene.control.{Label, ScrollPane}
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
-import javafx.scene.layout.{Background, BackgroundFill, BorderPane, CornerRadii}
-import net.ladstatt.logboard.{LogEntry, LogReport}
+import javafx.scene.layout.BorderPane
+import net.ladstatt.logboard.{LogEntry, LogReport, LogSeverity}
 
-object LogVisualView {
-  val radii = new CornerRadii(5.0)
-  val insets = new Insets(-5.0)
-
-}
 
 class LogVisualView(logReport: LogReport
                     , squareWidth: Int
@@ -40,10 +34,11 @@ class LogVisualView(logReport: LogReport
 
   selectedEntry.addListener(new ChangeListener[LogEntry] {
     override def changed(observableValue: ObservableValue[_ <: LogEntry], t: LogEntry, entry: LogEntry): Unit = {
-      label.setBackground(new Background(new BackgroundFill(entry.severity.color, LogVisualView.radii, LogVisualView.insets)))
+      label.setBackground(LogSeverity.backgrounds(entry.severity))
       label.setText(s"L: ${getSelectedIndex() + 1} ${entry.value}")
     }
   })
+
 
   val label = {
     val l = new Label("")
