@@ -52,7 +52,7 @@
                 <executions>
                     <execution>
                         <id>execute-compile-and-link</id>
-                        <phase>package</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>build</goal>
                         </goals>
@@ -85,7 +85,7 @@
                                 <configuration>
                                     <url>https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip</url>
                                     <unpack>true</unpack>
-                                    <outputDirectory>${project.build.directory}/upx/</outputDirectory>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
                                 </configuration>
                             </execution>
                         </executions>
@@ -96,7 +96,7 @@
                         <executions>
                             <execution>
                                 <id>pack-exe</id>
-                                <phase>prepare-package</phase>
+                                <phase>package</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
