@@ -62,6 +62,62 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>OS.windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.googlecode.maven-download-plugin</groupId>
+                        <artifactId>download-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>download-upx-packer</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>wget</goal>
+                                </goals>
+                                <configuration>
+                                    <url>https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip</url>
+                                    <unpack>true</unpack>
+                                    <outputDirectory>${project.build.directory}/upx/</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>pack-exe</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${project.build.directory}/client/x86_64-windows/</workingDirectory>
+                                    <executable>${project.build.directory}/upx-3.96-win64/upx.exe</executable>
+                                    <arguments>
+                                        <argument>-9</argument>
+                                        <argument>-ojavafx-logboard.exe</argument>
+                                        <argument>net.ladstatt.logboard.binary.exe</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
 </project>
 
 
