@@ -12,7 +12,7 @@
         <revision>21.1.2</revision>
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <openjfx.version>16-ea+6</openjfx.version>
+        <openjfx.version>16-ea+7</openjfx.version>
         <client.plugin.version>0.1.36</client.plugin.version>
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.4</scala.version>
