@@ -23,7 +23,7 @@ class LogViewTabPane extends TabPane {
     override def changed(observableValue: ObservableValue[_ <: Tab], t: Tab, t1: Tab): Unit = {
       t1 match {
         case logView: LogView =>
-          if (logView.getRepaint()) {
+          if (logView.isSelected) {
             logView.doRepaint(getCanvasWidth())
           }
         case _ =>

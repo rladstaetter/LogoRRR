@@ -1,28 +1,18 @@
 package net.ladstatt.logboard.views
 
-import javafx.collections.FXCollections
-import javafx.scene.control.{Button, ListCell, ListView, ToolBar}
+import javafx.collections.transformation.FilteredList
+import javafx.scene.control.{ListCell, ListView}
 import javafx.scene.layout.BorderPane
 import javafx.util.Callback
-import net.ladstatt.logboard.{LogEntry, LogReport, LogSeverity}
+import net.ladstatt.logboard.{LogEntry, LogSeverity}
 
-class LogTextView(logReport: LogReport) extends BorderPane {
+class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
 
-  def mkListView(): ListView[LogEntry] = {
+  private val listView: ListView[LogEntry] = {
     val lv = new ListView[LogEntry]()
-    lv.setItems(FXCollections.observableList(logReport.entries))
+    lv.setItems(filteredList)
     lv
   }
-
-  def mkStatsToolbar(): ToolBar = {
-    val bar = new ToolBar()
-    LogSeverity.seq.stream.forEach(ls => {
-      bar.getItems.add(new Button(ls.name + ": " + logReport.occurences.get(ls) + " " + logReport.percentAsString(ls) + "%"))
-    })
-    bar
-  }
-
-  private val listView: ListView[LogEntry] = mkListView()
 
   class LogEntryListCell extends ListCell[LogEntry] {
 
@@ -50,6 +40,5 @@ class LogTextView(logReport: LogReport) extends BorderPane {
     listView.scrollTo(index)
   }
 
-  setTop(mkStatsToolbar())
   setCenter(listView)
 }

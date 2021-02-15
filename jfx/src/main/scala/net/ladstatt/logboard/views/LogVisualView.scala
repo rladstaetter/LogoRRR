@@ -4,13 +4,15 @@ import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event.EventHandler
 import javafx.scene.control.{Label, ScrollPane}
-import javafx.scene.image.ImageView
+import javafx.scene.image.{ImageView, PixelWriter, WritableImage}
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
+import javafx.scene.paint.Color
 import net.ladstatt.logboard.{LogEntry, LogReport, LogSeverity}
 
+import scala.jdk.CollectionConverters._
 
-class LogVisualView(logReport: LogReport
+class LogVisualView(entries: java.util.List[LogEntry]
                     , squareWidth: Int
                     , canvasWidth: Int) extends BorderPane {
 
@@ -26,6 +28,7 @@ class LogVisualView(logReport: LogReport
 
   def getSelectedEntry(): LogEntry = selectedEntry.get()
 
+  /** will be set by mouse clicks / movements */
   val selectedIndexProperty = new SimpleIntegerProperty()
 
   def setSelectedIndex(i: Int): Unit = selectedIndexProperty.set(i)
@@ -50,15 +53,15 @@ class LogVisualView(logReport: LogReport
   /** responsible for determining current logevent */
   val mouseEventHandler = new EventHandler[MouseEvent]() {
     override def handle(me: MouseEvent): Unit = {
-      val index = logReport.indexOf(me.getX.toInt, me.getY.toInt, squareWidth, getCanvasWidth())
-      val entry = logReport.entries.get(index)
+      val index = LogReport.indexOf(me.getX.toInt, me.getY.toInt, squareWidth, getCanvasWidth())
+      val entry = entries.get(index)
       setSelectedIndex(index)
       setSelectedEntry(entry)
     }
   }
 
   val view = {
-    val iv = new ImageView(logReport.paint(squareWidth, canvasWidth))
+    val iv = new ImageView(paint(entries, squareWidth, canvasWidth))
     iv.setOnMouseMoved(mouseEventHandler)
     iv
   }
@@ -67,7 +70,29 @@ class LogVisualView(logReport: LogReport
 
   def doRepaint(sWidth: Int, cWidth: Int): Unit = {
     setCanvasWidth(cWidth)
-    view.setImage(logReport.paint(sWidth, cWidth))
+    view.setImage(paint(entries, sWidth, cWidth))
     label.setPrefWidth(cWidth)
   }
+
+  def paint(entries: java.util.List[LogEntry], squareWidth: Int, canvasWidth: Int): WritableImage = {
+    val numberCols = canvasWidth / squareWidth
+    val numRows = entries.size() / numberCols
+    val height = squareWidth * numRows
+    val wi = new WritableImage(canvasWidth + squareWidth, height + squareWidth)
+    val pw = wi.getPixelWriter
+
+    for ((e, i) <- entries.asScala.zipWithIndex) {
+      paintSquare(pw, (i % numberCols) * squareWidth, (i / numberCols) * squareWidth, squareWidth.toInt, e.severity.color)
+    }
+    wi
+  }
+
+  def paintSquare(pw: PixelWriter, u: Int, v: Int, length: Int, c: Color): PixelWriter = {
+    for {x <- u until (u + length - 1)
+         y <- v until (v + length - 1)} {
+      pw.setColor(x, y, c)
+    }
+    pw
+  }
+
 }
