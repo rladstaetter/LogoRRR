@@ -8,15 +8,27 @@ import net.ladstatt.logboard.views.LogView
 
 import scala.jdk.CollectionConverters._
 
+object LogViewTabPane {
+
+  def apply(parent: LogBoardMainBorderPane): LogViewTabPane = {
+    val lvtp = new LogViewTabPane
+    lvtp.sceneWidthProperty.bind(parent.sceneWidthProperty)
+    lvtp.squareWidthProperty.bind(parent.squareWidthProperty)
+    lvtp
+  }
+}
+
 class LogViewTabPane extends TabPane {
 
-  val canvasWidthProperty = new SimpleIntegerProperty(1000)
+  /** bound to sceneWidthProperty of parent LogBoardMainBorderPane */
+  val sceneWidthProperty = new SimpleIntegerProperty()
 
-  val squareWidthProperty = new SimpleIntegerProperty(7)
+  /** bound to squareWidthProperty of parent LogBoardMainBorderPane */
+  val squareWidthProperty = new SimpleIntegerProperty()
 
-  def getSquareWidth(): Int = squareWidthProperty.get
-
-  def getCanvasWidth(): Int = canvasWidthProperty.get()
+  def add(logReport: LogReport): Unit = {
+    getTabs.add(new LogView(logReport, squareWidthProperty.get, sceneWidthProperty.get))
+  }
 
 
   getSelectionModel.selectedItemProperty().addListener(new ChangeListener[Tab] {

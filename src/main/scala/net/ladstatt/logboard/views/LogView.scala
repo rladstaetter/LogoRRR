@@ -1,6 +1,6 @@
 package net.ladstatt.logboard.views
 
-import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleLongProperty, SimpleObjectProperty}
+import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.FXCollections
@@ -10,10 +10,20 @@ import javafx.scene.layout.BorderPane
 import net.ladstatt.logboard.{LogEntry, LogReport, LogSeverity}
 import net.ladstatt.util.CanLog
 
-
+/**
+ * Represents a single 'document' UI approach for a log file.
+ *
+ * One can view / interact with more than one log file at a time, using tabs here feels quite natural.
+ *
+ * @param logReport   report instance holding information of log file to be analyzed
+ * @param squareWidth width of a square to paint
+ * @param sceneWidth
+ * */
 class LogView(logReport: LogReport
               , squareWidth: Int
-              , initialCanvasWith: Int) extends Tab(logReport.name + " (" + logReport.entries.size() + " entries)") with CanLog {
+              , sceneWidth: Int) extends Tab(logReport.name + " (" + logReport.entries.size() + " entries)") with CanLog {
+
+  val InitialRatio = 0.5
 
   /** top component for log view */
   val borderPane = new BorderPane()
@@ -36,12 +46,17 @@ class LogView(logReport: LogReport
 
   private val filterButtonsToolBar = new FilterButtonsToolBar(filteredList, logReport.occurences, logReport.entries.size)
 
-  private val logVisualView = new LogVisualView(filteredList, squareWidth, (initialCanvasWith * 0.5).toInt)
+  private val logVisualView = {
+
+    val lvv = new LogVisualView(filteredList, squareWidth, (sceneWidth * InitialRatio).toInt)
+    lvv.doRepaint(squareWidth, (sceneWidth * InitialRatio).toInt)
+    lvv
+  }
   private val logTextView = new LogTextView(filteredList)
 
   val entryLabel = {
     val l = new Label("")
-    l.setPrefWidth(initialCanvasWith)
+    l.setPrefWidth(sceneWidth)
     l.setStyle(s"-fx-text-fill: white; -fx-font-size: 20px;")
     l
   }
@@ -83,22 +98,33 @@ class LogView(logReport: LogReport
 
   splitPane.getItems.addAll(logVisualView, logTextView)
 
-  val lastDividerPositionChangeProperty = new SimpleLongProperty()
 
+  /*
+splitPane.getDividers.get(0).positionProperty().addListener(new ChangeListener[Number] {
+override def changed(observableValue: ObservableValue[_ <: Number], oldPos: Number, newPos: Number): Unit = {
+  val currentTime = System.currentTimeMillis()
+  val width = newPos.doubleValue() * splitPane.getWidth
+  Option(lastDividerPositionChangeProperty.get()) match {
+    case Some(value) =>
+    case None =>
+
+  }
+  doRepaint(width)
+}
+})
+  */
+
+  /** we are interested just in the first divider */
   splitPane.getDividers.get(0).positionProperty().addListener(new ChangeListener[Number] {
-    override def changed(observableValue: ObservableValue[_ <: Number], oldPos: Number, newPos: Number): Unit = {
-      /*
-      val currentTime = System.currentTimeMillis()
-      val width = newPos.doubleValue() * splitPane.getWidth
-      Option(lastDividerPositionChangeProperty.get()) match {
-        case Some(value) =>
-        case None =>
-
+    override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
+      val width = t1.doubleValue() * splitPane.getWidth
+      // t1 can be negative as well
+      if (isSelected && width > squareWidth) {
+        logVisualView.doRepaint(squareWidth, width.toInt)
       }
-      doRepaint(width)
-      */
     }
   })
+
 
   setContent(borderPane)
 

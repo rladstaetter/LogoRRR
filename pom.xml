@@ -19,7 +19,7 @@
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.4</scala.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <main.class>net.ladstatt.logboard.LogboardApplication</main.class>
+        <main.class>net.ladstatt.logboard.LogboardApp</main.class>
     </properties>
 
     <dependencyManagement>

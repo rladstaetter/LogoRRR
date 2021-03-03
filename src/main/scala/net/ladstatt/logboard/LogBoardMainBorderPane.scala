@@ -4,28 +4,33 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.event.EventHandler
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
-import net.ladstatt.logboard.views.LogView
 import net.ladstatt.util.CanLog
 
 import java.nio.file.{Files, Path}
 import scala.util.{Failure, Success, Try}
 
+/**
+ * Main UI element, all other gui elements are in some way children of this Borderpane
+ *
+ * @param initialSceneWidth  initial width of scene
+ * @param initialSquareWidth width of squares to paint in visual view
+ */
+class LogBoardMainBorderPane(initialSceneWidth: Int
+                             , initialSquareWidth: Int) extends BorderPane with CanLog {
 
-class LogBoardMainBorderPane extends BorderPane with CanLog {
+  val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
 
-  val squareWidthProperty = new SimpleIntegerProperty(7)
-  val canvasWidthProperty = new SimpleIntegerProperty(1000)
+  val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
 
-  def getSquareWidth(): Int = squareWidthProperty.get
+  val tabPane = LogViewTabPane(this)
 
-  def setCanvasWidth(width: Int): Unit = canvasWidthProperty.set(width)
+  setCenter(tabPane)
 
-  def getCanvasWidth(): Int = canvasWidthProperty.get()
 
-  val tabPane = new LogViewTabPane
-  tabPane.canvasWidthProperty.bind(canvasWidthProperty)
-  tabPane.squareWidthProperty.bind(squareWidthProperty)
+  /** called when width of scene changes */
+  def setSceneWidth(width: Int): Unit = sceneWidthProperty.set(width)
 
+  /** needed to activate dragndrop */
   setOnDragOver(new EventHandler[DragEvent] {
     override def handle(event: DragEvent): Unit = {
       if (event.getDragboard.hasFiles) {
@@ -34,25 +39,22 @@ class LogBoardMainBorderPane extends BorderPane with CanLog {
     }
   })
 
+  /** try to interpret dropped element as log file */
   setOnDragDropped(new EventHandler[DragEvent] {
-    override def handle(event: DragEvent): Unit = {
+    override def handle(event: DragEvent): Unit = timeR({
       val logFile: Path = event.getDragboard.getFiles.get(0).toPath
       if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
         Try(LogReport(logFile)) match {
           case Success(value) =>
-            timeR({
-              tabPane.getTabs.add(new LogView(value, getSquareWidth(), getCanvasWidth()))
-//              tabPane.getSelectionModel.selectLast()
-            }, "Displays logfile")
+            tabPane.add(value)
+          //              tabPane.getSelectionModel.selectLast()
 
           case Failure(exception) =>
             System.err.println("Could not import file " + logFile.toAbsolutePath, " reason: " + exception.getMessage)
         }
       }
-    }
+    }, "Added logfile")
   })
-
-  setCenter(tabPane)
 
 
 }

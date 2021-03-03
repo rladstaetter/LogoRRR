@@ -8,12 +8,9 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
 import net.ladstatt.logboard.{LogEntry, LogReport}
-import net.ladstatt.util.{CanLog, JfxUtils}
+import net.ladstatt.util.CanLog
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 import scala.jdk.CollectionConverters._
-import scala.util.{Failure, Success}
 
 class LogVisualView(entries: java.util.List[LogEntry]
                     , squareWidth: Int
@@ -55,26 +52,11 @@ class LogVisualView(entries: java.util.List[LogEntry]
 
   setCenter(new ScrollPane(view))
 
-  var repainting = false
-
   def doRepaint(sWidth: Int, cWidth: Int): Unit = {
     setCanvasWidth(cWidth)
-    if (!repainting) {
-      repainting = true
-      Future {
-        val i = timeR(paint(entries, sWidth, cWidth), "repainting")
-        repainting = false
-        i
-      } onComplete {
-        case Success(image) => JfxUtils.execOnUiThread(view.setImage(image))
-        case Failure(exception) => exception.printStackTrace()
-      }
-    } else {
-      println("already in process of repainting ...")
-    }
+    val i = timeR(paint(entries, sWidth, cWidth), "repainting")
+    view.setImage(i)
   }
-
-  var painted = 0
 
   def mkBareImage(entries: java.util.List[LogEntry], squareWidth: Int, canvasWidth: Int): WritableImage = {
     val numberCols = canvasWidth / squareWidth
@@ -84,8 +66,6 @@ class LogVisualView(entries: java.util.List[LogEntry]
   }
 
   def paint(entries: java.util.List[LogEntry], squareWidth: Int, canvasWidth: Int): WritableImage = {
-    println("painted: " + painted)
-    painted = painted + 1
     val wi = mkBareImage(entries, squareWidth, canvasWidth)
 
     val numberCols = canvasWidth / squareWidth
