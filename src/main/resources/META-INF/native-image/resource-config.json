@@ -1,0 +1,8 @@
+{
+  "resources":{
+  "includes":[]},
+  "bundles":[
+    {"name":"com.sun.javafx.tk.quantum.QuantumMessagesBundle"}, 
+    {"name":"com/sun/javafx/scene/control/skin/resources/controls"}
+  ]
+}
