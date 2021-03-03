@@ -1,13 +1,13 @@
 package net.ladstatt.logboard.views
 
-import javafx.beans.{InvalidationListener, Observable}
-import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty}
+import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleLongProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 import javafx.scene.layout.BorderPane
-import net.ladstatt.logboard.{LogEntry, LogReport}
+import net.ladstatt.logboard.{LogEntry, LogReport, LogSeverity}
 import net.ladstatt.util.CanLog
 
 
@@ -18,28 +18,37 @@ class LogView(logReport: LogReport
   /** top component for log view */
   val borderPane = new BorderPane()
 
+  /** split visual view and text view */
   val splitPane = new SplitPane()
 
-  // defaults to view all entries
+  /** list which holds all entries, default to display all (can be changed via buttons) */
   val filteredList = new FilteredList[LogEntry](FXCollections.observableList(logReport.entries))
 
   // to detect when we apply a new filter via filter buttons (see FilterButtonsToolbar)
   filteredList.predicateProperty().addListener(new InvalidationListener {
     override def invalidated(observable: Observable): Unit = {
-      val width = splitPane.getDividers.get(0).getPosition * splitPane.getWidth
-      if (isSelected && width > squareWidth) {
-        logVisualView.doRepaint(squareWidth, width.toInt)
-      }
+      doRepaint()
     }
   })
+
+
+  def getVisualViewWidth(): Double = splitPane.getDividers.get(0).getPosition * splitPane.getWidth
 
   private val filterButtonsToolBar = new FilterButtonsToolBar(filteredList, logReport.occurences, logReport.entries.size)
 
   private val logVisualView = new LogVisualView(filteredList, squareWidth, (initialCanvasWith * 0.5).toInt)
   private val logTextView = new LogTextView(filteredList)
 
+  val entryLabel = {
+    val l = new Label("")
+    l.setPrefWidth(initialCanvasWith)
+    l.setStyle(s"-fx-text-fill: white; -fx-font-size: 20px;")
+    l
+  }
+
   borderPane.setTop(filterButtonsToolBar)
   borderPane.setCenter(splitPane)
+  borderPane.setBottom(entryLabel)
 
   /**
    * initially, report tab will be painted when added. per default the newly added report will be painted once.
@@ -48,7 +57,10 @@ class LogView(logReport: LogReport
    * */
   val repaintProperty = new SimpleBooleanProperty(false)
 
+  /** to share state between visual view and text view. index can be selected by navigation in visual view */
   val selectedIndexProperty = new SimpleIntegerProperty()
+
+  def getSelectedIndex(): Int = selectedIndexProperty.get()
 
   selectedIndexProperty.bind(logVisualView.selectedIndexProperty)
   selectedIndexProperty.addListener(new ChangeListener[Number] {
@@ -57,15 +69,34 @@ class LogView(logReport: LogReport
     }
   })
 
+
+  val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
+
+  selectedEntryProperty.bindBidirectional(logVisualView.selectedEntryProperty)
+
+  selectedEntryProperty.addListener(new ChangeListener[LogEntry] {
+    override def changed(observableValue: ObservableValue[_ <: LogEntry], t: LogEntry, entry: LogEntry): Unit = {
+      entryLabel.setBackground(LogSeverity.backgrounds.get(entry.severity))
+      entryLabel.setText(s"L: ${getSelectedIndex() + 1} ${entry.value}")
+    }
+  })
+
   splitPane.getItems.addAll(logVisualView, logTextView)
 
+  val lastDividerPositionChangeProperty = new SimpleLongProperty()
+
   splitPane.getDividers.get(0).positionProperty().addListener(new ChangeListener[Number] {
-    override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
-      val width = t1.doubleValue() * splitPane.getWidth
-      // t1 can be negative as well
-      if (isSelected && width > squareWidth) {
-        logVisualView.doRepaint(squareWidth, width.toInt)
+    override def changed(observableValue: ObservableValue[_ <: Number], oldPos: Number, newPos: Number): Unit = {
+      /*
+      val currentTime = System.currentTimeMillis()
+      val width = newPos.doubleValue() * splitPane.getWidth
+      Option(lastDividerPositionChangeProperty.get()) match {
+        case Some(value) =>
+        case None =>
+
       }
+      doRepaint(width)
+      */
     }
   })
 
@@ -75,7 +106,14 @@ class LogView(logReport: LogReport
 
   def getRepaint(): Boolean = repaintProperty.get()
 
-  def doRepaint(cWidth: Int): Unit = {
-    logVisualView.doRepaint(squareWidth, cWidth)
+  def doRepaint(): Unit = doRepaint(getVisualViewWidth())
+
+  /** width can be negative as well, we have to guard about that. also we repaint only if view is visible. */
+  private def doRepaint(width: Double): Unit = {
+    if (isSelected && width > squareWidth * 4) { // at minimum we want to have 4 squares left (an arbitrary choice)
+      logVisualView.doRepaint(squareWidth, width.toInt)
+      entryLabel.setPrefWidth(borderPane.getWidth)
+    }
   }
+
 }

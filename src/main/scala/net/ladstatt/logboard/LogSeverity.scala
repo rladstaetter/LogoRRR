@@ -5,7 +5,8 @@ import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}
 import javafx.scene.paint.Color
 
 import java.util
-import java.util.Collections
+
+abstract class LogSeverity(val name: String, val color: Color)
 
 object LogSeverity {
 
@@ -19,11 +20,13 @@ object LogSeverity {
 
   case object Other extends LogSeverity("Unclassified", Color.BLUE)
 
-  val seq = {
+  val seq: Seq[LogSeverity] = Seq(Info, Warning, Trace, Severe, Other)
+  /*
+  val seq: util.ArrayList[LogSeverity] = {
     val l = new util.ArrayList[LogSeverity]()
     Collections.addAll[LogSeverity](l, Info, Warning, Trace, Severe, Other)
     l
-  }
+  }*/
 
   val radii = new CornerRadii(5.0)
   val insets = new Insets(-5.0)
@@ -45,4 +48,3 @@ object LogSeverity {
 
 }
 
-abstract class LogSeverity(val name: String, val color: Color)

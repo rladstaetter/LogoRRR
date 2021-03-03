@@ -42,7 +42,7 @@ class LogBoardMainBorderPane extends BorderPane with CanLog {
           case Success(value) =>
             timeR({
               tabPane.getTabs.add(new LogView(value, getSquareWidth(), getCanvasWidth()))
-              tabPane.getSelectionModel.selectLast()
+//              tabPane.getSelectionModel.selectLast()
             }, "Displays logfile")
 
           case Failure(exception) =>

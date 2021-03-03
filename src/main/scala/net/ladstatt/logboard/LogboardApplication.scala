@@ -4,8 +4,14 @@ import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.Scene
 import javafx.stage.Stage
 
+object LogboardApplication {
+  def main(args: Array[String]): Unit = {
 
-class LogboardApplication {
+    javafx.application.Application.launch(classOf[LogboardApplication], args: _*)
+  }
+}
+
+class LogboardApplication extends javafx.application.Application {
 
   /**
    * will be called by the java bootstrapper

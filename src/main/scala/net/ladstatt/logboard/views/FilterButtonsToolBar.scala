@@ -36,7 +36,7 @@ class FilterButtonsToolBar(filteredList: FilteredList[LogEntry]
 
   val filterButtons: util.HashMap[LogSeverity, ToggleButton] = {
     val m = new util.HashMap[LogSeverity, ToggleButton]()
-    LogSeverity.seq.stream.forEach((ls: LogSeverity) => {
+    LogSeverity.seq.foreach((ls: LogSeverity) => {
       val button = new ToggleButton(ls.name + ": " + occurences.get(ls) + " " + FilterButtonsToolBar.percentAsString(ls, occurences, size))
       button.setSelected(true)
       button.selectedProperty().addListener(new InvalidationListener {
