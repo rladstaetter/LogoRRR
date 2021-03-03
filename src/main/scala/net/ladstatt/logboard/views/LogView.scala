@@ -42,12 +42,9 @@ class LogView(logReport: LogReport
   })
 
 
-  def getVisualViewWidth(): Double = splitPane.getDividers.get(0).getPosition * splitPane.getWidth
-
   private val filterButtonsToolBar = new FilterButtonsToolBar(filteredList, logReport.occurences, logReport.entries.size)
 
   private val logVisualView = {
-
     val lvv = new LogVisualView(filteredList, squareWidth, (sceneWidth * InitialRatio).toInt)
     lvv.doRepaint(squareWidth, (sceneWidth * InitialRatio).toInt)
     lvv
@@ -75,7 +72,6 @@ class LogView(logReport: LogReport
   /** to share state between visual view and text view. index can be selected by navigation in visual view */
   val selectedIndexProperty = new SimpleIntegerProperty()
 
-  def getSelectedIndex(): Int = selectedIndexProperty.get()
 
   selectedIndexProperty.bind(logVisualView.selectedIndexProperty)
   selectedIndexProperty.addListener(new ChangeListener[Number] {
@@ -98,22 +94,6 @@ class LogView(logReport: LogReport
 
   splitPane.getItems.addAll(logVisualView, logTextView)
 
-
-  /*
-splitPane.getDividers.get(0).positionProperty().addListener(new ChangeListener[Number] {
-override def changed(observableValue: ObservableValue[_ <: Number], oldPos: Number, newPos: Number): Unit = {
-  val currentTime = System.currentTimeMillis()
-  val width = newPos.doubleValue() * splitPane.getWidth
-  Option(lastDividerPositionChangeProperty.get()) match {
-    case Some(value) =>
-    case None =>
-
-  }
-  doRepaint(width)
-}
-})
-  */
-
   /** we are interested just in the first divider */
   splitPane.getDividers.get(0).positionProperty().addListener(new ChangeListener[Number] {
     override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
@@ -127,6 +107,10 @@ override def changed(observableValue: ObservableValue[_ <: Number], oldPos: Numb
 
 
   setContent(borderPane)
+
+  def getVisualViewWidth(): Double = splitPane.getDividers.get(0).getPosition * splitPane.getWidth
+
+  def getSelectedIndex(): Int = selectedIndexProperty.get()
 
   def setRepaint(repaint: Boolean): Unit = repaintProperty.set(repaint)
 

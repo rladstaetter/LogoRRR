@@ -48,8 +48,6 @@ class LogVisualView(entries: java.util.List[LogEntry]
     iv
   }
 
-  doRepaint(squareWidth, canvasWidth)
-
   setCenter(new ScrollPane(view))
 
   def doRepaint(sWidth: Int, cWidth: Int): Unit = {
