@@ -63,6 +63,21 @@ Note that you have to download this javafx-sdk separately and install it once on
 
 A comprehensive tutorial how to get started with developing JavaFX can be found on [openjfx.io](https://openjfx.io). 
 
+## Configuring GraalVM native-image 
+
+Recently a new feature for client maven plugin was introduced to help configure the underlying native-image technology. You have to provide configuration for reflection for example, or native code which is to be called by the application. 
+
+Configuring those aspects may swiftly become a challenge. Luckily client-maven-plugin has a target which makes those configuration steps easier, at least you get a good starting point. Just issue following maven command on your command line:
+
+    mvn client:runagent
+
+It will start JavaFX Logboard. Now you have to execute all possible click paths - in your code repository configuration files will appear which are needed for later AOT compilation via
+
+    mvn package 
+
+which itself calls `client:build`.
+
+
 ## License
 
 This software is licensed under Apache-2 License.
