@@ -31,7 +31,7 @@ Given you have followed the instructions for [maven-client-plugin](https://githu
 
 Should create a binary executable which can be run without a JVM:
 
-    ./target/client/x86_64-darwin/nxs.ladstatt.logboard.javafx-logboard
+    ./target/client/x86_64-darwin/net.ladstatt.logboard.javafx-logboard
 
 ### Windows    
 
