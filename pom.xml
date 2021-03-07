@@ -276,6 +276,15 @@
                 <graalvm.log>${project.build.directory}\graal.log</graalvm.log>
             </properties>
             <build>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/native-image/win</directory>
+                        <includes>
+                            <include>*.json</include>
+                        </includes>
+                        <targetPath>${project.build.directory}/classes/META-INF/native-image</targetPath>
+                    </resource>
+                </resources>
                 <plugins>
                     <plugin>
                         <groupId>com.googlecode.maven-download-plugin</groupId>
@@ -333,6 +342,17 @@
                 <graalvm.home>/Users/lad/.sdkman/candidates/java/21.0.0.r11-grl</graalvm.home>
                 <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
             </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/native-image/mac</directory>
+                        <includes>
+                            <include>*.json</include>
+                        </includes>
+                        <targetPath>${project.build.directory}/classes/META-INF/native-image</targetPath>
+                    </resource>
+                </resources>
+            </build>
         </profile>
     </profiles>
 

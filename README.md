@@ -45,7 +45,6 @@ A binary is available here after some minutes:
 
 If you want to execute this exe on another computer you have to make sure that the Visual Studio runtime environment is present there (redistributables).
 
-Tip: A great tool which can be used to reduce file size for executables is [UPX](https://upx.github.io).
 
 ## Running from IntelliJ
 
@@ -71,11 +70,14 @@ Configuring those aspects may swiftly become a challenge. Luckily client-maven-p
 
     mvn client:runagent
 
-It will start JavaFX Logboard. Now you have to execute all possible click paths - in your code repository configuration files will appear which are needed for later AOT compilation via
+It will start JavaFX Logboard. Now you have to execute all possible click paths - in your code repository configuration files will appear in `src/main/resources/META-INF/native-image/`. Those files are different depending on which OS you execute the application. 
+
+Currently, those files are generated / checked in under src/main/native-image/<os>/, and via a maven configuration they are placed in the right place needed for native-image. Like this the project can be build on multiple platforms via 
 
     mvn package 
 
-which itself calls `client:build`.
+Implicitly, maven package will call `client:build` and create a binary executable. (On windows the binary will be packed via [UPX](https://upx.github.io) to reduce the file size considerably.)
+
 
 ## Features
 
