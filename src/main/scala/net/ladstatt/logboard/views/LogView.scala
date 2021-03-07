@@ -9,7 +9,7 @@ import javafx.scene.control._
 import javafx.scene.layout.BorderPane
 import net.ladstatt.logboard.{LogEntry, LogReport, LogSeverity, LogViewTabPane}
 import net.ladstatt.util.CanLog
-
+import scala.jdk.CollectionConverters._
 object LogView {
 
   def apply(logViewTabPane: LogViewTabPane
@@ -34,7 +34,7 @@ object LogView {
 class LogView(logReport: LogReport
               , initialSceneWidth: Int
               , initialSquareWidth: Int)
-  extends Tab(logReport.name + " (" + logReport.entries.size() + " entries)") with CanLog {
+  extends Tab(logReport.name + " (" + logReport.entries.length + " entries)") with CanLog {
 
 
   /** bound to sceneWidthProperty of parent LogViewTabPane */
@@ -56,7 +56,7 @@ class LogView(logReport: LogReport
   val splitPane = new SplitPane()
 
   /** list which holds all entries, default to display all (can be changed via buttons) */
-  val filteredList = new FilteredList[LogEntry](FXCollections.observableList(logReport.entries))
+  val filteredList = new FilteredList[LogEntry](FXCollections.observableList(logReport.entries.asJava))
 
   // to detect when we apply a new filter via filter buttons (see FilterButtonsToolbar)
   filteredList.predicateProperty().addListener(new InvalidationListener {
@@ -66,10 +66,10 @@ class LogView(logReport: LogReport
   })
 
 
-  private val filterButtonsToolBar = new FilterButtonsToolBar(filteredList, logReport.occurences, logReport.entries.size)
+  private val filterButtonsToolBar = new FilterButtonsToolBar(filteredList, logReport.occurrences, logReport.entries.size)
 
   private lazy val logVisualView = {
-    val lvv = new LogVisualView(filteredList, (sceneWidth * InitialRatio).toInt, squareWidth)
+    val lvv = new LogVisualView(filteredList.asScala, (sceneWidth * InitialRatio).toInt, squareWidth)
     lvv.doRepaint(squareWidth, (sceneWidth * InitialRatio).toInt)
     lvv
   }
@@ -111,7 +111,7 @@ class LogView(logReport: LogReport
 
   selectedEntryProperty.addListener(new ChangeListener[LogEntry] {
     override def changed(observableValue: ObservableValue[_ <: LogEntry], t: LogEntry, entry: LogEntry): Unit = {
-      entryLabel.setBackground(LogSeverity.backgrounds.get(entry.severity))
+      entryLabel.setBackground(LogSeverity.backgrounds(entry.severity))
       entryLabel.setText(s"L: ${getSelectedIndex() + 1} ${entry.value}")
     }
   })

@@ -6,8 +6,6 @@ import javafx.scene.control.{ToggleButton, ToolBar}
 import net.ladstatt.logboard.{LogEntry, LogSeverity}
 
 import java.text.DecimalFormat
-import java.util
-import java.util.function.Predicate
 
 /** A toolbar with buttons which filter log events */
 object FilterButtonsToolBar {
@@ -15,9 +13,9 @@ object FilterButtonsToolBar {
   val percentFormatter = new DecimalFormat("#.##")
 
   def percentAsString(ls: LogSeverity
-                      , occurences: util.HashMap[LogSeverity, Long]
+                      , occurences: Map[LogSeverity, Int]
                       , size: Int): String = {
-    percentFormatter.format((100 * occurences.get(ls).toDouble) / size.toDouble) + "%"
+    percentFormatter.format((100 * occurences(ls).toDouble) / size.toDouble) + "%"
   }
 
 
@@ -31,13 +29,12 @@ object FilterButtonsToolBar {
  * @param size
  */
 class FilterButtonsToolBar(filteredList: FilteredList[LogEntry]
-                           , occurences: util.HashMap[LogSeverity, Long]
+                           , occurences: Map[LogSeverity, Int]
                            , size: Int) extends ToolBar {
 
-  val filterButtons: util.HashMap[LogSeverity, ToggleButton] = {
-    val m = new util.HashMap[LogSeverity, ToggleButton]()
-    LogSeverity.seq.foreach((ls: LogSeverity) => {
-      val button = new ToggleButton(ls.name + ": " + occurences.get(ls) + " " + FilterButtonsToolBar.percentAsString(ls, occurences, size))
+  val filterButtons: Map[LogSeverity, ToggleButton] = {
+    LogSeverity.seq.map((ls: LogSeverity) => {
+      val button = new ToggleButton(ls.name + ": " + occurences(ls) + " " + FilterButtonsToolBar.percentAsString(ls, occurences, size))
       button.setSelected(true)
       button.selectedProperty().addListener(new InvalidationListener {
         // if any of the buttons changes its selected value, reevaluate predicate
@@ -45,19 +42,14 @@ class FilterButtonsToolBar(filteredList: FilteredList[LogEntry]
         override def invalidated(observable: Observable): Unit = {
           // it is important that this is a method and thus the predicate gets recreated
           // otherwise filteredlist won't react to the new predicate and stays the same
-          filteredList.setPredicate(new Predicate[LogEntry] {
-            override def test(t: LogEntry): Boolean = {
-              filterButtons.get(t.severity).isSelected
-            }
+          filteredList.setPredicate((t: LogEntry) => {
+            filterButtons(t.severity).isSelected
           })
         }
       })
-      m.put(ls, button)
-    })
-    m
+      getItems.add(button)
+      ls -> button
+    }).toMap
   }
-
-  //  add buttons to self (ToolBar)
-  getItems.addAll(filterButtons.values)
 
 }
