@@ -27,7 +27,7 @@ Given you have followed the instructions for [maven-client-plugin](https://githu
 
 ### MacOs X
 
-     mvn clean install
+     mvn clean package
 
 Should create a binary executable which can be run without a JVM:
 
@@ -37,7 +37,7 @@ Should create a binary executable which can be run without a JVM:
 
 You have to enter following command in a Visual Studio Developer console:
 
-     mvn clean install
+     mvn clean package
 
 A binary is available here after some minutes:
     
@@ -76,6 +76,12 @@ It will start JavaFX Logboard. Now you have to execute all possible click paths 
     mvn package 
 
 which itself calls `client:build`.
+
+## Features
+
+- drag and drop log files to application to visualize/view them
+- handle multiple log files in parallel
+- filter log files for entries interactively
 
 
 ## License
