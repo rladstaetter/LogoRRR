@@ -7,21 +7,45 @@ import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 import javafx.scene.layout.BorderPane
-import net.ladstatt.logboard.{LogEntry, LogReport, LogSeverity}
+import net.ladstatt.logboard.{LogEntry, LogReport, LogSeverity, LogViewTabPane}
 import net.ladstatt.util.CanLog
+
+object LogView {
+
+  def apply(logViewTabPane: LogViewTabPane
+            , logReport: LogReport): LogView = {
+    val lv = new LogView(logReport
+      , logViewTabPane.sceneWidthProperty.get()
+      , logViewTabPane.squareWidthProperty.get())
+    lv.sceneWidthProperty.bind(logViewTabPane.sceneWidthProperty)
+    lv.squareWidthProperty.bind(logViewTabPane.squareWidthProperty)
+    lv
+  }
+
+}
 
 /**
  * Represents a single 'document' UI approach for a log file.
  *
  * One can view / interact with more than one log file at a time, using tabs here feels quite natural.
  *
- * @param logReport   report instance holding information of log file to be analyzed
- * @param squareWidth width of a square to paint
- * @param sceneWidth
+ * @param logReport report instance holding information of log file to be analyzed
  * */
 class LogView(logReport: LogReport
-              , squareWidth: Int
-              , sceneWidth: Int) extends Tab(logReport.name + " (" + logReport.entries.size() + " entries)") with CanLog {
+              , initialSceneWidth: Int
+              , initialSquareWidth: Int)
+  extends Tab(logReport.name + " (" + logReport.entries.size() + " entries)") with CanLog {
+
+
+  /** bound to sceneWidthProperty of parent LogViewTabPane */
+  val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
+
+  def sceneWidth = sceneWidthProperty.get()
+
+  /** bound to squareWidthProperty of parent LogViewTabPane */
+  val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
+
+  def squareWidth = squareWidthProperty.get()
 
   val InitialRatio = 0.5
 
@@ -44,8 +68,8 @@ class LogView(logReport: LogReport
 
   private val filterButtonsToolBar = new FilterButtonsToolBar(filteredList, logReport.occurences, logReport.entries.size)
 
-  private val logVisualView = {
-    val lvv = new LogVisualView(filteredList, squareWidth, (sceneWidth * InitialRatio).toInt)
+  private lazy val logVisualView = {
+    val lvv = new LogVisualView(filteredList, (sceneWidth * InitialRatio).toInt, squareWidth)
     lvv.doRepaint(squareWidth, (sceneWidth * InitialRatio).toInt)
     lvv
   }
@@ -53,7 +77,7 @@ class LogView(logReport: LogReport
 
   val entryLabel = {
     val l = new Label("")
-    l.setPrefWidth(sceneWidth)
+    l.prefWidthProperty.bind(sceneWidthProperty)
     l.setStyle(s"-fx-text-fill: white; -fx-font-size: 20px;")
     l
   }
@@ -122,7 +146,6 @@ class LogView(logReport: LogReport
   private def doRepaint(width: Double): Unit = {
     if (isSelected && width > squareWidth * 4) { // at minimum we want to have 4 squares left (an arbitrary choice)
       logVisualView.doRepaint(squareWidth, width.toInt)
-      entryLabel.setPrefWidth(borderPane.getWidth)
     }
   }
 

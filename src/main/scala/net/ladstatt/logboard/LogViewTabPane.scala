@@ -16,6 +16,7 @@ object LogViewTabPane {
     lvtp.squareWidthProperty.bind(parent.squareWidthProperty)
     lvtp
   }
+
 }
 
 class LogViewTabPane extends TabPane {
@@ -27,7 +28,7 @@ class LogViewTabPane extends TabPane {
   val squareWidthProperty = new SimpleIntegerProperty()
 
   def add(logReport: LogReport): Unit = {
-    getTabs.add(new LogView(logReport, squareWidthProperty.get, sceneWidthProperty.get))
+    getTabs.add(LogView(this, logReport))
   }
 
 

@@ -13,8 +13,11 @@ import net.ladstatt.util.CanLog
 import scala.jdk.CollectionConverters._
 
 class LogVisualView(entries: java.util.List[LogEntry]
-                    , squareWidth: Int
-                    , canvasWidth: Int) extends BorderPane with CanLog {
+                    , canvasWidth: Int
+                    , squareWidth: Int) extends BorderPane with CanLog {
+
+  require(canvasWidth > 0, "squareWidth must be greater than 0")
+  require(squareWidth > 0, "canvasWidth must be greater than 0")
 
   val currentCanvasWidthProperty = new SimpleIntegerProperty(canvasWidth)
 
@@ -52,8 +55,7 @@ class LogVisualView(entries: java.util.List[LogEntry]
 
   def doRepaint(sWidth: Int, cWidth: Int): Unit = {
     setCanvasWidth(cWidth)
-    val i = timeR(paint(entries, sWidth, cWidth), "repainting")
-    view.setImage(i)
+    view.setImage(paint(entries, sWidth, cWidth))
   }
 
   def mkBareImage(entries: java.util.List[LogEntry], squareWidth: Int, canvasWidth: Int): WritableImage = {
