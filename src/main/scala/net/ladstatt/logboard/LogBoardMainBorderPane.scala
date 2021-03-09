@@ -1,7 +1,6 @@
 package net.ladstatt.logboard
 
 import javafx.beans.property.SimpleIntegerProperty
-import javafx.event.EventHandler
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
 import net.ladstatt.util.CanLog
@@ -31,30 +30,26 @@ class LogBoardMainBorderPane(initialSceneWidth: Int
   def setSceneWidth(width: Int): Unit = sceneWidthProperty.set(width)
 
   /** needed to activate dragndrop */
-  setOnDragOver(new EventHandler[DragEvent] {
-    override def handle(event: DragEvent): Unit = {
-      if (event.getDragboard.hasFiles) {
-        event.acceptTransferModes(TransferMode.ANY: _*)
-      }
+  setOnDragOver((event: DragEvent) => {
+    if (event.getDragboard.hasFiles) {
+      event.acceptTransferModes(TransferMode.ANY: _*)
     }
   })
 
   /** try to interpret dropped element as log file */
-  setOnDragDropped(new EventHandler[DragEvent] {
-    override def handle(event: DragEvent): Unit = timeR({
-      val logFile: Path = event.getDragboard.getFiles.get(0).toPath
-      if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
-        Try(LogReport(logFile)) match {
-          case Success(value) =>
-            tabPane.add(value)
-          //              tabPane.getSelectionModel.selectLast()
+  setOnDragDropped((event: DragEvent) => timeR({
+    val logFile: Path = event.getDragboard.getFiles.get(0).toPath
+    if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
+      Try(LogReport(logFile)) match {
+        case Success(value) =>
+          tabPane.add(value)
+          tabPane.getSelectionModel.selectLast() // select last added file repaint it on selection
 
-          case Failure(exception) =>
-            System.err.println("Could not import file " + logFile.toAbsolutePath, " reason: " + exception.getMessage)
-        }
+        case Failure(exception) =>
+          System.err.println("Could not import file " + logFile.toAbsolutePath, " reason: " + exception.getMessage)
       }
-    }, "Added logfile")
-  })
+    }
+  }, "Added logfile"))
 
 
 }

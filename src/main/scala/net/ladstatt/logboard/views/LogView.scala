@@ -9,7 +9,9 @@ import javafx.scene.control._
 import javafx.scene.layout.BorderPane
 import net.ladstatt.logboard.{LogEntry, LogReport, LogSeverity, LogViewTabPane}
 import net.ladstatt.util.CanLog
+
 import scala.jdk.CollectionConverters._
+
 object LogView {
 
   def apply(logViewTabPane: LogViewTabPane
@@ -143,10 +145,10 @@ class LogView(logReport: LogReport
   def doRepaint(): Unit = doRepaint(getVisualViewWidth())
 
   /** width can be negative as well, we have to guard about that. also we repaint only if view is visible. */
-  private def doRepaint(width: Double): Unit = {
+  private def doRepaint(width: Double): Unit = timeR({
     if (isSelected && width > squareWidth * 4) { // at minimum we want to have 4 squares left (an arbitrary choice)
       logVisualView.doRepaint(squareWidth, width.toInt)
     }
-  }
+  }, "repaint")
 
 }
