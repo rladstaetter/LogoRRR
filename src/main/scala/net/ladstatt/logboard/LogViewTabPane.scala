@@ -19,6 +19,14 @@ object LogViewTabPane {
 
 class LogViewTabPane extends TabPane {
 
+  setStyle(
+    """
+      |-fx-background-image: url(/net/ladstatt/logboard/save-as.png);
+      |-fx-background-position: center center;
+      |-fx-background-repeat: no-repeat;
+      |-fx-background-size: 100%;
+      |""".stripMargin)
+
   /** bound to sceneWidthProperty of parent LogBoardMainBorderPane */
   val sceneWidthProperty = new SimpleIntegerProperty()
 
@@ -26,6 +34,7 @@ class LogViewTabPane extends TabPane {
   val squareWidthProperty = new SimpleIntegerProperty()
 
   def add(logReport: LogReport): Unit = getTabs.add(LogView(this, logReport))
+
 
   getSelectionModel.selectedItemProperty().addListener(new ChangeListener[Tab] {
     override def changed(observableValue: ObservableValue[_ <: Tab], t: Tab, t1: Tab): Unit = {

@@ -351,6 +351,13 @@
                         </includes>
                         <targetPath>${project.build.directory}/classes/META-INF/native-image</targetPath>
                     </resource>
+                    <resource>
+                        <directory>${project.basedir}/src/main/resources/</directory>
+                        <includes>
+                            <include>**/*</include>
+                        </includes>
+                        <targetPath>${project.build.directory}/classes/</targetPath>
+                    </resource>
                 </resources>
             </build>
         </profile>
