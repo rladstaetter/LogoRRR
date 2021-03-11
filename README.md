@@ -1,14 +1,14 @@
-# JavaFX Logboard
+# LogoRRR
 
 ![Screenshot](screenshot.png)
 
-JavaFX Logboard is a simple utility to display a logfile and visualise certain classes of events. 
+LogoRRR is a simple utility to display a logfile and visualise certain classes of events. 
 
 For example, ERROR events are visualized as red rectangles, TRACE events as grey rectangles, INFO events as green ones etc. 
 
 The idea is to start this application and simply drag'n drop a logfile to it.
 
-You can give it a try by downloading a [prebuilt binary for javafx-logboard](https://github.com/rladstaetter/javafx-logboard/releases/tag/21.1.1) from the releases page.
+You can give it a try by downloading a [prebuilt binary for logorrr](https://github.com/rladstaetter/LogoRRR/releases/tag/21.1.3) from the releases page.
 
 ## Motivation
 
@@ -31,7 +31,7 @@ Given you have followed the instructions for [maven-client-plugin](https://githu
 
 Should create a binary executable which can be run without a JVM:
 
-    ./target/client/x86_64-darwin/net.ladstatt.logboard.javafx-logboard
+    ./target/client/x86_64-darwin/net.ladstatt.logorrr.logorrr
 
 ### Windows    
 
@@ -41,7 +41,7 @@ You have to enter following command in a Visual Studio Developer console:
 
 A binary is available here after some minutes:
     
-    target\client\x86_64-windows\javafx-logboard.exe
+    target\client\x86_64-windows\logorrr.exe
 
 If you want to execute this exe on another computer you have to make sure that the Visual Studio runtime environment is present there (redistributables).
 
@@ -70,7 +70,7 @@ Configuring those aspects may swiftly become a challenge. Luckily client-maven-p
 
     mvn client:runagent
 
-It will start JavaFX Logboard. Now you have to execute all possible click paths - in your code repository configuration files will appear in `src/main/resources/META-INF/native-image/`. Those files are different depending on which OS you execute the application. 
+It will start LogoRRR. Now you have to execute all possible click paths - in your code repository configuration files will appear in `src/main/resources/META-INF/native-image/`. Those files are different depending on which OS you execute the application. 
 
 Currently, those files are generated / checked in under src/main/native-image/<os>/, and via a maven configuration they are placed in the right place needed for native-image. Like this the project can be build on multiple platforms via 
 

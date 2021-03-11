@@ -1,14 +1,14 @@
-package net.ladstatt.logboard
+package net.ladstatt.logorrr
 
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.control.{Tab, TabPane}
-import net.ladstatt.logboard.views.LogView
+import net.ladstatt.logorrr.views.LogView
 
 object LogViewTabPane {
 
   /** constructor to pass parent and do binding */
-  def apply(parent: LogBoardMainBorderPane): LogViewTabPane = {
+  def apply(parent: AppMainBorderPane): LogViewTabPane = {
     val lvtp = new LogViewTabPane
     lvtp.sceneWidthProperty.bind(parent.sceneWidthProperty)
     lvtp.squareWidthProperty.bind(parent.squareWidthProperty)
@@ -21,16 +21,16 @@ class LogViewTabPane extends TabPane {
 
   setStyle(
     """
-      |-fx-background-image: url(/net/ladstatt/logboard/save-as.png);
+      |-fx-background-image: url(/net/ladstatt/logorrr/save-as.png);
       |-fx-background-position: center center;
       |-fx-background-repeat: no-repeat;
       |-fx-background-size: 100%;
       |""".stripMargin)
 
-  /** bound to sceneWidthProperty of parent LogBoardMainBorderPane */
+  /** bound to sceneWidthProperty of parent logorrrMainBorderPane */
   val sceneWidthProperty = new SimpleIntegerProperty()
 
-  /** bound to squareWidthProperty of parent LogBoardMainBorderPane */
+  /** bound to squareWidthProperty of parent logorrrMainBorderPane */
   val squareWidthProperty = new SimpleIntegerProperty()
 
   def add(logReport: LogReport): Unit = getTabs.add(LogView(this, logReport))

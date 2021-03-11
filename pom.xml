@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>net.ladstatt.logboard</groupId>
-    <artifactId>javafx-logboard</artifactId>
+    <groupId>net.ladstatt</groupId>
+    <artifactId>logorrr</artifactId>
     <version>${revision}${changelist}</version>
 
     <packaging>jar</packaging>
 
-    <name>net.ladstatt.logboard.javafx-logboard</name>
+    <name>net.ladstatt.logorrr</name>
 
     <properties>
         <revision>21.1.3</revision>
@@ -19,7 +19,7 @@
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.4</scala.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <main.class>net.ladstatt.logboard.LogboardApp</main.class>
+        <main.class>net.ladstatt.logorrr.LogoRRRApp</main.class>
     </properties>
 
     <dependencyManagement>
@@ -35,7 +35,7 @@
                 <version>${openjfx.version}</version>
             </dependency>
             <dependency>
-                <groupId>net.ladstatt.logboard</groupId>
+                <groupId>net.ladstatt.logorrr</groupId>
                 <artifactId>jfx</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -320,7 +320,7 @@
                                     <executable>${project.build.directory}/upx-3.96-win64/upx.exe</executable>
                                     <arguments>
                                         <argument>-9</argument>
-                                        <argument>-ojavafx-logboard.exe</argument>
+                                        <argument>-ologorrr.exe</argument>
                                         <argument>${project.name}.exe</argument>
                                     </arguments>
                                 </configuration>

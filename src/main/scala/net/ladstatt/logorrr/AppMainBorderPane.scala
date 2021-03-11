@@ -1,4 +1,4 @@
-package net.ladstatt.logboard
+package net.ladstatt.logorrr
 
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.input.{DragEvent, TransferMode}
@@ -14,8 +14,8 @@ import scala.util.{Failure, Success, Try}
  * @param initialSceneWidth  initial width of scene
  * @param initialSquareWidth width of squares to paint in visual view
  */
-class LogBoardMainBorderPane(initialSceneWidth: Int
-                             , initialSquareWidth: Int) extends BorderPane with CanLog {
+class AppMainBorderPane(initialSceneWidth: Int
+                        , initialSquareWidth: Int) extends BorderPane with CanLog {
 
   val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
 

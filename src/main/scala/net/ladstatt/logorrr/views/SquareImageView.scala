@@ -1,8 +1,8 @@
-package net.ladstatt.logboard.views
+package net.ladstatt.logorrr.views
 
 import javafx.scene.image.{ImageView, PixelWriter, WritableImage}
 import javafx.scene.paint.Color
-import net.ladstatt.logboard.LogEntry
+import net.ladstatt.logorrr.LogEntry
 
 import scala.collection.mutable
 

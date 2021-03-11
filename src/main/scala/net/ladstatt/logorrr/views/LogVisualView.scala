@@ -1,11 +1,11 @@
-package net.ladstatt.logboard.views
+package net.ladstatt.logorrr.views
 
 import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.event.EventHandler
 import javafx.scene.control.ScrollPane
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.BorderPane
-import net.ladstatt.logboard.{LogEntry, LogReport}
+import net.ladstatt.logorrr.{LogEntry, LogReport}
 import net.ladstatt.util.CanLog
 
 import scala.collection.mutable

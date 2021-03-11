@@ -1,13 +1,13 @@
-package net.ladstatt.logboard
+package net.ladstatt.logorrr
 
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.Scene
 import javafx.stage.Stage
 
-object LogboardApp {
+object LogoRRRApp {
 
   /** application name */
-  val ApplicationName = "javafx-logboard"
+  val ApplicationName = "LogoRRR"
 
   /** initial width of main application scene */
   val InitialSceneWidth = 1000
@@ -19,19 +19,19 @@ object LogboardApp {
   val InitialSquareWidth = 7
 
   def main(args: Array[String]): Unit = {
-    javafx.application.Application.launch(classOf[LogboardApp], args: _*)
+    javafx.application.Application.launch(classOf[LogoRRRApp], args: _*)
   }
 }
 
-class LogboardApp extends javafx.application.Application {
+class LogoRRRApp extends javafx.application.Application {
 
   /**
    * will be called by the java bootstrapper
    */
   def start(stage: Stage): Unit = {
-    stage.setTitle(LogboardApp.ApplicationName)
-    val mainBorderPane = new LogBoardMainBorderPane(LogboardApp.InitialSceneWidth, LogboardApp.InitialSquareWidth)
-    val scene = new Scene(mainBorderPane, LogboardApp.InitialSceneWidth, LogboardApp.InitialSceneHeight)
+    stage.setTitle(LogoRRRApp.ApplicationName)
+    val mainBorderPane = new AppMainBorderPane(LogoRRRApp.InitialSceneWidth, LogoRRRApp.InitialSquareWidth)
+    val scene = new Scene(mainBorderPane, LogoRRRApp.InitialSceneWidth, LogoRRRApp.InitialSceneHeight)
     scene.widthProperty().addListener(new ChangeListener[Number] {
       override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
         Option(mainBorderPane).foreach(_.setSceneWidth(t1.intValue))

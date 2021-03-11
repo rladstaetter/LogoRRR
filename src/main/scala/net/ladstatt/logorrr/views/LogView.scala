@@ -1,4 +1,4 @@
-package net.ladstatt.logboard.views
+package net.ladstatt.logorrr.views
 
 import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
@@ -7,7 +7,7 @@ import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 import javafx.scene.layout.BorderPane
-import net.ladstatt.logboard.{LogEntry, LogReport, LogSeverity, LogViewTabPane}
+import net.ladstatt.logorrr.{LogEntry, LogReport, LogSeverity, LogViewTabPane}
 import net.ladstatt.util.CanLog
 
 import scala.jdk.CollectionConverters._

@@ -1,9 +1,9 @@
-package net.ladstatt.logboard.views
+package net.ladstatt.logorrr.views
 
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.{ToggleButton, ToolBar}
-import net.ladstatt.logboard.{LogEntry, LogSeverity}
+import net.ladstatt.logorrr.{LogEntry, LogSeverity}
 
 import java.text.DecimalFormat
 

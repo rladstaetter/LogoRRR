@@ -1,4 +1,4 @@
-package net.ladstatt.logboard
+package net.ladstatt.logorrr
 
 import net.ladstatt.util.CanLog
 
