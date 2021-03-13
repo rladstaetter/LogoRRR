@@ -205,10 +205,6 @@
   ]
 },
 {
-  "name":"net.ladstatt.logorrr.LogoRRRApp",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"sun.misc.Unsafe",
   "fields":[{"name":"theUnsafe"}]
 },

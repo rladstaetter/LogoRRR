@@ -11,6 +11,9 @@ object LogoRRRApp {
   /** application name */
   val ApplicationName = "LogoRRR"
 
+  /** version which is displayed to user */
+  val ApplicationVersion = "21.2.0"
+
   /** initial width of main application scene */
   val InitialSceneWidth = 1000
 
@@ -33,7 +36,7 @@ class LogoRRRApp extends javafx.application.Application {
    * will be called by the java bootstrapper
    */
   def start(stage: Stage): Unit = {
-    stage.setTitle(LogoRRRApp.ApplicationName)
+    stage.setTitle(LogoRRRApp.ApplicationName + " " + LogoRRRApp.ApplicationVersion)
     val mainBorderPane = new AppMainBorderPane(LogoRRRApp.InitialSceneWidth, LogoRRRApp.InitialSquareWidth)
     val scene = new Scene(mainBorderPane, LogoRRRApp.InitialSceneWidth, LogoRRRApp.InitialSceneHeight)
     scene.widthProperty().addListener(new ChangeListener[Number] {

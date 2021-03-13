@@ -16,14 +16,17 @@ object LogReport extends CanLog {
     val value = Files.readAllLines(logFile).stream().map(LogEntry.apply)
     val entries = value.collect(Collectors.toList[LogEntry]())
     logTrace(s"Read ${entries.size} lines ... ")
-    new LogReport(logFile.getFileName.toString, entries.asScala)
+    new LogReport(logFile, entries.asScala)
   }
 
   def indexOf(x: Int, y: Int, squareWidth: Int, canvasWidth: Int): Int = y / squareWidth * (canvasWidth / squareWidth) + x / squareWidth
 
 }
 
-case class LogReport(name: String, entries: mutable.Buffer[LogEntry]) {
+case class LogReport(path: Path
+                     , entries: mutable.Buffer[LogEntry]) {
+
+  val name = path.getFileName.toString
 
   val occurrences: Map[LogSeverity, Int] = LogSeverity.seq.map {
     ls => ls -> entries.count(_.severity == ls)

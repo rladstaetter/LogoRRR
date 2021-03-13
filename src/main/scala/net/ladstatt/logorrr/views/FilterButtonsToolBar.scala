@@ -2,7 +2,7 @@ package net.ladstatt.logorrr.views
 
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
-import javafx.scene.control.{ToggleButton, ToolBar}
+import javafx.scene.control.{Label, ToggleButton, ToolBar}
 import net.ladstatt.logorrr.{LogEntry, LogSeverity}
 
 import java.text.DecimalFormat
@@ -21,6 +21,7 @@ object FilterButtonsToolBar {
 
 }
 
+
 /**
  * Depending on buttons pressed, filteredList will be mutated to show only selected items.
  *
@@ -31,6 +32,8 @@ object FilterButtonsToolBar {
 class FilterButtonsToolBar(filteredList: FilteredList[LogEntry]
                            , occurences: Map[LogSeverity, Int]
                            , size: Int) extends ToolBar {
+
+  getItems.add(new Label("Default filter"))
 
   val filterButtons: Map[LogSeverity, ToggleButton] = {
     LogSeverity.seq.map((ls: LogSeverity) => {

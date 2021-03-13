@@ -6,7 +6,7 @@ import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
-import javafx.scene.layout.BorderPane
+import javafx.scene.layout.{BorderPane, VBox}
 import net.ladstatt.logorrr.views.visual.LogVisualView
 import net.ladstatt.logorrr.{LogEntry, LogReport, LogSeverity, LogViewTabPane}
 import net.ladstatt.util.CanLog
@@ -68,15 +68,20 @@ class LogView(logReport: LogReport
   })
 
 
+  //private val opsToolBar = new OpsToolBar(logReport)
   private val filterButtonsToolBar = new FilterButtonsToolBar(filteredList, logReport.occurrences, logReport.entries.size)
+
+  val opsToolBox = {
+    val vb = new VBox()
+    vb.getChildren.addAll(filterButtonsToolBar)
+    vb
+  }
+
 
   val initialWidth = (sceneWidth * InitialRatio).toInt
 
-  private lazy val logVisualView = {
-    val lvv = new LogVisualView(filteredList.asScala, initialWidth, getSquareWidth)
-    //    lvv.doRepaint(getSquareWidth, (sceneWidth * InitialRatio).toInt)
-    lvv
-  }
+  private lazy val logVisualView = new LogVisualView(filteredList.asScala, initialWidth, getSquareWidth)
+
   private val logTextView = new LogTextView(filteredList)
 
   val entryLabel = {
@@ -86,7 +91,7 @@ class LogView(logReport: LogReport
     l
   }
 
-  borderPane.setTop(filterButtonsToolBar)
+  borderPane.setTop(opsToolBox)
   borderPane.setCenter(splitPane)
   borderPane.setBottom(entryLabel)
 
