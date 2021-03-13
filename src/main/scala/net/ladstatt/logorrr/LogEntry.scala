@@ -19,6 +19,4 @@ object LogEntry {
 
 }
 
-case class LogEntry(value: String, severity: LogSeverity) {
-
-}
+case class LogEntry(value: String, severity: LogSeverity)

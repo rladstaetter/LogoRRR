@@ -4,7 +4,7 @@ import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.Scene
 import javafx.stage.Stage
 
-import java.nio.file.{Files, Paths}
+import java.nio.file.Paths
 
 object LogoRRRApp {
 
@@ -43,15 +43,14 @@ class LogoRRRApp extends javafx.application.Application {
     })
     stage.setScene(scene)
 
+
     for (p <- getParameters.getRaw.asScala) {
-      val path = Paths.get(p).toAbsolutePath
-      if (Files.exists(path) && Files.isRegularFile(path)) {
-        mainBorderPane.addLogFile(path)
-      }
-      mainBorderPane.selectLastLogFile()
+      mainBorderPane.addLogFile(Paths.get(p).toAbsolutePath)
     }
+    mainBorderPane.selectLastLogFile()
 
     stage.show()
+
   }
 
 }

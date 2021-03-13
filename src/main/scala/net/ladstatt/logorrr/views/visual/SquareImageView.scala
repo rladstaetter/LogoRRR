@@ -1,5 +1,6 @@
-package net.ladstatt.logorrr.views
+package net.ladstatt.logorrr.views.visual
 
+import javafx.geometry.Bounds
 import javafx.scene.image.{ImageView, PixelWriter, WritableImage}
 import javafx.scene.paint.Color
 import net.ladstatt.logorrr.LogEntry
@@ -15,13 +16,24 @@ object SquareImageView {
     new WritableImage(canvasWidth + squareWidth, height + squareWidth)
   }
 
-  def paint(entries: mutable.Buffer[LogEntry], squareWidth: Int, canvasWidth: Int): WritableImage = {
+  def paint(entries: mutable.Buffer[LogEntry]
+            , squareWidth: Int
+            , canvasWidth: Int
+            , bounds: Bounds): WritableImage = {
     val wi = SquareImageView.mkBareImage(entries, squareWidth, canvasWidth)
 
     val numberCols = canvasWidth / squareWidth
     val pw = wi.getPixelWriter
     for ((e, i) <- entries.zipWithIndex) {
-      paintSquare(pw, (i % numberCols) * squareWidth, (i / numberCols) * squareWidth, squareWidth.toInt, e.severity.color)
+      val u = (i % numberCols) * squareWidth
+      val v = (i / numberCols) * squareWidth
+      //if ((bounds.getMinY + v) >= 0 && (bounds.getMinY + v + squareWidth - 1) < bounds.getMaxY) {
+        paintSquare(pw
+          , u
+          , v
+          , squareWidth
+          , e.severity.color)
+      //}
     }
     wi
   }
@@ -45,4 +57,7 @@ object SquareImageView {
   }
 }
 
-class SquareImageView extends ImageView
+class SquareImageView extends ImageView {
+
+
+}

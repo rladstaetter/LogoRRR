@@ -18,19 +18,15 @@ import scala.util.{Failure, Success, Try}
 class AppMainBorderPane(initialSceneWidth: Int
                         , initialSquareWidth: Int) extends BorderPane with CanLog {
 
-  val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
-
   val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
+
+  val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
 
   val tabPane = LogViewTabPane(this)
 
   setCenter(tabPane)
 
-
-  /** called when width of scene changes */
-  def setSceneWidth(width: Int): Unit = sceneWidthProperty.set(width)
-
-  /** needed to activate dragndrop */
+  /** needed to activate drag'n drop */
   setOnDragOver((event: DragEvent) => {
     if (event.getDragboard.hasFiles) {
       event.acceptTransferModes(TransferMode.ANY: _*)
@@ -40,15 +36,14 @@ class AppMainBorderPane(initialSceneWidth: Int
   /** try to interpret dropped element as log file */
   setOnDragDropped((event: DragEvent) => timeR({
     for (f <- event.getDragboard.getFiles.asScala) {
-      val logFile: Path = f.toPath
-      if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
-        addLogFile(logFile)
-      } else {
-        logTrace(s"Could not read ${logFile.toAbsolutePath}")
-      }
+      addLogFile(f.toPath)
     }
     selectLastLogFile()
   }, "Added logfile"))
+
+
+  /** called when width of scene changes */
+  def setSceneWidth(width: Int): Unit = sceneWidthProperty.set(width)
 
   /** select log file which is last in tabPane */
   def selectLastLogFile(): Unit = {
@@ -57,9 +52,15 @@ class AppMainBorderPane(initialSceneWidth: Int
 
   /** Adds a new logfile to display */
   def addLogFile(logFile: Path): Unit = {
-    Try(LogReport(logFile)) match {
-      case Success(value) => tabPane.add(value)
-      case Failure(exception) => logError("Could not import file " + logFile.toAbsolutePath + ", reason: " + exception.getMessage)
+    if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
+      Try(LogReport(logFile)) match {
+        case Success(value) =>
+          logTrace(s"Adding ${logFile} ... ")
+          tabPane.add(value)
+        case Failure(exception) => logError("Could not import file " + logFile.toAbsolutePath + ", reason: " + exception.getMessage)
+      }
+    } else {
+      logTrace(s"Could not read ${logFile.toAbsolutePath} ...")
     }
   }
 }

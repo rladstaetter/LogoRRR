@@ -19,6 +19,12 @@ object LogViewTabPane {
 
 class LogViewTabPane extends TabPane {
 
+  /** bound to sceneWidthProperty of parent logorrrMainBorderPane */
+  val sceneWidthProperty = new SimpleIntegerProperty()
+
+  /** bound to squareWidthProperty of parent logorrrMainBorderPane */
+  val squareWidthProperty = new SimpleIntegerProperty()
+
   setStyle(
     """
       |-fx-background-image: url(/net/ladstatt/logorrr/save-as.png);
@@ -27,23 +33,15 @@ class LogViewTabPane extends TabPane {
       |-fx-background-size: 100%;
       |""".stripMargin)
 
-  /** bound to sceneWidthProperty of parent logorrrMainBorderPane */
-  val sceneWidthProperty = new SimpleIntegerProperty()
-
-  /** bound to squareWidthProperty of parent logorrrMainBorderPane */
-  val squareWidthProperty = new SimpleIntegerProperty()
-
-  def add(logReport: LogReport): Unit = getTabs.add(LogView(this, logReport))
-
-
   getSelectionModel.selectedItemProperty().addListener(new ChangeListener[Tab] {
     override def changed(observableValue: ObservableValue[_ <: Tab], t: Tab, t1: Tab): Unit = {
       t1 match {
-        case logView: LogView => logView.doRepaint()
+        case logView: LogView => logView.repaint()
         case _ =>
       }
     }
   })
 
+  def add(logReport: LogReport): Unit = getTabs.add(LogView(this, logReport))
 
 }
