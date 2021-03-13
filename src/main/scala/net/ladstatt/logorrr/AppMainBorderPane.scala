@@ -6,6 +6,7 @@ import javafx.scene.layout.BorderPane
 import net.ladstatt.util.CanLog
 
 import java.nio.file.{Files, Path}
+import scala.jdk.CollectionConverters.ListHasAsScala
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -38,9 +39,13 @@ class AppMainBorderPane(initialSceneWidth: Int
 
   /** try to interpret dropped element as log file */
   setOnDragDropped((event: DragEvent) => timeR({
-    val logFile: Path = event.getDragboard.getFiles.get(0).toPath
-    if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
-      addLogFile(logFile)
+    for (f <- event.getDragboard.getFiles.asScala) {
+      val logFile: Path = f.toPath
+      if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
+        addLogFile(logFile)
+      } else {
+        logTrace(s"Could not read ${logFile.toAbsolutePath}")
+      }
     }
     selectLastLogFile()
   }, "Added logfile"))
@@ -53,10 +58,8 @@ class AppMainBorderPane(initialSceneWidth: Int
   /** Adds a new logfile to display */
   def addLogFile(logFile: Path): Unit = {
     Try(LogReport(logFile)) match {
-      case Success(value) =>
-        tabPane.add(value)
-      case Failure(exception) =>
-        System.err.println("Could not import file " + logFile.toAbsolutePath, " reason: " + exception.getMessage)
+      case Success(value) => tabPane.add(value)
+      case Failure(exception) => logError("Could not import file " + logFile.toAbsolutePath + ", reason: " + exception.getMessage)
     }
   }
 }
