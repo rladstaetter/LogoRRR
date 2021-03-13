@@ -40,18 +40,25 @@ class AppMainBorderPane(initialSceneWidth: Int
   setOnDragDropped((event: DragEvent) => timeR({
     val logFile: Path = event.getDragboard.getFiles.get(0).toPath
     if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
-      Try(LogReport(logFile)) match {
-        case Success(value) =>
-          tabPane.add(value)
-          tabPane.getSelectionModel.selectLast() // select last added file repaint it on selection
-
-        case Failure(exception) =>
-          System.err.println("Could not import file " + logFile.toAbsolutePath, " reason: " + exception.getMessage)
-      }
+      addLogFile(logFile)
     }
+    selectLastLogFile()
   }, "Added logfile"))
 
+  /** select log file which is last in tabPane */
+  def selectLastLogFile(): Unit = {
+    tabPane.getSelectionModel.selectLast() // select last added file repaint it on selection
+  }
 
+  /** Adds a new logfile to display */
+  def addLogFile(logFile: Path): Unit = {
+    Try(LogReport(logFile)) match {
+      case Success(value) =>
+        tabPane.add(value)
+      case Failure(exception) =>
+        System.err.println("Could not import file " + logFile.toAbsolutePath, " reason: " + exception.getMessage)
+    }
+  }
 }
 
 

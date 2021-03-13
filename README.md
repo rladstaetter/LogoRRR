@@ -6,13 +6,18 @@ LogoRRR is a simple utility to display a logfile and visualise certain classes o
 
 For example, ERROR events are visualized as red rectangles, TRACE events as grey rectangles, INFO events as green ones etc. 
 
-The idea is to start this application and simply drag'n drop a logfile to it.
+You can give it a try by downloading a [prebuilt binary for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.1.3) from the releases page.
 
-You can give it a try by downloading a [prebuilt binary for logorrr](https://github.com/rladstaetter/LogoRRR/releases/tag/21.1.3) from the releases page.
+## Usage
+
+You can start LogoRRR via double click from the Desktop. You can select a log file to display via drag'n drop. 
+
+Alternatively, you can start LogoRRR via command line and provide the path to the log file as command line parameter. 
+
 
 ## Motivation
 
-This project serves as a vehicle to test and learn about various aspects of JavaFX GraalVM compilation. [This blog post](https://ladstatt.blogspot.com/2020/10/compile-scala-javafx-application-with.html) was written to accompany the initial public release of this github repository, describing challenges performing AOT with GraalVM and the tooling around it. 
+This project serves as a vehicle to test and learn about various aspects of JavaFX GraalVM compilation. [This blog post](https://ladstatt.blogspot.com/2020/10/compile-scala-javafx-application-with.html) was written to accompany the initial public release of this github repository, describing challenges performing AOT with GraalVM and the surrounding tooling. 
 
 ## Prerequisites
 
@@ -76,7 +81,7 @@ Currently, those files are generated / checked in under src/main/native-image/<o
 
     mvn package 
 
-Implicitly, maven package will call `client:build` and create a binary executable. (On windows the binary will be packed via [UPX](https://upx.github.io) to reduce the file size considerably.)
+Implicitly, maven package will call `client:build` and create a binary executable. (On Windows the binary will be packed via [UPX](https://upx.github.io) to reduce the file size considerably.)
 
 
 ## Features

@@ -4,6 +4,8 @@ import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.Scene
 import javafx.stage.Stage
 
+import java.nio.file.{Files, Paths}
+
 object LogoRRRApp {
 
   /** application name */
@@ -25,6 +27,8 @@ object LogoRRRApp {
 
 class LogoRRRApp extends javafx.application.Application {
 
+  import scala.jdk.CollectionConverters._
+
   /**
    * will be called by the java bootstrapper
    */
@@ -38,6 +42,15 @@ class LogoRRRApp extends javafx.application.Application {
       }
     })
     stage.setScene(scene)
+
+    for (p <- getParameters.getRaw.asScala) {
+      val path = Paths.get(p).toAbsolutePath
+      if (Files.exists(path) && Files.isRegularFile(path)) {
+        mainBorderPane.addLogFile(path)
+      }
+      mainBorderPane.selectLastLogFile()
+    }
+
     stage.show()
   }
 
