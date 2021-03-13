@@ -10,7 +10,7 @@
     <name>net.ladstatt.logorrr</name>
 
     <properties>
-        <revision>21.1.3</revision>
+        <revision>21.2.0</revision>
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <openjfx.version>16</openjfx.version>
