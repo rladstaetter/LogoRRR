@@ -10,9 +10,9 @@ You can give it a try by downloading a [prebuilt binary for LogoRRR](https://git
 
 ## Usage
 
-You can start LogoRRR via double click from the Desktop. You can select a log file to display via drag'n drop. 
+You can start LogoRRR via double click from the Desktop and provide one or more log files via drag'n drop. 
 
-Alternatively, you can start LogoRRR via command line and provide the path to the log file as command line parameter. 
+Alternatively, you can start LogoRRR via command line and provide the path to the log file as command line parameter (or multiple at once if you like).
 
 
 ## Motivation
