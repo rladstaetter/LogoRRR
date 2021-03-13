@@ -18,7 +18,7 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
                             , canvasWidth: Int) extends ScrollPane {
 
   val canvasWidthProperty = new SimpleIntegerProperty(canvasWidth)
-
+/*
   viewportBoundsProperty().addListener(new InvalidationListener {
     override def invalidated(observable: Observable): Unit = {
       println("viewportbound invalidated")
@@ -29,7 +29,7 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
     override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
       println(t1.doubleValue() + " " + getViewportBounds)
     }
-  })
+  })*/
 
   /** responsible for determining current logevent */
   val mouseEventHandler = new EventHandler[MouseEvent]() {
@@ -47,7 +47,7 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
 
   def repaint(sWidth: Int, cWidth: Int): Unit = {
     canvasWidthProperty.set(cWidth)
-    iv.setImage(SquareImageView.paint(entries, sWidth, cWidth, getViewportBounds))
+    iv.setImage(SquareImageView.paint(entries, sWidth, cWidth))
   }
 
 }

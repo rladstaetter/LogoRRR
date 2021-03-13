@@ -34,12 +34,12 @@ class AppMainBorderPane(initialSceneWidth: Int
   })
 
   /** try to interpret dropped element as log file */
-  setOnDragDropped((event: DragEvent) => timeR({
+  setOnDragDropped((event: DragEvent) => {
     for (f <- event.getDragboard.getFiles.asScala) {
       addLogFile(f.toPath)
     }
     selectLastLogFile()
-  }, "Added logfile"))
+  })
 
 
   /** called when width of scene changes */

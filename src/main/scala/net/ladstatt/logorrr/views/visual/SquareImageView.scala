@@ -1,13 +1,18 @@
 package net.ladstatt.logorrr.views.visual
 
-import javafx.geometry.Bounds
-import javafx.scene.image.{ImageView, PixelWriter, WritableImage}
+import javafx.scene.image._
 import javafx.scene.paint.Color
-import net.ladstatt.logorrr.LogEntry
+import net.ladstatt.logorrr.{ColorUtil, LogEntry, LogSeverity, LogoRRRApp}
 
 import scala.collection.mutable
 
+
 object SquareImageView {
+
+  val pixelBuffers: Map[Color, Array[Int]] =
+    LogSeverity.seq.map {
+      s => s.color -> ColorUtil.mkPixelArray(LogoRRRApp.InitialSquareWidth - 1, s.color)
+    }.toMap
 
   def mkBareImage(entries: mutable.Buffer[LogEntry], squareWidth: Int, canvasWidth: Int): WritableImage = {
     val numberCols = canvasWidth / squareWidth
@@ -18,8 +23,7 @@ object SquareImageView {
 
   def paint(entries: mutable.Buffer[LogEntry]
             , squareWidth: Int
-            , canvasWidth: Int
-            , bounds: Bounds): WritableImage = {
+            , canvasWidth: Int): WritableImage = {
     val wi = SquareImageView.mkBareImage(entries, squareWidth, canvasWidth)
 
     val numberCols = canvasWidth / squareWidth
@@ -27,25 +31,25 @@ object SquareImageView {
     for ((e, i) <- entries.zipWithIndex) {
       val u = (i % numberCols) * squareWidth
       val v = (i / numberCols) * squareWidth
-      //if ((bounds.getMinY + v) >= 0 && (bounds.getMinY + v + squareWidth - 1) < bounds.getMaxY) {
-        paintSquare(pw
-          , u
-          , v
-          , squareWidth
-          , e.severity.color)
-      //}
+      paintSquare(pw
+        , u
+        , v
+        , squareWidth
+        , pixelBuffers(e.severity.color))
     }
     wi
   }
 
-  def paintSquare(pw: PixelWriter, u: Int, v: Int, length: Int, c: Color): PixelWriter = {
-    for {x <- u until (u + length - 1)
-         y <- v until (v + length - 1)} {
-      pw.setColor(x, y, c)
-    }
+  /**
+   * paints a square with given src int's
+   *
+   * copy arrays around is faster than painting every pixel individually
+   * */
+  def paintSquare(pw: PixelWriter, u: Int, v: Int, length: Int, src: Array[Int]): PixelWriter = {
+    // length - 1 is just here to separate individual rectangles (gives nice effect)
+    pw.setPixels(u, v, length - 1, length - 1, PixelFormat.getIntArgbPreInstance, src, 0, 0)
     pw
   }
-
 
   def apply(entries: mutable.Buffer[LogEntry]
             , canvasWidth: Int
@@ -57,7 +61,4 @@ object SquareImageView {
   }
 }
 
-class SquareImageView extends ImageView {
-
-
-}
+class SquareImageView extends ImageView
