@@ -6,7 +6,7 @@ LogoRRR is a simple utility to display a logfile and visualise certain classes o
 
 For example, ERROR events are visualized as red rectangles, TRACE events as grey rectangles, INFO events as green ones etc. 
 
-You can give it a try by downloading a [prebuilt binary for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.1.3) from the releases page.
+You can give it a try by downloading a [prebuilt binary for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.2.0) from the releases page.
 
 ## Usage
 
@@ -36,7 +36,7 @@ Given you have followed the instructions for [maven-client-plugin](https://githu
 
 Should create a binary executable which can be run without a JVM:
 
-    ./target/client/x86_64-darwin/net.ladstatt.logorrr.logorrr
+    ./target/client/x86_64-darwin/net.ladstatt.logorrr
 
 ### Windows    
 
@@ -48,7 +48,7 @@ A binary is available here after some minutes:
     
     target\client\x86_64-windows\logorrr.exe
 
-If you want to execute this exe on another computer you have to make sure that the Visual Studio runtime environment is present there (redistributables).
+If you want to execute this exe on another computer you have to make sure that the Visual Studio runtime environment is present there. If not, you can download [Visual Studio 2019 redistributables here](https://aka.ms/vs/16/release/vc_redist.x64.exe).
 
 
 ## Running from IntelliJ
