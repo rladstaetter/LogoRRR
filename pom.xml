@@ -4,11 +4,8 @@
     <groupId>net.ladstatt</groupId>
     <artifactId>logorrr</artifactId>
     <version>${revision}${changelist}</version>
-
     <packaging>jar</packaging>
-
     <name>net.ladstatt.logorrr</name>
-
     <properties>
         <revision>21.2.0</revision>
         <changelist>-SNAPSHOT</changelist>
@@ -21,7 +18,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>net.ladstatt.logorrr.LogoRRRApp</main.class>
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -59,7 +55,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -78,8 +73,16 @@
             <artifactId>scalacheck_${scala.major.version}</artifactId>
         </dependency>
     </dependencies>
-
     <build>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources/</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <targetPath>${project.build.directory}/classes/</targetPath>
+            </resource>
+        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -184,8 +187,8 @@
                                 <rules>
                                     <requireMavenVersion>
                                         <version>[3.6.2,)</version>
-                                        <message>Check for Maven version &gt;=3.6.2 failed. Upgrade your Maven
-                                            installation.
+                                        <message>Check for Maven version &gt;=3.6.2 failed. Upgrade your Maven 
+                                            installation. 
                                         </message>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
@@ -262,7 +265,6 @@
             </plugin>
         </plugins>
     </build>
-
     <profiles>
         <profile>
             <id>OS.windows</id>
@@ -315,8 +317,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <workingDirectory>${project.build.directory}/client/x86_64-windows/
-                                    </workingDirectory>
+                                    <workingDirectory>${project.build.directory}/client/x86_64-windows/</workingDirectory>
                                     <executable>${project.build.directory}/upx-3.96-win64/upx.exe</executable>
                                     <arguments>
                                         <argument>-9</argument>
@@ -351,18 +352,8 @@
                         </includes>
                         <targetPath>${project.build.directory}/classes/META-INF/native-image</targetPath>
                     </resource>
-                    <resource>
-                        <directory>${project.basedir}/src/main/resources/</directory>
-                        <includes>
-                            <include>**/*</include>
-                        </includes>
-                        <targetPath>${project.build.directory}/classes/</targetPath>
-                    </resource>
                 </resources>
             </build>
         </profile>
     </profiles>
-
 </project>
-
-
