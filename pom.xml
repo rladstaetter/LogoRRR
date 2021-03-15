@@ -31,11 +31,6 @@
                 <version>${openjfx.version}</version>
             </dependency>
             <dependency>
-                <groupId>net.ladstatt.logorrr</groupId>
-                <artifactId>jfx</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest_${scala.major.version}</artifactId>
                 <version>3.2.3</version>
@@ -99,16 +94,6 @@
                     </executions>
                     <configuration>
                         <scalaVersion>${scala.version}</scalaVersion>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
-                    <configuration>
-                        <release>11</release>
-                        <source>9</source>
-                        <target>9</target>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -259,10 +244,7 @@
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
+
         </plugins>
     </build>
     <profiles>
