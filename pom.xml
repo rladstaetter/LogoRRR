@@ -14,7 +14,7 @@
         <client.plugin.version>0.1.38</client.plugin.version>
         <javafx.maven.plugin.version>0.0.5</javafx.maven.plugin.version>
         <scala.major.version>2.13</scala.major.version>
-        <scala.version>${scala.major.version}.4</scala.version>
+        <scala.version>${scala.major.version}.5</scala.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>net.ladstatt.logorrr.LogoRRRApp</main.class>
     </properties>
@@ -172,8 +172,7 @@
                                 <rules>
                                     <requireMavenVersion>
                                         <version>[3.6.2,)</version>
-                                        <message>Check for Maven version &gt;=3.6.2 failed. Upgrade your Maven 
-                                            installation. 
+                                        <message>Check for Maven version &gt;=3.6.2 failed. Upgrade your Maven installation.
                                         </message>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
