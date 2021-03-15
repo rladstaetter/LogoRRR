@@ -68,12 +68,12 @@ class LogView(logReport: LogReport
   })
 
 
-  //private val opsToolBar = new OpsToolBar(logReport)
+  private val opsToolBar = new OpsToolBar(filteredList)
   private val filterButtonsToolBar = new FilterButtonsToolBar(filteredList, logReport.occurrences, logReport.entries.size)
 
   val opsToolBox = {
     val vb = new VBox()
-    vb.getChildren.addAll(filterButtonsToolBar)
+    vb.getChildren.addAll(opsToolBar, filterButtonsToolBar)
     vb
   }
 

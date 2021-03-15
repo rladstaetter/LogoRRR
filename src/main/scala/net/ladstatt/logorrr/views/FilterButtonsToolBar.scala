@@ -33,7 +33,9 @@ class FilterButtonsToolBar(filteredList: FilteredList[LogEntry]
                            , occurences: Map[LogSeverity, Int]
                            , size: Int) extends ToolBar {
 
-  getItems.add(new Label("Default filter"))
+  private val label = new Label("Default filter")
+  label.setPrefWidth(100)
+  getItems.add(label)
 
   val filterButtons: Map[LogSeverity, ToggleButton] = {
     LogSeverity.seq.map((ls: LogSeverity) => {

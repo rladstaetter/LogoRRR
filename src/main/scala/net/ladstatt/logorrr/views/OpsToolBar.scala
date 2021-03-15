@@ -1,19 +1,27 @@
 package net.ladstatt.logorrr.views
 
-import javafx.event.ActionEvent
-import javafx.scene.control.{Button, Label, ToolBar}
-import net.ladstatt.logorrr.LogReport
+import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.collections.transformation.FilteredList
+import javafx.scene.control.{Label, TextField, ToolBar}
+import net.ladstatt.logorrr.LogEntry
 
 
-class OpsToolBar(logReport: LogReport) extends ToolBar {
+class OpsToolBar(filteredList: FilteredList[LogEntry]) extends ToolBar {
 
-  val openInApplicationButton = {
-    val b = new Button("Open in Default Editor")
-    b.setOnAction((_: ActionEvent) => {
-      // not implemented since awt / Desktop is not supported atm in graal
-    })
-    b
-  }
+  val initialText = "<enter search string>"
+  val searchTextField = new TextField()
+  searchTextField.setPrefWidth(500)
+  searchTextField.setPromptText(initialText)
+  searchTextField.textProperty().addListener(new ChangeListener[String] {
+    override def changed(observableValue: ObservableValue[_ <: String], t: String, t1: String): Unit = {
+      Option(t1) match {
+        case Some(value) => filteredList.setPredicate((t: LogEntry) => t.value.contains(value))
+        case None =>
+      }
+    }
+  })
 
-  getItems.addAll(new Label("Operations"), openInApplicationButton)
+  private val label = new Label("Search")
+  label.setPrefWidth(100)
+  getItems.addAll(label, searchTextField)
 }
