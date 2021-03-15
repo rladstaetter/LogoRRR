@@ -89,6 +89,7 @@ Implicitly, maven package will call `client:build` and create a binary executabl
 - drag and drop log files to application to visualize/view them
 - handle multiple log files in parallel
 - filter log files for entries interactively
+- basic search functionality
 
 
 ## License
