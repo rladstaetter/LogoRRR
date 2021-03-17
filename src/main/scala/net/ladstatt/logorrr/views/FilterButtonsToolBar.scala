@@ -3,6 +3,7 @@ package net.ladstatt.logorrr.views
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.{Label, ToggleButton, ToolBar}
+import javafx.scene.shape.Rectangle
 import net.ladstatt.logorrr.{LogEntry, LogSeverity}
 
 import java.text.DecimalFormat
@@ -40,6 +41,9 @@ class FilterButtonsToolBar(filteredList: FilteredList[LogEntry]
   val filterButtons: Map[LogSeverity, ToggleButton] = {
     LogSeverity.seq.map((ls: LogSeverity) => {
       val button = new ToggleButton(ls.name + ": " + occurences(ls) + " " + FilterButtonsToolBar.percentAsString(ls, occurences, size))
+      val r = new Rectangle(10,10)
+      r.setFill(ls.color)
+      button.setGraphic(r)
       button.setSelected(true)
       button.selectedProperty().addListener(new InvalidationListener {
         // if any of the buttons changes its selected value, reevaluate predicate
