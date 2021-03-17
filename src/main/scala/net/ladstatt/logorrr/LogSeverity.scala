@@ -16,9 +16,9 @@ object LogSeverity {
 
   case object Severe extends LogSeverity("Severe", Color.RED)
 
-  case object Other extends LogSeverity("Unclassified", Color.BLUE)
+  case object Other extends LogSeverity("Unclassified", Color.DARKRED)
 
-  val seq: Seq[LogSeverity] = Seq(Info, Warning, Trace, Severe, Other)
+  val seq: Seq[LogSeverity] = Seq(Info, Trace, Warning, Severe, Other)
 
   val radii = new CornerRadii(5.0)
   val insets = new Insets(-5.0)
