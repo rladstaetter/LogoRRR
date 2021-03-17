@@ -48,12 +48,12 @@ A binary is available here after some minutes:
     
     target\client\x86_64-windows\logorrr.exe
 
-If you want to execute this exe on another computer you have to make sure that the Visual Studio runtime environment is present there. If not, you can download [Visual Studio 2019 redistributables here](https://aka.ms/vs/16/release/vc_redist.x64.exe).
+If you want to execute this exe on another computer, you have to make sure that the Visual Studio runtime environment is present there. If not, you can download [Visual Studio 2019 redistributables here](https://aka.ms/vs/16/release/vc_redist.x64.exe).
 
 
 ## Running from IntelliJ
 
-Running JavaFX applications in IntelliJ needs a little bit more work if you work with modularized Java. There are builds of Java which incorporate JavaFX (from Azul for example) where following steps are not necessary. However, if you use GraalVM or AdoptOpenJDK builds, you have to provide special VM Parameters in order to start a JavaFX application from your IDE. 
+Running JavaFX applications in IntelliJ needs a some more work if you work with modularized Java. There are builds of Java which incorporate JavaFX (from Azul for example) where following steps are not necessary. However, if you use GraalVM or AdoptOpenJDK builds, you have to provide special VM Parameters in order to start a JavaFX application from your IDE. 
 
 As such, you have to provide following parameters:
 
