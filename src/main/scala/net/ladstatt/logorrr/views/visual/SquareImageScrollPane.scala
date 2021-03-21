@@ -38,7 +38,6 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
   def repaint(sWidth: Int, cWidth: Int): Unit = {
     canvasWidthProperty.set(cWidth)
     val filters: Seq[Filter] = Option(searchFilters.get()).map(_.asScala.toSeq).getOrElse(Seq())
-    println("SQF: " + filters)
     iv.setImage(SquareImageView.paint(entries, sWidth, cWidth, filters))
   }
 

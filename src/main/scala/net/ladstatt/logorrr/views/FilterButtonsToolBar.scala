@@ -65,7 +65,7 @@ class FilterButtonsToolBar(logView: LogView
   def allFilters: Set[Filter] = filterButtons.keySet ++ someUnclassifiedFilter.map(x => Set(x._1)).getOrElse(Set())
 
   private val label = {
-    val l = new Label("Active filter(s)")
+    val l = new Label("active filter(s)")
     l.setPrefWidth(100)
     l
   }
@@ -82,6 +82,7 @@ class FilterButtonsToolBar(logView: LogView
     someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
     getItems.add(1, tb)
     someUnclassifiedFilter = Option((unclassified, tb))
+    updateActiveFilter()
   }
 
   /**
@@ -109,6 +110,10 @@ class FilterButtonsToolBar(logView: LogView
 
   }
 
+  def updateActiveFilter(): Unit = {
+    val filter = computeCurrentFilter()
+    filteredList.setPredicate((entry: LogEntry) => filter.applyMatch(entry.value))
+  }
 
   private def mkToggleButton(sf: Filter): SearchTag = {
     val buttonTitle = sf.title + ": " + occurences(sf) + " " + FilterButtonsToolBar.percentAsString(occurences(sf), totalSize)
@@ -118,10 +123,7 @@ class FilterButtonsToolBar(logView: LogView
     button.setGraphic(r)
     button.setSelected(true)
 
-    def updateActiveFilter(): Unit = {
-      val filter = computeCurrentFilter()
-      filteredList.setPredicate((entry: LogEntry) => filter.applyMatch(entry.value))
-    }
+
 
     button.selectedProperty().addListener(new InvalidationListener {
       // if any of the buttons changes its selected value, reevaluate predicate
@@ -135,10 +137,7 @@ class FilterButtonsToolBar(logView: LogView
       case InverseFilter(filters) => removeButton.setDisable(true) // disable 'unclassified' 'x' button
       case _ =>
     }
-    removeButton.setOnAction((t: ActionEvent) => {
-      logView.removeFilter(sf)
-      updateActiveFilter()
-    })
+    removeButton.setOnAction((t: ActionEvent) => logView.removeFilter(sf))
 
     new SearchTag(button, removeButton)
   }

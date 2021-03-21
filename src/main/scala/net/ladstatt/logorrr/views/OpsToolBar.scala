@@ -1,27 +1,26 @@
 package net.ladstatt.logorrr.views
 
-import javafx.beans.value.{ChangeListener, ObservableValue}
-import javafx.collections.transformation.FilteredList
-import javafx.scene.control.{Label, TextField, ToolBar}
-import net.ladstatt.logorrr.LogEntry
+import javafx.event.{ActionEvent, EventHandler}
+import javafx.scene.control._
+import net.ladstatt.logorrr.CaseInsensitiveFilter
 
 
-class OpsToolBar(filteredList: FilteredList[LogEntry]) extends ToolBar {
+class OpsToolBar(logView: LogView) extends ToolBar {
 
   val initialText = "<enter search string>"
   val searchTextField = new TextField()
   searchTextField.setPrefWidth(500)
   searchTextField.setPromptText(initialText)
-  searchTextField.textProperty().addListener(new ChangeListener[String] {
-    override def changed(observableValue: ObservableValue[_ <: String], t: String, t1: String): Unit = {
-      Option(t1) match {
-        case Some(value) => filteredList.setPredicate((t: LogEntry) => t.value.contains(value))
-        case None =>
-      }
+
+  private val label = new Label("new filter")
+  label.setPrefWidth(100)
+  val cp = new ColorPicker()
+  val add = new Button("add")
+  add.setOnAction(new EventHandler[ActionEvent]() {
+    override def handle(t: ActionEvent): Unit = {
+      logView.addFilter(CaseInsensitiveFilter(searchTextField.getText, cp.getValue))
+      searchTextField.setText("")
     }
   })
-
-  private val label = new Label("Search")
-  label.setPrefWidth(100)
-  getItems.addAll(label, searchTextField)
+  getItems.addAll(label, searchTextField, cp, add)
 }

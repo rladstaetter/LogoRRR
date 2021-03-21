@@ -4,7 +4,7 @@ import javafx.collections.transformation.FilteredList
 import javafx.scene.control.{ListCell, ListView}
 import javafx.scene.layout.BorderPane
 import javafx.util.Callback
-import net.ladstatt.logorrr.{LogEntry, LogSeverity}
+import net.ladstatt.logorrr.LogEntry
 
 class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
 
@@ -22,9 +22,12 @@ class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
         e =>
           setText(e.value)
           setStyle("""-fx-font: 10pt "Courier"""")
-          if (e.severity == LogSeverity.Severe) {
-            setStyle("""-fx-font: 10pt "Courier"; -fx-background-color: red;""")
-          }
+        /*
+        if (e.filter == DefaultFilter.severe) {
+          setStyle("""-fx-font: 10pt "Courier"; -fx-background-color: red;""")
+        }
+
+         */
       }
     }
   }

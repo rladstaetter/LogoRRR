@@ -26,7 +26,7 @@ object LogView {
       lv.addSearchFilter(SearchFilter("Direct", Color.GREY))
       lv.addSearchFilter(SearchFilter("Engine", Color.BLUE))
   */
-    DefaultFilter.seq.foreach(lv.addFilter)
+    lv.addFilters(DefaultFilter.seq: _*)
     /*
     lv.addSearchFilter(SearchFilter("SEVERE", Color.RED))
     lv.addSearchFilter(SearchFilter("INFO", Color.GREEN))
@@ -83,7 +83,7 @@ class LogView(logReport: LogReport
     }
   })
 
-  private val opsToolBar = new OpsToolBar(filteredList)
+  private val opsToolBar = new OpsToolBar(this)
   private val filterButtonsToolBar = {
     val fbtb = new FilterButtonsToolBar(this, filteredList, logReport.entries.size)
     fbtb.filtersProperty.bind(filtersProperty)
@@ -154,20 +154,12 @@ class LogView(logReport: LogReport
   })
 
 
+  def addFilters(filters: Filter*): Unit = filtersProperty.addAll(filters.asJava)
+
   def addFilter(filter: Filter): Unit = filtersProperty.add(filter)
 
+
   def removeFilter(filter: Filter): Unit = filtersProperty.remove(filter)
-
-  /*
-    {
-      filterButtonsToolBar.addFilter(filter)
-    }
-
-    def removeFilter(filter: Filter): Unit = {
-      filterButtonsToolBar.removeFilter(filter)
-      logVisualView.sisp.searchFilters.setAll(filterButtonsToolBar.allFilters.toSeq: _*)
-    }
-  */
 
   def getVisualViewWidth(): Double = {
     val w = splitPane.getDividers.get(0).getPosition * splitPane.getWidth
