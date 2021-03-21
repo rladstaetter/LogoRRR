@@ -1,14 +1,14 @@
 package net.ladstatt.logorrr.views
 
-import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty}
+import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
-import javafx.scene.layout.{BorderPane, VBox}
+import javafx.scene.layout._
+import net.ladstatt.logorrr._
 import net.ladstatt.logorrr.views.visual.LogVisualView
-import net.ladstatt.logorrr.{LogEntry, LogReport, LogSeverity, LogViewTabPane}
 import net.ladstatt.util.CanLog
 
 import scala.jdk.CollectionConverters._
@@ -20,6 +20,18 @@ object LogView {
     val lv = new LogView(logReport
       , logViewTabPane.sceneWidthProperty.get()
       , logViewTabPane.squareWidthProperty.get())
+    /*
+      lv.addSearchFilter(SearchFilter("nxs", Color.RED))
+      lv.addSearchFilter(SearchFilter("ml", Color.GREEN))
+      lv.addSearchFilter(SearchFilter("Direct", Color.GREY))
+      lv.addSearchFilter(SearchFilter("Engine", Color.BLUE))
+  */
+    DefaultFilter.seq.foreach(lv.addFilter)
+    /*
+    lv.addSearchFilter(SearchFilter("SEVERE", Color.RED))
+    lv.addSearchFilter(SearchFilter("INFO", Color.GREEN))
+    lv.addSearchFilter(SearchFilter("TRACE", Color.GREY))
+    lv.addSearchFilter(SearchFilter("WARNING", Color.ORANGE)) */
     lv.sceneWidthProperty.bind(logViewTabPane.sceneWidthProperty)
     lv.squareWidthProperty.bind(logViewTabPane.squareWidthProperty)
     lv
@@ -38,6 +50,10 @@ class LogView(logReport: LogReport
               , initialSceneWidth: Int
               , initialSquareWidth: Int)
   extends Tab(logReport.name + " (" + logReport.entries.length + " entries)") with CanLog {
+
+  /** list of search filters to be applied to a Log Report */
+  val filtersProperty = new SimpleListProperty[Filter](CollectionUtils.mkEmptyObservableList())
+
 
   /** bound to sceneWidthProperty of parent LogViewTabPane */
   val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
@@ -67,9 +83,12 @@ class LogView(logReport: LogReport
     }
   })
 
-
   private val opsToolBar = new OpsToolBar(filteredList)
-  private val filterButtonsToolBar = new FilterButtonsToolBar(filteredList, logReport.occurrences, logReport.entries.size)
+  private val filterButtonsToolBar = {
+    val fbtb = new FilterButtonsToolBar(this, filteredList, logReport.entries.size)
+    fbtb.filtersProperty.bind(filtersProperty)
+    fbtb
+  }
 
   val opsToolBox = {
     val vb = new VBox()
@@ -77,10 +96,13 @@ class LogView(logReport: LogReport
     vb
   }
 
-
   val initialWidth = (sceneWidth * InitialRatio).toInt
 
-  private lazy val logVisualView = new LogVisualView(filteredList.asScala, initialWidth, getSquareWidth)
+  private lazy val logVisualView = {
+    val lvv = new LogVisualView(filteredList.asScala, initialWidth, getSquareWidth)
+    lvv.sisp.searchFilters.bind(filtersProperty)
+    lvv
+  }
 
   private val logTextView = new LogTextView(filteredList)
 
@@ -107,14 +129,13 @@ class LogView(logReport: LogReport
     }
   })
 
-
   val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 
   selectedEntryProperty.bindBidirectional(logVisualView.selectedEntryProperty)
 
   selectedEntryProperty.addListener(new ChangeListener[LogEntry] {
     override def changed(observableValue: ObservableValue[_ <: LogEntry], t: LogEntry, entry: LogEntry): Unit = {
-      entryLabel.setBackground(LogSeverity.backgrounds(entry.severity))
+      entryLabel.setBackground(entry.background(filterButtonsToolBar.filterButtons.keys.toSeq))
       entryLabel.setText(s"L: ${getSelectedIndex() + 1} ${entry.value}")
     }
   })
@@ -132,6 +153,21 @@ class LogView(logReport: LogReport
     }
   })
 
+
+  def addFilter(filter: Filter): Unit = filtersProperty.add(filter)
+
+  def removeFilter(filter: Filter): Unit = filtersProperty.remove(filter)
+
+  /*
+    {
+      filterButtonsToolBar.addFilter(filter)
+    }
+
+    def removeFilter(filter: Filter): Unit = {
+      filterButtonsToolBar.removeFilter(filter)
+      logVisualView.sisp.searchFilters.setAll(filterButtonsToolBar.allFilters.toSeq: _*)
+    }
+  */
 
   def getVisualViewWidth(): Double = {
     val w = splitPane.getDividers.get(0).getPosition * splitPane.getWidth

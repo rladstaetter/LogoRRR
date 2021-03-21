@@ -1,22 +1,44 @@
 package net.ladstatt.logorrr
 
-
-
+import javafx.geometry.Insets
+import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}
+import javafx.scene.paint.Color
 
 object LogEntry {
 
-  def apply(line: String): LogEntry = {
-    if (line.contains("SEVERE")) {
-      new LogEntry(line, LogSeverity.Severe)
-    } else if (line.contains("WARNING")) {
-      new LogEntry(line, LogSeverity.Warning)
-    } else if (line.contains("FINEST")) {
-      new LogEntry(line, LogSeverity.Trace)
-    } else if (line.contains("INFO")) {
-      new LogEntry(line, LogSeverity.Info)
-    } else new LogEntry(line, LogSeverity.Other)
-  }
 
 }
 
-case class LogEntry(value: String, severity: LogSeverity)
+/** represents one line in a log file */
+case class LogEntry(value: String) {
+
+  /**
+   * calculate a color for this log entry.
+   *
+   * - either white if no search filter hits
+   * - given color if only one hit
+   * - a melange of all colors from all hits in all other cases
+   * */
+  def calcColors(searchFilters: Seq[Filter]): Color = {
+    val hits = searchFilters.filter(sf => sf.applyMatch(value))
+    val color = {
+      if (hits.isEmpty) {
+        Color.WHITE
+      } else if (hits.size == 1) {
+        hits.head.color
+      } else {
+        val c = hits.tail.foldLeft(hits.head.color)((acc, sf) => acc.interpolate(sf.color, 0.5))
+        c
+      }
+    }
+    color
+  }
+
+  def background(searchFilters: Seq[Filter]): Background =
+    new Background(new BackgroundFill(calcColors(searchFilters), new CornerRadii(1.0), new Insets(0.0)))
+
+  /* pixel representation of rectangle to draw (mainly a performance optimisation) */
+  def pixelArray(searchFilters: Seq[Filter]): Array[Int] =
+    ColorUtil.mkPixelArray(LogoRRRApp.InitialSquareWidth - 1, calcColors(searchFilters))
+
+}

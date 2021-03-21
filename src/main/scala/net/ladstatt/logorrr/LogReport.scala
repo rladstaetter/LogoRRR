@@ -28,9 +28,6 @@ case class LogReport(path: Path
 
   val name = path.getFileName.toString
 
-  val occurrences: Map[LogSeverity, Int] = LogSeverity.seq.map {
-    ls => ls -> entries.count(_.severity == ls)
-  }.toMap
 
   def getEntryAt(x: Int, y: Int, squareWidth: Int, canvasWidth: Int): LogEntry = {
     entries(y / squareWidth * (canvasWidth / squareWidth) + x / squareWidth)
