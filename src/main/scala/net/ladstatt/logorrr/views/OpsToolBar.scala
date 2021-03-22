@@ -2,7 +2,7 @@ package net.ladstatt.logorrr.views
 
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.control._
-import net.ladstatt.logorrr.CaseInsensitiveFilter
+import net.ladstatt.logorrr.ExactMatchFilter
 
 
 class OpsToolBar(logView: LogView) extends ToolBar {
@@ -18,7 +18,7 @@ class OpsToolBar(logView: LogView) extends ToolBar {
   val add = new Button("add")
   add.setOnAction(new EventHandler[ActionEvent]() {
     override def handle(t: ActionEvent): Unit = {
-      logView.addFilter(CaseInsensitiveFilter(searchTextField.getText, cp.getValue))
+      logView.addFilter(ExactMatchFilter(searchTextField.getText, cp.getValue))
       searchTextField.setText("")
     }
   })

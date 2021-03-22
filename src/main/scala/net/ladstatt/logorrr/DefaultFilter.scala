@@ -4,11 +4,11 @@ import javafx.scene.paint.Color
 
 object DefaultFilter {
 
-  val trace = CaseInsensitiveFilter("Trace", Color.GREY)
-  val info = CaseInsensitiveFilter("Info", Color.GREEN)
-  val warning = CaseInsensitiveFilter("Warning", Color.ORANGE)
-  val severe = CaseInsensitiveFilter("Severe", Color.RED)
+  val finest = ExactMatchFilter("FINEST", Color.GREY)
+  val info = ExactMatchFilter("INFO", Color.GREEN)
+  val warning = ExactMatchFilter("WARNING", Color.ORANGE)
+  val severe = ExactMatchFilter("SEVERE", Color.RED)
 
-  val seq: Seq[Filter] = Seq(trace, info, warning, severe)
+  val seq: Seq[Filter] = Seq(finest, info, warning, severe)
 
 }

@@ -17,6 +17,14 @@ trait Filter {
   def applyMatch(string: String): Boolean
 }
 
+case class ExactMatchFilter(value: String
+                            , color: Color) extends Filter {
+
+  def applyMatch(string: String): Boolean = string.contains(value)
+
+  override def title: String = value
+}
+
 /** encodes filter text and color which should be used to display it */
 case class CaseInsensitiveFilter(value: String
                                  , color: Color) extends Filter {

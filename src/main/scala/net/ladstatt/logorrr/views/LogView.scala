@@ -20,12 +20,7 @@ object LogView {
     val lv = new LogView(logReport
       , logViewTabPane.sceneWidthProperty.get()
       , logViewTabPane.squareWidthProperty.get())
-    /*
-      lv.addSearchFilter(SearchFilter("nxs", Color.RED))
-      lv.addSearchFilter(SearchFilter("ml", Color.GREEN))
-      lv.addSearchFilter(SearchFilter("Direct", Color.GREY))
-      lv.addSearchFilter(SearchFilter("Engine", Color.BLUE))
-  */
+
     lv.addFilters(DefaultFilter.seq: _*)
     /*
     lv.addSearchFilter(SearchFilter("SEVERE", Color.RED))
@@ -50,6 +45,7 @@ class LogView(logReport: LogReport
               , initialSceneWidth: Int
               , initialSquareWidth: Int)
   extends Tab(logReport.name + " (" + logReport.entries.length + " entries)") with CanLog {
+
 
   /** list of search filters to be applied to a Log Report */
   val filtersProperty = new SimpleListProperty[Filter](CollectionUtils.mkEmptyObservableList())

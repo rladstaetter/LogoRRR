@@ -1,7 +1,7 @@
 package net.ladstatt.logorrr.views.visual
 
 import javafx.scene.image._
-import net.ladstatt.logorrr.{CaseInsensitiveFilter, Filter, LogEntry}
+import net.ladstatt.logorrr.{Filter, LogEntry}
 
 import scala.collection.mutable
 
@@ -9,7 +9,7 @@ import scala.collection.mutable
 object SquareImageView {
 
 
-  def mkBareImage(totalSize : Int, squareWidth: Int, canvasWidth: Int): WritableImage = {
+  def mkBareImage(totalSize: Int, squareWidth: Int, canvasWidth: Int): WritableImage = {
     val numberCols = canvasWidth / squareWidth
     val numRows = totalSize / numberCols
     val height = squareWidth * numRows
@@ -48,7 +48,7 @@ object SquareImageView {
     pw
   }
 
-  def apply(totalSize:Int
+  def apply(totalSize: Int
             , canvasWidth: Int
             , squareWidth: Int): SquareImageView = {
     val i = mkBareImage(totalSize, canvasWidth, squareWidth)
