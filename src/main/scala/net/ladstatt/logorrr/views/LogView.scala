@@ -22,11 +22,10 @@ object LogView {
       , logViewTabPane.squareWidthProperty.get())
 
     lv.addFilters(DefaultFilter.seq: _*)
-    /*
-    lv.addSearchFilter(SearchFilter("SEVERE", Color.RED))
-    lv.addSearchFilter(SearchFilter("INFO", Color.GREEN))
-    lv.addSearchFilter(SearchFilter("TRACE", Color.GREY))
-    lv.addSearchFilter(SearchFilter("WARNING", Color.ORANGE)) */
+
+    /** activate invalidation listener on filtered list */
+    lv.installInvalidationListener()
+
     lv.sceneWidthProperty.bind(logViewTabPane.sceneWidthProperty)
     lv.squareWidthProperty.bind(logViewTabPane.squareWidthProperty)
     lv
@@ -72,12 +71,15 @@ class LogView(logReport: LogReport
   /** list which holds all entries, default to display all (can be changed via buttons) */
   val filteredList = new FilteredList[LogEntry](FXCollections.observableList(logReport.entries.asJava))
 
-  // to detect when we apply a new filter via filter buttons (see FilterButtonsToolbar)
-  filteredList.predicateProperty().addListener(new InvalidationListener {
-    override def invalidated(observable: Observable): Unit = {
-      repaint()
-    }
-  })
+  def installInvalidationListener() : Unit = {
+    // to detect when we apply a new filter via filter buttons (see FilterButtonsToolbar)
+    filteredList.predicateProperty().addListener(new InvalidationListener {
+      override def invalidated(observable: Observable): Unit = {
+        repaint()
+      }
+    })
+
+  }
 
   private val opsToolBar = new OpsToolBar(this)
   private val filterButtonsToolBar = {
