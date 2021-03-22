@@ -64,13 +64,6 @@ class FilterButtonsToolBar(logView: LogView
 
   def allFilters: Set[Filter] = filterButtons.keySet ++ someUnclassifiedFilter.map(x => Set(x._1)).getOrElse(Set())
 
-  private val label = {
-    val l = new Label("active filter(s)")
-    l.setPrefWidth(100)
-    l
-  }
-  getItems.add(label)
-
   private def updateOccurrences(sf: Filter): Unit = {
     occurences = occurences + (sf -> filteredList.getSource.asScala.count(e => sf.applyMatch(e.value)))
   }
@@ -80,7 +73,7 @@ class FilterButtonsToolBar(logView: LogView
     updateOccurrences(unclassified)
     val tb = mkToggleButton(unclassified)
     someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
-    getItems.add(1, tb)
+    getItems.add(0, tb)
     someUnclassifiedFilter = Option((unclassified, tb))
     updateActiveFilter()
   }

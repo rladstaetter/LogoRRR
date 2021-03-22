@@ -12,8 +12,6 @@ class OpsToolBar(logView: LogView) extends ToolBar {
   searchTextField.setPrefWidth(500)
   searchTextField.setPromptText(initialText)
 
-  private val label = new Label("new filter")
-  label.setPrefWidth(100)
   val cp = new ColorPicker()
   val add = new Button("add")
   add.setOnAction(new EventHandler[ActionEvent]() {
@@ -22,5 +20,5 @@ class OpsToolBar(logView: LogView) extends ToolBar {
       searchTextField.setText("")
     }
   })
-  getItems.addAll(label, searchTextField, cp, add)
+  getItems.addAll(searchTextField, cp, add)
 }
