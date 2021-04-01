@@ -18,7 +18,6 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
 
   val canvasWidthProperty = new SimpleIntegerProperty(canvasWidth)
 
-  // wird nicht richtig updated von 'remove button'
   val searchFilters = new SimpleListProperty[Filter]()
 
   /** responsible for determining current logevent */
@@ -32,7 +31,7 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
   }
 
   val iv = SquareImageView(entries.size, squareWidth, canvasWidth)
-  iv.setOnMouseMoved(mouseEventHandler)
+  iv.setOnMouseClicked(mouseEventHandler)
   setContent(iv)
 
   def repaint(sWidth: Int, cWidth: Int): Unit = {
