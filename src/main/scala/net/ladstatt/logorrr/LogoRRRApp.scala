@@ -1,8 +1,9 @@
 package net.ladstatt.logorrr
 
 import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.event.EventHandler
 import javafx.scene.Scene
-import javafx.stage.Stage
+import javafx.stage.{Stage, WindowEvent}
 
 import java.nio.file.Paths
 
@@ -51,6 +52,13 @@ class LogoRRRApp extends javafx.application.Application {
       mainBorderPane.addLogFile(Paths.get(p).toAbsolutePath)
     }
     mainBorderPane.selectLastLogFile()
+
+    // make sure to cleanup on close
+    stage.setOnCloseRequest(new EventHandler[WindowEvent] {
+      override def handle(event: WindowEvent): Unit = {
+        mainBorderPane.shutdown()
+      }
+    })
 
     stage.show()
 

@@ -3,8 +3,8 @@ package net.ladstatt.logorrr.views
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.beans.{InvalidationListener, Observable}
-import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList
+import javafx.event.{Event, EventHandler}
 import javafx.scene.control._
 import javafx.scene.layout._
 import net.ladstatt.logorrr._
@@ -24,8 +24,7 @@ object LogView {
     lv.addFilters(DefaultFilter.seq: _*)
 
     /** activate invalidation listener on filtered list */
-    lv.installInvalidationListener()
-
+    lv.start()
     lv.sceneWidthProperty.bind(logViewTabPane.sceneWidthProperty)
     lv.squareWidthProperty.bind(logViewTabPane.squareWidthProperty)
     lv
@@ -43,12 +42,37 @@ object LogView {
 class LogView(logReport: LogReport
               , initialSceneWidth: Int
               , initialSquareWidth: Int)
-  extends Tab(logReport.name + " (" + logReport.entries.length + " entries)") with CanLog {
+  extends Tab with CanLog {
 
+  /** repaint if entries or filters change */
+  val repaintInvalidationListener: InvalidationListener = new InvalidationListener {
+    override def invalidated(observable: Observable): Unit = {
+      repaint()
+    }
+  }
+
+  def start(): Unit = {
+    logReport.start()
+    installInvalidationListener()
+
+  }
+
+  /** don't monitor file anymore if tab is closed, free invalidation listeners */
+  setOnClosed(new EventHandler[Event]() {
+    override def handle(t: Event): Unit = shutdown()
+  })
+
+  // logReport can change over time, thus change Tab text property accordingly
+  def shutdown(): Unit = {
+    logInfo(s"Closing file ${logReport.path.toAbsolutePath} ...")
+    uninstallInvalidationListener()
+    logReport.stop()
+  }
+
+  textProperty.bind(logReport.titleProperty)
 
   /** list of search filters to be applied to a Log Report */
   val filtersProperty = new SimpleListProperty[Filter](CollectionUtils.mkEmptyObservableList())
-
 
   /** bound to sceneWidthProperty of parent LogViewTabPane */
   val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
@@ -69,16 +93,17 @@ class LogView(logReport: LogReport
   val splitPane = new SplitPane()
 
   /** list which holds all entries, default to display all (can be changed via buttons) */
-  val filteredList = new FilteredList[LogEntry](FXCollections.observableList(logReport.entries.asJava))
+  val filteredList = new FilteredList[LogEntry](logReport.entries)
 
-  def installInvalidationListener() : Unit = {
+  def installInvalidationListener(): Unit = {
     // to detect when we apply a new filter via filter buttons (see FilterButtonsToolbar)
-    filteredList.predicateProperty().addListener(new InvalidationListener {
-      override def invalidated(observable: Observable): Unit = {
-        repaint()
-      }
-    })
+    filteredList.predicateProperty().addListener(repaintInvalidationListener)
+    logReport.entries.addListener(repaintInvalidationListener)
+  }
 
+  def uninstallInvalidationListener(): Unit = {
+    filteredList.predicateProperty().removeListener(repaintInvalidationListener)
+    logReport.entries.removeListener(repaintInvalidationListener)
   }
 
   private val opsToolBar = new OpsToolBar(this)
@@ -178,4 +203,6 @@ class LogView(logReport: LogReport
       logError(s"Not painting since isSelected: $isSelected && $width > 0 && $width > ${getSquareWidth * 4}")
     }
   }
+
+
 }

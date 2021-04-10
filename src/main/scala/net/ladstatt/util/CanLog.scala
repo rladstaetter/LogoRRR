@@ -3,6 +3,10 @@ package net.ladstatt.util
 trait CanLog {
 
   // ironic that this application doesn't use proper logging currently ;-)
+  // afair there was an issue with graalvm not to use java.util.logging which I
+  // couldn't yet resolve.
+  def logInfo(s: String): Unit = System.out.println("INFO: " + s)
+
   def logTrace(s: String): Unit = System.out.println("FINEST: " + s)
 
   def logError(s: String): Unit = System.err.println("ERROR: " + s)

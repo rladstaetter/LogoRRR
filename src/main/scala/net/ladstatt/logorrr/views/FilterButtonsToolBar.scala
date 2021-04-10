@@ -1,11 +1,11 @@
 package net.ladstatt.logorrr.views
 
-import javafx.beans.{InvalidationListener, Observable}
 import javafx.beans.property.SimpleListProperty
+import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
 import javafx.event.ActionEvent
-import javafx.scene.control.{Button, Label, ToggleButton, ToolBar}
+import javafx.scene.control.{Button, ToggleButton, ToolBar}
 import javafx.scene.shape.Rectangle
 import net.ladstatt.logorrr._
 
@@ -117,7 +117,6 @@ class FilterButtonsToolBar(logView: LogView
     button.setSelected(true)
 
 
-
     button.selectedProperty().addListener(new InvalidationListener {
       // if any of the buttons changes its selected value, reevaluate predicate
       // and thus change contents of all views which display filtered List
@@ -127,7 +126,8 @@ class FilterButtonsToolBar(logView: LogView
     /** filters can be removed, in this case update display */
     val removeButton = new Button("x")
     sf match {
-      case InverseFilter(filters) => removeButton.setDisable(true) // disable 'unclassified' 'x' button
+      // 'unclassified' entries are shown by 'inversefilter'
+      case _: InverseFilter => removeButton.setDisable(true) // disable 'unclassified' 'x' button
       case _ =>
     }
     removeButton.setOnAction((t: ActionEvent) => logView.removeFilter(sf))

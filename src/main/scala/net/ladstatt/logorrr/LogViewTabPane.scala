@@ -5,6 +5,8 @@ import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.control.{Tab, TabPane}
 import net.ladstatt.logorrr.views.LogView
 
+import scala.jdk.CollectionConverters._
+
 object LogViewTabPane {
 
   /** constructor to pass parent and do binding */
@@ -44,4 +46,13 @@ class LogViewTabPane extends TabPane {
 
   def add(logReport: LogReport): Unit = getTabs.add(LogView(this, logReport))
 
+  /** shutdown all tabs */
+  def shutdown(): Unit = {
+    for {t <- getTabs.asScala} {
+      t match {
+        case l: LogView => l.shutdown()
+        case _ =>
+      }
+    }
+  }
 }

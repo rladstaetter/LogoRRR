@@ -42,6 +42,9 @@ class AppMainBorderPane(initialSceneWidth: Int
   })
 
 
+  def shutdown(): Unit = tabPane.shutdown()
+
+
   /** called when width of scene changes */
   def setSceneWidth(width: Int): Unit = sceneWidthProperty.set(width)
 
@@ -55,12 +58,12 @@ class AppMainBorderPane(initialSceneWidth: Int
     if (Files.isReadable(logFile) && Files.isRegularFile(logFile)) {
       Try(LogReport(logFile)) match {
         case Success(value) =>
-          logTrace(s"Adding ${logFile} ... ")
+          logInfo(s"Opening ${logFile.toAbsolutePath.toString} ... ")
           tabPane.add(value)
         case Failure(exception) => logError("Could not import file " + logFile.toAbsolutePath + ", reason: " + exception.getMessage)
       }
     } else {
-      logTrace(s"Could not read ${logFile.toAbsolutePath} ...")
+      logWarn(s"Could not read ${logFile.toAbsolutePath} ...")
     }
   }
 }
