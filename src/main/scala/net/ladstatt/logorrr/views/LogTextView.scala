@@ -16,18 +16,14 @@ class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
 
   class LogEntryListCell extends ListCell[LogEntry] {
 
+    setStyle("""-fx-font: 12pt "Courier"""")
+    setGraphic(null)
+
     override def updateItem(t: LogEntry, b: Boolean): Unit = {
       super.updateItem(t, b)
-      Option(t).foreach {
-        e =>
-          setText(e.value)
-          setStyle("""-fx-font: 10pt "Courier"""")
-        /*
-        if (e.filter == DefaultFilter.severe) {
-          setStyle("""-fx-font: 10pt "Courier"; -fx-background-color: red;""")
-        }
-
-         */
+      Option(t) match {
+        case Some(e) => setText(e.value)
+        case None => setText(null)
       }
     }
   }
