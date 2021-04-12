@@ -1,6 +1,6 @@
 # LogoRRR
 
-![Screenshot](screenshot.png)
+![Screenshot](screencast.gif)
 
 LogoRRR is a simple utility to display a logfile and visualise certain classes of events. 
 
