@@ -11,6 +11,12 @@ trait CanLog {
 
   def logError(s: String): Unit = System.err.println("ERROR: " + s)
 
+  def logException(t: Throwable): Unit = {
+    for (t <- t.getStackTrace) {
+      logError(t.toString)
+    }
+  }
+
   def logWarn(s: String): Unit = System.out.println("WARN: " + s)
 
   def timeR[T](a: => T, s: String): T = {

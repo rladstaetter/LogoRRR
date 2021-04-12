@@ -2,11 +2,13 @@ package net.ladstatt.logorrr.views.visual
 
 import javafx.scene.image._
 import net.ladstatt.logorrr.{Filter, LogEntry}
+import net.ladstatt.util.CanLog
 
 import scala.collection.mutable
+import scala.util.{Failure, Success, Try}
 
 
-object SquareImageView {
+object SquareImageView extends CanLog {
 
 
   def mkBareImage(totalSize: Int, squareWidth: Int, canvasWidth: Int): WritableImage = {
@@ -21,18 +23,23 @@ object SquareImageView {
             , canvasWidth: Int
             , filter: Seq[Filter]): WritableImage = {
     val wi = SquareImageView.mkBareImage(entries.size, squareWidth, canvasWidth)
-
     val numberCols = canvasWidth / squareWidth
     val pw = wi.getPixelWriter
-    for ((e, i) <- entries.zipWithIndex) {
-      val u = (i % numberCols) * squareWidth
-      val v = (i / numberCols) * squareWidth
-      paintSquare(pw
-        , u
-        , v
-        , squareWidth
-        , e.pixelArray(filter))
+    // make sure that when a file gets deleted we don't blow up in the 'entries.zipWithIndex' for loop
+    Try(entries.zipWithIndex) match {
+      case Success(es) =>
+        for ((e, i) <- es) {
+          val u = (i % numberCols) * squareWidth
+          val v = (i / numberCols) * squareWidth
+          paintSquare(pw
+            , u
+            , v
+            , squareWidth
+            , e.pixelArray(filter))
+        }
+      case Failure(exception) => logException(exception)
     }
+
     wi
   }
 
