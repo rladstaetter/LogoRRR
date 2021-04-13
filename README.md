@@ -34,14 +34,16 @@ Given you have followed the instructions for [maven-client-plugin](https://githu
 
 ### MacOs X
 
-Following commands should get you a working environment (setup everything you'll need probably), and more (https://sdkman.io is a package manager specifically tailored for java development, very nice project!). Future versions should work, too.
+Following commands should get you a working environment. This is a fast way to install everything you'll need as far as I remember. 
 
     git clone https://github.com/rladstaetter/LogoRRR.git
     curl -s "https://get.sdkman.io" | bash
     sdk install maven 3.6.3
     sdk install java 21.0.0.2.r11-grl
 
-After this initial setup, you should be ready to build via maven. You have to adapt some paths in `pom.xml` - just search for `graalvm.home` and adapt to your needs.
+(https://sdkman.io is a package manager specifically tailored for java development, you can install various JVM based utilities / libraries and tools with it, manage different JVM versions as well - very handy!)
+
+After this initial setup, you should be ready to build via maven. You have to adapt some paths in `pom.xml` - just search for `graalvm.home` and make sure it is pointing to the correct path.
 
 Execute
 
