@@ -1,9 +1,9 @@
-package net.ladstatt.logorrr
+package app.logorrr
 
 import javafx.beans.property.{SimpleIntegerProperty, SimpleStringProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ObservableList}
-import net.ladstatt.util.{CanLog, JfxUtils}
+import app.util.{CanLog, JfxUtils}
 import org.apache.commons.io.input.Tailer
 
 import java.nio.file.{Files, Path}

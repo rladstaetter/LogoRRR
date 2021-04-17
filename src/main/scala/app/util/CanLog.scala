@@ -1,4 +1,4 @@
-package net.ladstatt.util
+package app.util
 
 trait CanLog {
 

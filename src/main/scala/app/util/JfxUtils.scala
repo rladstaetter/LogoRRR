@@ -1,4 +1,4 @@
-package net.ladstatt.util
+package app.util
 
 import javafx.application.Platform
 

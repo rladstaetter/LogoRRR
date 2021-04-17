@@ -1,4 +1,4 @@
-package net.ladstatt.logorrr.views
+package app.logorrr.views
 
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.{InvalidationListener, Observable}
@@ -7,7 +7,7 @@ import javafx.collections.transformation.FilteredList
 import javafx.event.ActionEvent
 import javafx.scene.control.{Button, ToggleButton, ToolBar}
 import javafx.scene.shape.Rectangle
-import net.ladstatt.logorrr._
+import app.logorrr._
 
 import java.text.DecimalFormat
 import scala.jdk.CollectionConverters._

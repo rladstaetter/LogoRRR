@@ -198,7 +198,7 @@
   "name":"javafx.stage.Window"
 },
 {
-  "name":"net.ladstatt.logorrr.LogoRRRApp",
+  "name":"app.logorrr.LogoRRRApp",
   "methods":[
     {"name":"<init>","parameterTypes":[] }, 
     {"name":"main","parameterTypes":["java.lang.String[]"] }

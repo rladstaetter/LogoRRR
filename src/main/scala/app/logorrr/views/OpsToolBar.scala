@@ -1,8 +1,8 @@
-package net.ladstatt.logorrr.views
+package app.logorrr.views
 
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.control._
-import net.ladstatt.logorrr.ExactMatchFilter
+import app.logorrr.ExactMatchFilter
 
 
 class OpsToolBar(logView: LogView) extends ToolBar {

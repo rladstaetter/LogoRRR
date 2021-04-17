@@ -1,4 +1,4 @@
-package net.ladstatt.logorrr.views
+package app.logorrr.views
 
 import javafx.scene.control.{Button, ToggleButton}
 import javafx.scene.layout.HBox

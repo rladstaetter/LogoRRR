@@ -1,7 +1,7 @@
-package net.ladstatt.logorrr
+package app.logorrr
 
 import javafx.collections.ObservableList
-import net.ladstatt.util.{CanLog, JfxUtils}
+import app.util.{CanLog, JfxUtils}
 import org.apache.commons.io.input.{Tailer, TailerListener}
 
 class LTailerListener(ol: ObservableList[LogEntry]) extends TailerListener with CanLog {

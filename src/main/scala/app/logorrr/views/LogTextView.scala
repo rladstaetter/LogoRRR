@@ -1,10 +1,10 @@
-package net.ladstatt.logorrr.views
+package app.logorrr.views
 
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.{ListCell, ListView}
 import javafx.scene.layout.BorderPane
 import javafx.util.Callback
-import net.ladstatt.logorrr.LogEntry
+import app.logorrr.LogEntry
 
 class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
 

@@ -1,4 +1,4 @@
-package net.ladstatt.logorrr
+package app.logorrr
 
 import javafx.geometry.Insets
 import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}

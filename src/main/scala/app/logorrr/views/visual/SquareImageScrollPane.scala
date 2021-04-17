@@ -1,10 +1,10 @@
-package net.ladstatt.logorrr.views.visual
+package app.logorrr.views.visual
 
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.event.EventHandler
 import javafx.scene.control.ScrollPane
 import javafx.scene.input.MouseEvent
-import net.ladstatt.logorrr.{CollectionUtils, Filter, LogEntry, LogReport}
+import app.logorrr.{CollectionUtils, Filter, LogEntry, LogReport}
 
 import scala.collection.mutable
 import scala.jdk.CollectionConverters.CollectionHasAsScala

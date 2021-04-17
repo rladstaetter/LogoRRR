@@ -1,8 +1,8 @@
-package net.ladstatt.logorrr.views.visual
+package app.logorrr.views.visual
 
 import javafx.scene.image._
-import net.ladstatt.logorrr.{Filter, LogEntry}
-import net.ladstatt.util.CanLog
+import app.logorrr.{Filter, LogEntry}
+import app.util.CanLog
 
 import scala.collection.mutable
 import scala.util.{Failure, Success, Try}

@@ -1,9 +1,9 @@
-package net.ladstatt.logorrr
+package app.logorrr
 
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
-import net.ladstatt.util.CanLog
+import app.util.CanLog
 
 import java.nio.file.{Files, Path}
 import scala.jdk.CollectionConverters.ListHasAsScala

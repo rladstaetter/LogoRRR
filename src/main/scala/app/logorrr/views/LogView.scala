@@ -1,4 +1,4 @@
-package net.ladstatt.logorrr.views
+package app.logorrr.views
 
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
@@ -7,9 +7,9 @@ import javafx.collections.transformation.FilteredList
 import javafx.event.{Event, EventHandler}
 import javafx.scene.control._
 import javafx.scene.layout._
-import net.ladstatt.logorrr._
-import net.ladstatt.logorrr.views.visual.LogVisualView
-import net.ladstatt.util.CanLog
+import app.logorrr._
+import app.logorrr.views.visual.LogVisualView
+import app.util.CanLog
 
 import scala.jdk.CollectionConverters._
 

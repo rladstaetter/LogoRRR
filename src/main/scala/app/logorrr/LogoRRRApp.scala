@@ -1,4 +1,4 @@
-package net.ladstatt.logorrr
+package app.logorrr
 
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event.EventHandler

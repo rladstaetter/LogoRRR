@@ -53,7 +53,7 @@ in the project directory (where `pom.xml` is located).
 
 After some compiling a binary executable which can be run without a JVM should be available:
 
-    ./target/client/x86_64-darwin/net.ladstatt.logorrr
+    ./target/client/x86_64-darwin/app.logorrr
 
 Try it out!
 

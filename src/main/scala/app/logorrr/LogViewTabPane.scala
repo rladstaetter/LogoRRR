@@ -1,9 +1,9 @@
-package net.ladstatt.logorrr
+package app.logorrr
 
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.control.{Tab, TabPane}
-import net.ladstatt.logorrr.views.LogView
+import app.logorrr.views.LogView
 
 import scala.jdk.CollectionConverters._
 
