@@ -29,7 +29,7 @@ class LogViewTabPane extends TabPane {
 
   setStyle(
     """
-      |-fx-background-image: url(/net/ladstatt/logorrr/save-as.png);
+      |-fx-background-image: url(/app/logorrr/save-as.png);
       |-fx-background-position: center center;
       |-fx-background-repeat: no-repeat;
       |-fx-background-size: 100%;
