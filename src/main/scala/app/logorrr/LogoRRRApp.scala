@@ -3,6 +3,7 @@ package app.logorrr
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event.EventHandler
 import javafx.scene.Scene
+import javafx.scene.image.Image
 import javafx.stage.{Stage, WindowEvent}
 
 import java.nio.file.Paths
@@ -38,6 +39,7 @@ class LogoRRRApp extends javafx.application.Application {
    */
   def start(stage: Stage): Unit = {
     stage.setTitle(LogoRRRApp.ApplicationName + " " + LogoRRRApp.ApplicationVersion)
+    stage.getIcons.add(new Image(getClass.getResourceAsStream("/app/logorrr/icon/logorrr-icon-32.png")))
     val mainBorderPane = new AppMainBorderPane(LogoRRRApp.InitialSceneWidth, LogoRRRApp.InitialSquareWidth)
     val scene = new Scene(mainBorderPane, LogoRRRApp.InitialSceneWidth, LogoRRRApp.InitialSceneHeight)
     scene.widthProperty().addListener(new ChangeListener[Number] {
