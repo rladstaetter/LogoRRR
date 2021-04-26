@@ -9,7 +9,7 @@ import javafx.scene.layout.{BorderPane, VBox}
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 
-import java.nio.file.Path
+import java.nio.file.{Files, Path, Paths}
 import javax.imageio.ImageIO
 
 object IconCreatorApp {
@@ -47,7 +47,7 @@ object LogorrrIcon {
 
     //rws(Color.WHITE, x0, y0, s, s, round)
     //drawRaster(Color.GREENYELLOW, x0, y0, s, s, factor)
-    val c = Color.LIGHTGREY
+    val c = Color.GREEN
     rws(c.darker(), x2 + xe / 2, y3 + ye / 2, 5 * xe, 4 * ye, round)
     rws(c.darker().darker(), x0, y0, 2 * xe, y9, round)
     rws(c.darker().darker().darker(), x0, y8, x10, 2 * ye, round)
@@ -85,25 +85,34 @@ class IconCreatorApp extends javafx.application.Application {
 
   val iconSizes = Seq(512, 256, 48, 32, 16)
 
+
+
   def start(stage: Stage): Unit = {
     val bp = new BorderPane()
     val icons =
-      for (i <- iconSizes) yield {
-        val canvas = new Canvas(i, i)
+      for (size <- iconSizes) yield {
+        val canvas = new Canvas(size, size)
         val gc2d = canvas.getGraphicsContext2D
-        LogorrrIcon.drawIcon2(gc2d, i)
-        canvas
+        LogorrrIcon.drawIcon(gc2d, size)
+        (size, canvas)
       }
-    val box = new VBox(10, icons: _*)
+    writeIcons(icons, Paths.get("src/main/resources/app/logorrr/icon/"))
+    val box = new VBox(10, icons.map(_._2): _*)
     box.setAlignment(Pos.CENTER)
     bp.setCenter(box)
-    val scene = new Scene(bp, iconSizes.max + iconSizes.max / 10, iconSizes.sum + iconSizes.sum/10)
+    val scene = new Scene(bp, iconSizes.max + iconSizes.max / 10, iconSizes.sum + iconSizes.sum / 10)
     stage.setScene(scene)
     stage.show()
-
   }
 
-  def writeCanvas(c: Canvas, target: Path): Unit = {
+  def writeIcons(canvases: Seq[(Int, Canvas)], path: Path): Unit = {
+    Files.createDirectories(path)
+    for ((s,c) <- canvases) {
+      val file = path.resolve(s"logorrr-icon-${s}.png")
+      writeIcon(c,file)
+    }
+  }
+  def writeIcon(c: Canvas, target: Path): Unit = {
     val writableImage = new WritableImage(c.getWidth.toInt, c.getHeight.toInt)
     c.snapshot(null, writableImage)
     val renderedImage = SwingFXUtils.fromFXImage(writableImage, null)
