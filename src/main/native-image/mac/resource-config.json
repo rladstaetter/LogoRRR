@@ -1,8 +1,20 @@
 {
-  "resources":{
-  "includes":[{"pattern":"\\Qnet/ladstatt/logorrr/save-as.png\\E"}]},
-  "bundles":[
-    {"name":"com.sun.javafx.tk.quantum.QuantumMessagesBundle"}, 
-    {"name":"com/sun/javafx/scene/control/skin/resources/controls"}
+  "resources": {
+    "includes": [
+      {
+        "pattern": "\\Qapp/logorrr/save-as.png\\E"
+      },
+      {
+        "pattern": "\\Qapp/logorrr/icon/logorrr-icon-32.png\\E"
+      }
+    ]
+  },
+  "bundles": [
+    {
+      "name": "com.sun.javafx.tk.quantum.QuantumMessagesBundle"
+    },
+    {
+      "name": "com/sun/javafx/scene/control/skin/resources/controls"
+    }
   ]
 }
