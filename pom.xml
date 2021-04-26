@@ -340,7 +340,7 @@
                 </os>
             </activation>
             <properties>
-                <graalvm.home>/Users/lad/.sdkman/candidates/java/21.0.0.2.r11-grl</graalvm.home>
+                <graalvm.home>/Users/lad/.sdkman/candidates/java/21.1.0.r11-grl</graalvm.home>
                 <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
             </properties>
             <build>
