@@ -10,10 +10,10 @@
         <revision>21.2.3</revision>
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <openjfx.version>17-ea+7</openjfx.version>
+        <openjfx.version>17-ea+9</openjfx.version>
         <!-- <openjfx.version>16</openjfx.version -->
-        <client.plugin.version>0.1.38</client.plugin.version>
-        <javafx.maven.plugin.version>0.0.5</javafx.maven.plugin.version>
+        <client.plugin.version>0.1.39</client.plugin.version>
+        <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.5</scala.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
