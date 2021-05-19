@@ -1,5 +1,7 @@
 # Project exclude paths
 **/target/**
+logfiles/
 .idea/
+.run/
 .hydra/
 *.iml
