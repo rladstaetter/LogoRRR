@@ -38,8 +38,8 @@ Following commands should get you a working environment. This is a fast way to i
 
     git clone https://github.com/rladstaetter/LogoRRR.git
     curl -s "https://get.sdkman.io" | bash
-    sdk install maven 3.6.3
-    sdk install java 21.0.0.2.r11-grl
+    sdk install maven 3.8.1
+    sdk install java 21.1.0.r11-grl
 
 (https://sdkman.io is a package manager specifically tailored for java development, you can install various JVM based utilities / libraries and tools with it, manage different JVM versions as well - very handy!)
 

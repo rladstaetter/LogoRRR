@@ -11,11 +11,10 @@
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <openjfx.version>17-ea+9</openjfx.version>
-        <!-- <openjfx.version>16</openjfx.version -->
-        <client.plugin.version>0.1.39</client.plugin.version>
+        <client.plugin.version>0.1.40</client.plugin.version>
         <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
         <scala.major.version>2.13</scala.major.version>
-        <scala.version>${scala.major.version}.5</scala.version>
+        <scala.version>${scala.major.version}.6</scala.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>app.logorrr.LogoRRRApp</main.class>
     </properties>
@@ -191,7 +190,8 @@
                                 <rules>
                                     <requireMavenVersion>
                                         <version>[3.6.2,)</version>
-                                        <message>Check for Maven version &gt;=3.6.2 failed. Upgrade your Maven installation.
+                                        <message>Check for Maven version &gt;=3.6.2 failed. Upgrade your Maven
+                                            installation.
                                         </message>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
@@ -317,7 +317,8 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <workingDirectory>${project.build.directory}/client/x86_64-windows/</workingDirectory>
+                                    <workingDirectory>${project.build.directory}/client/x86_64-windows/
+                                    </workingDirectory>
                                     <executable>${project.build.directory}/upx-3.96-win64/upx.exe</executable>
                                     <arguments>
                                         <argument>-9</argument>
