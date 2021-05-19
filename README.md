@@ -57,9 +57,17 @@ After some compiling a binary executable which can be run without a JVM should b
 
 Try it out!
 
-### Windows    
+### Windows 
 
-You have to enter following command in a Visual Studio Developer console (download and setup VisualStudio, GraalVM and Maven as well):
+To setup your Windows development environment, you have to perform following steps:
+
+- Visual Studio 2019 (Community Edition should suffice, tested with Visual Studio Professional)
+- GraalVM in a recent version (at least [21.1.0](https://github.com/graalvm/graalvm-ce-builds/releases/tag/vm-21.1.0)), for the moment stick to JDK 11 based version
+- put GraalVM in your Path
+- As Administrator, execute 'gu install native-image' in a 'x64 Native Tools command prompt' - which will be available if you have Visual Studio installed.
+- for normal compilation, you don't need administrator rights. 
+
+After setting `graalvm.home` in the main pom.xml to your GraalVM Installation directory all you have to do to get to a binary is:
 
      mvn clean package
 
@@ -67,7 +75,7 @@ A binary is available here after some minutes:
     
     target\client\x86_64-windows\logorrr.exe
 
-If you want to execute this exe on another computer, you have to make sure that the Visual Studio runtime environment is present there. If not, you can download [Visual Studio 2019 redistributables here](https://aka.ms/vs/16/release/vc_redist.x64.exe). (If you are lucky its already installed on your machine). If the application doesn't start this is a possible reason for that.  
+If you want to execute this exe on another computer, you have to make sure that the Visual Studio runtime environment is present there. If not, you can download [Visual Studio 2019 redistributables here](https://aka.ms/vs/16/release/vc_redist.x64.exe). (If you are lucky its already installed on your machine). If the application doesn't start - this is a possible reason for that.  
 
 
 ## Running from IntelliJ

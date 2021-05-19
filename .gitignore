@@ -5,3 +5,4 @@ logfiles/
 .run/
 .hydra/
 *.iml
+**/.flattened-pom.xml
