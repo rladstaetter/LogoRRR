@@ -1,11 +1,21 @@
 package app.logorrr.views
 
-import javafx.collections.transformation.FilteredList
-import javafx.scene.control.{ListCell, ListView}
-import javafx.scene.layout.BorderPane
-import javafx.util.Callback
 import app.logorrr.LogEntry
-import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.collections.transformation.FilteredList
+import javafx.scene.control.{ContextMenu, ListCell, ListView, MenuItem}
+import javafx.scene.layout.BorderPane
+import javafx.scene.input.Clipboard
+import javafx.scene.input.ClipboardContent
+
+object ClipBoardUtils {
+
+  def copyToClipboardText(s: String): Unit = {
+    val clipboard = Clipboard.getSystemClipboard()
+    val content = new ClipboardContent()
+    content.putString(s)
+    clipboard.setContent(content)
+  }
+}
 
 class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
 
@@ -23,11 +33,22 @@ class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
     setStyle("""-fx-font: 12pt "Courier"""")
     setGraphic(null)
 
+    val cm = new ContextMenu()
+    val copyCurrentToClipboard = new MenuItem("copy to clipboard")
+    cm.getItems.add(copyCurrentToClipboard)
+
     override def updateItem(t: LogEntry, b: Boolean): Unit = {
       super.updateItem(t, b)
       Option(t) match {
-        case Some(e) => setText(e.value)
-        case None => setText(null)
+        case Some(e) =>
+          setText(e.value)
+          copyCurrentToClipboard.setOnAction(_ => {
+            ClipBoardUtils.copyToClipboardText(e.value)
+          })
+          setContextMenu(cm)
+        case None =>
+          setText(null)
+          setContextMenu(null)
       }
     }
   }
