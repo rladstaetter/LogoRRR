@@ -1,5 +1,8 @@
 package app.logorrr.views
 
+import app.logorrr._
+import app.logorrr.views.visual.LogVisualView
+import app.util.CanLog
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.beans.{InvalidationListener, Observable}
@@ -7,9 +10,6 @@ import javafx.collections.transformation.FilteredList
 import javafx.event.{Event, EventHandler}
 import javafx.scene.control._
 import javafx.scene.layout._
-import app.logorrr._
-import app.logorrr.views.visual.LogVisualView
-import app.util.CanLog
 
 import scala.jdk.CollectionConverters._
 
@@ -157,11 +157,27 @@ class LogView(logReport: LogReport
   selectedEntryProperty.bindBidirectional(logVisualView.selectedEntryProperty)
 
   selectedEntryProperty.addListener(new ChangeListener[LogEntry] {
-    override def changed(observableValue: ObservableValue[_ <: LogEntry], t: LogEntry, entry: LogEntry): Unit = {
-      entryLabel.setBackground(entry.background(filterButtonsToolBar.filterButtons.keys.toSeq))
-      entryLabel.setText(s"L: ${getSelectedIndex() + 1} ${entry.value}")
+    override def changed(observableValue: ObservableValue[_ <: LogEntry], t: LogEntry, nullableEntry: LogEntry): Unit = {
+      updateEntryLabel(Option(nullableEntry))
     }
   })
+
+  // if user changes selected item in listview, change footer as well
+  logTextView.listView.getSelectionModel.selectedItemProperty.addListener(new ChangeListener[LogEntry] {
+    override def changed(observableValue: ObservableValue[_ <: LogEntry], t: LogEntry, nullableEntry: LogEntry): Unit = updateEntryLabel(Option(nullableEntry))
+  })
+
+
+  def updateEntryLabel(someEntry: Option[LogEntry]): Unit = {
+    someEntry match {
+      case Some(entry) =>
+        entryLabel.setBackground(entry.background(filterButtonsToolBar.filterButtons.keys.toSeq))
+        entryLabel.setText(entry.value)
+      case None =>
+        entryLabel.setBackground(null)
+        entryLabel.setText("")
+    }
+  }
 
   splitPane.getItems.addAll(logVisualView, logTextView)
 

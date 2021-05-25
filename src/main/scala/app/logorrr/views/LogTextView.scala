@@ -5,14 +5,18 @@ import javafx.scene.control.{ListCell, ListView}
 import javafx.scene.layout.BorderPane
 import javafx.util.Callback
 import app.logorrr.LogEntry
+import javafx.beans.value.{ChangeListener, ObservableValue}
 
 class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
 
-  private val listView: ListView[LogEntry] = {
+  val listView: ListView[LogEntry] = {
     val lv = new ListView[LogEntry]()
     lv.setItems(filteredList)
     lv
   }
+  listView.setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
+
+  setCenter(listView)
 
   class LogEntryListCell extends ListCell[LogEntry] {
 
@@ -28,16 +32,9 @@ class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
     }
   }
 
-  listView.setCellFactory(new Callback[ListView[LogEntry], ListCell[LogEntry]] {
-    override def call(p: ListView[LogEntry]): ListCell[LogEntry] = {
-      new LogEntryListCell()
-    }
-  })
-
   def selectEntryByIndex(index: Int): Unit = {
     listView.getSelectionModel.select(index)
     listView.scrollTo(index)
   }
 
-  setCenter(listView)
 }
