@@ -1,15 +1,15 @@
 package app.logorrr.views.visual
 
-import javafx.scene.image._
 import app.logorrr.{Filter, LogEntry}
 import app.util.CanLog
+import javafx.scene.image._
+import javafx.scene.paint.Color
 
 import scala.collection.mutable
 import scala.util.{Failure, Success, Try}
 
 
 object SquareImageView extends CanLog {
-
 
   def mkBareImage(totalSize: Int, squareWidth: Int, canvasWidth: Int): WritableImage = {
     val numberCols = canvasWidth / squareWidth
@@ -29,13 +29,14 @@ object SquareImageView extends CanLog {
     Try(entries.zipWithIndex) match {
       case Success(es) =>
         for ((e, i) <- es) {
-          val u = (i % numberCols) * squareWidth
-          val v = (i / numberCols) * squareWidth
+          val x = (i % numberCols) * squareWidth
+          val y = (i / numberCols) * squareWidth
+          val color = e.calcColor(filter)
           paintSquare(pw
-            , u
-            , v
+            , x
+            , y
             , squareWidth
-            , e.pixelArray(filter))
+            , e.pixelArray(color))
         }
       case Failure(exception) => logException(exception)
     }
@@ -52,6 +53,19 @@ object SquareImageView extends CanLog {
     // length - 1 is just here to separate individual rectangles (gives nice effect)
     // double check length with Filter.pixelarray, they have to be of the same value
     pw.setPixels(u, v, length - 1, length - 1, PixelFormat.getIntArgbPreInstance, src, 0, 0)
+    pw
+  }
+
+  /** paints a rectangle around a square */
+  def paintRect(pw: PixelWriter, x: Int, y: Int, length: Int, c: Color): PixelWriter = {
+    for (i <- x + 1 until x + length - 1) {
+      pw.setColor(i, y, c)
+      pw.setColor(i, y + length - 2, c)
+    }
+    for (i <- y + 1 until y + length - 1) {
+      pw.setColor(x, i, c)
+      pw.setColor(x + length - 2, i, c)
+    }
     pw
   }
 

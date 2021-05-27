@@ -19,7 +19,7 @@ case class LogEntry(value: String) {
    * - given color if only one hit
    * - a melange of all colors from all hits in all other cases
    * */
-  def calcColors(searchFilters: Seq[Filter]): Color = {
+  def calcColor(searchFilters: Seq[Filter]): Color = {
     val hits = searchFilters.filter(sf => sf.applyMatch(value))
     val color = {
       if (hits.isEmpty) {
@@ -35,10 +35,13 @@ case class LogEntry(value: String) {
   }
 
   def background(searchFilters: Seq[Filter]): Background =
-    new Background(new BackgroundFill(calcColors(searchFilters), new CornerRadii(1.0), new Insets(0.0)))
+    new Background(new BackgroundFill(calcColor(searchFilters), new CornerRadii(1.0), new Insets(0.0)))
 
   /* pixel representation of rectangle to draw (mainly a performance optimisation) */
-  def pixelArray(searchFilters: Seq[Filter]): Array[Int] =
-    ColorUtil.mkPixelArray(LogoRRRApp.InitialSquareWidth - 1, calcColors(searchFilters))
+  def pixelArray(c: Color): Array[Int] = {
+    ColorUtil.mkPixelArray(LogoRRRApp.InitialSquareWidth - 1, c)
+  }
+
+  def pixelArray(searchFilters: Seq[Filter]): Array[Int] = pixelArray(calcColor(searchFilters))
 
 }

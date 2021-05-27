@@ -1,10 +1,11 @@
 package app.logorrr.views.visual
 
+import app.logorrr.{Filter, LogEntry, LogReport}
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.event.EventHandler
 import javafx.scene.control.ScrollPane
+import javafx.scene.image.WritableImage
 import javafx.scene.input.MouseEvent
-import app.logorrr.{CollectionUtils, Filter, LogEntry, LogReport}
 
 import scala.collection.mutable
 import scala.jdk.CollectionConverters.CollectionHasAsScala
@@ -27,6 +28,10 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
       val entry = entries(index)
       selectedIndexProperty.set(index)
       selectedEntryProperty.set(entry)
+      val pw = getWritableImage().getPixelWriter
+      val x = (me.getX.toInt / squareWidth) * squareWidth
+      val y = (me.getY.toInt / squareWidth) * squareWidth
+      SquareImageView.paintRect(pw, x, y, squareWidth, entry.calcColor(filters).darker)
     }
   }
 
@@ -34,9 +39,12 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
   iv.setOnMouseClicked(mouseEventHandler)
   setContent(iv)
 
+  def getWritableImage(): WritableImage = iv.getImage.asInstanceOf[WritableImage]
+
+  def filters: Seq[Filter] = Option(searchFilters.get()).map(_.asScala.toSeq).getOrElse(Seq())
+
   def repaint(sWidth: Int, cWidth: Int): Unit = {
     canvasWidthProperty.set(cWidth)
-    val filters: Seq[Filter] = Option(searchFilters.get()).map(_.asScala.toSeq).getOrElse(Seq())
     iv.setImage(SquareImageView.paint(entries, sWidth, cWidth, filters))
   }
 
