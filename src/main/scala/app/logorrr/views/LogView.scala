@@ -99,6 +99,8 @@ class LogView(logReport: LogReport
     // to detect when we apply a new filter via filter buttons (see FilterButtonsToolbar)
     filteredList.predicateProperty().addListener(repaintInvalidationListener)
     logReport.entries.addListener(repaintInvalidationListener)
+    // if application changes width this will trigger repaint (See Issue #9)
+    splitPane.widthProperty().addListener(repaintInvalidationListener)
   }
 
   def uninstallInvalidationListener(): Unit = {
