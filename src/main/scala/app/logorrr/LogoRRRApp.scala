@@ -4,9 +4,23 @@ import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event.EventHandler
 import javafx.scene.Scene
 import javafx.scene.image.Image
+import javafx.scene.paint.Color
+import javafx.scene.text.Font
 import javafx.stage.{Stage, WindowEvent}
 
 import java.nio.file.Paths
+
+object LogoRRRFonts {
+
+  // load font thanks to https://www.jetbrains.com/lp/mono/
+  Font.loadFont(getClass.getResource("/app/logorrr/JetBrainsMono-Regular.ttf").toExternalForm, 12)
+
+  def jetBrainsMono(size: Int) =
+    s"""|-fx-font-family: 'JetBrains Mono';
+        |-fx-font-size: ${size.toString} px;
+        |""".stripMargin
+
+}
 
 object LogoRRRApp {
 
@@ -28,11 +42,13 @@ object LogoRRRApp {
   def main(args: Array[String]): Unit = {
     javafx.application.Application.launch(classOf[LogoRRRApp], args: _*)
   }
+
 }
 
 class LogoRRRApp extends javafx.application.Application {
 
   import scala.jdk.CollectionConverters._
+
 
   /**
    * will be called by the java bootstrapper

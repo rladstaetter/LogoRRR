@@ -132,7 +132,7 @@ class LogView(logReport: LogReport
   val entryLabel = {
     val l = new Label("")
     l.prefWidthProperty.bind(sceneWidthProperty)
-    l.setStyle(s"-fx-text-fill: white; -fx-font-size: 20px;")
+    l.setStyle(LogoRRRFonts.jetBrainsMono(20))
     l
   }
 
@@ -171,7 +171,9 @@ class LogView(logReport: LogReport
   def updateEntryLabel(someEntry: Option[LogEntry]): Unit = {
     someEntry match {
       case Some(entry) =>
-        entryLabel.setBackground(entry.background(filterButtonsToolBar.filterButtons.keys.toSeq))
+        val background: Background = entry.background(filterButtonsToolBar.filterButtons.keys.toSeq)
+        entryLabel.setBackground(background)
+        entryLabel.setTextFill(entry.calcColor(filterButtonsToolBar.filterButtons.keys.toSeq).invert())
         entryLabel.setText(entry.value)
       case None =>
         entryLabel.setBackground(null)

@@ -5,6 +5,9 @@
         "pattern": "\\Qapp/logorrr/save-as.png\\E"
       },
       {
+        "pattern": "\\Qapp/logorrr/JetBrainsMono-Regular.ttf\\E"
+      },
+      {
         "pattern": "\\Qapp/logorrr/icon/logorrr-icon-32.png\\E"
       }
     ]

@@ -1,11 +1,10 @@
 package app.logorrr.views
 
-import app.logorrr.LogEntry
+import app.logorrr.{LogEntry, LogoRRRFonts}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.{ContextMenu, ListCell, ListView, MenuItem}
+import javafx.scene.input.{Clipboard, ClipboardContent}
 import javafx.scene.layout.BorderPane
-import javafx.scene.input.Clipboard
-import javafx.scene.input.ClipboardContent
 
 object ClipBoardUtils {
 
@@ -30,7 +29,7 @@ class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
 
   class LogEntryListCell extends ListCell[LogEntry] {
 
-    setStyle("""-fx-font: 12pt "Courier"""")
+    setStyle(LogoRRRFonts.jetBrainsMono(12))
     setGraphic(null)
 
     val cm = new ContextMenu()
@@ -52,6 +51,7 @@ class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
       }
     }
   }
+
 
   def selectEntryByIndex(index: Int): Unit = {
     listView.getSelectionModel.select(index)
