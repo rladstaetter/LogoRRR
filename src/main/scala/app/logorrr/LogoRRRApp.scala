@@ -4,23 +4,10 @@ import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event.EventHandler
 import javafx.scene.Scene
 import javafx.scene.image.Image
-import javafx.scene.paint.Color
-import javafx.scene.text.Font
 import javafx.stage.{Stage, WindowEvent}
 
 import java.nio.file.Paths
 
-object LogoRRRFonts {
-
-  // load font thanks to https://www.jetbrains.com/lp/mono/
-  Font.loadFont(getClass.getResource("/app/logorrr/JetBrainsMono-Regular.ttf").toExternalForm, 12)
-
-  def jetBrainsMono(size: Int) =
-    s"""|-fx-font-family: 'JetBrains Mono';
-        |-fx-font-size: ${size.toString} px;
-        |""".stripMargin
-
-}
 
 object LogoRRRApp {
 
@@ -49,7 +36,6 @@ class LogoRRRApp extends javafx.application.Application {
 
   import scala.jdk.CollectionConverters._
 
-
   /**
    * will be called by the java bootstrapper
    */
@@ -60,6 +46,7 @@ class LogoRRRApp extends javafx.application.Application {
     val scene = new Scene(mainBorderPane, LogoRRRApp.InitialSceneWidth, LogoRRRApp.InitialSceneHeight)
     scene.widthProperty().addListener(new ChangeListener[Number] {
       override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
+        println(s"changed: ${t1.intValue}")
         Option(mainBorderPane).foreach(_.setSceneWidth(t1.intValue))
       }
     })

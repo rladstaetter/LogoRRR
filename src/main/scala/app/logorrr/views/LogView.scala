@@ -45,16 +45,11 @@ class LogView(logReport: LogReport
   extends Tab with CanLog {
 
   /** repaint if entries or filters change */
-  val repaintInvalidationListener: InvalidationListener = new InvalidationListener {
-    override def invalidated(observable: Observable): Unit = {
-      repaint()
-    }
-  }
+  val repaintInvalidationListener: InvalidationListener = (_: Observable) => repaint()
 
   def start(): Unit = {
     logReport.start()
     installInvalidationListener()
-
   }
 
   /** don't monitor file anymore if tab is closed, free invalidation listeners */

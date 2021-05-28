@@ -28,7 +28,7 @@ class LogVisualView(entries: mutable.Buffer[LogEntry]
 
   def repaint(sWidth: Int, cWidth: Int): Unit = timeR({
     sisp.repaint(sWidth, cWidth)
-  }, "Executes repaint")
+  }, "Repaint")
 
 
 }
