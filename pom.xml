@@ -6,6 +6,7 @@
     <version>${revision}${changelist}</version>
     <packaging>jar</packaging>
     <name>app.logorrr</name>
+
     <properties>
         <revision>21.2.4</revision>
         <changelist>-SNAPSHOT</changelist>
