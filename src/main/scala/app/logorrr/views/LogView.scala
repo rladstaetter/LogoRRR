@@ -95,7 +95,7 @@ class LogView(logReport: LogReport
     filteredList.predicateProperty().addListener(repaintInvalidationListener)
     logReport.entries.addListener(repaintInvalidationListener)
     // if application changes width this will trigger repaint (See Issue #9)
-    splitPane.widthProperty().addListener(repaintInvalidationListener)
+    // splitPane.widthProperty().addListener(repaintInvalidationListener)
   }
 
   def uninstallInvalidationListener(): Unit = {
