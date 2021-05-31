@@ -12,7 +12,7 @@ This project serves as a vehicle to test and learn about various aspects of Java
 
 ## Binary download 
 
-You can give it a try by downloading a [prebuilt binary for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.2.3) from the releases page.
+You can give it a try by downloading a [prebuilt binary for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.2.4) from the releases page.
 
 However, since the application is not digitally signed with a code signing certificate, you'll see warnings not to start the application or your computer will blow up. Until I pay much money to be able to sign the application, we have to live with this and you have to explicitly allow the application to to start. Sorry about that. 🤷🏼‍♂️ 
 
