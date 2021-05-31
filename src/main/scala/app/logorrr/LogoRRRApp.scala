@@ -15,7 +15,7 @@ object LogoRRRApp {
   val ApplicationName = "LogoRRR"
 
   /** version which is displayed to user */
-  val ApplicationVersion = "21.2.4"
+  val ApplicationVersion = "21.3.0"
 
   /** initial width of main application scene */
   val InitialSceneWidth = 1000
