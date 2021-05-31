@@ -1,5 +1,12 @@
 [
 {
+  "name":"app.logorrr.LogoRRRApp",
+  "methods":[
+    {"name":"<init>","parameterTypes":[] },
+    {"name":"main","parameterTypes":["java.lang.String[]"] }
+  ]
+},
+{
   "name":"com.sun.glass.ui.Screen"
 },
 {
@@ -44,6 +51,10 @@
   "methods":[{"name":"getInstance","parameterTypes":[] }]
 },
 {
+  "name":"com.sun.prism.shader.DrawPgram_Color_Loader",
+  "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
+},
+{
   "name":"com.sun.prism.shader.DrawRoundRect_Color_Loader",
   "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
 },
@@ -57,6 +68,10 @@
 },
 {
   "name":"com.sun.prism.shader.FillRoundRect_Color_Loader",
+  "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
+},
+{
+  "name":"com.sun.prism.shader.Solid_Color_Loader",
   "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
 },
 {
@@ -160,6 +175,18 @@
   "name":"javafx.scene.layout.Region"
 },
 {
+  "name":"javafx.scene.shape.LineTo"
+},
+{
+  "name":"javafx.scene.shape.MoveTo"
+},
+{
+  "name":"javafx.scene.shape.Path"
+},
+{
+  "name":"javafx.scene.shape.PathElement"
+},
+{
   "name":"javafx.scene.shape.Rectangle"
 },
 {
@@ -185,13 +212,6 @@
 },
 {
   "name":"javafx.stage.Window"
-},
-{
-  "name":"app.logorrr.LogoRRRApp",
-  "methods":[
-    {"name":"<init>","parameterTypes":[] }, 
-    {"name":"main","parameterTypes":["java.lang.String[]"] }
-  ]
 },
 {
   "name":"sun.misc.Unsafe",
