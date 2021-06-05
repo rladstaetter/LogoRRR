@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>app.logorrr</groupId>
+        <artifactId>logorrr</artifactId>
+        <version>${revision}${changelist}</version>
+    </parent>
+    <groupId>app.logorrr.dist</groupId>
+    <artifactId>dist</artifactId>
+    <name>app.logorrr.dist</name>
+    <packaging>pom</packaging>
+
+    <profiles>
+        <profile>
+            <id>OS.windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <modules>
+                <module>dist-win</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>OS.osx</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <name>Mac OS X</name>
+                </os>
+            </activation>
+            <modules>
+                <module>dist-osx</module>
+            </modules>
+        </profile>
+    </profiles>
+
+</project>

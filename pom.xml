@@ -4,21 +4,26 @@
     <groupId>app.logorrr</groupId>
     <artifactId>logorrr</artifactId>
     <version>${revision}${changelist}</version>
-    <packaging>jar</packaging>
     <name>app.logorrr</name>
-
+    <description>LogoRRR - the log visualisation tool</description>
+    <packaging>pom</packaging>
     <properties>
         <revision>21.3.0</revision>
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <openjfx.version>17-ea+9</openjfx.version>
-        <client.plugin.version>0.1.40</client.plugin.version>
-        <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.6</scala.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <openjfx.version>17-ea+9</openjfx.version>
+        <client.plugin.version>0.1.42</client.plugin.version>
+        <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
         <main.class>app.logorrr.LogoRRRApp</main.class>
     </properties>
+
+    <modules>
+        <module>app</module>
+        <module>dist</module>
+    </modules>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -61,42 +66,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-swing</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_${scala.major.version}</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.scalacheck</groupId>
-            <artifactId>scalacheck_${scala.major.version}</artifactId>
-        </dependency>
-    </dependencies>
     <build>
-        <resources>
-            <resource>
-                <directory>${project.basedir}/src/main/resources/</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-                <targetPath>${project.build.directory}/classes/</targetPath>
-            </resource>
-        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -124,6 +94,67 @@
                     <groupId>com.googlecode.maven-download-plugin</groupId>
                     <artifactId>download-maven-plugin</artifactId>
                     <version>1.6.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                    <executions>
+                        <execution>
+                            <id>copy-meta-inf</id>
+                            <phase>generate-resources</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <resources>
+                                    <resource>
+                                        <directory>${project.basedir}/src/main/resources/</directory>
+                                        <filtering>false</filtering>
+                                    </resource>
+                                </resources>
+                                <outputDirectory>${project.build.directory}/classes/</outputDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- to start application from command line and also to support client-maven-plugin's ability -->
+                <!-- to activate a tracing agent via client:runagent -->
+                <!-- see https://docs.oracle.com/en/graalvm/enterprise/19/guide/reference/native-image/tracing-agent.html -->
+                <!-- and https://docs.gluonhq.com/#_clientrunagent -->
+                <plugin>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-maven-plugin</artifactId>
+                    <version>${javafx.maven.plugin.version}</version>
+                    <configuration>
+                        <mainClass>${main.class}</mainClass>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.gluonhq</groupId>
+                    <artifactId>client-maven-plugin</artifactId>
+                    <version>${client.plugin.version}</version>
+                    <configuration>
+                        <target>host</target>
+                        <mainClass>${main.class}</mainClass>
+                        <verbose>true</verbose>
+                        <graalvmHome>${graalvm.home}</graalvmHome>
+                        <nativeImageArgs>
+                            <arg>--no-fallback</arg>
+                            <arg>-H:-UseServiceLoaderFeature</arg>
+                            <arg>--report-unsupported-elements-at-runtime</arg>
+                            <arg>-Dgraal.LogFile=${graalvm.log}</arg>
+                        </nativeImageArgs>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>execute-compile-and-link</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -217,145 +248,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>scala-maven-plugin</artifactId>
-            </plugin>
-            <!-- to start application from command line and also to support client-maven-plugin's ability -->
-            <!-- to activate a tracing agent via client:runagent -->
-            <!-- see https://docs.oracle.com/en/graalvm/enterprise/19/guide/reference/native-image/tracing-agent.html -->
-            <!-- and https://docs.gluonhq.com/#_clientrunagent -->
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>${javafx.maven.plugin.version}</version>
-                <configuration>
-                    <mainClass>${main.class}</mainClass>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.gluonhq</groupId>
-                <artifactId>client-maven-plugin</artifactId>
-                <version>${client.plugin.version}</version>
-                <configuration>
-                    <target>host</target>
-                    <mainClass>${main.class}</mainClass>
-                    <verbose>true</verbose>
-                    <graalvmHome>${graalvm.home}</graalvmHome>
-                    <nativeImageArgs>
-                        <arg>--no-fallback</arg>
-                        <arg>-H:-UseServiceLoaderFeature</arg>
-                        <arg>--report-unsupported-elements-at-runtime</arg>
-                        <arg>-Dgraal.LogFile=${graalvm.log}</arg>
-                    </nativeImageArgs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>execute-compile-and-link</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.scalatest</groupId>
-                <artifactId>scalatest-maven-plugin</artifactId>
-            </plugin>
-
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <id>OS.windows</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-            </activation>
-            <properties>
-                <graalvm.home>C:\Program Files\Java\graalvm-ce-java11-21.1.0</graalvm.home>
-                <graalvm.log>${project.build.directory}\graal.log</graalvm.log>
-            </properties>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>${project.basedir}/src/main/native-image/win</directory>
-                        <includes>
-                            <include>*.json</include>
-                        </includes>
-                        <targetPath>${project.build.directory}/classes/META-INF/native-image</targetPath>
-                    </resource>
-                </resources>
-                <plugins>
-                    <plugin>
-                        <groupId>com.googlecode.maven-download-plugin</groupId>
-                        <artifactId>download-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>download-upx-packer</id>
-                                <phase>initialize</phase>
-                                <goals>
-                                    <goal>wget</goal>
-                                </goals>
-                                <configuration>
-                                    <url>https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip</url>
-                                    <unpack>true</unpack>
-                                    <outputDirectory>${project.build.directory}</outputDirectory>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>pack-exe</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <workingDirectory>${project.build.directory}/client/x86_64-windows/
-                                    </workingDirectory>
-                                    <executable>${project.build.directory}/upx-3.96-win64/upx.exe</executable>
-                                    <arguments>
-                                        <argument>-9</argument>
-                                        <argument>-ologorrr.exe</argument>
-                                        <argument>${project.name}.exe</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>OS.mac</id>
-            <activation>
-                <os>
-                    <family>unix</family>
-                    <name>Mac OS X</name>
-                </os>
-            </activation>
-            <properties>
-                <graalvm.home>/Users/lad/.sdkman/candidates/java/21.1.0.r11-grl</graalvm.home>
-                <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
-            </properties>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>${project.basedir}/src/main/native-image/mac</directory>
-                        <includes>
-                            <include>*.json</include>
-                        </includes>
-                        <targetPath>${project.build.directory}/classes/META-INF/native-image</targetPath>
-                    </resource>
-                </resources>
-            </build>
-        </profile>
-    </profiles>
 </project>

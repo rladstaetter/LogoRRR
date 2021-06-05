@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>app.logorrr.dist.osx</groupId>
+        <artifactId>dist-osx</artifactId>
+        <version>${revision}${changelist}</version>
+    </parent>
+
+    <artifactId>binary-osx</artifactId>
+    <name>app.logorrr.dist.osx.binary</name>
+
+    <properties>
+        <graalvm.home>/Users/lad/.sdkman/candidates/java/21.1.0.r11-grl</graalvm.home>
+        <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>app</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- has to be defined to copy meta inf json files for native-image to proper place (see plugin management) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.gluonhq</groupId>
+                <artifactId>client-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

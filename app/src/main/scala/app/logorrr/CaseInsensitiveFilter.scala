@@ -2,6 +2,8 @@ package app.logorrr
 
 import javafx.scene.paint.Color
 
+import java.nio.file.Files
+
 object CaseInsensitiveFilter {
 
   def containsCaseInsensitive(string: String, needle: String): Boolean = string.toLowerCase.contains(needle.toLowerCase)
