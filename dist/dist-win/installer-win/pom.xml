@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>installer-win</artifactId>
-
+    <name>app.logorrr.dist.win.installer</name>
 
 
 </project>

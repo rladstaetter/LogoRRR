@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>logorrr</artifactId>
         <groupId>app.logorrr</groupId>
+        <artifactId>logorrr</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
     <artifactId>app</artifactId>
     <name>app.logorrr.app</name>
     <dependencies>
@@ -37,114 +37,15 @@
         </dependency>
     </dependencies>
     <build>
-        <resources>
-            <resource>
-                <directory>${project.basedir}/src/main/resources/</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-                <targetPath>${project.build.directory}/classes/</targetPath>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
             </plugin>
-
             <plugin>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <id>OS.windows</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-            </activation>
-
-            <build>
-                <resources>
-                    <resource>
-                        <directory>${project.basedir}/src/main/native-image/win</directory>
-                        <includes>
-                            <include>*.json</include>
-                        </includes>
-                        <targetPath>${project.build.directory}/classes/META-INF/native-image</targetPath>
-                    </resource>
-                </resources>
-                <plugins>
-                    <plugin>
-                        <groupId>com.googlecode.maven-download-plugin</groupId>
-                        <artifactId>download-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>download-upx-packer</id>
-                                <phase>initialize</phase>
-                                <goals>
-                                    <goal>wget</goal>
-                                </goals>
-                                <configuration>
-                                    <url>https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip</url>
-                                    <unpack>true</unpack>
-                                    <outputDirectory>${project.build.directory}</outputDirectory>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>pack-exe</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <workingDirectory>${project.build.directory}/client/x86_64-windows/
-                                    </workingDirectory>
-                                    <executable>${project.build.directory}/upx-3.96-win64/upx.exe</executable>
-                                    <arguments>
-                                        <argument>-9</argument>
-                                        <argument>-ologorrr.exe</argument>
-                                        <argument>${project.name}.exe</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>OS.mac</id>
-            <activation>
-                <os>
-                    <family>unix</family>
-                    <name>Mac OS X</name>
-                </os>
-            </activation>
-            <properties>
-                <graalvm.home>/Users/lad/.sdkman/candidates/java/21.1.0.r11-grl</graalvm.home>
-                <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
-            </properties>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>${project.basedir}/src/main/native-image/mac</directory>
-                        <includes>
-                            <include>*.json</include>
-                        </includes>
-                        <targetPath>${project.build.directory}/classes/META-INF/native-image</targetPath>
-                    </resource>
-                </resources>
-            </build>
-        </profile>
-    </profiles>
 </project>
