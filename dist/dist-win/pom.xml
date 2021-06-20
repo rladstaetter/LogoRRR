@@ -14,6 +14,15 @@
     <packaging>pom</packaging>
     <description>Distribution bundle for windows</description>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>app.logorrr.dist</groupId>
+                <artifactId>binary-win-uncompressed</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <modules>
         <module>binary-win</module>
         <module>installer-win</module>
