@@ -40,7 +40,7 @@ Alternatively, you can start LogoRRR via command line and provide the path to th
 
 ## Building
 
-Given you have followed the instructions for [maven-client-plugin](https://github.com/gluonhq/client-maven-plugin) you only have to provide the path to your GraalVM installation in the main pom.xml found at the root folder of the project.
+Given you have followed the instructions for [maven-gluonfx-plugin](https://github.com/gluonhq/gluonfx-maven-plugin) you only have to provide the path to your GraalVM installation in the main pom.xml found at the root folder of the project.
 
 ### MacOs X
 
@@ -61,9 +61,10 @@ Execute
 
 in the project directory (where `pom.xml` is located).
 
-After some compiling a binary executable which can be run without a JVM should be available:
+After spending some time compiling all necessary modules a binary executable which can be run without a JVM should be 
+available here:
 
-    ./target/client/x86_64-darwin/app.logorrr
+    ./dist/dist-osx/binary-osx/target/gluonfx/x86_64-darwin/app.logorrr.dist.osx.binary
 
 Try it out!
 
@@ -83,7 +84,7 @@ After setting `graalvm.home` in the main pom.xml to your GraalVM Installation di
 
 A binary is available here after some minutes:
     
-    target\client\x86_64-windows\logorrr.exe
+    target\gluonfx\x86_64-windows\logorrr.exe
 
 If you want to execute this exe on another computer, you have to make sure that the Visual Studio runtime environment is present there. If not, you can download [Visual Studio 2019 redistributables here](https://aka.ms/vs/16/release/vc_redist.x64.exe). (If you are lucky its already installed on your machine). If the application doesn't start - this is a possible reason for that.  
 
@@ -106,11 +107,10 @@ A comprehensive tutorial how to get started with developing JavaFX can be found 
 
 ## Configuring GraalVM native-image 
 
-Recently a new feature for client maven plugin was introduced to help configure the underlying native-image technology. You have to provide configuration for reflection for example, or native code which is to be called by the application. 
+`gluonfx-maven-plugin` helps to configure GraalVM compilation by providing a command which creates a configuration for 
+`native-image` by analysing the runtime behavior of an application. Just issue following maven command on your command line:
 
-Configuring those aspects may swiftly become a challenge. Luckily client-maven-plugin has a target which makes those configuration steps easier, at least you get a good starting point. Just issue following maven command on your command line:
-
-    mvn client:runagent
+    mvn gluonfx:runagent
 
 It will start LogoRRR. Now you have to execute all possible click paths - in your code repository configuration files will appear in `src/main/resources/META-INF/native-image/`. Those files are different depending on which OS you execute the application. 
 
@@ -118,7 +118,7 @@ Currently, those files are generated / checked in under src/main/native-image/<o
 
     mvn package 
 
-Implicitly, maven package will call `client:build` and create a binary executable. (On Windows the binary will be packed via [UPX](https://upx.github.io) to reduce the file size considerably.)
+Implicitly, maven package will call `gluonfx:build` and create a binary executable. (On Windows the binary will be packed via [UPX](https://upx.github.io) to reduce the file size considerably.)
 
 ## Features
 
