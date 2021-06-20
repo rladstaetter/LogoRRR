@@ -14,7 +14,7 @@
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.6</scala.version>
         <openjfx.version>17-ea+9</openjfx.version>
-        <client.plugin.version>0.1.42</client.plugin.version>
+        <gluonfx.plugin.version>1.0.1</gluonfx.plugin.version>
         <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
         <main.class>app.logorrr.LogoRRRApp</main.class>
     </properties>
@@ -118,7 +118,7 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!-- to start application from command line and also to support client-maven-plugin's ability -->
+                <!-- to start application from command line and also to support gluonfx-maven-plugin's ability -->
                 <!-- to activate a tracing agent via client:runagent -->
                 <!-- see https://docs.oracle.com/en/graalvm/enterprise/19/guide/reference/native-image/tracing-agent.html -->
                 <!-- and https://docs.gluonhq.com/#_clientrunagent -->
@@ -132,8 +132,8 @@
                 </plugin>
                 <plugin>
                     <groupId>com.gluonhq</groupId>
-                    <artifactId>client-maven-plugin</artifactId>
-                    <version>${client.plugin.version}</version>
+                    <artifactId>gluonfx-maven-plugin</artifactId>
+                    <version>${gluonfx.plugin.version}</version>
                     <configuration>
                         <target>host</target>
                         <mainClass>${main.class}</mainClass>

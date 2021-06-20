@@ -38,7 +38,7 @@
             </plugin>
             <plugin>
                 <groupId>com.gluonhq</groupId>
-                <artifactId>client-maven-plugin</artifactId>
+                <artifactId>gluonfx-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
