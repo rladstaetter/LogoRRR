@@ -25,7 +25,6 @@
         </dependencies>
     </dependencyManagement>
     <modules>
-        <module>binary-win-uncompressed</module>
         <module>binary-win</module>
         <module>installer-win</module>
     </modules>

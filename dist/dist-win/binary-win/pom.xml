@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>binary-win</artifactId>
-    <name>app.logorrr.dist.win</name>
+    <name>app.logorrr.dist.win.binary</name>
 
     <properties>
         <graalvm.home>C:\Program Files\Java\graalvm-ce-java11-21.1.0</graalvm.home>
@@ -76,7 +76,7 @@
                             <arguments>
                                 <argument>-9</argument>
                                 <argument>-oLogoRRR.exe</argument>
-                                <argument>${project.build.directory}/gluonfx/x86_64-windows/app.logorrr.dist.win.exe</argument>
+                                <argument>${project.build.directory}/gluonfx/x86_64-windows/app.logorrr.dist.win.binary.exe</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -95,7 +95,7 @@
                         <configuration>
                             <artifacts>
                                 <artifact>
-                                    <file>${project.build.directory}/gluonfx/x86_64-windows/app.logorrr.dist.win.exe</file>
+                                    <file>${project.build.directory}/gluonfx/x86_64-windows/app.logorrr.dist.win.binary.exe</file>
                                     <classifier>uncompressed</classifier>
                                     <type>exe</type>
                                 </artifact>
