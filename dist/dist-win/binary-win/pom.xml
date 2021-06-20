@@ -19,27 +19,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>app</artifactId>
-            <version>${project.version}</version>
+            <groupId>app.logorrr.dist</groupId>
+            <artifactId>binary-win-uncompressed</artifactId>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- has to be defined to copy meta inf json files for native-image to proper place (see plugin management) -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>com.gluonhq</groupId>
-                <artifactId>gluonfx-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
@@ -59,6 +45,28 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-binary</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>binary-win-uncompressed</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/installer/certificate/</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
@@ -69,8 +77,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <workingDirectory>${project.build.directory}/client/x86_64-windows/
-                            </workingDirectory>
+                            <workingDirectory>${project.build.directory}/</workingDirectory>
                             <executable>${project.build.directory}/upx-3.96-win64/upx.exe</executable>
                             <arguments>
                                 <argument>-9</argument>
