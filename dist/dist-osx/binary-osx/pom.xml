@@ -21,7 +21,6 @@
         <dependency>
             <groupId>app.logorrr</groupId>
             <artifactId>app</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

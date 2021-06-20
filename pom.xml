@@ -64,6 +64,12 @@
                 <version>1.15.4</version>
                 <scope>test</scope>
             </dependency>
+
+            <dependency>
+                <groupId>app.logorrr</groupId>
+                <artifactId>app</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>

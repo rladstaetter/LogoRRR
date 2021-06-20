@@ -20,6 +20,7 @@
                 <groupId>app.logorrr.dist</groupId>
                 <artifactId>binary-win-uncompressed</artifactId>
                 <version>${project.version}</version>
+                <type>exe</type>
             </dependency>
         </dependencies>
     </dependencyManagement>

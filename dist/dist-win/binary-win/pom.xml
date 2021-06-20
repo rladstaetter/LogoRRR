@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>binary-win</artifactId>
-    <name>app.logorrr.dist.win.binary</name>
+    <name>app.logorrr.dist.win</name>
 
     <properties>
         <graalvm.home>C:\Program Files\Java\graalvm-ce-java11-21.1.0</graalvm.home>
@@ -19,13 +19,28 @@
 
     <dependencies>
         <dependency>
-            <groupId>app.logorrr.dist</groupId>
-            <artifactId>binary-win-uncompressed</artifactId>
+            <groupId>app.logorrr</groupId>
+            <artifactId>app</artifactId>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- has to be defined to copy meta inf json files for native-image to proper place (see plugin management) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.gluonhq</groupId>
+                <artifactId>gluonfx-maven-plugin</artifactId>
+            </plugin>
+
+
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
@@ -40,27 +55,6 @@
                             <url>https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip</url>
                             <unpack>true</unpack>
                             <outputDirectory>${project.build.directory}</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-binary</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeArtifactIds>binary-win-uncompressed</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}/installer/certificate/</outputDirectory>
-                            <overWriteReleases>true</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                            <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
                 </executions>
@@ -81,9 +75,35 @@
                             <executable>${project.build.directory}/upx-3.96-win64/upx.exe</executable>
                             <arguments>
                                 <argument>-9</argument>
-                                <argument>-ologorrr.exe</argument>
-                                <argument>${project.name}.exe</argument>
+                                <argument>-oLogoRRR.exe</argument>
+                                <argument>${project.build.directory}/gluonfx/x86_64-windows/app.logorrr.dist.win.exe</argument>
                             </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-uncompressed-exe</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>${project.build.directory}/gluonfx/x86_64-windows/app.logorrr.dist.win.exe</file>
+                                    <classifier>uncompressed</classifier>
+                                    <type>exe</type>
+                                </artifact>
+                                <artifact>
+                                    <file>${project.build.directory}/LogoRRR.exe</file>
+                                    <type>exe</type>
+                                </artifact>
+                            </artifacts>
                         </configuration>
                     </execution>
                 </executions>
