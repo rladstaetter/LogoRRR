@@ -12,11 +12,6 @@
     <artifactId>binary-osx</artifactId>
     <name>app.logorrr.dist.osx.binary</name>
 
-    <properties>
-        <graalvm.home>/Users/lad/.sdkman/candidates/java/21.1.0.r11-grl</graalvm.home>
-        <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>app.logorrr</groupId>

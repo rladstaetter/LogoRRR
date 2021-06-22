@@ -17,7 +17,35 @@
         <gluonfx.plugin.version>1.0.1</gluonfx.plugin.version>
         <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
         <main.class>app.logorrr.LogoRRRApp</main.class>
+        <graalvm.log>${project.build.directory}\graal.log</graalvm.log>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>OS.windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <graalvm.home>C:\Program Files\Java\graalvm-ce-java11-21.1.0</graalvm.home>
+            </properties>
+        </profile>
+        <profile>
+            <id>OS.osx</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <name>Mac OS X</name>
+                </os>
+            </activation>
+            <properties>
+                <graalvm.home>/Users/lad/.sdkman/candidates/java/21.1.0.r11-grl</graalvm.home>
+            </properties>
+        </profile>
+    </profiles>
+
 
     <modules>
         <module>app</module>

@@ -12,11 +12,6 @@
     <artifactId>binary-win</artifactId>
     <name>app.logorrr.dist.win.binary</name>
 
-    <properties>
-        <graalvm.home>C:\Program Files\Java\graalvm-ce-java11-21.1.0</graalvm.home>
-        <graalvm.log>${project.build.directory}\graal.log</graalvm.log>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>app.logorrr</groupId>
