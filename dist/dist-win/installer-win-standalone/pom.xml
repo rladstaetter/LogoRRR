@@ -14,10 +14,12 @@
     <description>Installer project using Advanced Installer technology to install LogoRRR without AppStore.</description>
 
     <dependencies>
+       <!--
         <dependency>
             <groupId>app.logorrr</groupId>
             <artifactId>app</artifactId>
         </dependency>
+        -->
         <dependency>
             <groupId>app.logorrr.dist</groupId>
             <artifactId>binary-win</artifactId>
@@ -25,6 +27,15 @@
         </dependency>
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/ai</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <targetPath>${project.build.directory}/installer/</targetPath>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -45,10 +56,10 @@
                                 </artifactItem>
                             </artifactItems>
                             <stripVersion>true</stripVersion>
-                            <outputDirectory>${project.build.directory}/classes/</outputDirectory>
+                            <outputDirectory>${project.build.directory}/installer/</outputDirectory>
                         </configuration>
                     </execution>
-
+<!--
                     <execution>
                         <id>unpack-icons</id>
                         <phase>generate-resources</phase>
@@ -61,6 +72,7 @@
                             <includes>**/*.png</includes>
                         </configuration>
                     </execution>
+                    -->
                 </executions>
             </plugin>
             <plugin>
@@ -76,7 +88,7 @@
                         </goals>
                         <configuration>
                             <executable>${advanced.installer.compiler}</executable>
-                            <workingDirectory>${project.build.directory}/classes/</workingDirectory>
+                            <workingDirectory>${project.build.directory}/installer/</workingDirectory>
                             <arguments>
                                 <argument>/rebuild</argument>
                                 <argument>logorrr-installer.aip</argument>
