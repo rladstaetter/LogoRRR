@@ -1,7 +1,7 @@
 package app.logorrr
 
-import javafx.collections.ObservableList
 import app.util.{CanLog, JfxUtils}
+import javafx.collections.ObservableList
 import org.apache.commons.io.input.{Tailer, TailerListener}
 
 class LTailerListener(ol: ObservableList[LogEntry]) extends TailerListener with CanLog {

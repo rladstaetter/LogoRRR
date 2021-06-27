@@ -1,9 +1,11 @@
 package app.logorrr
 
+import app.logorrr.views.{LogFormatLearnerStage, LogView}
+import app.util.CanLog
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.scene.control.Button
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
-import app.util.CanLog
 
 import java.nio.file.{Files, Path}
 import scala.jdk.CollectionConverters.ListHasAsScala
@@ -22,9 +24,28 @@ class AppMainBorderPane(initialSceneWidth: Int
 
   val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
 
-  val tabPane = LogViewTabPane(this)
+  val logViewTabPane = LogViewTabPane(this)
 
-  setCenter(tabPane)
+  private val learnLogFormatButton = new Button("Learn log format")
+  learnLogFormatButton.setOnAction(_ => {
+    if (logViewTabPane.getTabs.asScala.nonEmpty) {
+      logViewTabPane.getTabs.asScala.head match {
+        case lv: LogView =>
+          val entries = lv.logReport.entries.asScala
+          if (entries.nonEmpty) {
+            val stage = LogFormatLearnerStage(entries.head)
+            stage.showAndWait()
+            stage.getLogColumnDef()
+
+          }
+        case x =>
+          println(x.getClass)
+      }
+    }
+  })
+
+  //  setTop(learnLogFormatButton)
+  setCenter(logViewTabPane)
 
   /** needed to activate drag'n drop */
   setOnDragOver((event: DragEvent) => {
@@ -42,7 +63,7 @@ class AppMainBorderPane(initialSceneWidth: Int
   })
 
 
-  def shutdown(): Unit = tabPane.shutdown()
+  def shutdown(): Unit = logViewTabPane.shutdown()
 
 
   /** called when width of scene changes */
@@ -50,7 +71,7 @@ class AppMainBorderPane(initialSceneWidth: Int
 
   /** select log file which is last in tabPane */
   def selectLastLogFile(): Unit = {
-    tabPane.getSelectionModel.selectLast() // select last added file repaint it on selection
+    logViewTabPane.getSelectionModel.selectLast() // select last added file repaint it on selection
   }
 
   /** Adds a new logfile to display */
@@ -59,13 +80,15 @@ class AppMainBorderPane(initialSceneWidth: Int
       Try(LogReport(logFile)) match {
         case Success(value) =>
           logInfo(s"Opening ${logFile.toAbsolutePath.toString} ... ")
-          tabPane.add(value)
+          addLogReport(value)
         case Failure(exception) => logError("Could not import file " + logFile.toAbsolutePath + ", reason: " + exception.getMessage)
       }
     } else {
       logWarn(s"Could not read ${logFile.toAbsolutePath} ...")
     }
   }
+
+  private def addLogReport(value: LogReport) = logViewTabPane.add(value)
 }
 
 

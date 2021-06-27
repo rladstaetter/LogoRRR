@@ -7,6 +7,7 @@ import app.util.{CanLog, JfxUtils}
 import org.apache.commons.io.input.Tailer
 
 import java.nio.file.{Files, Path}
+import java.util
 import java.util.stream.Collectors
 import scala.language.postfixOps
 
@@ -15,7 +16,7 @@ import scala.language.postfixOps
 object LogReport extends CanLog {
 
   def apply(logFile: Path): LogReport = {
-    val value = Files.readAllLines(logFile).stream().map(LogEntry.apply)
+    val value = Files.readAllLines(logFile).stream().map(l => LogEntry(l))
     val entries = value.collect(Collectors.toList[LogEntry]())
     logTrace(s"Read ${entries.size} lines ... ")
     new LogReport(logFile, FXCollections.observableList(entries))

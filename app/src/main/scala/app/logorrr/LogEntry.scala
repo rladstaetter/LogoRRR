@@ -1,16 +1,26 @@
 package app.logorrr
 
+import app.logorrr.views.LogColumnDef
 import javafx.geometry.Insets
 import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}
 import javafx.scene.paint.Color
 
+import java.time.Instant
+
 object LogEntry {
 
+  def apply(value: String): LogEntry = LogEntry(value, None)
 
+  def apply(value: String
+            , colDef: LogColumnDef): LogEntry = {
+    LogEntry(value, Option(colDef.parse(value)))
+  }
 }
 
 /** represents one line in a log file */
-case class LogEntry(value: String) {
+case class LogEntry(value: String
+                    , someInstant: Option[Instant]) {
+
 
   /**
    * calculate a color for this log entry.

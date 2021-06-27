@@ -12,6 +12,7 @@ import javafx.scene.control._
 import javafx.scene.layout._
 
 import scala.jdk.CollectionConverters._
+import scala.util.{Failure, Success, Try}
 
 object LogView {
 
@@ -39,9 +40,9 @@ object LogView {
  *
  * @param logReport report instance holding information of log file to be analyzed
  * */
-class LogView(logReport: LogReport
-              , initialSceneWidth: Int
-              , initialSquareWidth: Int)
+class LogView(val logReport: LogReport
+              , val initialSceneWidth: Int
+              , val initialSquareWidth: Int)
   extends Tab with CanLog {
 
   /** repaint if entries or filters change */
@@ -125,6 +126,20 @@ class LogView(logReport: LogReport
   }
 
   private val logTextView = new LogTextView(filteredList)
+
+  logTextView.logColumnDefProperty.addListener(new ChangeListener[LogColumnDef] {
+    override def changed(observableValue: ObservableValue[_ <: LogColumnDef], t: LogColumnDef, t1: LogColumnDef): Unit = {
+      println("updating logentry")
+      val copy = for (e <- filteredList.asScala) yield {
+        Try(e.copy(value = "SEVERE updated!", someInstant = Option(t1.parse(e.value)))) match {
+          case Success(value) => value
+          case Failure(exception) => e
+        }
+      }
+      filteredList.clear()
+      filteredList.setAll(copy.asJava)
+    }
+  })
 
   val entryLabel = {
     val l = new Label("")
