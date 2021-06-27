@@ -44,11 +44,13 @@
                                     <type>exe</type>
                                 </artifactItem>
                             </artifactItems>
+                            <stripVersion>true</stripVersion>
                             <outputDirectory>${project.build.directory}/classes/</outputDirectory>
                         </configuration>
                     </execution>
+
                     <execution>
-                        <id>copy-binary</id>
+                        <id>unpack-icons</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>unpack-dependencies</goal>
@@ -56,6 +58,7 @@
                         <configuration>
                             <includeArtifactIds>app</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/classes/</outputDirectory>
+                            <includes>**/*.png</includes>
                         </configuration>
                     </execution>
                 </executions>

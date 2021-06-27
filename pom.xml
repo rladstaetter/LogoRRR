@@ -30,6 +30,9 @@
             </activation>
             <properties>
                 <graalvm.home>C:\Program Files\Java\graalvm-ce-java11-21.1.0</graalvm.home>
+                <advanced.installer.compiler>C:\Program Files (x86)\Caphyon\Advanced Installer
+                    16.1\bin\x86\AdvancedInstaller.com
+                </advanced.installer.compiler>
             </properties>
         </profile>
         <profile>
@@ -163,6 +166,11 @@
                     <configuration>
                         <mainClass>${main.class}</mainClass>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.7</version>
                 </plugin>
                 <plugin>
                     <groupId>com.gluonhq</groupId>
