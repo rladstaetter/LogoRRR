@@ -18,15 +18,33 @@
         <dependencies>
             <dependency>
                 <groupId>app.logorrr.dist</groupId>
-                <artifactId>binary-win-uncompressed</artifactId>
+                <artifactId>binary-win</artifactId>
                 <version>${project.version}</version>
                 <type>exe</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <modules>
         <module>binary-win</module>
-        <module>installer-win</module>
     </modules>
+
+    <properties>
+        <advanced.installer.compiler></advanced.installer.compiler>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>OS.windows.advancedInstaller</id>
+            <activation>
+                <file>
+                    <exists>${advanced.installer.compiler}</exists>
+                </file>
+            </activation>
+            <modules>
+                <module>installer-win-standalone</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
