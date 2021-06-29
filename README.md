@@ -124,7 +124,9 @@ A comprehensive tutorial how to get started with developing JavaFX can be found 
 ## Configuring GraalVM native-image 
 
 `gluonfx-maven-plugin` helps to configure GraalVM compilation by providing a command which creates a configuration for 
-`native-image` by analysing the runtime behavior of an application. Just issue following maven command on your command line:
+`native-image` by analysing the runtime behavior of an application. Navigate to the `./dist/dist-win/binary-win/` or 
+`./dist/dist-osx/binary-osx/` subdirectory and enter following
+command:
 
     mvn gluonfx:runagent
 
