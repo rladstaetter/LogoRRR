@@ -27,21 +27,7 @@
 
     <modules>
         <module>binary-win</module>
+        <module>installer-win-standalone</module>
     </modules>
 
-    <properties>
-    </properties>
-    <profiles>
-        <profile>
-            <id>OS.windows.advancedInstaller</id>
-            <activation>
-                <file>
-                    <exists>${advanced.installer.compiler}</exists>
-                </file>
-            </activation>
-            <modules>
-                <module>installer-win-standalone</module>
-            </modules>
-        </profile>
-    </profiles>
 </project>
