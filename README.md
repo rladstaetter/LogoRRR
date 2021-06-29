@@ -88,6 +88,22 @@ A binary is available here after some minutes:
 
 If you want to execute this exe on another computer, you have to make sure that the Visual Studio runtime environment is present there. If not, you can download [Visual Studio 2019 redistributables here](https://aka.ms/vs/16/release/vc_redist.x64.exe). (If you are lucky its already installed on your machine). If the application doesn't start - this is a possible reason for that.  
 
+#### Additional Setup information for GRAALVM
+
+You should set `GRAALVM_HOME` and `JAVA_HOME`, as well as your `PATH` system variable.
+
+For my setup, those commands work
+ 
+    set GRAALVM_HOME=C:\Program Files\Java\graalvm-ce-java11-21.1.0
+    set JAVA_HOME=%GRAALVM_HOME%
+    set PATH=%GRAALVM_HOME%\bin;%PATH%
+
+'native-image' is an addon for GraalVM, you have to install it manually via `gu`. `gu` itself is an application which
+manages `GRAALVM` dependencies. It can be called on command line if `%GRAALVM_HOME%\bin` is in your PATH.
+
+
+
+
 
 ## Running from IntelliJ
 
