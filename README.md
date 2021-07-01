@@ -6,23 +6,17 @@ LogoRRR is a simple utility to display a logfile and visualise certain classes o
 
 For example, ERROR events are visualized as red rectangles, TRACE events as grey rectangles, INFO events as green ones etc. 
 
-## Motivation
-
-This project serves as a vehicle to test and learn about various aspects of JavaFX GraalVM compilation. [This blog post](https://ladstatt.blogspot.com/2020/10/compile-scala-javafx-application-with.html) was written to accompany the initial public release of this github repository, describing challenges performing AOT with GraalVM and the surrounding tooling.
-
-## Download 
+## Installation 
 
 You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.2.4) from the releases page. There are binaries for Windows and MacOs available.
 
-### Installation 
-
-#### Windows
+### Windows
 
 As of Release 21.3.0, there exists an Installer for this application, which can be found on the releases page. 
 
 **Please note**: Because LogoRRR is not digitally signed you are going to see warnings when trying to download, install or start the application. This will not change until it is digitally signed. However, for this project no such certificate exists yet.
 
-#### MacOsX
+### MacOsX
 
 For Mac Users, quite some motivation is needed at the moment to get the application to run.
 
@@ -47,7 +41,7 @@ You can start LogoRRR via double click from the desktop. Add a log file simply v
 
 Alternatively, you can start LogoRRR via command line and provide the path to the log file as command line parameter (or multiple at once if you like).
 
-## Sponsoring the project
+## Sponsoring
 
 Of course, if you find this project useful, **please consider to donate to this project.**. For this reason I've set up a page at [buymeacoffee](https://www.buymeacoffee.com/rladstaetter).
 
