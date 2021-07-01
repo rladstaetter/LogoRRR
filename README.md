@@ -43,15 +43,13 @@ Alternatively, you can start LogoRRR via command line and provide the path to th
 
 ## Sponsoring
 
-Of course, if you find this project useful, **please consider to donate to this project.**. For this reason I've set up a page at [buymeacoffee](https://www.buymeacoffee.com/rladstaetter).
+Of course, if you find this project useful, **please consider to donate to this project.** For this reason I've set up a page at [buymeacoffee](https://www.buymeacoffee.com/rladstaetter).
 
-Alternatively, just hit the 'like' button, or drop me a line on [twitter](https://www.twitter.com/rladstaetter/). 
+Alternatively, just hit the 'star' here on github, or drop me a line at [twitter](https://www.twitter.com/rladstaetter/). 
 
-A big shoutout goes to 
+A big shoutout goes to [@TheJeed](https://twitter.com/TheJeed) for sponsoring this project and boosting my motivation to continue working on it. Thank you!
 
-- [@TheJeed](https://twitter.com/TheJeed) for sponsoring this project. Thank you!
-- My employer [NEXTSENSE](https://www.nextsense-worldwide.com/) for providing toolings to build the application binaries.
-- [GluonHQ](https://www.gluonhq.com/) for creating toolings around the JavaFX ecosystem
+I want to thank my employer [NEXTSENSE](https://www.nextsense-worldwide.com/) as well for generously providing vital infrastructure to create this application. 
 
 ## License
 
