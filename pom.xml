@@ -30,7 +30,7 @@
             </activation>
             <properties>
                 <graalvm.home>C:\Program Files\Java\graalvm-ce-java11-21.1.0</graalvm.home>
-                <advanced.installer.compiler>C:\Program Files (x86)\Caphyon\Advanced Installer 17.7\bin\x86\AdvancedInstaller.com</advanced.installer.compiler>
+                <advanced.installer.compiler>C:\Program Files (x86)\Caphyon\Advanced Installer 18.4\bin\x86\AdvancedInstaller.com</advanced.installer.compiler>
             </properties>
         </profile>
         <profile>
