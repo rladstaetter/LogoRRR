@@ -10,20 +10,52 @@ For example, ERROR events are visualized as red rectangles, TRACE events as grey
 
 This project serves as a vehicle to test and learn about various aspects of JavaFX GraalVM compilation. [This blog post](https://ladstatt.blogspot.com/2020/10/compile-scala-javafx-application-with.html) was written to accompany the initial public release of this github repository, describing challenges performing AOT with GraalVM and the surrounding tooling.
 
-## Binary download 
+## Download 
 
-You can give it a try by downloading a [prebuilt binary for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.2.4) from the releases page.
+You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.2.4) from the releases page. There are binaries for Windows and MacOs available.
 
-However, since the application is not digitally signed with a code signing certificate, you'll see warnings not to start the application or your computer will blow up. Until I pay much money to be able to sign the application, we have to live with this and you have to explicitly allow the application to to start. Sorry about that. 🤷🏼‍♂️ 
+### Installation 
 
-Even worse, on MAC you'll have to give the application rights to be executed which can be done in a terminal with the command
+#### Windows
+
+As of Release 21.3.0, there exists an Installer for this application, which can be found on the releases page. 
+
+**Please note**: Because LogoRRR is not digitally signed you are going to see warnings when trying to download, install or start the application. This will not change until it is digitally signed. However, for this project no such certificate exists yet.
+
+#### MacOsX
+
+For Mac Users, quite some motivation is needed at the moment to get the application to run.
+
+You'll have to give the application rights to be executed which can be done in a terminal with the command
 
     chmod 755 app.logorrrr
 
-Afterwards you have to specify in your preferences menu that you allow to start this application. Finally then you can start it via command line. I didn't yet figure out what has to be done to package an application in way that you can launch it via mouse click. Anyway, it should be put into a the apple app store - the same applies to the Windows platform ... 
+Afterwards you have to specify in your preferences menu that you allow to start this application. Finally then you can start it via command line. 
 
-Speaking of the latter, on windows you can start it via mouse click, but you'll be warned by a nag screen not to open it ... 
+## Features
 
+- Drag and drop log files to application to visualize/view them
+- Handle multiple log files in parallel
+- Filter log files for entries interactively
+- Basic search functionality
+- Unix `tail -f` like functionality to watch ongoing events
+- Windows Installer
+
+## Sponsoring the project
+
+Of course, if you find this project useful, **please consider to donate to this project.**. For this reason I've set up a page at [buymeacoffee](https://www.buymeacoffee.com/rladstaetter).
+
+Alternatively, just hit the 'like' button, or drop me a line on [twitter](https://www.twitter.com/rladstaetter/). 
+
+A big shoutout goes to 
+
+- [@TheJeed](https://twitter.com/TheJeed) for sponsoring this project. Thank you!
+- My employer [NEXTSENSE](https://www.nextsense-worldwide.com/) for providing toolings to build the application binaries.
+- [GluonHQ](https://www.gluonhq.com/) for creating toolings around the JavaFX ecosystem
+
+# Development information 
+
+The rest of this document describes how to build LogoRRR from source.
 
 ## Prerequisites
 
@@ -66,7 +98,6 @@ available here:
 
     ./dist/dist-osx/binary-osx/target/gluonfx/x86_64-darwin/app.logorrr.dist.osx.binary
 
-Try it out!
 
 ### Windows 
 
@@ -102,9 +133,6 @@ For my setup, those commands work
 manages `GRAALVM` dependencies. It can be called on command line if `%GRAALVM_HOME%\bin` is in your PATH.
 
 
-
-
-
 ## Running from IntelliJ
 
 Running JavaFX applications in IntelliJ needs a some more work if you work with modularized Java. There are builds of Java which incorporate JavaFX (from Azul for example) where following steps are not necessary. However, if you use GraalVM or AdoptOpenJDK builds, you have to provide special VM Parameters in order to start a JavaFX application from your IDE. 
@@ -137,14 +165,6 @@ Currently, those files are generated / checked in under src/main/native-image/<o
     mvn package 
 
 Implicitly, maven package will call `gluonfx:build` and create a binary executable. (On Windows the binary will be packed via [UPX](https://upx.github.io) to reduce the file size considerably.)
-
-## Features
-
-- drag and drop log files to application to visualize/view them
-- handle multiple log files in parallel
-- filter log files for entries interactively
-- basic search functionality
-- Unix `tail -f` like functionality to watch ongoing events
 
 ## License
 
