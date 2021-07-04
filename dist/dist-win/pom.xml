@@ -27,7 +27,21 @@
 
     <modules>
         <module>binary-win</module>
-        <module>installer-win-standalone</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>OS.win.installer</id>
+            <activation>
+                <file>
+                    <exists>C:\Program Files (x86)\Caphyon\Advanced Installer 18.4\bin\x86\AdvancedInstaller.com</exists>
+                </file>
+            </activation>
+            <modules>
+                <module>binary-win</module>
+                <module>installer-win-standalone</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
