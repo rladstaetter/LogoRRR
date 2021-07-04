@@ -1,14 +1,19 @@
 # LogoRRR
 
-![Screenshot](screencast.gif)
+## Screenshot
+![Screenshot of LogoRRR, version 21.3.0](docs/releases/21.3.0/screenshot-21.3.0.png?raw=true)
 
-LogoRRR is a simple utility to display a logfile and visualise certain classes of events. 
+LogoRRR is a simple utility to display a logfile and visualise certain classes of events.
+
+## Basic usage
+
+![Shows basic functionality of LogoRRR as animated gif](screencast.gif)
 
 For example, ERROR events are visualized as red rectangles, TRACE events as grey rectangles, INFO events as green ones etc. 
 
 ## Installation 
 
-You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.2.4) from the releases page. There are binaries for Windows and MacOs available.
+You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.3.0) from the releases page. There are binaries for Windows and MacOs available.
 
 ### Windows
 
