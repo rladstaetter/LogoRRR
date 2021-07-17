@@ -32,6 +32,7 @@ class LogViewTabPane extends TabPane {
       |-fx-background-image: url(/app/logorrr/save-as.png);
       |-fx-background-position: center center;
       |-fx-background-repeat: no-repeat;
+      |-fx-background-color: BEIGE;
       |-fx-background-size: 100%;
       |""".stripMargin)
 
