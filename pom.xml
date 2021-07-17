@@ -8,7 +8,7 @@
     <description>LogoRRR - the log visualisation tool</description>
     <packaging>pom</packaging>
     <properties>
-        <revision>21.3.0</revision>
+        <revision>21.3.1</revision>
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scala.major.version>2.13</scala.major.version>
