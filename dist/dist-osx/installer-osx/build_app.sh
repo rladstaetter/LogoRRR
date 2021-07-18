@@ -10,8 +10,6 @@
 # APP_VERSION: the application version, e.g. 1.0.0, shown in "about" dialog
 PROJECT_VERSION=21.3.1-SNAPSHOT
 APP_VERSION=23.3.1
-JAVA_VERSION=16
-MAIN_JAR="app-$PROJECT_VERSION.jar"
 
 # Set desired installer type: "app-image", "dmg", "pkg", "rpm" or "deb".
 INSTALLER_TYPE=app-image
@@ -19,7 +17,6 @@ INSTALLER_TYPE=app-image
 echo "java home: $JAVA_HOME"
 echo "project version: $PROJECT_VERSION"
 echo "app version: $APP_VERSION"
-echo "main JAR file: $MAIN_JAR"
 
 # ------ SETUP DIRECTORIES AND FILES ----------------------------------------
 # Remove previously generated java runtime and installers. Copy all required
@@ -28,46 +25,6 @@ echo "main JAR file: $MAIN_JAR"
 rm -rfd ./target/java-runtime/
 rm -rfd target/installer/
 
-mkdir -p target/installer/input/libs/
-
-cp target/libs/* target/installer/input/libs/
-#cp target/${MAIN_JAR} target/installer/input/libs/
-
-# ------ REQUIRED MODULES ---------------------------------------------------
-# Use jlink to detect all modules that are required to run the application.
-# Starting point for the jdep analysis is the set of jars being used by the
-# application.
-
-echo "detecting required modules"
-detected_modules=`$JAVA_HOME/bin/jdeps \
-  -q \
-  --multi-release ${JAVA_VERSION} \
-  --ignore-missing-deps \
-  --print-module-deps \
-  --class-path "target/installer/input/libs/*" \
-    /Users/lad/gh/LogoRRR/app/target/classes/app/logorrr/LogoRRRApp.class`
-echo "detected modules: ${detected_modules}"
-
-
-# ------ MANUAL MODULES -----------------------------------------------------
-# jdk.crypto.ec has to be added manually bound via --bind-services or
-# otherwise HTTPS does not work.
-#
-# See: https://bugs.openjdk.java.net/browse/JDK-8221674
-#
-# In addition we need jdk.localedata if the application is localized.
-# This can be reduced to the actually needed locales via a jlink paramter,
-# e.g., --include-locales=en,de.
-
-manual_modules=jdk.crypto.ec,jdk.localedata
-echo "manual modules: ${manual_modules}"
-
-# ------ RUNTIME IMAGE ------------------------------------------------------
-# Use the jlink tool to create a runtime image for our application. We are
-# doing this is a separate step instead of letting jlink do the work as part
-# of the jpackage tool. This approach allows for finer configuration and also
-# works with dependencies that are not fully modularized, yet.
-
 echo "creating java runtime image"
 $JAVA_HOME/bin/jlink \
   --strip-native-commands \
@@ -75,8 +32,8 @@ $JAVA_HOME/bin/jlink \
   --no-man-pages  \
   --compress=2  \
   --strip-debug \
-  --add-modules "${detected_modules},${manual_modules}" \
-  --include-locales=en,de \
+  --add-modules "jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,jdk.unsupported" \
+  --include-locales=en \
   --output target/java-runtime
 
 # ------ PACKAGING ----------------------------------------------------------
@@ -86,16 +43,16 @@ echo "Creating installer of type $INSTALLER_TYPE"
 
 $JAVA_HOME/bin/jpackage \
 --type $INSTALLER_TYPE \
---dest target/installer \
---input target/installer/input/libs \
---name LogoRRR \
---main-class app.logorrr.LogoRRRAppLauncher \
---main-jar ${MAIN_JAR} \
---java-options -Xmx2048m \
 --runtime-image target/java-runtime \
---icon src/main/resources/logorrr-icon-256.icns \
+--input target/libs \
+--main-class app.logorrr.LogoRRRAppLauncher \
+--main-jar app-$PROJECT_VERSION.jar \
+--name LogoRRR \
+--mac-package-name LogoRRR \
+--mac-package-identifier app.logorrr \
 --app-version ${APP_VERSION} \
+--icon src/main/resources/logorrr-icon-256.icns \
 --vendor "app.logorrr" \
 --copyright "Copyright © 2021 Logorrr.app" \
---mac-package-identifier app.logorrr \
---mac-package-name LogoRRR
+--java-options -Xmx4096m \
+--dest target/installer \
