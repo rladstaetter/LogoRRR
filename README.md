@@ -11,25 +11,16 @@ LogoRRR is a simple utility to display a logfile and visualise certain classes o
 
 For example, ERROR events are visualized as red rectangles, TRACE events as grey rectangles, INFO events as green ones etc. 
 
+You can start LogoRRR via double click from the desktop. Add a log file simply via drag'n drop.
+
 ## Installation 
 
 You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.3.1) from the releases page. There are installer for Windows and MacOs available.
 
-### Windows
+**Please note**: Because LogoRRR is not digitally signed you are going to see warnings when trying to download, install or start the application. This will not change until it is digitally signed. 
 
-As of Release 21.3.0, there exists an Installer for this application, which can be found on the releases page. 
+This situation will be better when there is an installation via [windows app store](https://github.com/rladstaetter/LogoRRR/issues/29) and [apple app store](https://github.com/rladstaetter/LogoRRR/issues/30) are available. 
 
-**Please note**: Because LogoRRR is not digitally signed you are going to see warnings when trying to download, install or start the application. This will not change until it is digitally signed. However, for this project no such certificate exists yet.
-
-### MacOsX
-
-For Mac Users, quite some motivation is needed at the moment to get the application to run.
-
-You'll have to give the application rights to be executed which can be done in a terminal with the command
-
-    chmod 755 app.logorrrr
-
-Afterwards you have to specify in your preferences menu that you allow to start this application. Finally then you can start it via command line. 
 
 ## Features
 
@@ -38,13 +29,9 @@ Afterwards you have to specify in your preferences menu that you allow to start 
 - Filter log files for entries interactively
 - Basic search functionality
 - Unix `tail -f` like functionality to watch ongoing events
-- Windows Installer
+- Windows Installer 
+- MacOs installer
 
-## Usage
-
-You can start LogoRRR via double click from the desktop. Add a log file simply via drag'n drop.
-
-Alternatively, you can start LogoRRR via command line and provide the path to the log file as command line parameter (or multiple at once if you like).
 
 ## Sponsoring
 
