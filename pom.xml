@@ -13,10 +13,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.6</scala.version>
-        <openjfx.version>17-ea+12</openjfx.version>
-        <gluonfx.plugin.version>1.0.1</gluonfx.plugin.version>
+        <openjfx.version>17-ea+15</openjfx.version>
+        <gluonfx.plugin.version>1.0.3</gluonfx.plugin.version>
         <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
         <main.class>app.logorrr.LogoRRRApp</main.class>
+        <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>
         <graalvm.log>${project.build.directory}\graal.log</graalvm.log>
     </properties>
 
@@ -43,6 +44,10 @@
             </activation>
             <properties>
                 <graalvm.home>/Users/lad/.sdkman/candidates/java/21.1.0.r11-grl</graalvm.home>
+                <!-- for creating macOsX installer we need java 16 (jpackager)-->
+                <jdk16.home>/Users/lad/.sdkman/candidates/java/16.0.1-zulu</jdk16.home>
+                <jdk16.jlink>${jdk16.home}/bin/jlink</jdk16.jlink>
+                <jdk16.jpackage>${jdk16.home}/bin/jpackage</jdk16.jpackage>
             </properties>
         </profile>
     </profiles>
@@ -107,7 +112,7 @@
                 <plugin>
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>scala-maven-plugin</artifactId>
-                    <version>4.4.0</version>
+                    <version>4.5.3</version>
                     <executions>
                         <execution>
                             <goals>
@@ -123,17 +128,17 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
-                    <version>1.4.0</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>com.googlecode.maven-download-plugin</groupId>
                     <artifactId>download-maven-plugin</artifactId>
-                    <version>1.6.1</version>
+                    <version>1.6.6</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.6</version>
+                    <version>3.2.0</version>
                     <executions>
                         <execution>
                             <id>copy-meta-inf</id>
@@ -168,7 +173,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.7</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>com.gluonhq</groupId>
@@ -199,7 +204,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
-                    <version>1.1.0</version>
+                    <version>1.2.7</version>
                     <configuration>
                         <updatePomFile>true</updatePomFile>
                         <flattenMode>resolveCiFriendliesOnly</flattenMode>
@@ -224,7 +229,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.7</version>
+                    <version>3.0.0-M5</version>
                     <configuration>
                         <skipTests>true</skipTests>
                     </configuration>
@@ -250,7 +255,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>3.0.0-M3</version>
                     <executions>
                         <execution>
                             <id>apply-enforcer-rules</id>
@@ -280,12 +285,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.0.2</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.2.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
