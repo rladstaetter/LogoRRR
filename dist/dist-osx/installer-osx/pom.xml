@@ -21,6 +21,7 @@
 
     <build>
         <plugins>
+            <!--
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -28,18 +29,20 @@
                     <mainClass>app.logorrr.LogoRRRApp</mainClass>
                 </configuration>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
-                        <phase>package</phase>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/libs</outputDirectory>
+                            <!-- libs are needed by jpackage later on -->
+                            <outputDirectory>${project.build.directory}/libs/</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
@@ -50,25 +53,101 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>delete-javart</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <delete dir="${project.build.directory}/java-rt"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
+                    <!-- we don't need all features from our jre, strip down the most basic jre which can execute our app -->
                     <execution>
-                        <id>create osx-installer</id>
-                        <phase>package</phase>
+                        <id>create-custom-jre</id>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
+                        <configuration>
+                            <workingDirectory>${project.build.directory}</workingDirectory>
+                            <executable>${jdk16.jlink}</executable>
+                            <environmentVariables>
+                                <JAVA_HOME>${jdk16.home}</JAVA_HOME>
+                            </environmentVariables>
+                            <arguments>
+                                <argument>--strip-native-commands</argument>
+                                <argument>--no-header-files</argument>
+                                <argument>--no-man-pages</argument>
+                                <argument>--compress=2</argument>
+                                <argument>--strip-debug</argument>
+                                <argument>--add-modules</argument>
+                                <argument>jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,jdk.unsupported
+                                </argument>
+                                <argument>--include-locales=en</argument>
+                                <argument>--output</argument>
+                                <argument>java-rt</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <!-- create application image -->
+                    <execution>
+                        <id>create-app-image</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>${project.build.directory}</workingDirectory>
+                            <executable>${jdk16.jpackage}</executable>
+                            <environmentVariables>
+                                <JAVA_HOME>${jdk16.home}</JAVA_HOME>
+                            </environmentVariables>
+                            <arguments>
+                                <argument>--type</argument>
+                                <argument>app-image</argument>
+                                <argument>--runtime-image</argument>
+                                <argument>java-rt</argument>
+                                <argument>--input</argument>
+                                <argument>libs</argument>
+                                <argument>--main-class</argument>
+                                <argument>${main.launcher.class}</argument>
+                                <argument>--main-jar</argument>
+                                <argument>app-${project.version}.jar</argument>
+                                <argument>--name</argument>
+                                <argument>LogoRRR</argument>
+                                <argument>--mac-package-name</argument>
+                                <argument>LogoRRR</argument>
+                                <argument>--mac-package-identifier</argument>
+                                <argument>app.logorrr</argument>
+                                <argument>--app-version</argument>
+                                <argument>${revision}</argument>
+                                <argument>--icon</argument>
+                                <argument>classes/logorrr-icon-256.icns</argument>
+                                <argument>--vendor</argument>
+                                <argument>logorrr.app</argument>
+                                <argument>--copyright</argument>
+                                <argument>Copyright © 2021 Logorrr.app</argument>
+                                <argument>--java-options</argument>
+                                <argument>-Xmx4096m</argument>
+                                <argument>--dest</argument>
+                                <argument>app-image</argument>
+                            </arguments>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <workingDirectory>${project.basedir}</workingDirectory>
-                    <executable>./build_app.sh</executable>
-                    <environmentVariables>
-                        <APP_VERSION>21.3.1</APP_VERSION>
-                        <PROJECT_VERSION>${project.version}</PROJECT_VERSION>
-                    </environmentVariables>
-                </configuration>
             </plugin>
         </plugins>
     </build>

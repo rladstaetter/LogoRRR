@@ -17,6 +17,7 @@
         <gluonfx.plugin.version>1.0.3</gluonfx.plugin.version>
         <javafx.maven.plugin.version>0.0.6</javafx.maven.plugin.version>
         <main.class>app.logorrr.LogoRRRApp</main.class>
+        <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>
         <graalvm.log>${project.build.directory}\graal.log</graalvm.log>
     </properties>
 
@@ -43,6 +44,10 @@
             </activation>
             <properties>
                 <graalvm.home>/Users/lad/.sdkman/candidates/java/21.1.0.r11-grl</graalvm.home>
+                <!-- for creating macOsX installer we need java 16 (jpackager)-->
+                <jdk16.home>/Users/lad/.sdkman/candidates/java/16.0.1-zulu</jdk16.home>
+                <jdk16.jlink>${jdk16.home}/bin/jlink</jdk16.jlink>
+                <jdk16.jpackage>${jdk16.home}/bin/jpackage</jdk16.jpackage>
             </properties>
         </profile>
     </profiles>
