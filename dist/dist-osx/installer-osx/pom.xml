@@ -56,6 +56,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
+                    <!-- delete java rt in any case (otherwise build exits with error later) -->
                     <execution>
                         <id>delete-javart</id>
                         <phase>generate-resources</phase>
@@ -117,7 +118,7 @@
                             </environmentVariables>
                             <arguments>
                                 <argument>--type</argument>
-                                <argument>app-image</argument>
+                                <argument>dmg</argument>
                                 <argument>--runtime-image</argument>
                                 <argument>java-rt</argument>
                                 <argument>--input</argument>
@@ -138,12 +139,14 @@
                                 <argument>classes/logorrr-icon-256.icns</argument>
                                 <argument>--vendor</argument>
                                 <argument>logorrr.app</argument>
+                                <argument>--description</argument>
+                                <argument>LogoRRR is a log file visualisation app, see https://www.logorrr.app/</argument>
                                 <argument>--copyright</argument>
                                 <argument>Copyright © 2021 Logorrr.app</argument>
                                 <argument>--java-options</argument>
                                 <argument>-Xmx4096m</argument>
                                 <argument>--dest</argument>
-                                <argument>app-image</argument>
+                                <argument>installer</argument>
                             </arguments>
                         </configuration>
                     </execution>
