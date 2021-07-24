@@ -14,12 +14,6 @@
     <description>Installer project using Advanced Installer technology to install LogoRRR without AppStore.</description>
 
     <dependencies>
-       <!--
-        <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>app</artifactId>
-        </dependency>
-        -->
         <dependency>
             <groupId>app.logorrr.dist</groupId>
             <artifactId>binary-win</artifactId>
@@ -59,20 +53,6 @@
                             <outputDirectory>${project.build.directory}/installer/</outputDirectory>
                         </configuration>
                     </execution>
-<!--
-                    <execution>
-                        <id>unpack-icons</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeArtifactIds>app</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}/classes/</outputDirectory>
-                            <includes>**/*.png</includes>
-                        </configuration>
-                    </execution>
-                    -->
                 </executions>
             </plugin>
             <plugin>
