@@ -1,7 +1,5 @@
 # Building LogoRRR from source code
 
-The rest of this document describes how to build LogoRRR from source.
-
 ## Prerequisites
 
 You have to download a recent GraalVM installation package (I've tested it with 21.0.0.r11) and a maven distribution (everything starting from 3.6.3 should work).
@@ -28,7 +26,7 @@ After this initial setup, you should be ready to build via maven. You have to ad
 
 Execute
 
-     mvn clean package
+     mvn clean install
 
 in the project directory (where `pom.xml` is located).
 
@@ -50,13 +48,16 @@ To setup your Windows development environment, you have to perform following ste
 
 After setting `graalvm.home` in the main pom.xml to your GraalVM Installation directory all you have to do to get to a binary is:
 
-     mvn clean package
+     mvn clean install
 
 A binary is available here after some minutes:
 
     ./dist/dist-win/binary-win/target/LogoRRR.exe
 
 If you want to execute this exe on another computer, you have to make sure that the Visual Studio runtime environment is present there. If not, you can download [Visual Studio 2019 redistributables here](https://aka.ms/vs/16/release/vc_redist.x64.exe). (If you are lucky its already installed on your machine). If the application doesn't start - this is a possible reason for that.
+
+On Windows the binary will be packed via [UPX](https://upx.github.io) to reduce the file size considerably.
+
 
 #### Additional Setup information for GRAALVM
 
@@ -101,6 +102,6 @@ It will start LogoRRR. Now you have to execute all possible click paths - in you
 
 Currently, those files are generated / checked in under src/main/native-image/<os>/, and via a maven configuration they are placed in the right place needed for native-image. Like this the project can be build on multiple platforms via
 
-    mvn package 
+    mvn clean install 
 
-Implicitly, maven package will call `gluonfx:build` and create a binary executable. (On Windows the binary will be packed via [UPX](https://upx.github.io) to reduce the file size considerably.)
+Implicitly, maven package will call `gluonfx:build` and create a binary executable. 
