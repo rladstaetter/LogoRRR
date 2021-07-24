@@ -30,7 +30,7 @@
                 </os>
             </activation>
             <properties>
-                <graalvm.home>C:\Program Files\Java\graalvm-ce-java11-21.1.0</graalvm.home>
+                <graalvm.home>C:\Program Files\Java\graalvm-ce-java11-21.2.0</graalvm.home>
                 <advanced.installer.compiler>C:\Program Files (x86)\Caphyon\Advanced Installer 18.4\bin\x86\AdvancedInstaller.com</advanced.installer.compiler>
             </properties>
         </profile>
@@ -43,7 +43,7 @@
                 </os>
             </activation>
             <properties>
-                <graalvm.home>/Users/lad/.sdkman/candidates/java/21.1.0.r11-grl</graalvm.home>
+                <graalvm.home>/Users/lad/.sdkman/candidates/java/21.2.0.r11-grl</graalvm.home>
                 <!-- for creating macOsX installer we need java 16 (jpackager)-->
                 <jdk16.home>/Users/lad/.sdkman/candidates/java/16.0.1-zulu</jdk16.home>
                 <jdk16.jlink>${jdk16.home}/bin/jlink</jdk16.jlink>
