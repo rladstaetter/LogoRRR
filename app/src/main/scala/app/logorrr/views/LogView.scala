@@ -3,7 +3,7 @@ package app.logorrr.views
 import app.logorrr._
 import app.logorrr.views.visual.LogVisualView
 import app.util.CanLog
-import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
+import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
@@ -44,6 +44,9 @@ class LogView(val logReport: LogReport
               , val initialSceneWidth: Int
               , val initialSquareWidth: Int)
   extends Tab with CanLog {
+
+  /** is set to false if logview was painted at least once (see repaint) */
+  val neverPaintedProperty = new SimpleBooleanProperty(true)
 
   /** repaint if entries or filters change */
   val repaintInvalidationListener: InvalidationListener = (_: Observable) => repaint()
@@ -96,7 +99,7 @@ class LogView(val logReport: LogReport
     filteredList.predicateProperty().addListener(repaintInvalidationListener)
     logReport.entries.addListener(repaintInvalidationListener)
     // if application changes width this will trigger repaint (See Issue #9)
-    // splitPane.widthProperty().addListener(repaintInvalidationListener)
+    splitPane.widthProperty().addListener(repaintInvalidationListener)
   }
 
   def uninstallInvalidationListener(): Unit = {
@@ -211,7 +214,6 @@ class LogView(val logReport: LogReport
 
   def addFilter(filter: Filter): Unit = filtersProperty.add(filter)
 
-
   def removeFilter(filter: Filter): Unit = filtersProperty.remove(filter)
 
   def getVisualViewWidth(): Double = {
@@ -223,14 +225,13 @@ class LogView(val logReport: LogReport
     }
   }
 
-  def getSelectedIndex(): Int = selectedIndexProperty.get()
-
   /** width can be negative as well, we have to guard about that. also we repaint only if view is visible. */
   def repaint(width: Double = getVisualViewWidth()): Unit = {
-    if (width > 0 && width > getSquareWidth * 4) { // at minimum we want to have 4 squares left (an arbitrary choice)
+    if (isSelected && (neverPaintedProperty.get() || isSelected && width > 0 && width > getSquareWidth * 4)) { // at minimum we want to have 4 squares left (an arbitrary choice)
+      neverPaintedProperty.set(false)
       logVisualView.repaint(getSquareWidth, width.toInt)
     } else {
-      logError(s"Not painting since isSelected: $isSelected && $width > 0 && $width > ${getSquareWidth * 4}")
+      logTrace(s"Not painting since neverPainted: ${neverPaintedProperty.get} isSelected: $isSelected && $width > 0 && $width > ${getSquareWidth * 4}")
     }
   }
 

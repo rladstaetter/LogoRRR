@@ -39,7 +39,10 @@ class LogViewTabPane extends TabPane {
   getSelectionModel.selectedItemProperty().addListener(new ChangeListener[Tab] {
     override def changed(observableValue: ObservableValue[_ <: Tab], t: Tab, t1: Tab): Unit = {
       t1 match {
-        case logView: LogView => logView.repaint()
+        case logView: LogView =>
+          // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
+          getSelectionModel.select(logView)
+          logView.repaint()
         case _ =>
       }
     }
