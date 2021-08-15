@@ -15,8 +15,11 @@
     <packaging>pom</packaging>
 
     <modules>
+        <!--
         <module>binary-osx</module>
+-->
         <module>installer-osx</module>
+        <module>signpackage-osx</module>
     </modules>
 
 </project>

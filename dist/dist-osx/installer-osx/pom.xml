@@ -66,25 +66,33 @@
                         <configuration>
                             <target>
                                 <delete dir="${project.build.directory}/java-rt"/>
+                                <delete dir="${project.build.directory}/temporary-app-image"/>
                             </target>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <!-- Invoke exec maven plugin multiple times in order to create a valid dmg. -->
+            <!-- 1.) create a customized jre -->
+            <!-- 2.) on basis of this jre create an app image -->
+            <!-- 3.) sign all artefacts in this app image -->
+            <!-- 4.) create a dmg of those signed artefacts-->
+            <!-- 5.) sign dmg -->
+            <!-- 6.) notarize dmg -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <!-- we don't need all features from our jre, strip down the most basic jre which can execute our app -->
                     <execution>
-                        <id>create-custom-jre</id>
+                        <id>step-1-create-custom-jre</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <workingDirectory>${project.build.directory}</workingDirectory>
                             <executable>${jdk16.jlink}</executable>
+                            <workingDirectory>${project.build.directory}</workingDirectory>
                             <environmentVariables>
                                 <JAVA_HOME>${jdk16.home}</JAVA_HOME>
                             </environmentVariables>
@@ -105,20 +113,20 @@
                     </execution>
                     <!-- create application image -->
                     <execution>
-                        <id>create-app-image</id>
+                        <id>step-2-create-unsigned-app-image</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <workingDirectory>${project.build.directory}</workingDirectory>
                             <executable>${jdk16.jpackage}</executable>
+                            <workingDirectory>${project.build.directory}</workingDirectory>
                             <environmentVariables>
                                 <JAVA_HOME>${jdk16.home}</JAVA_HOME>
                             </environmentVariables>
                             <arguments>
                                 <argument>--type</argument>
-                                <argument>dmg</argument>
+                                <argument>app-image</argument>
                                 <argument>--runtime-image</argument>
                                 <argument>java-rt</argument>
                                 <argument>--input</argument>
@@ -140,19 +148,103 @@
                                 <argument>--vendor</argument>
                                 <argument>logorrr.app</argument>
                                 <argument>--description</argument>
-                                <argument>LogoRRR is a log file visualisation app, see https://www.logorrr.app/</argument>
+                                <argument>LogoRRR is a log file visualisation app, see https://www.logorrr.app/
+                                </argument>
                                 <argument>--copyright</argument>
                                 <argument>Copyright © 2021 Logorrr.app</argument>
                                 <argument>--java-options</argument>
                                 <argument>-Xmx4096m</argument>
                                 <argument>--dest</argument>
-                                <argument>installer</argument>
+                                <argument>temporary-app-image</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>step-3-sign-app-image</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>com.dgunia.signpackage.MainKt</mainClass>
+                            <arguments>
+                                <argument>-d</argument>
+                                <argument>target/temporary-app-image</argument>
+                                <argument>-t</argument>
+                                <argument>-r</argument>
+                                <argument>-k</argument>
+                                <argument>"Developer ID Application: Robert Ladstaetter (6NRKUU4NW4)"</argument>
+                                <argument>-e</argument>
+                                <argument>LogoRRR.entitlements</argument>
+                            </arguments>
+                            <includePluginDependencies>true</includePluginDependencies>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>step-4-create-dmg</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${jdk16.jpackage}</executable>
+                            <workingDirectory>${project.build.directory}</workingDirectory>
+                            <environmentVariables>
+                                <JAVA_HOME>${jdk16.home}</JAVA_HOME>
+                            </environmentVariables>
+                            <arguments>
+                                <argument>-n</argument>
+                                <argument>LogoRRR</argument>
+                                <argument>--mac-package-identifier</argument>
+                                <argument>app.logorrr</argument>
+                                <argument>--mac-package-name</argument>
+                                <argument>LogoRRR</argument>
+                                <argument>--app-version</argument>
+                                <argument>${revision}</argument>
+                                <argument>--mac-sign</argument>
+                                <argument>--mac-signing-key-user-name</argument>
+                                <argument>"Developer ID Application: Robert Ladstaetter (6NRKUU4NW4)"</argument>
+                                <argument>--app-image</argument>
+                                <argument>temporary-app-image</argument>
+                                <argument>--dest</argument>
+                                <argument>unsigned-installer</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>step-5-sign-dmg</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${codesign.binary}</executable>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <arguments>
+                                <argument>--timestamp</argument>
+                                <argument>--force</argument>
+                                <argument>--sign</argument>
+                                <argument>Developer ID Application: Robert Ladstaetter (6NRKUU4NW4)</argument>
+                                <argument>${project.build.directory}/unsigned-installer/LogoRRR-${revision}.dmg</argument>
                             </arguments>
                         </configuration>
                     </execution>
                 </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>app.logorrr.dist.osx</groupId>
+                        <artifactId>signpackage-osx</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
+
+    <!--
+    java -jar SignPackage.jar -d target/installer/ -t -r -k "Developer ID Application: Robert Ladstaetter (6NRKUU4NW4)" c
+
+    -->
 
 </project>
