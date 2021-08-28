@@ -242,9 +242,5 @@
         </plugins>
     </build>
 
-    <!--
-    java -jar SignPackage.jar -d target/installer/ -t -r -k "Developer ID Application: Robert Ladstaetter (6NRKUU4NW4)" c
-
-    -->
 
 </project>

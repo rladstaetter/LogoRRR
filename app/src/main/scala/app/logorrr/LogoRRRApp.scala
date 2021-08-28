@@ -3,12 +3,11 @@ package app.logorrr
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.event.EventHandler
 import javafx.scene.Scene
+import javafx.scene.control.{Menu, MenuBar, MenuItem}
 import javafx.scene.image.Image
 import javafx.stage.{Stage, WindowEvent}
 
 import java.nio.file.Paths
-
-
 
 
 object LogoRRRApp {
@@ -33,7 +32,16 @@ object LogoRRRApp {
   }
 
 }
-
+/*
+class LogoRRRAppMenuBar extends MenuBar {
+  //setUseSystemMenuBar(true)
+  private val systemMenu = new Menu("EXTREME")
+  val aboutMenuItem = new MenuItem("JOJOJO " + LogoRRRApp.ApplicationName)
+  val quitMenuItem = new MenuItem("Quit" + LogoRRRApp.ApplicationName)
+  systemMenu.getItems.addAll(aboutMenuItem, quitMenuItem)
+  getMenus.add(systemMenu)
+}
+*/
 class LogoRRRApp extends javafx.application.Application {
 
   import scala.jdk.CollectionConverters._

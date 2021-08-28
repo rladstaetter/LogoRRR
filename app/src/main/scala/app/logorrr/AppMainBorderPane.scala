@@ -44,7 +44,7 @@ class AppMainBorderPane(initialSceneWidth: Int
     }
   })
 
-  //  setTop(learnLogFormatButton)
+ // setTop(new LogoRRRAppMenuBar())
   setCenter(logViewTabPane)
 
   /** needed to activate drag'n drop */

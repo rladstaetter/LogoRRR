@@ -43,9 +43,9 @@
                 </os>
             </activation>
             <properties>
-                <graalvm.home>/Users/Administrator/.sdkman/candidates/java/21.2.0.r11-grl</graalvm.home>
+                <graalvm.home>/Users/lad/.sdkman/candidates/java/21.2.0.r11-grl</graalvm.home>
                 <!-- for creating macOsX installer we need java 16 (jpackager)-->
-                <jdk16.home>/Users/Administrator/.sdkman/candidates/java/16.0.2-zulu</jdk16.home>
+                <jdk16.home>/Users/lad/.sdkman/candidates/java/16.0.2-zulu</jdk16.home>
                 <jdk16.jlink>${jdk16.home}/bin/jlink</jdk16.jlink>
                 <jdk16.jpackage>${jdk16.home}/bin/jpackage</jdk16.jpackage>
                 <codesign.binary>/usr/bin/codesign</codesign.binary>
