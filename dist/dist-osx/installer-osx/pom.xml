@@ -176,6 +176,37 @@
                                 <argument>"Developer ID Application: Robert Ladstaetter (6NRKUU4NW4)"</argument>
                                 <argument>-e</argument>
                                 <argument>LogoRRR.entitlements</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/app/javafx-graphics-17-ea+15-mac.jar</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libnio.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libnet.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libzip.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjli.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libsplashscreen.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjimage.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libfreetype.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libosxui.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/server/libjsig.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjavajpeg.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libmlib_image.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libawt_lwawt.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjsig.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libprefs.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjawt.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjsound.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libfontmanager.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/jspawnhelper</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libosxsecurity.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/liblcms.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libverify.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libosx.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libosxapp.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjava.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libawt.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libharfbuzz.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/MacOS/libjli.dylib</argument>
+                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/server/libjvm.dylib</argument>
+
+
                             </arguments>
                             <includePluginDependencies>true</includePluginDependencies>
                         </configuration>
