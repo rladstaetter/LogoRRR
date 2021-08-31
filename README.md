@@ -1,9 +1,9 @@
 # LogoRRR
 
+LogoRRR is a simple utility to display a logfile and visualise certain classes of events.
+
 ## Screenshot
 ![Screenshot of LogoRRR, version 21.3.2](docs/releases/21.3.2/screenshot-21.3.2.png?raw=true)
-
-LogoRRR is a simple utility to display a logfile and visualise certain classes of events.
 
 ## Basic usage
 
