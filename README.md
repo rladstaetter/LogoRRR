@@ -3,11 +3,11 @@
 LogoRRR is a simple utility to display a logfile and visualise certain classes of events.
 
 ## Screenshot
-![Screenshot of LogoRRR, version 21.3.2](docs/releases/21.3.2/screenshot-21.3.2.png?raw=true)
+![Screenshot of LogoRRR, version 21.3.2](docs/releases/21.3.1/screenshot-21.3.1.png?raw=true)
 
 ## Basic usage
 
-![Shows basic functionality of LogoRRR as animated gif](docs/releases/21.3.2/screencast-21.3.2.gif?raw=true)
+![Shows basic functionality of LogoRRR as animated gif](docs/releases/21.3.1/screencast-21.3.1.gif?raw=true)
 
 For example, ERROR events are visualized as red rectangles, TRACE events as grey rectangles, INFO events as green ones etc. 
 
