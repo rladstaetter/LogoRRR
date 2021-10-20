@@ -18,7 +18,7 @@
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <main.class>app.logorrr.LogoRRRApp</main.class>
         <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>
-        <graalvm.log>${project.build.directory}\graal.log</graalvm.log>
+        <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
     </properties>
 
     <profiles>
