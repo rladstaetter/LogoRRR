@@ -1,4 +1,4 @@
-package app.logorrr.icon
+package app.logorrr.docs
 
 import javafx.embed.swing.SwingFXUtils
 import javafx.geometry.Pos

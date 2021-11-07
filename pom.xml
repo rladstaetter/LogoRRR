@@ -57,6 +57,7 @@
     <modules>
         <module>app</module>
         <module>dist</module>
+        <module>docs</module>
     </modules>
 
     <dependencyManagement>
