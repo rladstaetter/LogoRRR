@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>app.logorrr.dist.osx</groupId>
         <artifactId>dist-osx</artifactId>
@@ -11,7 +12,11 @@
 
     <artifactId>installer-osx</artifactId>
     <name>app.logorrr.dist.osx.installer</name>
-
+    <properties>
+        <!-- set this property in your settings.xml
+        <app.logorrr.dist.osx.developerid/>
+        -->
+    </properties>
     <dependencies>
         <dependency>
             <groupId>app.logorrr</groupId>
@@ -21,15 +26,6 @@
 
     <build>
         <plugins>
-            <!--
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>app.logorrr.LogoRRRApp</mainClass>
-                </configuration>
-            </plugin>
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -66,7 +62,7 @@
                         <configuration>
                             <target>
                                 <delete dir="${project.build.directory}/java-rt"/>
-                                <delete dir="${project.build.directory}/temporary-app-image"/>
+                                <delete dir="${project.build.directory}/app-image"/>
                             </target>
                         </configuration>
                     </execution>
@@ -91,10 +87,10 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${jdk16.jlink}</executable>
+                            <executable>${jdk.jlink.binary}</executable>
                             <workingDirectory>${project.build.directory}</workingDirectory>
                             <environmentVariables>
-                                <JAVA_HOME>${jdk16.home}</JAVA_HOME>
+                                <JAVA_HOME>${jdk.home}</JAVA_HOME>
                             </environmentVariables>
                             <arguments>
                                 <argument>--strip-native-commands</argument>
@@ -119,10 +115,10 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${jdk16.jpackage}</executable>
+                            <executable>${jdk.jpackage.binary}</executable>
                             <workingDirectory>${project.build.directory}</workingDirectory>
                             <environmentVariables>
-                                <JAVA_HOME>${jdk16.home}</JAVA_HOME>
+                                <JAVA_HOME>${jdk.home}</JAVA_HOME>
                             </environmentVariables>
                             <arguments>
                                 <argument>--type</argument>
@@ -144,21 +140,23 @@
                                 <argument>--app-version</argument>
                                 <argument>${revision}</argument>
                                 <argument>--icon</argument>
-                                <argument>classes/logorrr-icon-256.icns</argument>
+                                <!-- see https://stackoverflow.com/questions/12306223/how-to-manually-create-icns-files-using-iconutil on how to generate icns files -->
+                                <argument>classes/logorrr-iconset.icns</argument>
                                 <argument>--vendor</argument>
                                 <argument>logorrr.app</argument>
                                 <argument>--description</argument>
-                                <argument>LogoRRR is a log file visualisation app, see https://www.logorrr.app/
-                                </argument>
+                                <argument>LogoRRR is a log file visualisation app, see https://www.logorrr.app/</argument>
                                 <argument>--copyright</argument>
-                                <argument>Copyright © 2021 Logorrr.app</argument>
+                                <argument>Copyright 2021 www.logorrr.app</argument>
                                 <argument>--java-options</argument>
                                 <argument>-Xmx4096m</argument>
                                 <argument>--dest</argument>
-                                <argument>temporary-app-image</argument>
+                                <argument>app-image</argument>
+                                <argument>--verbose</argument>
                             </arguments>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>step-3-sign-app-image</id>
                         <phase>package</phase>
@@ -166,109 +164,77 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
-                            <mainClass>com.dgunia.signpackage.MainKt</mainClass>
+                            <mainClass>app.util.CodeSigner</mainClass>
                             <arguments>
-                                <argument>-d</argument>
-                                <argument>target/temporary-app-image</argument>
-                                <argument>-t</argument>
-                                <argument>-r</argument>
-                                <argument>-k</argument>
-                                <argument>"Developer ID Application: Robert Ladstaetter (6NRKUU4NW4)"</argument>
-                                <argument>-e</argument>
-                                <argument>LogoRRR.entitlements</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/app/javafx-graphics-17-ea+15-mac.jar</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libnio.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libnet.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libzip.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjli.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libsplashscreen.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjimage.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libfreetype.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libosxui.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/server/libjsig.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjavajpeg.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libmlib_image.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libawt_lwawt.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjsig.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libprefs.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjawt.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjsound.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libfontmanager.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/jspawnhelper</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libosxsecurity.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/liblcms.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libverify.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libosx.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libosxapp.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libjava.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libawt.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/libharfbuzz.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/MacOS/libjli.dylib</argument>
-                                <argument>-x</argument><argument>target/temporary-app-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/server/libjvm.dylib</argument>
-
-
+                                <argument>Developer ID Application: ${app.logorrr.dist.osx.developerid}</argument>
+                                <argument>/usr/bin/codesign</argument>
+                                <argument>${project.basedir}/LogoRRR.entitlements</argument>
+                                <argument>${project.basedir}/sign-list.txt</argument>
                             </arguments>
                             <includePluginDependencies>true</includePluginDependencies>
                         </configuration>
                     </execution>
+
                     <execution>
-                        <id>step-4-create-dmg</id>
+                        <id>step-4-create-pkg</id>
                         <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${jdk16.jpackage}</executable>
+                            <executable>${jdk.jpackage.binary}</executable>
                             <workingDirectory>${project.build.directory}</workingDirectory>
                             <environmentVariables>
-                                <JAVA_HOME>${jdk16.home}</JAVA_HOME>
+                                <JAVA_HOME>${jdk.home}</JAVA_HOME>
                             </environmentVariables>
                             <arguments>
                                 <argument>-n</argument>
                                 <argument>LogoRRR</argument>
+                                <argument>--type</argument>
+                                <argument>pkg</argument>
                                 <argument>--mac-package-identifier</argument>
                                 <argument>app.logorrr</argument>
                                 <argument>--mac-package-name</argument>
                                 <argument>LogoRRR</argument>
+                                <!--
+                                <argument>-x-mac-entitlements</argument>
+                                <argument>LogoRRR.entitlements</argument>
+                                -->
                                 <argument>--app-version</argument>
                                 <argument>${revision}</argument>
                                 <argument>--mac-sign</argument>
+ <!--
+                                <argument>-x-mac-signing-keychain</argument>
+                                <argument>/Library/Keychains/login.keychain</argument>
+     -->
                                 <argument>--mac-signing-key-user-name</argument>
-                                <argument>"Developer ID Application: Robert Ladstaetter (6NRKUU4NW4)"</argument>
+                                <argument>${app.logorrr.dist.osx.developerid}</argument>
                                 <argument>--app-image</argument>
-                                <argument>temporary-app-image</argument>
+                                <argument>app-image</argument>
                                 <argument>--dest</argument>
-                                <argument>unsigned-installer</argument>
+                                <argument>installer</argument>
                             </arguments>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>step-5-sign-dmg</id>
+                        <id>step-5-sign-pkg</id>
                         <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${codesign.binary}</executable>
+                            <executable>${mac.productsign.binary}</executable>
                             <workingDirectory>${project.basedir}</workingDirectory>
                             <arguments>
-                                <argument>--timestamp</argument>
-                                <argument>--force</argument>
                                 <argument>--sign</argument>
-                                <argument>Developer ID Application: Robert Ladstaetter (6NRKUU4NW4)</argument>
-                                <argument>${project.build.directory}/unsigned-installer/LogoRRR-${revision}.dmg</argument>
+                                <argument>3rd Party Mac Developer Installer: ${app.logorrr.dist.osx.developerid}</argument>
+                                <argument>${project.build.directory}/installer/LogoRRR-${revision}.pkg</argument>
+                                <argument>${project.build.directory}/installer/LogoRRR-signed-${revision}.pkg</argument>
                             </arguments>
                         </configuration>
                     </execution>
                 </executions>
 
-                <dependencies>
-                    <dependency>
-                        <groupId>app.logorrr.dist.osx</groupId>
-                        <artifactId>signpackage-osx</artifactId>
-                        <version>${project.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>

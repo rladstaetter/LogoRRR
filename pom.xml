@@ -12,9 +12,9 @@
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scala.major.version>2.13</scala.major.version>
-        <scala.version>${scala.major.version}.6</scala.version>
-        <openjfx.version>17.0.0.1</openjfx.version>
-        <gluonfx.plugin.version>1.0.7</gluonfx.plugin.version>
+        <scala.version>${scala.major.version}.7</scala.version>
+        <openjfx.version>18-ea+6</openjfx.version>
+        <gluonfx.plugin.version>1.0.9</gluonfx.plugin.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <main.class>app.logorrr.LogoRRRApp</main.class>
         <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>
@@ -45,10 +45,11 @@
             <properties>
                 <graalvm.home>/Users/lad/.sdkman/candidates/java/21.2.0.r11-grl</graalvm.home>
                 <!-- for creating macOsX installer we need java 16 (jpackager)-->
-                <jdk16.home>/Users/lad/.sdkman/candidates/java/16.0.2-zulu</jdk16.home>
-                <jdk16.jlink>${jdk16.home}/bin/jlink</jdk16.jlink>
-                <jdk16.jpackage>${jdk16.home}/bin/jpackage</jdk16.jpackage>
-                <codesign.binary>/usr/bin/codesign</codesign.binary>
+                <jdk.home>/Users/lad/.sdkman/candidates/java/18.ea.23-open</jdk.home>
+                <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
+                <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
+                <mac.codesign.binary>/usr/bin/codesign</mac.codesign.binary>
+                <mac.productsign.binary>/usr/bin/productsign</mac.productsign.binary>
             </properties>
         </profile>
     </profiles>

@@ -3,7 +3,7 @@
 # verify .app
 codesign -v -v target/temporary-app-image/LogoRRR.app
 
-# ths command should return:
+# this command should return:
 # target/temporary-app-image/LogoRRR.app: valid on disk
 # target/temporary-app-image/LogoRRR.app: satisfies its Designated Requirement
 
@@ -11,3 +11,5 @@ codesign -v -v target/temporary-app-image/LogoRRR.app
 # see https://stackoverflow.com/questions/26067694/code-has-no-resources-but-signature-indicates-they-must-be-present
 # spctl -at exec -vv target/temporary-app-image/LogoRRR.app/
 
+# validate notarization
+xcrun stapler validate target/unsigned-installer/LogoRRR-21.3.2.dmg

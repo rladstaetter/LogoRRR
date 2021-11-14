@@ -6,7 +6,11 @@ import javafx.scene.image.Image
 import javafx.scene.{Parent, Scene}
 import javafx.stage.{Modality, Stage}
 
+import java.nio.file.Path
 import scala.util.{Failure, Success, Try}
+
+
+
 
 
 object JfxEventHandler {

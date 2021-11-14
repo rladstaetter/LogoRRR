@@ -1,14 +1,8 @@
 package app.logorrr
 
-import javafx.beans.value.{ChangeListener, ObservableValue}
-import javafx.event.EventHandler
-import javafx.scene.Scene
-import javafx.scene.control.{Menu, MenuBar, MenuItem}
-import javafx.scene.image.Image
-import javafx.stage.{Stage, WindowEvent}
+import javafx.stage.Stage
 
-import java.nio.file.Paths
-
+import scala.jdk.CollectionConverters._
 
 object LogoRRRApp {
 
@@ -32,6 +26,7 @@ object LogoRRRApp {
   }
 
 }
+
 /*
 class LogoRRRAppMenuBar extends MenuBar {
   //setUseSystemMenuBar(true)
@@ -42,41 +37,16 @@ class LogoRRRAppMenuBar extends MenuBar {
   getMenus.add(systemMenu)
 }
 */
-class LogoRRRApp extends javafx.application.Application {
 
-  import scala.jdk.CollectionConverters._
+
+class LogoRRRApp extends javafx.application.Application {
 
   /**
    * will be called by the java bootstrapper
    */
   def start(stage: Stage): Unit = {
-    stage.setTitle(LogoRRRApp.ApplicationName + " " + LogoRRRApp.ApplicationVersion)
-    stage.getIcons.add(new Image(getClass.getResourceAsStream("/app/logorrr/icon/logorrr-icon-32.png")))
-    val mainBorderPane = new AppMainBorderPane(LogoRRRApp.InitialSceneWidth, LogoRRRApp.InitialSquareWidth)
-    val scene = new Scene(mainBorderPane, LogoRRRApp.InitialSceneWidth, LogoRRRApp.InitialSceneHeight)
-    scene.widthProperty().addListener(new ChangeListener[Number] {
-      override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
-        println(s"changed: ${t1.intValue}")
-        Option(mainBorderPane).foreach(_.setSceneWidth(t1.intValue))
-      }
-    })
-    stage.setScene(scene)
-
-
-    for (p <- getParameters.getRaw.asScala) {
-      mainBorderPane.addLogFile(Paths.get(p).toAbsolutePath)
-    }
-    mainBorderPane.selectLastLogFile()
-
-    // make sure to cleanup on close
-    stage.setOnCloseRequest(new EventHandler[WindowEvent] {
-      override def handle(event: WindowEvent): Unit = {
-        mainBorderPane.shutdown()
-      }
-    })
-
-    stage.show()
-
+    val params: Seq[String] = getParameters.getRaw.asScala.toSeq
+    LogoRRRAppBuilder.withStage(stage, params, LogoRRRApp.InitialSceneWidth, LogoRRRApp.InitialSceneHeight).show()
   }
 
 }

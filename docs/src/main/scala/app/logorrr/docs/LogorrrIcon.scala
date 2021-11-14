@@ -1,24 +1,11 @@
 package app.logorrr.docs
 
-import javafx.embed.swing.SwingFXUtils
-import javafx.geometry.Pos
-import javafx.scene.canvas.{Canvas, GraphicsContext}
-import javafx.scene.image.WritableImage
-import javafx.scene.layout.{BorderPane, VBox}
+import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
-import javafx.scene.{Scene, SnapshotParameters}
-import javafx.stage.Stage
 
-import java.nio.file.{Files, Path, Paths}
-import javax.imageio.ImageIO
-
-object IconCreatorApp {
-
-  def main(args: Array[String]): Unit = {
-    javafx.application.Application.launch(classOf[IconCreatorApp], args: _*)
-  }
-}
-
+/**
+ * Encodes logic to paint our LogoRRR logo.
+ */
 object LogorrrIcon {
 
   def drawRoundedRectangleWithShadow(gc2d: GraphicsContext)
@@ -78,65 +65,4 @@ object LogorrrIcon {
     rws(c, x2 + xe / 2, y1, x7 + xe / 2, 2 * ye, round)
   }
 
-}
-
-
-class IconCreatorApp extends javafx.application.Application {
-
-  val iconSizes = Seq(512, 256, 128, 64, 32, 16)
-
-  def start(stage: Stage): Unit = {
-    val bp = new BorderPane()
-    val icons =
-      for (size <- iconSizes) yield {
-        val canvas = new Canvas(size, size)
-        val gc2d = canvas.getGraphicsContext2D
-        LogorrrIcon.drawIcon(gc2d, size)
-        (size, canvas)
-      }
-    writeIcons(icons, Paths.get("app/src/main/resources/app/logorrr/icon/"))
-    val box = new VBox(10, icons.map(_._2): _*)
-    box.setAlignment(Pos.CENTER)
-    bp.setCenter(box)
-    val scene = new Scene(bp, iconSizes.max + iconSizes.max / 10, iconSizes.sum + iconSizes.sum / 10)
-    stage.setScene(scene)
-    stage.show()
-  }
-
-  def writeIcons(canvases: Seq[(Int, Canvas)], path: Path): Unit = {
-    Files.createDirectories(path)
-    for ((s, c) <- canvases) {
-      val file = path.resolve(s"logorrr-icon-${s}.png")
-      writeIcon(c, file)
-    }
-  }
-
-
-  def writeIcon(c: Canvas, target: Path): Unit = {
-    val writableImage = new WritableImage(c.getWidth.toInt, c.getHeight.toInt)
-    val spp = new SnapshotParameters()
-    spp.setFill(Color.TRANSPARENT)
-    c.snapshot(spp, writableImage)
-    val renderedImage = SwingFXUtils.fromFXImage(writableImage, null)
-    ImageIO.write(renderedImage, "png", target.toFile)
-  }
-
-
-  def drawRoundedRectangleWithShadow(gc2d: GraphicsContext
-                                     , color: Color
-                                     , x: Int
-                                     , y: Int
-                                     , size: Int): Unit = {
-    gc2d.setFill(color.darker)
-    gc2d.fillRoundRect(x, y, size, size, size.toDouble / 10, size.toDouble / 10)
-    gc2d.setFill(color)
-    gc2d.fillRoundRect(x, y, size - 1, size - 1, size.toDouble / 10, size.toDouble / 10)
-  }
-
-  private def fillRect(gc2d: GraphicsContext, x: Int, y: Int, w: Int, h: Int, fill: Color) = {
-    gc2d.beginPath()
-    gc2d.setFill(fill)
-    gc2d.fillRect(x, y, w, h)
-    gc2d.closePath()
-  }
 }
