@@ -46,7 +46,7 @@ class IcnsCreatorApp extends javafx.application.Application {
   def perform(): Unit = {
     // generate sudirectory with images
     val name = "logorrr-iconset.iconset"
-    val iconSetDir = Paths.get(s"dist/dist-osx/installer-osx/src/main/resources/$name")
+    val iconSetDir = Paths.get(s"dist/dist-osx/installer-osx/src/main/resources/icon/$name")
     // create images
     generateIcons(iconSetDir)
     // call iconutil
