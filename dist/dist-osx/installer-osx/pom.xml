@@ -219,7 +219,9 @@
                                 <argument>${basedir}/../../../LICENSE</argument>
 
                                 <!-- mac relevant options start -->
-                                <argument>--mac-app-store</argument>
+                                <!--
+                                <argument>-x-mac-app-store</argument>
+                                -->
                                 <argument>--type</argument>
                                 <argument>pkg</argument>
                                 <argument>--mac-package-identifier</argument>
@@ -247,15 +249,45 @@
                                 <argument>3rd Party Mac Developer Installer: ${app.logorrr.dist.osx.developerid}
                                 </argument>
                                 <argument>${project.build.directory}/installer/LogoRRR-${revision}.pkg</argument>
-                                <argument>${project.build.directory}/installer/LogoRRR-signed-${revision}.pkg</argument>
+                                <argument>${project.build.directory}/installer/LogoRRR-${revision}-${os.arch}.pkg</argument>
                             </arguments>
                         </configuration>
                     </execution>
                 </executions>
-
+            </plugin>
+            <plugin>
+                <groupId>com.soebes.maven.plugins</groupId>
+                <artifactId>maven-echo-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>echo</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <echos>
+                        <echo>Running on architecture ${os.arch}</echo>
+                        <echo>JAVA_HOME for build     ${java.home}</echo>
+                        <echo>JDK used for jpackage   ${jdk.home}</echo>
+                        <echo></echo>
+                        <echo>Make sure you set PATH and JAVA_HOME to your desired values (x64 / aarch64) prior of executing this build.</echo>
+                        <echo></echo>
+                        <echo>For x64, intel based Macs:</echo>
+                        <echo></echo>
+                        <echo>export JAVA_HOME=${osx.jdk.home.x64};export PATH=${osx.jdk.home.x64}:$PATH</echo>
+                        <echo></echo>
+                        <echo></echo>
+                        <echo>For aarch64, Mac M1 chips:</echo>
+                        <echo></echo>
+                        <echo>export JAVA_HOME=${osx.jdk.home.aarch64};export PATH=${osx.jdk.home.aarch64}:$PATH</echo>
+                        <echo></echo>
+                        <echo></echo>
+                        <echo></echo>
+                    </echos>
+                </configuration>
             </plugin>
         </plugins>
     </build>
-
-
 </project>
