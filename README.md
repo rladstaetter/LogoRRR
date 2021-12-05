@@ -3,7 +3,7 @@
 LogoRRR is a simple utility to display a logfile and visualise certain classes of events.
 
 ## Screenshot
-![Screenshot of LogoRRR, version 21.3.2](docs/releases/21.3.1/screenshot-21.3.1.png?raw=true)
+![Screenshot of LogoRRR, version 21.3.2](docs/releases/21.3.2/screenshot-21.3.2.png?raw=true)
 
 ## Basic usage
 
@@ -15,7 +15,7 @@ You can start LogoRRR via double click from the desktop. Add a log file simply v
 
 ## Installation 
 
-You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.3.1) from the releases page. There are installer for Windows and MacOs available.
+You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.3.2) from the releases page. There are installer for Windows and MacOs available.
 
 **Please note**: Because LogoRRR is not digitally signed you are going to see warnings when trying to download, install or start the application. This will not change until it is digitally signed. 
 
