@@ -12,4 +12,4 @@ codesign -v -v target/temporary-app-image/LogoRRR.app
 # spctl -at exec -vv target/temporary-app-image/LogoRRR.app/
 
 # validate notarization
-xcrun stapler validate target/unsigned-installer/LogoRRR-21.3.2.dmg
+xcrun stapler validate target/unsigned-installer/LogoRRR-21.4.0.dmg
