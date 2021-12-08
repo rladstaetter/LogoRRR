@@ -3,6 +3,9 @@ package app.logorrr.util
 import java.nio.file.{Files, Path, Paths}
 import scala.jdk.CollectionConverters._
 
+/**
+ * Will be called in OSX Installer module
+ */
 object CodeSigner {
 
   def main(args: Array[String]): Unit = {
