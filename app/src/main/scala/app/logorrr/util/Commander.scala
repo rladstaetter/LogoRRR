@@ -1,4 +1,4 @@
-package app.util
+package app.logorrr.util
 
 import java.nio.file.Path
 import scala.jdk.CollectionConverters._

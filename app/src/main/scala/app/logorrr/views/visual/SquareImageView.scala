@@ -1,7 +1,7 @@
 package app.logorrr.views.visual
 
+import app.logorrr.util.CanLog
 import app.logorrr.{Filter, LogEntry}
-import app.util.CanLog
 import javafx.scene.image._
 import javafx.scene.paint.Color
 

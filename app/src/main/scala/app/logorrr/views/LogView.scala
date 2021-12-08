@@ -1,8 +1,8 @@
 package app.logorrr.views
 
 import app.logorrr._
+import app.logorrr.util.CanLog
 import app.logorrr.views.visual.LogVisualView
-import app.util.CanLog
 import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.beans.{InvalidationListener, Observable}

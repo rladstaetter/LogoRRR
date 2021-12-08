@@ -1,4 +1,4 @@
-package app.util
+package app.logorrr.util
 
 import javafx.application.Platform
 import javafx.event.Event
@@ -6,7 +6,6 @@ import javafx.scene.{Parent, Scene}
 import javafx.stage.{Modality, Stage}
 
 import scala.util.{Failure, Success, Try}
-
 
 object JfxUtils extends CanLog {
 

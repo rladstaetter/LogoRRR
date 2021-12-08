@@ -1,4 +1,4 @@
-package app.util
+package app.logorrr.util
 
 import java.nio.file.{Files, Path, Paths}
 import scala.jdk.CollectionConverters._
@@ -40,4 +40,3 @@ object CodeSigner {
   }
 
 }
-
