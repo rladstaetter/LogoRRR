@@ -1,25 +1,53 @@
 package app.logorrr
 
+import app.logorrr.util.{CanLog, JfxUtils}
 import javafx.beans.property.{SimpleIntegerProperty, SimpleStringProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ObservableList}
-import app.util.{CanLog, JfxUtils}
 import org.apache.commons.io.input.Tailer
 
+import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path}
 import java.util
 import java.util.stream.Collectors
 import scala.language.postfixOps
+import scala.util.{Failure, Success, Try}
 
+object LogorrrConstants {
+
+  val WinNL = "\r\n"
+  val NL = "\n"
+}
 
 /** Abstraction for a log file */
 object LogReport extends CanLog {
 
   def apply(logFile: Path): LogReport = {
-    val value = Files.readAllLines(logFile).stream().map(l => LogEntry(l))
+    val strings = readFromFile(logFile)
+    val value = strings.stream().map(l => LogEntry(l))
     val entries = value.collect(Collectors.toList[LogEntry]())
     logTrace(s"Read ${entries.size} lines ... ")
     new LogReport(logFile, FXCollections.observableList(entries))
+  }
+
+  private def readFromFile(logFile: Path): util.List[String] = {
+    Try {
+      Files.readAllLines(logFile)
+    } match {
+      case Failure(exception) =>
+        // logException(exception)
+        logWarn(s"Could not read file ${logFile.toAbsolutePath.toString} with default charset, retrying with ISO_8859_1 ...")
+        Try {
+          Files.readAllLines(logFile, StandardCharsets.ISO_8859_1)
+        } match {
+          case Failure(exception) =>
+            logException(exception)
+            util.Arrays.asList(s"Could not read file ${logFile.toAbsolutePath.toString} properly. Reason: ${exception.getMessage}.")
+          case Success(value) =>
+            value
+        }
+      case Success(lines) => lines
+    }
   }
 
   def indexOf(x: Int, y: Int, squareWidth: Int, canvasWidth: Int): Int = y / squareWidth * (canvasWidth / squareWidth) + x / squareWidth

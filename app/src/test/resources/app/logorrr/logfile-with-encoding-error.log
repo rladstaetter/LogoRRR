@@ -1,0 +1,10 @@
+	
+2021-12-03 21:31:30 UTC-61aa40b6.40-LOG:  could not send data to client: An operation was attempted on something that is not a socket.
+	
+2021-12-03 21:31:30 UTC-61aa40bd.94-LOG:  could not send data to client: An operation was attempted on something that is not a socket.
+	
+2021-12-03 21:31:31 UTC-61aa40ab.20-LOG:  background worker "Ð" (PID 280) exited with exit code 1
+2021-12-03 21:31:32 UTC-61aa40ae.f8-LOG:  shutting down
+2021-12-03 21:31:32 UTC-61aa40ae.f8-LOG:  checkpoint starting: shutdown immediate
+2021-12-03 21:31:33 UTC-61aa40ae.f8-LOG:  checkpoint complete (248): wrote 28 buffers (0.0%); 0 WAL file(s) added, 1 removed, 0 recycled; write=0.063 s, sync=0.000 s, total=0.282 s; sync files=20, longest=0.003 s, average=0.001 s; distance=11838 kB, estimate=14199 kB
+2021-12-03 21:31:36 UTC-61aa40ab.20-LOG:  database system is shut down
