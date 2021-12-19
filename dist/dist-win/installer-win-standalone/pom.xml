@@ -31,24 +31,6 @@
             </resource>
         </resources>
         <plugins>
-            <!-- download necessary installer for visual studio redists (will be included in the aip file)-->
-            <plugin>
-                <groupId>com.googlecode.maven-download-plugin</groupId>
-                <artifactId>download-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>download-redists</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>https://aka.ms/vs/17/release/vc_redist.x64.exe</url>
-                            <outputDirectory>${project.build.directory}/installer/</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
