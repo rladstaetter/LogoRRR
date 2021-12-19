@@ -25,10 +25,20 @@
             <resource>
                 <directory>src/main/ai</directory>
                 <includes>
-                    <include>**/*</include>
+                    <include>logorrr-icon-128.ico</include>
                 </includes>
                 <targetPath>${project.build.directory}/installer/</targetPath>
+                <filtering>false</filtering>
             </resource>
+            <resource>
+                <directory>src/main/ai</directory>
+                <includes>
+                    <include>logorrr-installer.aip</include>
+                </includes>
+                <targetPath>${project.build.directory}/installer/</targetPath>
+                <filtering>true</filtering>
+            </resource>
+
         </resources>
         <plugins>
             <plugin>
