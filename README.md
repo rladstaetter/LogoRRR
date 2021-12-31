@@ -13,6 +13,10 @@ For example, ERROR events are visualized as red rectangles, TRACE events as grey
 
 You can start LogoRRR via double click from the desktop. Add a log file simply via drag'n drop.
 
+## Technology
+
+See [Technology](Technology.md) for a short summary of used technologies.
+
 ## Installation 
 
 You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.3.2) from the releases page. There are installer for Windows and MacOs available.
