@@ -1,6 +1,7 @@
 package app.logorrr.docs
 
 import app.logorrr.LogoRRRAppBuilder
+import app.logorrr.conf.Settings
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Node
 import javafx.stage.Stage
@@ -28,8 +29,9 @@ class ScreenShotterApp extends javafx.application.Application {
 
   def start(stage: Stage): Unit = {
     for (Area(width, height) <- Area.seq) {
-      val s = LogoRRRAppBuilder.withStage(stage, Seq("logfiles/logic.2.log"), width, height)
-      val bPath = Paths.get("docs/releases/21.4.0/")
+      val settings = Settings.Default.copy(stageSettings = Settings.Default.stageSettings.copy(height = height, width = width))
+      val s = LogoRRRAppBuilder.withStage(stage, Seq("logfiles/logic.2.log"), settings)
+      val bPath = Paths.get(s"docs/releases/${Settings.meta.appVersion}/")
       Files.createDirectories(bPath)
       val f = bPath.resolve(s"${width}x$height.png")
       ScreenShotterApp.persistNodeState(s.getScene.getRoot, f)

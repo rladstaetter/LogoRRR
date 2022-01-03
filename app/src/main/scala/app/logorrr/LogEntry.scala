@@ -47,11 +47,5 @@ case class LogEntry(value: String
   def background(searchFilters: Seq[Filter]): Background =
     new Background(new BackgroundFill(calcColor(searchFilters), new CornerRadii(1.0), new Insets(0.0)))
 
-  /* pixel representation of rectangle to draw (mainly a performance optimisation) */
-  def pixelArray(c: Color): Array[Int] = {
-    ColorUtil.mkPixelArray(LogoRRRApp.InitialSquareWidth - 1, c)
-  }
-
-  def pixelArray(searchFilters: Seq[Filter]): Array[Int] = pixelArray(calcColor(searchFilters))
 
 }

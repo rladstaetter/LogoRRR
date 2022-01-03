@@ -36,7 +36,8 @@ object SquareImageView extends CanLog {
             , x
             , y
             , squareWidth
-            , e.pixelArray(color))
+            , ColorUtil.mkPixelArray(squareWidth - 1, color)
+          )
         }
       case Failure(exception) => logException(exception)
     }

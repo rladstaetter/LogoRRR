@@ -1,27 +1,15 @@
 package app.logorrr
 
+import app.logorrr.conf.Settings
+import app.logorrr.util.{CanLog, LogUtil}
 import javafx.stage.Stage
 
 import scala.jdk.CollectionConverters._
 
-object LogoRRRApp {
-
-  /** application name */
-  val ApplicationName = "LogoRRR"
-
-  /** version which is displayed to user */
-  val ApplicationVersion = "21.4.0"
-
-  /** initial width of main application scene */
-  val InitialSceneWidth = 1000
-
-  /** initial height of main application scene */
-  val InitialSceneHeight = 600
-
-  /** width of squares which are painted for each log entry */
-  val InitialSquareWidth = 7
+object LogoRRRApp extends CanLog {
 
   def main(args: Array[String]): Unit = {
+    LogUtil.init()
     javafx.application.Application.launch(classOf[LogoRRRApp], args: _*)
   }
 
@@ -39,14 +27,14 @@ class LogoRRRAppMenuBar extends MenuBar {
 */
 
 
-class LogoRRRApp extends javafx.application.Application {
+class LogoRRRApp extends javafx.application.Application with CanLog {
 
   /**
    * will be called by the java bootstrapper
    */
   def start(stage: Stage): Unit = {
     val params: Seq[String] = getParameters.getRaw.asScala.toSeq
-    LogoRRRAppBuilder.withStage(stage, params, LogoRRRApp.InitialSceneWidth, LogoRRRApp.InitialSceneHeight).show()
+    Settings.someSettings.foreach(settings => LogoRRRAppBuilder.withStage(stage, params, settings).show())
   }
 
 }

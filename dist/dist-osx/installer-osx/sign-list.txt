@@ -1,4 +1,0 @@
-target/app-tmp-image/LogoRRR.app/Contents/MacOS/LogoRRR
-target/app-tmp-image/LogoRRR.app/Contents/app/app-21.4.0-SNAPSHOT.jar
-target/app-tmp-image/LogoRRR.app/Contents/runtime/Contents/MacOS/libjli.dylib
-target/app-tmp-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/jspawnhelper
