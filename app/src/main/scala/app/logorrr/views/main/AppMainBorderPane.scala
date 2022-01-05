@@ -1,7 +1,8 @@
-package app.logorrr
+package app.logorrr.views.main
 
+import app.logorrr.model.LogReport
 import app.logorrr.util.CanLog
-import app.logorrr.views.{LogFormatLearnerStage, LogView}
+import app.logorrr.views.{LogFormatLearnerStage, LogView, LogViewTabPane}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.control.Button
 import javafx.scene.input.{DragEvent, TransferMode}

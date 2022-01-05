@@ -1,9 +1,10 @@
-package app.logorrr
+package app.logorrr.views
 
+import app.logorrr.model.LogReport
+import app.logorrr.views.main.AppMainBorderPane
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.control.{Tab, TabPane}
-import app.logorrr.views.LogView
 
 import scala.jdk.CollectionConverters._
 

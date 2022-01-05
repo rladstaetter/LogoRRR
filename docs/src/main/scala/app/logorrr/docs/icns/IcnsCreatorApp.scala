@@ -1,7 +1,7 @@
 package app.logorrr.docs.icns
 
+import app.logorrr.build.Commander
 import app.logorrr.docs.{Area, IconCreatorApp, LogorrrIcon}
-import app.logorrr.util.Commander
 import javafx.scene.canvas.Canvas
 import javafx.stage.Stage
 

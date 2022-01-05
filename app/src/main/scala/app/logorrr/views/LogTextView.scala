@@ -1,6 +1,7 @@
 package app.logorrr.views
 
-import app.logorrr.{LogEntry, LogoRRRFonts}
+import app.logorrr.LogoRRRFonts
+import app.logorrr.model.LogEntry
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._

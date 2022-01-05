@@ -1,4 +1,4 @@
-package app.logorrr
+package app.logorrr.util
 
 import javafx.collections.{FXCollections, ObservableList}
 

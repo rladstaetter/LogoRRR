@@ -195,7 +195,7 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
-                            <mainClass>app.logorrr.util.CodeSigner</mainClass>
+                            <mainClass>app.logorrr.build.CodeSigner</mainClass>
                             <arguments>
                                 <argument>Developer ID Application: ${app.logorrr.dist.osx.developerid}</argument>
                                 <argument>/usr/bin/codesign</argument>

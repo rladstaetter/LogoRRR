@@ -1,6 +1,6 @@
-package app.logorrr
+package app.logorrr.model
 
-import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.util.{CanLog, JfxUtils, LTailerListener}
 import javafx.beans.property.{SimpleIntegerProperty, SimpleStringProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ObservableList}
@@ -13,11 +13,7 @@ import java.util.stream.Collectors
 import scala.language.postfixOps
 import scala.util.{Failure, Success, Try}
 
-object LogorrrConstants {
 
-  val WinNL = "\r\n"
-  val NL = "\n"
-}
 
 /** Abstraction for a log file */
 object LogReport extends CanLog {

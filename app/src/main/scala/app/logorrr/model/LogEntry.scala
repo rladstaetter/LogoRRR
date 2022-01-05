@@ -1,5 +1,6 @@
-package app.logorrr
+package app.logorrr.model
 
+import app.logorrr.Filter
 import app.logorrr.views.LogColumnDef
 import javafx.geometry.Insets
 import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}

@@ -8,6 +8,7 @@ import javafx.event.ActionEvent
 import javafx.scene.control.{Button, ToggleButton, ToolBar}
 import javafx.scene.shape.Rectangle
 import app.logorrr._
+import app.logorrr.model.LogEntry
 
 import java.text.DecimalFormat
 import scala.jdk.CollectionConverters._

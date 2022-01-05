@@ -1,7 +1,7 @@
 package app.logorrr.docs
 
-import app.logorrr.LogoRRRAppBuilder
 import app.logorrr.conf.Settings
+import app.logorrr.views.main.LogoRRRAppBuilder
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Node
 import javafx.stage.Stage
