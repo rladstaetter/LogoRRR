@@ -11,6 +11,7 @@ import java.nio.file.{Files, Path}
 import scala.jdk.CollectionConverters.ListHasAsScala
 import scala.util.{Failure, Success, Try}
 
+
 /**
  * Main UI element, all other gui elements are in some way children of this Borderpane
  *
@@ -44,7 +45,7 @@ class AppMainBorderPane(initialSceneWidth: Int
     }
   })
 
- // setTop(new LogoRRRAppMenuBar())
+  // setTop(new LogoRRRAppMenuBar())
   setCenter(logViewTabPane)
 
   /** needed to activate drag'n drop */

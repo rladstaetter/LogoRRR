@@ -30,7 +30,7 @@ class ScreenShotterApp extends javafx.application.Application {
   def start(stage: Stage): Unit = {
     for (Area(width, height) <- Area.seq) {
       val settings = Settings.Default.copy(stageSettings = Settings.Default.stageSettings.copy(height = height, width = width))
-      val s = LogoRRRAppBuilder.withStage(stage, Seq("logfiles/logic.2.log"), settings)
+      val s = LogoRRRAppBuilder.withStage(stage, Seq("logfiles/logic.2.log"), settings, getHostServices)
       val bPath = Paths.get(s"docs/releases/${Settings.meta.appVersion}/")
       Files.createDirectories(bPath)
       val f = bPath.resolve(s"${width}x$height.png")

@@ -9,7 +9,7 @@ import scala.jdk.CollectionConverters._
 object LogoRRRApp extends CanLog {
 
   def main(args: Array[String]): Unit = {
-    LogUtil.init()
+    //LogUtil.init()
     javafx.application.Application.launch(classOf[LogoRRRApp], args: _*)
   }
 
@@ -34,7 +34,7 @@ class LogoRRRApp extends javafx.application.Application with CanLog {
    */
   def start(stage: Stage): Unit = {
     val params: Seq[String] = getParameters.getRaw.asScala.toSeq
-    Settings.someSettings.foreach(settings => LogoRRRAppBuilder.withStage(stage, params, settings).show())
+    Settings.someSettings.foreach(settings => LogoRRRAppBuilder.withStage(stage, params, settings, getHostServices).show())
   }
 
 }

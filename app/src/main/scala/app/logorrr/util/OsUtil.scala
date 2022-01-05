@@ -18,5 +18,7 @@ object OsUtil {
       Mac
     }
 
+  val isMac = currentOs == Mac
+  val isWin = currentOs == Windows
 
 }
