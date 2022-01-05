@@ -16,8 +16,9 @@ object AboutScreen {
 
   val links = Seq(
     HLink("https://www.logorrr.app/", "LogoRRR Homepage")
-    , HLink("https://www.github.com/rladstaetter/LogoRRR/", "Github Page (Source code)")
-    , HLink("https://www.buymeacoffee.com/rladstaetter/", "Consider donating to this project :)"))
+    , HLink("https://www.twitter.com/logorrr/", "LogoRRR on twitter")
+    , HLink("https://www.github.com/rladstaetter/LogoRRR/", "LogoRRR on github (source code)")
+    , HLink("https://www.buymeacoffee.com/rladstaetter/", "Support LogoRRR via buymeacoffee.com"))
 
   case class MonoLabel(text: String, size: Int) extends Label(text) {
     setStyle(LogoRRRFonts.jetBrainsMono(size))
@@ -42,7 +43,6 @@ object AboutScreen {
     setEditable(false)
     appendText("(c) 2020-2022 Robert Ladstätter" + "\n\n")
     links.foreach(l => appendText(l.url.toString + "\n"))
-
   }
 }
 
@@ -57,10 +57,10 @@ class AboutScreen(hostServices: HostServices) extends BorderPane {
   setTop(mkHeader())
   setLeft(mkLogo())
   if (OsUtil.isMac) {
+    // see https://github.com/rladstaetter/LogoRRR/issues/50
     setRight(new AboutScreen.HLinkLabelView(hostServices, AboutScreen.links))
   } else if (OsUtil.isWin) {
     setRight(new AboutScreen.HLinkView(hostServices, AboutScreen.links))
-
   }
 
 }
