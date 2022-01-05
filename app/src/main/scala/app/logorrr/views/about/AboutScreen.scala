@@ -17,7 +17,7 @@ object AboutScreen {
   val links = Seq(
     HLink("https://www.logorrr.app", "LogoRRR Homepage")
     , HLink("https://github.com/rladstaetter/LogoRRR/", "Github Page (Source code)")
-    , HLink("https://www.buymeacoffee.com/rladstaetter/", "Donate a coffee to speed up development️"))
+    , HLink("https://www.buymeacoffee.com/rladstaetter/","Consider donating to this project :)"))
 
   case class MonoLabel(text: String, size: Int) extends Label(text) {
     setStyle(LogoRRRFonts.jetBrainsMono(size))
