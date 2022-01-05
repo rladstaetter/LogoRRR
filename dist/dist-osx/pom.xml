@@ -16,7 +16,7 @@
 
     <modules>
         <!-- atm there is no graalvm build active on macosx-->
-        <!-- <module>binary-osx</module> -->
+        <!--  <module>binary-osx</module> -->
         <module>installer-osx</module>
     </modules>
 

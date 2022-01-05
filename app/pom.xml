@@ -22,6 +22,7 @@
         <dependency>
             <groupId>com.github.pureconfig</groupId>
             <artifactId>pureconfig_${scala.major.version}</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>

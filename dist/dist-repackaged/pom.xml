@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>app.logorrr.dist</groupId>
+        <artifactId>dist</artifactId>
+        <version>${revision}${changelist}</version>
+    </parent>
+    <groupId>app.logorrr.dist.repackaged</groupId>
+    <artifactId>dist-repackaged</artifactId>
+    <name>app.logorrr.dist.repackaged</name>
+    <!-- see https://github.com/makingthematrix/scalaonandroid/wiki/ for a description -->
+    <!-- click on link 'Java 9  JPMS problem' -->
+    <description>Workaround to include scala dependencies for graalvm - scala libs don't like JPMS</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.pureconfig</groupId>
+            <artifactId>pureconfig_${scala.major.version}</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includes>**/**.class</includes>
+                            <excludes>scala/**</excludes>
+                          <!--
+                            -->
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <stripClassifier>true</stripClassifier>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

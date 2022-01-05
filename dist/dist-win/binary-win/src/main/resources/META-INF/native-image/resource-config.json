@@ -5,6 +5,12 @@
         "pattern": "\\Qapp/logorrr/save-as.png\\E"
       },
       {
+        "pattern": "\\Qapplication.conf\\E"
+      },
+      {
+        "pattern": "\\Qmeta.conf\\E"
+      },
+      {
         "pattern": "\\Qapp/logorrr/JetBrainsMono-Regular.ttf\\E"
       },
       {

@@ -47,7 +47,7 @@
                 </os>
             </activation>
             <properties>
-                <graalvm.home>/Users/lad/.sdkman/candidates/java/21.2.0.r11-grl</graalvm.home>
+                <graalvm.home>/Users/lad/bin/graalvm-ce-java11-21.3.0/Contents/Home</graalvm.home>
                 <jdk.home>/will/be/set/in/profiles</jdk.home>
                 <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
                 <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
@@ -140,6 +140,11 @@
             <dependency>
                 <groupId>app.logorrr</groupId>
                 <artifactId>app</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>app.logorrr.dist.repackaged</groupId>
+                <artifactId>dist-repackaged</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
