@@ -4,7 +4,7 @@ import app.logorrr._
 import app.logorrr.model.{LogEntry, LogReport}
 import app.logorrr.util.{CanLog, CollectionUtils}
 import app.logorrr.views.visual.LogVisualView
-import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
+import javafx.beans.property.{SimpleBooleanProperty, SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
