@@ -22,6 +22,10 @@
             <groupId>app.logorrr</groupId>
             <artifactId>app</artifactId>
         </dependency>
+        <dependency>
+            <groupId>app.logorrr.dist.repackaged</groupId>
+            <artifactId>dist-repackaged</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
