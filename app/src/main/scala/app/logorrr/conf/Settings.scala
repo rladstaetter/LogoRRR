@@ -27,6 +27,8 @@ object Settings extends CanLog {
       AppMeta("LogoRRR", "LATEST")
   }
 
+  lazy val fullAppName = Settings.meta.appName + " " + Settings.meta.appVersion
+
   lazy val Default = Settings(StageSettings(0, 0, 500, 500)
     , SquareImageSettings(10)
     , RecentFileSettings(Seq()))

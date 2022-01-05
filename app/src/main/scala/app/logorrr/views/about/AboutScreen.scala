@@ -4,60 +4,50 @@ import app.logorrr.LogoRRRFonts
 import app.logorrr.conf.Settings
 import app.logorrr.util.{HLink, ImageCp}
 import javafx.application.HostServices
-import javafx.collections.FXCollections
+import javafx.geometry.Insets
 import javafx.scene.control._
 import javafx.scene.image.ImageView
-import javafx.scene.layout.BorderPane
-
-import scala.jdk.CollectionConverters._
+import javafx.scene.layout.{BorderPane, VBox}
 
 
 object AboutScreen {
 
-  val logo = ImageCp("/app/logorr/icon/logorrr-icon-512.png", 512, 512)
+  val logo = ImageCp("/app/logorrr/icon/logorrr-icon-128.png", 128, 128)
 
   val links = Seq(
     HLink("https://www.logorrr.app", "LogoRRR Homepage")
     , HLink("https://github.com/rladstaetter/LogoRRR/", "Github Page (Source code)")
-    , HLink("https://www.buymeacoffee.com/rladstaetter/", "Donate a coffee to speed up development."))
+    , HLink("https://www.buymeacoffee.com/rladstaetter/", "Donate a coffee to speed up development️"))
 
-}
+  case class MonoLabel(text: String, size: Int) extends Label(text) {
+    setStyle(LogoRRRFonts.jetBrainsMono(size))
+  }
 
-class HLinkView(hostServices: HostServices, links: Seq[HLink]) extends ListView[HLink] {
-  getItems.addAll(FXCollections.observableArrayList(links.asJava))
+  class HLinkView(hostServices: HostServices, links: Seq[HLink]) extends VBox {
+    setPrefWidth(400)
+    setPadding(new Insets(30, 20, 20, 20))
 
-  setCellFactory(_ => {
-    new ListCell[HLink] {
-      setContentDisplay(ContentDisplay.GRAPHIC_ONLY)
-      val hyperlink = new Hyperlink()
-      hyperlink.setOnAction(_ => {
-        Option(getItem()).foreach(i => hostServices.showDocument(i.url.toString))
-      })
-
-      override def updateItem(item: HLink, empty: Boolean): Unit = {
-        super.updateItem(item, empty)
-        if (Option(item).isDefined && !empty) {
-          hyperlink.setText(item.toString)
-          setGraphic(hyperlink)
-        } else setGraphic(null)
-      }
+    def mkHyperLink(hlink: HLink): Hyperlink = {
+      val hyperlink = new Hyperlink(hlink.text)
+      hyperlink.setOnAction(e => hostServices.showDocument(hlink.url.toString))
+      hyperlink
     }
-  })
 
+    links.foreach(l => getChildren.add(mkHyperLink(l)))
+
+  }
 }
 
-case class MonoLabel(text: String, size: Int) extends Label(text) {
-  setStyle(LogoRRRFonts.jetBrainsMono(size))
-}
 
-class AboutScreen(hostServices: HostServices) extends BorderPane() {
+class AboutScreen(hostServices: HostServices) extends BorderPane {
 
   private def mkLogo(): ImageView = AboutScreen.logo.imageView()
 
-  private def mkHeader(): Label = MonoLabel(s"${Settings.meta.appName} ${Settings.meta.appVersion}", 130)
+  private def mkHeader(): Label = AboutScreen.MonoLabel(Settings.fullAppName, 50)
 
+  setPadding(new Insets(10, 10, 10, 10))
   setTop(mkHeader())
   setLeft(mkLogo())
-  setRight(new HLinkView(hostServices, AboutScreen.links))
+  setRight(new AboutScreen.HLinkView(hostServices, AboutScreen.links))
 
 }

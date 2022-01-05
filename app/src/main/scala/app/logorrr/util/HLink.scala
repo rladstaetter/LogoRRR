@@ -12,4 +12,8 @@ object HLink {
 
 case class HLink(name: String
                  , url: URL
-                 , description: String)
+                 , description: String) {
+
+  val text = s"$description"
+
+}
