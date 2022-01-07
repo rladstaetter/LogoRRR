@@ -1,7 +1,7 @@
 package app.logorrr.views.about
 
 import app.logorrr.conf.Settings
-import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts, OsUtil}
+import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts}
 import javafx.application.HostServices
 import javafx.geometry.Insets
 import javafx.scene.control._
@@ -37,12 +37,6 @@ object AboutScreen {
 
   }
 
-  class HLinkLabelView(hostServices: HostServices, links: Seq[HLink]) extends TextArea {
-    setPrefWidth(280)
-    setEditable(false)
-    appendText("(c) 2020-2022 Robert Ladstätter" + "\n\n")
-    links.foreach(l => appendText(l.url.toString + "\n"))
-  }
 }
 
 
@@ -55,11 +49,6 @@ class AboutScreen(hostServices: HostServices) extends BorderPane {
   setPadding(new Insets(10, 10, 10, 10))
   setTop(mkHeader())
   setLeft(mkLogo())
-  if (OsUtil.isMac) {
-    // see https://github.com/rladstaetter/LogoRRR/issues/50
-    setRight(new AboutScreen.HLinkLabelView(hostServices, AboutScreen.links))
-  } else if (OsUtil.isWin) {
-    setRight(new AboutScreen.HLinkView(hostServices, AboutScreen.links))
-  }
+  setRight(new AboutScreen.HLinkView(hostServices, AboutScreen.links))
 
 }
