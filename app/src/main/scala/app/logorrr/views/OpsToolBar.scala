@@ -2,7 +2,6 @@ package app.logorrr.views
 
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.control._
-import app.logorrr.ExactMatchFilter
 
 
 class OpsToolBar(logView: LogView) extends ToolBar {

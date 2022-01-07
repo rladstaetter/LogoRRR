@@ -1,10 +1,11 @@
 package app.logorrr.views
 
 import app.logorrr._
+import app.logorrr.conf.Settings
 import app.logorrr.model.{LogEntry, LogReport}
-import app.logorrr.util.{CanLog, CollectionUtils}
+import app.logorrr.util.{CanLog, CollectionUtils, LogoRRRFonts}
 import app.logorrr.views.visual.LogVisualView
-import javafx.beans.property.{SimpleBooleanProperty, SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
+import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
@@ -59,7 +60,10 @@ class LogView(val logReport: LogReport
 
   /** don't monitor file anymore if tab is closed, free invalidation listeners */
   setOnClosed(new EventHandler[Event]() {
-    override def handle(t: Event): Unit = shutdown()
+    override def handle(t: Event): Unit = {
+      Settings.removeFromRecentFiles(logReport.path)
+      shutdown()
+    }
   })
 
   // logReport can change over time, thus change Tab text property accordingly

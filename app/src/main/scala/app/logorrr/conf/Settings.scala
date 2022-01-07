@@ -8,16 +8,26 @@ import javafx.stage.Window
 import pureconfig.generic.auto._
 import pureconfig.{ConfigSource, ConfigWriter}
 
+import java.nio.file.{Files, Path, Paths}
 import scala.util.{Failure, Success, Try}
 
 object Settings extends CanLog {
+
+  /** update recent files */
+  def updateRecentFileSettings(updateRecentFilesFn: RecentFileSettings => RecentFileSettings): Unit = {
+    val settings = Settings.read()
+    Settings.write(settings.copy(recentFiles = updateRecentFilesFn(settings.recentFiles)))
+  }
+
 
   /** turn of ugly 'hardcoded value' messages */
   lazy val renderOptions = ConfigRenderOptions.defaults().setOriginComments(false)
 
   lazy val default: Settings = ConfigSource.default.loadOrThrow[Settings]
 
-  def read(): Settings = ConfigSource.file(FilePaths.settingsFilePath).loadOrThrow[Settings]
+  def read(): Settings = {
+    ConfigSource.file(FilePaths.settingsFilePath).loadOrThrow[Settings].filterNonExistingPaths
+  }
 
   /** persists settings */
   def write(settings: Settings): Unit = {
@@ -61,12 +71,29 @@ object Settings extends CanLog {
         }
     }
 
+
+
+  def removeFromRecentFiles(path: Path): Unit = {
+    val settings = Settings.read()
+    val recentFiles = settings.recentFiles
+    val filteredFiles = recentFiles.files.filterNot(s => s == path.toAbsolutePath.toString)
+    Settings.write(settings.copy(recentFiles = recentFiles.copy(files = filteredFiles)))
+  }
+
 }
 
 /**
  * @param files files which were last opened
  */
-case class RecentFileSettings(files: Seq[String])
+case class RecentFileSettings(files: Seq[String]) {
+
+  def clear(): RecentFileSettings = RecentFileSettings(Seq())
+
+  def filterNonExisting(): RecentFileSettings = {
+    copy(files = files.map(s => Paths.get(s)).filter(p => Files.isRegularFile(p)).filterNot(p => !Files.exists(p)).map(_.toAbsolutePath.toString))
+  }
+
+}
 
 object StageSettings {
 
@@ -128,6 +155,9 @@ case class SquareImageSettings(width: Int)
 
 case class Settings(stageSettings: StageSettings
                     , squareImageSettings: SquareImageSettings
-                    , recentFiles: RecentFileSettings)
+                    , recentFiles: RecentFileSettings) {
+
+  def filterNonExistingPaths: Settings = copy(recentFiles = recentFiles.filterNonExisting())
+}
 
 

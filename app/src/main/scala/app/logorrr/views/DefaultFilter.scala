@@ -1,6 +1,5 @@
 package app.logorrr.views
 
-import app.logorrr.{ExactMatchFilter, Filter}
 import javafx.scene.paint.Color
 
 object DefaultFilter {

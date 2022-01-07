@@ -1,8 +1,8 @@
 package app.logorrr.views.visual
 
 import app.logorrr.model.{LogEntry, LogReport}
-import app.logorrr.Filter
-import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
+import app.logorrr.views.Filter
+import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.event.EventHandler
 import javafx.scene.control.ScrollPane
 import javafx.scene.image.WritableImage

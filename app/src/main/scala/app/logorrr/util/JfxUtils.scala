@@ -2,6 +2,9 @@ package app.logorrr.util
 
 import javafx.application.Platform
 import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.stage.FileChooser
+
+import java.nio.file.Path
 
 object JfxUtils extends CanLog {
 

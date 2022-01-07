@@ -1,51 +1,76 @@
 package app.logorrr.views.menubar
 
 import app.logorrr.conf.Settings
-import app.logorrr.util.OsUtil
-import app.logorrr.views.menubar.FileMenu.{CloseAllMenuItem, OpenMenuItem, OpenRecentMenu}
+import app.logorrr.util.{CanLog, LogoRRRFileChooser, OsUtil}
+import app.logorrr.views.menubar.FileMenu.OpenRecentMenu
 import javafx.scene.control.{Menu, MenuItem, SeparatorMenuItem}
 
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{Path, Paths}
+import scala.jdk.CollectionConverters._
 
 object FileMenu {
 
-  object OpenMenuItem extends MenuItem("Open")
+  class OpenMenuItem(openLogFile: Path => Unit)
+    extends MenuItem("Open") with CanLog {
 
-  object QuitMenuItem extends MenuItem("Quit") {
+    setOnAction(_ => {
+      new LogoRRRFileChooser("Open log file").showAndWait() match {
+        case Some(logFile) =>
+          Settings.updateRecentFileSettings(rf => rf.copy(files = logFile.toAbsolutePath.toString +: rf.files))
+          openLogFile(logFile)
+        case None => logInfo("Cancelled open file ...")
+      }
 
+    })
   }
+
+  class QuitMenuItem extends MenuItem("Quit")
 
   object OpenRecentMenu {
 
-    class RecentFileMenuItem(path: Path) extends MenuItem(path.getFileName.toString)
-
-    object RemoveAllRecentFilesMenuItem extends MenuItem("Remove all")
+    class RecentFileMenuItem(path: Path
+                             , openLogFile: Path => Unit) extends MenuItem(path.getFileName.toString) {
+      setOnAction(_ => {
+        openLogFile(path)
+      })
+    }
 
     class OpenRecentMenu extends Menu("Open Recent")
 
-    def menu(recentFiles: Seq[Path]): Menu = {
+    def menu(openLogFile: Path => Unit, recentFiles: Seq[Path]): Menu = {
       val m = new OpenRecentMenu
-      m.getItems.addAll(recentFiles.map(p => new OpenRecentMenu.RecentFileMenuItem(p)): _*)
-      m.getItems.add(new SeparatorMenuItem())
-      m.getItems.add(OpenRecentMenu.RemoveAllRecentFilesMenuItem)
+      m.getItems.addAll(recentFiles.map(p => new OpenRecentMenu.RecentFileMenuItem(p, openLogFile)): _*)
       m
     }
   }
 
-  object CloseAllMenuItem extends MenuItem("Close All")
+  class CloseAllMenuItem(removeAllLogFiles: => Unit) extends MenuItem("Close All") {
+    setOnAction(_ => removeAllLogFiles)
+  }
 
 }
 
-class FileMenu(settings: Settings) extends Menu("File") {
+class FileMenu(openLogFile: Path => Unit
+               , removeAllLogFiles: => Unit) extends Menu("File") {
+
+  val settings = Settings.read()
+
+  private val recentFiles: Seq[String] = settings.recentFiles.files
+
+  val recentFilesMenu = OpenRecentMenu.menu(openLogFile, recentFiles.map(f => Paths.get(f)))
 
   def init(): Unit = {
-    getItems.add(OpenMenuItem)
-    if (settings.recentFiles.files.nonEmpty) {
-      getItems.add(OpenRecentMenu.menu(settings.recentFiles.files.map(f => Paths.get(f)).filter(p => Files.exists(p))))
+    getItems.clear()
+    getItems.add(new FileMenu.OpenMenuItem(openLogFile))
+
+    if (recentFiles.nonEmpty) {
+      getItems.add(recentFilesMenu)
+      val closeAllMenuItems = new FileMenu.CloseAllMenuItem(removeAllLogFiles)
+      getItems.add(closeAllMenuItems)
     }
-    getItems.add(CloseAllMenuItem)
+
     if (OsUtil.isWin) {
-      getItems.add(FileMenu.QuitMenuItem)
+      getItems.add(new FileMenu.QuitMenuItem)
     }
   }
 

@@ -1,8 +1,7 @@
 package app.logorrr.views.about
 
-import app.logorrr.LogoRRRFonts
 import app.logorrr.conf.Settings
-import app.logorrr.util.{HLink, ImageCp, OsUtil}
+import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts, OsUtil}
 import javafx.application.HostServices
 import javafx.geometry.Insets
 import javafx.scene.control._

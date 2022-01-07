@@ -1,7 +1,8 @@
 package app.logorrr.docs
 
-import app.logorrr.conf.Settings
-import app.logorrr.views.main.LogoRRRAppBuilder
+import app.logorrr.conf.{RecentFileSettings, Settings, SquareImageSettings, StageSettings}
+import app.logorrr.util.CanLog
+import app.logorrr.views.main.LogoRRRStage
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Node
 import javafx.stage.Stage
@@ -14,7 +15,7 @@ import javax.imageio.ImageIO
  */
 object ScreenShotterApp {
 
-  def persistNodeState(node: Node, target: Path) = {
+  def persistNodeState(node: Node, target: Path): Boolean = {
     Thread.sleep(500)
     val renderedNode = node.snapshot(null, null)
     ImageIO.write(SwingFXUtils.fromFXImage(renderedNode, null), "png", target.toFile)
@@ -25,17 +26,20 @@ object ScreenShotterApp {
   }
 }
 
-class ScreenShotterApp extends javafx.application.Application {
+class ScreenShotterApp extends javafx.application.Application with CanLog {
 
   def start(stage: Stage): Unit = {
     for (Area(width, height) <- Area.seq) {
-      val settings = Settings.Default.copy(stageSettings = Settings.Default.stageSettings.copy(height = height, width = width))
-      val s = LogoRRRAppBuilder.withStage(stage, Seq("logfiles/logic.2.log"), settings, getHostServices)
+      val settings =
+        Settings(StageSettings(0, 0, width, height)
+          , SquareImageSettings(7)
+          , RecentFileSettings(Seq("logfiles/logic.2.log")))
+      val s = LogoRRRStage(stage, settings, getHostServices)
       val bPath = Paths.get(s"docs/releases/${Settings.meta.appVersion}/")
       Files.createDirectories(bPath)
       val f = bPath.resolve(s"${width}x$height.png")
-      ScreenShotterApp.persistNodeState(s.getScene.getRoot, f)
-      println("created " + f.toAbsolutePath.toString)
+      ScreenShotterApp.persistNodeState(s.stage.getScene.getRoot, f)
+      logInfo("created " + f.toAbsolutePath.toString)
       s.show()
     }
 
