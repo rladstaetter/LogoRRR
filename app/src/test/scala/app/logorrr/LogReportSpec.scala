@@ -1,5 +1,6 @@
 package app.logorrr
 
+import app.logorrr.model.LogReport
 import org.scalatest.wordspec.AnyWordSpec
 
 import java.nio.file.{Files, Paths}

@@ -22,9 +22,34 @@
             <groupId>app.logorrr</groupId>
             <artifactId>app</artifactId>
         </dependency>
+        <dependency>
+            <groupId>app.logorrr.dist.repackaged</groupId>
+            <artifactId>dist-repackaged</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>icon/**</include>
+                    <include>res/**</include>
+                </includes>
+                <excludes>
+                    <exclude>res/Info.plist</exclude>
+                </excludes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>sign-list.txt</include>
+                    <include>res/Info.plist</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -141,7 +166,7 @@
                                 <argument>LogoRRR is a log file visualisation app, see https://www.logorrr.app/
                                 </argument>
                                 <argument>--copyright</argument>
-                                <argument>Copyright 2021 www.logorrr.app</argument>
+                                <argument>Copyright 2021-2022 www.logorrr.app</argument>
 
                                 <argument>--type</argument>
                                 <argument>app-image</argument>
@@ -170,12 +195,12 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
-                            <mainClass>app.logorrr.util.CodeSigner</mainClass>
+                            <mainClass>app.logorrr.build.CodeSigner</mainClass>
                             <arguments>
                                 <argument>Developer ID Application: ${app.logorrr.dist.osx.developerid}</argument>
                                 <argument>/usr/bin/codesign</argument>
                                 <argument>${project.basedir}/LogoRRR.entitlements</argument>
-                                <argument>${project.basedir}/sign-list.txt</argument>
+                                <argument>${project.build.directory}/classes/sign-list.txt</argument>
                             </arguments>
                             <includePluginDependencies>true</includePluginDependencies>
                         </configuration>
@@ -214,7 +239,7 @@
                                 <argument>LogoRRR is a log file visualisation app, see https://www.logorrr.app/
                                 </argument>
                                 <argument>--copyright</argument>
-                                <argument>Copyright 2021 www.logorrr.app</argument>
+                                <argument>Copyright 2021-2022 www.logorrr.app</argument>
                                 <argument>--license-file</argument>
                                 <argument>${basedir}/../../../LICENSE</argument>
 

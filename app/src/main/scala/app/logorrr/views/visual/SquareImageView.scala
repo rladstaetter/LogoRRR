@@ -1,7 +1,8 @@
 package app.logorrr.views.visual
 
+import app.logorrr.model.LogEntry
 import app.logorrr.util.CanLog
-import app.logorrr.{Filter, LogEntry}
+import app.logorrr.views.Filter
 import javafx.scene.image._
 import javafx.scene.paint.Color
 
@@ -36,7 +37,8 @@ object SquareImageView extends CanLog {
             , x
             , y
             , squareWidth
-            , e.pixelArray(color))
+            , ColorUtil.mkPixelArray(squareWidth - 1, color)
+          )
         }
       case Failure(exception) => logException(exception)
     }

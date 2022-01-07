@@ -15,7 +15,7 @@
 
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.7</scala.version>
-        <openjfx.version>18-ea+8</openjfx.version>
+        <openjfx.version>18-ea+9</openjfx.version>
         <gluonfx.plugin.version>1.0.10</gluonfx.plugin.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <main.class>app.logorrr.LogoRRRApp</main.class>
@@ -47,7 +47,7 @@
                 </os>
             </activation>
             <properties>
-                <graalvm.home>/Users/lad/.sdkman/candidates/java/21.2.0.r11-grl</graalvm.home>
+                <graalvm.home>/Users/lad/bin/graalvm-ce-java11-21.3.0/Contents/Home</graalvm.home>
                 <jdk.home>/will/be/set/in/profiles</jdk.home>
                 <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
                 <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
@@ -114,6 +114,11 @@
                 <version>2.8.0</version>
             </dependency>
             <dependency>
+                <groupId>com.github.pureconfig</groupId>
+                <artifactId>pureconfig_${scala.major.version}</artifactId>
+                <version>0.17.1</version>
+            </dependency>
+            <dependency>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest_${scala.major.version}</artifactId>
                 <version>3.2.3</version>
@@ -137,6 +142,11 @@
                 <artifactId>app</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>app.logorrr.dist.repackaged</groupId>
+                <artifactId>dist-repackaged</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
@@ -145,7 +155,7 @@
                 <plugin>
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>scala-maven-plugin</artifactId>
-                    <version>4.5.3</version>
+                    <version>4.5.6</version>
                     <executions>
                         <execution>
                             <goals>

@@ -1,8 +1,6 @@
-package app.logorrr
+package app.logorrr.views
 
 import javafx.scene.paint.Color
-
-import java.nio.file.Files
 
 object CaseInsensitiveFilter {
 

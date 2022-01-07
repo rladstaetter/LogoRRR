@@ -22,6 +22,7 @@
                 </os>
             </activation>
             <modules>
+                <module>dist-repackaged</module>
                 <module>dist-win</module>
             </modules>
         </profile>
@@ -34,6 +35,7 @@
                 </os>
             </activation>
             <modules>
+                <module>dist-repackaged</module>
                 <module>dist-osx</module>
             </modules>
         </profile>

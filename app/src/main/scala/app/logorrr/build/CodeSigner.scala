@@ -1,4 +1,4 @@
-package app.logorrr.util
+package app.logorrr.build
 
 import java.nio.file.{Files, Path, Paths}
 import scala.jdk.CollectionConverters._
@@ -16,7 +16,11 @@ object CodeSigner {
       val codesign = Paths.get(args(1))
       val entitlements = Paths.get(args(2))
       val file = Paths.get(args(3)).toAbsolutePath
-      Files.readAllLines(file).asScala.map(f => sign(codesign, entitlements, developerId, file.getParent.resolve(f)))
+      if (Files.exists(file)) {
+        Files.readAllLines(file).asScala.map(f => sign(codesign, entitlements, developerId, file.getParent.resolve(f)))
+      } else {
+        System.out.println(s"${file.toAbsolutePath} does not exist, could not execute signing operation ...")
+      }
     }
   }
 

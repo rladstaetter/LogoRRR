@@ -12,4 +12,5 @@ codesign -v -v target/temporary-app-image/LogoRRR.app
 # spctl -at exec -vv target/temporary-app-image/LogoRRR.app/
 
 # validate notarization
-xcrun stapler validate target/unsigned-installer/LogoRRR-21.4.0.dmg
+# we currently create pkg's not dmg's, following command was left here for documentation
+# xcrun stapler validate target/unsigned-installer/LogoRRR-21.4.0.dmg

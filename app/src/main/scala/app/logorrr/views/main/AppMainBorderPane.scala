@@ -1,7 +1,9 @@
-package app.logorrr
+package app.logorrr.views.main
 
+import app.logorrr.conf.Settings
+import app.logorrr.model.LogReport
 import app.logorrr.util.CanLog
-import app.logorrr.views.{LogFormatLearnerStage, LogView}
+import app.logorrr.views.{LogFormatLearnerStage, LogView, LogViewTabPane}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.control.Button
 import javafx.scene.input.{DragEvent, TransferMode}
@@ -11,6 +13,13 @@ import java.nio.file.{Files, Path}
 import scala.jdk.CollectionConverters.ListHasAsScala
 import scala.util.{Failure, Success, Try}
 
+object AppMainBorderPane {
+
+  def apply(settings: Settings, reInitMenuBarFn: => Unit): AppMainBorderPane = {
+    new AppMainBorderPane(settings.stageSettings.width, settings.squareImageSettings.width, reInitMenuBarFn)
+  }
+}
+
 /**
  * Main UI element, all other gui elements are in some way children of this Borderpane
  *
@@ -18,7 +27,8 @@ import scala.util.{Failure, Success, Try}
  * @param initialSquareWidth width of squares to paint in visual view
  */
 class AppMainBorderPane(initialSceneWidth: Int
-                        , initialSquareWidth: Int) extends BorderPane with CanLog {
+                        , initialSquareWidth: Int
+                        , reInitMenuBarFn: => Unit) extends BorderPane with CanLog {
 
   val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
 
@@ -27,6 +37,7 @@ class AppMainBorderPane(initialSceneWidth: Int
   val logViewTabPane = LogViewTabPane(this)
 
   private val learnLogFormatButton = new Button("Learn log format")
+
   learnLogFormatButton.setOnAction(_ => {
     if (logViewTabPane.getTabs.asScala.nonEmpty) {
       logViewTabPane.getTabs.asScala.head match {
@@ -36,7 +47,6 @@ class AppMainBorderPane(initialSceneWidth: Int
             val stage = LogFormatLearnerStage(entries.head)
             stage.showAndWait()
             stage.getLogColumnDef()
-
           }
         case x =>
           println(x.getClass)
@@ -44,7 +54,6 @@ class AppMainBorderPane(initialSceneWidth: Int
     }
   })
 
- // setTop(new LogoRRRAppMenuBar())
   setCenter(logViewTabPane)
 
   /** needed to activate drag'n drop */
@@ -57,14 +66,20 @@ class AppMainBorderPane(initialSceneWidth: Int
   /** try to interpret dropped element as log file */
   setOnDragDropped((event: DragEvent) => {
     for (f <- event.getDragboard.getFiles.asScala) {
-      addLogFile(f.toPath)
+      val path = f.toPath
+      if (Files.exists(path)) {
+        Settings.updateRecentFileSettings(rf => rf.copy(files = path.toAbsolutePath.toString +: rf.files))
+        reInitMenuBarFn
+        addLogFile(path)
+      }
     }
     selectLastLogFile()
   })
 
-
-  def shutdown(): Unit = logViewTabPane.shutdown()
-
+  def shutdown(): Unit = {
+    logViewTabPane.shutdown()
+    logViewTabPane.getTabs.clear()
+  }
 
   /** called when width of scene changes */
   def setSceneWidth(width: Int): Unit = sceneWidthProperty.set(width)
@@ -88,7 +103,9 @@ class AppMainBorderPane(initialSceneWidth: Int
     }
   }
 
-  private def addLogReport(value: LogReport) = logViewTabPane.add(value)
+  private def addLogReport(value: LogReport): Unit = {
+    logViewTabPane.add(value)
+  }
 }
 
 

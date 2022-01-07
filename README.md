@@ -1,6 +1,6 @@
 # LogoRRR
 
-LogoRRR is a simple utility to display a logfile and visualise certain classes of events.
+LogoRRR is a simple utility to display a logfile and visualise certain classes of events. The main target audience are first or second level support engineers who need a tool to find patterns in log files.
 
 ## Screenshot
 ![Screenshot of LogoRRR, version 21.3.2](docs/releases/21.3.2/screenshot-21.3.2.png?raw=true)
@@ -41,7 +41,7 @@ This situation will be better when there is an installation via [windows app sto
 
 Of course, if you find this project useful, **please consider to donate to this project.** For this reason I've set up a page at [buymeacoffee](https://www.buymeacoffee.com/rladstaetter).
 
-Alternatively, just hit the 'star' here on github, or drop me a line at [twitter](https://www.twitter.com/rladstaetter/). 
+Alternatively, just hit the 'star' here on github, or drop me a line at twitter: [@logorrr](https://www.twitter.com/logorrr/). 
 
 A big shoutout goes to [@TheJeed](https://twitter.com/TheJeed) for sponsoring this project and boosting my motivation to continue working on it. Thank you!
 
