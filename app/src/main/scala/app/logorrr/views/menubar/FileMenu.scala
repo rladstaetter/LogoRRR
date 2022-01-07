@@ -3,10 +3,9 @@ package app.logorrr.views.menubar
 import app.logorrr.conf.Settings
 import app.logorrr.util.{CanLog, LogoRRRFileChooser, OsUtil}
 import app.logorrr.views.menubar.FileMenu.OpenRecentMenu
-import javafx.scene.control.{Menu, MenuItem, SeparatorMenuItem}
+import javafx.scene.control.{Menu, MenuItem}
 
 import java.nio.file.{Path, Paths}
-import scala.jdk.CollectionConverters._
 
 object FileMenu {
 
@@ -24,7 +23,9 @@ object FileMenu {
     })
   }
 
-  class QuitMenuItem extends MenuItem("Quit")
+  class QuitMenuItem(closeApplication: => Unit) extends MenuItem("Quit") {
+    setOnAction(e => closeApplication)
+  }
 
   object OpenRecentMenu {
 
@@ -51,7 +52,8 @@ object FileMenu {
 }
 
 class FileMenu(openLogFile: Path => Unit
-               , removeAllLogFiles: => Unit) extends Menu("File") {
+               , removeAllLogFiles: => Unit
+               , closeApplication: => Unit) extends Menu("File") {
 
   val settings = Settings.read()
 
@@ -70,7 +72,7 @@ class FileMenu(openLogFile: Path => Unit
     }
 
     if (OsUtil.isWin) {
-      getItems.add(new FileMenu.QuitMenuItem)
+      getItems.add(new FileMenu.QuitMenuItem(closeApplication))
     }
   }
 

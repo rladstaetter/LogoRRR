@@ -19,5 +19,5 @@ object LogoRRRScene {
 }
 
 case class LogoRRRScene(settings: Settings
-                   , mainPane: LogoRRRMain)
+                        , mainPane: LogoRRRMain)
   extends Scene(mainPane, settings.stageSettings.width, settings.stageSettings.height)

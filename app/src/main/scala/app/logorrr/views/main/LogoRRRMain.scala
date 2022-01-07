@@ -7,14 +7,15 @@ import javafx.scene.layout.BorderPane
 
 import java.nio.file.{Path, Paths}
 
-case class LogoRRRMain(hostServices: HostServices
-                       , settings: Settings) extends BorderPane
+class LogoRRRMain(hostServices: HostServices
+                  , closeStage: => Unit
+                  , settings: Settings) extends BorderPane
   with CanLog {
 
   val width = settings.stageSettings.width
   val height = settings.stageSettings.height
 
-  val mB = new LogoRRRMenuBar(openLogFile, removeAllLogFiles(), hostServices)
+  val mB = new LogoRRRMenuBar(openLogFile, removeAllLogFiles(), closeStage, hostServices)
   val ambp = AppMainBorderPane(settings, initFileMenu())
 
   init()

@@ -9,6 +9,7 @@ import java.nio.file.Path
 
 class LogoRRRMenuBar(openLogFile: Path => Unit
                      , removeAllLogFiles: => Unit
+                     , closeApplication: => Unit
                      , hostServices: HostServices) extends MenuBar {
 
   if (OsUtil.isMac) {
@@ -17,7 +18,7 @@ class LogoRRRMenuBar(openLogFile: Path => Unit
 
   def init(): Unit = {
     getMenus.clear()
-    getMenus.addAll(new FileMenu(openLogFile, removeAllLogFiles), new HelpMenu(hostServices))
+    getMenus.addAll(new FileMenu(openLogFile, removeAllLogFiles, closeApplication), new HelpMenu(hostServices))
   }
 
   init()
