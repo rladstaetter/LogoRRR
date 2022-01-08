@@ -29,7 +29,7 @@ object AboutScreen {
 
     def mkHyperLink(hlink: HLink): Hyperlink = {
       val hyperlink = new Hyperlink(hlink.description)
-      hyperlink.setOnAction(e => hostServices.showDocument(hlink.url.toString))
+      hyperlink.setOnAction(_ => hostServices.showDocument(hlink.url.toString))
       hyperlink
     }
 

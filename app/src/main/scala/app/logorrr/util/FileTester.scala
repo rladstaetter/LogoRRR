@@ -25,7 +25,7 @@ object FileTester {
     val bb = new Button("mumu")
     val b = new Button("write")
     val t = new TextArea()
-    bb.setOnAction(e => {
+    bb.setOnAction(_ => {
       t.appendText("SYSTEM start ---")
       t.appendText(new String(LogUtil.outBackingStream.toByteArray, StringUtil.utf8))
       t.appendText("SYSTEM end ---")
@@ -34,7 +34,7 @@ object FileTester {
       t.appendText(new String(LogUtil.errBackingStream.toByteArray, StringUtil.utf8))
       t.appendText("ERROR end ---")
     })
-    b.setOnAction(e => {
+    b.setOnAction(_ => {
       val dc = new DirectoryChooser()
       val directory: File = dc.showDialog(null)
       val filePath = directory.toPath.resolve("test.txt")

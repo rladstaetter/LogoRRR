@@ -136,16 +136,7 @@ class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
       Option(t) match {
         case Some(e) =>
           setText(e.value)
-          copyCurrentToClipboard.setOnAction(_ => {
-            ClipBoardUtils.copyToClipboardText(e.value)
-          })
-          /*
-          learnLogFormat.setOnAction(_ => {
-            val stage = LogFormatLearnerStage(e)
-            stage.showAndWait()
-            setLogColumnDef(stage.getLogColumnDef())
-          })
-          */
+          copyCurrentToClipboard.setOnAction(_ => ClipBoardUtils.copyToClipboardText(e.value))
           setContextMenu(cm)
         case None =>
           setText(null)
