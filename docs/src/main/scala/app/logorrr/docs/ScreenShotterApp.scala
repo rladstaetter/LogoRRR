@@ -1,6 +1,7 @@
 package app.logorrr.docs
 
-import app.logorrr.conf.{RecentFileSettings, Settings, SquareImageSettings, StageSettings}
+import app.logorrr.conf._
+import app.logorrr.model.LogReportDefinition
 import app.logorrr.util.CanLog
 import app.logorrr.views.main.LogoRRRStage
 import javafx.embed.swing.SwingFXUtils
@@ -33,7 +34,7 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
       val settings =
         Settings(StageSettings(0, 0, width, height)
           , SquareImageSettings(7)
-          , RecentFileSettings(Seq("logfiles/logic.2.log")))
+          , RecentFileSettings(Seq(LogReportDefinition(Paths.get("logfiles/logic.2.log")))))
       val s = LogoRRRStage(stage, settings, getHostServices)
       val bPath = Paths.get(s"docs/releases/${Settings.meta.appVersion}/")
       Files.createDirectories(bPath)

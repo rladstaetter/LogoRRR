@@ -1,6 +1,7 @@
 package app.logorrr.model
 
 import app.logorrr.util.{CanLog, JfxUtils, LTailerListener}
+import app.logorrr.views.{Filter, LogColumnDef}
 import javafx.beans.property.{SimpleIntegerProperty, SimpleStringProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ObservableList}
@@ -14,17 +15,24 @@ import scala.language.postfixOps
 import scala.util.{Failure, Success, Try}
 
 
-
 /** Abstraction for a log file */
 object LogReport extends CanLog {
 
-  def apply(logFile: Path): LogReport = {
-    val strings = readFromFile(logFile)
-    val value = strings.stream().map(l => LogEntry(l))
-    val entries = value.collect(Collectors.toList[LogEntry]())
-    logTrace(s"Read ${entries.size} lines ... ")
-    new LogReport(logFile, FXCollections.observableList(entries))
-  }
+  def apply(lrd: LogReportDefinition): LogReport = timeR({
+    val logFile = lrd.path
+    val someColumnDef = lrd.someColumnDefinition
+    val filters = lrd.filters
+
+    // trying to be very clever and use java stream instead of scala collections, didn't measure if it makes any difference
+    val logEntryStream = readFromFile(logFile).stream().map(l => someColumnDef match {
+      case Some(columDef) => LogEntry(l, Try(columDef.parse(l)).toOption)
+      case None => LogEntry(l)
+    })
+    new LogReport(logFile
+      , FXCollections.observableList(logEntryStream.collect(Collectors.toList[LogEntry]()))
+      , filters
+      , someColumnDef)
+  }, s"Imported ${lrd.path.toAbsolutePath.toString} ... ")
 
   private def readFromFile(logFile: Path): util.List[String] = {
     Try {
@@ -51,8 +59,11 @@ object LogReport extends CanLog {
 }
 
 case class LogReport(path: Path
-                     , entries: ObservableList[LogEntry]) {
+                     , entries: ObservableList[LogEntry]
+                     , filters: Seq[Filter]
+                     , someColumnDef: Option[LogColumnDef]) {
 
+  val logFileDefinition: LogReportDefinition = LogReportDefinition(path.toAbsolutePath.toString, someColumnDef, filters)
   val lengthProperty = new SimpleIntegerProperty(entries.size())
   val titleProperty = new SimpleStringProperty(computeTabName)
 

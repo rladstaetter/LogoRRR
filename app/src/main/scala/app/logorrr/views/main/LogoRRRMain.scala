@@ -1,7 +1,9 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.Settings
+import app.logorrr.model.LogReportDefinition
 import app.logorrr.util.CanLog
+import app.logorrr.views.LogColumnDef
 import javafx.application.HostServices
 import javafx.scene.layout.BorderPane
 
@@ -15,18 +17,22 @@ class LogoRRRMain(hostServices: HostServices
   val width = settings.stageSettings.width
   val height = settings.stageSettings.height
 
-  val mB = new LogoRRRMenuBar(openLogFile, removeAllLogFiles(), closeStage, hostServices)
+  val mB = new LogoRRRMenuBar(openLogFile, removeAllLogFiles(), updateLogReportDefinition, closeStage, hostServices)
   val ambp = AppMainBorderPane(settings, initFileMenu())
 
   init()
+
+  def updateLogReportDefinition(logFileDef: LogReportDefinition) : Unit = {
+    ambp.updateLogFile(logFileDef)
+  }
 
   def init(): Unit = {
     setTop(mB)
     setCenter(ambp)
 
     // reverse since most recently file is saved first in list but should be opened last (= is last log file)
-    for (p <- settings.recentFiles.files.reverse) {
-      addLogFile(Paths.get(p).toAbsolutePath)
+    for (logFileDef <- settings.recentFiles.logReportDefinition.reverse) {
+      addLogFile(logFileDef)
     }
     selectLastLogFile()
   }
@@ -34,7 +40,7 @@ class LogoRRRMain(hostServices: HostServices
   /** called when 'Open File' is or an entry of 'Recent Files' is selected. */
   def openLogFile(path: Path): Unit = {
     logTrace(s"Opens log file ${path.toAbsolutePath.toString}")
-    ambp.addLogFile(path)
+    ambp.addLogReport(LogReportDefinition(path))
     initFileMenu()
     selectLastLogFile()
   }
@@ -50,7 +56,7 @@ class LogoRRRMain(hostServices: HostServices
 
   def setSceneWidth(sceneWidth: Int): Unit = ambp.setSceneWidth(sceneWidth)
 
-  def addLogFile(p: Path): Unit = ambp.addLogFile(p)
+  def addLogFile(lrd: LogReportDefinition): Unit = ambp.addLogReport(lrd)
 
   def selectLastLogFile(): Unit = ambp.selectLastLogFile()
 

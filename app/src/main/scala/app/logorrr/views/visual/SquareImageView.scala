@@ -22,7 +22,7 @@ object SquareImageView extends CanLog {
   def paint(entries: mutable.Buffer[LogEntry]
             , squareWidth: Int
             , canvasWidth: Int
-            , filter: Seq[Filter]): WritableImage = {
+            , filters: Seq[Filter]): WritableImage = {
     val wi = SquareImageView.mkBareImage(entries.size, squareWidth, canvasWidth)
     val numberCols = canvasWidth / squareWidth
     val pw = wi.getPixelWriter
@@ -32,7 +32,7 @@ object SquareImageView extends CanLog {
         for ((e, i) <- es) {
           val x = (i % numberCols) * squareWidth
           val y = (i / numberCols) * squareWidth
-          val color = e.calcColor(filter)
+          val color = e.calcColor(filters)
           paintSquare(pw
             , x
             , y

@@ -1,8 +1,9 @@
-package app.logorrr.views
+package app.logorrr.views.learner
 
-import app.logorrr.util.{JfxEventHandler, LogoRRRFonts}
-import app.logorrr.views.LogColumnDef.SimpleRange
 import app.logorrr.model.LogEntry
+import app.logorrr.util.{JfxEventHandler, LogoRRRFonts}
+import app.logorrr.views.LogColumnDef
+import app.logorrr.views.LogColumnDef.SimpleRange
 import javafx.beans.property.{SimpleIntegerProperty, SimpleMapProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.beans.{InvalidationListener, Observable}

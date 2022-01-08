@@ -1,14 +1,12 @@
 package app.logorrr.views
 
+import app.logorrr.model.LogEntry
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
-import javafx.event.ActionEvent
 import javafx.scene.control.{Button, ToggleButton, ToolBar}
 import javafx.scene.shape.Rectangle
-import app.logorrr._
-import app.logorrr.model.LogEntry
 
 import java.text.DecimalFormat
 import scala.jdk.CollectionConverters._
@@ -32,7 +30,7 @@ object FilterButtonsToolBar {
  * @param filteredList list of entries which are displayed (can be filtered via buttons)
  * @param totalSize    number of all entries
  */
-class FilterButtonsToolBar(logView: LogView
+class FilterButtonsToolBar(logView: LogReportTab
                            , filteredList: FilteredList[LogEntry]
                            , totalSize: Int) extends ToolBar {
 
@@ -42,14 +40,10 @@ class FilterButtonsToolBar(logView: LogView
     override def onChanged(change: ListChangeListener.Change[_ <: Filter]): Unit = {
       while (change.next()) {
         if (change.wasAdded()) {
-          for (f <- change.getAddedSubList.asScala) {
-            addFilter(f)
-          }
+          change.getAddedSubList.asScala.foreach(addFilter)
           updateUnclassified()
         } else if (change.wasRemoved()) {
-          for (f <- change.getRemoved.asScala) {
-            removeFilter(f)
-          }
+          change.getRemoved.asScala.foreach(removeFilter)
           updateUnclassified()
         }
       }
@@ -66,11 +60,11 @@ class FilterButtonsToolBar(logView: LogView
   def allFilters: Set[Filter] = filterButtons.keySet ++ someUnclassifiedFilter.map(x => Set(x._1)).getOrElse(Set())
 
   private def updateOccurrences(sf: Filter): Unit = {
-    occurences = occurences + (sf -> filteredList.getSource.asScala.count(e => sf.applyMatch(e.value)))
+    occurences = occurences + (sf -> filteredList.getSource.asScala.count(e => sf.matcher.applyMatch(e.value)))
   }
 
   private def updateUnclassified(): Unit = {
-    val unclassified = InverseFilter(filterButtons.keySet)
+    val unclassified = new UnclassifiedFilter(filterButtons.keySet)
     updateOccurrences(unclassified)
     val tb = mkToggleButton(unclassified)
     someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
@@ -87,7 +81,7 @@ class FilterButtonsToolBar(logView: LogView
    * @return
    */
   def computeCurrentFilter(): Filter = {
-    AtLeastOneMatchFilter(someUnclassifiedFilter.map(fst => if (fst._2.toggleButton.isSelected) Set(fst._1) else Set()).getOrElse(Set()) ++
+    new AnyFilter(someUnclassifiedFilter.map(fst => if (fst._2.toggleButton.isSelected) Set(fst._1) else Set()).getOrElse(Set()) ++
       filterButtons.filter(fst => fst._2.toggleButton.isSelected).keySet)
   }
 
@@ -106,14 +100,14 @@ class FilterButtonsToolBar(logView: LogView
 
   def updateActiveFilter(): Unit = {
     val filter = computeCurrentFilter()
-    filteredList.setPredicate((entry: LogEntry) => filter.applyMatch(entry.value))
+    filteredList.setPredicate((entry: LogEntry) => filter.matcher.applyMatch(entry.value))
   }
 
-  private def mkToggleButton(sf: Filter): SearchTag = {
-    val buttonTitle = sf.title + ": " + occurences(sf) + " " + FilterButtonsToolBar.percentAsString(occurences(sf), totalSize)
+  private def mkToggleButton(filter: Filter): SearchTag = {
+    val buttonTitle = filter.value + ": " + occurences(filter) + " " + FilterButtonsToolBar.percentAsString(occurences(filter), totalSize)
     val button = new ToggleButton(buttonTitle)
     val r = new Rectangle(10, 10)
-    r.setFill(sf.color)
+    r.setFill(filter.color)
     button.setGraphic(r)
     button.setSelected(true)
 
@@ -125,15 +119,15 @@ class FilterButtonsToolBar(logView: LogView
     })
 
     /** filters can be removed, in this case update display */
-    val removeButton = new Button("x")
-    sf match {
-      // 'unclassified' entries are shown by 'inversefilter'
-      case _: InverseFilter => removeButton.setDisable(true) // disable 'unclassified' 'x' button
-      case _ =>
-    }
-    removeButton.setOnAction((t: ActionEvent) => logView.removeFilter(sf))
+    val removeButton = new RemoveButton(filter, logView.removeFilter)
 
     new SearchTag(button, removeButton)
   }
 }
 
+
+
+class RemoveButton(filter:Filter, removeFilter : Filter => Unit) extends Button("x"){
+  setDisable(filter.isInstanceOf[UnclassifiedFilter])
+  setOnAction(_ => removeFilter(filter))
+}

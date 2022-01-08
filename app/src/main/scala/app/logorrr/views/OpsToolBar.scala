@@ -1,23 +1,30 @@
 package app.logorrr.views
 
-import javafx.event.{ActionEvent, EventHandler}
+import app.logorrr.conf.Settings
+import app.logorrr.model.LogReportDefinition
 import javafx.scene.control._
 
+import scala.jdk.CollectionConverters._
 
-class OpsToolBar(logView: LogView) extends ToolBar {
+
+class OpsToolBar(logReportTab: LogReportTab) extends ToolBar {
 
   val initialText = "<enter search string>"
   val searchTextField = new TextField()
-  searchTextField.setPrefWidth(500)
+  searchTextField.setPrefWidth(200)
   searchTextField.setPromptText(initialText)
 
-  val cp = new ColorPicker()
-  val add = new Button("add")
-  add.setOnAction(new EventHandler[ActionEvent]() {
-    override def handle(t: ActionEvent): Unit = {
-      logView.addFilter(ExactMatchFilter(searchTextField.getText, cp.getValue))
-      searchTextField.setText("")
-    }
+  val colorPicker = new ColorPicker()
+  val add = new Button("search")
+  add.setOnAction(_ => {
+    val filter = new Filter(searchTextField.getText, colorPicker.getValue.toString)
+    searchTextField.setText("")
+    logReportTab.addFilter(filter)
+    // update settings
+    val definition: LogReportDefinition = logReportTab.logReport.logFileDefinition
+    val updatedDefinition = definition.copy(filters = logReportTab.filtersListProperty.asScala.toSeq)
+    Settings.updateRecentFileSettings(rf => rf.update(updatedDefinition))
   })
-  getItems.addAll(searchTextField, cp, add)
+
+  getItems.addAll(searchTextField, colorPicker, add)
 }

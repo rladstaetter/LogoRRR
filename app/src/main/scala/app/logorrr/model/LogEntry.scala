@@ -1,6 +1,7 @@
 package app.logorrr.model
 
-import app.logorrr.views.{Filter, LogColumnDef}
+import app.logorrr.views.Filter.Matcher
+import app.logorrr.views.{AnyFilter, Filter, LogColumnDef}
 import javafx.geometry.Insets
 import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}
 import javafx.scene.paint.Color
@@ -10,11 +11,6 @@ import java.time.Instant
 object LogEntry {
 
   def apply(value: String): LogEntry = LogEntry(value, None)
-
-  def apply(value: String
-            , colDef: LogColumnDef): LogEntry = {
-    LogEntry(value, Option(colDef.parse(value)))
-  }
 }
 
 /** represents one line in a log file */
@@ -29,8 +25,8 @@ case class LogEntry(value: String
    * - given color if only one hit
    * - a melange of all colors from all hits in all other cases
    * */
-  def calcColor(searchFilters: Seq[Filter]): Color = {
-    val hits = searchFilters.filter(sf => sf.applyMatch(value))
+  def calcColor(filters: Seq[Filter]): Color = {
+    val hits = filters.filter(sf => sf.matcher.applyMatch(value))
     val color = {
       if (hits.isEmpty) {
         Color.WHITE

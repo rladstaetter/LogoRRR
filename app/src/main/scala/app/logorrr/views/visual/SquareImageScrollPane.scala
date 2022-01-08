@@ -20,10 +20,11 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
 
   val canvasWidthProperty = new SimpleIntegerProperty(canvasWidth)
 
-  val searchFilters = new SimpleListProperty[Filter]()
+  val filtersListProperty = new SimpleListProperty[Filter]()
+  def filters: Seq[Filter] = Option(filtersListProperty.get()).map(_.asScala.toSeq).getOrElse(Seq())
 
   /** responsible for determining current logevent */
-  val mouseEventHandler = new EventHandler[MouseEvent]() {
+  private val mouseEventHandler: EventHandler[MouseEvent] = new EventHandler[MouseEvent]() {
     override def handle(me: MouseEvent): Unit = {
       val index = LogReport.indexOf(me.getX.toInt, me.getY.toInt, squareWidth, canvasWidthProperty.get())
       val entry = entries(index)
@@ -42,7 +43,6 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
 
   def getWritableImage(): WritableImage = iv.getImage.asInstanceOf[WritableImage]
 
-  def filters: Seq[Filter] = Option(searchFilters.get()).map(_.asScala.toSeq).getOrElse(Seq())
 
   def repaint(sWidth: Int, cWidth: Int): Unit = {
     canvasWidthProperty.set(cWidth)

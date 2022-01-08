@@ -1,8 +1,7 @@
 package app.logorrr.views
 
-import app.logorrr._
 import app.logorrr.conf.Settings
-import app.logorrr.model.{LogEntry, LogReport}
+import app.logorrr.model.{LogEntry, LogReport, LogReportDefinition}
 import app.logorrr.util.{CanLog, CollectionUtils, LogoRRRFonts}
 import app.logorrr.views.visual.LogVisualView
 import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
@@ -14,17 +13,16 @@ import javafx.scene.control._
 import javafx.scene.layout._
 
 import scala.jdk.CollectionConverters._
-import scala.util.{Failure, Success, Try}
 
-object LogView {
+object LogReportTab {
 
   def apply(logViewTabPane: LogViewTabPane
-            , logReport: LogReport): LogView = {
-    val lv = new LogView(logReport
+            , logReport: LogReport): LogReportTab = {
+    val lv = new LogReportTab(logReport
       , logViewTabPane.sceneWidthProperty.get()
       , logViewTabPane.squareWidthProperty.get())
 
-    lv.addFilters(DefaultFilter.seq: _*)
+    logReport.filters.foreach(lv.addFilter)
 
     /** activate invalidation listener on filtered list */
     lv.start()
@@ -42,9 +40,9 @@ object LogView {
  *
  * @param logReport report instance holding information of log file to be analyzed
  * */
-class LogView(val logReport: LogReport
-              , val initialSceneWidth: Int
-              , val initialSquareWidth: Int)
+class LogReportTab(val logReport: LogReport
+                   , val initialSceneWidth: Int
+                   , val initialSquareWidth: Int)
   extends Tab with CanLog {
 
   /** is set to false if logview was painted at least once (see repaint) */
@@ -76,7 +74,7 @@ class LogView(val logReport: LogReport
   textProperty.bind(logReport.titleProperty)
 
   /** list of search filters to be applied to a Log Report */
-  val filtersProperty = new SimpleListProperty[Filter](CollectionUtils.mkEmptyObservableList())
+  val filtersListProperty = new SimpleListProperty[Filter](CollectionUtils.mkEmptyObservableList())
 
   /** bound to sceneWidthProperty of parent LogViewTabPane */
   val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
@@ -115,7 +113,7 @@ class LogView(val logReport: LogReport
   private val opsToolBar = new OpsToolBar(this)
   private val filterButtonsToolBar = {
     val fbtb = new FilterButtonsToolBar(this, filteredList, logReport.entries.size)
-    fbtb.filtersProperty.bind(filtersProperty)
+    fbtb.filtersProperty.bind(filtersListProperty)
     fbtb
   }
 
@@ -129,25 +127,11 @@ class LogView(val logReport: LogReport
 
   private lazy val logVisualView = {
     val lvv = new LogVisualView(filteredList.asScala, initialWidth, getSquareWidth)
-    lvv.sisp.searchFilters.bind(filtersProperty)
+    lvv.sisp.filtersListProperty.bind(filtersListProperty)
     lvv
   }
 
   private val logTextView = new LogTextView(filteredList)
-
-  logTextView.logColumnDefProperty.addListener(new ChangeListener[LogColumnDef] {
-    override def changed(observableValue: ObservableValue[_ <: LogColumnDef], t: LogColumnDef, t1: LogColumnDef): Unit = {
-      println("updating logentry")
-      val copy = for (e <- filteredList.asScala) yield {
-        Try(e.copy(value = "SEVERE updated!", someInstant = Option(t1.parse(e.value)))) match {
-          case Success(value) => value
-          case Failure(exception) => e
-        }
-      }
-      filteredList.clear()
-      filteredList.setAll(copy.asJava)
-    }
-  })
 
   val entryLabel = {
     val l = new Label("")
@@ -215,11 +199,13 @@ class LogView(val logReport: LogReport
   })
 
 
-  def addFilters(filters: Filter*): Unit = filtersProperty.addAll(filters.asJava)
+  def addFilter(filter: Filter): Unit = filtersListProperty.add(filter)
 
-  def addFilter(filter: Filter): Unit = filtersProperty.add(filter)
-
-  def removeFilter(filter: Filter): Unit = filtersProperty.remove(filter)
+  def removeFilter(filter: Filter): Unit = {
+    filtersListProperty.remove(filter)
+    val updatedDefinition = logReport.logFileDefinition.copy(filters = filtersListProperty.asScala.toSeq)
+    Settings.updateRecentFileSettings(rf => rf.update(updatedDefinition))
+  }
 
   def getVisualViewWidth(): Double = {
     val w = splitPane.getDividers.get(0).getPosition * splitPane.getWidth

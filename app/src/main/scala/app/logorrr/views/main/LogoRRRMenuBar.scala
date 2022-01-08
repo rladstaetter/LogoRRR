@@ -1,5 +1,6 @@
 package app.logorrr.views.main
 
+import app.logorrr.model.LogReportDefinition
 import app.logorrr.util.OsUtil
 import app.logorrr.views.menubar.{FileMenu, HelpMenu}
 import javafx.application.HostServices
@@ -9,6 +10,7 @@ import java.nio.file.Path
 
 class LogoRRRMenuBar(openLogFile: Path => Unit
                      , removeAllLogFiles: => Unit
+                     , updateLogDef: LogReportDefinition => Unit
                      , closeApplication: => Unit
                      , hostServices: HostServices) extends MenuBar {
 
@@ -18,7 +20,7 @@ class LogoRRRMenuBar(openLogFile: Path => Unit
 
   def init(): Unit = {
     getMenus.clear()
-    getMenus.addAll(new FileMenu(openLogFile, removeAllLogFiles, closeApplication), new HelpMenu(hostServices))
+    getMenus.addAll(new FileMenu(openLogFile, removeAllLogFiles, updateLogDef, closeApplication), new HelpMenu(hostServices))
   }
 
   init()

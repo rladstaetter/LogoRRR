@@ -1,6 +1,7 @@
 package app.logorrr.conf
 
 import app.logorrr.io.{FilePaths, Fs}
+import app.logorrr.model.LogReportDefinition
 import app.logorrr.util.{CanLog, JfxUtils}
 import com.typesafe.config.ConfigRenderOptions
 import javafx.scene.image.Image
@@ -8,7 +9,7 @@ import javafx.stage.Window
 import pureconfig.generic.auto._
 import pureconfig.{ConfigSource, ConfigWriter}
 
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.Path
 import scala.util.{Failure, Success, Try}
 
 object Settings extends CanLog {
@@ -25,9 +26,8 @@ object Settings extends CanLog {
 
   lazy val default: Settings = ConfigSource.default.loadOrThrow[Settings]
 
-  def read(): Settings = {
-    ConfigSource.file(FilePaths.settingsFilePath).loadOrThrow[Settings].filterNonExistingPaths
-  }
+  def read(): Settings = ConfigSource.file(FilePaths.settingsFilePath).loadOrThrow[Settings].filterWithValidPaths
+
 
   /** persists settings */
   def write(settings: Settings): Unit = {
@@ -72,26 +72,32 @@ object Settings extends CanLog {
     }
 
 
-
   def removeFromRecentFiles(path: Path): Unit = {
     val settings = Settings.read()
     val recentFiles = settings.recentFiles
-    val filteredFiles = recentFiles.files.filterNot(s => s == path.toAbsolutePath.toString)
-    Settings.write(settings.copy(recentFiles = recentFiles.copy(files = filteredFiles)))
+    val filteredFiles = recentFiles.logReportDefinition.filterNot(s => s.pathAsString == path.toAbsolutePath.toString)
+    Settings.write(settings.copy(recentFiles = recentFiles.copy(logReportDefinition = filteredFiles)))
   }
 
 }
 
+
 /**
- * @param files files which were last opened
+ * @param logReportDefinition files which were last opened
  */
-case class RecentFileSettings(files: Seq[String]) {
+case class RecentFileSettings(logReportDefinition: Seq[LogReportDefinition]) {
+  def update(definition: LogReportDefinition): RecentFileSettings = {
+    RecentFileSettings(for (ld <- logReportDefinition) yield {
+      if (ld.pathAsString == definition.pathAsString) {
+        definition
+      } else ld
+    })
+  }
+
 
   def clear(): RecentFileSettings = RecentFileSettings(Seq())
 
-  def filterNonExisting(): RecentFileSettings = {
-    copy(files = files.map(s => Paths.get(s)).filter(p => Files.isRegularFile(p)).filterNot(p => !Files.exists(p)).map(_.toAbsolutePath.toString))
-  }
+  def filterValids(): RecentFileSettings = copy(logReportDefinition = logReportDefinition.filter(_.isPathValid))
 
 }
 
@@ -157,7 +163,7 @@ case class Settings(stageSettings: StageSettings
                     , squareImageSettings: SquareImageSettings
                     , recentFiles: RecentFileSettings) {
 
-  def filterNonExistingPaths: Settings = copy(recentFiles = recentFiles.filterNonExisting())
+  def filterWithValidPaths: Settings = copy(recentFiles = recentFiles.filterValids())
 }
 
 

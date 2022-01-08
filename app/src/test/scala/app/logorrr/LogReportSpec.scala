@@ -1,6 +1,6 @@
 package app.logorrr
 
-import app.logorrr.model.LogReport
+import app.logorrr.model.{LogReport, LogReportDefinition}
 import org.scalatest.wordspec.AnyWordSpec
 
 import java.nio.file.{Files, Paths}
@@ -14,7 +14,7 @@ class LogReportSpec extends AnyWordSpec {
       //val p = Paths.get("src/test/resources/app/logorrr/util/orig.log")
       "exist" in assert(Files.exists(p))
       "be readable" in {
-        val r = LogReport(p)
+        val r = LogReport(model.LogReportDefinition(p))
         assert(!r.entries.isEmpty)
       }
     }

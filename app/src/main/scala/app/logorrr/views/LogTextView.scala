@@ -108,9 +108,6 @@ case class LogColumnDef(yearRange: LogColumnDef.SimpleRange
 
 class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
 
-  val logColumnDefProperty = new SimpleObjectProperty[LogColumnDef]()
-
-  def setLogColumnDef(value: LogColumnDef): Unit = logColumnDefProperty.set(value)
 
   val listView: ListView[LogEntry] = {
     val lv = new ListView[LogEntry]()
@@ -128,7 +125,6 @@ class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
     setGraphic(null)
     val cm = new ContextMenu()
     val copyCurrentToClipboard = new MenuItem("copy to clipboard")
-    //val learnLogFormat = new MenuItem("learn logformat")
     cm.getItems.addAll(copyCurrentToClipboard)
 
     override def updateItem(t: LogEntry, b: Boolean): Unit = {
