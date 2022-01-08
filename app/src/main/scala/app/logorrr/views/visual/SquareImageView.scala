@@ -72,9 +72,9 @@ object SquareImageView extends CanLog {
   }
 
   def apply(totalSize: Int
-            , canvasWidth: Int
-            , squareWidth: Int): SquareImageView = {
-    val i = mkBareImage(totalSize, canvasWidth, squareWidth)
+            , squareWidth: Int
+            , canvasWidth: Int): SquareImageView = {
+    val i = mkBareImage(totalSize, squareWidth, canvasWidth)
     val siv = new SquareImageView
     siv.setImage(i)
     siv
