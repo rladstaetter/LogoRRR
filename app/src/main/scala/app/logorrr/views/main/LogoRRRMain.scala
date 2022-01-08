@@ -3,11 +3,11 @@ package app.logorrr.views.main
 import app.logorrr.conf.Settings
 import app.logorrr.model.LogReportDefinition
 import app.logorrr.util.CanLog
-import app.logorrr.views.LogColumnDef
+import app.logorrr.views.Filter
 import javafx.application.HostServices
 import javafx.scene.layout.BorderPane
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
 
 class LogoRRRMain(hostServices: HostServices
                   , closeStage: => Unit
@@ -17,12 +17,12 @@ class LogoRRRMain(hostServices: HostServices
   val width = settings.stageSettings.width
   val height = settings.stageSettings.height
 
-  val mB = new LogoRRRMenuBar(openLogFile, removeAllLogFiles(), updateLogReportDefinition, closeStage, hostServices)
-  val ambp = AppMainBorderPane(settings, initFileMenu())
+  val mB = new LogoRRRMenuBar(openLogFile, closeAllLogReports, updateLogReportDefinition, closeStage, hostServices)
+  val ambp = AppMainBorderPane(settings, initFileMenu)
 
   init()
 
-  def updateLogReportDefinition(logFileDef: LogReportDefinition) : Unit = {
+  def updateLogReportDefinition(logFileDef: LogReportDefinition): Unit = {
     ambp.updateLogFile(logFileDef)
   }
 
@@ -32,33 +32,48 @@ class LogoRRRMain(hostServices: HostServices
 
     // reverse since most recently file is saved first in list but should be opened last (= is last log file)
     for (logFileDef <- settings.recentFiles.logReportDefinition.reverse) {
-      addLogFile(logFileDef)
+      addLogReport(logFileDef)
     }
-    selectLastLogFile()
+    selectLastLogReport()
   }
 
   /** called when 'Open File' is or an entry of 'Recent Files' is selected. */
   def openLogFile(path: Path): Unit = {
-    logTrace(s"Opens log file ${path.toAbsolutePath.toString}")
-    ambp.addLogReport(LogReportDefinition(path))
-    initFileMenu()
-    selectLastLogFile()
+    logTrace(s"Try to open log file ${path.toAbsolutePath.toString}")
+
+    if (!ambp.contains(path)) {
+      Settings.updateRecentFileSettings(rf => rf.copy(logReportDefinition = LogReportDefinition(path.toString, None, Filter.seq) +: rf.logReportDefinition))
+      addLogReport(LogReportDefinition(path))
+      initFileMenu()
+      selectLastLogReport()
+    } else {
+      logTrace("File is already opened.")
+    }
+
   }
 
   /** removes all log files */
-  def removeAllLogFiles(): Unit = {
+  def closeAllLogReports(): Unit = {
     shutdown()
     Settings.updateRecentFileSettings(rf => rf.clear())
     initFileMenu()
   }
 
-  private def initFileMenu(): Unit = mB.init()
+  private def initFileMenu(): Unit = {
+    mB.init()
+  }
 
   def setSceneWidth(sceneWidth: Int): Unit = ambp.setSceneWidth(sceneWidth)
 
-  def addLogFile(lrd: LogReportDefinition): Unit = ambp.addLogReport(lrd)
+  def addLogReport(lrd: LogReportDefinition): Unit = {
+    if (!ambp.contains(lrd.path)) {
+      ambp.addLogReport(lrd)
+    } else {
+      logWarn(s"Path ${lrd.path.toAbsolutePath} is already opened ...")
+    }
+  }
 
-  def selectLastLogFile(): Unit = ambp.selectLastLogFile()
+  def selectLastLogReport(): Unit = ambp.selectLastLogFile()
 
   def shutdown(): Unit = ambp.shutdown()
 

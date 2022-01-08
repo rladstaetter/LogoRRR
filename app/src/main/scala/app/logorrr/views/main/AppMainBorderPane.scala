@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
 
-import java.nio.file.Files
+import java.nio.file.{Files, Path}
 import scala.jdk.CollectionConverters.ListHasAsScala
 import scala.util.{Failure, Success, Try}
 
@@ -34,7 +34,7 @@ class AppMainBorderPane(initialSceneWidth: Int
 
   val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
 
-  val logViewTabPane = LogViewTabPane(this)
+  val logViewTabPane = LogViewTabPane(this, reInitMenuBarFn)
 
   setCenter(logViewTabPane)
 
@@ -50,10 +50,16 @@ class AppMainBorderPane(initialSceneWidth: Int
     for (f <- event.getDragboard.getFiles.asScala) {
       val path = f.toPath
       if (Files.exists(path)) {
-        val logFileDefinition = LogReportDefinition(path.toAbsolutePath.toString, None, Filter.seq)
-        Settings.updateRecentFileSettings(rf => rf.copy(logReportDefinition = logFileDefinition +: rf.logReportDefinition))
-        reInitMenuBarFn
-        addLogReport(logFileDefinition)
+        if (!contains(path)) {
+          val logFileDefinition = LogReportDefinition(path.toAbsolutePath.toString, None, Filter.seq)
+          Settings.updateRecentFileSettings(rf => rf.copy(logReportDefinition = logFileDefinition +: rf.logReportDefinition))
+          reInitMenuBarFn
+          addLogReport(logFileDefinition)
+        } else {
+          logWarn(s"${path.toAbsolutePath.toString} is already opened ...")
+        }
+      } else {
+        logWarn(s"${path.toAbsolutePath.toString} does not exist.")
       }
     }
     selectLastLogFile()
@@ -97,6 +103,8 @@ class AppMainBorderPane(initialSceneWidth: Int
   def updateLogFile(logFileDef: LogReportDefinition): Unit = {
     ???
   }
+
+  def contains(path: Path): Boolean = logViewTabPane.contains(path)
 
 }
 

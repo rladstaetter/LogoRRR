@@ -1,14 +1,13 @@
 package app.logorrr.views
 
 import app.logorrr.conf.Settings
-import app.logorrr.model.{LogEntry, LogReport, LogReportDefinition}
-import app.logorrr.util.{CanLog, CollectionUtils, LogoRRRFonts}
+import app.logorrr.model.{LogEntry, LogReport}
+import app.logorrr.util.{CanLog, CollectionUtils, JfxUtils, LogoRRRFonts}
 import app.logorrr.views.visual.LogVisualView
 import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
-import javafx.event.{Event, EventHandler}
 import javafx.scene.control._
 import javafx.scene.layout._
 
@@ -17,10 +16,12 @@ import scala.jdk.CollectionConverters._
 object LogReportTab {
 
   def apply(logViewTabPane: LogViewTabPane
-            , logReport: LogReport): LogReportTab = {
+            , logReport: LogReport
+            , initFileMenu: => Unit): LogReportTab = {
     val lv = new LogReportTab(logReport
       , logViewTabPane.sceneWidthProperty.get()
-      , logViewTabPane.squareWidthProperty.get())
+      , logViewTabPane.squareWidthProperty.get()
+      , initFileMenu)
 
     logReport.filters.foreach(lv.addFilter)
 
@@ -42,7 +43,8 @@ object LogReportTab {
  * */
 class LogReportTab(val logReport: LogReport
                    , val initialSceneWidth: Int
-                   , val initialSquareWidth: Int)
+                   , val initialSquareWidth: Int
+                   , initFileMenu: => Unit)
   extends Tab with CanLog {
 
   /** is set to false if logview was painted at least once (see repaint) */
@@ -57,14 +59,25 @@ class LogReportTab(val logReport: LogReport
   }
 
   /** don't monitor file anymore if tab is closed, free invalidation listeners */
-  setOnClosed(new EventHandler[Event]() {
-    override def handle(t: Event): Unit = {
-      Settings.removeFromRecentFiles(logReport.path)
-      shutdown()
-    }
-  })
+  setOnClosed(_ => closeTab())
 
-  // logReport can change over time, thus change Tab text property accordingly
+  /**
+   * Actions to perform if tab is closed:
+   *
+   * - end monitoring of file
+   * - update config file
+   * - update file menu
+   *
+   */
+  def closeTab(): Unit = {
+    Settings.updateRecentFileSettings(rf => {
+      val filteredFiles = rf.logReportDefinition.filterNot(s => s.pathAsString == logReport.logFileDefinition.path.toAbsolutePath.toString)
+      rf.copy(logReportDefinition = filteredFiles)
+    })
+    initFileMenu
+    shutdown()
+  }
+
   def shutdown(): Unit = {
     logInfo(s"Closing file ${logReport.path.toAbsolutePath} ...")
     uninstallInvalidationListener()
@@ -150,30 +163,24 @@ class LogReportTab(val logReport: LogReport
   val selectedIndexProperty = new SimpleIntegerProperty()
 
   selectedIndexProperty.bind(logVisualView.selectedIndexProperty)
-  selectedIndexProperty.addListener(new ChangeListener[Number] {
-    override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
-      logTextView.selectEntryByIndex(t1.intValue())
-    }
-  })
+
+  selectedIndexProperty.addListener(JfxUtils.onNew[Number](selectEntry))
+
 
   val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 
   selectedEntryProperty.bindBidirectional(logVisualView.selectedEntryProperty)
 
-  selectedEntryProperty.addListener(new ChangeListener[LogEntry] {
-    override def changed(observableValue: ObservableValue[_ <: LogEntry], t: LogEntry, nullableEntry: LogEntry): Unit = {
-      updateEntryLabel(Option(nullableEntry))
-    }
-  })
+  private val logEntryChangeListener: ChangeListener[LogEntry] = JfxUtils.onNew[LogEntry](updateEntryLabel)
 
+  selectedEntryProperty.addListener(logEntryChangeListener)
   // if user changes selected item in listview, change footer as well
-  logTextView.listView.getSelectionModel.selectedItemProperty.addListener(new ChangeListener[LogEntry] {
-    override def changed(observableValue: ObservableValue[_ <: LogEntry], t: LogEntry, nullableEntry: LogEntry): Unit = updateEntryLabel(Option(nullableEntry))
-  })
+  logTextView.listView.getSelectionModel.selectedItemProperty.addListener(logEntryChangeListener)
 
+  def selectEntry(number: Number): Unit = logTextView.selectEntryByIndex(number.intValue)
 
-  def updateEntryLabel(someEntry: Option[LogEntry]): Unit = {
-    someEntry match {
+  def updateEntryLabel(logEntry: LogEntry): Unit = {
+    Option(logEntry) match {
       case Some(entry) =>
         val background: Background = entry.background(filterButtonsToolBar.filterButtons.keys.toSeq)
         entryLabel.setBackground(background)
@@ -197,7 +204,6 @@ class LogReportTab(val logReport: LogReport
       repaint(width)
     }
   })
-
 
   def addFilter(filter: Filter): Unit = filtersListProperty.add(filter)
 

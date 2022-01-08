@@ -49,7 +49,8 @@ object Settings extends CanLog {
     , SquareImageSettings(10)
     , RecentFileSettings(Seq()))
 
-  lazy val someSettings: Option[Settings] =
+  /** has to be a def to reread every time this is accessed */
+  def someSettings: Option[Settings] =
     Try(read()) match {
       case Success(settings) =>
         logInfo(s"Loaded settings from ${FilePaths.settingsFilePath.toAbsolutePath} ...")
@@ -71,14 +72,6 @@ object Settings extends CanLog {
         }
     }
 
-
-  def removeFromRecentFiles(path: Path): Unit = {
-    val settings = Settings.read()
-    val recentFiles = settings.recentFiles
-    val filteredFiles = recentFiles.logReportDefinition.filterNot(s => s.pathAsString == path.toAbsolutePath.toString)
-    Settings.write(settings.copy(recentFiles = recentFiles.copy(logReportDefinition = filteredFiles)))
-  }
-
 }
 
 
@@ -86,6 +79,7 @@ object Settings extends CanLog {
  * @param logReportDefinition files which were last opened
  */
 case class RecentFileSettings(logReportDefinition: Seq[LogReportDefinition]) {
+  /** updates recent files with given log report definition */
   def update(definition: LogReportDefinition): RecentFileSettings = {
     RecentFileSettings(for (ld <- logReportDefinition) yield {
       if (ld.pathAsString == definition.pathAsString) {

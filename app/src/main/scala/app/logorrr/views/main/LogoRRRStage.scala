@@ -15,6 +15,7 @@ case class LogoRRRStage(stage: Stage
   val sceneListener = LogoRRRScene.mkSceneListener(settings.stageSettings.x, settings.stageSettings.y)()
   val abbWidthListener = JfxUtils.onNew[Number](width => mainPane.setSceneWidth(width.intValue))
 
+  /** selected via File Menu on Windows */
   def closeStage(): Unit = {
     stage.fireEvent(
       new WindowEvent(
@@ -25,13 +26,11 @@ case class LogoRRRStage(stage: Stage
   }
 
   def show(): Unit = {
-
     scene.widthProperty().addListener(abbWidthListener)
     stage.sceneProperty().addListener(sceneListener)
     stage.setTitle(Settings.fullAppName)
     stage.getIcons.add(Settings.icon)
     stage.setScene(scene)
-
 
     // make sure to cleanup on close
     stage.setOnCloseRequest((_: WindowEvent) => {

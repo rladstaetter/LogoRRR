@@ -2,17 +2,19 @@ package app.logorrr.views
 
 import app.logorrr.model.LogReport
 import app.logorrr.views.main.AppMainBorderPane
-import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.control.{Tab, TabPane}
 
+import java.nio.file.Path
 import scala.jdk.CollectionConverters._
 
 object LogViewTabPane {
 
   /** constructor to pass parent and do binding */
-  def apply(parent: AppMainBorderPane): LogViewTabPane = {
-    val lvtp = new LogViewTabPane
+  def apply(parent: AppMainBorderPane
+            , initFileMenu: => Unit): LogViewTabPane = {
+    val lvtp = new LogViewTabPane(initFileMenu)
     lvtp.sceneWidthProperty.bind(parent.sceneWidthProperty)
     lvtp.squareWidthProperty.bind(parent.squareWidthProperty)
     lvtp
@@ -20,7 +22,7 @@ object LogViewTabPane {
 
 }
 
-class LogViewTabPane extends TabPane {
+class LogViewTabPane(initFileMenu: => Unit) extends TabPane {
 
   /** bound to sceneWidthProperty of parent logorrrMainBorderPane */
   val sceneWidthProperty = new SimpleIntegerProperty()
@@ -49,7 +51,9 @@ class LogViewTabPane extends TabPane {
     }
   })
 
-  def add(logReport: LogReport): Unit = getTabs.add(LogReportTab(this, logReport))
+  def add(logReport: LogReport): Unit = getTabs.add(LogReportTab(this, logReport, initFileMenu))
+
+  def contains(p: Path): Boolean = getTabs.asScala.map(_.asInstanceOf[LogReportTab]).exists(lr => lr.logReport.path.toAbsolutePath.toString == p.toAbsolutePath.toString)
 
   /** shutdown all tabs */
   def shutdown(): Unit = {
