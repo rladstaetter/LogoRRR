@@ -13,10 +13,6 @@ import java.nio.file.{Files, Path, Paths}
 
 object FileMenu {
 
-  class LearnLogFormat(logEntry: => LogEntry) extends MenuItem("learn log format") {
-    setOnAction(_ => LogFormatLearnerStage(logEntry))
-  }
-
   class OpenMenuItem(openLogFile: Path => Unit)
     extends MenuItem("Open") with CanLog {
 
@@ -92,13 +88,13 @@ class FileMenu(openLogFile: Path => Unit
   def init(): Unit = {
     getItems.clear()
     getItems.add(new FileMenu.OpenMenuItem(openLogFile))
-
+/*
     if (recentFiles.nonEmpty) {
       getItems.add(recentFilesMenu)
       val closeAllMenuItems = new FileMenu.CloseAllMenuItem(removeAllLogFiles)
       getItems.add(closeAllMenuItems)
     }
-
+*/
     if (OsUtil.isWin) {
       getItems.add(new FileMenu.QuitMenuItem(closeApplication))
     }
