@@ -39,9 +39,9 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
       val bPath = Paths.get(s"docs/releases/${Settings.meta.appVersion}/")
       Files.createDirectories(bPath)
       val f = bPath.resolve(s"${width}x$height.png")
+      s.show()
       ScreenShotterApp.persistNodeState(s.stage.getScene.getRoot, f)
       logInfo("created " + f.toAbsolutePath.toString)
-      s.show()
     }
 
   }
