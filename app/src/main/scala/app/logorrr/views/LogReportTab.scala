@@ -1,6 +1,6 @@
 package app.logorrr.views
 
-import app.logorrr.conf.Settings
+import app.logorrr.conf.SettingsIO
 import app.logorrr.model.{LogEntry, LogReport}
 import app.logorrr.util.{CanLog, CollectionUtils, JfxUtils, LogoRRRFonts}
 import app.logorrr.views.visual.LogVisualView
@@ -70,7 +70,7 @@ class LogReportTab(val logReport: LogReport
    *
    */
   def closeTab(): Unit = {
-    Settings.updateRecentFileSettings(rf => {
+    SettingsIO.updateRecentFileSettings(rf => {
       val filteredFiles = rf.logReportDefinition.filterNot(s => s.pathAsString == logReport.logFileDefinition.path.toAbsolutePath.toString)
       rf.copy(logReportDefinition = filteredFiles)
     })
@@ -210,7 +210,7 @@ class LogReportTab(val logReport: LogReport
   def removeFilter(filter: Filter): Unit = {
     filtersListProperty.remove(filter)
     val updatedDefinition = logReport.logFileDefinition.copy(filters = filtersListProperty.asScala.toSeq)
-    Settings.updateRecentFileSettings(rf => rf.update(updatedDefinition))
+    SettingsIO.updateRecentFileSettings(rf => rf.update(updatedDefinition))
   }
 
   def getVisualViewWidth(): Double = {

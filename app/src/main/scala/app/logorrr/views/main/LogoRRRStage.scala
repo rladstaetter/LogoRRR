@@ -1,8 +1,9 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{Settings, StageSettings}
+import app.logorrr.conf.{AppMeta, Settings}
 import app.logorrr.util.JfxUtils
 import javafx.application.HostServices
+import javafx.scene.image.Image
 import javafx.stage.{Stage, WindowEvent}
 
 
@@ -10,6 +11,7 @@ case class LogoRRRStage(stage: Stage
                         , settings: Settings
                         , hs: HostServices) {
 
+  val icon: Image = new Image(getClass.getResourceAsStream("/app/logorrr/icon/logorrr-icon-32.png"))
   val mainPane = new LogoRRRMain(hs, closeStage(), settings)
   val scene = LogoRRRScene(settings, mainPane)
   val sceneListener = LogoRRRScene.mkSceneListener(settings.stageSettings.x, settings.stageSettings.y)()
@@ -28,14 +30,14 @@ case class LogoRRRStage(stage: Stage
   def show(): Unit = {
     scene.widthProperty().addListener(abbWidthListener)
     stage.sceneProperty().addListener(sceneListener)
-    stage.setTitle(Settings.fullAppName)
-    stage.getIcons.add(Settings.icon)
+    stage.setTitle(AppMeta.fullAppName)
+    stage.getIcons.add(icon)
     stage.setScene(scene)
 
     // make sure to cleanup on close
     stage.setOnCloseRequest((_: WindowEvent) => {
       mainPane.shutdown()
-      StageSettings.removeWindowListeners(scene.getWindow)
+      LogoRRRScene.removeWindowListeners(scene.getWindow)
       scene.widthProperty().removeListener(abbWidthListener)
       stage.sceneProperty.removeListener(sceneListener)
     })

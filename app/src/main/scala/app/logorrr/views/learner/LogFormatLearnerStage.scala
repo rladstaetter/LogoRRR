@@ -2,8 +2,7 @@ package app.logorrr.views.learner
 
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{JfxEventHandler, LogoRRRFonts}
-import app.logorrr.views.LogColumnDef
-import app.logorrr.views.LogColumnDef.SimpleRange
+import app.logorrr.views.{LogColumnDef, SimpleRange}
 import javafx.beans.property.{SimpleIntegerProperty, SimpleMapProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.beans.{InvalidationListener, Observable}
@@ -35,7 +34,7 @@ case class LogFormatLearnerStage(e: LogEntry) extends Stage {
 
   /** stores where LogoRRRR searches for certain attributes like date/time for a given log entry */
   val logColumnDefinitionProperty =
-    new SimpleMapProperty[String, LogColumnDef.SimpleRange](FXCollections.observableMap(new mutable.HashMap[String, LogColumnDef.SimpleRange]().asJava))
+    new SimpleMapProperty[String, SimpleRange](FXCollections.observableMap(new mutable.HashMap[String, SimpleRange]().asJava))
 
   val logColumnDefProperty = new SimpleObjectProperty[LogColumnDef]()
 
@@ -45,7 +44,7 @@ case class LogFormatLearnerStage(e: LogEntry) extends Stage {
 
   logColumnDefinitionProperty.addListener(new InvalidationListener {
     override def invalidated(observable: Observable): Unit = {
-      val map = observable.asInstanceOf[SimpleMapProperty[String, LogColumnDef.SimpleRange]]
+      val map = observable.asInstanceOf[SimpleMapProperty[String, SimpleRange]]
       val difference = LogColumnDef.entries.toSet.diff(map.keySet().asScala)
       if (difference.isEmpty) {
         println("Updating column definiton ...")

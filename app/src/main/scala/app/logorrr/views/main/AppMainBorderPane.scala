@@ -1,6 +1,6 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.Settings
+import app.logorrr.conf.{Settings, SettingsIO}
 import app.logorrr.model.{LogReport, LogReportDefinition}
 import app.logorrr.util.CanLog
 import app.logorrr.views.{Filter, LogViewTabPane}
@@ -52,7 +52,7 @@ class AppMainBorderPane(initialSceneWidth: Int
       if (Files.exists(path)) {
         if (!contains(path)) {
           val logFileDefinition = LogReportDefinition(path.toAbsolutePath.toString, None, Filter.seq)
-          Settings.updateRecentFileSettings(rf => rf.copy(logReportDefinition = logFileDefinition +: rf.logReportDefinition))
+          SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinition = logFileDefinition +: rf.logReportDefinition))
           reInitMenuBarFn
           addLogReport(logFileDefinition)
         } else {

@@ -1,6 +1,6 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.conf.Settings
+import app.logorrr.conf.AppMeta
 import app.logorrr.views.about.AboutScreen
 import app.logorrr.views.menubar.HelpMenu.AboutMenuItem
 import javafx.application.HostServices
@@ -14,7 +14,7 @@ object HelpMenu {
     setOnAction(_ => {
       val stage = new Stage()
       stage.initModality(Modality.APPLICATION_MODAL)
-      stage.setTitle("About " + Settings.fullAppName)
+      stage.setTitle("About " + AppMeta.fullAppName)
       val scene = new Scene(new AboutScreen(hostServices), 440, 210)
       stage.setScene(scene)
       stage.setOnCloseRequest(_ => stage.close())

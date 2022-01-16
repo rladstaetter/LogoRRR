@@ -1,6 +1,6 @@
 package app.logorrr.views
 
-import app.logorrr.conf.Settings
+import app.logorrr.conf.SettingsIO
 import app.logorrr.model.LogReportDefinition
 import javafx.scene.control._
 
@@ -23,7 +23,7 @@ class OpsToolBar(logReportTab: LogReportTab) extends ToolBar {
     // update settings
     val definition: LogReportDefinition = logReportTab.logReport.logFileDefinition
     val updatedDefinition = definition.copy(filters = logReportTab.filtersListProperty.asScala.toSeq)
-    Settings.updateRecentFileSettings(rf => rf.update(updatedDefinition))
+    SettingsIO.updateRecentFileSettings(rf => rf.update(updatedDefinition))
   })
 
   getItems.addAll(searchTextField, colorPicker, add)

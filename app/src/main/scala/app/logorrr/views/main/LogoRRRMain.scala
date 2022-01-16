@@ -1,6 +1,6 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.Settings
+import app.logorrr.conf.{Settings, SettingsIO}
 import app.logorrr.model.LogReportDefinition
 import app.logorrr.util.CanLog
 import app.logorrr.views.Filter
@@ -42,7 +42,7 @@ class LogoRRRMain(hostServices: HostServices
     logTrace(s"Try to open log file ${path.toAbsolutePath.toString}")
 
     if (!ambp.contains(path)) {
-      Settings.updateRecentFileSettings(rf => rf.copy(logReportDefinition = LogReportDefinition(path.toString, None, Filter.seq) +: rf.logReportDefinition))
+      SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinition = LogReportDefinition(path.toString, None, Filter.seq) +: rf.logReportDefinition))
       addLogReport(LogReportDefinition(path))
       initFileMenu()
       selectLastLogReport()
@@ -55,7 +55,7 @@ class LogoRRRMain(hostServices: HostServices
   /** removes all log files */
   def closeAllLogReports(): Unit = {
     shutdown()
-    Settings.updateRecentFileSettings(rf => rf.clear())
+    SettingsIO.updateRecentFileSettings(rf => rf.clear())
     initFileMenu()
   }
 

@@ -1,6 +1,6 @@
 package app.logorrr.views.about
 
-import app.logorrr.conf.Settings
+import app.logorrr.conf.AppMeta
 import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts}
 import javafx.application.HostServices
 import javafx.geometry.Insets
@@ -44,7 +44,7 @@ class AboutScreen(hostServices: HostServices) extends BorderPane {
 
   private def mkLogo(): ImageView = AboutScreen.logo.imageView()
 
-  private def mkHeader(): Label = AboutScreen.MonoLabel(Settings.fullAppName, 50)
+  private def mkHeader(): Label = AboutScreen.MonoLabel(AppMeta.fullAppName, 50)
 
   setPadding(new Insets(10, 10, 10, 10))
   setTop(mkHeader())

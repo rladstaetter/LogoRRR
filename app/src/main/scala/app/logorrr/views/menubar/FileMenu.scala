@@ -1,6 +1,6 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.conf.Settings
+import app.logorrr.conf.{Settings, SettingsIO}
 import app.logorrr.model
 import app.logorrr.model.{LogEntry, LogReportDefinition}
 import app.logorrr.util.{CanLog, LogoRRRFileChooser, OsUtil}
@@ -74,26 +74,26 @@ class FileMenu(openLogFile: Path => Unit
                , removeAllLogFiles: => Unit
                , updateLogDef: LogReportDefinition => Unit
                , closeApplication: => Unit) extends Menu("File") with CanLog {
-
+/*
   val settings = {
     logTrace("Reinit File Menu ...")
-    Settings.someSettings.getOrElse(Settings.Default)
+    SettingsIO.someSettings.getOrElse(Settings.Default)
   }
 
   val recentFiles: Seq[String] = settings.recentFiles.logReportDefinition.map(_.pathAsString)
 
   val recentFilesMenu = RecentFilesMenu(recentFiles.map(f => Paths.get(f)), updateLogDef)
-
+*/
   def init(): Unit = {
     getItems.clear()
     getItems.add(new FileMenu.OpenMenuItem(openLogFile))
-/*
-    if (recentFiles.nonEmpty) {
-      getItems.add(recentFilesMenu)
-      val closeAllMenuItems = new FileMenu.CloseAllMenuItem(removeAllLogFiles)
-      getItems.add(closeAllMenuItems)
-    }
-*/
+    /*
+        if (recentFiles.nonEmpty) {
+          getItems.add(recentFilesMenu)
+          val closeAllMenuItems = new FileMenu.CloseAllMenuItem(removeAllLogFiles)
+          getItems.add(closeAllMenuItems)
+        }
+    */
     if (OsUtil.isWin) {
       getItems.add(new FileMenu.QuitMenuItem(closeApplication))
     }

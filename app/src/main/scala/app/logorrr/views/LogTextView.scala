@@ -6,6 +6,7 @@ import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 import javafx.scene.input.{Clipboard, ClipboardContent}
 import javafx.scene.layout.BorderPane
+import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.time.Instant
 import scala.collection.mutable
@@ -20,8 +21,23 @@ object ClipBoardUtils {
   }
 }
 
+object SimpleRange {
+
+  implicit lazy val reader = deriveReader[SimpleRange]
+  implicit lazy val writer = deriveWriter[SimpleRange]
+
+}
+
+case class SimpleRange(start: Int, end: Int) {
+  require(start <= end)
+  val length = end - start
+}
+
 
 object LogColumnDef {
+
+  implicit lazy val reader = deriveReader[LogColumnDef]
+  implicit lazy val writer = deriveWriter[LogColumnDef]
 
   private val Year = "Year"
   private val Month = "Month"
@@ -35,10 +51,6 @@ object LogColumnDef {
   val entries = Seq(Year, Month, Day, Hour, Minute, Second, Millisecond)
 
 
-  case class SimpleRange(start: Int, end: Int) {
-    require(start <= end)
-    val length = end - start
-  }
 
   /**
    * able to parse following string:
@@ -58,7 +70,7 @@ object LogColumnDef {
 
   def apply(): LogColumnDef = Default
 
-  def apply(map: mutable.Map[String, LogColumnDef.SimpleRange]): LogColumnDef = {
+  def apply(map: mutable.Map[String, SimpleRange]): LogColumnDef = {
     LogColumnDef(
       map(Year)
       , map(Month)
@@ -71,13 +83,13 @@ object LogColumnDef {
   }
 }
 
-case class LogColumnDef(yearRange: LogColumnDef.SimpleRange
-                        , monthRange: LogColumnDef.SimpleRange
-                        , dayRange: LogColumnDef.SimpleRange
-                        , hourRange: LogColumnDef.SimpleRange
-                        , minuteRange: LogColumnDef.SimpleRange
-                        , secondRange: LogColumnDef.SimpleRange
-                        , milliRange: LogColumnDef.SimpleRange) {
+case class LogColumnDef(yearRange: SimpleRange
+                        , monthRange: SimpleRange
+                        , dayRange: SimpleRange
+                        , hourRange: SimpleRange
+                        , minuteRange: SimpleRange
+                        , secondRange: SimpleRange
+                        , milliRange: SimpleRange) {
 
   require(yearRange.length == 4)
   require(monthRange.length == 2)
@@ -87,7 +99,7 @@ case class LogColumnDef(yearRange: LogColumnDef.SimpleRange
   require(secondRange.length == 2)
   require(milliRange.length == 3)
 
-  def substring(value: String, range: LogColumnDef.SimpleRange): String = {
+  def substring(value: String, range: SimpleRange): String = {
     value.substring(range.start, range.end)
   }
 

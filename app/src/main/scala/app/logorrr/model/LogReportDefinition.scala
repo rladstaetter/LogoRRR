@@ -1,10 +1,15 @@
 package app.logorrr.model
 
 import app.logorrr.views.{Filter, LogColumnDef}
+import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.nio.file.{Files, Path, Paths}
 
 object LogReportDefinition {
+
+  implicit lazy val reader = deriveReader[LogReportDefinition]
+  implicit lazy val writer = deriveWriter[LogReportDefinition]
+
 
   def apply(p: Path): LogReportDefinition = LogReportDefinition(p.toAbsolutePath.toString, None, Filter.seq)
 

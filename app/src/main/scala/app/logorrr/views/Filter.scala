@@ -2,6 +2,7 @@ package app.logorrr.views
 
 import app.logorrr.views.Filter.Matcher
 import javafx.scene.paint.Color
+import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 
 class Filter(val value: String
@@ -23,8 +24,8 @@ class UnclassifiedFilter(filters: Set[Filter]) extends Filter("Unclassified", Co
   }
 }
 
-class AnyFilter(filters : Set[Filter]) extends Filter("All", Color.WHITE.toString) {
-  override val matcher : Matcher = new Matcher(value) {
+class AnyFilter(filters: Set[Filter]) extends Filter("All", Color.WHITE.toString) {
+  override val matcher: Matcher = new Matcher(value) {
     override val color: Color = {
       if (filters.isEmpty) {
         Color.WHITE
@@ -40,6 +41,9 @@ class AnyFilter(filters : Set[Filter]) extends Filter("All", Color.WHITE.toStrin
 }
 
 object Filter {
+
+  implicit lazy val reader = deriveReader[Filter]
+  implicit lazy val writer = deriveWriter[Filter]
 
   val finest: Filter = new Filter("FINEST", Color.GREY.toString)
   val info: Filter = new Filter("INFO", Color.GREEN.toString)
