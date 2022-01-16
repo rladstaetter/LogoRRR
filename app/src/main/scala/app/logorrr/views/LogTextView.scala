@@ -2,7 +2,6 @@ package app.logorrr.views
 
 import app.logorrr.model.LogEntry
 import app.logorrr.util.LogoRRRFonts
-import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 import javafx.scene.input.{Clipboard, ClipboardContent}

@@ -1,9 +1,9 @@
 package app.logorrr.views.visual
 
 import app.logorrr.model.LogEntry
+import app.logorrr.util.CanLog
 import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.scene.layout.BorderPane
-import app.logorrr.util.CanLog
 
 import scala.collection.mutable
 

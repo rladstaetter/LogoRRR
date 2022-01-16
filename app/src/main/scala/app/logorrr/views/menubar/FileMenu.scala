@@ -5,7 +5,6 @@ import app.logorrr.model
 import app.logorrr.model.{LogEntry, LogReportDefinition}
 import app.logorrr.util.{CanLog, LogoRRRFileChooser, OsUtil}
 import app.logorrr.views.learner
-import app.logorrr.views.learner.LogFormatLearnerStage
 import app.logorrr.views.menubar.FileMenu.RecentFilesMenu
 import javafx.scene.control.{Menu, MenuItem}
 

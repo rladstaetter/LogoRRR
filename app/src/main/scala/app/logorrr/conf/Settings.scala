@@ -9,7 +9,6 @@ import javafx.stage.Window
 import pureconfig.generic.auto._
 import pureconfig.{ConfigSource, ConfigWriter}
 
-import java.nio.file.Path
 import scala.util.{Failure, Success, Try}
 
 object Settings extends CanLog {
