@@ -23,7 +23,7 @@
         <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
         <!-- settings for x64 and aarch64 builds on mac, can be ignored for other platforms -->
         <osx.jdk.home.aarch64>/Users/lad/.sdkman/candidates/java/18.ea.25-open</osx.jdk.home.aarch64>
-        <osx.jdk.home.x64>/Library/Java/JavaVirtualMachines/jdk-18+26/Contents/Home</osx.jdk.home.x64>
+        <osx.jdk.home.x64>/Users/lad/.sdkman/candidates/java/18.ea.31-open</osx.jdk.home.x64>
     </properties>
 
     <profiles>
