@@ -3,7 +3,7 @@
 LogoRRR is a simple utility to display a logfile and visualise certain classes of events. The main target audience are first or second level support engineers who need a tool to find patterns in log files.
 
 ## Screenshot
-![Screenshot of LogoRRR, version 21.4.0](docs/releases/21.4.0/screenshot-21.4.0.png?raw=true)
+![Screenshot of LogoRRR, version 22.1.0](docs/releases/22.1.0/screenshot-22.1.0.png?raw=true)
 
 ## Basic usage
 
