@@ -9,11 +9,19 @@ import java.time.Instant
 
 object LogEntry {
 
-  def apply(value: String): LogEntry = LogEntry(value, None)
+  def apply(lineNumber: Long
+            , value: String): LogEntry = LogEntry(lineNumber, value, None)
 }
 
-/** represents one line in a log file */
-case class LogEntry(value: String
+/**
+ * represents one line in a log file
+ *
+ * @param lineNumber line number of this log entry
+ * @param value contens of line in plaintext
+ * @param someInstant a timestamp if there is any
+ * */
+case class LogEntry(lineNumber: Long
+                    , value: String
                     , someInstant: Option[Instant]) {
 
 

@@ -1,14 +1,12 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.conf.{Settings, SettingsIO}
 import app.logorrr.model
 import app.logorrr.model.{LogEntry, LogReportDefinition}
 import app.logorrr.util.{CanLog, LogoRRRFileChooser, OsUtil}
 import app.logorrr.views.learner
-import app.logorrr.views.menubar.FileMenu.RecentFilesMenu
 import javafx.scene.control.{Menu, MenuItem}
 
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{Files, Path}
 
 object FileMenu {
 
@@ -40,7 +38,7 @@ object FileMenu {
           val reader = Files.newBufferedReader(path)
           val firstLogLine = reader.readLine()
           reader.close()
-          val lfls = learner.LogFormatLearnerStage(LogEntry(firstLogLine))
+          val lfls = learner.LogFormatLearnerStage(LogEntry(1, firstLogLine))
           lfls.showAndWait()
           updateLogDef(model.LogReportDefinition(path, lfls.getLogColumnDef()))
         })
@@ -74,16 +72,16 @@ class FileMenu(openLogFile: Path => Unit
                , removeAllLogFiles: => Unit
                , updateLogDef: LogReportDefinition => Unit
                , closeApplication: => Unit) extends Menu("File") with CanLog {
-/*
-  val settings = {
-    logTrace("Reinit File Menu ...")
-    SettingsIO.someSettings.getOrElse(Settings.Default)
-  }
+  /*
+    val settings = {
+      logTrace("Reinit File Menu ...")
+      SettingsIO.someSettings.getOrElse(Settings.Default)
+    }
 
-  val recentFiles: Seq[String] = settings.recentFiles.logReportDefinition.map(_.pathAsString)
+    val recentFiles: Seq[String] = settings.recentFiles.logReportDefinition.map(_.pathAsString)
 
-  val recentFilesMenu = RecentFilesMenu(recentFiles.map(f => Paths.get(f)), updateLogDef)
-*/
+    val recentFilesMenu = RecentFilesMenu(recentFiles.map(f => Paths.get(f)), updateLogDef)
+  */
   def init(): Unit = {
     getItems.clear()
     getItems.add(new FileMenu.OpenMenuItem(openLogFile))

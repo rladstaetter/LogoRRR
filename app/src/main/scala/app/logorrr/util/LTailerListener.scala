@@ -6,10 +6,14 @@ import org.apache.commons.io.input.{Tailer, TailerListener}
 
 class LTailerListener(ol: ObservableList[LogEntry]) extends TailerListener with CanLog {
 
+  var currentCnt = ol.size()
+
   override def init(tailer: Tailer): Unit = ()
 
   override def handle(l: String): Unit = {
-    JfxUtils.execOnUiThread(ol.add(LogEntry(l)))
+    currentCnt = currentCnt + 1
+    val e = LogEntry(currentCnt, l)
+    JfxUtils.execOnUiThread(ol.add(e))
   }
 
   override def fileNotFound(): Unit = {
@@ -17,6 +21,7 @@ class LTailerListener(ol: ObservableList[LogEntry]) extends TailerListener with 
   }
 
   override def fileRotated(): Unit = {
+    currentCnt = 0
     JfxUtils.execOnUiThread(ol.clear())
   }
 

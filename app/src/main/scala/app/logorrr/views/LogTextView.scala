@@ -51,7 +51,6 @@ object LogColumnDef {
   val entries = Seq(Year, Month, Day, Hour, Minute, Second, Millisecond)
 
 
-
   /**
    * able to parse following string:
    *
@@ -138,10 +137,18 @@ class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
     val copyCurrentToClipboard = new MenuItem("copy to clipboard")
     cm.getItems.addAll(copyCurrentToClipboard)
 
+    val lineNumberLabel = {
+      val l = new Label("")
+      l.setStyle(LogoRRRFonts.jetBrainsMono(10))
+      l
+    }
+
     override def updateItem(t: LogEntry, b: Boolean): Unit = {
       super.updateItem(t, b)
       Option(t) match {
         case Some(e) =>
+          lineNumberLabel.setText(e.lineNumber.toString)
+          setGraphic(lineNumberLabel)
           setText(e.value)
           copyCurrentToClipboard.setOnAction(_ => ClipBoardUtils.copyToClipboardText(e.value))
           setContextMenu(cm)

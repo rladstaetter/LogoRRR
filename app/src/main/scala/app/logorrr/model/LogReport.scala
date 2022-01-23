@@ -23,10 +23,15 @@ object LogReport extends CanLog {
     val someColumnDef = lrd.someColumnDefinition
     val filters = lrd.filters
 
-    // trying to be very clever and use java stream instead of scala collections, didn't measure if it makes any difference
-    val logEntryStream = readFromFile(logFile).stream().map(l => someColumnDef match {
-      case Some(columDef) => LogEntry(l, Try(columDef.parse(l)).toOption)
-      case None => LogEntry(l)
+    var lineNumber: Long = 0L
+    // trying to be very clever and use java stream instead of scala collections
+    // it makes a notable difference in performance if we don't convert huge lists from java <-> scala
+    val logEntryStream = readFromFile(logFile).stream().map(l => {
+      lineNumber = lineNumber + 1L
+      someColumnDef match {
+        case Some(columDef) => LogEntry(lineNumber, l, Try(columDef.parse(l)).toOption)
+        case None => LogEntry(lineNumber, l)
+      }
     })
     new LogReport(logFile
       , FXCollections.observableList(logEntryStream.collect(Collectors.toList[LogEntry]()))
@@ -39,7 +44,7 @@ object LogReport extends CanLog {
       Files.readAllLines(logFile)
     } match {
       case Failure(exception) =>
-        // logException(exception)
+        logException(exception)
         logWarn(s"Could not read file ${logFile.toAbsolutePath.toString} with default charset, retrying with ISO_8859_1 ...")
         Try {
           Files.readAllLines(logFile, StandardCharsets.ISO_8859_1)
