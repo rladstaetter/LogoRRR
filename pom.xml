@@ -308,6 +308,12 @@
                             <phase>initialize</phase>
                             <configuration>
                                 <rules>
+                                    <requireFilesExist>
+                                        <files>
+                                            <!-- simple check if graalvm home is correctly defined -->
+                                            <file>${graalvm.home}/GRAALVM-README.md</file>
+                                        </files>
+                                    </requireFilesExist>
                                     <requireMavenVersion>
                                         <version>[3.6.2,)</version>
                                         <message>Check for Maven version &gt;=3.6.2 failed. Upgrade your Maven
