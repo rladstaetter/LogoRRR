@@ -14,17 +14,17 @@ object LogoRRRScene {
     SettingsIO.write(settings1.copy(stageSettings = newStageSettings))
   }
 
-  private val stageWidthListener = JfxUtils.onNew[Number](n =>
-    updateSettings(stageSettings => stageSettings.copy(width = n.intValue())))
+  private val stageWidthListener =
+    JfxUtils.onNew[Number](n => updateSettings(stageSettings => stageSettings.copy(width = n.intValue())))
 
-  private val stageHeightListener = JfxUtils.onNew[Number](n =>
-    updateSettings(stageSettings => stageSettings.copy(height = n.intValue())))
+  private val stageHeightListener =
+    JfxUtils.onNew[Number](n => updateSettings(stageSettings => stageSettings.copy(height = n.intValue())))
 
-  private val stageXListener = JfxUtils.onNew[Number](xValue =>
-    updateSettings(stageSettings => stageSettings.copy(x = xValue.doubleValue())))
+  private val stageXListener =
+    JfxUtils.onNew[Number](xValue => updateSettings(stageSettings => stageSettings.copy(x = xValue.doubleValue())))
 
-  private val stageYListener = JfxUtils.onNew[Number](yValue =>
-    updateSettings(stageSettings => stageSettings.copy(y = yValue.doubleValue())))
+  private val stageYListener =
+    JfxUtils.onNew[Number](yValue => updateSettings(stageSettings => stageSettings.copy(y = yValue.doubleValue())))
 
   def addWindowListeners(window: Window): Unit = {
     window.xProperty().addListener(stageXListener)

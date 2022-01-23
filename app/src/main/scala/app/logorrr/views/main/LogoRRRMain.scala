@@ -31,10 +31,17 @@ class LogoRRRMain(hostServices: HostServices
     setCenter(ambp)
 
     // reverse since most recently file is saved first in list but should be opened last (= is last log file)
-    for (logFileDef <- settings.recentFiles.logReportDefinition.reverse) {
+    for (logFileDef <- settings.recentFiles.logReportDefinitions.reverse) {
       addLogReport(logFileDef)
     }
-    selectLastLogReport()
+    // if no report was checked as active (which should be a bug) activate
+    // the last one
+    settings.recentFiles.someActive match {
+      case Some(value) => selectLog(value.path)
+      case None => selectLastLogReport()
+    }
+    // only after having initialized we activate change listeners */
+    ambp.init()
   }
 
   /** called when 'Open File' is or an entry of 'Recent Files' is selected. */
@@ -42,10 +49,10 @@ class LogoRRRMain(hostServices: HostServices
     logTrace(s"Try to open log file ${path.toAbsolutePath.toString}")
 
     if (!ambp.contains(path)) {
-      SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinition = LogReportDefinition(path.toString, None, Filter.seq) +: rf.logReportDefinition))
+      SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinitions = LogReportDefinition(path.toString, None, true, Filter.seq) +: rf.logReportDefinitions))
       addLogReport(LogReportDefinition(path))
+      selectLog(path)
       initFileMenu()
-      selectLastLogReport()
     } else {
       logTrace("File is already opened.")
     }
@@ -72,6 +79,8 @@ class LogoRRRMain(hostServices: HostServices
       logWarn(s"Path ${lrd.path.toAbsolutePath} is already opened ...")
     }
   }
+
+  def selectLog(path: Path): Unit = ambp.selectLog(path)
 
   def selectLastLogReport(): Unit = ambp.selectLastLogFile()
 

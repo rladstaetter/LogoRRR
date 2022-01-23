@@ -11,10 +11,10 @@ object LogReportDefinition {
   implicit lazy val writer = deriveWriter[LogReportDefinition]
 
 
-  def apply(p: Path): LogReportDefinition = LogReportDefinition(p.toAbsolutePath.toString, None, Filter.seq)
+  def apply(p: Path): LogReportDefinition = LogReportDefinition(p.toAbsolutePath.toString, None, false, Filter.seq)
 
   def apply(p: Path, logColumnDef: LogColumnDef): LogReportDefinition =
-    LogReportDefinition(p.toAbsolutePath.toString, Option(logColumnDef), Filter.seq)
+    LogReportDefinition(p.toAbsolutePath.toString, Option(logColumnDef), false, Filter.seq)
 
 }
 
@@ -32,6 +32,7 @@ object LogReportDefinition {
  */
 case class LogReportDefinition(pathAsString: String
                                , someColumnDefinition: Option[LogColumnDef] = None
+                               , active: Boolean
                                , filters: Seq[Filter]) {
   val path: Path = Paths.get(pathAsString)
 

@@ -11,12 +11,15 @@ object RecentFileSettings {
 }
 
 /**
- * @param logReportDefinition files which were last opened
+ * @param logReportDefinitions files which were last opened
  */
-case class RecentFileSettings(logReportDefinition: Seq[LogReportDefinition]) {
+case class RecentFileSettings(logReportDefinitions: Seq[LogReportDefinition]) {
+
+  val someActive: Option[LogReportDefinition] = logReportDefinitions.find(_.active)
+
   /** updates recent files with given log report definition */
   def update(definition: LogReportDefinition): RecentFileSettings = {
-    RecentFileSettings(for (ld <- logReportDefinition) yield {
+    RecentFileSettings(for (ld <- logReportDefinitions) yield {
       if (ld.pathAsString == definition.pathAsString) {
         definition
       } else ld
@@ -26,6 +29,6 @@ case class RecentFileSettings(logReportDefinition: Seq[LogReportDefinition]) {
 
   def clear(): RecentFileSettings = RecentFileSettings(Seq())
 
-  def filterValids(): RecentFileSettings = copy(logReportDefinition = logReportDefinition.filter(_.isPathValid))
+  def filterValids(): RecentFileSettings = copy(logReportDefinitions = logReportDefinitions.filter(_.isPathValid))
 
 }

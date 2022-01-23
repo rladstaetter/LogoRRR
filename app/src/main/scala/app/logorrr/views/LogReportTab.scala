@@ -71,8 +71,8 @@ class LogReportTab(val logReport: LogReport
    */
   def closeTab(): Unit = {
     SettingsIO.updateRecentFileSettings(rf => {
-      val filteredFiles = rf.logReportDefinition.filterNot(s => s.pathAsString == logReport.logFileDefinition.path.toAbsolutePath.toString)
-      rf.copy(logReportDefinition = filteredFiles)
+      val filteredFiles = rf.logReportDefinitions.filterNot(s => s.pathAsString == logReport.logFileDefinition.path.toAbsolutePath.toString)
+      rf.copy(logReportDefinitions = filteredFiles)
     })
     initFileMenu
     shutdown()

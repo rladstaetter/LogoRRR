@@ -2,10 +2,12 @@ package app.logorrr.conf
 
 import app.logorrr.conf.Settings.Default
 import app.logorrr.io.{FilePaths, Fs}
+import app.logorrr.model.LogReportDefinition
 import app.logorrr.util.CanLog
 import com.typesafe.config.ConfigRenderOptions
 import pureconfig.{ConfigSource, ConfigWriter}
 
+import java.nio.file.Path
 import scala.util.{Failure, Success, Try}
 
 object SettingsIO extends CanLog {
@@ -22,6 +24,18 @@ object SettingsIO extends CanLog {
   def updateRecentFileSettings(updateRecentFilesFn: RecentFileSettings => RecentFileSettings): Unit = {
     val settings = read()
     SettingsIO.write(settings.copy(recentFiles = updateRecentFilesFn(settings.recentFiles)))
+  }
+
+  def updateActiveLogFile(path: Path): Unit = {
+    val settings = read()
+    val defs: Seq[LogReportDefinition] = for (lrd <- settings.recentFiles.logReportDefinitions) yield {
+      if (lrd.pathAsString == path.toAbsolutePath.toString) {
+        lrd.copy(active = true)
+      } else {
+        lrd.copy(active = false)
+      }
+    }
+    SettingsIO.write(settings.copy(recentFiles = settings.recentFiles.copy(logReportDefinitions = defs)))
   }
 
   /** read settings from default place and filter all paths which don't exist anymore */

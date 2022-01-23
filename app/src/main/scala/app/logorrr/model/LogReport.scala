@@ -68,7 +68,7 @@ case class LogReport(path: Path
                      , filters: Seq[Filter]
                      , someColumnDef: Option[LogColumnDef]) {
 
-  val logFileDefinition: LogReportDefinition = LogReportDefinition(path.toAbsolutePath.toString, someColumnDef, filters)
+  val logFileDefinition: LogReportDefinition = LogReportDefinition(path.toAbsolutePath.toString, someColumnDef, false, filters)
   val lengthProperty = new SimpleIntegerProperty(entries.size())
   val titleProperty = new SimpleStringProperty(computeTabName)
 
