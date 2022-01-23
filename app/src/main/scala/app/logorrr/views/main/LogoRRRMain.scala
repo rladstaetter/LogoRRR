@@ -38,7 +38,9 @@ class LogoRRRMain(hostServices: HostServices
     // the last one
     settings.recentFiles.someActive match {
       case Some(value) => selectLog(value.path)
-      case None => selectLastLogReport()
+      case None =>
+        logError("No active log file entries found.")
+        selectLastLogReport()
     }
     // only after having initialized we activate change listeners */
     ambp.init()
@@ -49,7 +51,7 @@ class LogoRRRMain(hostServices: HostServices
     logTrace(s"Try to open log file ${path.toAbsolutePath.toString}")
 
     if (!ambp.contains(path)) {
-      SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinitions = LogReportDefinition(path.toString, None, true, Filter.seq) +: rf.logReportDefinitions))
+      SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinitions = LogReportDefinition(path.toString, None, true, LogReportDefinition.defaultDividerPosition, Filter.seq) +: rf.logReportDefinitions))
       addLogReport(LogReportDefinition(path))
       selectLog(path)
       initFileMenu()

@@ -62,7 +62,10 @@ class LogViewTabPane(initFileMenu: => Unit)
     })
   }
 
-  def add(logReport: LogReport): Unit = getTabs.add(LogReportTab(this, logReport, initFileMenu))
+  def add(logReport: LogReport): Unit = {
+    val tab = LogReportTab(this, logReport, initFileMenu)
+    getTabs.add(tab)
+  }
 
   def contains(p: Path): Boolean = getLogReportTabs.exists(lr => lr.logReport.path.toAbsolutePath.toString == p.toAbsolutePath.toString)
 

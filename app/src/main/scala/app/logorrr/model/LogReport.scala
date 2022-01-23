@@ -36,7 +36,9 @@ object LogReport extends CanLog {
     new LogReport(logFile
       , FXCollections.observableList(logEntryStream.collect(Collectors.toList[LogEntry]()))
       , filters
-      , someColumnDef)
+      , someColumnDef
+      , lrd.active
+      , lrd.dividerPosition)
   }, s"Imported ${lrd.path.toAbsolutePath.toString} ... ")
 
   private def readFromFile(logFile: Path): util.List[String] = {
@@ -66,16 +68,18 @@ object LogReport extends CanLog {
 case class LogReport(path: Path
                      , entries: ObservableList[LogEntry]
                      , filters: Seq[Filter]
-                     , someColumnDef: Option[LogColumnDef]) {
+                     , someColumnDef: Option[LogColumnDef]
+                     , active: Boolean
+                     , dividerPosition: Double) {
 
-  val logFileDefinition: LogReportDefinition = LogReportDefinition(path.toAbsolutePath.toString, someColumnDef, false, filters)
+  val logFileDefinition: LogReportDefinition = LogReportDefinition(path.toAbsolutePath.toString, someColumnDef, active, dividerPosition, filters)
   val lengthProperty = new SimpleIntegerProperty(entries.size())
   val titleProperty = new SimpleStringProperty(computeTabName)
 
   val tailer = new Tailer(path.toFile, new LTailerListener(entries), 1000, true)
 
   /** start observing log file for changes */
-  def start(): Unit = new Thread(tailer).start()
+  def init(): Unit = new Thread(tailer).start()
 
   /** stop observing changes */
   def stop(): Unit = tailer.stop()

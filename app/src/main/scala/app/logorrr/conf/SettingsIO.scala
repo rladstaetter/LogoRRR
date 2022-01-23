@@ -26,6 +26,19 @@ object SettingsIO extends CanLog {
     SettingsIO.write(settings.copy(recentFiles = updateRecentFilesFn(settings.recentFiles)))
   }
 
+  def updateDividerPosition(path: Path, dividerPosition: Double): Unit = {
+    val settings = read()
+    val defs: Seq[LogReportDefinition] = for (lrd <- settings.recentFiles.logReportDefinitions) yield {
+      if (lrd.pathAsString == path.toAbsolutePath.toString) {
+        lrd.copy(dividerPosition = dividerPosition)
+      } else {
+        lrd
+      }
+    }
+    SettingsIO.write(settings.copy(recentFiles = settings.recentFiles.copy(logReportDefinitions = defs)))
+  }
+
+
   def updateActiveLogFile(path: Path): Unit = {
     val settings = read()
     val defs: Seq[LogReportDefinition] = for (lrd <- settings.recentFiles.logReportDefinitions) yield {

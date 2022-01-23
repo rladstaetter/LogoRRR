@@ -5,7 +5,7 @@ import app.logorrr.model.{LogEntry, LogReport}
 import app.logorrr.util.{CanLog, CollectionUtils, JfxUtils, LogoRRRFonts}
 import app.logorrr.views.visual.LogVisualView
 import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
-import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.beans.value.ChangeListener
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
@@ -21,12 +21,13 @@ object LogReportTab {
     val lv = new LogReportTab(logReport
       , logViewTabPane.sceneWidthProperty.get()
       , logViewTabPane.squareWidthProperty.get()
+      , logReport.logFileDefinition.dividerPosition
       , initFileMenu)
 
     logReport.filters.foreach(lv.addFilter)
 
     /** activate invalidation listener on filtered list */
-    lv.start()
+    lv.init()
     lv.sceneWidthProperty.bind(logViewTabPane.sceneWidthProperty)
     lv.squareWidthProperty.bind(logViewTabPane.squareWidthProperty)
     lv
@@ -44,6 +45,7 @@ object LogReportTab {
 class LogReportTab(val logReport: LogReport
                    , val initialSceneWidth: Int
                    , val initialSquareWidth: Int
+                   , val initialDividerPosition: Double
                    , initFileMenu: => Unit)
   extends Tab with CanLog {
 
@@ -53,13 +55,107 @@ class LogReportTab(val logReport: LogReport
   /** repaint if entries or filters change */
   val repaintInvalidationListener: InvalidationListener = (_: Observable) => repaint()
 
-  def start(): Unit = {
-    logReport.start()
-    installInvalidationListener()
+  /** list of search filters to be applied to a Log Report */
+  val filtersListProperty = new SimpleListProperty[Filter](CollectionUtils.mkEmptyObservableList())
+
+  /** bound to sceneWidthProperty of parent LogViewTabPane */
+  val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
+
+  /** bound to squareWidthProperty of parent LogViewTabPane */
+  val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
+
+  /** top component for log view */
+  val borderPane = new BorderPane()
+
+  /** split visual view and text view */
+  val splitPane = new SplitPane()
+
+  /** list which holds all entries, default to display all (can be changed via buttons) */
+  val filteredList = new FilteredList[LogEntry](logReport.entries)
+
+  private val opsToolBar = new OpsToolBar(this)
+
+  private val filterButtonsToolBar = {
+    val fbtb = new FilterButtonsToolBar(this, filteredList, logReport.entries.size)
+    fbtb.filtersProperty.bind(filtersListProperty)
+    fbtb
   }
 
-  /** don't monitor file anymore if tab is closed, free invalidation listeners */
-  setOnClosed(_ => closeTab())
+  val opsToolBox = {
+    val vb = new VBox()
+    vb.getChildren.addAll(opsToolBar, filterButtonsToolBar)
+    vb
+  }
+
+  val initialWidth = (sceneWidth * initialDividerPosition).toInt
+
+  private lazy val logVisualView = {
+    val lvv = new LogVisualView(filteredList.asScala, initialWidth, getSquareWidth)
+    lvv.sisp.filtersListProperty.bind(filtersListProperty)
+    lvv
+  }
+
+  private val logTextView = new LogTextView(filteredList)
+
+  val entryLabel = {
+    val l = new Label("")
+    l.prefWidthProperty.bind(sceneWidthProperty)
+    l.setStyle(LogoRRRFonts.jetBrainsMono(20))
+    l
+  }
+
+
+
+
+  /** to share state between visual view and text view. index can be selected by navigation in visual view */
+  val selectedIndexProperty = new SimpleIntegerProperty()
+
+  val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
+
+  private val logEntryChangeListener: ChangeListener[LogEntry] = JfxUtils.onNew[LogEntry](updateEntryLabel)
+
+
+  def init(): Unit = {
+    borderPane.setTop(opsToolBox)
+    borderPane.setCenter(splitPane)
+    borderPane.setBottom(entryLabel)
+
+    setContent(borderPane)
+    /** don't monitor file anymore if tab is closed, free invalidation listeners */
+    setOnClosed(_ => closeTab())
+
+    textProperty.bind(logReport.titleProperty)
+
+    selectedIndexProperty.bind(logVisualView.selectedIndexProperty)
+
+    selectedIndexProperty.addListener(JfxUtils.onNew[Number](selectEntry))
+
+    selectedEntryProperty.bindBidirectional(logVisualView.selectedEntryProperty)
+
+    selectedEntryProperty.addListener(logEntryChangeListener)
+
+    // if user changes selected item in listview, change footer as well
+    logTextView.listView.getSelectionModel.selectedItemProperty.addListener(logEntryChangeListener)
+
+    splitPane.getItems.addAll(logVisualView, logTextView)
+
+
+    /**
+     * we are interested just in the first divider. If it changes its position (which means the user interacts) then
+     * update logVisualView
+     * */
+    splitPane.getDividers.get(0).positionProperty().addListener(JfxUtils.onNew {
+      t1: Number =>
+        val width = t1.doubleValue() * splitPane.getWidth
+        SettingsIO.updateDividerPosition(logReport.path, t1.doubleValue())
+        repaint(width)
+    })
+
+    logReport.init()
+
+    setDivider(initialDividerPosition)
+    installInvalidationListener()
+  }
 
   /**
    * Actions to perform if tab is closed:
@@ -84,31 +180,9 @@ class LogReportTab(val logReport: LogReport
     logReport.stop()
   }
 
-  textProperty.bind(logReport.titleProperty)
-
-  /** list of search filters to be applied to a Log Report */
-  val filtersListProperty = new SimpleListProperty[Filter](CollectionUtils.mkEmptyObservableList())
-
-  /** bound to sceneWidthProperty of parent LogViewTabPane */
-  val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
-
   def sceneWidth = sceneWidthProperty.get()
 
-  /** bound to squareWidthProperty of parent LogViewTabPane */
-  val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
-
   def getSquareWidth = squareWidthProperty.get()
-
-  val InitialRatio = 0.5
-
-  /** top component for log view */
-  val borderPane = new BorderPane()
-
-  /** split visual view and text view */
-  val splitPane = new SplitPane()
-
-  /** list which holds all entries, default to display all (can be changed via buttons) */
-  val filteredList = new FilteredList[LogEntry](logReport.entries)
 
   def installInvalidationListener(): Unit = {
     // to detect when we apply a new filter via filter buttons (see FilterButtonsToolbar)
@@ -122,60 +196,6 @@ class LogReportTab(val logReport: LogReport
     filteredList.predicateProperty().removeListener(repaintInvalidationListener)
     logReport.entries.removeListener(repaintInvalidationListener)
   }
-
-  private val opsToolBar = new OpsToolBar(this)
-  private val filterButtonsToolBar = {
-    val fbtb = new FilterButtonsToolBar(this, filteredList, logReport.entries.size)
-    fbtb.filtersProperty.bind(filtersListProperty)
-    fbtb
-  }
-
-  val opsToolBox = {
-    val vb = new VBox()
-    vb.getChildren.addAll(opsToolBar, filterButtonsToolBar)
-    vb
-  }
-
-  val initialWidth = (sceneWidth * InitialRatio).toInt
-
-  private lazy val logVisualView = {
-    val lvv = new LogVisualView(filteredList.asScala, initialWidth, getSquareWidth)
-    lvv.sisp.filtersListProperty.bind(filtersListProperty)
-    lvv
-  }
-
-  private val logTextView = new LogTextView(filteredList)
-
-  val entryLabel = {
-    val l = new Label("")
-    l.prefWidthProperty.bind(sceneWidthProperty)
-    l.setStyle(LogoRRRFonts.jetBrainsMono(20))
-    l
-  }
-
-  borderPane.setTop(opsToolBox)
-  borderPane.setCenter(splitPane)
-  borderPane.setBottom(entryLabel)
-
-  setContent(borderPane)
-
-  /** to share state between visual view and text view. index can be selected by navigation in visual view */
-  val selectedIndexProperty = new SimpleIntegerProperty()
-
-  selectedIndexProperty.bind(logVisualView.selectedIndexProperty)
-
-  selectedIndexProperty.addListener(JfxUtils.onNew[Number](selectEntry))
-
-
-  val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
-
-  selectedEntryProperty.bindBidirectional(logVisualView.selectedEntryProperty)
-
-  private val logEntryChangeListener: ChangeListener[LogEntry] = JfxUtils.onNew[LogEntry](updateEntryLabel)
-
-  selectedEntryProperty.addListener(logEntryChangeListener)
-  // if user changes selected item in listview, change footer as well
-  logTextView.listView.getSelectionModel.selectedItemProperty.addListener(logEntryChangeListener)
 
   def selectEntry(number: Number): Unit = logTextView.selectEntryByIndex(number.intValue)
 
@@ -192,18 +212,7 @@ class LogReportTab(val logReport: LogReport
     }
   }
 
-  splitPane.getItems.addAll(logVisualView, logTextView)
-
-  /**
-   * we are interested just in the first divider. If it changes its position (which means the user interacts) then
-   * update logVisualView
-   * */
-  splitPane.getDividers.get(0).positionProperty().addListener(new ChangeListener[Number] {
-    override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
-      val width = t1.doubleValue() * splitPane.getWidth
-      repaint(width)
-    }
-  })
+  def setDivider(pos: Double): Unit = splitPane.getDividers.get(0).setPosition(pos)
 
   def addFilter(filter: Filter): Unit = filtersListProperty.add(filter)
 

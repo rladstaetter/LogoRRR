@@ -52,11 +52,16 @@ class AppMainBorderPane(initialSceneWidth: Int
         val path = f.toPath
         if (Files.exists(path)) {
           if (!contains(path)) {
-            val logFileDefinition = LogReportDefinition(path.toAbsolutePath.toString, None, true, Filter.seq)
+            val logFileDefinition =
+              LogReportDefinition(path.toAbsolutePath.toString
+                , None
+                , active = true
+                , LogReportDefinition.defaultDividerPosition
+                , Filter.seq)
             SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinitions = logFileDefinition +: rf.logReportDefinitions))
             reInitMenuBarFn
             addLogReport(logFileDefinition)
-            logViewTabPane.selectLog(path)
+            selectLog(path)
           } else {
             logWarn(s"${path.toAbsolutePath.toString} is already opened ...")
           }
