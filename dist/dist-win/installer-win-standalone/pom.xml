@@ -33,7 +33,7 @@
             <resource>
                 <directory>src/main/ai</directory>
                 <includes>
-                    <include>logorrr-installer.aip</include>
+                    <include>*.aip</include>
                 </includes>
                 <targetPath>${project.build.directory}/installer/</targetPath>
                 <filtering>true</filtering>
@@ -82,6 +82,21 @@
                             <arguments>
                                 <argument>/rebuild</argument>
                                 <argument>logorrr-installer.aip</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-installer-slim</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${advanced.installer.compiler}</executable>
+                            <workingDirectory>${project.build.directory}/installer/</workingDirectory>
+                            <arguments>
+                                <argument>/rebuild</argument>
+                                <argument>logorrr-installer-slim.aip</argument>
                             </arguments>
                         </configuration>
                     </execution>
