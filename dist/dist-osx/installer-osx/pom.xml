@@ -26,6 +26,10 @@
             <groupId>app.logorrr.dist.repackaged</groupId>
             <artifactId>dist-repackaged</artifactId>
         </dependency>
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>build</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

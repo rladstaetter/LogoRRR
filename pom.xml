@@ -87,6 +87,8 @@
 
 
     <modules>
+        <module>core</module>
+        <module>build</module>
         <module>app</module>
         <module>dist</module>
         <module>docs</module>
@@ -137,10 +139,19 @@
                 <version>1.15.4</version>
                 <scope>test</scope>
             </dependency>
-
+            <dependency>
+                <groupId>app.logorrr</groupId>
+                <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>app.logorrr</groupId>
                 <artifactId>app</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>app.logorrr</groupId>
+                <artifactId>build</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

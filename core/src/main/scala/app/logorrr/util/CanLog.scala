@@ -1,6 +1,5 @@
 package app.logorrr.util
 
-
 trait CanLog {
 
   // ironic that this application doesn't use proper logging currently ;-)

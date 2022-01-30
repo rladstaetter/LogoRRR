@@ -1,7 +1,6 @@
 package app.logorrr.build
 
 import java.nio.file.Path
-import scala.jdk.CollectionConverters._
 
 object Commander {
 
