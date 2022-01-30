@@ -9,8 +9,8 @@
         <version>${revision}${changelist}</version>
     </parent>
 
-    <artifactId>installer-win-standalone</artifactId>
-    <name>app.logorrr.dist.win.installer-standalone</name>
+    <artifactId>installer-win</artifactId>
+    <name>app.logorrr.dist.win.installer</name>
     <description>Installer project using Advanced Installer technology to install LogoRRR without AppStore.</description>
 
     <dependencies>

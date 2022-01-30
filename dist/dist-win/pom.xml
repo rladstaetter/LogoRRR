@@ -39,7 +39,7 @@
             </activation>
             <modules>
                 <module>binary-win</module>
-                <module>installer-win-standalone</module>
+                <module>installer-win</module>
             </modules>
         </profile>
     </profiles>
