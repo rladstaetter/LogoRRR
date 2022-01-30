@@ -27,7 +27,7 @@ object ProductCodeUpdater extends CanLog {
             if (l.contains(needle)) {
               l.replace(needle, s"""<ROW Property="ProductCode" Value="1033:{${uuid}} " Type="16"/>""")
             } else l
-          }).mkString
+          }).mkString("\r\n")
         Files.write(p, lines.getBytes(Charset.forName("UTF-8")))
       } else {
         logError(s"${p.toAbsolutePath} does not exist. Aborting ...")
