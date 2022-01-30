@@ -11,13 +11,18 @@
 
     <artifactId>installer-win</artifactId>
     <name>app.logorrr.dist.win.installer</name>
-    <description>Installer project using Advanced Installer technology to install LogoRRR without AppStore.</description>
+    <description>Installer project using Advanced Installer technology to install LogoRRR without AppStore.
+    </description>
 
     <dependencies>
         <dependency>
             <groupId>app.logorrr.dist</groupId>
             <artifactId>binary-win</artifactId>
             <type>exe</type>
+        </dependency>
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>build</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -38,7 +43,6 @@
                 <targetPath>${project.build.directory}/installer/</targetPath>
                 <filtering>true</filtering>
             </resource>
-
         </resources>
         <plugins>
             <plugin>
@@ -69,6 +73,36 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
+                    <execution>
+                        <id>create-product-code-logorrr-installer</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>app.logorrr.build.ProductCodeUpdater</mainClass>
+                            <arguments>
+                                <argument>${project.build.directory}/installer/logorrr-installer.aip</argument>
+                                <argument>${revision}</argument>
+                            </arguments>
+                            <includePluginDependencies>true</includePluginDependencies>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-product-code-logorrr-installer-slim</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>app.logorrr.build.ProductCodeUpdater</mainClass>
+                            <arguments>
+                                <argument>${project.build.directory}/installer/logorrr-installer-slim.aip</argument>
+                                <argument>${revision}</argument>
+                            </arguments>
+                            <includePluginDependencies>true</includePluginDependencies>
+                        </configuration>
+                    </execution>
                     <!-- Create installer -->
                     <execution>
                         <id>create-installer</id>

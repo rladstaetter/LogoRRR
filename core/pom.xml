@@ -8,34 +8,13 @@
         <artifactId>logorrr</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
-    <artifactId>docs</artifactId>
-    <name>app.logorrr.docs</name>
+    <artifactId>core</artifactId>
+    <name>app.logorrr.core</name>
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
         </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>build</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>app</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-swing</artifactId>
-        </dependency>
-        <!--
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${scala.major.version}</artifactId>
@@ -44,7 +23,6 @@
             <groupId>org.scalacheck</groupId>
             <artifactId>scalacheck_${scala.major.version}</artifactId>
         </dependency>
-        -->
     </dependencies>
     <build>
         <plugins>
@@ -52,12 +30,10 @@
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
             </plugin>
-            <!--
             <plugin>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
             </plugin>
-            -->
         </plugins>
     </build>
 </project>

@@ -1,1 +1,0 @@
-copy target\installer\LogoRRR-installer.exe H:\TEMP\lad\
