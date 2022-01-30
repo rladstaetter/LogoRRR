@@ -20,7 +20,6 @@ On windows, LogoRRR uses [GraalVM native image](https://www.graalvm.org/referenc
 
 To enhance end user experience further, an installer framwework named [Advanced Installer](https://www.advancedinstaller.com) was used to create the windows installer. Advanced installer is in no way affiliated with either Gluon nor GraalVM, but can be regarded as its own tooling. It was choosen since the installer itself has a great UX and it is easy to use and is accessible for the project thanks to the employer of the main author ([Nextsense](https://www.nextsense-worldwide.com/en/)). 
 
-To reduce the size of the application itself [UPX](https://upx.github.io) is used which really does a great job at minimizing the application size.
 
 ### MacOs
 

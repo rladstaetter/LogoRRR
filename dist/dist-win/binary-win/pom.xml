@@ -38,74 +38,13 @@
                 <groupId>com.gluonhq</groupId>
                 <artifactId>gluonfx-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>delete-old-builds</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <delete>
-                                    <fileset dir="${project.build.directory}/" includes="LogoRRR.exe" />
-                                </delete>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
 
-            <plugin>
-                <groupId>com.googlecode.maven-download-plugin</groupId>
-                <artifactId>download-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>download-upx-packer</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip</url>
-                            <unpack>true</unpack>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>pack-exe</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <workingDirectory>${project.build.directory}/</workingDirectory>
-                            <executable>${project.build.directory}/upx-3.96-win64/upx.exe</executable>
-                            <arguments>
-                                <argument>-9</argument>
-                                <argument>-oLogoRRR.exe</argument>
-                                <argument>${project.build.directory}/gluonfx/x86_64-windows/app.logorrr.dist.win.binary.exe</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>attach-uncompressed-exe</id>
+                        <id>attach-exe</id>
                         <phase>package</phase>
                         <goals>
                             <goal>attach-artifact</goal>
@@ -114,11 +53,6 @@
                             <artifacts>
                                 <artifact>
                                     <file>${project.build.directory}/gluonfx/x86_64-windows/app.logorrr.dist.win.binary.exe</file>
-                                    <classifier>uncompressed</classifier>
-                                    <type>exe</type>
-                                </artifact>
-                                <artifact>
-                                    <file>${project.build.directory}/LogoRRR.exe</file>
                                     <type>exe</type>
                                 </artifact>
                             </artifacts>

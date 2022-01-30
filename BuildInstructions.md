@@ -56,8 +56,6 @@ A binary is available here after some minutes:
 
 If you want to execute this exe on another computer, you have to make sure that the Visual Studio runtime environment is present there. If not, you can download [Visual Studio 2019 redistributables here](https://aka.ms/vs/16/release/vc_redist.x64.exe). (If you are lucky its already installed on your machine). If the application doesn't start - this is a possible reason for that.
 
-On Windows the binary will be packed via [UPX](https://upx.github.io) to reduce the file size considerably.
-
 
 #### Additional Setup information for GRAALVM
 
