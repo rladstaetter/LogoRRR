@@ -9,7 +9,10 @@ import org.apache.commons.io.input.Tailer
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path}
+import java.time.{Instant, LocalDateTime, ZoneId, ZoneOffset}
+import java.time.format.DateTimeFormatter
 import java.util
+import java.util.function.Predicate
 import java.util.stream.Collectors
 import scala.language.postfixOps
 import scala.util.{Failure, Success, Try}
@@ -20,7 +23,6 @@ object LogReport extends CanLog {
 
   def apply(lrd: LogReportDefinition): LogReport = timeR({
     val logFile = lrd.path
-    val someColumnDef = lrd.someColumnDefinition
     val filters = lrd.filters
 
     var lineNumber: Long = 0L
@@ -28,18 +30,26 @@ object LogReport extends CanLog {
     // it makes a notable difference in performance if we don't convert huge lists from java <-> scala
     val logEntryStream = readFromFile(logFile).stream().map(l => {
       lineNumber = lineNumber + 1L
-      someColumnDef match {
-        case Some(columDef) => LogEntry(lineNumber, l, Try(columDef.parse(l)).toOption)
-        case None => LogEntry(lineNumber, l)
+      lrd.logEntrySetting match {
+        case Some(entrySetting) => LogEntry(lineNumber, l, tryToParseDateTime(l, entrySetting))
+        case None =>
+          LogEntry(lineNumber, l, None)
       }
     })
     new LogReport(logFile
       , FXCollections.observableList(logEntryStream.collect(Collectors.toList[LogEntry]()))
       , filters
-      , someColumnDef
+      , lrd.logEntrySetting
       , lrd.active
       , lrd.dividerPosition)
   }, s"Imported ${lrd.path.toAbsolutePath.toString} ... ")
+
+  private def tryToParseDateTime(line: String, entrySetting: LogEntrySetting): Option[Instant] = Try {
+    val dateTimeAsString = line.substring(entrySetting.dateTimeRange.start, entrySetting.dateTimeRange.end)
+    val dtf: DateTimeFormatter = entrySetting.dateTimeFormatter
+    println(s"Parsing : '${dateTimeAsString}'")
+    LocalDateTime.parse(dateTimeAsString, dtf).toInstant(ZoneOffset.of(entrySetting.zoneOffset))
+  }.toOption
 
   private def readFromFile(logFile: Path): util.List[String] = {
     Try {
@@ -65,14 +75,37 @@ object LogReport extends CanLog {
 
 }
 
+case class TimeRange(startTime: Instant, endTime: Instant)
+
 case class LogReport(path: Path
                      , entries: ObservableList[LogEntry]
                      , filters: Seq[Filter]
-                     , someColumnDef: Option[LogColumnDef]
+                     , someLogEntrySetting: Option[LogEntrySetting]
                      , active: Boolean
                      , dividerPosition: Double) {
 
-  val logFileDefinition: LogReportDefinition = LogReportDefinition(path.toAbsolutePath.toString, someColumnDef, active, dividerPosition, filters)
+  /** contains time information for first and last entry for given log file */
+  lazy val someTimeRange: Option[TimeRange] =
+    if (entries.isEmpty) {
+      None
+    } else {
+      val filteredEntries = entries.filtered((t: LogEntry) => t.someInstant.isDefined)
+      if (filteredEntries.isEmpty) {
+        None
+      } else {
+        for {start <- filteredEntries.get(0).someInstant
+             end <- filteredEntries.get(filteredEntries.size() - 1).someInstant} yield TimeRange(start, end)
+      }
+    }
+
+
+  val logFileDefinition: LogReportDefinition =
+    LogReportDefinition(path.toAbsolutePath.toString
+      , None
+      , active
+      , dividerPosition
+      , filters
+      , someLogEntrySetting)
   val lengthProperty = new SimpleIntegerProperty(entries.size())
   val titleProperty = new SimpleStringProperty(computeTabName)
 

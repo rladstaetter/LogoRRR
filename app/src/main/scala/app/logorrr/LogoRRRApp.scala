@@ -8,7 +8,7 @@ import javafx.stage.Stage
 object LogoRRRApp {
 
   def main(args: Array[String]): Unit = {
-    //LogUtil.init()
+    // LogUtil.init()
     javafx.application.Application.launch(classOf[LogoRRRApp], args: _*)
   }
 

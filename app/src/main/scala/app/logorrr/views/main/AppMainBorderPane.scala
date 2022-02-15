@@ -1,9 +1,9 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.{Settings, SettingsIO}
-import app.logorrr.model.LogReportDefinition
+import app.logorrr.model.{LogEntrySetting, LogReportDefinition}
 import app.logorrr.util.CanLog
-import app.logorrr.views.{Filter, LogViewTabPane}
+import app.logorrr.views.{Filter, LogViewTabPane, SimpleRange}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
@@ -57,7 +57,8 @@ class AppMainBorderPane(initialSceneWidth: Int
                 , None
                 , active = true
                 , LogReportDefinition.defaultDividerPosition
-                , Filter.seq)
+                , Filter.seq
+                , Option(LogEntrySetting.Default))
             SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinitions = logFileDefinition +: rf.logReportDefinitions))
             reInitMenuBarFn
             addLogReport(logFileDefinition)

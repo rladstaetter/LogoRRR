@@ -4,6 +4,8 @@ import app.logorrr.model.LogEntry
 import javafx.collections.ObservableList
 import org.apache.commons.io.input.{Tailer, TailerListener}
 
+import java.time.Instant
+
 class LTailerListener(ol: ObservableList[LogEntry]) extends TailerListener with CanLog {
 
   var currentCnt = ol.size()
@@ -12,7 +14,7 @@ class LTailerListener(ol: ObservableList[LogEntry]) extends TailerListener with 
 
   override def handle(l: String): Unit = {
     currentCnt = currentCnt + 1
-    val e = LogEntry(currentCnt, l)
+    val e = LogEntry(currentCnt, l, Option(Instant.now)) // TODO: cheating, uses system time instead of time logged in file
     JfxUtils.execOnUiThread(ol.add(e))
   }
 

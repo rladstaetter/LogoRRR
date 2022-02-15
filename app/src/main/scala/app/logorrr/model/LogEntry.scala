@@ -9,8 +9,8 @@ import java.time.Instant
 
 object LogEntry {
 
-  def apply(lineNumber: Long
-            , value: String): LogEntry = LogEntry(lineNumber, value, None)
+  def apply(lineNumber: Long, value: String): LogEntry = LogEntry(lineNumber, value, None)
+
 }
 
 /**

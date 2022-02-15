@@ -1,7 +1,7 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.{Settings, SettingsIO}
-import app.logorrr.model.LogReportDefinition
+import app.logorrr.model.{LogEntrySetting, LogReportDefinition}
 import app.logorrr.util.CanLog
 import app.logorrr.views.Filter
 import javafx.application.HostServices
@@ -51,7 +51,13 @@ class LogoRRRMain(hostServices: HostServices
     logTrace(s"Try to open log file ${path.toAbsolutePath.toString}")
 
     if (!ambp.contains(path)) {
-      SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinitions = LogReportDefinition(path.toString, None, true, LogReportDefinition.defaultDividerPosition, Filter.seq) +: rf.logReportDefinitions))
+      SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinitions =
+        LogReportDefinition(path.toString
+          , None
+          , true
+          , LogReportDefinition.defaultDividerPosition
+          , Filter.seq
+          , Option(LogEntrySetting.Default)) +: rf.logReportDefinitions))
       addLogReport(LogReportDefinition(path))
       selectLog(path)
       initFileMenu()

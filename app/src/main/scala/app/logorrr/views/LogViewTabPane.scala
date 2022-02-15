@@ -102,7 +102,9 @@ class LogViewTabPane(initFileMenu: => Unit)
         case Success(logReport) =>
           logInfo(s"Opening ${lrd.path.toAbsolutePath.toString} ... ")
           add(logReport)
-        case Failure(exception) => logError("Could not import file " + lrd.path.toAbsolutePath + ", reason: " + exception.getMessage)
+        case Failure(exception) =>
+          logException(exception)
+          logError("Could not import file " + lrd.path.toAbsolutePath + ", reason: " + exception.getMessage)
       }
     } else {
       logWarn(s"Could not read ${lrd.path.toAbsolutePath} ...")

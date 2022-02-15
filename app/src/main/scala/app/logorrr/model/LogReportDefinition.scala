@@ -1,6 +1,6 @@
 package app.logorrr.model
 
-import app.logorrr.views.{Filter, LogColumnDef}
+import app.logorrr.views.{Filter, LogColumnDef, SimpleRange}
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.nio.file.{Files, Path, Paths}
@@ -13,12 +13,13 @@ object LogReportDefinition {
   val defaultDividerPosition = 0.5
   val defaultActive = false
 
-  def apply(p: Path): LogReportDefinition = LogReportDefinition(p.toAbsolutePath.toString, None, defaultActive, defaultDividerPosition, Filter.seq)
+  def apply(p: Path): LogReportDefinition = LogReportDefinition(p.toAbsolutePath.toString, None, defaultActive, defaultDividerPosition, Filter.seq, None)
 
   def apply(p: Path, logColumnDef: LogColumnDef): LogReportDefinition =
-    LogReportDefinition(p.toAbsolutePath.toString, Option(logColumnDef), defaultActive, defaultDividerPosition, Filter.seq)
+    LogReportDefinition(p.toAbsolutePath.toString, Option(logColumnDef), defaultActive, defaultDividerPosition, Filter.seq, None)
 
 }
+
 
 /**
  * Contains information which is necessary to display a log file.
@@ -36,7 +37,9 @@ case class LogReportDefinition(pathAsString: String
                                , someColumnDefinition: Option[LogColumnDef] = None
                                , active: Boolean
                                , dividerPosition: Double
-                               , filters: Seq[Filter]) {
+                               , filters: Seq[Filter]
+                               , logEntrySetting: Option[LogEntrySetting]) {
+
   val path: Path = Paths.get(pathAsString)
 
   val isPathValid = Files.isReadable(path) && Files.isRegularFile(path)
