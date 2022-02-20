@@ -116,8 +116,15 @@ case class LogColumnDef(yearRange: SimpleRange
 
 }
 
+class LineDecoratorLabel extends Label {
+  setStyle(LogoRRRFonts.jetBrainsMono(12) + "-fx-background-color: BISQUE;")
+  setText("")
+}
+
 class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
 
+  /** 'pragmatic way' to determine width of max elems in this view */
+  val maxLength = filteredList.size().toString.length
 
   val listView: ListView[LogEntry] = {
     val lv = new ListView[LogEntry]()
@@ -126,7 +133,6 @@ class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
   }
 
   listView.setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
-
   setCenter(listView)
 
   class LogEntryListCell extends ListCell[LogEntry] {
@@ -134,25 +140,22 @@ class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
     setStyle(LogoRRRFonts.jetBrainsMono(12))
     setGraphic(null)
     val cm = new ContextMenu()
-    val copyCurrentToClipboard = new MenuItem("copy to clipboard")
-    cm.getItems.addAll(copyCurrentToClipboard)
+    val copyCurrentToClipboard = new MenuItem("copy text to clipboard")
 
-    val lineNumberLabel = {
-      val l = new Label("")
-      l.setStyle(LogoRRRFonts.jetBrainsMono(10))
-      l
-    }
+    cm.getItems.addAll(copyCurrentToClipboard)
 
     override def updateItem(t: LogEntry, b: Boolean): Unit = {
       super.updateItem(t, b)
       Option(t) match {
         case Some(e) =>
-          lineNumberLabel.setText(e.lineNumber.toString)
-          setGraphic(lineNumberLabel)
+          val l = new LineDecoratorLabel
+          l.setText(e.lineNumber.toString.reverse.padTo(maxLength, " ").reverse.mkString)
+          setGraphic(l)
           setText(e.value)
           copyCurrentToClipboard.setOnAction(_ => ClipBoardUtils.copyToClipboardText(e.value))
           setContextMenu(cm)
         case None =>
+          setGraphic(null)
           setText(null)
           setContextMenu(null)
       }

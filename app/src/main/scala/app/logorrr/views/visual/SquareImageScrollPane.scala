@@ -21,6 +21,7 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
   val canvasWidthProperty = new SimpleIntegerProperty(canvasWidth)
 
   val filtersListProperty = new SimpleListProperty[Filter]()
+
   def filters: Seq[Filter] = Option(filtersListProperty.get()).map(_.asScala.toSeq).getOrElse(Seq())
 
   /** responsible for determining current logevent */
