@@ -3,10 +3,15 @@ package app.logorrr.views
 import app.logorrr.conf.SettingsIO
 import app.logorrr.model.LogReportDefinition
 import javafx.scene.control._
+import javafx.scene.paint.Color
 
 import scala.jdk.CollectionConverters._
 
 object SearchOp {
+
+  class SearchColorPicker extends ColorPicker {
+    setValue(Color.MAGENTA)
+  }
 
   class SearchTextField extends TextField {
     setPrefWidth(200)
@@ -32,10 +37,11 @@ object SearchOp {
 
 }
 
+
 class OpsToolBar(logReportTab: LogReportTab) extends ToolBar {
 
   val searchTextField = new SearchOp.SearchTextField
-  val colorPicker = new ColorPicker()
+  val colorPicker = new SearchOp.SearchColorPicker()
   val searchButton = new SearchOp.SearchButton(searchTextField, colorPicker, logReportTab)
 
   getItems.addAll(searchTextField, colorPicker, searchButton)
