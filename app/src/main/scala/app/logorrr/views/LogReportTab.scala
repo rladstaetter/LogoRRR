@@ -1,13 +1,15 @@
 package app.logorrr.views
 
 import app.logorrr.conf.SettingsIO
-import app.logorrr.model.{LogEntry, LogReport}
+import app.logorrr.model.{LogEntry, LogReport, LogReportDefinition}
 import app.logorrr.util.{CanLog, CollectionUtils, JfxUtils, LogoRRRFonts}
 import app.logorrr.views.visual.LogVisualView
 import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.ChangeListener
 import javafx.beans.{InvalidationListener, Observable}
+import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
+import javafx.geometry.Pos
 import javafx.scene.control._
 import javafx.scene.layout._
 
@@ -35,6 +37,7 @@ object LogReportTab {
 
 }
 
+
 /**
  * Represents a single 'document' UI approach for a log file.
  *
@@ -46,8 +49,7 @@ class LogReportTab(val logReport: LogReport
                    , val initialSceneWidth: Int
                    , val initialSquareWidth: Int
                    , val initialDividerPosition: Double
-                   , initFileMenu: => Unit)
-  extends Tab with CanLog {
+                   , initFileMenu: => Unit) extends Tab with CanLog {
 
   /** is set to false if logview was painted at least once (see repaint) */
   val neverPaintedProperty = new SimpleBooleanProperty(true)
@@ -64,6 +66,7 @@ class LogReportTab(val logReport: LogReport
   /** bound to squareWidthProperty of parent LogViewTabPane */
   val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
 
+
   /** top component for log view */
   val borderPane = new BorderPane()
 
@@ -73,19 +76,17 @@ class LogReportTab(val logReport: LogReport
   /** list which holds all entries, default to display all (can be changed via buttons) */
   val filteredList = new FilteredList[LogEntry](logReport.entries)
 
-  private val opsToolBar = new OpsToolBar(this)
+  private val searchToolBar = new SearchToolBar(addFilter)
 
-  private val filterButtonsToolBar = {
-    val fbtb = new FilterButtonsToolBar(this, filteredList, logReport.entries.size)
+  private val filtersToolBar = {
+    val fbtb = new FiltersToolBar(filteredList, logReport.entries.size, removeFilter)
     fbtb.filtersProperty.bind(filtersListProperty)
     fbtb
   }
 
-  val opsToolBox = {
-    val vb = new VBox()
-    vb.getChildren.addAll(opsToolBar, filterButtonsToolBar)
-    vb
-  }
+  val settingsToolBar = new SettingsToolBar
+
+  val opsBorderPane: BorderPane = new OpsBorderPane(searchToolBar, filtersToolBar, settingsToolBar)
 
   val initialWidth = (sceneWidth * initialDividerPosition).toInt
 
@@ -105,8 +106,6 @@ class LogReportTab(val logReport: LogReport
   }
 
 
-
-
   /** to share state between visual view and text view. index can be selected by navigation in visual view */
   val selectedIndexProperty = new SimpleIntegerProperty()
 
@@ -115,12 +114,25 @@ class LogReportTab(val logReport: LogReport
   private val logEntryChangeListener: ChangeListener[LogEntry] = JfxUtils.onNew[LogEntry](updateEntryLabel)
 
 
+  /** if a change event for filtersList Property occurs, save it to disc */
+  def initFiltersPropertyListChangeListener(): Unit = {
+    filtersListProperty.addListener(JfxUtils.mkListChangeListener(handleFilterChange))
+  }
+
+  private def handleFilterChange(change: ListChangeListener.Change[_ <: Filter]): Unit = {
+    while (change.next()) {
+      val updatedDefinition = logReport.logFileDefinition.copy(filters = filtersListProperty.asScala.toSeq)
+      SettingsIO.updateRecentFileSettings(rf => rf.update(updatedDefinition))
+    }
+  }
+
   def init(): Unit = {
-    borderPane.setTop(opsToolBox)
+    borderPane.setTop(opsBorderPane)
     borderPane.setCenter(splitPane)
     borderPane.setBottom(entryLabel)
 
     setContent(borderPane)
+
     /** don't monitor file anymore if tab is closed, free invalidation listeners */
     setOnClosed(_ => closeTab())
 
@@ -154,6 +166,7 @@ class LogReportTab(val logReport: LogReport
     logReport.init()
 
     setDivider(initialDividerPosition)
+    initFiltersPropertyListChangeListener()
     installInvalidationListener()
   }
 
@@ -202,9 +215,9 @@ class LogReportTab(val logReport: LogReport
   def updateEntryLabel(logEntry: LogEntry): Unit = {
     Option(logEntry) match {
       case Some(entry) =>
-        val background: Background = entry.background(filterButtonsToolBar.filterButtons.keys.toSeq)
+        val background: Background = entry.background(filtersToolBar.filterButtons.keys.toSeq)
         entryLabel.setBackground(background)
-        entryLabel.setTextFill(entry.calcColor(filterButtonsToolBar.filterButtons.keys.toSeq).invert())
+        entryLabel.setTextFill(entry.calcColor(filtersToolBar.filterButtons.keys.toSeq).invert())
         entryLabel.setText(entry.value)
       case None =>
         entryLabel.setBackground(null)
@@ -218,8 +231,6 @@ class LogReportTab(val logReport: LogReport
 
   def removeFilter(filter: Filter): Unit = {
     filtersListProperty.remove(filter)
-    val updatedDefinition = logReport.logFileDefinition.copy(filters = filtersListProperty.asScala.toSeq)
-    SettingsIO.updateRecentFileSettings(rf => rf.update(updatedDefinition))
   }
 
   def getVisualViewWidth(): Double = {

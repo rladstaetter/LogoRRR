@@ -20,29 +20,31 @@ object SearchOp {
 
   class SearchButton(searchTextField: SearchTextField
                      , colorPicker: ColorPicker
-                     , logReportTab: LogReportTab) extends Button {
+                     , addFilterFn: Filter => Unit) extends Button {
     setText("search")
 
     setOnAction(_ => {
       val filter = new Filter(searchTextField.getText, colorPicker.getValue.toString)
-      searchTextField.setText("")
-      logReportTab.addFilter(filter)
-      // update settings
-      val definition: LogReportDefinition = logReportTab.logReport.logFileDefinition
-      val updatedDefinition = definition.copy(filters = logReportTab.filtersListProperty.asScala.toSeq)
-      SettingsIO.updateRecentFileSettings(rf => rf.update(updatedDefinition))
+      searchTextField.clear()
+      addFilterFn(filter)
     })
 
   }
 
 }
 
-
-class OpsToolBar(logReportTab: LogReportTab) extends ToolBar {
-
+case class SearchOp(addFilterFn: Filter => Unit) {
   val searchTextField = new SearchOp.SearchTextField
   val colorPicker = new SearchOp.SearchColorPicker()
-  val searchButton = new SearchOp.SearchButton(searchTextField, colorPicker, logReportTab)
+  val searchButton = new SearchOp.SearchButton(searchTextField, colorPicker, addFilterFn)
 
-  getItems.addAll(searchTextField, colorPicker, searchButton)
+  val items = Seq(searchTextField, colorPicker, searchButton)
+}
+
+
+class SearchToolBar(addFilterFn: Filter => Unit) extends ToolBar {
+
+  val searchOp = SearchOp(addFilterFn)
+
+  getItems.addAll(searchOp.items: _*)
 }

@@ -1,7 +1,38 @@
 package app.logorrr.views
 
+import javafx.beans.{InvalidationListener, Observable}
 import javafx.scene.control.{Button, ToggleButton}
 import javafx.scene.layout.HBox
+import javafx.scene.shape.Rectangle
+
+
+object SearchTag {
+
+  def apply(filter: Filter
+            , occurrences: Map[Filter, Int]
+            , totalSize: Int
+            , updateActiveFilter: () => Unit
+            , removeFilter: Filter => Unit): SearchTag = {
+    val buttonTitle = filter.value + ": " + occurrences(filter) + " " + FiltersToolBar.percentAsString(occurrences(filter), totalSize)
+    val button = new ToggleButton(buttonTitle)
+    val r = new Rectangle(10, 10)
+    r.setFill(filter.color)
+    button.setGraphic(r)
+    button.setSelected(true)
+
+
+    button.selectedProperty().addListener(new InvalidationListener {
+      // if any of the buttons changes its selected value, reevaluate predicate
+      // and thus change contents of all views which display filtered List
+      override def invalidated(observable: Observable): Unit = updateActiveFilter()
+    })
+
+    /** filters can be removed, in this case update display */
+    val removeButton = new FiltersToolBar.RemoveButton(filter, removeFilter)
+
+    new SearchTag(button, removeButton)
+  }
+}
 
 /**
  * Groups a toggle button to activate a filter and a button to remove it
