@@ -28,32 +28,32 @@ object SettingsIO extends CanLog {
 
   def updateDividerPosition(path: Path, dividerPosition: Double): Unit = {
     val settings = read()
-    val defs: Seq[LogReportDefinition] = for (lrd <- settings.recentFiles.logReportDefinitions) yield {
-      if (lrd.pathAsString == path.toAbsolutePath.toString) {
-        lrd.copy(dividerPosition = dividerPosition)
-      } else {
-        lrd
-      }
-    }
-    SettingsIO.write(settings.copy(recentFiles = settings.recentFiles.copy(logReportDefinitions = defs)))
+    val recentFiles = settings.recentFiles
+    val lrd = recentFiles.logReportDefinitions(path.toAbsolutePath.toString).copy(dividerPosition = dividerPosition)
+    val nrf = recentFiles.copy(logReportDefinitions = settings.recentFiles.logReportDefinitions + (path.toAbsolutePath.toString -> lrd))
+    SettingsIO.write(settings.copy(recentFiles = nrf))
   }
 
+  def updateLogReportDefinition(logReportDefinition: LogReportDefinition): Unit = {
+    val settings = read()
+  }
 
   def updateActiveLogFile(path: Path): Unit = {
     val settings = read()
-    val defs: Seq[LogReportDefinition] = for (lrd <- settings.recentFiles.logReportDefinitions) yield {
-      if (lrd.pathAsString == path.toAbsolutePath.toString) {
-        lrd.copy(active = true)
-      } else {
-        lrd.copy(active = false)
-      }
-    }
-    SettingsIO.write(settings.copy(recentFiles = settings.recentFiles.copy(logReportDefinitions = defs)))
+    val recentFiles = settings.recentFiles
+    val lrd = recentFiles.logReportDefinitions(path.toAbsolutePath.toString).copy(active = true)
+    val nrf = recentFiles.copy(logReportDefinitions = settings.recentFiles.logReportDefinitions + (path.toAbsolutePath.toString -> lrd))
+    SettingsIO.write(settings.copy(recentFiles = nrf))
   }
 
   /** read settings from default place and filter all paths which don't exist anymore */
   def read(): Settings = {
-    ConfigSource.file(FilePaths.settingsFilePath).loadOrThrow[Settings].filterWithValidPaths
+    Try(ConfigSource.file(FilePaths.settingsFilePath).loadOrThrow[Settings].filterWithValidPaths) match {
+      case Failure(ex) =>
+        logException(s"Could not load ${FilePaths.settingsFilePath}, using default settings ...", ex)
+        Settings.Default
+      case Success(value) => value
+    }
   }
 
   /** has to be a def to reread every time this is accessed */
@@ -70,7 +70,7 @@ object SettingsIO extends CanLog {
             Option(defaultSettings)
           // should not happen, programming / deployment error
           case Failure(e) =>
-            logException(e)
+            logException("Could not load config default source ...", e)
             //logError("Using following fallback configuration:")
             //logError("")
             //logError(SettingsWriter.to(Default))

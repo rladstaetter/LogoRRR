@@ -27,13 +27,7 @@ object AboutScreen {
     setPrefWidth(400)
     setPadding(new Insets(30, 20, 20, 20))
 
-    def mkHyperLink(hlink: HLink): Hyperlink = {
-      val hyperlink = new Hyperlink(hlink.description)
-      hyperlink.setOnAction(_ => hostServices.showDocument(hlink.url.toString))
-      hyperlink
-    }
-
-    links.foreach(l => getChildren.add(mkHyperLink(l)))
+    links.foreach(l => getChildren.add(l.mkHyperLink(hostServices)))
 
   }
 

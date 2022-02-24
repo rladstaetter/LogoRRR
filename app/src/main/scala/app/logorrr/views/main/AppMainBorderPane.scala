@@ -4,6 +4,7 @@ import app.logorrr.conf.{Settings, SettingsIO}
 import app.logorrr.model.{LogEntrySetting, LogReportDefinition}
 import app.logorrr.util.CanLog
 import app.logorrr.views.{Filter, LogViewTabPane, SimpleRange}
+import javafx.application.HostServices
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
@@ -13,8 +14,8 @@ import scala.jdk.CollectionConverters.ListHasAsScala
 
 object AppMainBorderPane {
 
-  def apply(settings: Settings, reInitMenuBarFn: => Unit): AppMainBorderPane = {
-    new AppMainBorderPane(settings.stageSettings.width, settings.squareImageSettings.width, reInitMenuBarFn)
+  def apply(hostServices: HostServices, settings: Settings, reInitMenuBarFn: => Unit): AppMainBorderPane = {
+    new AppMainBorderPane(hostServices,settings.stageSettings.width, settings.squareImageSettings.width, reInitMenuBarFn)
   }
 }
 
@@ -24,7 +25,8 @@ object AppMainBorderPane {
  * @param initialSceneWidth  initial width of scene
  * @param initialSquareWidth width of squares to paint in visual view
  */
-class AppMainBorderPane(initialSceneWidth: Int
+class AppMainBorderPane(hostServices: HostServices
+                        , initialSceneWidth: Int
                         , initialSquareWidth: Int
                         , reInitMenuBarFn: => Unit) extends BorderPane with CanLog {
 
@@ -33,7 +35,7 @@ class AppMainBorderPane(initialSceneWidth: Int
 
   val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
 
-  val logViewTabPane = LogViewTabPane(this, reInitMenuBarFn)
+  val logViewTabPane = LogViewTabPane(hostServices, this, reInitMenuBarFn)
 
 
   def init(): Unit = {
@@ -59,7 +61,7 @@ class AppMainBorderPane(initialSceneWidth: Int
                 , LogReportDefinition.defaultDividerPosition
                 , Filter.seq
                 , Option(LogEntrySetting.Default))
-            SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinitions = logFileDefinition +: rf.logReportDefinitions))
+            SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinitions = Map(logFileDefinition.pathAsString -> logFileDefinition) ++ rf.logReportDefinitions))
             reInitMenuBarFn
             addLogReport(logFileDefinition)
             selectLog(path)

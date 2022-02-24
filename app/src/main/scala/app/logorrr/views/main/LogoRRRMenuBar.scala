@@ -8,11 +8,7 @@ import javafx.scene.control.MenuBar
 
 import java.nio.file.Path
 
-class LogoRRRMenuBar(openLogFile: Path => Unit
-                     , removeAllLogFiles: => Unit
-                     , updateLogDef: LogReportDefinition => Unit
-                     , closeApplication: => Unit
-                     , hostServices: HostServices) extends MenuBar
+class LogoRRRMenuBar(hostServices: HostServices, openLogFile: Path => Unit, removeAllLogFiles: => Unit, updateLogDef: LogReportDefinition => Unit, closeApplication: => Unit) extends MenuBar
   with CanLog {
 
   if (OsUtil.isMac) {

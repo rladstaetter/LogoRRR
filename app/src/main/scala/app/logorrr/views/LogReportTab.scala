@@ -4,6 +4,7 @@ import app.logorrr.conf.SettingsIO
 import app.logorrr.model.{LogEntry, LogReport, LogReportDefinition}
 import app.logorrr.util.{CanLog, CollectionUtils, JfxUtils, LogoRRRFonts}
 import app.logorrr.views.visual.LogVisualView
+import javafx.application.HostServices
 import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.ChangeListener
 import javafx.beans.{InvalidationListener, Observable}
@@ -17,10 +18,13 @@ import scala.jdk.CollectionConverters._
 
 object LogReportTab {
 
-  def apply(logViewTabPane: LogViewTabPane
+  def apply(hostServices: HostServices
+            , logViewTabPane: LogViewTabPane
             , logReport: LogReport
             , initFileMenu: => Unit): LogReportTab = {
-    val lv = new LogReportTab(logReport
+    val lv = new LogReportTab(
+      hostServices
+      , logReport
       , logViewTabPane.sceneWidthProperty.get()
       , logViewTabPane.squareWidthProperty.get()
       , logReport.logFileDefinition.dividerPosition
@@ -45,7 +49,8 @@ object LogReportTab {
  *
  * @param logReport report instance holding information of log file to be analyzed
  * */
-class LogReportTab(val logReport: LogReport
+class LogReportTab(hostServices: HostServices
+                   , val logReport: LogReport
                    , val initialSceneWidth: Int
                    , val initialSquareWidth: Int
                    , val initialDividerPosition: Double
@@ -84,7 +89,7 @@ class LogReportTab(val logReport: LogReport
     fbtb
   }
 
-  val settingsToolBar = new SettingsToolBar
+  val settingsToolBar = new SettingsToolBar(hostServices, logReport.logFileDefinition)
 
   val opsBorderPane: BorderPane = new OpsBorderPane(searchToolBar, filtersToolBar, settingsToolBar)
 
@@ -179,10 +184,7 @@ class LogReportTab(val logReport: LogReport
    *
    */
   def closeTab(): Unit = {
-    SettingsIO.updateRecentFileSettings(rf => {
-      val filteredFiles = rf.logReportDefinitions.filterNot(s => s.pathAsString == logReport.logFileDefinition.path.toAbsolutePath.toString)
-      rf.copy(logReportDefinitions = filteredFiles)
-    })
+    SettingsIO.updateRecentFileSettings(rf => rf.remove(logReport.path.toAbsolutePath.toString))
     initFileMenu
     shutdown()
   }

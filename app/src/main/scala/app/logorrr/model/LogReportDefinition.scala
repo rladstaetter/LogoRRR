@@ -35,10 +35,10 @@ object LogReportDefinition {
  */
 case class LogReportDefinition(pathAsString: String
                                , someColumnDefinition: Option[LogColumnDef] = None
-                               , active: Boolean
+                               , @deprecated active: Boolean // use activeLogReport from RecentFileSettings
                                , dividerPosition: Double
                                , filters: Seq[Filter]
-                               , logEntrySetting: Option[LogEntrySetting]) {
+                               , someLogEntrySetting: Option[LogEntrySetting]) {
 
   val path: Path = Paths.get(pathAsString)
 

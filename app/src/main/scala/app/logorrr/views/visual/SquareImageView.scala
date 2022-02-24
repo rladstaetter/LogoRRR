@@ -40,7 +40,7 @@ object SquareImageView extends CanLog {
             , ColorUtil.mkPixelArray(squareWidth - 1, color)
           )
         }
-      case Failure(exception) => logException(exception)
+      case Failure(ex) => logException("Could not process entries", ex)
     }
 
     wi

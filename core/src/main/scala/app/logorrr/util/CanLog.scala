@@ -11,7 +11,8 @@ trait CanLog {
 
   def logError(s: String): Unit = System.err.println("ERROR: " + s)
 
-  def logException(t: Throwable): Unit = {
+  def logException(msg: String, t: Throwable): Unit = {
+    logError(msg)
     for (t <- t.getStackTrace) {
       logError(t.toString)
     }

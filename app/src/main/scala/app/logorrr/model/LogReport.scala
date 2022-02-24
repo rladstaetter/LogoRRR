@@ -30,7 +30,7 @@ object LogReport extends CanLog {
     // it makes a notable difference in performance if we don't convert huge lists from java <-> scala
     val logEntryStream = readFromFile(logFile).stream().map(l => {
       lineNumber = lineNumber + 1L
-      lrd.logEntrySetting match {
+      lrd.someLogEntrySetting match {
         case Some(entrySetting) => LogEntry(lineNumber, l, tryToParseDateTime(l, entrySetting))
         case None =>
           LogEntry(lineNumber, l, None)
@@ -39,7 +39,7 @@ object LogReport extends CanLog {
     new LogReport(logFile
       , FXCollections.observableList(logEntryStream.collect(Collectors.toList[LogEntry]()))
       , filters
-      , lrd.logEntrySetting
+      , lrd.someLogEntrySetting
       , lrd.active
       , lrd.dividerPosition)
   }, s"Imported ${lrd.path.toAbsolutePath.toString} ... ")
@@ -56,14 +56,15 @@ object LogReport extends CanLog {
       Files.readAllLines(logFile)
     } match {
       case Failure(exception) =>
-        logException(exception)
-        logWarn(s"Could not read file ${logFile.toAbsolutePath.toString} with default charset, retrying with ISO_8859_1 ...")
+        val msg = s"Could not read file ${logFile.toAbsolutePath.toString} with default charset, retrying with ISO_8859_1 ..."
+        logException(msg, exception)
         Try {
           Files.readAllLines(logFile, StandardCharsets.ISO_8859_1)
         } match {
           case Failure(exception) =>
-            logException(exception)
-            util.Arrays.asList(s"Could not read file ${logFile.toAbsolutePath.toString} properly. Reason: ${exception.getMessage}.")
+            val msg = s"Could not read file ${logFile.toAbsolutePath.toString} properly. Reason: ${exception.getMessage}."
+            logException(msg, exception)
+            util.Arrays.asList(msg)
           case Success(value) =>
             value
         }

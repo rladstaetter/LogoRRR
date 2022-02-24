@@ -17,8 +17,8 @@ class LogoRRRMain(hostServices: HostServices
   val width = settings.stageSettings.width
   val height = settings.stageSettings.height
 
-  val mB = new LogoRRRMenuBar(openLogFile, closeAllLogReports, updateLogReportDefinition, closeStage, hostServices)
-  val ambp = AppMainBorderPane(settings, initFileMenu)
+  val mB = new LogoRRRMenuBar(hostServices, openLogFile, closeAllLogReports, updateLogReportDefinition, closeStage)
+  val ambp = AppMainBorderPane(hostServices, settings, initFileMenu)
 
   init()
 
@@ -31,8 +31,8 @@ class LogoRRRMain(hostServices: HostServices
     setCenter(ambp)
 
     // reverse since most recently file is saved first in list but should be opened last (= is last log file)
-    for (logFileDef <- settings.recentFiles.logReportDefinitions.reverse) {
-      addLogReport(logFileDef)
+    for ((p, lrd) <- settings.recentFiles.logReportDefinitions.toSeq.reverse) {
+      addLogReport(lrd)
     }
     // if no report was checked as active (which should be a bug) activate
     // the last one
@@ -51,13 +51,16 @@ class LogoRRRMain(hostServices: HostServices
     logTrace(s"Try to open log file ${path.toAbsolutePath.toString}")
 
     if (!ambp.contains(path)) {
-      SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinitions =
-        LogReportDefinition(path.toString
+      SettingsIO.updateRecentFileSettings(rf => {
+        val lrd = LogReportDefinition(path.toString
           , None
           , true
           , LogReportDefinition.defaultDividerPosition
           , Filter.seq
-          , Option(LogEntrySetting.Default)) +: rf.logReportDefinitions))
+          , Option(LogEntrySetting.Default))
+        rf.copy(logReportDefinitions =
+          Map(lrd.pathAsString -> lrd) ++ rf.logReportDefinitions)
+      })
       addLogReport(LogReportDefinition(path))
       selectLog(path)
       initFileMenu()

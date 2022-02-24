@@ -4,6 +4,7 @@ import app.logorrr.conf.SettingsIO
 import app.logorrr.model.{LogReport, LogReportDefinition}
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.main.AppMainBorderPane
+import javafx.application.HostServices
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.control.{Tab, TabPane}
 
@@ -24,9 +25,10 @@ object LogViewTabPane {
       |""".stripMargin
 
   /** constructor to pass parent and do binding */
-  def apply(parent: AppMainBorderPane
+  def apply(hostServices: HostServices
+            , parent: AppMainBorderPane
             , initFileMenu: => Unit): LogViewTabPane = {
-    val lvtp = new LogViewTabPane(initFileMenu)
+    val lvtp = new LogViewTabPane(hostServices, initFileMenu)
     lvtp.sceneWidthProperty.bind(parent.sceneWidthProperty)
     lvtp.squareWidthProperty.bind(parent.squareWidthProperty)
     lvtp
@@ -34,7 +36,8 @@ object LogViewTabPane {
 
 }
 
-class LogViewTabPane(initFileMenu: => Unit)
+class LogViewTabPane(hostServices: HostServices
+                     , initFileMenu: => Unit)
   extends TabPane
     with CanLog {
 
@@ -63,7 +66,7 @@ class LogViewTabPane(initFileMenu: => Unit)
   }
 
   def add(logReport: LogReport): Unit = {
-    val tab = LogReportTab(this, logReport, initFileMenu)
+    val tab = LogReportTab(hostServices, this, logReport, initFileMenu)
     getTabs.add(tab)
   }
 
@@ -102,12 +105,12 @@ class LogViewTabPane(initFileMenu: => Unit)
         case Success(logReport) =>
           logInfo(s"Opening ${lrd.path.toAbsolutePath.toString} ... ")
           add(logReport)
-        case Failure(exception) =>
-          logException(exception)
-          logError("Could not import file " + lrd.path.toAbsolutePath + ", reason: " + exception.getMessage)
+        case Failure(ex) =>
+          val msg = s"Could not import file ${lrd.path.toAbsolutePath}"
+          logException(msg, ex)
       }
     } else {
-      logWarn(s"Could not read ${lrd.path.toAbsolutePath} ...")
+      logWarn(s"Could not read ${lrd.path.toAbsolutePath} - does it exist?")
     }
   }
 }

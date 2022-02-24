@@ -9,7 +9,7 @@ object Settings {
 
   val Default = Settings(StageSettings(0, 0, 500, 500)
     , SquareImageSettings(10)
-    , RecentFileSettings(Seq()))
+    , RecentFileSettings(Map(), None))
 
 }
 

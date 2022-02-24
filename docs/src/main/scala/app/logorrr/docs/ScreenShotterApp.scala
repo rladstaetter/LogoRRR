@@ -34,7 +34,7 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
       val settings =
         Settings(StageSettings(0, 0, width, height)
           , SquareImageSettings(7)
-          , RecentFileSettings(Seq(LogReportDefinition(Paths.get("logfiles/logic.2.log")))))
+          , RecentFileSettings(Map("logfiles/logic.2.log" -> LogReportDefinition(Paths.get("logfiles/logic.2.log"))), None))
       val s = LogoRRRStage(stage, settings, getHostServices)
       val bPath = Paths.get(s"docs/releases/${AppMeta.appVersion}/")
       Files.createDirectories(bPath)
