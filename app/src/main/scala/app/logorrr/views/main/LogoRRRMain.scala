@@ -53,7 +53,6 @@ class LogoRRRMain(hostServices: HostServices
     if (!ambp.contains(path)) {
       SettingsIO.updateRecentFileSettings(rf => {
         val lrd = LogReportDefinition(path.toString
-          , None
           , true
           , LogReportDefinition.defaultDividerPosition
           , Filter.seq

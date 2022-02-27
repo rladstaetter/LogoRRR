@@ -3,7 +3,6 @@ package app.logorrr.views.menubar
 import app.logorrr.model
 import app.logorrr.model.{LogEntry, LogReportDefinition}
 import app.logorrr.util.{CanLog, LogoRRRFileChooser, OsUtil}
-import app.logorrr.views.learner
 import javafx.scene.control.{Menu, MenuItem}
 
 import java.nio.file.{Files, Path}
@@ -32,33 +31,19 @@ object FileMenu {
 
     object RecentFileMenu {
 
-      case class LearnLogFormat(path: Path, updateLogDef: LogReportDefinition => Unit) extends MenuItem("Learn log format") {
-        setOnAction(_ => {
-          // read first line of log file
-          val reader = Files.newBufferedReader(path)
-          val firstLogLine = reader.readLine()
-          reader.close()
-          val lfls = learner.LogFormatLearnerStage(LogEntry(1, firstLogLine))
-          lfls.showAndWait()
-          updateLogDef(model.LogReportDefinition(path, lfls.getLogColumnDef()))
-        })
-      }
 
     }
 
 
-    class RecentFileMenu(path: Path
-                         , updateLogDef: LogReportDefinition => Unit) extends Menu(path.getFileName.toString) {
-      getItems.add(RecentFileMenu.LearnLogFormat(path, updateLogDef))
+    class RecentFileMenu(path: Path) extends Menu(path.getFileName.toString) {
 
     }
 
 
   }
 
-  case class RecentFilesMenu(paths: Seq[Path]
-                             , updateLogDef: LogReportDefinition => Unit) extends Menu("Log Files") {
-    getItems.addAll(paths.map(p => new RecentFilesMenu.RecentFileMenu(p, updateLogDef)): _*)
+  case class RecentFilesMenu(paths: Seq[Path]) extends Menu("Log Files") {
+    getItems.addAll(paths.map(p => new RecentFilesMenu.RecentFileMenu(p)): _*)
   }
 
 

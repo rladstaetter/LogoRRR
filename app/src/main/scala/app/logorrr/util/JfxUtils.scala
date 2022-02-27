@@ -4,6 +4,7 @@ import app.logorrr.views.Filter
 import javafx.application.Platform
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.ListChangeListener
+import javafx.stage.{Stage, WindowEvent}
 
 object JfxUtils extends CanLog {
 
@@ -14,6 +15,17 @@ object JfxUtils extends CanLog {
       f
     }
   }
+
+  /** close given stage like it would have been closed via clicking 'x' in window frame */
+  def closeStage(stage: Stage): Unit = {
+    stage.fireEvent(
+      new WindowEvent(
+        stage,
+        WindowEvent.WINDOW_CLOSE_REQUEST
+      )
+    )
+  }
+
 
   def onNew[T](f: T => Unit): ChangeListener[T] = (observableValue: ObservableValue[_ <: T], t: T, t1: T) => f(t1)
 

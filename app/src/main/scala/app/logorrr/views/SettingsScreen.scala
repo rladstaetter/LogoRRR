@@ -13,7 +13,7 @@ import scala.util.Try
 
 object SettingsScreen {
 
-  val dateTimeFormatterLink = HLink("https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html", "Format description")
+  val dateTimeFormatterLink = HLink("https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html", "format description")
 
   def mkTf(name: String
            , somePrompt: Option[String]
@@ -26,29 +26,38 @@ object SettingsScreen {
   }
 }
 
-case class SettingsScreen(hostServices: HostServices
-                          , lrd: LogReportDefinition) extends BorderPane {
+class SettingsScreen(hostServices: HostServices
+                     , lrd: LogReportDefinition
+                     , closeStage: => Unit) extends BorderPane {
 
   val (startColLabel, startColTf) = SettingsScreen.mkTf("start column", None, 4)
   val (timeFormatLabel, timeFormatTf) = SettingsScreen.mkTf("time format", Option("<enter time format>"), 30)
   val (endColLabel, endColTf) = SettingsScreen.mkTf("end column", None, 4)
 
-  private val okButton = new Button("ok")
-  okButton.setOnAction(_ => {
-    val timeFormat = timeFormatTf.getText.trim
-    val start = Try(startColTf.getText.trim.toInt).getOrElse(0)
-    val end = Try(endColTf.getText.trim.toInt).getOrElse(1)
+  private val okButton = {
+    val b = new Button("ok")
+    b.setOnAction(_ => {
+      val timeFormat = timeFormatTf.getText.trim
+      val start = Try(startColTf.getText.trim.toInt).getOrElse(0)
+      val end = Try(endColTf.getText.trim.toInt).getOrElse(1)
 
-    val updatedLogReportDefinition = lrd.copy(someLogEntrySetting = Option(LogEntrySetting(SimpleRange(start, end), timeFormat)))
+      val updatedLogReportDefinition = lrd.copy(someLogEntrySetting = Option(LogEntrySetting(SimpleRange(start, end), timeFormat)))
 
-    SettingsIO.updateRecentFileSettings(rf => rf.update(updatedLogReportDefinition))
+      SettingsIO.updateRecentFileSettings(rf => rf.update(updatedLogReportDefinition))
+      closeStage
+    })
+    b
+  }
 
-  })
+  private val cancelButton = {
+    val b = new Button("cancel")
+    b.setOnAction(_ => {
+      closeStage
+    })
+    b
+  }
 
-  private val cancelButton = new Button("cancel")
   private val hyperlink: Hyperlink = SettingsScreen.dateTimeFormatterLink.mkHyperLink(hostServices)
-
-  lrd.someLogEntrySetting.foreach(s => timeFormatTf.setText(s.dateTimePattern))
 
   private val bar = {
     val tb = new ToolBar()
@@ -59,6 +68,13 @@ case class SettingsScreen(hostServices: HostServices
       , hyperlink)
     tb
   }
+
+  lrd.someLogEntrySetting.foreach(s => {
+    startColTf.setText(s.dateTimeRange.start.toString)
+    endColTf.setText(s.dateTimeRange.end.toString)
+    timeFormatTf.setText(s.dateTimePattern)
+  })
+
 
   setCenter(bar)
 

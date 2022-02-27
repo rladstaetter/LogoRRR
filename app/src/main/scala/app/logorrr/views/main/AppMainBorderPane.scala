@@ -56,7 +56,6 @@ class AppMainBorderPane(hostServices: HostServices
           if (!contains(path)) {
             val logFileDefinition =
               LogReportDefinition(path.toAbsolutePath.toString
-                , None
                 , active = true
                 , LogReportDefinition.defaultDividerPosition
                 , Filter.seq

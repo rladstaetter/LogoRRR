@@ -1,7 +1,7 @@
 package app.logorrr.model
 
 import app.logorrr.util.{CanLog, JfxUtils, LTailerListener}
-import app.logorrr.views.{Filter, LogColumnDef}
+import app.logorrr.views.Filter
 import javafx.beans.property.{SimpleIntegerProperty, SimpleStringProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ObservableList}
@@ -9,10 +9,9 @@ import org.apache.commons.io.input.Tailer
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path}
-import java.time.{Instant, LocalDateTime, ZoneId, ZoneOffset}
 import java.time.format.DateTimeFormatter
+import java.time.{Instant, LocalDateTime, ZoneOffset}
 import java.util
-import java.util.function.Predicate
 import java.util.stream.Collectors
 import scala.language.postfixOps
 import scala.util.{Failure, Success, Try}
@@ -102,7 +101,6 @@ case class LogReport(path: Path
 
   val logFileDefinition: LogReportDefinition =
     LogReportDefinition(path.toAbsolutePath.toString
-      , None
       , active
       , dividerPosition
       , filters

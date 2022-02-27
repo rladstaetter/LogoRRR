@@ -12,20 +12,10 @@ case class LogoRRRStage(stage: Stage
                         , hs: HostServices) {
 
   val icon: Image = new Image(getClass.getResourceAsStream("/app/logorrr/icon/logorrr-icon-32.png"))
-  val mainPane = new LogoRRRMain(hs, closeStage(), settings)
+  val mainPane = new LogoRRRMain(hs, JfxUtils.closeStage(stage), settings)
   val scene = LogoRRRScene(settings, mainPane)
   val sceneListener = LogoRRRScene.mkSceneListener(settings.stageSettings.x, settings.stageSettings.y)()
   val abbWidthListener = JfxUtils.onNew[Number](width => mainPane.setSceneWidth(width.intValue))
-
-  /** selected via File Menu on Windows */
-  def closeStage(): Unit = {
-    stage.fireEvent(
-      new WindowEvent(
-        stage,
-        WindowEvent.WINDOW_CLOSE_REQUEST
-      )
-    )
-  }
 
   def show(): Unit = {
     scene.widthProperty().addListener(abbWidthListener)

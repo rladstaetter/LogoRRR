@@ -1,6 +1,7 @@
 package app.logorrr.views
 
 import app.logorrr.model.LogReportDefinition
+import app.logorrr.util.JfxUtils
 import javafx.application.HostServices
 import javafx.scene.Scene
 import javafx.scene.control.{Button, ToolBar}
@@ -15,7 +16,7 @@ class SettingsToolBar(hostServices: HostServices
     val stage = new Stage()
     stage.initModality(Modality.APPLICATION_MODAL)
     stage.setTitle(s"Settings for ${lrd.path.getFileName.toString}")
-    val scene = new Scene(new SettingsScreen(hostServices, lrd), 800, 37)
+    val scene = new Scene(new SettingsScreen(hostServices, lrd, JfxUtils.closeStage(stage)), 950, 37)
     stage.setScene(scene)
     stage.setOnCloseRequest(_ => stage.close())
     stage.showAndWait()

@@ -1,7 +1,7 @@
 package app.logorrr.views
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.LogoRRRFonts
+import app.logorrr.util.{ClipBoardUtils, LogoRRRFonts}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 import javafx.scene.input.{Clipboard, ClipboardContent}
@@ -11,115 +11,17 @@ import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import java.time.Instant
 import scala.collection.mutable
 
-object ClipBoardUtils {
 
-  def copyToClipboardText(s: String): Unit = {
-    val clipboard = Clipboard.getSystemClipboard()
-    val content = new ClipboardContent()
-    content.putString(s)
-    clipboard.setContent(content)
-  }
-}
+object LogTextView {
 
-object SimpleRange {
-
-  implicit lazy val reader = deriveReader[SimpleRange]
-  implicit lazy val writer = deriveWriter[SimpleRange]
-
-}
-
-case class SimpleRange(start: Int, end: Int) {
-  require(start <= end)
-  val length = end - start
-}
-
-
-object LogColumnDef {
-
-  implicit lazy val reader = deriveReader[LogColumnDef]
-  implicit lazy val writer = deriveWriter[LogColumnDef]
-
-  private val Year = "Year"
-  private val Month = "Month"
-  private val Day = "Day"
-  private val Hour = "Hour"
-  private val Minute = "Minute"
-  private val Second = "Second"
-  private val Millisecond = "Millisecond"
-
-  /** entries to be defined in log format learner */
-  val entries = Seq(Year, Month, Day, Hour, Minute, Second, Millisecond)
-
-
-  /**
-   * able to parse following string:
-   *
-   * 2020-08-11 07:17:43.962
-   *
-   * */
-  val Default =
-    LogColumnDef(
-      SimpleRange(1, 5)
-      , SimpleRange(6, 8)
-      , SimpleRange(9, 11)
-      , SimpleRange(12, 14)
-      , SimpleRange(15, 17)
-      , SimpleRange(18, 20)
-      , SimpleRange(21, 24))
-
-  def apply(): LogColumnDef = Default
-
-  def apply(map: mutable.Map[String, SimpleRange]): LogColumnDef = {
-    LogColumnDef(
-      map(Year)
-      , map(Month)
-      , map(Day)
-      , map(Hour)
-      , map(Minute)
-      , map(Second)
-      , map(Millisecond)
-    )
-  }
-}
-
-case class LogColumnDef(yearRange: SimpleRange
-                        , monthRange: SimpleRange
-                        , dayRange: SimpleRange
-                        , hourRange: SimpleRange
-                        , minuteRange: SimpleRange
-                        , secondRange: SimpleRange
-                        , milliRange: SimpleRange) {
-
-  require(yearRange.length == 4)
-  require(monthRange.length == 2)
-  require(dayRange.length == 2)
-  require(hourRange.length == 2)
-  require(minuteRange.length == 2)
-  require(secondRange.length == 2)
-  require(milliRange.length == 3)
-
-  def substring(value: String, range: SimpleRange): String = {
-    value.substring(range.start, range.end)
-  }
-
-  def parse(logEntryAsString: String): Instant = {
-    val year = substring(logEntryAsString, yearRange)
-    val month = substring(logEntryAsString, monthRange)
-    val day = substring(logEntryAsString, dayRange)
-    val hour = substring(logEntryAsString, hourRange)
-    val minute = substring(logEntryAsString, minuteRange)
-    val second = substring(logEntryAsString, secondRange)
-    val milli = substring(logEntryAsString, milliRange)
-    Instant.parse(s"$year-$month-${day}T$hour:$minute:$second.${milli}Z")
+  class LineDecoratorLabel extends Label {
+    setStyle(LogoRRRFonts.jetBrainsMono(12) + "-fx-background-color: BISQUE;")
+    setText("")
   }
 
 
 }
 
-class LineDecoratorLabel extends Label {
-  setStyle(LogoRRRFonts.jetBrainsMono(12) + "-fx-background-color: BISQUE;")
-  setText("")
-}
 
 class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
 
@@ -148,7 +50,7 @@ class LogTextView(filteredList: FilteredList[LogEntry]) extends BorderPane {
       super.updateItem(t, b)
       Option(t) match {
         case Some(e) =>
-          val l = new LineDecoratorLabel
+          val l = new LogTextView.LineDecoratorLabel
           l.setText(e.lineNumber.toString.reverse.padTo(maxLength, " ").reverse.mkString)
           setGraphic(l)
           setText(e.value)

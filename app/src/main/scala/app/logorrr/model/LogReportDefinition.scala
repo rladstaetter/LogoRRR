@@ -1,6 +1,6 @@
 package app.logorrr.model
 
-import app.logorrr.views.{Filter, LogColumnDef, SimpleRange}
+import app.logorrr.views.Filter
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.nio.file.{Files, Path, Paths}
@@ -13,10 +13,8 @@ object LogReportDefinition {
   val defaultDividerPosition = 0.5
   val defaultActive = false
 
-  def apply(p: Path): LogReportDefinition = LogReportDefinition(p.toAbsolutePath.toString, None, defaultActive, defaultDividerPosition, Filter.seq, None)
-
-  def apply(p: Path, logColumnDef: LogColumnDef): LogReportDefinition =
-    LogReportDefinition(p.toAbsolutePath.toString, Option(logColumnDef), defaultActive, defaultDividerPosition, Filter.seq, None)
+  def apply(p: Path): LogReportDefinition =
+    LogReportDefinition(p.toAbsolutePath.toString, defaultActive, defaultDividerPosition, Filter.seq, None)
 
 }
 
@@ -34,7 +32,6 @@ object LogReportDefinition {
  * @param filters
  */
 case class LogReportDefinition(pathAsString: String
-                               , someColumnDefinition: Option[LogColumnDef] = None
                                , @deprecated active: Boolean // use activeLogReport from RecentFileSettings
                                , dividerPosition: Double
                                , filters: Seq[Filter]
