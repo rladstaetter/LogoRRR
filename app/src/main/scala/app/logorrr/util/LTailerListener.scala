@@ -14,7 +14,7 @@ class LTailerListener(ol: ObservableList[LogEntry]) extends TailerListener with 
 
   override def handle(l: String): Unit = {
     currentCnt = currentCnt + 1
-    val e = LogEntry(currentCnt, l, Option(Instant.now)) // TODO: cheating, uses system time instead of time logged in file
+    val e = LogEntry(currentCnt, l, None)
     JfxUtils.execOnUiThread(ol.add(e))
   }
 

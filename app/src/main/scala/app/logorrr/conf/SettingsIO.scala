@@ -2,7 +2,7 @@ package app.logorrr.conf
 
 import app.logorrr.conf.Settings.Default
 import app.logorrr.io.{FilePaths, Fs}
-import app.logorrr.model.LogReportDefinition
+import app.logorrr.model.LogFileDefinition
 import app.logorrr.util.CanLog
 import com.typesafe.config.ConfigRenderOptions
 import pureconfig.{ConfigSource, ConfigWriter}
@@ -29,20 +29,16 @@ object SettingsIO extends CanLog {
   def updateDividerPosition(path: Path, dividerPosition: Double): Unit = {
     val settings = read()
     val recentFiles = settings.recentFiles
-    val lrd = recentFiles.logReportDefinitions(path.toAbsolutePath.toString).copy(dividerPosition = dividerPosition)
-    val nrf = recentFiles.copy(logReportDefinitions = settings.recentFiles.logReportDefinitions + (path.toAbsolutePath.toString -> lrd))
+    val lrd = recentFiles.logFileDefinitions(path.toAbsolutePath.toString).copy(dividerPosition = dividerPosition)
+    val nrf = recentFiles.copy(logFileDefinitions = settings.recentFiles.logFileDefinitions + (path.toAbsolutePath.toString -> lrd))
     SettingsIO.write(settings.copy(recentFiles = nrf))
-  }
-
-  def updateLogReportDefinition(logReportDefinition: LogReportDefinition): Unit = {
-    val settings = read()
   }
 
   def updateActiveLogFile(path: Path): Unit = {
     val settings = read()
     val recentFiles = settings.recentFiles
-    val lrd = recentFiles.logReportDefinitions(path.toAbsolutePath.toString).copy(active = true)
-    val nrf = recentFiles.copy(logReportDefinitions = settings.recentFiles.logReportDefinitions + (path.toAbsolutePath.toString -> lrd))
+    val lrd = recentFiles.logFileDefinitions(path.toAbsolutePath.toString).copy(active = true)
+    val nrf = recentFiles.copy(logFileDefinitions = settings.recentFiles.logFileDefinitions + (path.toAbsolutePath.toString -> lrd))
     SettingsIO.write(settings.copy(recentFiles = nrf))
   }
 

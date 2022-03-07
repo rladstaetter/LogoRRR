@@ -6,6 +6,7 @@ import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}
 import javafx.scene.paint.Color
 
 import java.time.Instant
+import scala.language.postfixOps
 
 object LogEntry {
 

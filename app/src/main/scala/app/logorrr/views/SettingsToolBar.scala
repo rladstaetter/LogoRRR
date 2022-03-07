@@ -1,6 +1,6 @@
 package app.logorrr.views
 
-import app.logorrr.model.LogReportDefinition
+import app.logorrr.model.LogFileDefinition
 import app.logorrr.util.JfxUtils
 import javafx.application.HostServices
 import javafx.scene.Scene
@@ -10,7 +10,7 @@ import javafx.stage.{Modality, Stage}
 
 /* container to host settings button, positioned to the right of the application / separate for each log view */
 class SettingsToolBar(hostServices: HostServices
-                      , lrd: LogReportDefinition) extends ToolBar {
+                      , lrd: LogFileDefinition) extends ToolBar {
   private val settingsButton = new Button("Settings")
   settingsButton.setOnAction(_ => {
     val stage = new Stage()

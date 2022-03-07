@@ -1,7 +1,7 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.{Settings, SettingsIO}
-import app.logorrr.model.{LogEntrySetting, LogReportDefinition}
+import app.logorrr.model.{LogEntrySetting, LogFileDefinition}
 import app.logorrr.util.CanLog
 import app.logorrr.views.{Filter, LogViewTabPane, SimpleRange}
 import javafx.application.HostServices
@@ -15,7 +15,7 @@ import scala.jdk.CollectionConverters.ListHasAsScala
 object AppMainBorderPane {
 
   def apply(hostServices: HostServices, settings: Settings, reInitMenuBarFn: => Unit): AppMainBorderPane = {
-    new AppMainBorderPane(hostServices,settings.stageSettings.width, settings.squareImageSettings.width, reInitMenuBarFn)
+    new AppMainBorderPane(hostServices, settings.stageSettings.width, settings.squareImageSettings.width, reInitMenuBarFn)
   }
 }
 
@@ -55,14 +55,14 @@ class AppMainBorderPane(hostServices: HostServices
         if (Files.exists(path)) {
           if (!contains(path)) {
             val logFileDefinition =
-              LogReportDefinition(path.toAbsolutePath.toString
+              LogFileDefinition(path.toAbsolutePath.toString
                 , active = true
-                , LogReportDefinition.defaultDividerPosition
+                , LogFileDefinition.DefaultDividerPosition
                 , Filter.seq
-                , Option(LogEntrySetting.Default))
-            SettingsIO.updateRecentFileSettings(rf => rf.copy(logReportDefinitions = Map(logFileDefinition.pathAsString -> logFileDefinition) ++ rf.logReportDefinitions))
+                , LogFileDefinition.DefaultLogFormat)
+            SettingsIO.updateRecentFileSettings(rf => rf.copy(logFileDefinitions = Map(logFileDefinition.pathAsString -> logFileDefinition) ++ rf.logFileDefinitions))
             reInitMenuBarFn
-            addLogReport(logFileDefinition)
+            addLogFile(logFileDefinition)
             selectLog(path)
           } else {
             logWarn(s"${path.toAbsolutePath.toString} is already opened ...")
@@ -88,14 +88,14 @@ class AppMainBorderPane(hostServices: HostServices
 
 
   /** Adds a new logfile to display */
-  def addLogReport(lrd: LogReportDefinition): Unit = {
-    logViewTabPane.addLogReport(lrd)
+  def addLogFile(lrd: LogFileDefinition): Unit = {
+    logViewTabPane.addLogFile(lrd)
   }
 
   /**
    * replaces existing log file tab with given one, if it does not exist yet create one.
    */
-  def updateLogFile(logFileDef: LogReportDefinition): Unit = {
+  def updateLogFile(logFileDef: LogFileDefinition): Unit = {
     ???
   }
 

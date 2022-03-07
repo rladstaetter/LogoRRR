@@ -1,7 +1,7 @@
 package app.logorrr.views
 
 import app.logorrr.conf.{Settings, SettingsIO}
-import app.logorrr.model.{LogEntry, LogEntrySetting, LogReportDefinition}
+import app.logorrr.model.{LogEntry, LogEntrySetting, LogFileDefinition}
 import app.logorrr.util.HLink
 import javafx.application.HostServices
 import javafx.geometry.Insets
@@ -27,7 +27,7 @@ object SettingsScreen {
 }
 
 class SettingsScreen(hostServices: HostServices
-                     , lrd: LogReportDefinition
+                     , lrd: LogFileDefinition
                      , closeStage: => Unit) extends BorderPane {
 
   val (startColLabel, startColTf) = SettingsScreen.mkTf("start column", None, 4)
@@ -41,9 +41,9 @@ class SettingsScreen(hostServices: HostServices
       val start = Try(startColTf.getText.trim.toInt).getOrElse(0)
       val end = Try(endColTf.getText.trim.toInt).getOrElse(1)
 
-      val updatedLogReportDefinition = lrd.copy(someLogEntrySetting = Option(LogEntrySetting(SimpleRange(start, end), timeFormat)))
+      val updatedLogFileDefinitions = lrd.copy(someLogEntrySetting = Option(LogEntrySetting(SimpleRange(start, end), timeFormat)))
 
-      SettingsIO.updateRecentFileSettings(rf => rf.update(updatedLogReportDefinition))
+      SettingsIO.updateRecentFileSettings(rf => rf.update(updatedLogFileDefinitions))
       closeStage
     })
     b

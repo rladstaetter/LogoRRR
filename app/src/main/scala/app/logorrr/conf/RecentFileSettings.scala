@@ -1,6 +1,6 @@
 package app.logorrr.conf
 
-import app.logorrr.model.LogReportDefinition
+import app.logorrr.model.LogFileDefinition
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import scala.:+
@@ -14,13 +14,13 @@ object RecentFileSettings {
 }
 
 /**
- * @param logReportDefinitions files which were last opened
+ * @param logFileDefinitions files which were last opened
  */
-case class RecentFileSettings(logReportDefinitions: Map[String, LogReportDefinition]
+case class RecentFileSettings(logFileDefinitions: Map[String, LogFileDefinition]
                               , someActiveLogReport: Option[String]) {
 
   // remove in favor of someActiveLogReport
-  val someActive: Option[LogReportDefinition] = logReportDefinitions.values.find(_.active)
+  val someActive: Option[LogFileDefinition] = logFileDefinitions.values.find(_.active)
 
   def remove(pathAsString: String): RecentFileSettings = {
     val updatedActiveReport =
@@ -28,15 +28,15 @@ case class RecentFileSettings(logReportDefinitions: Map[String, LogReportDefinit
         case Some(value) if value == pathAsString => None
         case None => None
       }
-    copy(logReportDefinitions = logReportDefinitions - pathAsString, updatedActiveReport)
+    copy(logFileDefinitions = logFileDefinitions - pathAsString, updatedActiveReport)
   }
 
   /** updates recent files with given log report definition */
-  def update(definition: LogReportDefinition): RecentFileSettings = {
-    copy(logReportDefinitions + (definition.pathAsString -> definition))
+  def update(definition: LogFileDefinition): RecentFileSettings = {
+    copy(logFileDefinitions + (definition.pathAsString -> definition))
   }
 
-  def filterValids(): RecentFileSettings = copy(logReportDefinitions = logReportDefinitions.filter { case (_, d) => d.isPathValid })
+  def filterValids(): RecentFileSettings = copy(logFileDefinitions = logFileDefinitions.filter { case (_, d) => d.isPathValid })
 
   def clear(): RecentFileSettings = RecentFileSettings(Map(), None)
 

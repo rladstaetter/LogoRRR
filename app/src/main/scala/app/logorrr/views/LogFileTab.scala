@@ -1,7 +1,7 @@
 package app.logorrr.views
 
 import app.logorrr.conf.SettingsIO
-import app.logorrr.model.{LogEntry, LogReport, LogReportDefinition}
+import app.logorrr.model.{LogEntry, LogFile, LogFileDefinition}
 import app.logorrr.util.{CanLog, CollectionUtils, JfxUtils, LogoRRRFonts}
 import app.logorrr.views.visual.LogVisualView
 import javafx.application.HostServices
@@ -16,21 +16,21 @@ import javafx.scene.layout._
 
 import scala.jdk.CollectionConverters._
 
-object LogReportTab {
+object LogFileTab {
 
   def apply(hostServices: HostServices
             , logViewTabPane: LogViewTabPane
-            , logReport: LogReport
-            , initFileMenu: => Unit): LogReportTab = {
-    val lv = new LogReportTab(
+            , logFile: LogFile
+            , initFileMenu: => Unit): LogFileTab = {
+    val lv = new LogFileTab(
       hostServices
-      , logReport
+      , logFile
       , logViewTabPane.sceneWidthProperty.get()
       , logViewTabPane.squareWidthProperty.get()
-      , logReport.logFileDefinition.dividerPosition
+      , logFile.logFileDefinition.dividerPosition
       , initFileMenu)
 
-    logReport.filters.foreach(lv.addFilter)
+    logFile.filters.foreach(lv.addFilter)
 
     /** activate invalidation listener on filtered list */
     lv.init()
@@ -47,14 +47,16 @@ object LogReportTab {
  *
  * One can view / interact with more than one log file at a time, using tabs here feels quite natural.
  *
- * @param logReport report instance holding information of log file to be analyzed
+ * @param logFile report instance holding information of log file to be analyzed
  * */
-class LogReportTab(hostServices: HostServices
-                   , val logReport: LogReport
-                   , val initialSceneWidth: Int
-                   , val initialSquareWidth: Int
-                   , val initialDividerPosition: Double
-                   , initFileMenu: => Unit) extends Tab with CanLog {
+class LogFileTab(hostServices: HostServices
+                 , val logFile: LogFile
+                 , val initialSceneWidth: Int
+                 , val initialSquareWidth: Int
+                 , val initialDividerPosition: Double
+                 , initFileMenu: => Unit)
+  extends Tab
+    with CanLog {
 
   /** is set to false if logview was painted at least once (see repaint) */
   val neverPaintedProperty = new SimpleBooleanProperty(true)
@@ -71,7 +73,6 @@ class LogReportTab(hostServices: HostServices
   /** bound to squareWidthProperty of parent LogViewTabPane */
   val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
 
-
   /** top component for log view */
   val borderPane = new BorderPane()
 
@@ -79,29 +80,31 @@ class LogReportTab(hostServices: HostServices
   val splitPane = new SplitPane()
 
   /** list which holds all entries, default to display all (can be changed via buttons) */
-  val filteredList = new FilteredList[LogEntry](logReport.entries)
+  val filteredList = new FilteredList[LogEntry](logFile.entries)
 
   private val searchToolBar = new SearchToolBar(addFilter)
 
   private val filtersToolBar = {
-    val fbtb = new FiltersToolBar(filteredList, logReport.entries.size, removeFilter)
+    val fbtb = new FiltersToolBar(filteredList, logFile.entries.size, removeFilter)
     fbtb.filtersProperty.bind(filtersListProperty)
     fbtb
   }
 
-  val settingsToolBar = new SettingsToolBar(hostServices, logReport.logFileDefinition)
+  val settingsToolBar = new SettingsToolBar(hostServices, logFile.logFileDefinition)
 
   val opsBorderPane: BorderPane = new OpsBorderPane(searchToolBar, filtersToolBar, settingsToolBar)
 
   val initialWidth = (sceneWidth * initialDividerPosition).toInt
 
   private lazy val logVisualView = {
-    val lvv = new LogVisualView(filteredList.asScala, initialWidth, getSquareWidth)
+    val lvv = new LogVisualView(filteredList.asScala
+      , initialWidth
+      , getSquareWidth)
     lvv.sisp.filtersListProperty.bind(filtersListProperty)
     lvv
   }
 
-  private val logTextView = new LogTextView(filteredList)
+  private val logTextView = new LogTextView(filteredList, logFile.timings)
 
   val entryLabel = {
     val l = new Label("")
@@ -126,7 +129,7 @@ class LogReportTab(hostServices: HostServices
 
   private def handleFilterChange(change: ListChangeListener.Change[_ <: Filter]): Unit = {
     while (change.next()) {
-      val updatedDefinition = logReport.logFileDefinition.copy(filters = filtersListProperty.asScala.toSeq)
+      val updatedDefinition = logFile.logFileDefinition.copy(filters = filtersListProperty.asScala.toSeq)
       SettingsIO.updateRecentFileSettings(rf => rf.update(updatedDefinition))
     }
   }
@@ -141,7 +144,7 @@ class LogReportTab(hostServices: HostServices
     /** don't monitor file anymore if tab is closed, free invalidation listeners */
     setOnClosed(_ => closeTab())
 
-    textProperty.bind(logReport.titleProperty)
+    textProperty.bind(logFile.titleProperty)
 
     selectedIndexProperty.bind(logVisualView.selectedIndexProperty)
 
@@ -164,11 +167,11 @@ class LogReportTab(hostServices: HostServices
     splitPane.getDividers.get(0).positionProperty().addListener(JfxUtils.onNew {
       t1: Number =>
         val width = t1.doubleValue() * splitPane.getWidth
-        SettingsIO.updateDividerPosition(logReport.path, t1.doubleValue())
+        SettingsIO.updateDividerPosition(logFile.path, t1.doubleValue())
         repaint(width)
     })
 
-    logReport.init()
+    logFile.init()
 
     setDivider(initialDividerPosition)
     initFiltersPropertyListChangeListener()
@@ -184,15 +187,15 @@ class LogReportTab(hostServices: HostServices
    *
    */
   def closeTab(): Unit = {
-    SettingsIO.updateRecentFileSettings(rf => rf.remove(logReport.path.toAbsolutePath.toString))
+    SettingsIO.updateRecentFileSettings(rf => rf.remove(logFile.path.toAbsolutePath.toString))
     initFileMenu
     shutdown()
   }
 
   def shutdown(): Unit = {
-    logInfo(s"Closing file ${logReport.path.toAbsolutePath} ...")
+    logInfo(s"Closing file ${logFile.path.toAbsolutePath} ...")
     uninstallInvalidationListener()
-    logReport.stop()
+    logFile.stop()
   }
 
   def sceneWidth = sceneWidthProperty.get()
@@ -202,14 +205,14 @@ class LogReportTab(hostServices: HostServices
   def installInvalidationListener(): Unit = {
     // to detect when we apply a new filter via filter buttons (see FilterButtonsToolbar)
     filteredList.predicateProperty().addListener(repaintInvalidationListener)
-    logReport.entries.addListener(repaintInvalidationListener)
+    logFile.entries.addListener(repaintInvalidationListener)
     // if application changes width this will trigger repaint (See Issue #9)
     splitPane.widthProperty().addListener(repaintInvalidationListener)
   }
 
   def uninstallInvalidationListener(): Unit = {
     filteredList.predicateProperty().removeListener(repaintInvalidationListener)
-    logReport.entries.removeListener(repaintInvalidationListener)
+    logFile.entries.removeListener(repaintInvalidationListener)
   }
 
   def selectEntry(number: Number): Unit = logTextView.selectEntryByIndex(number.intValue)

@@ -1,7 +1,7 @@
 package app.logorrr.views
 
 import app.logorrr.conf.SettingsIO
-import app.logorrr.model.{LogReport, LogReportDefinition}
+import app.logorrr.model.{LogFile, LogFileDefinition}
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.main.AppMainBorderPane
 import javafx.application.HostServices
@@ -54,39 +54,39 @@ class LogViewTabPane(hostServices: HostServices
     getSelectionModel.selectedItemProperty().addListener(JfxUtils.onNew {
       t1: Tab =>
         t1 match {
-          case logReportTab: LogReportTab =>
-            logTrace("Selected: " + logReportTab.logReport.logFileDefinition.path)
-            SettingsIO.updateActiveLogFile(logReportTab.logReport.path)
+          case logFileTab: LogFileTab =>
+            logTrace("Selected: " + logFileTab.logFile.logFileDefinition.path)
+            SettingsIO.updateActiveLogFile(logFileTab.logFile.path)
             // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
-            getSelectionModel.select(logReportTab)
-            logReportTab.repaint()
+            getSelectionModel.select(logFileTab)
+            logFileTab.repaint()
           case _ =>
         }
     })
   }
 
-  def add(logReport: LogReport): Unit = {
-    val tab = LogReportTab(hostServices, this, logReport, initFileMenu)
+  def add(logFile: LogFile): Unit = {
+    val tab = LogFileTab(hostServices, this, logFile, initFileMenu)
     getTabs.add(tab)
   }
 
-  def contains(p: Path): Boolean = getLogReportTabs.exists(lr => lr.logReport.path.toAbsolutePath.toString == p.toAbsolutePath.toString)
+  def contains(p: Path): Boolean = getLogFileTabs.exists(lr => lr.logFile.path.toAbsolutePath.toString == p.toAbsolutePath.toString)
 
-  private def getLogReportTabs: mutable.Seq[LogReportTab] = getTabs.asScala.flatMap {
+  private def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
     case t => t match {
-      case l: LogReportTab => Option(l)
+      case l: LogFileTab => Option(l)
       case _ => None
     }
   }
 
   /** shutdown all tabs */
   def shutdown(): Unit = {
-    getLogReportTabs.foreach(_.shutdown())
+    getLogFileTabs.foreach(_.shutdown())
     getTabs.clear()
   }
 
   def selectLog(path: Path): Unit = {
-    getLogReportTabs.find(_.logReport.path == path) match {
+    getLogFileTabs.find(_.logFile.path == path) match {
       case Some(value) =>
         logTrace(s"Selects tab view with path ${path.toAbsolutePath.toString}.")
         getSelectionModel.select(value)
@@ -98,19 +98,18 @@ class LogViewTabPane(hostServices: HostServices
 
   def selectLastLogFile(): Unit = getSelectionModel.selectLast() // select last added file repaint it on selection
 
-
-  def addLogReport(lrd: LogReportDefinition): Unit = {
-    if (lrd.isPathValid) {
-      Try(LogReport(lrd)) match {
-        case Success(logReport) =>
-          logInfo(s"Opening ${lrd.path.toAbsolutePath.toString} ... ")
-          add(logReport)
+  def addLogFile(logFileDefinition: LogFileDefinition): Unit = {
+    if (logFileDefinition.isPathValid) {
+      Try(LogFile(logFileDefinition)) match {
+        case Success(logFile) =>
+          logInfo(s"Opening ${logFileDefinition.path.toAbsolutePath.toString} ... ")
+          add(logFile)
         case Failure(ex) =>
-          val msg = s"Could not import file ${lrd.path.toAbsolutePath}"
+          val msg = s"Could not import file ${logFileDefinition.path.toAbsolutePath}"
           logException(msg, ex)
       }
     } else {
-      logWarn(s"Could not read ${lrd.path.toAbsolutePath} - does it exist?")
+      logWarn(s"Could not read ${logFileDefinition.path.toAbsolutePath} - does it exist?")
     }
   }
 }

@@ -1,6 +1,6 @@
 package app.logorrr.views.visual
 
-import app.logorrr.model.{LogEntry, LogReport}
+import app.logorrr.model.{LogEntry, LogFile}
 import app.logorrr.views.Filter
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.event.EventHandler
@@ -27,7 +27,7 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
   /** responsible for determining current logevent */
   private val mouseEventHandler: EventHandler[MouseEvent] = new EventHandler[MouseEvent]() {
     override def handle(me: MouseEvent): Unit = {
-      val index = LogReport.indexOf(me.getX.toInt, me.getY.toInt, squareWidth, canvasWidthProperty.get())
+      val index = LogFile.indexOf(me.getX.toInt, me.getY.toInt, squareWidth, canvasWidthProperty.get())
       val entry = entries(index)
       selectedIndexProperty.set(index)
       selectedEntryProperty.set(entry)

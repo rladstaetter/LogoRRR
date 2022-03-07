@@ -1,6 +1,6 @@
 package app.logorrr.views.main
 
-import app.logorrr.model.LogReportDefinition
+import app.logorrr.model.LogFileDefinition
 import app.logorrr.util.{CanLog, OsUtil}
 import app.logorrr.views.menubar.{FileMenu, HelpMenu}
 import javafx.application.HostServices
@@ -8,7 +8,7 @@ import javafx.scene.control.MenuBar
 
 import java.nio.file.Path
 
-class LogoRRRMenuBar(hostServices: HostServices, openLogFile: Path => Unit, removeAllLogFiles: => Unit, updateLogDef: LogReportDefinition => Unit, closeApplication: => Unit) extends MenuBar
+class LogoRRRMenuBar(hostServices: HostServices, openLogFile: Path => Unit, removeAllLogFiles: => Unit, updateLogDef: LogFileDefinition => Unit, closeApplication: => Unit) extends MenuBar
   with CanLog {
 
   if (OsUtil.isMac) {

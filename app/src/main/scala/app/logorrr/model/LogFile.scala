@@ -13,40 +13,51 @@ import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneOffset}
 import java.util
 import java.util.stream.Collectors
+import scala.collection.immutable.ListMap
+import scala.collection.mutable.ListBuffer
+import scala.concurrent.duration.{Duration, DurationLong}
+import scala.jdk.CollectionConverters.{CollectionHasAsScala, IterableHasAsJava}
 import scala.language.postfixOps
 import scala.util.{Failure, Success, Try}
-
+import scala.jdk.CollectionConverters._
 
 /** Abstraction for a log file */
-object LogReport extends CanLog {
+object LogFile extends CanLog {
 
-  def apply(lrd: LogReportDefinition): LogReport = timeR({
-    val logFile = lrd.path
-    val filters = lrd.filters
+  case class TimeRange(startTime: Instant, endTime: Instant)
+
+  def apply(logFileDefinition: LogFileDefinition): LogFile = timeR({
+    val logFilePath = logFileDefinition.path
+    val filters = logFileDefinition.filters
 
     var lineNumber: Long = 0L
     // trying to be very clever and use java stream instead of scala collections
     // it makes a notable difference in performance if we don't convert huge lists from java <-> scala
-    val logEntryStream = readFromFile(logFile).stream().map(l => {
+    val logEntryStream = readFromFile(logFilePath).stream().map(l => {
       lineNumber = lineNumber + 1L
-      lrd.someLogEntrySetting match {
-        case Some(entrySetting) => LogEntry(lineNumber, l, tryToParseDateTime(l, entrySetting))
-        case None =>
-          LogEntry(lineNumber, l, None)
+      logFileDefinition.someLogEntrySetting match {
+        case Some(entrySetting) => {
+          val maybeInstant = tryToParseDateTime(l, entrySetting)
+          maybeInstant.foreach(i => {})
+          //   timings = timings + (lineNumber -> maybeInstant)
+          LogEntry(lineNumber, l, maybeInstant)
+        }
+        case None => LogEntry(lineNumber, l, None)
       }
     })
-    new LogReport(logFile
-      , FXCollections.observableList(logEntryStream.collect(Collectors.toList[LogEntry]()))
+
+    val entries: util.List[LogEntry] = logEntryStream.collect(Collectors.toList[LogEntry]())
+    new LogFile(logFilePath
+      , FXCollections.observableList(entries)
       , filters
-      , lrd.someLogEntrySetting
-      , lrd.active
-      , lrd.dividerPosition)
-  }, s"Imported ${lrd.path.toAbsolutePath.toString} ... ")
+      , logFileDefinition.someLogEntrySetting
+      , logFileDefinition.active
+      , logFileDefinition.dividerPosition)
+  }, s"Imported ${logFileDefinition.path.toAbsolutePath.toString} ... ")
 
   private def tryToParseDateTime(line: String, entrySetting: LogEntrySetting): Option[Instant] = Try {
     val dateTimeAsString = line.substring(entrySetting.dateTimeRange.start, entrySetting.dateTimeRange.end)
     val dtf: DateTimeFormatter = entrySetting.dateTimeFormatter
-    println(s"Parsing : '${dateTimeAsString}'")
     LocalDateTime.parse(dateTimeAsString, dtf).toInstant(ZoneOffset.of(entrySetting.zoneOffset))
   }.toOption
 
@@ -75,17 +86,20 @@ object LogReport extends CanLog {
 
 }
 
-case class TimeRange(startTime: Instant, endTime: Instant)
 
-case class LogReport(path: Path
-                     , entries: ObservableList[LogEntry]
-                     , filters: Seq[Filter]
-                     , someLogEntrySetting: Option[LogEntrySetting]
-                     , active: Boolean
-                     , dividerPosition: Double) {
+case class LogFile(path: Path
+                   , entries: ObservableList[LogEntry]
+                   , filters: Seq[Filter]
+                   , someLogEntrySetting: Option[LogEntrySetting]
+                   , active: Boolean
+                   , dividerPosition: Double) {
+
+  val timings: Map[Long, Instant] =
+    entries.stream().collect(Collectors.toMap((le: LogEntry) => le.lineNumber, (le: LogEntry) => le.someInstant.getOrElse(Instant.now()))).asScala.toMap
+
 
   /** contains time information for first and last entry for given log file */
-  lazy val someTimeRange: Option[TimeRange] =
+  lazy val someTimeRange: Option[LogFile.TimeRange] =
     if (entries.isEmpty) {
       None
     } else {
@@ -94,18 +108,20 @@ case class LogReport(path: Path
         None
       } else {
         for {start <- filteredEntries.get(0).someInstant
-             end <- filteredEntries.get(filteredEntries.size() - 1).someInstant} yield TimeRange(start, end)
+             end <- filteredEntries.get(filteredEntries.size() - 1).someInstant} yield LogFile.TimeRange(start, end)
       }
     }
 
 
-  val logFileDefinition: LogReportDefinition =
-    LogReportDefinition(path.toAbsolutePath.toString
+  val logFileDefinition: LogFileDefinition =
+    LogFileDefinition(path.toAbsolutePath.toString
       , active
       , dividerPosition
       , filters
       , someLogEntrySetting)
+
   val lengthProperty = new SimpleIntegerProperty(entries.size())
+
   val titleProperty = new SimpleStringProperty(computeTabName)
 
   val tailer = new Tailer(path.toFile, new LTailerListener(entries), 1000, true)
