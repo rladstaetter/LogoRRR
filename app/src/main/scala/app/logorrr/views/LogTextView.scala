@@ -114,8 +114,10 @@ class LogTextView(filteredList: FilteredList[LogEntry]
           e.someInstant match {
             case Some(_) =>
               setGraphic(new LogTextView.LogEntryElement(e, maxLength, timings, maxDuration))
+              setText(null)
             case None =>
               setText(e.value)
+              setGraphic(null)
           }
           copyCurrentToClipboard.setOnAction(_ => ClipBoardUtils.copyToClipboardText(e.value))
           setContextMenu(cm)
