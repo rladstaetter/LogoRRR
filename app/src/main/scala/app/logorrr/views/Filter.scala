@@ -10,7 +10,7 @@ class Filter(val value: String
 
   val color: Color = Color.web(colorString)
 
-  val matcher: Matcher = Filter.ContainsMatcher(value, color)
+  val matcher: Matcher = Filter.CaseInsensitiveContainsMatcher(value, color)
 
 }
 
@@ -63,6 +63,9 @@ object Filter {
     def applyMatch(string: String): Boolean = string.contains(value)
   }
 
+  case class CaseInsensitiveContainsMatcher(override val value: String, color: Color) extends Matcher(value) {
+    def applyMatch(string: String): Boolean = string.toLowerCase.contains(value.toLowerCase)
+  }
 
 }
 
