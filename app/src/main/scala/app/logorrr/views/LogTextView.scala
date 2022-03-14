@@ -5,15 +5,11 @@ import app.logorrr.util.{ClipBoardUtils, LogoRRRFonts}
 import javafx.collections.transformation.FilteredList
 import javafx.geometry.Pos
 import javafx.scene.control._
-import javafx.scene.input.{Clipboard, ClipboardContent}
 import javafx.scene.layout.{BorderPane, HBox}
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
-import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.time.Instant
-import scala.collection.immutable.ListMap
-import scala.collection.mutable
 import scala.concurrent.duration.{DurationLong, FiniteDuration}
 import scala.language.postfixOps
 
@@ -45,6 +41,29 @@ object LogTextView {
                         , timings: Map[Long, Instant]
                         , maxDuration: FiniteDuration) extends BorderPane {
 
+    /**
+     *     val hBox = new HBox()
+
+    val bg = new Background(new BackgroundFill(Color.YELLOW, new CornerRadii(size * 1.25), Insets.EMPTY))
+
+    private val labels: Seq[Label] =
+      for ((c, i) <- Seq(e.value, e.value, e.value).zipWithIndex) yield {
+        val l = new Label(c)
+        if (i % 2 == 0) {
+          l.setBackground(bg)
+          l.setTextFill(Color.BLACK)
+        }
+        //l.setStyle("-fx-background: rgb(255,0,255);")
+        // l.setTextFill(Color.rgb(Random.nextInt(255), Random.nextInt(255), Random.nextInt(255)))
+        l
+      }
+    hBox.getChildren.addAll(labels: _*)
+    BorderPane.setAlignment(hBox, Pos.CENTER_LEFT)
+    setLeft(LineDecoratorLabel(e, maxLength))
+    setCenter(hBox)
+
+     */
+
     val label = new Label(e.value)
     BorderPane.setAlignment(label, Pos.CENTER_LEFT)
     setLeft(LineDecoratorLabel(e, maxLength))
@@ -59,7 +78,7 @@ object LogTextView {
             case Some(nextTi) =>
               nextTi.toEpochMilli - instant.toEpochMilli
             case None =>
-              println(s"timings.size ${timings.size}, linenumber: ${e.lineNumber + 1}")
+           //   println(s"timings.size ${timings.size}, linenumber: ${e.lineNumber + 1}")
               0L
           }
         if (duration > maxDuration.toMillis) {
@@ -84,7 +103,7 @@ object LogTextView {
 
 class LogTextView(filteredList: FilteredList[LogEntry]
                   , timings: Map[Long, Instant]
-                  , maxDuration: FiniteDuration = 1000 millis) extends BorderPane {
+                  , maxDuration: FiniteDuration = 1200 millis) extends BorderPane {
 
   /** 'pragmatic way' to determine width of max elems in this view */
   val maxLength = filteredList.size().toString.length

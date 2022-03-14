@@ -1,11 +1,10 @@
 package app.logorrr.views
 
-import app.logorrr.conf.{Settings, SettingsIO}
-import app.logorrr.model.{LogEntry, LogEntrySetting, LogFileDefinition}
+import app.logorrr.conf.SettingsIO
+import app.logorrr.model.{LogEntrySetting, LogFileDefinition}
 import app.logorrr.util.HLink
 import javafx.application.HostServices
-import javafx.geometry.Insets
-import javafx.scene.control.{Button, Hyperlink, Label, TextField, ToolBar}
+import javafx.scene.control._
 import javafx.scene.layout.BorderPane
 
 import scala.util.Try
@@ -34,6 +33,10 @@ class SettingsScreen(hostServices: HostServices
   val (timeFormatLabel, timeFormatTf) = SettingsScreen.mkTf("time format", Option("<enter time format>"), 30)
   val (endColLabel, endColTf) = SettingsScreen.mkTf("end column", None, 4)
 
+  /**
+   * if ok button is clicked, log definition will be written, settings stage will be closed, associated logfile
+   * definition will be updated
+   * */
   private val okButton = {
     val b = new Button("ok")
     b.setOnAction(_ => {

@@ -9,7 +9,8 @@ import scala.collection.mutable
 
 class LogVisualView(entries: mutable.Buffer[LogEntry]
                     , canvasWidth: Int
-                    , squareWidth: Int) extends BorderPane with CanLog {
+                    , squareWidth: Int)
+  extends BorderPane with CanLog {
 
   require(canvasWidth > 0, "squareWidth must be greater than 0")
   require(squareWidth > 0, "canvasWidth must be greater than 0")

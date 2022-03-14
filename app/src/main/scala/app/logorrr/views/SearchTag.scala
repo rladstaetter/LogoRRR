@@ -13,8 +13,11 @@ object SearchTag {
             , totalSize: Int
             , updateActiveFilter: () => Unit
             , removeFilter: Filter => Unit): SearchTag = {
-    val buttonTitle = filter.value + ": " + occurrences(filter) + " " + FiltersToolBar.percentAsString(occurrences(filter), totalSize)
+    val i = occurrences(filter)
+    val buttonTitle = filter.value + ": " + i + " " + FiltersToolBar.percentAsString(i, totalSize)
     val button = new ToggleButton(buttonTitle)
+    // val button = new ToggleButton()
+    //   button.textProperty.bind(Bindings.concat(filter.value, ":", i, " ", FiltersToolBar.percentAsString(i, totalSize)))
     val r = new Rectangle(10, 10)
     r.setFill(filter.color)
     button.setGraphic(r)
