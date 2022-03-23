@@ -1,7 +1,7 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.{Settings, SettingsIO}
-import app.logorrr.model.{LogEntrySetting, LogFileDefinition}
+import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.util.CanLog
 import app.logorrr.views.Filter
 import javafx.application.HostServices
@@ -22,7 +22,7 @@ class LogoRRRMain(hostServices: HostServices
 
   init()
 
-  def updateLogReportDefinition(logFileDef: LogFileDefinition): Unit = {
+  def updateLogReportDefinition(logFileDef: LogFileSettings): Unit = {
     ambp.updateLogFile(logFileDef)
   }
 
@@ -31,12 +31,12 @@ class LogoRRRMain(hostServices: HostServices
     setCenter(ambp)
 
     // reverse since most recently file is saved first in list but should be opened last (= is last log file)
-    for ((p, lrd) <- settings.recentFiles.logFileDefinitions.toSeq.reverse) {
+    for ((_, lrd) <- settings.recentFileSettings.logFileDefinitions.toSeq.reverse) {
       addLogFile(lrd)
     }
     // if no report was checked as active (which should be a bug) activate
     // the last one
-    settings.recentFiles.someActive match {
+    settings.recentFileSettings.someActive match {
       case Some(value) => selectLog(value.path)
       case None =>
         logError("No active log file entries found.")
@@ -52,15 +52,14 @@ class LogoRRRMain(hostServices: HostServices
 
     if (!ambp.contains(path)) {
       SettingsIO.updateRecentFileSettings(rf => {
-        val lrd = LogFileDefinition(path.toString
-          , true
-          , LogFileDefinition.DefaultDividerPosition
+        val lrd = LogFileSettings(path.toString
+          , LogFileSettings.DefaultDividerPosition
           , Filter.seq
-          , Option(LogEntrySetting.Default))
+          , Option(LogEntryInstantFormat.Default))
         rf.copy(logFileDefinitions =
           Map(lrd.pathAsString -> lrd) ++ rf.logFileDefinitions)
       })
-      addLogFile(LogFileDefinition(path))
+      addLogFile(LogFileSettings(path))
       selectLog(path)
       initFileMenu()
     } else {
@@ -82,7 +81,7 @@ class LogoRRRMain(hostServices: HostServices
 
   def setSceneWidth(sceneWidth: Int): Unit = ambp.setSceneWidth(sceneWidth)
 
-  def addLogFile(lrd: LogFileDefinition): Unit = {
+  def addLogFile(lrd: LogFileSettings): Unit = {
     if (!ambp.contains(lrd.path)) {
       ambp.addLogFile(lrd)
     } else {

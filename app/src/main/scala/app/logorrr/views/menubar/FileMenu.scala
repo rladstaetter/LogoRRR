@@ -1,7 +1,7 @@
 package app.logorrr.views.menubar
 
 import app.logorrr.model
-import app.logorrr.model.{LogEntry, LogFileDefinition}
+import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.{CanLog, LogoRRRFileChooser, OsUtil}
 import javafx.scene.control.{Menu, MenuItem}
 
@@ -55,7 +55,7 @@ object FileMenu {
 
 class FileMenu(openLogFile: Path => Unit
                , removeAllLogFiles: => Unit
-               , updateLogDef: LogFileDefinition => Unit
+               , updateLogDef: LogFileSettings => Unit
                , closeApplication: => Unit) extends Menu("File") with CanLog {
   /*
     val settings = {

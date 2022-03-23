@@ -5,17 +5,16 @@ import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.nio.file.{Files, Path, Paths}
 
-object LogFileDefinition {
+object LogFileSettings {
 
-  implicit lazy val reader = deriveReader[LogFileDefinition]
-  implicit lazy val writer = deriveWriter[LogFileDefinition]
+  implicit lazy val reader = deriveReader[LogFileSettings]
+  implicit lazy val writer = deriveWriter[LogFileSettings]
 
   val DefaultDividerPosition = 0.5
-  val defaultActive = false
-  val DefaultLogFormat: Option[LogEntrySetting] = None
+  val DefaultLogFormat: Option[LogEntryInstantFormat] = None
 
-  def apply(p: Path): LogFileDefinition =
-    LogFileDefinition(p.toAbsolutePath.toString, defaultActive, DefaultDividerPosition, Filter.seq, DefaultLogFormat)
+  def apply(p: Path): LogFileSettings =
+    LogFileSettings(p.toAbsolutePath.toString,  DefaultDividerPosition, Filter.seq, DefaultLogFormat)
 
 }
 
@@ -32,11 +31,10 @@ object LogFileDefinition {
  * @param someColumnDefinition where is
  * @param filters
  */
-case class LogFileDefinition(pathAsString: String
-                             , @deprecated active: Boolean // use activeLogReport from RecentFileSettings
-                             , dividerPosition: Double
-                             , filters: Seq[Filter]
-                             , someLogEntrySetting: Option[LogEntrySetting]) {
+case class LogFileSettings(pathAsString: String
+                           , dividerPosition: Double
+                           , filters: Seq[Filter]
+                           , someLogEntrySetting: Option[LogEntryInstantFormat]) {
 
   val path: Path = Paths.get(pathAsString)
 

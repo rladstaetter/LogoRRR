@@ -2,7 +2,6 @@ package app.logorrr.conf
 
 import app.logorrr.conf.Settings.Default
 import app.logorrr.io.{FilePaths, Fs}
-import app.logorrr.model.LogFileDefinition
 import app.logorrr.util.CanLog
 import com.typesafe.config.ConfigRenderOptions
 import pureconfig.{ConfigSource, ConfigWriter}
@@ -10,9 +9,12 @@ import pureconfig.{ConfigSource, ConfigWriter}
 import java.nio.file.Path
 import scala.util.{Failure, Success, Try}
 
+/**
+ * pureconfig provides tools to de/serialize configuration which is in use here.
+ **/
 object SettingsIO extends CanLog {
 
-  /** turn of ugly 'hardcoded value' messages */
+  /** turn off ugly 'hardcoded value' messages */
   val renderOptions = ConfigRenderOptions.defaults().setOriginComments(false)
 
   /** persists settings */
@@ -23,23 +25,23 @@ object SettingsIO extends CanLog {
   /** update recent files */
   def updateRecentFileSettings(updateRecentFilesFn: RecentFileSettings => RecentFileSettings): Unit = {
     val settings = read()
-    SettingsIO.write(settings.copy(recentFiles = updateRecentFilesFn(settings.recentFiles)))
+    SettingsIO.write(settings.copy(recentFileSettings = updateRecentFilesFn(settings.recentFileSettings)))
   }
 
   def updateDividerPosition(path: Path, dividerPosition: Double): Unit = {
     val settings = read()
-    val recentFiles = settings.recentFiles
+    val recentFiles = settings.recentFileSettings
     val lrd = recentFiles.logFileDefinitions(path.toAbsolutePath.toString).copy(dividerPosition = dividerPosition)
-    val nrf = recentFiles.copy(logFileDefinitions = settings.recentFiles.logFileDefinitions + (path.toAbsolutePath.toString -> lrd))
-    SettingsIO.write(settings.copy(recentFiles = nrf))
+    val nrf = recentFiles.copy(logFileDefinitions = settings.recentFileSettings.logFileDefinitions + (path.toAbsolutePath.toString -> lrd))
+    SettingsIO.write(settings.copy(recentFileSettings = nrf))
   }
 
   def updateActiveLogFile(path: Path): Unit = {
     val settings = read()
-    val recentFiles = settings.recentFiles
-    val lrd = recentFiles.logFileDefinitions(path.toAbsolutePath.toString).copy(active = true)
-    val nrf = recentFiles.copy(logFileDefinitions = settings.recentFiles.logFileDefinitions + (path.toAbsolutePath.toString -> lrd))
-    SettingsIO.write(settings.copy(recentFiles = nrf))
+    val recentFiles = settings.recentFileSettings
+    val lrd = recentFiles.logFileDefinitions(path.toAbsolutePath.toString)
+    val nrf = recentFiles.copy(logFileDefinitions = settings.recentFileSettings.logFileDefinitions + (path.toAbsolutePath.toString -> lrd))
+    SettingsIO.write(settings.copy(recentFileSettings = nrf))
   }
 
   /** read settings from default place and filter all paths which don't exist anymore */

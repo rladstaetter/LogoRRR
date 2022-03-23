@@ -6,7 +6,15 @@ import org.apache.commons.io.input.{Tailer, TailerListener}
 
 import java.time.Instant
 
-class LTailerListener(ol: ObservableList[LogEntry]) extends TailerListener with CanLog {
+/**
+ * Inform observable list about events from Tailer.
+ *
+ * Like append a new element, or react if file was rotated.
+ *
+ * @param ol list containing current entries
+ */
+class LogEntryListener(ol: ObservableList[LogEntry])
+  extends TailerListener with CanLog {
 
   var currentCnt = ol.size()
 
@@ -29,7 +37,7 @@ class LTailerListener(ol: ObservableList[LogEntry]) extends TailerListener with 
 
   // ignore exceptions for the moment ...
   override def handle(ex: Exception): Unit = {
-    logError(ex.toString)
+    logException("Tailer exception:", ex)
   }
 }
 

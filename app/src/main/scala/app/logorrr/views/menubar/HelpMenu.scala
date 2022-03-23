@@ -1,6 +1,6 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.conf.AppMeta
+import app.logorrr.meta.AppMeta
 import app.logorrr.views.about.AboutScreen
 import app.logorrr.views.menubar.HelpMenu.AboutMenuItem
 import javafx.application.HostServices

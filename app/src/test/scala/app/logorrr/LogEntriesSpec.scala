@@ -1,12 +1,12 @@
 package app.logorrr
 
-import app.logorrr.model.LogFile
+import app.logorrr.model.LogEntries
 import org.scalatest.wordspec.AnyWordSpec
 
 import java.nio.file.{Files, Paths}
 
 
-class LogFileSpec extends AnyWordSpec {
+class LogEntriesSpec extends AnyWordSpec {
 
   "Logfile" when {
     "contains special chars" should {
@@ -14,8 +14,8 @@ class LogFileSpec extends AnyWordSpec {
       //val p = Paths.get("src/test/resources/app/logorrr/util/orig.log")
       "exist" in assert(Files.exists(p))
       "be readable" in {
-        val r = LogFile(model.LogFileDefinition(p))
-        assert(!r.entries.isEmpty)
+        val r = LogEntries(p)
+        assert(!r.values.isEmpty)
       }
     }
   }

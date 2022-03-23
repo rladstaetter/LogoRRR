@@ -1,8 +1,7 @@
-package app.logorrr.conf
+package app.logorrr.meta
 
 import pureconfig.ConfigSource
 import pureconfig.generic.semiauto.deriveReader
-
 
 object AppMeta {
 

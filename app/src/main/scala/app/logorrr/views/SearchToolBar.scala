@@ -1,7 +1,7 @@
 package app.logorrr.views
 
 import app.logorrr.conf.SettingsIO
-import app.logorrr.model.LogFileDefinition
+import app.logorrr.model.LogFileSettings
 import javafx.scene.control._
 import javafx.scene.paint.Color
 

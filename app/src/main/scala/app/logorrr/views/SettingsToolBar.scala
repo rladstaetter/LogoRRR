@@ -1,6 +1,7 @@
 package app.logorrr.views
 
-import app.logorrr.model.LogFileDefinition
+import app.logorrr.conf.SettingsIO
+import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.util.JfxUtils
 import javafx.application.HostServices
 import javafx.scene.Scene
@@ -10,16 +11,21 @@ import javafx.stage.{Modality, Stage}
 
 /* container to host settings button, positioned to the right of the application / separate for each log view */
 class SettingsToolBar(hostServices: HostServices
-                      , lrd: LogFileDefinition) extends ToolBar {
+                      , lrd: LogFileSettings) extends ToolBar {
   private val settingsButton = new Button("Settings")
   settingsButton.setOnAction(_ => {
     val stage = new Stage()
     stage.initModality(Modality.APPLICATION_MODAL)
     stage.setTitle(s"Settings for ${lrd.path.getFileName.toString}")
-    val scene = new Scene(new SettingsScreen(hostServices, lrd, JfxUtils.closeStage(stage)), 950, 37)
+    val scene = new Scene(new SettingsBorderPane(hostServices, lrd, updateLogEntrySetting, JfxUtils.closeStage(stage)), 950, 37)
     stage.setScene(scene)
     stage.setOnCloseRequest(_ => stage.close())
     stage.showAndWait()
   })
   getItems.add(settingsButton)
+
+  def updateLogEntrySetting(logEntrySetting: LogEntryInstantFormat): Unit = {
+    val updatedLogFileDefinitions = lrd.copy(someLogEntrySetting = Option(logEntrySetting))
+    SettingsIO.updateRecentFileSettings(rf => rf.update(updatedLogFileDefinitions))
+  }
 }

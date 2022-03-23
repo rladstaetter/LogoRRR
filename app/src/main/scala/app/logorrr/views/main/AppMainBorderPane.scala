@@ -1,11 +1,13 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.{Settings, SettingsIO}
-import app.logorrr.model.{LogEntrySetting, LogFileDefinition}
+import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.util.CanLog
 import app.logorrr.views.{Filter, LogViewTabPane, SimpleRange}
 import javafx.application.HostServices
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.value.ObservableStringValue
+import javafx.scene.control.Label
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
 
@@ -28,7 +30,8 @@ object AppMainBorderPane {
 class AppMainBorderPane(hostServices: HostServices
                         , initialSceneWidth: Int
                         , initialSquareWidth: Int
-                        , reInitMenuBarFn: => Unit) extends BorderPane with CanLog {
+                        , reInitMenuBarFn: => Unit)
+  extends BorderPane with CanLog {
 
 
   val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
@@ -55,11 +58,10 @@ class AppMainBorderPane(hostServices: HostServices
         if (Files.exists(path)) {
           if (!contains(path)) {
             val logFileDefinition =
-              LogFileDefinition(path.toAbsolutePath.toString
-                , active = true
-                , LogFileDefinition.DefaultDividerPosition
+              LogFileSettings(path.toAbsolutePath.toString
+                , LogFileSettings.DefaultDividerPosition
                 , Filter.seq
-                , LogFileDefinition.DefaultLogFormat)
+                , LogFileSettings.DefaultLogFormat)
             SettingsIO.updateRecentFileSettings(rf => rf.copy(logFileDefinitions = Map(logFileDefinition.pathAsString -> logFileDefinition) ++ rf.logFileDefinitions))
             reInitMenuBarFn
             addLogFile(logFileDefinition)
@@ -88,14 +90,14 @@ class AppMainBorderPane(hostServices: HostServices
 
 
   /** Adds a new logfile to display */
-  def addLogFile(lrd: LogFileDefinition): Unit = {
+  def addLogFile(lrd: LogFileSettings): Unit = {
     logViewTabPane.addLogFile(lrd)
   }
 
   /**
    * replaces existing log file tab with given one, if it does not exist yet create one.
    */
-  def updateLogFile(logFileDef: LogFileDefinition): Unit = {
+  def updateLogFile(logFileDef: LogFileSettings): Unit = {
     ???
   }
 

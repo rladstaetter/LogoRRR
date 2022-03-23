@@ -1,6 +1,6 @@
 package app.logorrr.conf
 
-import app.logorrr.model.LogFileDefinition
+import app.logorrr.model.LogFileSettings
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import scala.:+
@@ -16,23 +16,22 @@ object RecentFileSettings {
 /**
  * @param logFileDefinitions files which were last opened
  */
-case class RecentFileSettings(logFileDefinitions: Map[String, LogFileDefinition]
+case class RecentFileSettings(logFileDefinitions: Map[String, LogFileSettings]
                               , someActiveLogReport: Option[String]) {
 
-  // remove in favor of someActiveLogReport
-  val someActive: Option[LogFileDefinition] = logFileDefinitions.values.find(_.active)
+  val someActive: Option[LogFileSettings] = someActiveLogReport.flatMap(logFileDefinitions.get)
 
   def remove(pathAsString: String): RecentFileSettings = {
     val updatedActiveReport =
       someActiveLogReport match {
         case Some(value) if value == pathAsString => None
-        case None => None
+        case _ => None
       }
     copy(logFileDefinitions = logFileDefinitions - pathAsString, updatedActiveReport)
   }
 
   /** updates recent files with given log report definition */
-  def update(definition: LogFileDefinition): RecentFileSettings = {
+  def update(definition: LogFileSettings): RecentFileSettings = {
     copy(logFileDefinitions + (definition.pathAsString -> definition))
   }
 

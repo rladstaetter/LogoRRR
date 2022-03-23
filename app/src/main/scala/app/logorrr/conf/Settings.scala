@@ -2,6 +2,12 @@ package app.logorrr.conf
 
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
+/**
+ * Global settings for LogoRRR
+ *
+ * LogoRRR tries to remember as much as possible from last run, in order to give user a headstart from where they last
+ * left. The idea is that the user doesn't need to fiddle around with settings every time.
+ */
 object Settings {
 
   implicit lazy val reader = deriveReader[Settings]
@@ -15,10 +21,17 @@ object Settings {
 
 case class Settings(stageSettings: StageSettings
                     , squareImageSettings: SquareImageSettings
-                    , recentFiles: RecentFileSettings) {
+                    , recentFileSettings: RecentFileSettings) {
 
-  def filterWithValidPaths: Settings = copy(recentFiles = recentFiles.filterValids())
+  def filterWithValidPaths: Settings = copy(recentFileSettings = recentFileSettings.filterValids())
 
 }
+
+
+
+
+
+
+
 
 
