@@ -1,8 +1,9 @@
 package app.logorrr.views
 
 import app.logorrr.conf.SettingsIO
-import app.logorrr.model.{LogEntry, LogEntryInstantFormat, LogEntries, LogFileSettings}
+import app.logorrr.model.{LogEntries, LogEntry, LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.util.{CanLog, CollectionUtils, JfxUtils, LogEntryListener, LogoRRRFonts}
+import app.logorrr.views.main.LogoRRRGlobals
 import app.logorrr.views.visual.LogVisualView
 import javafx.application.HostServices
 import javafx.beans.binding.{Bindings, StringExpression}
@@ -31,7 +32,6 @@ object LogFileTab {
       hostServices
       , logFile
       , logViewTabPane.sceneWidthProperty.get()
-      , logViewTabPane.squareWidthProperty.get()
       , logFileDefinition
       , initFileMenu)
 
@@ -39,7 +39,6 @@ object LogFileTab {
     /** activate invalidation listener on filtered list */
     logFileTab.init()
     logFileTab.sceneWidthProperty.bind(logViewTabPane.sceneWidthProperty)
-    logFileTab.squareWidthProperty.bind(logViewTabPane.squareWidthProperty)
     logFileTab
   }
 
@@ -56,7 +55,6 @@ object LogFileTab {
 class LogFileTab(hostServices: HostServices
                  , val logEntries: LogEntries
                  , val initialSceneWidth: Int
-                 , val initialSquareWidth: Int
                  , val initialLogFileDefinition: LogFileSettings
                  , initFileMenu: => Unit)
   extends Tab
@@ -82,9 +80,6 @@ class LogFileTab(hostServices: HostServices
   /** bound to sceneWidthProperty of parent LogViewTabPane */
   val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
 
-  /** bound to squareWidthProperty of parent LogViewTabPane */
-  val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
-
 
   /** split visual view and text view */
   val splitPane = new SplitPane()
@@ -108,8 +103,7 @@ class LogFileTab(hostServices: HostServices
 
   private lazy val logVisualView = {
     val lvv = new LogVisualView(filteredList.asScala
-      , initialWidth
-      , getSquareWidth)
+      , initialWidth)
     lvv.sisp.filtersListProperty.bind(filtersListProperty)
     lvv
   }
@@ -220,7 +214,6 @@ class LogFileTab(hostServices: HostServices
 
   def sceneWidth = sceneWidthProperty.get()
 
-  def getSquareWidth = squareWidthProperty.get()
 
   def installInvalidationListener(): Unit = {
     // to detect when we apply a new filter via filter buttons (see FilterButtonsToolbar)
@@ -269,11 +262,12 @@ class LogFileTab(hostServices: HostServices
 
   /** width can be negative as well, we have to guard about that. also we repaint only if view is visible. */
   def repaint(width: Double = getVisualViewWidth()): Unit = {
-    if (isSelected && (neverPaintedProperty.get() || isSelected && width > 0 && width > getSquareWidth * 4)) { // at minimum we want to have 4 squares left (an arbitrary choice)
+    val squareWidth = LogoRRRGlobals.settings.squareImageSettings.widthProperty.get
+    if (isSelected && (neverPaintedProperty.get() || isSelected && width > 0 && width > squareWidth * 4)) { // at minimum we want to have 4 squares left (an arbitrary choice)
       neverPaintedProperty.set(false)
-      logVisualView.repaint(getSquareWidth, width.toInt)
+      logVisualView.repaint(width.toInt)
     } else {
-      logTrace(s"Not painting since neverPainted: ${neverPaintedProperty.get} isSelected: $isSelected && $width > 0 && $width > ${getSquareWidth * 4}")
+      logTrace(s"Not painting since neverPainted: ${neverPaintedProperty.get} isSelected: $isSelected && $width > 0 && $width > ${squareWidth * 4}")
     }
   }
 

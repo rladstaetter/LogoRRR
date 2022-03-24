@@ -30,7 +30,6 @@ object LogViewTabPane {
             , initFileMenu: => Unit): LogViewTabPane = {
     val lvtp = new LogViewTabPane(hostServices, initFileMenu)
     lvtp.sceneWidthProperty.bind(parent.sceneWidthProperty)
-    lvtp.squareWidthProperty.bind(parent.squareWidthProperty)
     lvtp
   }
 
@@ -43,9 +42,6 @@ class LogViewTabPane(hostServices: HostServices
 
   /** bound to sceneWidthProperty of parent logorrrMainBorderPane */
   val sceneWidthProperty = new SimpleIntegerProperty()
-
-  /** bound to squareWidthProperty of parent logorrrMainBorderPane */
-  val squareWidthProperty = new SimpleIntegerProperty()
 
   setStyle(LogViewTabPane.BackgroundStyle)
 

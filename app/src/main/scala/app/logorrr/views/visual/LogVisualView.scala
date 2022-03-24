@@ -8,12 +8,10 @@ import javafx.scene.layout.BorderPane
 import scala.collection.mutable
 
 class LogVisualView(entries: mutable.Buffer[LogEntry]
-                    , canvasWidth: Int
-                    , squareWidth: Int)
+                    , canvasWidth: Int)
   extends BorderPane with CanLog {
 
-  require(canvasWidth > 0, "squareWidth must be greater than 0")
-  require(squareWidth > 0, "canvasWidth must be greater than 0")
+  require(canvasWidth > 0, "canvasWidth must be greater than 0")
 
   val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 
@@ -23,11 +21,10 @@ class LogVisualView(entries: mutable.Buffer[LogEntry]
   val sisp = new SquareImageScrollPane(entries
     , selectedIndexProperty
     , selectedEntryProperty
-    , squareWidth
     , canvasWidth)
   setCenter(sisp)
 
-  def repaint(sWidth: Int, cWidth: Int): Unit = timeR(sisp.repaint(sWidth, cWidth), "Repaint")
+  def repaint( cWidth: Int): Unit = timeR(sisp.repaint( cWidth), "Repaint")
 
 
 }

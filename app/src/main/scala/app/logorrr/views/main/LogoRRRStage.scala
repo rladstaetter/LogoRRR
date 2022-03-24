@@ -35,10 +35,8 @@ class LogoRRRStage(val stage: Stage
                    , settings: Settings
                    , hs: HostServices) {
 
-  val mainPane = new LogoRRRMain(hs, JfxUtils.closeStage(stage), initialStageSettings, settings.squareImageSettings, settings.recentFileSettings)
+  val mainPane = new LogoRRRMain(hs, JfxUtils.closeStage(stage), initialStageSettings,  settings.recentFileSettings)
   val scene = LogoRRRScene(mainPane, initialStageSettings)
-
-  LogoRRRGlobals.settings.squareImageSettings.widthProperty.bind(mainPane.ambp.squareWidthProperty)
 
 
   /** after scene got initialized / scene was set to stage immediately set position of stage */

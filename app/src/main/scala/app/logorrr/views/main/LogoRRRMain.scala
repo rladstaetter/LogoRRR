@@ -12,12 +12,11 @@ import java.nio.file.Path
 class LogoRRRMain(hostServices: HostServices
                   , closeStage: => Unit
                   , stageSettings: StageSettings
-                  , squareImageSettings: SquareImageSettings
                   , recentFileSettings: RecentFileSettings) extends BorderPane
   with CanLog {
 
   val mB = new LogoRRRMenuBar(hostServices, openLogFile, closeAllLogFiles, updateLogReportDefinition, closeStage)
-  val ambp = AppMainBorderPane(hostServices, stageSettings, squareImageSettings, initFileMenu)
+  val ambp = AppMainBorderPane(hostServices, stageSettings,  initFileMenu)
 
   init()
 

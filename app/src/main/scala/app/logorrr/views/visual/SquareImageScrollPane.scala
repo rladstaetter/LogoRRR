@@ -1,7 +1,8 @@
 package app.logorrr.views.visual
 
-import app.logorrr.model.{LogEntry, LogEntries}
+import app.logorrr.model.{LogEntries, LogEntry}
 import app.logorrr.views.Filter
+import app.logorrr.views.main.LogoRRRGlobals
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.event.EventHandler
 import javafx.scene.control.ScrollPane
@@ -21,10 +22,13 @@ object SquareImageScrollPane {
 class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
                             , selectedIndexProperty: SimpleIntegerProperty
                             , selectedEntryProperty: SimpleObjectProperty[LogEntry]
-                            , squareWidth: Int
                             , canvasWidth: Int) extends ScrollPane {
 
+
+
   val canvasWidthProperty = new SimpleIntegerProperty(canvasWidth)
+
+  def getCanvasWidth(): Int = canvasWidthProperty.get()
 
   val filtersListProperty = new SimpleListProperty[Filter]()
 
@@ -33,27 +37,35 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
   /** responsible for determining current logevent */
   private val mouseEventHandler: EventHandler[MouseEvent] = new EventHandler[MouseEvent]() {
     override def handle(me: MouseEvent): Unit = {
-      val index = SquareImageScrollPane.indexOf(me.getX.toInt, me.getY.toInt, squareWidth, canvasWidthProperty.get())
+      val currentSquareWidth = LogoRRRGlobals.settings.squareImageSettings.widthProperty.get
+      val index = SquareImageScrollPane.indexOf(me.getX.toInt, me.getY.toInt, currentSquareWidth, getCanvasWidth())
       val entry = entries(index)
       selectedIndexProperty.set(index)
       selectedEntryProperty.set(entry)
       val pw = getWritableImage().getPixelWriter
-      val x = (me.getX.toInt / squareWidth) * squareWidth
-      val y = (me.getY.toInt / squareWidth) * squareWidth
-      SquareImageView.paintRect(pw, x, y, squareWidth, entry.calcColor(filters).darker)
+      val x = (me.getX.toInt / currentSquareWidth) * currentSquareWidth
+      val y = (me.getY.toInt / currentSquareWidth) * currentSquareWidth
+      SquareImageView.paintRect(pw, x, y, currentSquareWidth, entry.calcColor(filters).darker)
     }
   }
 
-  val iv = SquareImageView(entries.size, squareWidth, canvasWidth)
-  iv.setOnMouseClicked(mouseEventHandler)
-  setContent(iv)
 
-  def getWritableImage(): WritableImage = iv.getImage.asInstanceOf[WritableImage]
+  def getWritableImage(): WritableImage =  getContent.asInstanceOf[SquareImageView].getImage.asInstanceOf[WritableImage]
 
 
-  def repaint(sWidth: Int, cWidth: Int): Unit = {
+  def repaint(cWidth: Int): Unit = {
     canvasWidthProperty.set(cWidth)
-    iv.setImage(SquareImageView.paint(entries, sWidth, cWidth, filters))
+    val squareWidth = LogoRRRGlobals.settings.squareImageSettings.widthProperty.get
+    if (Option(getContent).isEmpty) {
+      val iv = {
+        val iiv = SquareImageView(entries.size, squareWidth, canvasWidth)
+        iiv.setOnMouseClicked(mouseEventHandler)
+        iiv
+      }
+      setContent(iv)
+    }
+
+    getContent.asInstanceOf[SquareImageView].setImage(SquareImageView.paint(entries,  squareWidth, cWidth, filters))
   }
 
 }

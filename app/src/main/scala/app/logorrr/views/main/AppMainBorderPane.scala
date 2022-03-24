@@ -18,9 +18,8 @@ object AppMainBorderPane {
 
   def apply(hostServices: HostServices
             , stageSettings: StageSettings
-            , squareImageSettings: SquareImageSettings
             , reInitMenuBarFn: => Unit): AppMainBorderPane = {
-    new AppMainBorderPane(hostServices, stageSettings.width,squareImageSettings.width, reInitMenuBarFn)
+    new AppMainBorderPane(hostServices, stageSettings.width, reInitMenuBarFn)
   }
 }
 
@@ -32,13 +31,10 @@ object AppMainBorderPane {
  */
 class AppMainBorderPane(hostServices: HostServices
                         , initialSceneWidth: Int
-                        , initialSquareWidth: Int
                         , reInitMenuBarFn: => Unit)
   extends BorderPane with CanLog {
 
   val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
-
-  val squareWidthProperty = new SimpleIntegerProperty(initialSquareWidth)
 
   val logViewTabPane = LogViewTabPane(hostServices, this, reInitMenuBarFn)
 
