@@ -1,6 +1,6 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{Settings, SettingsIO}
+import app.logorrr.conf.{Settings, SettingsIO, SquareImageSettings, StageSettings}
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.util.CanLog
 import app.logorrr.views.{Filter, LogViewTabPane, SimpleRange}
@@ -16,8 +16,11 @@ import scala.jdk.CollectionConverters.ListHasAsScala
 
 object AppMainBorderPane {
 
-  def apply(hostServices: HostServices, settings: Settings, reInitMenuBarFn: => Unit): AppMainBorderPane = {
-    new AppMainBorderPane(hostServices, settings.stageSettings.width, settings.squareImageSettings.width, reInitMenuBarFn)
+  def apply(hostServices: HostServices
+            , stageSettings: StageSettings
+            , squareImageSettings: SquareImageSettings
+            , reInitMenuBarFn: => Unit): AppMainBorderPane = {
+    new AppMainBorderPane(hostServices, stageSettings.width,squareImageSettings.width, reInitMenuBarFn)
   }
 }
 
@@ -32,7 +35,6 @@ class AppMainBorderPane(hostServices: HostServices
                         , initialSquareWidth: Int
                         , reInitMenuBarFn: => Unit)
   extends BorderPane with CanLog {
-
 
   val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
 
@@ -87,7 +89,6 @@ class AppMainBorderPane(hostServices: HostServices
   def selectLastLogFile(): Unit = logViewTabPane.selectLastLogFile()
 
   def selectLog(path: Path): Unit = logViewTabPane.selectLog(path)
-
 
   /** Adds a new logfile to display */
   def addLogFile(lrd: LogFileSettings): Unit = {

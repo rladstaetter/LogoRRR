@@ -1,6 +1,6 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{Settings, SettingsIO}
+import app.logorrr.conf.{RecentFileSettings, Settings, SettingsIO, SquareImageSettings, StageSettings}
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.util.CanLog
 import app.logorrr.views.Filter
@@ -11,14 +11,13 @@ import java.nio.file.Path
 
 class LogoRRRMain(hostServices: HostServices
                   , closeStage: => Unit
-                  , settings: Settings) extends BorderPane
+                  , stageSettings: StageSettings
+                  , squareImageSettings: SquareImageSettings
+                  , recentFileSettings: RecentFileSettings) extends BorderPane
   with CanLog {
 
-  val width = settings.stageSettings.width
-  val height = settings.stageSettings.height
-
   val mB = new LogoRRRMenuBar(hostServices, openLogFile, closeAllLogFiles, updateLogReportDefinition, closeStage)
-  val ambp = AppMainBorderPane(hostServices, settings, initFileMenu)
+  val ambp = AppMainBorderPane(hostServices, stageSettings, squareImageSettings, initFileMenu)
 
   init()
 
@@ -31,12 +30,12 @@ class LogoRRRMain(hostServices: HostServices
     setCenter(ambp)
 
     // reverse since most recently file is saved first in list but should be opened last (= is last log file)
-    for ((_, lrd) <- settings.recentFileSettings.logFileDefinitions.toSeq.reverse) {
+    for ((_, lrd) <- recentFileSettings.logFileDefinitions.toSeq.reverse) {
       addLogFile(lrd)
     }
     // if no report was checked as active (which should be a bug) activate
     // the last one
-    settings.recentFileSettings.someActive match {
+    recentFileSettings.someActive match {
       case Some(value) => selectLog(value.path)
       case None =>
         logError("No active log file entries found.")

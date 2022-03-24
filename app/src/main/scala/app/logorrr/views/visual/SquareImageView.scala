@@ -16,7 +16,8 @@ object SquareImageView extends CanLog {
     val numberCols = canvasWidth / squareWidth
     val numRows = totalSize / numberCols
     val height = squareWidth * numRows
-    new WritableImage(canvasWidth + squareWidth, height + squareWidth)
+    val wi = new WritableImage(canvasWidth + squareWidth, height + squareWidth)
+    wi
   }
 
   def paint(entries: mutable.Buffer[LogEntry]

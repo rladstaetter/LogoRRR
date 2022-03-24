@@ -27,9 +27,7 @@ class LogVisualView(entries: mutable.Buffer[LogEntry]
     , canvasWidth)
   setCenter(sisp)
 
-  def repaint(sWidth: Int, cWidth: Int): Unit = timeR({
-    sisp.repaint(sWidth, cWidth)
-  }, "Repaint")
+  def repaint(sWidth: Int, cWidth: Int): Unit = timeR(sisp.repaint(sWidth, cWidth), "Repaint")
 
 
 }

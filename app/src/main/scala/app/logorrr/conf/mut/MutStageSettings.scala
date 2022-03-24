@@ -2,7 +2,7 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.{SettingsIO, StageSettings}
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.main.LG
+import app.logorrr.views.main.LogoRRRGlobals
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
 import javafx.stage.Window
 
@@ -29,31 +29,31 @@ object MutStageSettings {
     JfxUtils.onNew[Number](yValue => updateSettings(stageSettings => stageSettings.copy(y = yValue.doubleValue())))
 
   def bind(window: Window): Unit = {
-    LG.settings.stageSettings.widthProperty.bind(window.getScene.widthProperty())
-    LG.settings.stageSettings.widthProperty.addListener(MutStageSettings.stageWidthListener)
+    LogoRRRGlobals.settings.stageSettings.widthProperty.bind(window.getScene.widthProperty())
+    LogoRRRGlobals.settings.stageSettings.widthProperty.addListener(MutStageSettings.stageWidthListener)
 
-    LG.settings.stageSettings.heightProperty.bind(window.getScene.heightProperty())
-    LG.settings.stageSettings.heightProperty.addListener(MutStageSettings.stageHeightListener)
+    LogoRRRGlobals.settings.stageSettings.heightProperty.bind(window.getScene.heightProperty())
+    LogoRRRGlobals.settings.stageSettings.heightProperty.addListener(MutStageSettings.stageHeightListener)
 
-    LG.settings.stageSettings.xProperty.bind(window.xProperty())
-    LG.settings.stageSettings.xProperty.addListener(MutStageSettings.stageXListener)
+    LogoRRRGlobals.settings.stageSettings.xProperty.bind(window.xProperty())
+    LogoRRRGlobals.settings.stageSettings.xProperty.addListener(MutStageSettings.stageXListener)
 
-    LG.settings.stageSettings.yProperty.bind(window.yProperty())
-    LG.settings.stageSettings.yProperty.addListener(MutStageSettings.stageYListener)
+    LogoRRRGlobals.settings.stageSettings.yProperty.bind(window.yProperty())
+    LogoRRRGlobals.settings.stageSettings.yProperty.addListener(MutStageSettings.stageYListener)
   }
 
   def unbind(): Unit = {
-    LG.settings.stageSettings.widthProperty.unbind()
-    LG.settings.stageSettings.widthProperty.removeListener(MutStageSettings.stageWidthListener)
+    LogoRRRGlobals.settings.stageSettings.widthProperty.unbind()
+    LogoRRRGlobals.settings.stageSettings.widthProperty.removeListener(MutStageSettings.stageWidthListener)
 
-    LG.settings.stageSettings.heightProperty.unbind()
-    LG.settings.stageSettings.heightProperty.removeListener(MutStageSettings.stageHeightListener)
+    LogoRRRGlobals.settings.stageSettings.heightProperty.unbind()
+    LogoRRRGlobals.settings.stageSettings.heightProperty.removeListener(MutStageSettings.stageHeightListener)
 
-    LG.settings.stageSettings.xProperty.unbind()
-    LG.settings.stageSettings.xProperty.removeListener(MutStageSettings.stageXListener)
+    LogoRRRGlobals.settings.stageSettings.xProperty.unbind()
+    LogoRRRGlobals.settings.stageSettings.xProperty.removeListener(MutStageSettings.stageXListener)
 
-    LG.settings.stageSettings.yProperty.unbind()
-    LG.settings.stageSettings.yProperty.removeListener(MutStageSettings.stageYListener)
+    LogoRRRGlobals.settings.stageSettings.yProperty.unbind()
+    LogoRRRGlobals.settings.stageSettings.yProperty.removeListener(MutStageSettings.stageYListener)
   }
 
   def apply(stageSettings: StageSettings): MutStageSettings = {

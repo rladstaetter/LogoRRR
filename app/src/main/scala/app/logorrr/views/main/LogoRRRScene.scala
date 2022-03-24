@@ -1,7 +1,6 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.StageSettings
-import app.logorrr.conf.mut.MutStageSettings
 import app.logorrr.util.JfxUtils
 import javafx.beans.value.ChangeListener
 import javafx.scene.Scene
@@ -20,10 +19,4 @@ object LogoRRRScene {
     })
 }
 
-case class LogoRRRScene(mainPane: LogoRRRMain, stageSettings: StageSettings)
-  extends Scene(mainPane, stageSettings.width, stageSettings.height) {
-
-  // bind stage properties (they are initially set and constantly overwritten during execution)
-  windowProperty().addListener(MutStageSettings.windowListener)
-
-}
+case class LogoRRRScene(mainPane: LogoRRRMain, stageSettings: StageSettings) extends Scene(mainPane, stageSettings.width, stageSettings.height)
