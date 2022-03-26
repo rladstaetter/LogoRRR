@@ -11,7 +11,7 @@ class LogVisualView(entries: mutable.Buffer[LogEntry]
                     , canvasWidth: Int)
   extends BorderPane with CanLog {
 
-  require(canvasWidth > 0, "canvasWidth must be greater than 0")
+//  require(canvasWidth > 0, "canvasWidth must be greater than 0")
 
   val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 

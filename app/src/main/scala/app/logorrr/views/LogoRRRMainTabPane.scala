@@ -3,7 +3,7 @@ package app.logorrr.views
 import app.logorrr.conf.SettingsIO
 import app.logorrr.model.{LogEntries, LogFileSettings}
 import app.logorrr.util.{CanLog, JfxUtils}
-import app.logorrr.views.main.AppMainBorderPane
+import app.logorrr.views.main.LogoRRRMainBorderPane
 import javafx.application.HostServices
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.control.{Tab, TabPane}
@@ -13,7 +13,7 @@ import scala.collection.mutable
 import scala.jdk.CollectionConverters._
 import scala.util.{Failure, Success, Try}
 
-object LogViewTabPane {
+object LogoRRRMainTabPane {
 
   private val BackgroundStyle: String =
     """
@@ -26,24 +26,24 @@ object LogViewTabPane {
 
   /** constructor to pass parent and do binding */
   def apply(hostServices: HostServices
-            , parent: AppMainBorderPane
-            , initFileMenu: => Unit): LogViewTabPane = {
-    val lvtp = new LogViewTabPane(hostServices, initFileMenu)
+            , parent: LogoRRRMainBorderPane
+            , initFileMenu: => Unit): LogoRRRMainTabPane = {
+    val lvtp = new LogoRRRMainTabPane(hostServices, initFileMenu)
     lvtp.sceneWidthProperty.bind(parent.sceneWidthProperty)
     lvtp
   }
 
 }
 
-class LogViewTabPane(hostServices: HostServices
-                     , initFileMenu: => Unit)
+class LogoRRRMainTabPane(hostServices: HostServices
+                         , initFileMenu: => Unit)
   extends TabPane
     with CanLog {
 
   /** bound to sceneWidthProperty of parent logorrrMainBorderPane */
   val sceneWidthProperty = new SimpleIntegerProperty()
 
-  setStyle(LogViewTabPane.BackgroundStyle)
+  setStyle(LogoRRRMainTabPane.BackgroundStyle)
 
   /** init change listeners */
   def init(): Unit = {

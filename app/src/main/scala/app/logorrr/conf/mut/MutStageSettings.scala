@@ -1,8 +1,7 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.conf.{SettingsIO, StageSettings}
+import app.logorrr.conf.{LogoRRRGlobals, SettingsIO, StageSettings}
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.main.LogoRRRGlobals
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
 import javafx.stage.Window
 

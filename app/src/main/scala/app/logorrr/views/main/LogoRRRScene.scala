@@ -1,6 +1,5 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.StageSettings
 import app.logorrr.util.JfxUtils
 import javafx.beans.value.ChangeListener
 import javafx.scene.Scene
@@ -19,4 +18,3 @@ object LogoRRRScene {
     })
 }
 
-case class LogoRRRScene(mainPane: LogoRRRMain, stageSettings: StageSettings) extends Scene(mainPane, stageSettings.width, stageSettings.height)

@@ -1,9 +1,8 @@
 package app.logorrr.views
 
-import app.logorrr.conf.SettingsIO
-import app.logorrr.model.{LogEntries, LogEntry, LogEntryInstantFormat, LogFileSettings}
-import app.logorrr.util.{CanLog, CollectionUtils, JfxUtils, LogEntryListener, LogoRRRFonts}
-import app.logorrr.views.main.LogoRRRGlobals
+import app.logorrr.conf.{LogoRRRGlobals, SettingsIO}
+import app.logorrr.model.{LogEntries, LogEntry, LogFileSettings}
+import app.logorrr.util._
 import app.logorrr.views.visual.LogVisualView
 import javafx.application.HostServices
 import javafx.beans.binding.{Bindings, StringExpression}
@@ -12,11 +11,8 @@ import javafx.beans.value.ChangeListener
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
-import javafx.geometry.Pos
 import javafx.scene.control._
 import javafx.scene.layout._
-import javafx.scene.paint.Color
-import javafx.scene.shape.Rectangle
 import org.apache.commons.io.input.Tailer
 
 import scala.jdk.CollectionConverters._
@@ -24,7 +20,7 @@ import scala.jdk.CollectionConverters._
 object LogFileTab {
 
   def apply(hostServices: HostServices
-            , logViewTabPane: LogViewTabPane
+            , logViewTabPane: LogoRRRMainTabPane
             , logFile: LogEntries
             , logFileDefinition: LogFileSettings
             , initFileMenu: => Unit): LogFileTab = {

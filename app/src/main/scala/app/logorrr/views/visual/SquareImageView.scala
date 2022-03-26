@@ -12,6 +12,7 @@ import scala.collection.mutable
 import scala.util.{Failure, Success, Try}
 
 
+
 object SquareImageView extends CanLog {
 
   def mkBareImage(totalSize: Int, squareWidth: Int, canvasWidth: Int): WritableImage = {

@@ -1,18 +1,14 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.mut.{MutSettings, MutStageSettings}
-import app.logorrr.conf.{Settings, StageSettings}
+import app.logorrr.conf.mut.MutStageSettings
+import app.logorrr.conf.{LogoRRRGlobals, RecentFileSettings, Settings, StageSettings}
 import app.logorrr.meta.AppMeta
 import app.logorrr.util.JfxUtils
 import javafx.application.HostServices
+import javafx.scene.Scene
 import javafx.scene.image.Image
 import javafx.stage.{Stage, WindowEvent}
 
-object LogoRRRGlobals {
-
-  val settings = new MutSettings
-
-}
 
 object LogoRRRStage {
 
@@ -21,23 +17,19 @@ object LogoRRRStage {
   def apply(stage: Stage
             , settings: Settings
             , hs: HostServices): LogoRRRStage = {
-    LogoRRRGlobals.settings.setRecentFileSettings(settings.recentFileSettings)
-    LogoRRRGlobals.settings.setSquareImageSettings(settings.squareImageSettings)
-    LogoRRRGlobals.settings.setStageSettings(settings.stageSettings)
-    val ls = new LogoRRRStage(stage, settings.stageSettings, settings, hs)
-    ls
+    new LogoRRRStage(stage, settings.stageSettings, settings.recentFileSettings, hs)
   }
 
 }
 
 class LogoRRRStage(val stage: Stage
                    , initialStageSettings: StageSettings
-                   , settings: Settings
+                   , recentFileSettings: RecentFileSettings
                    , hs: HostServices) {
 
-  val mainPane = new LogoRRRMain(hs, JfxUtils.closeStage(stage), initialStageSettings,  settings.recentFileSettings)
-  val scene = LogoRRRScene(mainPane, initialStageSettings)
-
+  val logorrrMain = new LogoRRRMain(hs, JfxUtils.closeStage(stage), initialStageSettings, recentFileSettings)
+  val scene = new Scene(logorrrMain, initialStageSettings.width, initialStageSettings.height)
+  logorrrMain.ambp.sceneWidthProperty.bind(scene.widthProperty())
 
   /** after scene got initialized / scene was set to stage immediately set position of stage */
   val sceneListener = LogoRRRScene.mkSceneListener(initialStageSettings.x, initialStageSettings.y)()
@@ -51,7 +43,7 @@ class LogoRRRStage(val stage: Stage
 
   // make sure to cleanup on close
   stage.setOnCloseRequest((_: WindowEvent) => {
-    mainPane.shutdown()
+    logorrrMain.shutdown()
     MutStageSettings.unbind()
     stage.sceneProperty.removeListener(sceneListener)
   })

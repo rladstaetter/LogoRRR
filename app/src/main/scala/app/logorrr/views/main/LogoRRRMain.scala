@@ -16,7 +16,7 @@ class LogoRRRMain(hostServices: HostServices
   with CanLog {
 
   val mB = new LogoRRRMenuBar(hostServices, openLogFile, closeAllLogFiles, updateLogReportDefinition, closeStage)
-  val ambp = AppMainBorderPane(hostServices, stageSettings,  initFileMenu)
+  val ambp = LogoRRRMainBorderPane(hostServices, stageSettings,  initFileMenu)
 
   init()
 

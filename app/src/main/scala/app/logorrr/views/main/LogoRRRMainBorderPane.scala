@@ -1,25 +1,23 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{Settings, SettingsIO, SquareImageSettings, StageSettings}
-import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
+import app.logorrr.conf.{SettingsIO, StageSettings}
+import app.logorrr.model.LogFileSettings
 import app.logorrr.util.CanLog
-import app.logorrr.views.{Filter, LogViewTabPane, SimpleRange}
+import app.logorrr.views.{Filter, LogoRRRMainTabPane}
 import javafx.application.HostServices
 import javafx.beans.property.SimpleIntegerProperty
-import javafx.beans.value.ObservableStringValue
-import javafx.scene.control.Label
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
 
 import java.nio.file.{Files, Path}
 import scala.jdk.CollectionConverters.ListHasAsScala
 
-object AppMainBorderPane {
+object LogoRRRMainBorderPane {
 
   def apply(hostServices: HostServices
             , stageSettings: StageSettings
-            , reInitMenuBarFn: => Unit): AppMainBorderPane = {
-    new AppMainBorderPane(hostServices, stageSettings.width, reInitMenuBarFn)
+            , reInitMenuBarFn: => Unit): LogoRRRMainBorderPane = {
+    new LogoRRRMainBorderPane(hostServices, stageSettings.width, reInitMenuBarFn)
   }
 }
 
@@ -29,14 +27,14 @@ object AppMainBorderPane {
  * @param initialSceneWidth  initial width of scene
  * @param initialSquareWidth width of squares to paint in visual view
  */
-class AppMainBorderPane(hostServices: HostServices
-                        , initialSceneWidth: Int
-                        , reInitMenuBarFn: => Unit)
+class LogoRRRMainBorderPane(hostServices: HostServices
+                            , initialSceneWidth: Int
+                            , reInitMenuBarFn: => Unit)
   extends BorderPane with CanLog {
 
   val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
 
-  val logViewTabPane = LogViewTabPane(hostServices, this, reInitMenuBarFn)
+  val logViewTabPane = LogoRRRMainTabPane(hostServices, this, reInitMenuBarFn)
 
 
   def init(): Unit = {

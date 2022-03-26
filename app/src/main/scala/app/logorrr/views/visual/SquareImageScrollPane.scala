@@ -1,8 +1,8 @@
 package app.logorrr.views.visual
 
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.{LogEntries, LogEntry}
 import app.logorrr.views.Filter
-import app.logorrr.views.main.LogoRRRGlobals
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.event.EventHandler
 import javafx.scene.control.ScrollPane
@@ -23,8 +23,6 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
                             , selectedIndexProperty: SimpleIntegerProperty
                             , selectedEntryProperty: SimpleObjectProperty[LogEntry]
                             , canvasWidth: Int) extends ScrollPane {
-
-
 
   val canvasWidthProperty = new SimpleIntegerProperty(canvasWidth)
 
@@ -48,7 +46,6 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
       SquareImageView.paintRect(pw, x, y, currentSquareWidth, entry.calcColor(filters).darker)
     }
   }
-
 
   def getWritableImage(): WritableImage =  getContent.asInstanceOf[SquareImageView].getImage.asInstanceOf[WritableImage]
 

@@ -1,6 +1,6 @@
 package app.logorrr
 
-import app.logorrr.conf.SettingsIO
+import app.logorrr.conf.{LogoRRRGlobals, SettingsIO}
 import app.logorrr.util.CanLog
 import app.logorrr.views.main.LogoRRRStage
 import javafx.stage.Stage
@@ -22,7 +22,9 @@ class LogoRRRApp extends javafx.application.Application with CanLog {
    */
   def start(stage: Stage): Unit = {
     SettingsIO.someSettings match {
-      case Some(settings) => LogoRRRStage(stage, settings, getHostServices).show()
+      case Some(settings) =>
+        LogoRRRGlobals.set(settings)
+        LogoRRRStage(stage, settings, getHostServices).show()
       case None => logError("Could not initialize LogoRRR, quitting application.")
     }
   }
