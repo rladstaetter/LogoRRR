@@ -48,7 +48,7 @@ class SIVR extends javafx.application.Application {
     slider.valueProperty().addListener(JfxUtils.onNew[Number](n => {
       val blockSize = n.intValue()
       blockSizeLabel.setText(blockSize.toString)
-//      squareImageViz.setBlockSize(blockSize)
+      squareImageViz.setBlockSize(blockSize)
     }))
 
 

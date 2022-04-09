@@ -11,9 +11,21 @@ import javafx.scene.paint.Color
 
 import java.nio.IntBuffer
 
-class SQImage extends CanLog {
+object SQImage {
 
+  /** width is constrained by the maximum texture width which is set to 4096 */
+  val MaxWidth = 4096
+
+  /** max height of a single SQView, constrained by maximum texture height (4096) */
+  val MaxHeight = 4096
+
+}
+
+class SQImage extends CanLog {
   logTrace("Instantiating " + Debug.inc())
+
+  def bind(): Unit = ???
+
   var pixelBuffer: PixelBuffer[IntBuffer] = _
   var intBuffer: IntBuffer = _
   var rawInts: Array[Int] = _
@@ -50,6 +62,8 @@ class SQImage extends CanLog {
    * */
   val heightProperty = new SimpleIntegerProperty()
 
+  def setHeight(height : Int) : Unit = heightProperty.set(height)
+
   def getHeight(): Int = heightProperty.get()
 
   heightProperty.addListener(JfxUtils.onNew[Number](height => {
@@ -66,6 +80,9 @@ class SQImage extends CanLog {
   }))
 
   private def resetBackingImage(intWidth: Int, intHeight: Int): Unit = {
+    // println(s"XXXX ${intWidth}\t\t${intHeight}")
+    assert(intWidth <= SQImage.MaxWidth, s"intWidth was ${intWidth} which exceeds ${SQImage.MaxWidth}.")
+    assert(intHeight <= SQImage.MaxHeight, s"intHeight was ${intHeight} which exceeds ${SQImage.MaxHeight}.")
     if (intHeight * intWidth > 0) {
       //      println(s"Allocating ${intWidth * intHeight} memory ...")
       Option(this.intBuffer) match {

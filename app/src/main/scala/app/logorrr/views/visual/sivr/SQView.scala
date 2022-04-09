@@ -43,20 +43,24 @@ object SQView {
   }
 }
 
+/**
+ * Displays a region with max 4096 x 4096 pixels and as many entries as can fit in this region.
+ */
 class SQView extends ImageView with CanLog {
+
+
+  private val sqImage = new SQImage
+  private val blockSizeProperty = new SimpleIntegerProperty(5)
+  private val widthProperty = new SimpleIntegerProperty()
+  private val entriesProperty = new SimpleListProperty[SQView.E](FXCollections.observableArrayList())
 
 
   /** holds reference to property */
   var squareImageWidthPropertyHolder: ReadOnlyDoubleProperty = _
 
-
-  def setWidth(width: Int): Unit = {
-    widthProperty.set(width)
-  }
-
   private val widthListener = JfxUtils.onNew[Number](n => {
     val scrollPaneWidth = n.intValue()
-    if (scrollPaneWidth < SquareImageViz.MaxWidth) {
+    if (scrollPaneWidth < SQImage.MaxWidth) {
       val proposedWidth = scrollPaneWidth - SQView.ScrollBarWidth
       if (proposedWidth > SQView.MinWidth) {
         setWidth(proposedWidth)
@@ -64,15 +68,37 @@ class SQView extends ImageView with CanLog {
         logTrace(s"Proposed width (${proposedWidth}) < SQView.MinWidth (${SQView.MinWidth}), not adjusting width of canvas ...")
       }
     } else {
-      logTrace(s"ScrollPaneWidth (${scrollPaneWidth}) >= SquareImageViz.MaxWidth (${SquareImageViz.MaxWidth}), not adjusting width of canvas ...")
+      logTrace(s"ScrollPaneWidth (${scrollPaneWidth}) >= SQImage.MaxWidth (${SQImage.MaxWidth}), not adjusting width of canvas ...")
     }
   })
 
 
-  private val sqImage = new SQImage
-  private val blockSizeProperty = new SimpleIntegerProperty(5)
-  private val widthProperty = new SimpleIntegerProperty()
-  private val entriesProperty = new SimpleListProperty[SQView.E](FXCollections.observableArrayList())
+  private val recalcHeightListener: InvalidationListener = (_: Observable) => {
+    val blockSize = blockSizeProperty.get()
+    if (blockSize != 0) {
+      val height = SQView.calcVirtualCanvasHeight(blockSize, blockSize, widthProperty.get(), entriesProperty.size())
+      sqImage.setHeight(height)
+    } else {
+      // println("blocksize was null")
+    }
+  }
+
+  //  blockSizeProperty.addListener(recalcHeightListener)
+  //  widthProperty.addListener(recalcHeightListener)
+  // entriesProperty.addListener(recalcHeightListener)
+
+  //  sqImage.heightProperty.bind(virtualCanvasHeightProperty)
+  sqImage.widthProperty.bind(widthProperty)
+  sqImage.blockWidthProperty.bind(blockSizeProperty)
+  sqImage.blockHeightProperty.bind(blockSizeProperty)
+  sqImage.entries.bind(entriesProperty)
+
+  imageProperty().bind(sqImage.imageProperty)
+
+  def setHeight(height: Int) : Unit = sqImage.setHeight(height)
+
+  def setWidth(width: Int): Unit = widthProperty.set(width)
+
 
   def bind(blockSizeProperty: SimpleDoubleProperty
            , squareImageVizWidthProperty: ReadOnlyDoubleProperty): Unit = {
@@ -85,43 +111,8 @@ class SQView extends ImageView with CanLog {
     this.squareImageWidthPropertyHolder.removeListener(widthListener)
   }
 
-  private val recalcVirtualCanvasHeightListener: InvalidationListener = (_: Observable) => {
-    val blockSize = blockSizeProperty.get()
-    if (blockSize != 0) {
-      setVirtualCanvasHeight(
-        SQView.calcVirtualCanvasHeight(blockSize
-          , blockSize
-          , widthProperty.get()
-          , entriesProperty.size()))
-    } else {
-      // println("blocksize was null")
-    }
-  }
-
-  blockSizeProperty.addListener(recalcVirtualCanvasHeightListener)
-  widthProperty.addListener(recalcVirtualCanvasHeightListener)
-  entriesProperty.addListener(recalcVirtualCanvasHeightListener)
-
-  private val printVirtualCanvasHeight: InvalidationListener = (_: Observable) => {
-    // println("virtual canvas height:" + virtualCanvasHeightProperty.get)
-  }
-
-  val virtualCanvasHeightProperty = new SimpleIntegerProperty()
-  virtualCanvasHeightProperty.addListener(printVirtualCanvasHeight)
-
-  def setVirtualCanvasHeight(canvasHeight: Int): Unit = virtualCanvasHeightProperty.set(canvasHeight)
-
   def setEntries(entries: java.util.List[SQView.E]): Unit = entriesProperty.setAll(entries)
 
   def redraw(): Unit = sqImage.redraw()
-
-  sqImage.heightProperty.bind(virtualCanvasHeightProperty.add(blockSizeProperty))
-  sqImage.widthProperty.bind(widthProperty)
-  sqImage.blockWidthProperty.bind(blockSizeProperty)
-  sqImage.blockHeightProperty.bind(blockSizeProperty)
-  sqImage.entries.bind(entriesProperty)
-
-  imageProperty().bind(sqImage.imageProperty)
-
 
 }

@@ -15,47 +15,44 @@ import scala.jdk.CollectionConverters._
 
 object SquareImageViz {
 
-  /** width is constrained by the maximum texture width which is set to 4096 */
-  val MaxWidth = 4096
-
-  /** max height of a single SQView, constrained by maximum texture height (4096) */
-  val MaxHeight = 4096
-
 
 }
 
 class SquareImageViz extends ScrollPane with CanLog {
 
-
   /** vertical box which holds single SQViews and serves as a canvas for painting */
   val vbox = new VBox()
 
-  //private val listChangeListener: ListChangeListener[SQView.E] = (c: ListChangeListener.Change[_ <: SQView.E]) => recalcSqViews()
+  private val listChangeListener: ListChangeListener[SQView.E] = (c: ListChangeListener.Change[_ <: SQView.E]) => calcSquareViews()
 
   val entries = {
     val es = new SimpleListProperty[SQView.E](FXCollections.observableArrayList())
-    //  es.addListener(listChangeListener)
+    es.addListener(listChangeListener)
     es
   }
 
   def setEntries(es: Seq[SQView.E]): Unit = {
     entries.setAll(es.asJava)
-    recalcSqViews()
   }
 
-  //private val recalcSqViewsListener: InvalidationListener = (observable: Observable) => recalcSqViews()
-
-  val blockSizeProperty = new SimpleDoubleProperty(5)
-
-  def setBlockSize(blockSize: Int): Unit = {
-    blockSizeProperty.set(blockSize)
+  private val recalcSqViewsListener: InvalidationListener = (observable: Observable) => {
+    calcSquareViews()
   }
+
+  val blockSizeProperty = {
+    val p = new SimpleDoubleProperty(5)
+    p.addListener(recalcSqViewsListener)
+    p
+  }
+
+  widthProperty().addListener(recalcSqViewsListener)
+
+  def setBlockSize(blockSize: Int): Unit = blockSizeProperty.set(blockSize)
 
   def getBlockSize(): Int = blockSizeProperty.get().toInt
 
-  // blockSizeProperty.addListener(recalcSqViewsListener)
 
-  //  widthProperty().addListener(recalcSqViewsListener)
+
 
   /**
    * one (most of the time) or more squareviews which visualize entries
@@ -64,44 +61,40 @@ class SquareImageViz extends ScrollPane with CanLog {
    * image) can get (4096 * 4096 is the maximum). This is the reason why width of SquareImageViz is constrained
    * to 4096.
    * */
-  val squareViews = new SimpleListProperty[SQView](FXCollections.observableArrayList())
+  // val squareViews = new SimpleListProperty[SQView](FXCollections.observableArrayList())
 
   def mkSQView(): SQView = {
     val squareView = new SQView
     squareView.bind(blockSizeProperty, widthProperty)
-
     squareView
   }
 
 
-  private def recalcSqViews(): Unit = {
-    calcSquareViews()
-  }
-
-  def calcSquareViews(): Unit = {
+  private def calcSquareViews(): Unit = {
     // unbind old listeners or we have a memory problem
-    vbox.getChildren.forEach(c => {
-      c match {
-        case c: SQView =>
-          c.unbind()
-        case _ => ???
-      }
-    })
+    vbox.getChildren.forEach {
+      case c: SQView => c.unbind()
+      case _ => ???
+    }
 
-    val size: Int =
-      SQView.calcVirtualCanvasHeight(blockSizeProperty.get().toInt
+    val virtualCanvasHeight: Int =
+      SQView.calcVirtualCanvasHeight(
+        blockSizeProperty.get().toInt
         , blockSizeProperty.get().toInt
         , getWidth.toInt
         , entries.size)
 
-    val sqViews: Seq[SQView] =
-      if (size <= SquareImageViz.MaxHeight) {
+    val sqViews: Seq[SQView] = {
+      // if virtual canvas height is lower than maxheight, just create one sqView and be done with it
+      if (virtualCanvasHeight <= SQImage.MaxHeight) {
         val sqView = mkSQView()
+        sqView.setHeight(virtualCanvasHeight)
         sqView.setWidth(getWidth().toInt)
         Seq(sqView)
       } else {
+        // if the virtual canvas height exceeds SQImage.MaxHeight, iterate and create new SQViews
         val nrOfElemsInRow = (getWidth.toInt / blockSizeProperty.get()).toInt
-        val nrOfRowsPerSquareView = (SquareImageViz.MaxHeight / blockSizeProperty.get()).toInt
+        val nrOfRowsPerSquareView = (SQImage.MaxHeight / blockSizeProperty.get()).toInt
         val nrElemsInSqView = nrOfRowsPerSquareView * nrOfElemsInRow
         var curIndex = 0
         val lb = new ListBuffer[SQView]
@@ -114,12 +107,15 @@ class SquareImageViz extends ScrollPane with CanLog {
           } else {
             entries.size
           }
-          v.setEntries(entries.subList(curIndex, end))
+          val entriesInSquareView = entries.subList(curIndex, end)
+          v.setEntries(entriesInSquareView)
+          v.setHeight(SQView.calcVirtualCanvasHeight(getBlockSize(), getBlockSize(), getWidth.toInt, entriesInSquareView.size))
           lb.addOne(v)
           curIndex = curIndex + nrElemsInSqView
         }
         lb.toSeq
       }
+    }
     vbox.getChildren.setAll(sqViews: _*)
     logTrace(s"Redraw ${sqViews.size} SquareViews")
     sqViews.foreach(_.redraw())
