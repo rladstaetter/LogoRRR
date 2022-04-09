@@ -2,27 +2,23 @@ package app.logorrr.views.visual.sivr
 
 import app.logorrr.util.JfxUtils
 import javafx.beans.binding.StringBinding
+import javafx.collections.FXCollections
 import javafx.geometry.Orientation
 import javafx.scene.Scene
 import javafx.scene.control._
 import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
 import javafx.stage.Stage
+import sun.jvm.hotspot.utilities.Observable
 
 import scala.util.Random
 
 object SIVR {
 
-  val cols2 = Seq(Color.RED)
-
   val cols = Seq(Color.RED
-    , Color.BLUE
-    , Color.ORANGE
     , Color.GREEN
-    , Color.BROWN
-    , Color.AZURE
-    , Color.MAGENTA)
-
+    , Color.BLUE
+    , Color.ORANGE)
 
   def main(args: Array[String]): Unit = {
     javafx.application.Application.launch(classOf[SIVR], args: _*)
@@ -33,34 +29,34 @@ class SIVR extends javafx.application.Application {
   override def start(primaryStage: Stage): Unit = {
 
     val bp = new BorderPane
-    val i = 1000 * 1000
-    val button = new Button(s"set entries ${i} entries")
-    val blockSizeLabel = new Label
+    val nrBlocksLabel = new Label(s"# blocks")
+    val sizeBlocksLabel = new Label(s"size")
+    val currentBlockSizeLabel = new Label
 
+    val nrElemsChoiceBox = new ChoiceBox[Int]()
+    val elems = FXCollections.observableArrayList(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000)
     val squareImageViz = new SquareImageViz
-    button.setOnAction(_ => {
-      squareImageViz.setEntries(for (_ <- 1 to i) yield SQView.E(SIVR.cols(Random.nextInt(SIVR.cols.length))))
-    })
+    nrElemsChoiceBox.setItems(elems)
+    nrElemsChoiceBox.getSelectionModel().selectedIndexProperty().addListener(JfxUtils.onNew[Number](n => {
+      val nrElems = elems.get(n.intValue())
+      squareImageViz.setEntries(for (_ <- 1 to nrElems) yield BlockView.E(SIVR.cols(Random.nextInt(SIVR.cols.length))))
+    }))
+ //   nrElemsChoiceBox.setValue(elems.get(0))
+
     val slider = new Slider(5, 50, 5)
     slider.setOrientation(Orientation.HORIZONTAL)
-    slider.setPrefWidth(400)
+    slider.setPrefWidth(90)
 
     slider.valueProperty().addListener(JfxUtils.onNew[Number](n => {
       val blockSize = n.intValue()
-      blockSizeLabel.setText(blockSize.toString)
+      currentBlockSizeLabel.setText(blockSize.toString)
       squareImageViz.setBlockSize(blockSize)
     }))
 
-
-
-    /*
-        slider.valueProperty().bind(squareImageViz.blockWidthProperty)
-        slider.valueProperty().bind(squareImageViz.blockHeightProperty)
-    */
-    bp.setTop(new ToolBar(button, slider, blockSizeLabel))
+    bp.setTop(new ToolBar(nrBlocksLabel, nrElemsChoiceBox, slider))
     bp.setCenter(squareImageViz)
 
-    val s = new Scene(bp, 800, 600)
+    val s = new Scene(bp, 300, 200)
     primaryStage.setScene(s)
     primaryStage.show()
   }
