@@ -3,14 +3,11 @@ package app.logorrr.views.visual
 import app.logorrr.model.LogEntry
 import app.logorrr.util.CanLog
 import app.logorrr.views.Filter
-import javafx.event.EventHandler
 import javafx.scene.image._
-import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 
 import scala.collection.mutable
 import scala.util.{Failure, Success, Try}
-
 
 
 object SquareImageView extends CanLog {

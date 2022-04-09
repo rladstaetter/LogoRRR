@@ -2,7 +2,21 @@ package app.logorrr.views.visual
 
 import javafx.scene.paint.Color
 
+import scala.util.Random
+
 object ColorUtil {
+
+
+  def toARGB(color: Color): Int =
+    (color.getOpacity * 255).toInt << 24 |
+      (color.getRed * 255).toInt << 16 |
+      (color.getGreen * 255).toInt << 8 |
+      (color.getBlue * 255).toInt
+
+  def randColor = Color.color(Random.nextDouble()
+    , Random.nextDouble()
+    , Random.nextDouble()
+  )
 
   def mkPixelArray(squareWidth: Int, color: Color): Array[Int] = {
     val fillColor = ColorUtil.colVal(color)
