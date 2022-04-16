@@ -1,4 +1,4 @@
-package app.logorrr.views.visual.sivr
+package app.logorrr.views.block
 
 import org.scalatest.wordspec.AnyWordSpec
 

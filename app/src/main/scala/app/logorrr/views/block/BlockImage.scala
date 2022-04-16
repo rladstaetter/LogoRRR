@@ -1,7 +1,6 @@
-package app.logorrr.views.visual.sivr
+package app.logorrr.views.block
 
 import app.logorrr.util.{CanLog, JfxUtils}
-import app.logorrr.views.visual.ColorUtil
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.FXCollections
@@ -60,15 +59,12 @@ class BlockImage extends CanLog {
    * */
   val heightProperty = {
     val p = new SimpleIntegerProperty()
-    p.addListener(JfxUtils.onNew[Number](height => {
-      resetBackingImage(getWidth(), height.intValue)
-    }))
+    p.addListener(JfxUtils.onNew[Number](height => resetBackingImage(getWidth(), height.intValue)))
     p
   }
 
-  def setHeight(height: Int): Unit = {
-    heightProperty.set(height)
-  }
+  def setHeight(height: Int): Unit = heightProperty.set(height)
+
 
   def getHeight(): Int = heightProperty.get()
 
@@ -121,8 +117,7 @@ class BlockImage extends CanLog {
           })
           roi
         })
-      case None =>
-        println("pixelBuffer was null")
+      case None => logTrace("pixelBuffer was null")
     }
   }
 

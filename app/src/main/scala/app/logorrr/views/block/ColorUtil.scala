@@ -1,4 +1,4 @@
-package app.logorrr.views.visual
+package app.logorrr.views.block
 
 import javafx.scene.paint.Color
 

@@ -3,6 +3,7 @@ package app.logorrr.views.visual
 import app.logorrr.model.LogEntry
 import app.logorrr.util.CanLog
 import app.logorrr.views.Filter
+import app.logorrr.views.block.ColorUtil
 import javafx.scene.image._
 import javafx.scene.paint.Color
 

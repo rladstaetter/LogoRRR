@@ -1,4 +1,4 @@
-package app.logorrr.views.visual.sivr
+package app.logorrr.views.block
 
 import app.logorrr.util.{CanLog, JfxUtils}
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty}

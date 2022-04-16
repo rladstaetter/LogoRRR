@@ -1,5 +1,4 @@
-package app.logorrr.views.visual.sivr
-
+package app.logorrr.views.block
 
 import app.logorrr.util.{CanLog, JfxUtils}
 import javafx.beans.property.{SimpleDoubleProperty, SimpleListProperty}
@@ -12,14 +11,14 @@ import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
 
 
-class SquareImageViz extends ScrollPane with CanLog {
+class BlockViewPane extends ScrollPane with CanLog {
 
   /** vertical box which holds single SQViews and serves as a canvas for painting */
-  val vbox = new VBox()
+  private val vbox = new VBox()
 
-  private val listChangeListener: ListChangeListener[BlockView.E] = (c: ListChangeListener.Change[_ <: BlockView.E]) => redrawBlocks()
+  private val listChangeListener: ListChangeListener[BlockView.E] = (_: ListChangeListener.Change[_ <: BlockView.E]) => redrawBlocks()
 
-  val entries = {
+  private val entries = {
     val es = new SimpleListProperty[BlockView.E](FXCollections.observableArrayList())
     es.addListener(listChangeListener)
     es
@@ -29,25 +28,21 @@ class SquareImageViz extends ScrollPane with CanLog {
     entries.setAll(es.asJava)
   }
 
-  private val recalcSqViewsListener: InvalidationListener = (observable: Observable) => {
-    redrawBlocks()
-  }
+  private val recalcSqViewsListener: InvalidationListener = (_: Observable) => redrawBlocks()
 
-  val blockSizeProperty = {
+  private val blockSizeProperty = {
     val p = new SimpleDoubleProperty(5)
     p.addListener(recalcSqViewsListener)
     p
   }
 
-  widthProperty().addListener(JfxUtils.onNew[Number](n => {
-    redrawBlocks()
-  }))
+  widthProperty().addListener(JfxUtils.onNew[Number](_ => redrawBlocks()))
 
   def setBlockSize(blockSize: Int): Unit = blockSizeProperty.set(blockSize)
 
-  def getBlockSize(): Int = blockSizeProperty.get().toInt
+  private def getBlockSize(): Int = blockSizeProperty.get().toInt
 
-  def mkSQView(): BlockView = {
+  private def mkSQView(): BlockView = {
     val squareView = new BlockView
     squareView.bind(blockSizeProperty, widthProperty)
     squareView
@@ -58,7 +53,7 @@ class SquareImageViz extends ScrollPane with CanLog {
     // unbind old listeners or we have a memory problem
     vbox.getChildren.forEach {
       case c: BlockView => c.unbind()
-      case _ => ???
+      case _ =>
     }
 
     val virtualHeight: Int =
@@ -67,17 +62,15 @@ class SquareImageViz extends ScrollPane with CanLog {
         , blockSizeProperty.get().toInt
         , getWidth.toInt
         , entries.size)
-    /*
-    */
+
     assert(blockSizeProperty.get().toInt > 0)
     assert(getWidth.toInt > 0, getWidth)
-    //assert(entries.size() > 0)
-//    assert(virtualHeight != 0)
+
     val blockViews: Seq[BlockView] = {
       // if virtual canvas height is lower than maxheight, just create one sqView and be done with it
       if (virtualHeight <= BlockImage.MaxHeight) {
         val sqView = mkSQView()
-        sqView.setWidth(getWidth().toInt)
+        sqView.setWidth(getWidth.toInt)
         sqView.setHeight(virtualHeight)
         sqView.setEntries(entries)
         Seq(sqView)
@@ -91,7 +84,7 @@ class SquareImageViz extends ScrollPane with CanLog {
 
         while (curIndex < entries.size) {
           val v = mkSQView()
-          v.setWidth(getWidth().toInt)
+          v.setWidth(getWidth.toInt)
           val end = if (curIndex + nrElemsInSqView < entries.size) {
             curIndex + nrElemsInSqView
           } else {
