@@ -39,7 +39,7 @@ class BlockViewDemoApp extends javafx.application.Application {
     nrElemsChoiceBox.setItems(elems)
     nrElemsChoiceBox.getSelectionModel().selectedIndexProperty().addListener(JfxUtils.onNew[Number](n => {
       val nrElems = elems.get(n.intValue())
-      blockViewPane.setEntries(for (_ <- 1 to nrElems) yield BlockView.E(BlockViewDemoApp.cols(Random.nextInt(BlockViewDemoApp.cols.length))))
+      blockViewPane.setEntries(for (i <- 1 to nrElems) yield BlockView.E(i, BlockViewDemoApp.cols(Random.nextInt(BlockViewDemoApp.cols.length))))
     }))
 
     val slider = new Slider(5, 50, 5)

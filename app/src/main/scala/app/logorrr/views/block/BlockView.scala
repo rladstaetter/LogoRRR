@@ -1,12 +1,15 @@
 package app.logorrr.views.block
 
 import app.logorrr.util.{CanLog, JfxUtils}
-import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty}
+import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.collections.FXCollections
+import javafx.event.EventHandler
 import javafx.scene.image.ImageView
+import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 
 import scala.math.BigDecimal.RoundingMode
+import scala.util.Try
 
 object BlockView {
 
@@ -14,7 +17,11 @@ object BlockView {
 
   val MinWidth = 200
 
-  case class E(color: Color)
+  case class E(index: Int
+               , color: Color)
+
+
+  def indexOf(x: Int, y: Int, blockWidth: Int, blockViewWidth: Int): Int = y / blockWidth * (blockViewWidth / blockWidth) + x / blockWidth
 
   /**
    * Calculates overall height of virtual canvas
@@ -53,6 +60,19 @@ class BlockView extends ImageView with CanLog {
   private val blockSizeProperty = new SimpleIntegerProperty(5)
   private val widthProperty = new SimpleIntegerProperty()
   private val entriesProperty = new SimpleListProperty[BlockView.E](FXCollections.observableArrayList())
+  private val selectedIndexProperty = new SimpleIntegerProperty()
+
+  private val mouseEventHandler: EventHandler[MouseEvent] = new EventHandler[MouseEvent]() {
+    override def handle(me: MouseEvent): Unit = {
+      val index = BlockView.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get)
+      getEntryAt(index) match {
+        case Some(value) => selectedIndexProperty.set(value.index)
+        case None => println("no element found")
+      }
+    }
+  }
+
+  setOnMouseClicked(mouseEventHandler)
 
   /** holds reference to property */
   var blockImageWidthPropertyHolder: ReadOnlyDoubleProperty = _
@@ -87,15 +107,19 @@ class BlockView extends ImageView with CanLog {
   def setWidth(width: Int): Unit = widthProperty.set(width)
 
   def bind(blockSizeProperty: SimpleDoubleProperty
-           , squareImageVizWidthProperty: ReadOnlyDoubleProperty): Unit = {
+           , squareImageVizWidthProperty: ReadOnlyDoubleProperty
+           , selectedIndexProperty: SimpleIntegerProperty): Unit = {
     this.blockSizeProperty.bind(blockSizeProperty)
     this.blockImageWidthPropertyHolder = squareImageVizWidthProperty
     this.blockImageWidthPropertyHolder.addListener(widthListener)
+    selectedIndexProperty.bind(this.selectedIndexProperty)
   }
 
   def unbind(): Unit = this.blockImageWidthPropertyHolder.removeListener(widthListener)
 
   def setEntries(entries: java.util.List[BlockView.E]): Unit = entriesProperty.setAll(entries)
+
+  def getEntryAt(index: Int): Option[BlockView.E] = Try(entriesProperty.get(index)).toOption
 
   def redraw(): Unit = blockImage.redraw()
 

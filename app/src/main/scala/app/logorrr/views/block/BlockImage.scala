@@ -4,8 +4,10 @@ import app.logorrr.util.{CanLog, JfxUtils}
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.FXCollections
+import javafx.event.EventHandler
 import javafx.geometry.Rectangle2D
 import javafx.scene.image.{PixelBuffer, PixelFormat, WritableImage}
+import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 
 import java.nio.IntBuffer
@@ -21,6 +23,7 @@ object BlockImage {
 }
 
 class BlockImage extends CanLog {
+
   logTrace("Instantiating " + Debug.inc())
 
   var pixelBuffer: PixelBuffer[IntBuffer] = _
@@ -28,6 +31,7 @@ class BlockImage extends CanLog {
   var rawInts: Array[Int] = _
   var background: Array[Int] = _
   var roi: Rectangle2D = _
+
 
   private val redrawListener: InvalidationListener = (_: Observable) => redraw()
 
@@ -65,7 +69,6 @@ class BlockImage extends CanLog {
 
   def setHeight(height: Int): Unit = heightProperty.set(height)
 
-
   def getHeight(): Int = heightProperty.get()
 
   val widthProperty = {
@@ -89,7 +92,8 @@ class BlockImage extends CanLog {
         this.rawInts = null
       case None =>
     }
-    val bgColor = Color.WHITE
+    //val bgColor = Color.WHITE
+    val bgColor = ColorUtil.randColor
     val rawInts = Array.fill(width * height)(ColorUtil.toARGB(Color.WHITE))
     val buffer: IntBuffer = IntBuffer.wrap(rawInts)
     val pixelBuffer = new PixelBuffer[IntBuffer](width, height, buffer, PixelFormat.getIntArgbPreInstance)

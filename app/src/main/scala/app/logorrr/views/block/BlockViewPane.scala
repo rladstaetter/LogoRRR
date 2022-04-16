@@ -1,7 +1,7 @@
 package app.logorrr.views.block
 
 import app.logorrr.util.{CanLog, JfxUtils}
-import javafx.beans.property.{SimpleDoubleProperty, SimpleListProperty}
+import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ListChangeListener}
 import javafx.scene.control._
@@ -17,6 +17,15 @@ class BlockViewPane extends ScrollPane with CanLog {
   private val vbox = new VBox()
 
   private val listChangeListener: ListChangeListener[BlockView.E] = (_: ListChangeListener.Change[_ <: BlockView.E]) => redrawBlocks()
+
+  val selectedIndexProperty = {
+    val p = new SimpleIntegerProperty()
+    p.addListener(JfxUtils.onNew[Number](n => {
+      println("selected " + n.intValue())
+    }))
+    p
+  }
+
 
   private val entries = {
     val es = new SimpleListProperty[BlockView.E](FXCollections.observableArrayList())
@@ -42,10 +51,10 @@ class BlockViewPane extends ScrollPane with CanLog {
 
   private def getBlockSize(): Int = blockSizeProperty.get().toInt
 
-  private def mkSQView(): BlockView = {
-    val squareView = new BlockView
-    squareView.bind(blockSizeProperty, widthProperty)
-    squareView
+  private def mkBlockView(): BlockView = {
+    val blockView = new BlockView
+    blockView.bind(blockSizeProperty, widthProperty, selectedIndexProperty)
+    blockView
   }
 
 
@@ -69,7 +78,7 @@ class BlockViewPane extends ScrollPane with CanLog {
     val blockViews: Seq[BlockView] = {
       // if virtual canvas height is lower than maxheight, just create one sqView and be done with it
       if (virtualHeight <= BlockImage.MaxHeight) {
-        val sqView = mkSQView()
+        val sqView = mkBlockView()
         sqView.setWidth(getWidth.toInt)
         sqView.setHeight(virtualHeight)
         sqView.setEntries(entries)
@@ -83,7 +92,7 @@ class BlockViewPane extends ScrollPane with CanLog {
         val lb = new ListBuffer[BlockView]
 
         while (curIndex < entries.size) {
-          val v = mkSQView()
+          val v = mkBlockView()
           v.setWidth(getWidth.toInt)
           val end = if (curIndex + nrElemsInSqView < entries.size) {
             curIndex + nrElemsInSqView
