@@ -2,6 +2,7 @@ package app.logorrr.util
 
 import app.logorrr.model.LogEntry
 import javafx.collections.ObservableList
+import javafx.scene.paint.Color
 import org.apache.commons.io.input.{Tailer, TailerListener}
 
 import java.time.Instant
@@ -22,7 +23,7 @@ class LogEntryListener(ol: ObservableList[LogEntry])
 
   override def handle(l: String): Unit = {
     currentCnt = currentCnt + 1
-    val e = LogEntry(currentCnt, l, None)
+    val e = LogEntry(currentCnt, Color.BLUE, l, None)
     JfxUtils.execOnUiThread(ol.add(e))
   }
 

@@ -16,6 +16,8 @@ import scala.util.Random
  */
 object BlockViewDemoApp {
 
+  case class Block(index: Int, color: Color) extends BlockView.E
+
   val cols = Seq(Color.RED
     , Color.GREEN
     , Color.BLUE
@@ -27,6 +29,7 @@ object BlockViewDemoApp {
 }
 
 class BlockViewDemoApp extends javafx.application.Application {
+  import scala.jdk.CollectionConverters._
   override def start(primaryStage: Stage): Unit = {
 
     val bp = new BorderPane
@@ -35,11 +38,12 @@ class BlockViewDemoApp extends javafx.application.Application {
 
     val nrElemsChoiceBox = new ChoiceBox[Int]()
     val elems = FXCollections.observableArrayList(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000)
-    val blockViewPane = new BlockViewPane
+    val blockViewPane = new BlockViewPane[BlockViewDemoApp.Block]
     nrElemsChoiceBox.setItems(elems)
     nrElemsChoiceBox.getSelectionModel().selectedIndexProperty().addListener(JfxUtils.onNew[Number](n => {
       val nrElems = elems.get(n.intValue())
-      blockViewPane.setEntries(for (i <- 1 to nrElems) yield BlockView.E(i, BlockViewDemoApp.cols(Random.nextInt(BlockViewDemoApp.cols.length))))
+      val es = for (i <- 1 to nrElems) yield BlockViewDemoApp.Block(i, BlockViewDemoApp.cols(Random.nextInt(BlockViewDemoApp.cols.length)))
+      blockViewPane.setEntries(FXCollections.observableList(es.asJava))
     }))
 
     val slider = new Slider(5, 50, 5)

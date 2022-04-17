@@ -38,7 +38,7 @@ object LogTextView {
 
   class LogEntryElement(e: LogEntry
                         , maxLength: Int
-                        , timings: Map[Long, Instant]
+                        , timings: Map[Int, Instant]
                         , maxDuration: FiniteDuration) extends BorderPane {
 
     /**
@@ -102,7 +102,7 @@ object LogTextView {
 
 
 class LogTextView(filteredList: FilteredList[LogEntry]
-                  , timings: Map[Long, Instant]
+                  , timings: Map[Int, Instant]
                   , maxDuration: FiniteDuration = 1200 millis) extends BorderPane {
 
   /** 'pragmatic way' to determine width of max elems in this view */

@@ -22,7 +22,7 @@ object BlockImage {
 
 }
 
-class BlockImage extends CanLog {
+class BlockImage[Elem <: BlockView.E] extends CanLog {
 
   logTrace("Instantiating " + Debug.inc())
 
@@ -35,7 +35,7 @@ class BlockImage extends CanLog {
 
   private val redrawListener: InvalidationListener = (_: Observable) => redraw()
 
-  val entries = new SimpleListProperty[BlockView.E](FXCollections.observableArrayList())
+  val entries = new SimpleListProperty[Elem](FXCollections.observableArrayList())
 
   /* if blockwidth is changed redraw */
   val blockWidthProperty = {

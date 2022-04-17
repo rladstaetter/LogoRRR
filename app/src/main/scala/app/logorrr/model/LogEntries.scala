@@ -3,6 +3,7 @@ package app.logorrr.model
 import app.logorrr.model.LogEntries.logException
 import app.logorrr.util.CanLog
 import javafx.collections.{FXCollections, ObservableList}
+import javafx.scene.paint.Color
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path}
@@ -45,12 +46,12 @@ object LogEntries extends CanLog {
   case class TimeRange(startTime: Instant, endTime: Instant)
 
   def apply(parseEntryForTimeInstant: String => Option[Instant])(logFilePath: Path): LogEntries = timeR({
-    var lineNumber: Long = 0L
+    var lineNumber: Int = 0
     // trying to be very clever and use java stream instead of scala collections
     // it makes a notable difference in performance if we don't convert huge lists from java <-> scala
     val logEntryStream: stream.Stream[LogEntry] = LogFileReader.readFromFile(logFilePath).stream().map(l => {
-      lineNumber = lineNumber + 1L
-      LogEntry(lineNumber, l, parseEntryForTimeInstant(l))
+      lineNumber = lineNumber + 1
+      LogEntry(lineNumber, Color.YELLOW, l, parseEntryForTimeInstant(l))
     })
     LogEntries(FXCollections.observableList(logEntryStream.collect(Collectors.toList[LogEntry]())))
   }, s"Imported ${logFilePath.toAbsolutePath.toString} ... ")
@@ -67,7 +68,7 @@ object LogEntries extends CanLog {
 
 case class LogEntries(values: ObservableList[LogEntry]) {
 
-  val timings: Map[Long, Instant] =
+  val timings: Map[Int, Instant] =
     values.stream().collect(Collectors.toMap((le: LogEntry) => le.lineNumber, (le: LogEntry) => le.someInstant.getOrElse(Instant.now()))).asScala.toMap
 
   /** contains time information for first and last entry for given log file */

@@ -98,9 +98,9 @@ class LogFileTab(hostServices: HostServices
   val initialWidth = (sceneWidth * initialLogFileDefinition.dividerPosition).toInt
 
   private lazy val logVisualView = {
-    val lvv = new LogVisualView(filteredList.asScala
-      , initialWidth)
-    lvv.sisp.filtersListProperty.bind(filtersListProperty)
+    val lvv = new LogVisualView(filteredList, initialWidth)
+
+//    lvv.sisp.filtersListProperty.bind(filtersListProperty)
     lvv
   }
 

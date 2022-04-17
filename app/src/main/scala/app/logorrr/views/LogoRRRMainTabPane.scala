@@ -95,21 +95,21 @@ class LogoRRRMainTabPane(hostServices: HostServices
 
   def selectLastLogFile(): Unit = getSelectionModel.selectLast() // select last added file repaint it on selection
 
-  def addLogFile(logFileDefinition: LogFileSettings): Unit = {
-    if (logFileDefinition.isPathValid) {
-      Try(logFileDefinition.someLogEntrySetting match {
-        case Some(value) => LogEntries(logFileDefinition.path, value)
-        case None => LogEntries(logFileDefinition.path)
+  def addLogFile(logFileSettings: LogFileSettings): Unit = {
+    if (logFileSettings.isPathValid) {
+      Try(logFileSettings.someLogEntrySetting match {
+        case Some(value) => LogEntries(logFileSettings.path, value)
+        case None => LogEntries(logFileSettings.path)
       }) match {
         case Success(logFile) =>
-          logInfo(s"Opening ${logFileDefinition.path.toAbsolutePath.toString} ... ")
-          add(logFile, logFileDefinition)
+          logInfo(s"Opening ${logFileSettings.path.toAbsolutePath.toString} ... ")
+          add(logFile, logFileSettings)
         case Failure(ex) =>
-          val msg = s"Could not import file ${logFileDefinition.path.toAbsolutePath}"
+          val msg = s"Could not import file ${logFileSettings.path.toAbsolutePath}"
           logException(msg, ex)
       }
     } else {
-      logWarn(s"Could not read ${logFileDefinition.path.toAbsolutePath} - does it exist?")
+      logWarn(s"Could not read ${logFileSettings.path.toAbsolutePath} - does it exist?")
     }
   }
 }

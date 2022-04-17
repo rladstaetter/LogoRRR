@@ -17,8 +17,10 @@ object BlockView {
 
   val MinWidth = 200
 
-  case class E(index: Int
-               , color: Color)
+  trait E {
+    def index : Int
+    def color : Color
+  }
 
 
   def indexOf(x: Int, y: Int, blockWidth: Int, blockViewWidth: Int): Int = y / blockWidth * (blockViewWidth / blockWidth) + x / blockWidth
@@ -55,11 +57,11 @@ object BlockView {
 /**
  * Displays a region with max 4096 x 4096 pixels and as many entries as can fit in this region.
  */
-class BlockView extends ImageView with CanLog {
+class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
 
   private val blockSizeProperty = new SimpleIntegerProperty(5)
   private val widthProperty = new SimpleIntegerProperty()
-  private val entriesProperty = new SimpleListProperty[BlockView.E](FXCollections.observableArrayList())
+  private val entriesProperty = new SimpleListProperty[Elem](FXCollections.observableArrayList())
   private val selectedIndexProperty = new SimpleIntegerProperty()
 
   private val mouseEventHandler: EventHandler[MouseEvent] = new EventHandler[MouseEvent]() {
@@ -78,7 +80,7 @@ class BlockView extends ImageView with CanLog {
   var blockImageWidthPropertyHolder: ReadOnlyDoubleProperty = _
 
   private val blockImage = {
-    val bi = new BlockImage
+    val bi = new BlockImage[Elem]
     bi.widthProperty.bind(widthProperty)
     bi.blockWidthProperty.bind(blockSizeProperty)
     bi.blockHeightProperty.bind(blockSizeProperty)
@@ -117,9 +119,9 @@ class BlockView extends ImageView with CanLog {
 
   def unbind(): Unit = this.blockImageWidthPropertyHolder.removeListener(widthListener)
 
-  def setEntries(entries: java.util.List[BlockView.E]): Unit = entriesProperty.setAll(entries)
+  def setEntries(entries: java.util.List[Elem]): Unit = entriesProperty.setAll(entries)
 
-  def getEntryAt(index: Int): Option[BlockView.E] = Try(entriesProperty.get(index)).toOption
+  def getEntryAt(index: Int): Option[Elem] = Try(entriesProperty.get(index)).toOption
 
   def redraw(): Unit = blockImage.redraw()
 

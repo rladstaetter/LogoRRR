@@ -1,6 +1,7 @@
 package app.logorrr.model
 
 import app.logorrr.views.Filter
+import app.logorrr.views.block.BlockView
 import javafx.geometry.Insets
 import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}
 import javafx.scene.paint.Color
@@ -10,7 +11,7 @@ import scala.language.postfixOps
 
 object LogEntry {
 
-  def apply(lineNumber: Long, value: String): LogEntry = LogEntry(lineNumber, value, None)
+  def apply(lineNumber: Int, value: String): LogEntry = LogEntry(lineNumber, Color.RED, value, None)
 
 }
 
@@ -21,10 +22,12 @@ object LogEntry {
  * @param value contens of line in plaintext
  * @param someInstant a timestamp if there is any
  * */
-case class LogEntry(lineNumber: Long
+case class LogEntry(lineNumber: Int
+                    , color: Color
                     , value: String
-                    , someInstant: Option[Instant]) {
+                    , someInstant: Option[Instant]) extends BlockView.E {
 
+  val index: Int = lineNumber
 
   /**
    * calculate a color for this log entry.
