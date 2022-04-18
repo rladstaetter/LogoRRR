@@ -1,11 +1,12 @@
 package app.logorrr.views
 
 import app.logorrr.conf.SettingsIO
-import app.logorrr.model.{LogEntries, LogFileSettings}
+import app.logorrr.model.{LogEntryFileReader, LogEntry, LogFileSettings}
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.main.LogoRRRMainBorderPane
 import javafx.application.HostServices
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.collections.ObservableList
 import javafx.scene.control.{Tab, TabPane}
 
 import java.nio.file.Path
@@ -53,8 +54,8 @@ class LogoRRRMainTabPane(hostServices: HostServices
       t1: Tab =>
         t1 match {
           case logFileTab: LogFileTab =>
-            logTrace("Selected: " + logFileTab.initialLogFileDefinition.path)
-            SettingsIO.updateActiveLogFile(logFileTab.initialLogFileDefinition.path)
+            logTrace("Selected: " + logFileTab.initialLogFileSettings.path)
+            SettingsIO.updateActiveLogFile(logFileTab.initialLogFileSettings.path)
             // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
             getSelectionModel.select(logFileTab)
             logFileTab.repaint()
@@ -63,13 +64,13 @@ class LogoRRRMainTabPane(hostServices: HostServices
     })
   }
 
-  def add(logFile: LogEntries
-          , logFileDefinition: LogFileSettings): Unit = {
-    val tab = LogFileTab(hostServices, this, logFile, logFileDefinition, initFileMenu)
+  def add(logEntries: ObservableList[LogEntry]
+          , logFileSettings: LogFileSettings): Unit = {
+    val tab = LogFileTab(hostServices, this, logEntries, logFileSettings, initFileMenu)
     getTabs.add(tab)
   }
 
-  def contains(p: Path): Boolean = getLogFileTabs.exists(lr => lr.initialLogFileDefinition.path.toAbsolutePath.toString == p.toAbsolutePath.toString)
+  def contains(p: Path): Boolean = getLogFileTabs.exists(lr => lr.initialLogFileSettings.path.toAbsolutePath.toString == p.toAbsolutePath.toString)
 
   private def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
     case t => t match {
@@ -85,7 +86,7 @@ class LogoRRRMainTabPane(hostServices: HostServices
   }
 
   def selectLog(path: Path): Unit = {
-    getLogFileTabs.find(_.initialLogFileDefinition.path == path) match {
+    getLogFileTabs.find(_.initialLogFileSettings.path == path) match {
       case Some(value) =>
         logTrace(s"Selects tab view with path ${path.toAbsolutePath.toString}.")
         getSelectionModel.select(value)
@@ -100,12 +101,12 @@ class LogoRRRMainTabPane(hostServices: HostServices
   def addLogFile(logFileSettings: LogFileSettings): Unit = {
     if (logFileSettings.isPathValid) {
       Try(logFileSettings.someLogEntrySetting match {
-        case Some(value) => LogEntries(logFileSettings.path, logFileSettings.filters, value)
-        case None => LogEntries(logFileSettings.path, logFileSettings.filters)
+        case Some(value) => LogEntryFileReader.from(logFileSettings.path, logFileSettings.filters, value)
+        case None => LogEntryFileReader.from(logFileSettings.path, logFileSettings.filters)
       }) match {
-        case Success(logFile) =>
+        case Success(logEntries) =>
           logInfo(s"Opening ${logFileSettings.path.toAbsolutePath.toString} ... ")
-          add(logFile, logFileSettings)
+          add(logEntries, logFileSettings)
         case Failure(ex) =>
           val msg = s"Could not import file ${logFileSettings.path.toAbsolutePath}"
           logException(msg, ex)

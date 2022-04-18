@@ -1,6 +1,6 @@
 package app.logorrr.model
 
-import app.logorrr.views.Filter
+import app.logorrr.views.{Filter, Fltr}
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.nio.file.{Files, Path, Paths}

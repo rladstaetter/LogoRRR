@@ -2,7 +2,7 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.RecentFileSettings
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
-import app.logorrr.views.Filter
+import app.logorrr.views.{Filter, Fltr}
 import javafx.beans.property.{SimpleDoubleProperty, SimpleListProperty, SimpleMapProperty, SimpleObjectProperty, SimpleStringProperty}
 import javafx.collections.FXCollections
 

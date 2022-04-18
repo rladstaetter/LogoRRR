@@ -43,6 +43,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
 
   filtersProperty.addListener(JfxUtils.mkListChangeListener[Filter](processFiltersChange))
 
+
   /** if list is changed in any way, react to this event and either add or remove filter from UI */
   private def processFiltersChange(change: ListChangeListener.Change[_ <: Filter]): Unit = {
     while (change.next()) {
@@ -85,7 +86,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
    *
    * @return
    */
-  def computeCurrentFilter(): Filter = {
+  def computeCurrentFilter(): Fltr = {
     new AnyFilter(someUnclassifiedFilter.map(fst => if (fst._2.toggleButton.isSelected) Set(fst._1) else Set()).getOrElse(Set()) ++
       filterButtons.filter(fst => fst._2.toggleButton.isSelected).keySet)
   }
@@ -106,6 +107,9 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
     val filter = computeCurrentFilter()
     filteredList.setPredicate((entry: LogEntry) => filter.matcher.applyMatch(entry.value))
   }
+
+  updateUnclassified()
+
 
 }
 

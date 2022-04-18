@@ -4,55 +4,12 @@ import app.logorrr.views.Filter.LMatcher
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
-
-/**
- * Pairs a searchterm to a color.
- *
- * The idea is to encode each search term with a color such that one can immediately spot an occurence in the views.
- *
- * @param searchTerm text to search for
- * @param colorString associated color
- */
-// TODO write encoder for pureconfig for color
-class Filter(val searchTerm: String
-             , val colorString: String) {
-
-  val color: Color = Color.web(colorString)
-
-  val matcher: LMatcher = Filter.CaseInsensitiveTextMatcher(searchTerm, color)
-
-}
-
-class UnclassifiedFilter(filters: Set[Filter]) extends Filter("Unclassified", Color.WHITE.toString) {
-  override val matcher: LMatcher = new LMatcher(searchTerm) {
-
-    override def color: Color = Color.web(colorString)
-
-    /* no filter should match */
-    override def applyMatch(string: String): Boolean = !filters.exists(_.matcher.applyMatch(string))
-  }
-}
-
-class AnyFilter(filters: Set[Filter]) extends Filter("All", Color.WHITE.toString) {
-  override val matcher: LMatcher = new LMatcher(searchTerm) {
-    override val color: Color = {
-      if (filters.isEmpty) {
-        Color.WHITE
-      } else if (filters.size == 1) {
-        filters.head.color
-      } else {
-        filters.tail.foldLeft(filters.head.color)((acc, sf) => acc.interpolate(sf.color, 0.5))
-      }
-    }
-
-    override def applyMatch(string: String): Boolean = filters.exists(_.matcher.applyMatch(string))
-  }
-}
-
 object Filter {
 
   implicit lazy val reader = deriveReader[Filter]
   implicit lazy val writer = deriveWriter[Filter]
+
+  val unClassifiedFilterColor = Color.LIGHTGREY
 
   val finest: Filter = new Filter("FINEST", Color.GREY.toString)
   val info: Filter = new Filter("INFO", Color.GREEN.toString)
@@ -62,20 +19,32 @@ object Filter {
   val seq: Seq[Filter] = Seq(finest, info, warning, severe)
 
 
-  abstract class LMatcher(val value: String) {
+  abstract class LMatcher {
+
     def color: Color
 
-    def applyMatch(string: String): Boolean
+    def applyMatch(searchTerm: String): Boolean
   }
 
-  case class CaseSensitiveTextMatcher(override val value: String, color: Color) extends LMatcher(value) {
-    def applyMatch(string: String): Boolean = string.contains(value)
+  /** matches if at least one filter matches */
+  case class ExistsMatcher(filters: Set[Filter], color: Color) extends LMatcher {
+    override def applyMatch(searchTerm: String): Boolean = {
+      filters.exists(_.matcher.applyMatch(searchTerm))
+    }
   }
 
-  case class CaseInsensitiveTextMatcher(override val value: String, color: Color) extends LMatcher(value) {
-    def applyMatch(string: String): Boolean = string.toLowerCase.contains(value.toLowerCase)
+  /** matches if no filter matches */
+  case class NotExistsMatcher(filters: Set[Filter], color: Color) extends LMatcher {
+
+    val existsMatcher = ExistsMatcher(filters, color)
+
+    override def applyMatch(searchTerm: String): Boolean = !existsMatcher.applyMatch(searchTerm)
   }
 
+  /** matches if value matches search term (case insensitive) */
+  case class CaseInsensitiveTextMatcher(value: String, color: Color) extends LMatcher {
+    def applyMatch(searchTerm: String): Boolean = searchTerm.toLowerCase.contains(value.toLowerCase)
+  }
 
   /**
    * calculate a color for this log entry.
@@ -84,11 +53,11 @@ object Filter {
    * - given color if only one hit
    * - a melange of all colors from all hits in all other cases
    * */
-  def calcColor(value : String, filters: Seq[Filter]): Color = {
+  def calcColor(value: String, filters: Seq[Fltr]): Color = {
     val hits = filters.filter(sf => sf.matcher.applyMatch(value))
     val color = {
       if (hits.isEmpty) {
-        Color.WHITE
+        Color.LIGHTGREY
       } else if (hits.size == 1) {
         hits.head.color
       } else {
@@ -100,4 +69,20 @@ object Filter {
   }
 }
 
+/**
+ * Pairs a searchterm to a color.
+ *
+ * The idea is to encode each search term with a color such that one can immediately spot an occurence in the views.
+ *
+ * @param searchTerm text to search for
+ * @param colorString associated color
+ */
+// TODO write encoder for pureconfig for color
+class Filter(val searchTerm: String
+             , val colorString: String) extends Fltr {
 
+  val color: Color = Color.web(colorString)
+
+  val matcher: LMatcher = Filter.CaseInsensitiveTextMatcher(searchTerm, color)
+
+}

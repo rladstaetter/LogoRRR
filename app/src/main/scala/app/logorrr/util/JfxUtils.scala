@@ -1,11 +1,8 @@
 package app.logorrr.util
 
-import app.logorrr.views.Filter
 import javafx.application.Platform
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.ListChangeListener
-import javafx.scene.paint.Color
-import javafx.scene.shape.Rectangle
 import javafx.stage.{Stage, WindowEvent}
 
 object JfxUtils extends CanLog {

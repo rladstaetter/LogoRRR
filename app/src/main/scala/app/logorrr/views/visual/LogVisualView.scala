@@ -11,8 +11,7 @@ import javafx.scene.paint.Color
 
 import scala.collection.mutable
 
-class LogVisualView(entries: ObservableList[LogEntry]
-                    , canvasWidth: Int)
+class LogVisualView(entries: ObservableList[LogEntry], canvasWidth: Int)
   extends BorderPane with CanLog {
 
   //  require(canvasWidth > 0, "canvasWidth must be greater than 0")

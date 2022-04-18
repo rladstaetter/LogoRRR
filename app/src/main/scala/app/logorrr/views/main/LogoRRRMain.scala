@@ -3,7 +3,7 @@ package app.logorrr.views.main
 import app.logorrr.conf.{RecentFileSettings, Settings, SettingsIO, SquareImageSettings, StageSettings}
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.util.CanLog
-import app.logorrr.views.Filter
+import app.logorrr.views.{Filter, Fltr}
 import javafx.application.HostServices
 import javafx.scene.layout.BorderPane
 

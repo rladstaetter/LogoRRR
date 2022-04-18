@@ -3,7 +3,7 @@ package app.logorrr.views.main
 import app.logorrr.conf.{SettingsIO, StageSettings}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.util.CanLog
-import app.logorrr.views.{Filter, LogoRRRMainTabPane}
+import app.logorrr.views.{Filter, Fltr, LogoRRRMainTabPane}
 import javafx.application.HostServices
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.input.{DragEvent, TransferMode}

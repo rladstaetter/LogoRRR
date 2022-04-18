@@ -2,7 +2,7 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.RecentFileSettings
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
-import app.logorrr.views.{Filter, SimpleRange}
+import app.logorrr.views.{Filter, Fltr, SimpleRange}
 import org.scalacheck.Gen
 
 import scala.util.Random
