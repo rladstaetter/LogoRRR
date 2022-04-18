@@ -4,6 +4,7 @@ import app.logorrr.conf.mut.MutStageSettings
 import app.logorrr.conf.{LogoRRRGlobals, RecentFileSettings, Settings, StageSettings}
 import app.logorrr.meta.AppMeta
 import app.logorrr.util.JfxUtils
+import app.logorrr.views.LogoRRRAccelerators
 import javafx.application.HostServices
 import javafx.scene.Scene
 import javafx.scene.image.Image
@@ -33,6 +34,9 @@ class LogoRRRStage(val stage: Stage
 
   /** after scene got initialized / scene was set to stage immediately set position of stage */
   val sceneListener = LogoRRRScene.mkSceneListener(initialStageSettings.x, initialStageSettings.y)()
+
+  /** only initialize accelerators after a scene is defined */
+  LogoRRRAccelerators.initAccelerators(scene)
 
   // bind stage properties (they are initially set and constantly overwritten during execution)
   scene.windowProperty().addListener(MutStageSettings.windowListener)

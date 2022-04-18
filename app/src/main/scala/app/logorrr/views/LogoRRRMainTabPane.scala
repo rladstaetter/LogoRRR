@@ -45,7 +45,9 @@ class LogoRRRMainTabPane(hostServices: HostServices
 
   setStyle(LogoRRRMainTabPane.BackgroundStyle)
 
-  /** init change listeners */
+  /**
+   * Defines what should happen when a tab is selected
+   **/
   def init(): Unit = {
     getSelectionModel.selectedItemProperty().addListener(JfxUtils.onNew {
       t1: Tab =>

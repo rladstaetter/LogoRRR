@@ -14,7 +14,7 @@ class LogEntriesSpec extends AnyWordSpec {
       //val p = Paths.get("src/test/resources/app/logorrr/util/orig.log")
       "exist" in assert(Files.exists(p))
       "be readable" in {
-        val r = LogEntries(p)
+        val r = LogEntries(p, Seq())
         assert(!r.values.isEmpty)
       }
     }

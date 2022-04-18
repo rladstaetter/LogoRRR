@@ -5,17 +5,26 @@ import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 
-class Filter(val value: String
+/**
+ * Pairs a searchterm to a color.
+ *
+ * The idea is to encode each search term with a color such that one can immediately spot an occurence in the views.
+ *
+ * @param searchTerm text to search for
+ * @param colorString associated color
+ */
+// TODO write encoder for pureconfig for color
+class Filter(val searchTerm: String
              , val colorString: String) {
 
   val color: Color = Color.web(colorString)
 
-  val matcher: LMatcher = Filter.CaseInsensitiveTextMatcher(value, color)
+  val matcher: LMatcher = Filter.CaseInsensitiveTextMatcher(searchTerm, color)
 
 }
 
 class UnclassifiedFilter(filters: Set[Filter]) extends Filter("Unclassified", Color.WHITE.toString) {
-  override val matcher: LMatcher = new LMatcher(value) {
+  override val matcher: LMatcher = new LMatcher(searchTerm) {
 
     override def color: Color = Color.web(colorString)
 
@@ -25,7 +34,7 @@ class UnclassifiedFilter(filters: Set[Filter]) extends Filter("Unclassified", Co
 }
 
 class AnyFilter(filters: Set[Filter]) extends Filter("All", Color.WHITE.toString) {
-  override val matcher: LMatcher = new LMatcher(value) {
+  override val matcher: LMatcher = new LMatcher(searchTerm) {
     override val color: Color = {
       if (filters.isEmpty) {
         Color.WHITE

@@ -14,7 +14,7 @@ object SearchTag {
             , updateActiveFilter: () => Unit
             , removeFilter: Filter => Unit): SearchTag = {
     val i = occurrences(filter)
-    val buttonTitle = filter.value + ": " + i + " " + FiltersToolBar.percentAsString(i, totalSize)
+    val buttonTitle = filter.searchTerm + ": " + i + " " + FiltersToolBar.percentAsString(i, totalSize)
     val button = new ToggleButton(buttonTitle)
     // val button = new ToggleButton()
     //   button.textProperty.bind(Bindings.concat(filter.value, ":", i, " ", FiltersToolBar.percentAsString(i, totalSize)))

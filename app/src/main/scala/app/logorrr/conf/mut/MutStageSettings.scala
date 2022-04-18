@@ -5,6 +5,13 @@ import app.logorrr.util.JfxUtils
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
 import javafx.stage.Window
 
+/**
+ * App wide singleton to store and load global settings.
+ */
+// This avoids passing around references to settings in all classes.
+// This approach is some sort of experiment and the current state of my knowledge to cope with
+// this problem when doing this sort of stuff in JavaFX. Happy to get input on how to solve the global
+// configuration problem any better.
 object MutStageSettings {
 
   val windowListener = JfxUtils.onNew[Window](window => MutStageSettings.bind(window))
@@ -85,7 +92,6 @@ class MutStageSettings extends Petrify[StageSettings] {
   def setWidth(width: Int): Unit = widthProperty.set(width)
 
   def setHeight(height: Int): Unit = heightProperty.set(height)
-
 
   override def petrify(): StageSettings =
     StageSettings(xProperty.get()

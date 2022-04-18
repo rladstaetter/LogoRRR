@@ -56,6 +56,7 @@ class LogFileTab(hostServices: HostServices
   extends Tab
     with CanLog {
 
+
   val tailer = new Tailer(initialLogFileDefinition.path.toFile, new LogEntryListener(logEntries.values), 1000, true)
 
   /** start observing log file for changes */
@@ -75,7 +76,6 @@ class LogFileTab(hostServices: HostServices
 
   /** bound to sceneWidthProperty of parent LogViewTabPane */
   val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
-
 
   /** split visual view and text view */
   val splitPane = new SplitPane()
@@ -144,6 +144,16 @@ class LogFileTab(hostServices: HostServices
     borderPane.setBottom(entryLabel)
 
     setContent(borderPane)
+
+    /* change active text field depending on visible tab */
+    selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](b => {
+      if (b) {
+        //logTrace("SELECTED TF")
+        LogoRRRAccelerators.setActiveSearchTextField(searchToolBar.searchTextField)
+      } else {
+        //logTrace("DESELECTED TF")
+      }
+    }))
 
     /** don't monitor file anymore if tab is closed, free invalidation listeners */
     setOnClosed(_ => closeTab())
