@@ -2,6 +2,7 @@ package app.logorrr.model
 
 import app.logorrr.model.LogEntries.logException
 import app.logorrr.util.CanLog
+import app.logorrr.views.Filter
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.paint.Color
 
@@ -45,22 +46,24 @@ object LogEntries extends CanLog {
 
   case class TimeRange(startTime: Instant, endTime: Instant)
 
-  def apply(parseEntryForTimeInstant: String => Option[Instant])(logFilePath: Path): LogEntries = timeR({
+  def apply(parseColor: String => Color
+            , parseEntryForTimeInstant: String => Option[Instant])
+           (logFilePath: Path): LogEntries = timeR({
     var lineNumber: Int = 0
     // trying to be very clever and use java stream instead of scala collections
     // it makes a notable difference in performance if we don't convert huge lists from java <-> scala
     val logEntryStream: stream.Stream[LogEntry] = LogFileReader.readFromFile(logFilePath).stream().map(l => {
       lineNumber = lineNumber + 1
-      LogEntry(lineNumber, Color.YELLOW, l, parseEntryForTimeInstant(l))
+      LogEntry(lineNumber, parseColor(l), l, parseEntryForTimeInstant(l))
     })
     LogEntries(FXCollections.observableList(logEntryStream.collect(Collectors.toList[LogEntry]())))
   }, s"Imported ${logFilePath.toAbsolutePath.toString} ... ")
 
-  def apply(logFilePath: Path, logEntryTimeFormat: LogEntryInstantFormat): LogEntries = {
-    apply(l => LogEntryInstantFormat.parseInstant(l, logEntryTimeFormat))(logFilePath)
+  def apply(logFilePath: Path, filters: Seq[Filter], logEntryTimeFormat: LogEntryInstantFormat): LogEntries = {
+    apply(l => Filter.calcColor(l, filters), l => LogEntryInstantFormat.parseInstant(l, logEntryTimeFormat))(logFilePath)
   }
 
-  def apply(logFilePath: Path): LogEntries = apply(l => None)(logFilePath)
+  def apply(logFilePath: Path, filters: Seq[Filter]): LogEntries = apply(l => Filter.calcColor(l,filters), l => None)(logFilePath)
 
 
 }
@@ -84,7 +87,6 @@ case class LogEntries(values: ObservableList[LogEntry]) {
              end <- filteredEntries.get(filteredEntries.size() - 1).someInstant} yield LogEntries.TimeRange(start, end)
       }
     }
-
 
 
 }

@@ -100,7 +100,7 @@ class LogFileTab(hostServices: HostServices
   private lazy val logVisualView = {
     val lvv = new LogVisualView(filteredList, initialWidth)
 
-//    lvv.sisp.filtersListProperty.bind(filtersListProperty)
+    //    lvv.sisp.filtersListProperty.bind(filtersListProperty)
     lvv
   }
 
@@ -224,14 +224,17 @@ class LogFileTab(hostServices: HostServices
     logEntries.values.removeListener(repaintInvalidationListener)
   }
 
-  def selectEntry(number: Number): Unit = logTextView.selectEntryByIndex(number.intValue)
+  def selectEntry(number: Number): Unit = {
+    println(s"Selecting now in logTextView line number: ${number.intValue()}")
+    logTextView.selectEntryByIndex(number.intValue)
+  }
 
   def updateEntryLabel(logEntry: LogEntry): Unit = {
     Option(logEntry) match {
       case Some(entry) =>
         val background: Background = entry.background(filtersToolBar.filterButtons.keys.toSeq)
         entryLabel.setBackground(background)
-        entryLabel.setTextFill(entry.calcColor(filtersToolBar.filterButtons.keys.toSeq).invert())
+        entryLabel.setTextFill(Filter.calcColor(entry.value, filtersToolBar.filterButtons.keys.toSeq).invert())
         entryLabel.setText(entry.value)
       case None =>
         entryLabel.setBackground(null)

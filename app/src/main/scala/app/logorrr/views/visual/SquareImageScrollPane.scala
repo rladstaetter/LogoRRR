@@ -43,11 +43,11 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
       val pw = getWritableImage().getPixelWriter
       val x = (me.getX.toInt / currentSquareWidth) * currentSquareWidth
       val y = (me.getY.toInt / currentSquareWidth) * currentSquareWidth
-      SquareImageView.paintRect(pw, x, y, currentSquareWidth, entry.calcColor(filters).darker)
+      SquareImageView.paintRect(pw, x, y, currentSquareWidth, Filter.calcColor(entry.value, filters).darker)
     }
   }
 
-  def getWritableImage(): WritableImage =  getContent.asInstanceOf[SquareImageView].getImage.asInstanceOf[WritableImage]
+  def getWritableImage(): WritableImage = getContent.asInstanceOf[SquareImageView].getImage.asInstanceOf[WritableImage]
 
 
   def repaint(cWidth: Int): Unit = {
@@ -62,7 +62,7 @@ class SquareImageScrollPane(entries: mutable.Buffer[LogEntry]
       setContent(iv)
     }
 
-    getContent.asInstanceOf[SquareImageView].setImage(SquareImageView.paint(entries,  squareWidth, cWidth, filters))
+    getContent.asInstanceOf[SquareImageView].setImage(SquareImageView.paint(entries, squareWidth, cWidth, filters))
   }
 
 }

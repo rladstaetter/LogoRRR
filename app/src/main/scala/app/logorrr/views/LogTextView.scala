@@ -151,8 +151,8 @@ class LogTextView(filteredList: FilteredList[LogEntry]
 
 
   def selectEntryByIndex(index: Int): Unit = {
-    listView.getSelectionModel.select(index)
     listView.scrollTo(index)
+    listView.getSelectionModel.clearAndSelect(index)
   }
 
 }

@@ -98,8 +98,8 @@ class LogoRRRMainTabPane(hostServices: HostServices
   def addLogFile(logFileSettings: LogFileSettings): Unit = {
     if (logFileSettings.isPathValid) {
       Try(logFileSettings.someLogEntrySetting match {
-        case Some(value) => LogEntries(logFileSettings.path, value)
-        case None => LogEntries(logFileSettings.path)
+        case Some(value) => LogEntries(logFileSettings.path, logFileSettings.filters, value)
+        case None => LogEntries(logFileSettings.path, logFileSettings.filters)
       }) match {
         case Success(logFile) =>
           logInfo(s"Opening ${logFileSettings.path.toAbsolutePath.toString} ... ")

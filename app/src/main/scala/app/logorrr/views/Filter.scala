@@ -1,6 +1,6 @@
 package app.logorrr.views
 
-import app.logorrr.views.Filter.Matcher
+import app.logorrr.views.Filter.LMatcher
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
@@ -10,12 +10,12 @@ class Filter(val value: String
 
   val color: Color = Color.web(colorString)
 
-  val matcher: Matcher = Filter.CaseInsensitiveTextMatcher(value, color)
+  val matcher: LMatcher = Filter.CaseInsensitiveTextMatcher(value, color)
 
 }
 
 class UnclassifiedFilter(filters: Set[Filter]) extends Filter("Unclassified", Color.WHITE.toString) {
-  override val matcher: Matcher = new Matcher(value) {
+  override val matcher: LMatcher = new LMatcher(value) {
 
     override def color: Color = Color.web(colorString)
 
@@ -25,7 +25,7 @@ class UnclassifiedFilter(filters: Set[Filter]) extends Filter("Unclassified", Co
 }
 
 class AnyFilter(filters: Set[Filter]) extends Filter("All", Color.WHITE.toString) {
-  override val matcher: Matcher = new Matcher(value) {
+  override val matcher: LMatcher = new LMatcher(value) {
     override val color: Color = {
       if (filters.isEmpty) {
         Color.WHITE
@@ -53,20 +53,42 @@ object Filter {
   val seq: Seq[Filter] = Seq(finest, info, warning, severe)
 
 
-  abstract class Matcher(val value: String) {
+  abstract class LMatcher(val value: String) {
     def color: Color
 
     def applyMatch(string: String): Boolean
   }
 
-  case class CaseSensitiveTextMatcher(override val value: String, color: Color) extends Matcher(value) {
+  case class CaseSensitiveTextMatcher(override val value: String, color: Color) extends LMatcher(value) {
     def applyMatch(string: String): Boolean = string.contains(value)
   }
 
-  case class CaseInsensitiveTextMatcher(override val value: String, color: Color) extends Matcher(value) {
+  case class CaseInsensitiveTextMatcher(override val value: String, color: Color) extends LMatcher(value) {
     def applyMatch(string: String): Boolean = string.toLowerCase.contains(value.toLowerCase)
   }
 
+
+  /**
+   * calculate a color for this log entry.
+   *
+   * - either white if no search filter hits
+   * - given color if only one hit
+   * - a melange of all colors from all hits in all other cases
+   * */
+  def calcColor(value : String, filters: Seq[Filter]): Color = {
+    val hits = filters.filter(sf => sf.matcher.applyMatch(value))
+    val color = {
+      if (hits.isEmpty) {
+        Color.WHITE
+      } else if (hits.size == 1) {
+        hits.head.color
+      } else {
+        val c = hits.tail.foldLeft(hits.head.color)((acc, sf) => acc.interpolate(sf.color, 0.5))
+        c
+      }
+    }
+    color
+  }
 }
 
 

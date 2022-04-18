@@ -11,6 +11,7 @@ import scala.language.postfixOps
 
 object LogEntry {
 
+
   def apply(lineNumber: Int, value: String): LogEntry = LogEntry(lineNumber, Color.RED, value, None)
 
 }
@@ -29,30 +30,8 @@ case class LogEntry(lineNumber: Int
 
   val index: Int = lineNumber
 
-  /**
-   * calculate a color for this log entry.
-   *
-   * - either white if no search filter hits
-   * - given color if only one hit
-   * - a melange of all colors from all hits in all other cases
-   * */
-  def calcColor(filters: Seq[Filter]): Color = {
-    val hits = filters.filter(sf => sf.matcher.applyMatch(value))
-    val color = {
-      if (hits.isEmpty) {
-        Color.WHITE
-      } else if (hits.size == 1) {
-        hits.head.color
-      } else {
-        val c = hits.tail.foldLeft(hits.head.color)((acc, sf) => acc.interpolate(sf.color, 0.5))
-        c
-      }
-    }
-    color
-  }
-
   def background(searchFilters: Seq[Filter]): Background =
-    new Background(new BackgroundFill(calcColor(searchFilters), new CornerRadii(1.0), new Insets(0.0)))
+    new Background(new BackgroundFill(Filter.calcColor(value, searchFilters), new CornerRadii(1.0), new Insets(0.0)))
 
 
 }

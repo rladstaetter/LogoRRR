@@ -92,8 +92,8 @@ class BlockImage[Elem <: BlockView.E] extends CanLog {
         this.rawInts = null
       case None =>
     }
-    //val bgColor = Color.WHITE
-    val bgColor = ColorUtil.randColor
+    val bgColor = Color.WHITE
+    //val bgColor = ColorUtil.randColor
     val rawInts = Array.fill(width * height)(ColorUtil.toARGB(Color.WHITE))
     val buffer: IntBuffer = IntBuffer.wrap(rawInts)
     val pixelBuffer = new PixelBuffer[IntBuffer](width, height, buffer, PixelFormat.getIntArgbPreInstance)

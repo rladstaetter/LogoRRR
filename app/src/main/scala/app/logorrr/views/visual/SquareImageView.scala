@@ -34,7 +34,7 @@ object SquareImageView extends CanLog {
         for ((e, i) <- es) {
           val x = (i % numberCols) * squareWidth
           val y = (i / numberCols) * squareWidth
-          val color = e.calcColor(filters)
+          val color = Filter.calcColor(e.value,filters)
           paintSquare(pw
             , x
             , y
