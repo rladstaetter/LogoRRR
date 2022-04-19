@@ -62,41 +62,48 @@ object LogTextView {
     setLeft(LineDecoratorLabel(e, maxLength))
     setCenter(hBox)
 
-     */
+  * hBox
+  .getChildren.addAll(labels: _*)
+  * BorderPane
+  .setAlignment(hBox, Pos.CENTER_LEFT)
+  * setLeft (LineDecoratorLabel(e, maxLength))
+  * setCenter (hBox)
+  *
+  */
 
-    val label = new Label(e.value)
-    BorderPane.setAlignment(label, Pos.CENTER_LEFT)
-    setLeft(LineDecoratorLabel(e, maxLength))
-    setCenter(label)
+  val label = new Label(e.value)
+  BorderPane.setAlignment(label, Pos.CENTER_LEFT)
+  setLeft(LineDecoratorLabel(e, maxLength))
+  setCenter(label)
 
 
-    val hb = new HBox()
-    e.someInstant match {
-      case Some(instant) =>
-        val duration: Long =
-          timings.get(e.lineNumber + 1) match {
-            case Some(nextTi) =>
-              nextTi.toEpochMilli - instant.toEpochMilli
-            case None =>
-           //   println(s"timings.size ${timings.size}, linenumber: ${e.lineNumber + 1}")
-              0L
-          }
-        if (duration > maxDuration.toMillis) {
-          val left = new Rectangle(maxDuration.toMillis, 10)
-          left.setFill(LogTextView.timeBarColor)
-          val right = new Rectangle(2, 10)
-          right.setFill(LogTextView.timeBarOverflowColor)
-          hb.getChildren.addAll(left, right)
-          setBottom(hb)
-        } else {
-          val left = new Rectangle(duration.toDouble, 10)
-          left.setFill(LogTextView.timeBarColor)
-          hb.getChildren.addAll(left)
-          setBottom(hb)
+  val hb = new HBox()
+  e.someInstant match {
+    case Some(instant) =>
+      val duration: Long =
+        timings.get(e.lineNumber + 1) match {
+          case Some(nextTi) =>
+            nextTi.toEpochMilli - instant.toEpochMilli
+          case None =>
+            //   println(s"timings.size ${timings.size}, linenumber: ${e.lineNumber + 1}")
+            0L
         }
-      case None =>
-    }
+      if (duration > maxDuration.toMillis) {
+        val left = new Rectangle(maxDuration.toMillis, 10)
+        left.setFill(LogTextView.timeBarColor)
+        val right = new Rectangle(2, 10)
+        right.setFill(LogTextView.timeBarOverflowColor)
+        hb.getChildren.addAll(left, right)
+        setBottom(hb)
+      } else {
+        val left = new Rectangle(duration.toDouble, 10)
+        left.setFill(LogTextView.timeBarColor)
+        hb.getChildren.addAll(left)
+        setBottom(hb)
+      }
+    case None =>
   }
+}
 
 }
 
@@ -115,6 +122,7 @@ class LogTextView(filteredList: FilteredList[LogEntry]
   }
 
   listView.setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
+  listView.setFixedCellSize(26)
   setCenter(listView)
 
   class LogEntryListCell extends ListCell[LogEntry] {
@@ -150,9 +158,13 @@ class LogTextView(filteredList: FilteredList[LogEntry]
   }
 
 
-  def selectEntryByIndex(index: Int): Unit = {
-    listView.scrollTo(index)
-    listView.getSelectionModel.clearAndSelect(index)
+  def select(logEntry: LogEntry): Unit = {
+    listView.getSelectionModel.select(logEntry)
+    val selectedIndex = listView.getSelectionModel.getSelectedIndex
+    listView.scrollTo(selectedIndex - 10)
+
+    listView.requestFocus()
+//    listView.getSelectionModel.clearAndSelect(logEntry)
   }
 
 }

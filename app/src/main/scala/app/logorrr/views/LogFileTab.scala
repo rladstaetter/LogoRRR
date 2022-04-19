@@ -194,9 +194,9 @@ class LogFileTab(hostServices: HostServices
 
     textProperty.bind(computeTabTitle)
     // textProperty.bind(logFile.titleProperty)
-    selectedIndexProperty.bind(logVisualView.selectedIndexProperty)
+    //selectedIndexProperty.bind(logVisualView.selectedIndexProperty)
 
-    selectedIndexProperty.addListener(JfxUtils.onNew[Number](selectEntry))
+    //selectedIndexProperty.addListener(JfxUtils.onNew[Number](selectEntry))
 
     selectedEntryProperty.bindBidirectional(logVisualView.selectedEntryProperty)
 
@@ -267,11 +267,6 @@ class LogFileTab(hostServices: HostServices
     logEntries.removeListener(repaintInvalidationListener)
   }
 
-  def selectEntry(number: Number): Unit = {
-    println(s"Selecting now in logTextView line number: ${number.intValue()}")
-    logTextView.selectEntryByIndex(number.intValue)
-  }
-
   def updateEntryLabel(logEntry: LogEntry): Unit = {
     Option(logEntry) match {
       case Some(entry) =>
@@ -279,6 +274,7 @@ class LogFileTab(hostServices: HostServices
         entryLabel.setBackground(background)
         entryLabel.setTextFill(Filter.calcColor(entry.value, filtersToolBar.filterButtons.keys.toSeq).invert())
         entryLabel.setText(entry.value)
+        logTextView.select(logEntry)
       case None =>
         entryLabel.setBackground(null)
         entryLabel.setText("")
