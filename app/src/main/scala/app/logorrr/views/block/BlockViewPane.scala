@@ -1,12 +1,14 @@
 package app.logorrr.views.block
 
 import app.logorrr.util.{CanLog, JfxUtils}
+import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
 import javafx.scene.control._
 import javafx.scene.layout.VBox
 
+import java.util.concurrent.Callable
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
 
@@ -23,14 +25,13 @@ class BlockViewPane[Elem <: BlockView.E]
 
   private val listChangeListener: ListChangeListener[Elem] = (_: ListChangeListener.Change[_ <: Elem]) => redrawBlocks()
 
-  val selectedIndexProperty = {
-    val p = new SimpleIntegerProperty()
-    p.addListener(JfxUtils.onNew[Number](n => {
-      logTrace("selected " + n.intValue())
+  val selectedElemProperty = {
+    val p = new SimpleObjectProperty[Elem]()
+    p.addListener(JfxUtils.onNew[Elem](n => {
+      logTrace("selected " + n)
     }))
     p
   }
-
 
   private val entriesProperty = {
     val es = new SimpleListProperty[Elem](FXCollections.observableArrayList())
@@ -42,7 +43,6 @@ class BlockViewPane[Elem <: BlockView.E]
 
   def setEntries(es: ObservableList[Elem]): Unit = {
     entriesProperty.setValue(es)
-    //    entriesProperty.setAll(es.asJava)
   }
 
   private val recalcSqViewsListener: InvalidationListener = (_: Observable) => redrawBlocks()
@@ -57,9 +57,11 @@ class BlockViewPane[Elem <: BlockView.E]
 
   def setBlockSize(blockSize: Int): Unit = blockSizeProperty.set(blockSize)
 
+  def setSelectedElem(elem: Elem): Unit = selectedElemProperty.set(elem)
+
   private def mkBlockView(): BlockView[Elem] = {
     val blockView = new BlockView[Elem]
-    blockView.bind(blockSizeProperty, widthProperty, selectedIndexProperty)
+    blockView.bind(blockSizeProperty, widthProperty, setSelectedElem)
     blockView
   }
 
@@ -114,6 +116,8 @@ class BlockViewPane[Elem <: BlockView.E]
         lb.toSeq
       }
     }
+
+
     vbox.getChildren.setAll(blockViews: _*)
     logTrace(s"Redraw ${blockViews.size} BlockViews")
     blockViews.foreach(_.redraw())

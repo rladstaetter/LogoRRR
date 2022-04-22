@@ -20,38 +20,16 @@ class LogVisualView(entries: ObservableList[LogEntry], canvasWidth: Int)
 
   val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 
-  /** will be set by mouse clicks / movements */
-  val selectedIndexProperty = {
-    val sip = new SimpleIntegerProperty()
-    sip.addListener(JfxUtils.onNew[Number](n => {
-      println("ENTRIES: " + entries.size + ", n = " + n.intValue())
-      Try(entries.filtered((t: LogEntry) => t.lineNumber == n.intValue()).get(0)) match {
-        case Failure(exception) =>
-         logException("could not lookup entries.", exception)
-        case Success(value) =>
-          selectedEntryProperty.set(value)
-      }
-    }))
-    sip
-  }
 
 
   import scala.jdk.CollectionConverters._
 
   val blockViewPane = new BlockViewPane[LogEntry]
-  selectedIndexProperty.bind(blockViewPane.selectedIndexProperty)
+  selectedEntryProperty.bind(blockViewPane.selectedElemProperty)
   blockViewPane.setCanvasWidth(canvasWidth)
   blockViewPane.setBlockSize(8)
   blockViewPane.setEntries(entries)
 
-  //  blockViewPane.setWidth(canvasWidth)
-  /*
-  val sisp = new SquareImageScrollPane(entries
-    , selectedIndexProperty
-    , selectedEntryProperty
-    , canvasWidth)
-
-   */
   setCenter(blockViewPane)
 
   def repaint(cWidth: Int): Unit = {

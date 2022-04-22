@@ -84,12 +84,6 @@ class LogFileTab(hostServices: HostServices
   /** stop observing changes */
   def stopTailer(): Unit = tailer.stop()
 
-  /** is set to false if logview was painted at least once (see repaint) */
-  val neverPaintedProperty = new SimpleBooleanProperty(true)
-
-  /** repaint if entries or filters change */
-  val repaintInvalidationListener: InvalidationListener = (_: Observable) => repaint()
-
   /** list of search filters to be applied */
   val filtersListProperty = new SimpleListProperty[Filter](CollectionUtils.mkEmptyObservableList())
 
@@ -135,9 +129,6 @@ class LogFileTab(hostServices: HostServices
   }
 
 
-  /** to share state between visual view and text view. index can be selected by navigation in visual view */
-  val selectedIndexProperty = new SimpleIntegerProperty()
-
   val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 
   private val logEntryChangeListener: ChangeListener[LogEntry] = JfxUtils.onNew[LogEntry](updateEntryLabel)
@@ -181,25 +172,16 @@ class LogFileTab(hostServices: HostServices
     /* change active text field depending on visible tab */
     selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](b => {
       if (b) {
-        //logTrace("SELECTED TF")
         LogoRRRAccelerators.setActiveSearchTextField(searchToolBar.searchTextField)
       } else {
-        //logTrace("DESELECTED TF")
       }
     }))
 
     /** don't monitor file anymore if tab is closed, free invalidation listeners */
     setOnClosed(_ => closeTab())
-
-
     textProperty.bind(computeTabTitle)
-    // textProperty.bind(logFile.titleProperty)
-    //selectedIndexProperty.bind(logVisualView.selectedIndexProperty)
 
-    //selectedIndexProperty.addListener(JfxUtils.onNew[Number](selectEntry))
-
-    selectedEntryProperty.bindBidirectional(logVisualView.selectedEntryProperty)
-
+    selectedEntryProperty.bind(logVisualView.selectedEntryProperty)
     selectedEntryProperty.addListener(logEntryChangeListener)
 
     // if user changes selected item in listview, change footer as well
@@ -216,14 +198,12 @@ class LogFileTab(hostServices: HostServices
       t1: Number =>
         val width = t1.doubleValue() * splitPane.getWidth
         SettingsIO.updateDividerPosition(initialLogFileSettings.path, t1.doubleValue())
-        repaint(width)
     })
 
     startTailer()
 
     setDivider(initialLogFileSettings.dividerPosition)
     initFiltersPropertyListChangeListener()
-    installInvalidationListener()
   }
 
   /** compute title of tab */
@@ -247,25 +227,11 @@ class LogFileTab(hostServices: HostServices
 
   def shutdown(): Unit = {
     logInfo(s"Closing file ${initialLogFileSettings.path.toAbsolutePath} ...")
-    uninstallInvalidationListener()
     stopTailer()
   }
 
   def sceneWidth = sceneWidthProperty.get()
 
-
-  def installInvalidationListener(): Unit = {
-    // to detect when we apply a new filter via filter buttons (see FilterButtonsToolbar)
-    filteredList.predicateProperty().addListener(repaintInvalidationListener)
-    logEntries.addListener(repaintInvalidationListener)
-    // if application changes width this will trigger repaint (See Issue #9)
-    splitPane.widthProperty().addListener(repaintInvalidationListener)
-  }
-
-  def uninstallInvalidationListener(): Unit = {
-    filteredList.predicateProperty().removeListener(repaintInvalidationListener)
-    logEntries.removeListener(repaintInvalidationListener)
-  }
 
   def updateEntryLabel(logEntry: LogEntry): Unit = {
     Option(logEntry) match {
@@ -297,16 +263,7 @@ class LogFileTab(hostServices: HostServices
     }
   }
 
-  /** width can be negative as well, we have to guard about that. also we repaint only if view is visible. */
-  def repaint(width: Double = getVisualViewWidth()): Unit = {
-    val squareWidth = LogoRRRGlobals.settings.squareImageSettings.widthProperty.get
-    if (isSelected && (neverPaintedProperty.get() || isSelected && width > 0 && width > squareWidth * 4)) { // at minimum we want to have 4 squares left (an arbitrary choice)
-      neverPaintedProperty.set(false)
-      logVisualView.repaint(width.toInt)
-    } else {
-      logTrace(s"Not painting since neverPainted: ${neverPaintedProperty.get} isSelected: $isSelected && $width > 0 && $width > ${squareWidth * 4}")
-    }
-  }
+
 
 
 }

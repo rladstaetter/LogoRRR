@@ -2,6 +2,7 @@ package app.logorrr.views.block
 
 import app.logorrr.util.{CanLog, JfxUtils}
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
+import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
 import javafx.event.EventHandler
 import javafx.scene.image.ImageView
@@ -18,8 +19,9 @@ object BlockView {
   val MinWidth = 200
 
   trait E {
-    def index : Int
-    def color : Color
+    def index: Int
+
+    def color: Color
   }
 
 
@@ -62,13 +64,16 @@ class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
   private val blockSizeProperty = new SimpleIntegerProperty(5)
   private val widthProperty = new SimpleIntegerProperty()
   private val entriesProperty = new SimpleListProperty[Elem](FXCollections.observableArrayList())
-  private val selectedIndexProperty = new SimpleIntegerProperty()
+
+  val selectedEntryProperty: SimpleObjectProperty[Elem] = new SimpleObjectProperty[Elem]()
+
+  var selectedListener: ChangeListener[Elem] = _
 
   private val mouseEventHandler: EventHandler[MouseEvent] = new EventHandler[MouseEvent]() {
     override def handle(me: MouseEvent): Unit = {
       val index = BlockView.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get)
       getEntryAt(index) match {
-        case Some(value) => selectedIndexProperty.set(value.index)
+        case Some(value) => selectedEntryProperty.set(value)
         case None => println("no element found")
       }
     }
@@ -79,6 +84,7 @@ class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
   /** holds reference to property */
   var blockImageWidthPropertyHolder: ReadOnlyDoubleProperty = _
 
+
   private val blockImage = {
     val bi = new BlockImage[Elem]
     bi.widthProperty.bind(widthProperty)
@@ -87,6 +93,7 @@ class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
     bi.entries.bind(entriesProperty)
     bi
   }
+
 
   private val widthListener = JfxUtils.onNew[Number](n => {
     val scrollPaneWidth = n.intValue()
@@ -110,14 +117,18 @@ class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
 
   def bind(blockSizeProperty: SimpleDoubleProperty
            , squareImageVizWidthProperty: ReadOnlyDoubleProperty
-           , selectedIndexProperty: SimpleIntegerProperty): Unit = {
+           , setEntry: Elem => Unit): Unit = {
     this.blockSizeProperty.bind(blockSizeProperty)
     this.blockImageWidthPropertyHolder = squareImageVizWidthProperty
     this.blockImageWidthPropertyHolder.addListener(widthListener)
-    selectedIndexProperty.bind(this.selectedIndexProperty)
+    this.selectedListener = JfxUtils.onNew(setEntry)
+    this.selectedEntryProperty.addListener(selectedListener)
   }
 
-  def unbind(): Unit = this.blockImageWidthPropertyHolder.removeListener(widthListener)
+  def unbind(): Unit = {
+    this.blockImageWidthPropertyHolder.removeListener(widthListener)
+    this.selectedListener = null
+  }
 
   def setEntries(entries: java.util.List[Elem]): Unit = entriesProperty.setAll(entries)
 

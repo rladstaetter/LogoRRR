@@ -58,7 +58,6 @@ class LogoRRRMainTabPane(hostServices: HostServices
             SettingsIO.updateActiveLogFile(logFileTab.initialLogFileSettings.path)
             // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
             getSelectionModel.select(logFileTab)
-            logFileTab.repaint()
           case _ =>
         }
     })

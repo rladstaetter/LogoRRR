@@ -161,10 +161,9 @@ class LogTextView(filteredList: FilteredList[LogEntry]
   def select(logEntry: LogEntry): Unit = {
     listView.getSelectionModel.select(logEntry)
     val selectedIndex = listView.getSelectionModel.getSelectedIndex
-    listView.scrollTo(selectedIndex - 10)
+    listView.scrollTo(selectedIndex )
 
     listView.requestFocus()
-//    listView.getSelectionModel.clearAndSelect(logEntry)
   }
 
 }
