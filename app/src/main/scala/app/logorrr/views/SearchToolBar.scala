@@ -1,13 +1,14 @@
 package app.logorrr.views
 
+import app.logorrr.views.block.ColorUtil
 import javafx.scene.control._
 import javafx.scene.input.{KeyCode, KeyEvent}
-import javafx.scene.paint.Color
 
 object SearchOp {
 
+
   class SearchColorPicker extends ColorPicker {
-    setValue(Color.MAGENTA)
+    setValue(ColorUtil.randColor)
   }
 
   class SearchTextField extends TextField {
@@ -21,6 +22,7 @@ object SearchOp {
 
     setOnAction(_ => {
       val filter = new Filter(searchTextField.getText, colorPicker.getValue.toString)
+      colorPicker.setValue(ColorUtil.randColor)
       searchTextField.clear()
       addFilterFn(filter)
     })
@@ -28,6 +30,7 @@ object SearchOp {
   }
 
 }
+
 
 case class SearchOp(addFilterFn: Filter => Unit) {
   val searchTextField = new SearchOp.SearchTextField
@@ -51,7 +54,6 @@ case class SearchOp(addFilterFn: Filter => Unit) {
 class SearchToolBar(addFilterFn: Filter => Unit) extends ToolBar {
 
   val searchOp = SearchOp(addFilterFn)
-
   /** expose for key accelerator */
   val searchTextField: SearchOp.SearchTextField = searchOp.searchTextField
 

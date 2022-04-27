@@ -1,7 +1,7 @@
 package app.logorrr.views
 
-import app.logorrr.conf.SettingsIO
-import app.logorrr.model.{LogEntryFileReader, LogEntry, LogFileSettings}
+import app.logorrr.conf.{LogoRRRGlobals, SettingsIO}
+import app.logorrr.model.{LogEntry, LogEntryFileReader, LogFileSettings}
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.main.LogoRRRMainBorderPane
 import javafx.application.HostServices
@@ -26,18 +26,16 @@ object LogoRRRMainTabPane {
       |""".stripMargin
 
   /** constructor to pass parent and do binding */
-  def apply(hostServices: HostServices
-            , parent: LogoRRRMainBorderPane
+  def apply(parent: LogoRRRMainBorderPane
             , initFileMenu: => Unit): LogoRRRMainTabPane = {
-    val lvtp = new LogoRRRMainTabPane(hostServices, initFileMenu)
+    val lvtp = new LogoRRRMainTabPane( initFileMenu)
     lvtp.sceneWidthProperty.bind(parent.sceneWidthProperty)
     lvtp
   }
 
 }
 
-class LogoRRRMainTabPane(hostServices: HostServices
-                         , initFileMenu: => Unit)
+class LogoRRRMainTabPane(initFileMenu: => Unit)
   extends TabPane
     with CanLog {
 
@@ -48,7 +46,7 @@ class LogoRRRMainTabPane(hostServices: HostServices
 
   /**
    * Defines what should happen when a tab is selected
-   **/
+   * */
   def init(): Unit = {
     getSelectionModel.selectedItemProperty().addListener(JfxUtils.onNew {
       t1: Tab =>
@@ -65,17 +63,18 @@ class LogoRRRMainTabPane(hostServices: HostServices
 
   def add(logEntries: ObservableList[LogEntry]
           , logFileSettings: LogFileSettings): Unit = {
-    val tab = LogFileTab(hostServices, this, logEntries, logFileSettings, initFileMenu)
+    val tab = LogFileTab(this, logEntries, logFileSettings, initFileMenu)
     getTabs.add(tab)
   }
 
   def contains(p: Path): Boolean = getLogFileTabs.exists(lr => lr.initialLogFileSettings.path.toAbsolutePath.toString == p.toAbsolutePath.toString)
 
   private def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
-    case t => t match {
-      case l: LogFileTab => Option(l)
-      case _ => None
-    }
+    t =>
+      t match {
+        case l: LogFileTab => Option(l)
+        case _ => None
+      }
   }
 
   /** shutdown all tabs */

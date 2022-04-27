@@ -3,11 +3,9 @@ package app.logorrr.views
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
 import javafx.beans.property.SimpleListProperty
-import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
-import javafx.scene.control.{Button, ToggleButton, ToolBar}
-import javafx.scene.shape.Rectangle
+import javafx.scene.control.{Button, ToolBar}
 
 import java.text.DecimalFormat
 import scala.jdk.CollectionConverters._
@@ -62,8 +60,6 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
   var someUnclassifiedFilter: Option[(Filter, SearchTag)] = None
 
   var occurrences: Map[Filter, Int] = Map().withDefaultValue(0)
-
-  def allFilters: Set[Filter] = filterButtons.keySet ++ someUnclassifiedFilter.map(x => Set(x._1)).getOrElse(Set())
 
   private def updateOccurrences(sf: Filter): Unit = {
     occurrences = occurrences + (sf -> filteredList.getSource.asScala.count(e => sf.matcher.applyMatch(e.value)))

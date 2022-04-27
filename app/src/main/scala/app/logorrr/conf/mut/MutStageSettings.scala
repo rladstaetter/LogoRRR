@@ -8,59 +8,9 @@ import javafx.stage.Window
 /**
  * App wide singleton to store and load global settings.
  */
-// This avoids passing around references to settings in all classes.
-// This approach is some sort of experiment and the current state of my knowledge to cope with
-// this problem when doing this sort of stuff in JavaFX. Happy to get input on how to solve the global
-// configuration problem any better.
 object MutStageSettings {
 
-  val windowListener = JfxUtils.onNew[Window](window => MutStageSettings.bind(window))
-
-  private def updateSettings(updateFn: StageSettings => StageSettings): Unit = {
-    val settings1 = SettingsIO.read()
-    val newStageSettings = updateFn(settings1.stageSettings)
-    SettingsIO.write(settings1.copy(stageSettings = newStageSettings))
-  }
-
-  val stageWidthListener =
-    JfxUtils.onNew[Number](n => updateSettings(stageSettings => stageSettings.copy(width = n.intValue())))
-
-  val stageHeightListener =
-    JfxUtils.onNew[Number](n => updateSettings(stageSettings => stageSettings.copy(height = n.intValue())))
-
-  val stageXListener =
-    JfxUtils.onNew[Number](xValue => updateSettings(stageSettings => stageSettings.copy(x = xValue.doubleValue())))
-
-  val stageYListener =
-    JfxUtils.onNew[Number](yValue => updateSettings(stageSettings => stageSettings.copy(y = yValue.doubleValue())))
-
-  def bind(window: Window): Unit = {
-    LogoRRRGlobals.settings.stageSettings.widthProperty.bind(window.getScene.widthProperty())
-    LogoRRRGlobals.settings.stageSettings.widthProperty.addListener(MutStageSettings.stageWidthListener)
-
-    LogoRRRGlobals.settings.stageSettings.heightProperty.bind(window.getScene.heightProperty())
-    LogoRRRGlobals.settings.stageSettings.heightProperty.addListener(MutStageSettings.stageHeightListener)
-
-    LogoRRRGlobals.settings.stageSettings.xProperty.bind(window.xProperty())
-    LogoRRRGlobals.settings.stageSettings.xProperty.addListener(MutStageSettings.stageXListener)
-
-    LogoRRRGlobals.settings.stageSettings.yProperty.bind(window.yProperty())
-    LogoRRRGlobals.settings.stageSettings.yProperty.addListener(MutStageSettings.stageYListener)
-  }
-
-  def unbind(): Unit = {
-    LogoRRRGlobals.settings.stageSettings.widthProperty.unbind()
-    LogoRRRGlobals.settings.stageSettings.widthProperty.removeListener(MutStageSettings.stageWidthListener)
-
-    LogoRRRGlobals.settings.stageSettings.heightProperty.unbind()
-    LogoRRRGlobals.settings.stageSettings.heightProperty.removeListener(MutStageSettings.stageHeightListener)
-
-    LogoRRRGlobals.settings.stageSettings.xProperty.unbind()
-    LogoRRRGlobals.settings.stageSettings.xProperty.removeListener(MutStageSettings.stageXListener)
-
-    LogoRRRGlobals.settings.stageSettings.yProperty.unbind()
-    LogoRRRGlobals.settings.stageSettings.yProperty.removeListener(MutStageSettings.stageYListener)
-  }
+  val windowListener = JfxUtils.onNew[Window](window => LogoRRRGlobals.bindWindow(window))
 
   def apply(stageSettings: StageSettings): MutStageSettings = {
     val s = new MutStageSettings
@@ -75,7 +25,6 @@ object MutStageSettings {
 
 
 class MutStageSettings extends Petrify[StageSettings] {
-
 
   val xProperty = new SimpleDoubleProperty()
 

@@ -1,6 +1,6 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.conf.RecentFileSettings
+import app.logorrr.conf.{BlockSettings, RecentFileSettings}
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.views.{Filter, Fltr, SimpleRange}
 import org.scalacheck.Gen
@@ -10,7 +10,7 @@ import scala.util.Random
 object FilterSpec {
 
   val gen: Gen[Filter] = for {
-    f <- Gen.oneOf(Filter.seq)
+    f <- Gen.oneOf(LogFileSettings.DefaultFilter)
   } yield f
 }
 
@@ -38,19 +38,15 @@ object LogFileSettingsSpec {
     filters <- Gen.listOf(FilterSpec.gen)
     leif <- LogEntryInstantFormatSpec.gen
     someLogEntryInstantFormat <- Gen.oneOf(None, Option(leif))
-  } yield LogFileSettings(pathAsString, dPos, filters, someLogEntryInstantFormat)
+    blockSettings <- BlockSettingsSpec.gen
+  } yield LogFileSettings(pathAsString, dPos, filters, blockSettings, someLogEntryInstantFormat)
 }
 
 object RecentFileSettingsSpec {
 
   val gen: Gen[RecentFileSettings] = for {
     lfd <- Gen.nonEmptyMap(LogFileSettingsSpec.gen.map(lfs => (lfs.pathAsString, lfs)))
-    salr <- Gen.oneOf(None, {
-      val keys = lfd.keys.toSeq
-      val i = Random.nextInt(keys.length)
-      val e: LogFileSettings = lfd.values.toSeq(i)
-      Option(e.pathAsString)
-    })
-  } yield RecentFileSettings(lfd, salr)
+    salr <- Gen.oneOf(Seq(), lfd.keys.toSeq)
+  } yield RecentFileSettings(lfd, salr, None)
 
 }

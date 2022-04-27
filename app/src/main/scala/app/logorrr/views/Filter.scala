@@ -11,14 +11,6 @@ object Filter {
 
   val unClassifiedFilterColor = Color.LIGHTGREY
 
-  val finest: Filter = new Filter("FINEST", Color.GREY.toString)
-  val info: Filter = new Filter("INFO", Color.GREEN.toString)
-  val warning: Filter = new Filter("WARNING", Color.ORANGE.toString)
-  val severe: Filter = new Filter("SEVERE", Color.RED.toString)
-
-  val seq: Seq[Filter] = Seq(finest, info, warning, severe)
-
-
   abstract class LMatcher {
 
     def color: Color

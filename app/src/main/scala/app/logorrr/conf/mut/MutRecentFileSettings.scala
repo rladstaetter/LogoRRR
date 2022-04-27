@@ -1,9 +1,9 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.conf.RecentFileSettings
+import app.logorrr.conf.{BlockSettings}
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.views.{Filter, Fltr}
-import javafx.beans.property.{SimpleDoubleProperty, SimpleListProperty, SimpleMapProperty, SimpleObjectProperty, SimpleStringProperty}
+import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleMapProperty, SimpleObjectProperty, SimpleStringProperty}
 import javafx.collections.FXCollections
 
 import scala.jdk.CollectionConverters._
@@ -26,29 +26,12 @@ class MutLogFileSettings extends Petrify[LogFileSettings] {
   val dividerPositionProperty = new SimpleDoubleProperty()
   val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList())
   val someLogEntrySettings = new SimpleObjectProperty[Option[LogEntryInstantFormat]]()
+  val blockWidthSettingsProperty = new SimpleIntegerProperty()
 
   override def petrify(): LogFileSettings = LogFileSettings(pathAsStringProperty.get()
     , dividerPositionProperty.get()
     , filtersProperty.get().asScala.toSeq
+    , BlockSettings(blockWidthSettingsProperty.get())
     , someLogEntrySettings.get())
 }
 
-class MutRecentFileSettings extends Petrify[RecentFileSettings] {
-
-  val logFileDefinitionsProperty = new SimpleMapProperty[String, MutLogFileSettings]()
-  val someActiveLogReportProperty = new SimpleObjectProperty[Option[String]](None)
-
-  def setLogFileDefinitions(logFileDefinitions: Map[String, LogFileSettings]): Unit = {
-    val m = for ((k, v) <- logFileDefinitions) yield {
-      k -> MutLogFileSettings(v)
-    }
-    logFileDefinitionsProperty.set(FXCollections.observableMap(m.asJava))
-  }
-
-  def setSomeActiveLogReport(someActiveLogReport: Option[String]): Unit = someActiveLogReportProperty.set(someActiveLogReport)
-
-  override def petrify(): RecentFileSettings = {
-    val m = (for ((k, v) <- logFileDefinitionsProperty.get.asScala) yield k -> v.petrify()).toMap
-    RecentFileSettings(m, someActiveLogReportProperty.get)
-  }
-}

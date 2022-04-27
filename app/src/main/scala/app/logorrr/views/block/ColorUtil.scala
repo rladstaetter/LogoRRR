@@ -1,11 +1,18 @@
 package app.logorrr.views.block
 
 import javafx.scene.paint.Color
+import javafx.scene.shape.Rectangle
 
 import scala.util.Random
 
 object ColorUtil {
 
+  def mkR(width: Int, height: Int, color: Color = ColorUtil.randColor): Rectangle = {
+    val r = new Rectangle(width, height)
+    r.setFill(color)
+    r.setStroke(Color.WHITE)
+    r
+  }
 
   def toARGB(color: Color): Int =
     (color.getOpacity * 255).toInt << 24 |

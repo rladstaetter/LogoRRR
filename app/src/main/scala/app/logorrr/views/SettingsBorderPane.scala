@@ -1,5 +1,6 @@
 package app.logorrr.views
 
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.util.HLink
 import javafx.application.HostServices
@@ -24,8 +25,7 @@ object SettingsBorderPane {
   }
 }
 
-class SettingsBorderPane(hostServices: HostServices
-                         , lrd: LogFileSettings
+class SettingsBorderPane(lrd: LogFileSettings
                          , updateLogEntrySetting: LogEntryInstantFormat => Unit
                          , closeStage: => Unit) extends BorderPane {
 
@@ -52,7 +52,7 @@ class SettingsBorderPane(hostServices: HostServices
     b
   }
 
-  private val hyperlink: Hyperlink = SettingsBorderPane.dateTimeFormatterLink.mkHyperLink(hostServices)
+  private val hyperlink: Hyperlink = SettingsBorderPane.dateTimeFormatterLink.mkHyperLink()
 
   private val bar = {
     val tb = new ToolBar()
@@ -74,7 +74,7 @@ class SettingsBorderPane(hostServices: HostServices
   setCenter(bar)
 
 
-  def mkLogEntrySetting : LogEntryInstantFormat = {
+  def mkLogEntrySetting: LogEntryInstantFormat = {
     val timeFormat = timeFormatTf.getText.trim
     val start = Try(startColTf.getText.trim.toInt).getOrElse(0)
     val end = Try(endColTf.getText.trim.toInt).getOrElse(1)

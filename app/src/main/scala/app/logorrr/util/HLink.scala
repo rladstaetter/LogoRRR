@@ -1,5 +1,6 @@
 package app.logorrr.util
 
+import app.logorrr.conf.LogoRRRGlobals
 import javafx.application.HostServices
 import javafx.scene.control.Hyperlink
 
@@ -16,9 +17,9 @@ object HLink {
 case class HLink(url: URL
                  , description: String) {
 
-  def mkHyperLink(hostServices: HostServices): Hyperlink = {
+  def mkHyperLink(): Hyperlink = {
     val hyperlink = new Hyperlink(description)
-    hyperlink.setOnAction(_ => hostServices.showDocument(url.toString))
+    hyperlink.setOnAction(_ => LogoRRRGlobals.getHostServices.showDocument(url.toString))
     hyperlink
   }
 }

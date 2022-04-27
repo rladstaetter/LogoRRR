@@ -61,7 +61,7 @@ object BlockView {
  */
 class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
 
-  private val blockSizeProperty = new SimpleIntegerProperty(5)
+  private val blockSizeProperty = new SimpleIntegerProperty()
   private val widthProperty = new SimpleIntegerProperty()
   private val entriesProperty = new SimpleListProperty[Elem](FXCollections.observableArrayList())
 
@@ -82,7 +82,7 @@ class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
   setOnMouseClicked(mouseEventHandler)
 
   /** holds reference to property */
-  var blockImageWidthPropertyHolder: ReadOnlyDoubleProperty = _
+  var blockViewWidthPropertyHolder: ReadOnlyDoubleProperty = _
 
 
   private val blockImage = {
@@ -115,18 +115,18 @@ class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
 
   def setWidth(width: Int): Unit = widthProperty.set(width)
 
-  def bind(blockSizeProperty: SimpleDoubleProperty
-           , squareImageVizWidthProperty: ReadOnlyDoubleProperty
+  def bind(blockSizeProperty: SimpleIntegerProperty
+           , blockViewWidthProperty: ReadOnlyDoubleProperty
            , setEntry: Elem => Unit): Unit = {
     this.blockSizeProperty.bind(blockSizeProperty)
-    this.blockImageWidthPropertyHolder = squareImageVizWidthProperty
-    this.blockImageWidthPropertyHolder.addListener(widthListener)
+    this.blockViewWidthPropertyHolder = blockViewWidthProperty
+    this.blockViewWidthPropertyHolder.addListener(widthListener)
     this.selectedListener = JfxUtils.onNew(setEntry)
     this.selectedEntryProperty.addListener(selectedListener)
   }
 
   def unbind(): Unit = {
-    this.blockImageWidthPropertyHolder.removeListener(widthListener)
+    this.blockViewWidthPropertyHolder.removeListener(widthListener)
     this.selectedListener = null
   }
 
@@ -134,6 +134,6 @@ class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
 
   def getEntryAt(index: Int): Option[Elem] = Try(entriesProperty.get(index)).toOption
 
-  def redraw(): Unit = blockImage.redraw()
+  def repaint(): Unit = blockImage.repaint()
 
 }

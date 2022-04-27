@@ -4,10 +4,8 @@ import app.logorrr.util.{CanLog, JfxUtils}
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.FXCollections
-import javafx.event.EventHandler
 import javafx.geometry.Rectangle2D
 import javafx.scene.image.{PixelBuffer, PixelFormat, WritableImage}
-import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 
 import java.nio.IntBuffer
@@ -24,8 +22,6 @@ object BlockImage {
 
 class BlockImage[Elem <: BlockView.E] extends CanLog {
 
-  logTrace("Instantiating " + Debug.inc())
-
   var pixelBuffer: PixelBuffer[IntBuffer] = _
   var intBuffer: IntBuffer = _
   var rawInts: Array[Int] = _
@@ -33,7 +29,7 @@ class BlockImage[Elem <: BlockView.E] extends CanLog {
   var roi: Rectangle2D = _
 
 
-  private val redrawListener: InvalidationListener = (_: Observable) => redraw()
+  private val redrawListener: InvalidationListener = (_: Observable) => repaint()
 
   val entries = new SimpleListProperty[Elem](FXCollections.observableArrayList())
 
@@ -73,7 +69,7 @@ class BlockImage[Elem <: BlockView.E] extends CanLog {
 
   val widthProperty = {
     val p = new SimpleIntegerProperty()
-    p.addListener(JfxUtils.onNew[Number](_ => redraw()))
+    p.addListener(JfxUtils.onNew[Number](_ => repaint()))
     p
   }
 
@@ -109,7 +105,7 @@ class BlockImage[Elem <: BlockView.E] extends CanLog {
   def cleanBackground(): Unit = System.arraycopy(background, 0, rawInts, 0, background.length)
 
 
-  def redraw(): Unit = {
+  def repaint(): Unit = {
     Option(pixelBuffer) match {
       case Some(pb) =>
         pb.updateBuffer((_: PixelBuffer[IntBuffer]) => {
@@ -121,7 +117,7 @@ class BlockImage[Elem <: BlockView.E] extends CanLog {
           })
           roi
         })
-      case None => logTrace("pixelBuffer was null")
+      case None =>  // logTrace("pixelBuffer was null")
     }
   }
 

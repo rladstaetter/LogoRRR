@@ -8,8 +8,7 @@ import javafx.scene.control.MenuBar
 
 import java.nio.file.Path
 
-class LogoRRRMenuBar(hostServices: HostServices
-                     , openLogFile: Path => Unit
+class LogoRRRMenuBar( openLogFile: Path => Unit
                      , removeAllLogFiles: => Unit
                      , updateLogDef: LogFileSettings => Unit
                      , closeApplication: => Unit)
@@ -22,7 +21,7 @@ class LogoRRRMenuBar(hostServices: HostServices
 
   def init(): Unit = {
     getMenus.clear()
-    getMenus.addAll(new FileMenu(openLogFile, removeAllLogFiles, updateLogDef, closeApplication), new HelpMenu(hostServices))
+    getMenus.addAll(new FileMenu(openLogFile, removeAllLogFiles, updateLogDef, closeApplication), new HelpMenu())
   }
 
   init()

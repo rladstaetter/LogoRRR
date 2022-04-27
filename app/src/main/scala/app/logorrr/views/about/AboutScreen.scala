@@ -23,18 +23,18 @@ object AboutScreen {
     setStyle(LogoRRRFonts.jetBrainsMono(size))
   }
 
-  class HLinkView(hostServices: HostServices, links: Seq[HLink]) extends VBox {
+  class HLinkView(links: Seq[HLink]) extends VBox {
     setPrefWidth(400)
     setPadding(new Insets(30, 20, 20, 20))
 
-    links.foreach(l => getChildren.add(l.mkHyperLink(hostServices)))
+    links.foreach(l => getChildren.add(l.mkHyperLink()))
 
   }
 
 }
 
 
-class AboutScreen(hostServices: HostServices) extends BorderPane {
+class AboutScreen extends BorderPane {
 
   private def mkLogo(): ImageView = AboutScreen.logo.imageView()
 
@@ -43,6 +43,6 @@ class AboutScreen(hostServices: HostServices) extends BorderPane {
   setPadding(new Insets(10, 10, 10, 10))
   setTop(mkHeader())
   setLeft(mkLogo())
-  setRight(new AboutScreen.HLinkView(hostServices, AboutScreen.links))
+  setRight(new AboutScreen.HLinkView( AboutScreen.links))
 
 }

@@ -1,20 +1,43 @@
 package app.logorrr.views.block
 
 import app.logorrr.util.{CanLog, JfxUtils}
-import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
+import javafx.event.{ActionEvent, EventHandler}
+import javafx.geometry.{Insets, Orientation}
 import javafx.scene.control._
-import javafx.scene.layout.VBox
+import javafx.scene.input.{KeyCode, KeyEvent}
+import javafx.scene.layout.{Border, BorderPane, BorderStroke, VBox}
+import javafx.scene.paint.Color
 
-import java.util.concurrent.Callable
 import scala.collection.mutable.ListBuffer
-import scala.jdk.CollectionConverters._
+
+class RectButton(width: Int
+                 , height: Int
+                 , color: Color
+                 , eventHandler: EventHandler[ActionEvent]) extends Button {
+  setGraphic(ColorUtil.mkR(width, height, color))
+ // setPadding(new Insets(0, 0, 0, 0))
+  setOnAction(eventHandler)
+  setOnKeyPressed((event: KeyEvent) => {
+    if (event.getCode == KeyCode.ENTER) {
+      fire()
+    }
+  })
+}
 
 
 class BlockViewPane[Elem <: BlockView.E]
-  extends ScrollPane with CanLog {
+  extends ScrollPane
+    with HasBlockSizeProperty
+    with CanLog {
+
+  override val blockSizeProperty: SimpleIntegerProperty = {
+    val p = new SimpleIntegerProperty(5)
+    p.addListener(_ => repaint())
+    p
+  }
 
   def setCanvasWidth(value: Double): Unit = {
     super.setWidth(value)
@@ -22,8 +45,7 @@ class BlockViewPane[Elem <: BlockView.E]
 
   /** vertical box which holds single SQViews and serves as a canvas for painting */
   private val vbox = new VBox()
-
-  private val listChangeListener: ListChangeListener[Elem] = (_: ListChangeListener.Change[_ <: Elem]) => redrawBlocks()
+  private val repaintListener: ListChangeListener[Elem] = (_: ListChangeListener.Change[_ <: Elem]) => repaint()
 
   val selectedElemProperty = {
     val p = new SimpleObjectProperty[Elem]()
@@ -35,7 +57,7 @@ class BlockViewPane[Elem <: BlockView.E]
 
   private val entriesProperty = {
     val es = new SimpleListProperty[Elem](FXCollections.observableArrayList())
-    es.addListener(listChangeListener)
+    es.addListener(repaintListener)
     es
   }
 
@@ -45,17 +67,8 @@ class BlockViewPane[Elem <: BlockView.E]
     entriesProperty.setValue(es)
   }
 
-  private val recalcSqViewsListener: InvalidationListener = (_: Observable) => redrawBlocks()
 
-  private val blockSizeProperty: SimpleDoubleProperty = {
-    val p = new SimpleDoubleProperty(5)
-    p.addListener(recalcSqViewsListener)
-    p
-  }
-
-  widthProperty().addListener(JfxUtils.onNew[Number](_ => redrawBlocks()))
-
-  def setBlockSize(blockSize: Int): Unit = blockSizeProperty.set(blockSize)
+  widthProperty().addListener(JfxUtils.onNew[Number](_ => repaint()))
 
   def setSelectedElem(elem: Elem): Unit = selectedElemProperty.set(elem)
 
@@ -65,8 +78,7 @@ class BlockViewPane[Elem <: BlockView.E]
     blockView
   }
 
-
-  private def redrawBlocks(): Unit = {
+  def repaint(): Unit = {
     // unbind old listeners or we have a memory problem
     vbox.getChildren.forEach {
       case c: BlockView[Elem] => c.unbind()
@@ -75,12 +87,12 @@ class BlockViewPane[Elem <: BlockView.E]
 
     val virtualHeight: Int =
       BlockView.calcVirtualHeight(
-        getBlockSizeAsInt()
-        , getBlockSizeAsInt()
+        getBlockSize()
+        , getBlockSize()
         , getWidth.toInt
         , getEntriesSize())
 
-    assert(getBlockSizeAsInt() > 0)
+    assert(getBlockSize() > 0)
     assert(getWidth.toInt > 0, getWidth)
 
     val blockViews: Seq[BlockView[Elem]] = {
@@ -109,7 +121,7 @@ class BlockViewPane[Elem <: BlockView.E]
           }
           val blockViewEntries = entriesProperty.subList(curIndex, end)
           v.setEntries(blockViewEntries)
-          v.setHeight(BlockView.calcVirtualHeight(getBlockSizeAsInt(), getBlockSizeAsInt(), getWidth.toInt, blockViewEntries.size))
+          v.setHeight(BlockView.calcVirtualHeight(getBlockSize(), getBlockSize(), getWidth.toInt, blockViewEntries.size))
           lb.addOne(v)
           curIndex = curIndex + nrElemsInSqView
         }
@@ -117,15 +129,12 @@ class BlockViewPane[Elem <: BlockView.E]
       }
     }
 
-
     vbox.getChildren.setAll(blockViews: _*)
     logTrace(s"Redraw ${blockViews.size} BlockViews")
-    blockViews.foreach(_.redraw())
+    blockViews.foreach(_.repaint())
     ()
   }
 
-
-  private def getBlockSizeAsInt() = blockSizeProperty.get().toInt
-
   setContent(vbox)
+
 }

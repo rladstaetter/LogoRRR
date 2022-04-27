@@ -10,12 +10,12 @@ import javafx.stage.{Modality, Stage}
 
 object HelpMenu {
 
-  class AboutMenuItem(hostServices: HostServices) extends MenuItem("About") {
+  class AboutMenuItem extends MenuItem("About") {
     setOnAction(_ => {
       val stage = new Stage()
       stage.initModality(Modality.APPLICATION_MODAL)
       stage.setTitle(s"About ${AppMeta.fullAppName}")
-      val scene = new Scene(new AboutScreen(hostServices), 440, 210)
+      val scene = new Scene(new AboutScreen, 440, 210)
       stage.setScene(scene)
       stage.setOnCloseRequest(_ => stage.close())
       stage.showAndWait()
@@ -23,6 +23,6 @@ object HelpMenu {
   }
 }
 
-class HelpMenu(hostServices: HostServices) extends Menu("Help") {
-  getItems.add(new AboutMenuItem(hostServices))
+class HelpMenu extends Menu("Help") {
+  getItems.add(new AboutMenuItem())
 }

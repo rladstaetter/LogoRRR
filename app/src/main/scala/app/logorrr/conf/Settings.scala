@@ -1,5 +1,6 @@
 package app.logorrr.conf
 
+import app.logorrr.model.LogFileSettings
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 /**
@@ -13,17 +14,44 @@ object Settings {
   implicit lazy val reader = deriveReader[Settings]
   implicit lazy val writer = deriveWriter[Settings]
 
-  val Default = Settings(StageSettings(0, 0, 500, 500)
-    , SquareImageSettings(10)
-    , RecentFileSettings(Map(), None))
+  val Default = Settings(
+    StageSettings(0, 0, 500, 500)
+    , Map()
+    , Seq()
+    , None
+  )
 
 }
 
 case class Settings(stageSettings: StageSettings
-                    , squareImageSettings: SquareImageSettings
-                    , recentFileSettings: RecentFileSettings) {
+                    , logFileSettings: Map[String, LogFileSettings]
+                    , logFileOrdering: Seq[String]
+                    , someActive: Option[String]) {
 
-  def filterWithValidPaths: Settings = copy(recentFileSettings = recentFileSettings.filterValids())
+  def asOrderedSeq: Seq[LogFileSettings] = logFileOrdering.map(logFileSettings.apply)
+
+  def remove(pathAsString: String): Settings = {
+    val logOrdering = logFileOrdering.filterNot(_ == pathAsString)
+    copy(stageSettings
+      , logFileSettings - pathAsString
+      , logOrdering
+      , None)
+  }
+
+  /** updates recent files with given log setting */
+  def update(logFileSetting: LogFileSettings): Settings = {
+    val newPath = logFileSetting.pathAsString
+    val nlo =
+      if (!logFileOrdering.toSet.contains(newPath)) {
+        logFileOrdering :+ newPath
+      } else {
+        logFileOrdering
+      }
+    copy(stageSettings, logFileSettings + (newPath -> logFileSetting), logFileOrdering = nlo)
+  }
+
+  def filterWithValidPaths(): Settings = copy(logFileSettings = logFileSettings.filter { case (_, d) => d.isPathValid })
+
 
 }
 

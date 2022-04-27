@@ -17,8 +17,7 @@ object SearchTag {
     val i = occurrences(filter)
     val buttonTitle = filter.searchTerm + ": " + i + " " + FiltersToolBar.percentAsString(i, totalSize)
     val button = new ToggleButton(buttonTitle)
-    // val button = new ToggleButton()
-    //   button.textProperty.bind(Bindings.concat(filter.value, ":", i, " ", FiltersToolBar.percentAsString(i, totalSize)))
+
     val r = new Rectangle(10, 10)
     r.setFill(filter.color)
     r.setStroke(Color.WHITE)
@@ -37,6 +36,7 @@ object SearchTag {
 
     new SearchTag(button, removeButton)
   }
+
 }
 
 /**

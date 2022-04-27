@@ -1,41 +1,35 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{RecentFileSettings, Settings, SettingsIO, SquareImageSettings, StageSettings}
-import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
+import app.logorrr.conf.{LogoRRRGlobals, Settings}
+import app.logorrr.model.LogFileSettings
 import app.logorrr.util.CanLog
-import app.logorrr.views.{Filter, Fltr}
-import javafx.application.HostServices
 import javafx.scene.layout.BorderPane
 
-import java.nio.file.Path
+import java.nio.file.{Path, Paths}
 
-class LogoRRRMain(hostServices: HostServices
-                  , closeStage: => Unit
-                  , stageSettings: StageSettings
-                  , recentFileSettings: RecentFileSettings) extends BorderPane
+class LogoRRRMain(closeStage: => Unit
+                  , settings: Settings) extends BorderPane
   with CanLog {
 
-  val mB = new LogoRRRMenuBar(hostServices, openLogFile, closeAllLogFiles, updateLogReportDefinition, closeStage)
-  val ambp = LogoRRRMainBorderPane(hostServices, stageSettings,  initFileMenu)
+  val mB = new LogoRRRMenuBar( openLogFile, closeAllLogFiles, updateLogFileSettings, closeStage)
+  val ambp = LogoRRRMainBorderPane( settings.stageSettings, initFileMenu)
 
   init()
 
-  def updateLogReportDefinition(logFileDef: LogFileSettings): Unit = {
-    ambp.updateLogFile(logFileDef)
+  def updateLogFileSettings(logFileSetting: LogFileSettings): Unit = {
+    ambp.updateLogFileSettings(logFileSetting)
   }
 
   def init(): Unit = {
     setTop(mB)
     setCenter(ambp)
 
-    // reverse since most recently file is saved first in list but should be opened last (= is last log file)
-    for ((_, lrd) <- recentFileSettings.logFileDefinitions.toSeq.reverse) {
-      addLogFile(lrd)
+    settings.asOrderedSeq.foreach {
+      s => addLogFile(s)
     }
-    // if no report was checked as active (which should be a bug) activate
-    // the last one
-    recentFileSettings.someActive match {
-      case Some(value) => selectLog(value.path)
+
+    settings.someActive match {
+      case Some(value) => selectLog(Paths.get(value))
       case None =>
         logError("No active log file entries found.")
         selectLastLogFile()
@@ -49,15 +43,9 @@ class LogoRRRMain(hostServices: HostServices
     logTrace(s"Try to open log file ${path.toAbsolutePath.toString}")
 
     if (!ambp.contains(path)) {
-      SettingsIO.updateRecentFileSettings(rf => {
-        val lrd = LogFileSettings(path.toString
-          , LogFileSettings.DefaultDividerPosition
-          , Filter.seq
-          , Option(LogEntryInstantFormat.Default))
-        rf.copy(logFileDefinitions =
-          Map(lrd.pathAsString -> lrd) ++ rf.logFileDefinitions)
-      })
-      addLogFile(LogFileSettings(path))
+      val logFileSettings = LogFileSettings(path)
+      LogoRRRGlobals.updateLogFile(logFileSettings.pathAsString, logFileSettings)
+      addLogFile(logFileSettings)
       selectLog(path)
       initFileMenu()
     } else {
@@ -69,7 +57,7 @@ class LogoRRRMain(hostServices: HostServices
   /** removes all log files */
   def closeAllLogFiles(): Unit = {
     shutdown()
-    SettingsIO.updateRecentFileSettings(rf => rf.clear())
+    LogoRRRGlobals.resetLogs()
     initFileMenu()
   }
 
@@ -77,13 +65,11 @@ class LogoRRRMain(hostServices: HostServices
     mB.init()
   }
 
-  def setSceneWidth(sceneWidth: Int): Unit = ambp.setSceneWidth(sceneWidth)
-
-  def addLogFile(lrd: LogFileSettings): Unit = {
-    if (!ambp.contains(lrd.path)) {
-      ambp.addLogFile(lrd)
+  def addLogFile(logFileSettings: LogFileSettings): Unit = {
+    if (!ambp.contains(logFileSettings.path)) {
+      ambp.addLogFile(logFileSettings)
     } else {
-      logWarn(s"Path ${lrd.path.toAbsolutePath} is already opened ...")
+      logWarn(s"Path ${logFileSettings.path.toAbsolutePath} is already opened ...")
     }
   }
 

@@ -1,17 +1,11 @@
 package app.logorrr.views.visual
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, JfxUtils}
-import app.logorrr.views.block.{BlockView, BlockViewPane}
-import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty}
-import javafx.collections.{FXCollections, ObservableList}
-import javafx.collections.transformation.FilteredList
+import app.logorrr.util.CanLog
+import app.logorrr.views.block.BlockViewPane
+import javafx.beans.property.SimpleObjectProperty
+import javafx.collections.ObservableList
 import javafx.scene.layout.BorderPane
-import javafx.scene.paint.Color
-
-import java.util.function.Predicate
-import scala.collection.mutable
-import scala.util.{Failure, Success, Try}
 
 class LogVisualView(entries: ObservableList[LogEntry], canvasWidth: Int)
   extends BorderPane with CanLog {
@@ -20,10 +14,6 @@ class LogVisualView(entries: ObservableList[LogEntry], canvasWidth: Int)
 
   val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 
-
-
-  import scala.jdk.CollectionConverters._
-
   val blockViewPane = new BlockViewPane[LogEntry]
   selectedEntryProperty.bind(blockViewPane.selectedElemProperty)
   blockViewPane.setCanvasWidth(canvasWidth)
@@ -31,11 +21,6 @@ class LogVisualView(entries: ObservableList[LogEntry], canvasWidth: Int)
   blockViewPane.setEntries(entries)
 
   setCenter(blockViewPane)
-
-  def repaint(cWidth: Int): Unit = {
-    // blockViewPane.setWidth(cWidth)
-    //    timeR(sisp.repaint(cWidth), "Repaint")
-  }
 
 
 }

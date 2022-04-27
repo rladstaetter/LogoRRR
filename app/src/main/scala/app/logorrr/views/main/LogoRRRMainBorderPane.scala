@@ -1,6 +1,6 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{SettingsIO, StageSettings}
+import app.logorrr.conf.{LogoRRRGlobals, SettingsIO, StageSettings}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.util.CanLog
 import app.logorrr.views.{Filter, Fltr, LogoRRRMainTabPane}
@@ -14,10 +14,9 @@ import scala.jdk.CollectionConverters.ListHasAsScala
 
 object LogoRRRMainBorderPane {
 
-  def apply(hostServices: HostServices
-            , stageSettings: StageSettings
+  def apply(stageSettings: StageSettings
             , reInitMenuBarFn: => Unit): LogoRRRMainBorderPane = {
-    new LogoRRRMainBorderPane(hostServices, stageSettings.width, reInitMenuBarFn)
+    new LogoRRRMainBorderPane(stageSettings.width, reInitMenuBarFn)
   }
 }
 
@@ -27,14 +26,13 @@ object LogoRRRMainBorderPane {
  * @param initialSceneWidth  initial width of scene
  * @param initialSquareWidth width of squares to paint in visual view
  */
-class LogoRRRMainBorderPane(hostServices: HostServices
-                            , initialSceneWidth: Int
+class LogoRRRMainBorderPane(initialSceneWidth: Int
                             , reInitMenuBarFn: => Unit)
   extends BorderPane with CanLog {
 
   val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
 
-  val logViewTabPane = LogoRRRMainTabPane(hostServices, this, reInitMenuBarFn)
+  val logViewTabPane = LogoRRRMainTabPane(this, reInitMenuBarFn)
 
 
   def init(): Unit = {
@@ -53,14 +51,10 @@ class LogoRRRMainBorderPane(hostServices: HostServices
         val path = f.toPath
         if (Files.exists(path)) {
           if (!contains(path)) {
-            val logFileDefinition =
-              LogFileSettings(path.toAbsolutePath.toString
-                , LogFileSettings.DefaultDividerPosition
-                , Filter.seq
-                , LogFileSettings.DefaultLogFormat)
-            SettingsIO.updateRecentFileSettings(rf => rf.copy(logFileDefinitions = Map(logFileDefinition.pathAsString -> logFileDefinition) ++ rf.logFileDefinitions))
+            val logFileSettings = LogFileSettings(path)
+            LogoRRRGlobals.updateLogFile(logFileSettings.pathAsString, logFileSettings)
             reInitMenuBarFn
-            addLogFile(logFileDefinition)
+            addLogFile(logFileSettings)
             selectLog(path)
           } else {
             logWarn(s"${path.toAbsolutePath.toString} is already opened ...")
@@ -76,9 +70,6 @@ class LogoRRRMainBorderPane(hostServices: HostServices
 
   def shutdown(): Unit = logViewTabPane.shutdown()
 
-  /** called when width of scene changes */
-  def setSceneWidth(width: Int): Unit = sceneWidthProperty.set(width)
-
   /** select log file which is last in tabPane */
   def selectLastLogFile(): Unit = logViewTabPane.selectLastLogFile()
 
@@ -92,7 +83,7 @@ class LogoRRRMainBorderPane(hostServices: HostServices
   /**
    * replaces existing log file tab with given one, if it does not exist yet create one.
    */
-  def updateLogFile(logFileDef: LogFileSettings): Unit = {
+  def updateLogFileSettings(logFileSettings: LogFileSettings): Unit = {
     ???
   }
 
