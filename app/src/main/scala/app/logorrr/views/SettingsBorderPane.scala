@@ -25,7 +25,7 @@ object SettingsBorderPane {
   }
 }
 
-class SettingsBorderPane(lrd: LogFileSettings
+class SettingsBorderPane(pathAsString: String
                          , updateLogEntrySetting: LogEntryInstantFormat => Unit
                          , closeStage: => Unit) extends BorderPane {
 
@@ -64,7 +64,7 @@ class SettingsBorderPane(lrd: LogFileSettings
     tb
   }
 
-  lrd.someLogEntrySetting.foreach(s => {
+  LogoRRRGlobals.getLogFileSettings(pathAsString).someLogEntrySettings.get().foreach(s => {
     startColTf.setText(s.dateTimeRange.start.toString)
     endColTf.setText(s.dateTimeRange.end.toString)
     timeFormatTf.setText(s.dateTimePattern)

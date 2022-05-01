@@ -15,30 +15,25 @@ import javafx.scene.control._
 import javafx.scene.layout._
 import org.apache.commons.io.input.Tailer
 
+import java.nio.file.Paths
 import java.time.Instant
 import java.util.function.UnaryOperator
 import java.util.stream.Collectors
 import scala.collection.mutable
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.jdk.CollectionConverters._
 
 object LogFileTab {
 
   case class TimeRange(startTime: Instant, endTime: Instant)
 
-  def apply(logViewTabPane: LogoRRRMainTabPane
-            , logEntries: ObservableList[LogEntry]
-            , logFileSettings: LogFileSettings
-            , initFileMenu: => Unit): LogFileTab = {
-    val logFileTab = new LogFileTab(
-      logEntries
-      , logViewTabPane.sceneWidthProperty.get()
-      , logFileSettings
-      , initFileMenu)
+  def apply(pathAsString: String, logEntries: ObservableList[LogEntry], initFileMenu: => Unit): LogFileTab = {
+    val logFileTab = new LogFileTab(pathAsString, logEntries, initFileMenu)
 
 
     /** activate invalidation listener on filtered list */
     logFileTab.init()
-    logFileTab.sceneWidthProperty.bind(logViewTabPane.sceneWidthProperty)
     logFileTab
   }
 
@@ -63,9 +58,8 @@ trait LogTailer {
  *
  * @param logEntries report instance holding information of log file to be analyzed
  * */
-class LogFileTab(val logEntries: ObservableList[LogEntry]
-                 , val initialSceneWidth: Int
-                 , val initialLogFileSettings: LogFileSettings
+class LogFileTab(val pathAsString: String
+                 , val logEntries: ObservableList[LogEntry]
                  , initFileMenu: => Unit)
   extends Tab
     with LogTailer
@@ -87,13 +81,11 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
       }
     }
 
-  val tailer = new Tailer(initialLogFileSettings.path.toFile, new LogEntryListener(logEntries), 1000, true)
+  val tailer = new Tailer(Paths.get(pathAsString).toFile, new LogEntryListener(logEntries), 1000, true)
 
   /** list of search filters to be applied */
   val filtersListProperty = new SimpleListProperty[Filter](CollectionUtils.mkEmptyObservableList())
 
-  /** bound to sceneWidthProperty of parent LogViewTabPane */
-  val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
 
   /** split visual view and text view */
   val splitPane = new SplitPane()
@@ -109,18 +101,19 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
     fbtb
   }
 
-  val settingsToolBar = new SettingsToolBar(initialLogFileSettings)
+  val settingsToolBar = new SettingsToolBar(pathAsString)
 
   val opsBorderPane: OpsBorderPane = {
     val op = new OpsBorderPane(searchToolBar, filtersToolBar, settingsToolBar)
-    op.blockSizeProperty.set(initialLogFileSettings.blockSettings.width)
+    op.blockSizeProperty.set(LogoRRRGlobals.getLogFileSettings(pathAsString).blockWidthSettingsProperty.get())
     op
   }
 
-  val initialWidth = (sceneWidth * initialLogFileSettings.dividerPosition).toInt
+  val initialWidth = (Bindings.multiply(LogoRRRGlobals.settings.stageSettings.widthProperty, LogoRRRGlobals.getLogFileSettings(pathAsString).dividerPositionProperty))
+  //val initialWidth = (sceneWidth * initialLogFileSettings.dividerPosition).toInt
 
   private lazy val logVisualView = {
-    val lvv = new LogVisualView(filteredList, initialWidth)
+    val lvv = new LogVisualView(filteredList, initialWidth.intValue())
     lvv.blockViewPane.visibleProperty().bind(selectedProperty())
     //    lvv.blockViewPane.blockSizeProperty.set(initialLogFileSettings.blockSettings.width)
     //       lvv.sisp.filtersListProperty.bind(filtersListProperty)
@@ -130,11 +123,11 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
   lazy val timings: Map[Int, Instant] =
     logEntries.stream().collect(Collectors.toMap((le: LogEntry) => le.lineNumber, (le: LogEntry) => le.someInstant.getOrElse(Instant.now()))).asScala.toMap
 
-  private val logTextView = new LogTextView(filteredList, timings )
+  private val logTextView = new LogTextView(filteredList, timings)
 
   val entryLabel = {
     val l = new Label("")
-    l.prefWidthProperty.bind(sceneWidthProperty)
+    l.prefWidthProperty.bind(LogoRRRGlobals.settings.stageSettings.widthProperty)
     l.setStyle(LogoRRRFonts.jetBrainsMono(20))
     l
   }
@@ -159,18 +152,15 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
 
   private def handleFilterChange(change: ListChangeListener.Change[_ <: Fltr]): Unit = {
     while (change.next()) {
-      updateSettingsFile()
+      Future {
+        LogoRRRGlobals.persist()
+      }
       updateLogEntryColors()
     }
   }
 
-  private def updateSettingsFile(): Unit = {
-    val logFileSettings = initialLogFileSettings.copy(filters = filtersListProperty.asScala.toSeq)
-    LogoRRRGlobals.updateLogFile(logFileSettings)
-  }
-
   def init(): Unit = {
-    initialLogFileSettings.filters.foreach(addFilter)
+    filtersListProperty.bind(LogoRRRGlobals.getLogFileSettings(pathAsString).filtersProperty)
 
     /** top component for log view */
     val borderPane = new BorderPane()
@@ -181,13 +171,14 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
 
     logVisualView.blockViewPane.blockSizeProperty.bind(opsBorderPane.blockSizeProperty)
     logVisualView.blockViewPane.blockSizeProperty.addListener(JfxUtils.onNew[Number](n => {
-      LogoRRRGlobals.updateBlockSettings(initialLogFileSettings.pathAsString, BlockSettings(n.intValue()))
+      LogoRRRGlobals.updateBlockSettings(pathAsString, BlockSettings(n.intValue()))
     }))
 
     /* change active text field depending on visible tab */
     selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](b => {
       if (b) {
         LogoRRRAccelerators.setActiveSearchTextField(searchToolBar.searchTextField)
+        JfxUtils.execOnUiThread(repaint())
       } else {
       }
     }))
@@ -210,18 +201,18 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
      * update logVisualView
      * */
     splitPane.getDividers.get(0).positionProperty().addListener(JfxUtils.onNew {
-      t1: Number => LogoRRRGlobals.updateDividerPosition(initialLogFileSettings.pathAsString, t1.doubleValue())
+      t1: Number => LogoRRRGlobals.updateDividerPosition(pathAsString, t1.doubleValue())
     })
 
     startTailer()
 
-    setDivider(initialLogFileSettings.dividerPosition)
+    setDivider(LogoRRRGlobals.getLogFileSettings(pathAsString).dividerPositionProperty.get())
     initFiltersPropertyListChangeListener()
   }
 
   /** compute title of tab */
   private def computeTabTitle: StringExpression = {
-    Bindings.concat(initialLogFileSettings.pathAsString, " (", Bindings.size(logEntries).asString, " lines)")
+    Bindings.concat(pathAsString, " (", Bindings.size(logEntries).asString, " lines)")
   }
 
   /**
@@ -238,12 +229,9 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
   }
 
   def shutdown(): Unit = {
-    LogoRRRGlobals.removeLogFile(initialLogFileSettings.pathAsString)
+    LogoRRRGlobals.removeLogFile(pathAsString)
     stopTailer()
   }
-
-  def sceneWidth = sceneWidthProperty.get()
-
 
   def updateEntryLabel(logEntry: LogEntry): Unit = {
     Option(logEntry) match {
@@ -271,7 +259,7 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
     if (w != 0.0) {
       w
     } else {
-      initialWidth
+      initialWidth.doubleValue()
     }
   }
 

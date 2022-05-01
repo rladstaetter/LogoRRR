@@ -10,13 +10,13 @@ import javafx.stage.{Modality, Stage}
 
 
 /* container to host settings button, positioned to the right of the application / separate for each log view */
-class SettingsToolBar(lrd: LogFileSettings) extends ToolBar {
+class SettingsToolBar(pathAsString: String) extends ToolBar {
   private val settingsButton = new Button("Settings")
   settingsButton.setOnAction(_ => {
     val stage = new Stage()
     stage.initModality(Modality.APPLICATION_MODAL)
-    stage.setTitle(s"Settings for ${lrd.path.getFileName.toString}")
-    val scene = new Scene(new SettingsBorderPane( lrd, updateLogEntrySetting, JfxUtils.closeStage(stage)), 950, 37)
+    stage.setTitle(s"Settings for ${pathAsString}")
+    val scene = new Scene(new SettingsBorderPane(pathAsString, updateLogEntrySetting, JfxUtils.closeStage(stage)), 950, 37)
     stage.setScene(scene)
     stage.setOnCloseRequest(_ => stage.close())
     stage.showAndWait()

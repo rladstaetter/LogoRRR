@@ -1,11 +1,12 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.{LogoRRRGlobals, SettingsIO, StageSettings}
-import app.logorrr.model.LogFileSettings
+import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.CanLog
 import app.logorrr.views.{Filter, Fltr, LogoRRRMainTabPane}
 import javafx.application.HostServices
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.collections.ObservableList
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
 
@@ -25,10 +26,8 @@ class LogoRRRMainBorderPane(reInitMenuBarFn: => Unit)
 
   val logViewTabPane = LogoRRRMainTabPane(this, reInitMenuBarFn)
 
-
+  setCenter(logViewTabPane)
   def init(): Unit = {
-    setCenter(logViewTabPane)
-
     /** needed to activate drag'n drop */
     setOnDragOver((event: DragEvent) => {
       if (event.getDragboard.hasFiles) {
@@ -46,7 +45,7 @@ class LogoRRRMainBorderPane(reInitMenuBarFn: => Unit)
             val logFileSettings = LogFileSettings(path)
             LogoRRRGlobals.updateLogFile(logFileSettings)
             reInitMenuBarFn
-            addLogFile(logFileSettings)
+            setLogEntries(logFileSettings.pathAsString,logFileSettings.readEntries())
             selectLog(pathAsString)
           } else {
             logWarn(s"$pathAsString is already opened ...")
@@ -68,8 +67,8 @@ class LogoRRRMainBorderPane(reInitMenuBarFn: => Unit)
   def selectLog(path: String): Unit = logViewTabPane.selectLog(path)
 
   /** Adds a new logfile to display */
-  def addLogFile(log: LogFileSettings): Unit = {
-    logViewTabPane.addLogFile(log)
+  def setLogEntries(pathAsString: String, logEntries: ObservableList[LogEntry]): Unit = {
+    logViewTabPane.add(pathAsString, logEntries)
   }
 
   /**

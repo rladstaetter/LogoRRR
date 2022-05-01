@@ -24,18 +24,18 @@ object MutLogFileSettings {
 
 class MutLogFileSettings extends Petrify[LogFileSettings] {
 
+  private val pathAsStringProperty = new SimpleStringProperty()
+  private val firstOpenedProperty = new SimpleLongProperty()
+  val dividerPositionProperty = new SimpleDoubleProperty()
+  val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList())
+  val someLogEntrySettings = new SimpleObjectProperty[Option[LogEntryInstantFormat]]()
+  val blockWidthSettingsProperty = new SimpleIntegerProperty()
+
   def setBlockSettings(bs: BlockSettings): Unit = blockWidthSettingsProperty.set(bs.width)
 
   def setDividerPosition(dividerPosition: Double): Unit = dividerPositionProperty.set(dividerPosition)
 
-  def getFirstOpened() : Long = firstOpenedProperty.get()
-
-  private val pathAsStringProperty = new SimpleStringProperty()
-  private val firstOpenedProperty = new SimpleLongProperty()
-  private val dividerPositionProperty = new SimpleDoubleProperty()
-  private val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList())
-  private val someLogEntrySettings = new SimpleObjectProperty[Option[LogEntryInstantFormat]]()
-  private val blockWidthSettingsProperty = new SimpleIntegerProperty()
+  def getFirstOpened(): Long = firstOpenedProperty.get()
 
   override def petrify(): LogFileSettings = LogFileSettings(pathAsStringProperty.get()
     , firstOpenedProperty.get()

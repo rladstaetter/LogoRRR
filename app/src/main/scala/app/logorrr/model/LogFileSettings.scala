@@ -1,12 +1,15 @@
 package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
+import app.logorrr.util.CanLog
 import app.logorrr.views.{Filter, Fltr}
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.nio.file.{Files, Path, Paths}
 import java.time.Instant
+import scala.util.{Failure, Success, Try}
 
 object LogFileSettings {
 
@@ -52,10 +55,30 @@ case class LogFileSettings(pathAsString: String
                            , dividerPosition: Double
                            , filters: Seq[Filter]
                            , blockSettings: BlockSettings
-                           , someLogEntrySetting: Option[LogEntryInstantFormat]) {
-
+                           , someLogEntrySetting: Option[LogEntryInstantFormat]) extends CanLog {
 
   val path: Path = Paths.get(pathAsString)
 
   val isPathValid = Files.isReadable(path) && Files.isRegularFile(path)
+
+  def readEntries(): ObservableList[LogEntry] = {
+    if (isPathValid) {
+      Try(someLogEntrySetting match {
+        case Some(value) => LogEntryFileReader.from(path, filters, value)
+        case None => LogEntryFileReader.from(path, filters)
+      }) match {
+        case Success(logEntries) =>
+          logInfo(s"Opening ${pathAsString} ... ")
+          logEntries
+        case Failure(ex) =>
+          val msg = s"Could not import file ${pathAsString}"
+          logException(msg, ex)
+          FXCollections.observableArrayList()
+      }
+    } else {
+      logWarn(s"Could not read ${pathAsString} - does it exist?")
+      FXCollections.observableArrayList()
+    }
+  }
+
 }

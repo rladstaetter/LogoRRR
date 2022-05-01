@@ -18,7 +18,8 @@ class OpsBorderPane(searchToolBar: SearchToolBar
 
   val stepSize = 4
 
-  override val blockSizeProperty: SimpleIntegerProperty = new SimpleIntegerProperty(stepSize)
+  override val blockSizeProperty: SimpleIntegerProperty = new SimpleIntegerProperty()
+
   val items: Seq[Control] = {
     val smallerBtn =
       new RectButton(2 * stepSize, 2 * stepSize, Color.GRAY,

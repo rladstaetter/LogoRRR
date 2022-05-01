@@ -20,11 +20,13 @@ import scala.jdk.CollectionConverters._
  * The user can change certain values via interacting or explicitly setting values in the preferences dialog.
  */
 object LogoRRRGlobals extends CanLog {
+
   def persist(): Unit = write(LogoRRRGlobals.getSettings())
 
   def allLogs(): Seq[LogFileSettings] = {
     settings.logFileSettingsProperty.get().values.asScala.toSeq.sortWith((lt, gt) => lt.getFirstOpened() < gt.getFirstOpened()).map(_.petrify())
   }
+
 
   def bindWindow(window: Window): Unit = {
     window.setX(LogoRRRGlobals.getStageX())
@@ -53,7 +55,7 @@ object LogoRRRGlobals extends CanLog {
 
   def getStageY(): Double = settings.stageSettings.yProperty.get()
 
-  private val settings = new MutSettings
+  val settings = new MutSettings
   private val hostServicesProperty = new SimpleObjectProperty[HostServices]()
 
   def setHostServices(hostServices: HostServices): Unit = hostServicesProperty.set(hostServices)
@@ -93,6 +95,9 @@ object LogoRRRGlobals extends CanLog {
     settings.setSomeActive(None)
   }
 
+  def getLogFileSettings(pathAsString: String): MutLogFileSettings = {
+    settings.getLogFileSetting(pathAsString)
+  }
 
   def mupdate(t: MutLogFileSettings => Unit)(pathAsString: String): Unit =
     Option(settings.getLogFileSetting(pathAsString)) match {
@@ -111,10 +116,10 @@ object LogoRRRGlobals extends CanLog {
 
   def updateDividerPosition(pathAsString: String, dividerPosition: Double): Unit = {
     settings.getLogFileSetting(pathAsString).setDividerPosition(dividerPosition)
-  //  mupdate({ lfs: MutLogFileSettings => lfs.setDividerPosition(dividerPosition) })(pathAsString)
+    //  mupdate({ lfs: MutLogFileSettings => lfs.setDividerPosition(dividerPosition) })(pathAsString)
   }
 
-  def updateLogFile( fs: LogFileSettings): Unit = {
+  def updateLogFile(fs: LogFileSettings): Unit = {
     settings.putLogFileSetting(fs)
   }
 
