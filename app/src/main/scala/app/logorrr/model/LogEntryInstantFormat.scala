@@ -9,18 +9,21 @@ import scala.util.Try
 
 object LogEntryInstantFormat {
 
-   val DefaultPattern = "yyyy-MM-dd HH:mm:ss.SSS"
+  val DefaultPattern = "yyyy-MM-dd HH:mm:ss.SSS"
   /** just my preferred time format */
   val Default = LogEntryInstantFormat(SimpleRange(1, 24), DefaultPattern)
 
   implicit lazy val reader = deriveReader[LogEntryInstantFormat]
   implicit lazy val writer = deriveWriter[LogEntryInstantFormat]
 
-  def parseInstant(line: String, entrySetting: LogEntryInstantFormat): Option[Instant] = Try {
-    val dateTimeAsString = line.substring(entrySetting.dateTimeRange.start, entrySetting.dateTimeRange.end)
-    val dtf: DateTimeFormatter = entrySetting.dateTimeFormatter
-    LocalDateTime.parse(dateTimeAsString, dtf).toInstant(ZoneOffset.of(entrySetting.zoneOffset))
-  }.toOption
+  def parseInstant(line: String, entrySetting: LogEntryInstantFormat): Option[Instant] =
+    if (line.size >= entrySetting.dateTimeRange.end) {
+      Try {
+        val dateTimeAsString = line.substring(entrySetting.dateTimeRange.start, entrySetting.dateTimeRange.end)
+        val dtf: DateTimeFormatter = entrySetting.dateTimeFormatter
+        LocalDateTime.parse(dateTimeAsString, dtf).toInstant(ZoneOffset.of(entrySetting.zoneOffset))
+      }.toOption
+    } else None
 
 
 }

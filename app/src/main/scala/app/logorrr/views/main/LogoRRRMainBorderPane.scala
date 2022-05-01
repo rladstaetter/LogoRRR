@@ -12,25 +12,16 @@ import javafx.scene.layout.BorderPane
 import java.nio.file.{Files, Path}
 import scala.jdk.CollectionConverters.ListHasAsScala
 
-object LogoRRRMainBorderPane {
-
-  def apply(stageSettings: StageSettings
-            , reInitMenuBarFn: => Unit): LogoRRRMainBorderPane = {
-    new LogoRRRMainBorderPane(stageSettings.width, reInitMenuBarFn)
-  }
-}
 
 /**
  * Main UI element, all other gui elements are in some way children of this Borderpane
  *
- * @param initialSceneWidth  initial width of scene
  * @param initialSquareWidth width of squares to paint in visual view
  */
-class LogoRRRMainBorderPane(initialSceneWidth: Int
-                            , reInitMenuBarFn: => Unit)
+class LogoRRRMainBorderPane(reInitMenuBarFn: => Unit)
   extends BorderPane with CanLog {
 
-  val sceneWidthProperty = new SimpleIntegerProperty(initialSceneWidth)
+  val sceneWidthProperty = new SimpleIntegerProperty(LogoRRRGlobals.getStageWidth())
 
   val logViewTabPane = LogoRRRMainTabPane(this, reInitMenuBarFn)
 
@@ -49,18 +40,19 @@ class LogoRRRMainBorderPane(initialSceneWidth: Int
     setOnDragDropped((event: DragEvent) => {
       for (f <- event.getDragboard.getFiles.asScala) {
         val path = f.toPath
+        val pathAsString = path.toAbsolutePath.toString
         if (Files.exists(path)) {
-          if (!contains(path)) {
+          if (!contains(pathAsString)) {
             val logFileSettings = LogFileSettings(path)
-            LogoRRRGlobals.updateLogFile(logFileSettings.pathAsString, logFileSettings)
+            LogoRRRGlobals.updateLogFile(logFileSettings)
             reInitMenuBarFn
             addLogFile(logFileSettings)
-            selectLog(path)
+            selectLog(pathAsString)
           } else {
-            logWarn(s"${path.toAbsolutePath.toString} is already opened ...")
+            logWarn(s"$pathAsString is already opened ...")
           }
         } else {
-          logWarn(s"${path.toAbsolutePath.toString} does not exist.")
+          logWarn(s"$pathAsString does not exist.")
         }
       }
     })
@@ -73,11 +65,11 @@ class LogoRRRMainBorderPane(initialSceneWidth: Int
   /** select log file which is last in tabPane */
   def selectLastLogFile(): Unit = logViewTabPane.selectLastLogFile()
 
-  def selectLog(path: Path): Unit = logViewTabPane.selectLog(path)
+  def selectLog(path: String): Unit = logViewTabPane.selectLog(path)
 
   /** Adds a new logfile to display */
-  def addLogFile(lrd: LogFileSettings): Unit = {
-    logViewTabPane.addLogFile(lrd)
+  def addLogFile(log: LogFileSettings): Unit = {
+    logViewTabPane.addLogFile(log)
   }
 
   /**
@@ -87,7 +79,7 @@ class LogoRRRMainBorderPane(initialSceneWidth: Int
     ???
   }
 
-  def contains(path: Path): Boolean = logViewTabPane.contains(path)
+  def contains(path: String): Boolean = logViewTabPane.contains(path)
 
 
 }

@@ -12,15 +12,6 @@ object MutStageSettings {
 
   val windowListener = JfxUtils.onNew[Window](window => LogoRRRGlobals.bindWindow(window))
 
-  def apply(stageSettings: StageSettings): MutStageSettings = {
-    val s = new MutStageSettings
-    s.setX(stageSettings.x)
-    s.setY(stageSettings.y)
-    s.setWidth(stageSettings.width)
-    s.setHeight(stageSettings.height)
-    s
-  }
-
 }
 
 

@@ -25,13 +25,10 @@ case class LogoRRRStage(stage: Stage
 
   val scene = new Scene(logorrrMain, width, height)
 
-  LogoRRRGlobals.setScene(scene)
-
-  logorrrMain.ambp.sceneWidthProperty.bind(LogoRRRGlobals.getScene().widthProperty())
+  logorrrMain.ambp.sceneWidthProperty.bind(scene.widthProperty())
 
   /** only initialize accelerators after a scene is defined */
   LogoRRRAccelerators.initAccelerators(scene)
-
   // bind stage properties (they are initially set and constantly overwritten during execution)
   scene.windowProperty().addListener(MutStageSettings.windowListener)
   stage.sceneProperty().addListener(LogoRRRScene.sceneListener)
@@ -41,6 +38,7 @@ case class LogoRRRStage(stage: Stage
 
   // make sure to cleanup on close
   stage.setOnCloseRequest((_: WindowEvent) => {
+    LogoRRRGlobals.persist()
     logorrrMain.shutdown()
     LogoRRRGlobals.unbindWindow()
     stage.sceneProperty.removeListener(LogoRRRScene.sceneListener)

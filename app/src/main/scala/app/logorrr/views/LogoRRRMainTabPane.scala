@@ -28,7 +28,7 @@ object LogoRRRMainTabPane {
   /** constructor to pass parent and do binding */
   def apply(parent: LogoRRRMainBorderPane
             , initFileMenu: => Unit): LogoRRRMainTabPane = {
-    val lvtp = new LogoRRRMainTabPane( initFileMenu)
+    val lvtp = new LogoRRRMainTabPane(initFileMenu)
     lvtp.sceneWidthProperty.bind(parent.sceneWidthProperty)
     lvtp
   }
@@ -53,9 +53,10 @@ class LogoRRRMainTabPane(initFileMenu: => Unit)
         t1 match {
           case logFileTab: LogFileTab =>
             logTrace("Selected: " + logFileTab.initialLogFileSettings.path)
-            SettingsIO.updateActiveLogFile(logFileTab.initialLogFileSettings.path)
+            LogoRRRGlobals.setSomeActive(Option(logFileTab.initialLogFileSettings.pathAsString))
             // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
             getSelectionModel.select(logFileTab)
+            logFileTab.repaint()
           case _ =>
         }
     })
@@ -67,7 +68,7 @@ class LogoRRRMainTabPane(initFileMenu: => Unit)
     getTabs.add(tab)
   }
 
-  def contains(p: Path): Boolean = getLogFileTabs.exists(lr => lr.initialLogFileSettings.path.toAbsolutePath.toString == p.toAbsolutePath.toString)
+  def contains(p: String): Boolean = getLogFileTabs.exists(lr => lr.initialLogFileSettings.pathAsString == p)
 
   private def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
     t =>
@@ -83,13 +84,13 @@ class LogoRRRMainTabPane(initFileMenu: => Unit)
     getTabs.clear()
   }
 
-  def selectLog(path: Path): Unit = {
-    getLogFileTabs.find(_.initialLogFileSettings.path == path) match {
+  def selectLog(pathAsString: String): Unit = {
+    getLogFileTabs.find(_.initialLogFileSettings.pathAsString == pathAsString) match {
       case Some(value) =>
-        logTrace(s"Selects tab view with path ${path.toAbsolutePath.toString}.")
+        logTrace(s"Selects tab view with path ${pathAsString}.")
         getSelectionModel.select(value)
       case None =>
-        logWarn(s"Couldn't find tab with ${path.toAbsolutePath.toString}, selecting last tab ...")
+        logWarn(s"Couldn't find tab with ${pathAsString}, selecting last tab ...")
         selectLastLogFile()
     }
   }

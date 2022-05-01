@@ -108,16 +108,20 @@ class BlockImage[Elem <: BlockView.E] extends CanLog {
   def repaint(): Unit = {
     Option(pixelBuffer) match {
       case Some(pb) =>
-        pb.updateBuffer((_: PixelBuffer[IntBuffer]) => {
-          cleanBackground()
-          var i = 0
-          entries.forEach(e => {
-            drawRect(i, e.color)
-            i = i + 1
+        if (getBlockWidth() != 0) {
+          pb.updateBuffer((_: PixelBuffer[IntBuffer]) => {
+            cleanBackground()
+            var i = 0
+            entries.forEach(e => {
+              drawRect(i, e.color)
+              i = i + 1
+            })
+            roi
           })
-          roi
-        })
-      case None =>  // logTrace("pixelBuffer was null")
+        } else {
+          logWarn(s"getBlockWidth() = ${getBlockWidth()}")
+        }
+      case None => // logTrace("pixelBuffer was null")
     }
   }
 

@@ -11,8 +11,8 @@ class LogoRRRMain(closeStage: => Unit
                   , settings: Settings) extends BorderPane
   with CanLog {
 
-  val mB = new LogoRRRMenuBar( openLogFile, closeAllLogFiles, updateLogFileSettings, closeStage)
-  val ambp = LogoRRRMainBorderPane( settings.stageSettings, initFileMenu)
+  val mB = new LogoRRRMenuBar(openLogFile, closeAllLogFiles, updateLogFileSettings, closeStage)
+  val ambp = new LogoRRRMainBorderPane(initFileMenu)
 
   init()
 
@@ -24,12 +24,12 @@ class LogoRRRMain(closeStage: => Unit
     setTop(mB)
     setCenter(ambp)
 
-    settings.asOrderedSeq.foreach {
+    LogoRRRGlobals.allLogs().foreach {
       s => addLogFile(s)
     }
 
-    settings.someActive match {
-      case Some(value) => selectLog(Paths.get(value))
+    LogoRRRGlobals.getSomeActive() match {
+      case Some(value) => selectLog(value)
       case None =>
         logError("No active log file entries found.")
         selectLastLogFile()
@@ -40,13 +40,14 @@ class LogoRRRMain(closeStage: => Unit
 
   /** called when 'Open File' is or an entry of 'Recent Files' is selected. */
   def openLogFile(path: Path): Unit = {
-    logTrace(s"Try to open log file ${path.toAbsolutePath.toString}")
+    val pathAsString = path.toAbsolutePath.toString
+    logTrace(s"Try to open log file $pathAsString")
 
-    if (!ambp.contains(path)) {
+    if (!ambp.contains(pathAsString)) {
       val logFileSettings = LogFileSettings(path)
-      LogoRRRGlobals.updateLogFile(logFileSettings.pathAsString, logFileSettings)
+      LogoRRRGlobals.updateLogFile(logFileSettings)
       addLogFile(logFileSettings)
-      selectLog(path)
+      selectLog(pathAsString)
       initFileMenu()
     } else {
       logTrace("File is already opened.")
@@ -66,14 +67,14 @@ class LogoRRRMain(closeStage: => Unit
   }
 
   def addLogFile(logFileSettings: LogFileSettings): Unit = {
-    if (!ambp.contains(logFileSettings.path)) {
+    if (!ambp.contains(logFileSettings.pathAsString)) {
       ambp.addLogFile(logFileSettings)
     } else {
       logWarn(s"Path ${logFileSettings.path.toAbsolutePath} is already opened ...")
     }
   }
 
-  def selectLog(path: Path): Unit = ambp.selectLog(path)
+  def selectLog(path: String): Unit = ambp.selectLog(path)
 
   def selectLastLogFile(): Unit = ambp.selectLastLogFile()
 

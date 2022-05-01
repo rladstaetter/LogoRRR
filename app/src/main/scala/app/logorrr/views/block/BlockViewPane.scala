@@ -18,7 +18,7 @@ class RectButton(width: Int
                  , color: Color
                  , eventHandler: EventHandler[ActionEvent]) extends Button {
   setGraphic(ColorUtil.mkR(width, height, color))
- // setPadding(new Insets(0, 0, 0, 0))
+  // setPadding(new Insets(0, 0, 0, 0))
   setOnAction(eventHandler)
   setOnKeyPressed((event: KeyEvent) => {
     if (event.getCode == KeyCode.ENTER) {
@@ -34,7 +34,7 @@ class BlockViewPane[Elem <: BlockView.E]
     with CanLog {
 
   override val blockSizeProperty: SimpleIntegerProperty = {
-    val p = new SimpleIntegerProperty(5)
+    val p = new SimpleIntegerProperty()
     p.addListener(_ => repaint())
     p
   }
@@ -79,59 +79,68 @@ class BlockViewPane[Elem <: BlockView.E]
   }
 
   def repaint(): Unit = {
-    // unbind old listeners or we have a memory problem
-    vbox.getChildren.forEach {
-      case c: BlockView[Elem] => c.unbind()
-      case _ =>
-    }
-
-    val virtualHeight: Int =
-      BlockView.calcVirtualHeight(
-        getBlockSize()
-        , getBlockSize()
-        , getWidth.toInt
-        , getEntriesSize())
-
-    assert(getBlockSize() > 0)
-    assert(getWidth.toInt > 0, getWidth)
-
-    val blockViews: Seq[BlockView[Elem]] = {
-      // if virtual canvas height is lower than maxheight, just create one sqView and be done with it
-      if (virtualHeight <= BlockImage.MaxHeight) {
-        val sqView = mkBlockView()
-        sqView.setWidth(getWidth.toInt)
-        sqView.setHeight(virtualHeight)
-        sqView.setEntries(entriesProperty)
-        Seq(sqView)
-      } else {
-        // if the virtual canvas height exceeds SQImage.MaxHeight, iterate and create new SQViews
-        val nrOfElemsInRow = (getWidth.toInt / blockSizeProperty.get()).toInt
-        val nrOfRowsPerSquareView = (BlockImage.MaxHeight / blockSizeProperty.get()).toInt
-        val nrElemsInSqView = nrOfRowsPerSquareView * nrOfElemsInRow
-        var curIndex = 0
-        val lb = new ListBuffer[BlockView[Elem]]
-
-        while (curIndex < getEntriesSize()) {
-          val v = mkBlockView()
-          v.setWidth(getWidth.toInt)
-          val end = if (curIndex + nrElemsInSqView < getEntriesSize()) {
-            curIndex + nrElemsInSqView
-          } else {
-            getEntriesSize()
-          }
-          val blockViewEntries = entriesProperty.subList(curIndex, end)
-          v.setEntries(blockViewEntries)
-          v.setHeight(BlockView.calcVirtualHeight(getBlockSize(), getBlockSize(), getWidth.toInt, blockViewEntries.size))
-          lb.addOne(v)
-          curIndex = curIndex + nrElemsInSqView
-        }
-        lb.toSeq
+    if (isVisible) {
+      logTrace("visible ...")
+      // unbind old listeners or we have a memory problem
+      vbox.getChildren.forEach {
+        case c: BlockView[Elem] => c.unbind()
+        case _ =>
       }
-    }
 
-    vbox.getChildren.setAll(blockViews: _*)
-    logTrace(s"Redraw ${blockViews.size} BlockViews")
-    blockViews.foreach(_.repaint())
+      val virtualHeight: Int =
+        BlockView.calcVirtualHeight(
+          getBlocksize()
+          , getBlocksize()
+          , getWidth.toInt
+          , getEntriesSize())
+      /*
+        assert(getBlockSize() > 0)
+        assert(getWidth.toInt > 0, getWidth)
+        */
+      if (getBlocksize() > 0 && getWidth.toInt > 0) {
+        val blockViews: Seq[BlockView[Elem]] = {
+          // if virtual canvas height is lower than maxheight, just create one sqView and be done with it
+          if (virtualHeight <= BlockImage.MaxHeight) {
+            val sqView = mkBlockView()
+            sqView.setWidth(getWidth.toInt)
+            sqView.setHeight(virtualHeight)
+            sqView.setEntries(entriesProperty)
+            Seq(sqView)
+          } else {
+            // if the virtual canvas height exceeds SQImage.MaxHeight, iterate and create new SQViews
+            val nrOfElemsInRow = (getWidth.toInt / blockSizeProperty.get()).toInt
+            val nrOfRowsPerSquareView = (BlockImage.MaxHeight / blockSizeProperty.get()).toInt
+            val nrElemsInSqView = nrOfRowsPerSquareView * nrOfElemsInRow
+            var curIndex = 0
+            val lb = new ListBuffer[BlockView[Elem]]
+
+            while (curIndex < getEntriesSize()) {
+              val v = mkBlockView()
+              v.setWidth(getWidth.toInt)
+              val end = if (curIndex + nrElemsInSqView < getEntriesSize()) {
+                curIndex + nrElemsInSqView
+              } else {
+                getEntriesSize()
+              }
+              val blockViewEntries = entriesProperty.subList(curIndex, end)
+              v.setEntries(blockViewEntries)
+              v.setHeight(BlockView.calcVirtualHeight(getBlocksize(), getBlocksize(), getWidth.toInt, blockViewEntries.size))
+              lb.addOne(v)
+              curIndex = curIndex + nrElemsInSqView
+            }
+            lb.toSeq
+          }
+        }
+
+        vbox.getChildren.setAll(blockViews: _*)
+       // logTrace(s"Redraw ${blockViews.size} BlockViews")
+        blockViews.foreach(_.repaint())
+      } else {
+        logWarn(s"Blocksize: ${getBlocksize()}, getWidth: ${getWidth} ")
+      }
+    } else {
+      logTrace("invisible ...")
+    }
     ()
   }
 

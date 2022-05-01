@@ -17,7 +17,6 @@ object Settings {
   val Default = Settings(
     StageSettings(0, 0, 500, 500)
     , Map()
-    , Seq()
     , None
   )
 
@@ -25,29 +24,19 @@ object Settings {
 
 case class Settings(stageSettings: StageSettings
                     , logFileSettings: Map[String, LogFileSettings]
-                    , logFileOrdering: Seq[String]
                     , someActive: Option[String]) {
 
-  def asOrderedSeq: Seq[LogFileSettings] = logFileOrdering.map(logFileSettings.apply)
+  def asOrderedSeq: Seq[LogFileSettings] = logFileSettings.values.toSeq.sortWith((lt, gt) => lt.firstOpened < gt.firstOpened)
 
   def remove(pathAsString: String): Settings = {
-    val logOrdering = logFileOrdering.filterNot(_ == pathAsString)
     copy(stageSettings
       , logFileSettings - pathAsString
-      , logOrdering
       , None)
   }
 
   /** updates recent files with given log setting */
   def update(logFileSetting: LogFileSettings): Settings = {
-    val newPath = logFileSetting.pathAsString
-    val nlo =
-      if (!logFileOrdering.toSet.contains(newPath)) {
-        logFileOrdering :+ newPath
-      } else {
-        logFileOrdering
-      }
-    copy(stageSettings, logFileSettings + (newPath -> logFileSetting), logFileOrdering = nlo)
+    copy(stageSettings, logFileSettings + (logFileSetting.pathAsString -> logFileSetting))
   }
 
   def filterWithValidPaths(): Settings = copy(logFileSettings = logFileSettings.filter { case (_, d) => d.isPathValid })

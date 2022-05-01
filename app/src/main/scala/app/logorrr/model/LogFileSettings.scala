@@ -6,6 +6,7 @@ import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.nio.file.{Files, Path, Paths}
+import java.time.Instant
 
 object LogFileSettings {
 
@@ -24,7 +25,12 @@ object LogFileSettings {
   val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
 
   def apply(p: Path): LogFileSettings =
-    LogFileSettings(p.toAbsolutePath.toString, DefaultDividerPosition, DefaultFilter, DefaultBlockSettings, DefaultLogFormat)
+    LogFileSettings(p.toAbsolutePath.toString
+      , Instant.now().toEpochMilli
+      , DefaultDividerPosition
+      , DefaultFilter
+      , DefaultBlockSettings
+      , DefaultLogFormat)
 
 }
 
@@ -42,10 +48,12 @@ object LogFileSettings {
  * @param filters
  */
 case class LogFileSettings(pathAsString: String
+                           , firstOpened: Long
                            , dividerPosition: Double
                            , filters: Seq[Filter]
                            , blockSettings: BlockSettings
                            , someLogEntrySetting: Option[LogEntryInstantFormat]) {
+
 
   val path: Path = Paths.get(pathAsString)
 

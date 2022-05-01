@@ -8,7 +8,7 @@ trait HasBlockSizeProperty {
 
   def setBlockSize(blockSize: Int): Unit = blockSizeProperty.set(blockSize)
 
-  def getBlockSize(): Int = blockSizeProperty.get()
+  def getBlocksize(): Int = blockSizeProperty.get()
 
 
 }

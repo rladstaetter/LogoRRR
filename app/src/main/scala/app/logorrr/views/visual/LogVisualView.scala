@@ -10,6 +10,9 @@ import javafx.scene.layout.BorderPane
 class LogVisualView(entries: ObservableList[LogEntry], canvasWidth: Int)
   extends BorderPane with CanLog {
 
+  def repaint() = blockViewPane.repaint()
+
+
   //  require(canvasWidth > 0, "canvasWidth must be greater than 0")
 
   val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()

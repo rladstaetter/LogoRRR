@@ -23,15 +23,15 @@ class OpsBorderPane(searchToolBar: SearchToolBar
     val smallerBtn =
       new RectButton(2 * stepSize, 2 * stepSize, Color.GRAY,
         _ => {
-          if (getBlockSize() - stepSize > 0) {
-            setBlockSize(getBlockSize() - stepSize)
+          if (getBlocksize() - stepSize > 0) {
+            setBlockSize(getBlocksize() - stepSize)
           }
         })
     val biggerBtn =
       new RectButton(3 * stepSize, 3 * stepSize, Color.GRAY
         , _ => {
-          if (getBlockSize() + stepSize < 10 * stepSize) {
-            setBlockSize(getBlockSize() + stepSize)
+          if (getBlocksize() + stepSize < 10 * stepSize) {
+            setBlockSize(getBlocksize() + stepSize)
           }
         })
 

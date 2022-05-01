@@ -71,6 +71,8 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
     with LogTailer
     with CanLog {
 
+  def repaint() = logVisualView.repaint()
+
   /** contains time information for first and last entry for given log file */
   lazy val someTimeRange: Option[LogFileTab.TimeRange] =
     if (logEntries.isEmpty) {
@@ -107,24 +109,28 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
     fbtb
   }
 
-  val settingsToolBar = new SettingsToolBar( initialLogFileSettings)
+  val settingsToolBar = new SettingsToolBar(initialLogFileSettings)
 
-  val opsBorderPane: OpsBorderPane = new OpsBorderPane(searchToolBar, filtersToolBar, settingsToolBar)
+  val opsBorderPane: OpsBorderPane = {
+    val op = new OpsBorderPane(searchToolBar, filtersToolBar, settingsToolBar)
+    op.blockSizeProperty.set(initialLogFileSettings.blockSettings.width)
+    op
+  }
 
   val initialWidth = (sceneWidth * initialLogFileSettings.dividerPosition).toInt
 
   private lazy val logVisualView = {
     val lvv = new LogVisualView(filteredList, initialWidth)
-    opsBorderPane.blockSizeProperty.set(initialLogFileSettings.blockSettings.width)
+    lvv.blockViewPane.visibleProperty().bind(selectedProperty())
     //    lvv.blockViewPane.blockSizeProperty.set(initialLogFileSettings.blockSettings.width)
     //       lvv.sisp.filtersListProperty.bind(filtersListProperty)
     lvv
   }
 
-  val timings: Map[Int, Instant] =
+  lazy val timings: Map[Int, Instant] =
     logEntries.stream().collect(Collectors.toMap((le: LogEntry) => le.lineNumber, (le: LogEntry) => le.someInstant.getOrElse(Instant.now()))).asScala.toMap
 
-  private val logTextView = new LogTextView(filteredList, timings)
+  private val logTextView = new LogTextView(filteredList, timings )
 
   val entryLabel = {
     val l = new Label("")
@@ -160,7 +166,7 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
 
   private def updateSettingsFile(): Unit = {
     val logFileSettings = initialLogFileSettings.copy(filters = filtersListProperty.asScala.toSeq)
-    LogoRRRGlobals.updateLogFile(logFileSettings.pathAsString, logFileSettings)
+    LogoRRRGlobals.updateLogFile(logFileSettings)
   }
 
   def init(): Unit = {
@@ -171,9 +177,9 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
     borderPane.setTop(opsBorderPane)
     borderPane.setCenter(splitPane)
     borderPane.setBottom(entryLabel)
-    logVisualView.blockViewPane.blockSizeProperty.bind(opsBorderPane.blockSizeProperty)
     setContent(borderPane)
 
+    logVisualView.blockViewPane.blockSizeProperty.bind(opsBorderPane.blockSizeProperty)
     logVisualView.blockViewPane.blockSizeProperty.addListener(JfxUtils.onNew[Number](n => {
       LogoRRRGlobals.updateBlockSettings(initialLogFileSettings.pathAsString, BlockSettings(n.intValue()))
     }))
@@ -204,7 +210,7 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
      * update logVisualView
      * */
     splitPane.getDividers.get(0).positionProperty().addListener(JfxUtils.onNew {
-      t1: Number => SettingsIO.updateDividerPosition(initialLogFileSettings.path, t1.doubleValue())
+      t1: Number => LogoRRRGlobals.updateDividerPosition(initialLogFileSettings.pathAsString, t1.doubleValue())
     })
 
     startTailer()
@@ -227,13 +233,12 @@ class LogFileTab(val logEntries: ObservableList[LogEntry]
    *
    */
   def closeTab(): Unit = {
-    LogoRRRGlobals.removeLogFile(initialLogFileSettings.pathAsString)
     initFileMenu
     shutdown()
   }
 
   def shutdown(): Unit = {
-    logInfo(s"Closing file ${initialLogFileSettings.path.toAbsolutePath} ...")
+    LogoRRRGlobals.removeLogFile(initialLogFileSettings.pathAsString)
     stopTailer()
   }
 
