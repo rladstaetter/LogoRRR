@@ -11,6 +11,7 @@ import javafx.collections.transformation.FilteredList
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control._
 import javafx.scene.layout._
+import javafx.scene.paint.Color
 import org.apache.commons.io.input.Tailer
 
 import java.nio.file.Paths
@@ -111,15 +112,13 @@ class LogFileTab(val pathAsString: String
   private lazy val logVisualView = {
     val lvv = new LogVisualView(filteredList, initialWidth.intValue())
     lvv.blockViewPane.visibleProperty().bind(selectedProperty())
-    //    lvv.blockViewPane.blockSizeProperty.set(initialLogFileSettings.blockSettings.width)
-    //       lvv.sisp.filtersListProperty.bind(filtersListProperty)
     lvv
   }
 
   lazy val timings: Map[Int, Instant] =
     logEntries.stream().collect(Collectors.toMap((le: LogEntry) => le.lineNumber, (le: LogEntry) => le.someInstant.getOrElse(Instant.now()))).asScala.toMap
 
-  private val logTextView = new LogTextView(filteredList, timings)
+  private val logTextView = new LogTextView(pathAsString, filteredList, timings)
 
   val entryLabel = {
     val l = new Label("")
@@ -167,7 +166,7 @@ class LogFileTab(val pathAsString: String
 
     logVisualView.blockViewPane.blockSizeProperty.bind(opsBorderPane.blockSizeProperty)
     logVisualView.blockViewPane.blockSizeProperty.addListener(JfxUtils.onNew[Number](n => {
-      LogoRRRGlobals.updateBlockSettings(pathAsString, BlockSettings(n.intValue()))
+      LogoRRRGlobals.setBlockSettings(pathAsString, BlockSettings(n.intValue()))
     }))
 
     /* change active text field depending on visible tab */
@@ -197,7 +196,7 @@ class LogFileTab(val pathAsString: String
      * update logVisualView
      * */
     splitPane.getDividers.get(0).positionProperty().addListener(JfxUtils.onNew {
-      t1: Number => LogoRRRGlobals.updateDividerPosition(pathAsString, t1.doubleValue())
+      t1: Number => LogoRRRGlobals.setDividerPosition(pathAsString, t1.doubleValue())
     })
 
     startTailer()
@@ -231,9 +230,8 @@ class LogFileTab(val pathAsString: String
   def updateEntryLabel(logEntry: LogEntry): Unit = {
     Option(logEntry) match {
       case Some(entry) =>
-        val background: Background = entry.background(filtersToolBar.filterButtons.keys.toSeq)
-        entryLabel.setBackground(background)
-        entryLabel.setTextFill(Filter.calcColor(entry.value, filtersToolBar.filterButtons.keys.toSeq).invert())
+        entryLabel.setBackground(entry.background)
+        entryLabel.setTextFill(Color.WHITE)
         entryLabel.setText(entry.value)
         logTextView.select(logEntry)
       case None =>

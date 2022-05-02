@@ -24,8 +24,7 @@ case class LogEntry(lineNumber: Int
 
   val index: Int = lineNumber
 
-  def background(searchFilters: Seq[Fltr]): Background =
-    new Background(new BackgroundFill(Filter.calcColor(value, searchFilters), new CornerRadii(1.0), new Insets(0.0)))
+  lazy val background = new Background(new BackgroundFill(color, new CornerRadii(1.0), new Insets(0.0)))
 
 
 }

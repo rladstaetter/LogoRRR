@@ -1,5 +1,6 @@
 package app.logorrr.views
 
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{ClipBoardUtils, LogoRRRFonts}
 import javafx.collections.transformation.FilteredList
@@ -110,7 +111,8 @@ object LogTextView {
 }
 
 
-class LogTextView(filteredList: FilteredList[LogEntry]
+class LogTextView(pathAsString: String
+                  , filteredList: FilteredList[LogEntry]
                   , timings: Map[Int, Instant]
                   , maxDuration: FiniteDuration = 1200 millis) extends BorderPane {
 
@@ -120,8 +122,13 @@ class LogTextView(filteredList: FilteredList[LogEntry]
   val listView: ListView[LogEntry] = {
     val lv = new ListView[LogEntry]()
     lv.setItems(filteredList)
+    val i = LogoRRRGlobals.getLogFileSettings(pathAsString).selectedIndexProperty.get()
+    println("index: " + i)
+    lv.getSelectionModel.select(i)
+    LogoRRRGlobals.getLogFileSettings(pathAsString).selectedIndexProperty.bind(lv.getSelectionModel.selectedIndexProperty())
     lv
   }
+
 
   listView.setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
   listView.setFixedCellSize(26)
@@ -159,14 +166,7 @@ class LogTextView(filteredList: FilteredList[LogEntry]
 
   }
 
-
-  def select(logEntry: LogEntry): Unit = {
-    listView.getSelectionModel.select(logEntry)
-    val selectedIndex = listView.getSelectionModel.getSelectedIndex
-    listView.scrollTo(selectedIndex)
-
-    listView.requestFocus()
-  }
+  def select(logEntry: LogEntry): Unit = listView.getSelectionModel.select(logEntry)
 
 }
 

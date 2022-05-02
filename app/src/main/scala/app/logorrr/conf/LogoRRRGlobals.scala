@@ -109,10 +109,12 @@ object LogoRRRGlobals extends CanLog {
       case None => logWarn(s"${pathAsString} not found.")
     }
 
-  def updateBlockSettings(pathAsString: String, bs: BlockSettings): Unit =
+  def setSelectedIndex(pathAsString: String, index: Int): Unit = getLogFileSettings(pathAsString).setSelectedIndex(index)
+
+  def setBlockSettings(pathAsString: String, bs: BlockSettings): Unit =
     mupdate({ lfs: MutLogFileSettings => lfs.setBlockSettings(bs) })(pathAsString)
 
-  def updateDividerPosition(pathAsString: String, dividerPosition: Double): Unit = {
+  def setDividerPosition(pathAsString: String, dividerPosition: Double): Unit = {
     settings.getLogFileSetting(pathAsString).setDividerPosition(dividerPosition)
     //  mupdate({ lfs: MutLogFileSettings => lfs.setDividerPosition(dividerPosition) })(pathAsString)
   }

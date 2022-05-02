@@ -45,13 +45,7 @@ class BlockViewPane[Elem <: BlockView.E]
   private val vbox = new VBox()
   private val repaintListener: ListChangeListener[Elem] = (_: ListChangeListener.Change[_ <: Elem]) => repaint()
 
-  val selectedElemProperty = {
-    val p = new SimpleObjectProperty[Elem]()
-    p.addListener(JfxUtils.onNew[Elem](n => {
-      logTrace("selected " + n)
-    }))
-    p
-  }
+  val selectedElemProperty = new SimpleObjectProperty[Elem]()
 
   private val entriesProperty = {
     val es = new SimpleListProperty[Elem](FXCollections.observableArrayList())

@@ -15,7 +15,7 @@ object LogFileSettings {
 
   implicit lazy val reader = deriveReader[LogFileSettings]
   implicit lazy val writer = deriveWriter[LogFileSettings]
-
+  val DefaultSelectedIndex = 0
   val DefaultDividerPosition = 0.5
   val DefaultBlockSettings = BlockSettings(10)
   //val DefaultLogFormat: Option[LogEntryInstantFormat] = Option(LogEntryInstantFormat.Default)
@@ -30,6 +30,7 @@ object LogFileSettings {
 
   def apply(p: Path): LogFileSettings =
     LogFileSettings(p.toAbsolutePath.toString
+      , DefaultSelectedIndex
       , Instant.now().toEpochMilli
       , DefaultDividerPosition
       , DefaultFilter
@@ -52,6 +53,7 @@ object LogFileSettings {
  * @param filters
  */
 case class LogFileSettings(pathAsString: String
+                           , selectedIndex: Int
                            , firstOpened: Long
                            , dividerPosition: Double
                            , filters: Seq[Filter]

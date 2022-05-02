@@ -1,7 +1,8 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.conf.BlockSettings
-import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
+import app.logorrr.model.{LogEntry, LogEntryInstantFormat, LogFileSettings}
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.Filter
 import javafx.beans.property._
 import javafx.collections.FXCollections
@@ -12,10 +13,11 @@ object MutLogFileSettings {
 
   def apply(logFileSettings: LogFileSettings): MutLogFileSettings = {
     val s = new MutLogFileSettings
-    s.blockWidthSettingsProperty.set(logFileSettings.blockSettings.width)
+    s.setSelectedIndex(logFileSettings.selectedIndex)
+    s.setBlockSettings(logFileSettings.blockSettings)
     s.pathAsStringProperty.set(logFileSettings.pathAsString)
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
-    s.dividerPositionProperty.set(logFileSettings.dividerPosition)
+    s.setDividerPosition(logFileSettings.dividerPosition)
     s.filtersProperty.setAll(logFileSettings.filters.asJava)
     s.someLogEntrySettings.set(logFileSettings.someLogEntrySetting)
     s
@@ -23,6 +25,12 @@ object MutLogFileSettings {
 }
 
 class MutLogFileSettings extends Petrify[LogFileSettings] {
+
+
+  val selectedIndexProperty = new SimpleIntegerProperty()
+  selectedIndexProperty.addListener(JfxUtils.onNew(println))
+
+  def getSelectedIndex = selectedIndexProperty.get()
 
   private val pathAsStringProperty = new SimpleStringProperty()
   private val firstOpenedProperty = new SimpleLongProperty()
@@ -33,11 +41,14 @@ class MutLogFileSettings extends Petrify[LogFileSettings] {
 
   def setBlockSettings(bs: BlockSettings): Unit = blockWidthSettingsProperty.set(bs.width)
 
+  def setSelectedIndex(index: Int): Unit = selectedIndexProperty.set(index)
+
   def setDividerPosition(dividerPosition: Double): Unit = dividerPositionProperty.set(dividerPosition)
 
   def getFirstOpened(): Long = firstOpenedProperty.get()
 
   override def petrify(): LogFileSettings = LogFileSettings(pathAsStringProperty.get()
+    , selectedIndexProperty.get()
     , firstOpenedProperty.get()
     , dividerPositionProperty.get()
     , filtersProperty.get().asScala.toSeq

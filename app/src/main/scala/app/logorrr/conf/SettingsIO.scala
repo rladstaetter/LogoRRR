@@ -17,7 +17,7 @@ object SettingsIO extends CanLog {
   val renderOptions = ConfigRenderOptions.defaults().setOriginComments(false)
 
   def updateDividerPosition(path: Path, dividerPosition: Double): Unit = {
-    LogoRRRGlobals.updateDividerPosition(path.toAbsolutePath.toString, dividerPosition)
+    LogoRRRGlobals.setDividerPosition(path.toAbsolutePath.toString, dividerPosition)
   }
 
   def updateActiveLogFile(path: Path): Unit = {
