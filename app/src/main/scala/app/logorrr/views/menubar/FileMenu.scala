@@ -53,29 +53,11 @@ object FileMenu {
 }
 
 class FileMenu(openLogFile: Path => Unit
-               , removeAllLogFiles: => Unit
-               , updateLogDef: LogFileSettings => Unit
                , closeApplication: => Unit) extends Menu("File") with CanLog {
-  /*
-    val settings = {
-      logTrace("Reinit File Menu ...")
-      SettingsIO.someSettings.getOrElse(Settings.Default)
-    }
 
-    val recentFiles: Seq[String] = settings.recentFiles.logReportDefinition.map(_.pathAsString)
-
-    val recentFilesMenu = RecentFilesMenu(recentFiles.map(f => Paths.get(f)), updateLogDef)
-  */
   def init(): Unit = {
     getItems.clear()
     getItems.add(new FileMenu.OpenMenuItem(openLogFile))
-    /*
-        if (recentFiles.nonEmpty) {
-          getItems.add(recentFilesMenu)
-          val closeAllMenuItems = new FileMenu.CloseAllMenuItem(removeAllLogFiles)
-          getItems.add(closeAllMenuItems)
-        }
-    */
     if (OsUtil.isWin) {
       getItems.add(new FileMenu.QuitMenuItem(closeApplication))
     }

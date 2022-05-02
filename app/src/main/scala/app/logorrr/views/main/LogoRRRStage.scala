@@ -16,16 +16,13 @@ object LogoRRRStage {
 
 }
 
-case class LogoRRRStage(stage: Stage
-                        , settings: Settings) {
+case class LogoRRRStage(stage: Stage) {
 
-  val logorrrMain = new LogoRRRMain(JfxUtils.closeStage(stage), settings)
+  val logorrrMain = new LogoRRRMain(JfxUtils.closeStage(stage))
 
   val (width, height) = (LogoRRRGlobals.getStageWidth(), LogoRRRGlobals.getStageHeight())
 
   val scene = new Scene(logorrrMain, width, height)
-
-  logorrrMain.ambp.sceneWidthProperty.bind(scene.widthProperty())
 
   /** only initialize accelerators after a scene is defined */
   LogoRRRAccelerators.initAccelerators(scene)

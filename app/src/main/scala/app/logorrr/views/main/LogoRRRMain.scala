@@ -3,6 +3,7 @@ package app.logorrr.views.main
 import app.logorrr.conf.{LogoRRRGlobals, Settings}
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.views.LogFileTab
 import javafx.collections.FXCollections
 import javafx.scene.layout.BorderPane
 
@@ -10,18 +11,14 @@ import java.nio.file.Path
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class LogoRRRMain(closeStage: => Unit
-                  , settings: Settings) extends BorderPane
-  with CanLog {
+class LogoRRRMain(closeStage: => Unit)
+  extends BorderPane
+    with CanLog {
 
-  val mB = new LogoRRRMenuBar(openLogFile, closeAllLogFiles, updateLogFileSettings, closeStage)
-  val ambp = new LogoRRRMainBorderPane(initFileMenu)
+  val mB = new LogoRRRMenuBar(openLogFile, closeStage)
+  val ambp = new LogoRRRMainBorderPane()
 
   init()
-
-  def updateLogFileSettings(logFileSetting: LogFileSettings): Unit = {
-    ambp.updateLogFileSettings(logFileSetting)
-  }
 
   def init(): Unit = {
     setTop(mB)
@@ -36,10 +33,10 @@ class LogoRRRMain(closeStage: => Unit
       }
     }).map {
       case ((entries, path)) if (!entries.isEmpty) =>
-        JfxUtils.execOnUiThread(ambp.setLogEntries(path, entries))
+        JfxUtils.execOnUiThread(ambp.addLogFileTab(LogFileTab(path, entries)))
       case (_, path) => logWarn(s"Could not read $path. No entries found.")
     })).onComplete({
-      res =>
+      _ =>
         LogoRRRGlobals.getSomeActive() match {
           case Some(value) => selectLog(value)
           case None =>
@@ -60,9 +57,8 @@ class LogoRRRMain(closeStage: => Unit
     if (!ambp.contains(pathAsString)) {
       val logFileSettings = LogFileSettings(path)
       LogoRRRGlobals.updateLogFile(logFileSettings)
-      ambp.setLogEntries(pathAsString, logFileSettings.readEntries())
+      ambp.addLogFileTab(LogFileTab(pathAsString, logFileSettings.readEntries()))
       selectLog(pathAsString)
-      initFileMenu()
     } else {
       logTrace("File is already opened.")
     }
@@ -73,11 +69,6 @@ class LogoRRRMain(closeStage: => Unit
   def closeAllLogFiles(): Unit = {
     shutdown()
     LogoRRRGlobals.resetLogs()
-    initFileMenu()
-  }
-
-  private def initFileMenu(): Unit = {
-    mB.init()
   }
 
   def selectLog(path: String): Unit = ambp.selectLog(path)

@@ -25,8 +25,8 @@ object LogFileTab {
 
   case class TimeRange(startTime: Instant, endTime: Instant)
 
-  def apply(pathAsString: String, logEntries: ObservableList[LogEntry], initFileMenu: => Unit): LogFileTab = {
-    val logFileTab = new LogFileTab(pathAsString, logEntries, initFileMenu)
+  def apply(pathAsString: String, logEntries: ObservableList[LogEntry]): LogFileTab = {
+    val logFileTab = new LogFileTab(pathAsString, logEntries)
 
 
     /** activate invalidation listener on filtered list */
@@ -56,8 +56,7 @@ trait LogTailer {
  * @param logEntries report instance holding information of log file to be analyzed
  * */
 class LogFileTab(val pathAsString: String
-                 , val logEntries: ObservableList[LogEntry]
-                 , initFileMenu: => Unit)
+                 , val logEntries: ObservableList[LogEntry])
   extends Tab
     with LogTailer
     with CanLog {
@@ -221,7 +220,6 @@ class LogFileTab(val pathAsString: String
    *
    */
   def closeTab(): Unit = {
-    initFileMenu
     shutdown()
   }
 

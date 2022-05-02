@@ -23,7 +23,7 @@ class LogoRRRApp extends javafx.application.Application with CanLog {
   def start(stage: Stage): Unit = {
     val settings: Settings = SettingsIO.fromFile()
     LogoRRRGlobals.set(settings, getHostServices)
-    LogoRRRStage(stage, settings).show()
+    LogoRRRStage(stage).show()
   }
 
 }

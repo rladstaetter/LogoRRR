@@ -22,17 +22,10 @@ object LogoRRRMainTabPane {
       |-fx-background-size: 100%;
       |""".stripMargin
 
-  /** constructor to pass parent and do binding */
-  def apply(parent: LogoRRRMainBorderPane
-            , initFileMenu: => Unit): LogoRRRMainTabPane = {
-    val lvtp = new LogoRRRMainTabPane(initFileMenu)
-    lvtp.sceneWidthProperty.bind(parent.sceneWidthProperty)
-    lvtp
-  }
 
 }
 
-class LogoRRRMainTabPane(initFileMenu: => Unit)
+class LogoRRRMainTabPane()
   extends TabPane
     with CanLog {
 
@@ -53,16 +46,13 @@ class LogoRRRMainTabPane(initFileMenu: => Unit)
             LogoRRRGlobals.setSomeActive(Option(logFileTab.pathAsString))
             // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
             getSelectionModel.select(logFileTab)
-            logFileTab.repaint()
           case _ =>
         }
     })
   }
 
-  def add(pathAsString: String, logEntries: ObservableList[LogEntry]): Unit = {
-    val tab = LogFileTab(pathAsString, logEntries, initFileMenu)
-    getTabs.add(tab)
-  }
+  def add(tab: LogFileTab): Unit = getTabs.add(tab)
+
 
   def contains(p: String): Boolean = getLogFileTabs.exists(lr => lr.pathAsString == p)
 

@@ -3,7 +3,7 @@ package app.logorrr.views.main
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.CanLog
-import app.logorrr.views.LogoRRRMainTabPane
+import app.logorrr.views.{LogFileTab, LogoRRRMainTabPane}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
 import javafx.scene.input.{DragEvent, TransferMode}
@@ -18,14 +18,12 @@ import scala.jdk.CollectionConverters.ListHasAsScala
  *
  * @param initialSquareWidth width of squares to paint in visual view
  */
-class LogoRRRMainBorderPane(reInitMenuBarFn: => Unit)
-  extends BorderPane with CanLog {
+class LogoRRRMainBorderPane  extends BorderPane with CanLog {
 
-  val sceneWidthProperty = new SimpleIntegerProperty(LogoRRRGlobals.getStageWidth())
-
-  val logViewTabPane = LogoRRRMainTabPane(this, reInitMenuBarFn)
+  val logViewTabPane = new LogoRRRMainTabPane()
 
   setCenter(logViewTabPane)
+
   def init(): Unit = {
     /** needed to activate drag'n drop */
     setOnDragOver((event: DragEvent) => {
@@ -43,8 +41,7 @@ class LogoRRRMainBorderPane(reInitMenuBarFn: => Unit)
           if (!contains(pathAsString)) {
             val logFileSettings = LogFileSettings(path)
             LogoRRRGlobals.updateLogFile(logFileSettings)
-            reInitMenuBarFn
-            setLogEntries(logFileSettings.pathAsString,logFileSettings.readEntries())
+            addLogFileTab(LogFileTab(logFileSettings.pathAsString, logFileSettings.readEntries()))
             selectLog(pathAsString)
           } else {
             logWarn(s"$pathAsString is already opened ...")
@@ -60,22 +57,12 @@ class LogoRRRMainBorderPane(reInitMenuBarFn: => Unit)
 
   def shutdown(): Unit = logViewTabPane.shutdown()
 
-  /** select log file which is last in tabPane */
-  def selectLastLogFile(): Unit = logViewTabPane.selectLastLogFile()
+  /** Adds a new logfile to display */
+  def addLogFileTab(tab : LogFileTab): Unit = logViewTabPane.add(tab)
 
   def selectLog(path: String): Unit = logViewTabPane.selectLog(path)
-
-  /** Adds a new logfile to display */
-  def setLogEntries(pathAsString: String, logEntries: ObservableList[LogEntry]): Unit = {
-    logViewTabPane.add(pathAsString, logEntries)
-  }
-
-  /**
-   * replaces existing log file tab with given one, if it does not exist yet create one.
-   */
-  def updateLogFileSettings(logFileSettings: LogFileSettings): Unit = {
-    ???
-  }
+  /** select log file which is last in tabPane */
+  def selectLastLogFile(): Unit = logViewTabPane.selectLastLogFile()
 
   def contains(path: String): Boolean = logViewTabPane.contains(path)
 
