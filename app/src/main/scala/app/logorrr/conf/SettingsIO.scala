@@ -1,10 +1,9 @@
 package app.logorrr.conf
 
-import app.logorrr.io.{FilePaths, Fs}
-import app.logorrr.model.LogFileSettings
+import app.logorrr.io.FilePaths
 import app.logorrr.util.CanLog
 import com.typesafe.config.ConfigRenderOptions
-import pureconfig.{ConfigSource, ConfigWriter}
+import pureconfig.ConfigSource
 
 import java.nio.file.Path
 import scala.util.{Failure, Success, Try}

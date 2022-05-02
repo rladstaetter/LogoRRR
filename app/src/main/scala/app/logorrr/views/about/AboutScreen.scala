@@ -2,7 +2,6 @@ package app.logorrr.views.about
 
 import app.logorrr.meta.AppMeta
 import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts}
-import javafx.application.HostServices
 import javafx.geometry.Insets
 import javafx.scene.control._
 import javafx.scene.image.ImageView

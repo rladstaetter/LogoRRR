@@ -3,8 +3,8 @@ package app.logorrr.model
 import app.logorrr.views.SimpleRange
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
-import java.time.{Instant, LocalDateTime, ZoneId, ZoneOffset}
 import java.time.format.DateTimeFormatter
+import java.time.{Instant, LocalDateTime, ZoneId, ZoneOffset}
 import scala.util.Try
 
 object LogEntryInstantFormat {

@@ -7,7 +7,5 @@ object SettingsSpec {
 
   val gen: Gen[Settings] = for {
     stageSettings <- StageSettingsSpec.gen
-    blockSettings <- BlockSettingsSpec.gen
-    recentFileSettings <- RecentFileSettingsSpec.gen
-  } yield Settings(stageSettings, recentFileSettings)
+  } yield Settings(stageSettings, Map(), None)
 }

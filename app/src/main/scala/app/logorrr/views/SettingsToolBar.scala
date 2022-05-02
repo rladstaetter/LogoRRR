@@ -1,9 +1,7 @@
 package app.logorrr.views
 
-import app.logorrr.conf.{LogoRRRGlobals, SettingsIO}
-import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
+import app.logorrr.model.LogEntryInstantFormat
 import app.logorrr.util.JfxUtils
-import javafx.application.HostServices
 import javafx.scene.Scene
 import javafx.scene.control.{Button, ToolBar}
 import javafx.stage.{Modality, Stage}

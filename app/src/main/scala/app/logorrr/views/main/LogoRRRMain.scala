@@ -3,13 +3,12 @@ package app.logorrr.views.main
 import app.logorrr.conf.{LogoRRRGlobals, Settings}
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.{CanLog, JfxUtils}
-import javafx.collections.{FXCollections, ObservableList}
+import javafx.collections.FXCollections
 import javafx.scene.layout.BorderPane
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Failure, Success}
 
 class LogoRRRMain(closeStage: => Unit
                   , settings: Settings) extends BorderPane

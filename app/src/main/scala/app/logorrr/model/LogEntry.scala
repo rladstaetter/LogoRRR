@@ -1,7 +1,7 @@
 package app.logorrr.model
 
-import app.logorrr.views.{Filter, Fltr}
 import app.logorrr.views.block.BlockView
+import app.logorrr.views.{Filter, Fltr}
 import javafx.geometry.Insets
 import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}
 import javafx.scene.paint.Color

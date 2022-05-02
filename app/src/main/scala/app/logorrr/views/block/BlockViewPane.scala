@@ -1,14 +1,12 @@
 package app.logorrr.views.block
 
 import app.logorrr.util.{CanLog, JfxUtils}
-import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
-import javafx.beans.{InvalidationListener, Observable}
+import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
 import javafx.event.{ActionEvent, EventHandler}
-import javafx.geometry.{Insets, Orientation}
 import javafx.scene.control._
 import javafx.scene.input.{KeyCode, KeyEvent}
-import javafx.scene.layout.{Border, BorderPane, BorderStroke, VBox}
+import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 
 import scala.collection.mutable.ListBuffer
@@ -33,7 +31,7 @@ class BlockViewPane[Elem <: BlockView.E]
     with HasBlockSizeProperty
     with CanLog {
 
-  override val blockSizeProperty: SimpleIntegerProperty = {
+   override val blockSizeProperty: SimpleIntegerProperty = {
     val p = new SimpleIntegerProperty()
     p.addListener(_ => repaint())
     p

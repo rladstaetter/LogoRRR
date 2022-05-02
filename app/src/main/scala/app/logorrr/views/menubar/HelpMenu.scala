@@ -3,7 +3,6 @@ package app.logorrr.views.menubar
 import app.logorrr.meta.AppMeta
 import app.logorrr.views.about.AboutScreen
 import app.logorrr.views.menubar.HelpMenu.AboutMenuItem
-import javafx.application.HostServices
 import javafx.scene.Scene
 import javafx.scene.control.{Menu, MenuItem}
 import javafx.stage.{Modality, Stage}

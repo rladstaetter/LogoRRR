@@ -1,23 +1,20 @@
 package app.logorrr.views
 
-import app.logorrr.conf.{BlockSettings, LogoRRRGlobals, Settings, SettingsIO}
-import app.logorrr.model.{LogEntry, LogEntryFileReader, LogFileSettings}
+import app.logorrr.conf.{BlockSettings, LogoRRRGlobals}
+import app.logorrr.model.LogEntry
 import app.logorrr.util._
 import app.logorrr.views.visual.LogVisualView
-import javafx.application.HostServices
 import javafx.beans.binding.{Bindings, StringExpression}
-import javafx.beans.property.{SimpleBooleanProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
+import javafx.beans.property.{SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.ChangeListener
-import javafx.beans.{InvalidationListener, Observable}
-import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.collections.transformation.FilteredList
+import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control._
 import javafx.scene.layout._
 import org.apache.commons.io.input.Tailer
 
 import java.nio.file.Paths
 import java.time.Instant
-import java.util.function.UnaryOperator
 import java.util.stream.Collectors
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global

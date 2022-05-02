@@ -1,7 +1,7 @@
 package app.logorrr.views.block
 
 import app.logorrr.util.{CanLog, JfxUtils}
-import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
+import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
 import javafx.event.EventHandler

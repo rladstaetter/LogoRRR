@@ -1,6 +1,6 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.conf.{BlockSettings, StageSettings}
+import app.logorrr.conf.BlockSettings
 import javafx.beans.property.SimpleIntegerProperty
 
 object MutBlockSettings

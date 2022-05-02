@@ -2,8 +2,8 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.BlockSettings
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
-import app.logorrr.views.{Filter, Fltr}
-import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleLongProperty, SimpleMapProperty, SimpleObjectProperty, SimpleStringProperty}
+import app.logorrr.views.Filter
+import javafx.beans.property._
 import javafx.collections.FXCollections
 
 import scala.jdk.CollectionConverters._

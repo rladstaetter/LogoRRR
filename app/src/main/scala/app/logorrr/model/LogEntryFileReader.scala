@@ -14,7 +14,6 @@ import java.util.stream
 import java.util.stream.Collectors
 import scala.language.postfixOps
 import scala.util.{Failure, Success, Try}
-import scala.jdk.CollectionConverters._
 
 object LogFileReader {
   def readFromFile(logFile: Path): util.List[String] = {

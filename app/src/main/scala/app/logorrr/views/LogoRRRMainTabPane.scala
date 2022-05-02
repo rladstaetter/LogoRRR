@@ -1,18 +1,15 @@
 package app.logorrr.views
 
-import app.logorrr.conf.{LogoRRRGlobals, SettingsIO}
-import app.logorrr.model.{LogEntry, LogEntryFileReader, LogFileSettings}
+import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.main.LogoRRRMainBorderPane
-import javafx.application.HostServices
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
 import javafx.scene.control.{Tab, TabPane}
 
-import java.nio.file.{Files, Path, Paths}
 import scala.collection.mutable
 import scala.jdk.CollectionConverters._
-import scala.util.{Failure, Success, Try}
 
 object LogoRRRMainTabPane {
 

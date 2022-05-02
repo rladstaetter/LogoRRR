@@ -3,7 +3,6 @@ package app.logorrr.views.main
 import app.logorrr.model.LogFileSettings
 import app.logorrr.util.{CanLog, OsUtil}
 import app.logorrr.views.menubar.{FileMenu, HelpMenu}
-import javafx.application.HostServices
 import javafx.scene.control.MenuBar
 
 import java.nio.file.Path

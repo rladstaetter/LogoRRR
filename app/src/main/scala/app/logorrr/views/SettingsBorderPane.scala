@@ -1,9 +1,8 @@
 package app.logorrr.views
 
 import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
+import app.logorrr.model.LogEntryInstantFormat
 import app.logorrr.util.HLink
-import javafx.application.HostServices
 import javafx.scene.control._
 import javafx.scene.layout.BorderPane
 

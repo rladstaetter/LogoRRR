@@ -1,7 +1,6 @@
 package app.logorrr.util
 
 import app.logorrr.conf.LogoRRRGlobals
-import javafx.application.HostServices
 import javafx.scene.control.Hyperlink
 
 import java.net.URL

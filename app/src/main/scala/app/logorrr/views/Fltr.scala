@@ -2,7 +2,6 @@ package app.logorrr.views
 
 import app.logorrr.views.Filter.{ExistsMatcher, LMatcher, NotExistsMatcher}
 import javafx.scene.paint.Color
-import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 
 

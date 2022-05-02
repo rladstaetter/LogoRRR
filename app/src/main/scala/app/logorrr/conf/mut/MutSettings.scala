@@ -1,9 +1,8 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.conf.LogoRRRGlobals.settings
 import app.logorrr.conf.{Settings, StageSettings}
 import app.logorrr.model.LogFileSettings
-import javafx.beans.property.{SimpleListProperty, SimpleMapProperty, SimpleObjectProperty, SimpleStringProperty}
+import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.FXCollections
 
 import java.util
@@ -17,7 +16,7 @@ object MutSettings {
 
   def apply(settings: Settings): MutSettings = {
     val s = new MutSettings
-    //s.setStageSettings(settings.stageSettings)
+    s.setStageSettings(settings.stageSettings)
     s.setLogFileSettings(settings.logFileSettings)
     s.setSomeActive(settings.someActive)
     s

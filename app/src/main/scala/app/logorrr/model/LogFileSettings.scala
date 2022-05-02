@@ -2,7 +2,7 @@ package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
 import app.logorrr.util.CanLog
-import app.logorrr.views.{Filter, Fltr}
+import app.logorrr.views.Filter
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
@@ -18,7 +18,8 @@ object LogFileSettings {
 
   val DefaultDividerPosition = 0.5
   val DefaultBlockSettings = BlockSettings(10)
-  val DefaultLogFormat: Option[LogEntryInstantFormat] = Option(LogEntryInstantFormat.Default)
+  //val DefaultLogFormat: Option[LogEntryInstantFormat] = Option(LogEntryInstantFormat.Default)
+  val DefaultLogFormat: Option[LogEntryInstantFormat] = None
 
   val finest: Filter = new Filter("FINEST", Color.GREY.toString)
   val info: Filter = new Filter("INFO", Color.GREEN.toString)

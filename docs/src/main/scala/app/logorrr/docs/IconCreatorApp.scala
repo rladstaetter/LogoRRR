@@ -2,7 +2,7 @@ package app.logorrr.docs
 
 import javafx.embed.swing.SwingFXUtils
 import javafx.geometry.Pos
-import javafx.scene.canvas.{Canvas, GraphicsContext}
+import javafx.scene.canvas.Canvas
 import javafx.scene.image.WritableImage
 import javafx.scene.layout.{BorderPane, VBox}
 import javafx.scene.paint.Color

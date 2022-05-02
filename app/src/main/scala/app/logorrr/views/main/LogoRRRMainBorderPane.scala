@@ -1,16 +1,15 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{LogoRRRGlobals, SettingsIO, StageSettings}
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.CanLog
-import app.logorrr.views.{Filter, Fltr, LogoRRRMainTabPane}
-import javafx.application.HostServices
+import app.logorrr.views.LogoRRRMainTabPane
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
 
-import java.nio.file.{Files, Path}
+import java.nio.file.Files
 import scala.jdk.CollectionConverters.ListHasAsScala
 
 

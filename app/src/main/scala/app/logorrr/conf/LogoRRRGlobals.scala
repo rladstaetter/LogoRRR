@@ -1,14 +1,12 @@
 package app.logorrr.conf
 
 import app.logorrr.conf.SettingsIO.renderOptions
-import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings, MutStageSettings}
+import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
 import app.logorrr.io.{FilePaths, Fs}
 import app.logorrr.model.LogFileSettings
-import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.util.CanLog
 import javafx.application.HostServices
-import javafx.beans.property.{SimpleListProperty, SimpleMapProperty, SimpleObjectProperty, SimpleStringProperty}
-import javafx.collections.FXCollections
-import javafx.scene.Scene
+import javafx.beans.property.SimpleObjectProperty
 import javafx.stage.Window
 import pureconfig.ConfigWriter
 

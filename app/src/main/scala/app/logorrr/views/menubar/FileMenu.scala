@@ -1,11 +1,10 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.model
-import app.logorrr.model.{LogEntry, LogFileSettings}
+import app.logorrr.model.LogFileSettings
 import app.logorrr.util.{CanLog, LogoRRRFileChooser, OsUtil}
 import javafx.scene.control.{Menu, MenuItem}
 
-import java.nio.file.{Files, Path}
+import java.nio.file.Path
 
 object FileMenu {
 

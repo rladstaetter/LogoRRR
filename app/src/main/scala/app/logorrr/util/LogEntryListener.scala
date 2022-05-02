@@ -5,8 +5,6 @@ import javafx.collections.ObservableList
 import javafx.scene.paint.Color
 import org.apache.commons.io.input.{Tailer, TailerListener}
 
-import java.time.Instant
-
 /**
  * Inform observable list about events from Tailer.
  *

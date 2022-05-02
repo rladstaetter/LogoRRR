@@ -1,7 +1,7 @@
 package app.logorrr.views
 
 import app.logorrr.views.block.{HasBlockSizeProperty, RectButton}
-import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.geometry.Pos
 import javafx.scene.control.{Control, ToolBar}
 import javafx.scene.layout.BorderPane
