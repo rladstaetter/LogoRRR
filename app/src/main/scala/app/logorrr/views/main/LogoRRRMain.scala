@@ -4,12 +4,13 @@ import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.LogFileTab
-import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import javafx.scene.layout.BorderPane
 
 import java.nio.file.Path
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.{Failure, Success}
 
 class LogoRRRMain(closeStage: => Unit)
   extends BorderPane
@@ -23,30 +24,32 @@ class LogoRRRMain(closeStage: => Unit)
   def init(): Unit = {
     setTop(mB)
     setCenter(ambp)
+    loadLogFiles(LogoRRRGlobals.allLogs())
+  }
 
-    Future.sequence(LogoRRRGlobals.allLogs().map(s => Future({
-      if (!ambp.contains(s.pathAsString)) {
-        (s.readEntries(), s.pathAsString)
-      } else {
-        logWarn(s"Path ${s.pathAsString} is already opened ...")
-        (FXCollections.observableArrayList[LogEntry](), s.pathAsString)
-      }
-    }).map {
-      case ((entries, path)) if (!entries.isEmpty) =>
-        JfxUtils.execOnUiThread(ambp.addLogFileTab(LogFileTab(path, entries)))
-      case (_, path) => logWarn(s"Could not read $path. No entries found.")
-    })).onComplete({
-      _ =>
-        LogoRRRGlobals.getSomeActive() match {
-          case Some(value) => selectLog(value)
-          case None =>
-            logError("No active log file entries found.")
-            selectLastLogFile()
+  private def loadLogFiles(logs: Seq[LogFileSettings]): Unit = {
+    Future.sequence(
+      logs.filter(s => !ambp.contains(s.pathAsString)).map(s => Future((s.pathAsString, s.readEntries())))
+    ).onComplete({
+      tryLfs =>
+        tryLfs match {
+          case Success(lfs: Seq[(String, ObservableList[LogEntry])]) =>
+            lfs.foreach({
+              case (pathAsString, es) => JfxUtils.execOnUiThread({
+                ambp.addLogFileTab(LogFileTab(pathAsString, es))
+                LogoRRRGlobals.getSomeActive() match {
+                  case Some(value) if pathAsString == value =>
+                    selectLog(value)
+                  case _ =>
+                }
+              })
+            })
+          case Failure(exception) =>
+            logException("Could not load logfiles", exception)
         }
-        // only after having initialized we activate change listeners */
+
         JfxUtils.execOnUiThread(ambp.init())
     })
-
   }
 
   /** called when 'Open File' is or an entry of 'Recent Files' is selected. */

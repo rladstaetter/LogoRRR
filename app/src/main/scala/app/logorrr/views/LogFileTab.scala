@@ -1,7 +1,7 @@
 package app.logorrr.views
 
 import app.logorrr.conf.{BlockSettings, LogoRRRGlobals}
-import app.logorrr.model.LogEntry
+import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util._
 import app.logorrr.views.visual.LogVisualView
 import javafx.beans.binding.{Bindings, StringExpression}
@@ -26,9 +26,12 @@ object LogFileTab {
 
   case class TimeRange(startTime: Instant, endTime: Instant)
 
+  def apply(logFileSettings: LogFileSettings): LogFileTab = {
+    apply(logFileSettings.pathAsString, logFileSettings.readEntries())
+  }
+
   def apply(pathAsString: String, logEntries: ObservableList[LogEntry]): LogFileTab = {
     val logFileTab = new LogFileTab(pathAsString, logEntries)
-
 
     /** activate invalidation listener on filtered list */
     logFileTab.init()
@@ -37,17 +40,6 @@ object LogFileTab {
 
 }
 
-trait LogTailer {
-
-  val tailer: Tailer
-
-  /** start observing log file for changes */
-  def startTailer(): Unit = new Thread(tailer).start()
-
-  /** stop observing changes */
-  def stopTailer(): Unit = tailer.stop()
-
-}
 
 /**
  * Represents a single 'document' UI approach for a log file.

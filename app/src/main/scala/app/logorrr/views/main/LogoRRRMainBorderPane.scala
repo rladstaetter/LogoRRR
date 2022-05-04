@@ -59,6 +59,7 @@ class LogoRRRMainBorderPane  extends BorderPane with CanLog {
   def addLogFileTab(tab : LogFileTab): Unit = logViewTabPane.add(tab)
 
   def selectLog(path: String): Unit = logViewTabPane.selectLog(path)
+
   /** select log file which is last in tabPane */
   def selectLastLogFile(): Unit = logViewTabPane.selectLastLogFile()
 
