@@ -1,6 +1,5 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.model.LogFileSettings
 import app.logorrr.util.{CanLog, LogoRRRFileChooser, OsUtil}
 import javafx.scene.control.{Menu, MenuItem}
 

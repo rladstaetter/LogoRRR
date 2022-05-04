@@ -1,7 +1,7 @@
 package app.logorrr.views.main
 
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutStageSettings
-import app.logorrr.conf.{LogoRRRGlobals, Settings}
 import app.logorrr.meta.AppMeta
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.LogoRRRAccelerators

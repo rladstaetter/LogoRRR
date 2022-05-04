@@ -1,6 +1,6 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{LogoRRRGlobals, Settings}
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.LogFileTab

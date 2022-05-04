@@ -1,11 +1,8 @@
 package app.logorrr.views
 
 import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
-import app.logorrr.views.main.LogoRRRMainBorderPane
 import javafx.beans.property.SimpleIntegerProperty
-import javafx.collections.ObservableList
 import javafx.scene.control.{Tab, TabPane}
 
 import scala.collection.mutable

@@ -1,11 +1,9 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.model.{LogEntry, LogFileSettings}
+import app.logorrr.model.LogFileSettings
 import app.logorrr.util.CanLog
 import app.logorrr.views.{LogFileTab, LogoRRRMainTabPane}
-import javafx.beans.property.SimpleIntegerProperty
-import javafx.collections.ObservableList
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
 
