@@ -63,7 +63,8 @@ class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
 
   private val blockSizeProperty = new SimpleIntegerProperty()
   private val widthProperty = new SimpleIntegerProperty()
-  private val entriesProperty = new SimpleListProperty[Elem](FXCollections.observableArrayList())
+
+  val entriesProperty = new SimpleListProperty[Elem](FXCollections.observableArrayList())
 
   val selectedEntryProperty: SimpleObjectProperty[Elem] = new SimpleObjectProperty[Elem]()
 

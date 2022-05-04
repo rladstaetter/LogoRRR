@@ -110,7 +110,7 @@ class LogFileTab(val pathAsString: String
   //val initialWidth = (sceneWidth * initialLogFileSettings.dividerPosition).toInt
 
   private lazy val logVisualView = {
-    val lvv = new LogVisualView(filteredList, initialWidth.intValue())
+    val lvv = new LogVisualView(pathAsString, filteredList, initialWidth.intValue())
     lvv.blockViewPane.visibleProperty().bind(selectedProperty())
     lvv
   }
@@ -120,17 +120,18 @@ class LogFileTab(val pathAsString: String
 
   private val logTextView = new LogTextView(pathAsString, filteredList, timings)
 
-  val entryLabel = {
+  val footerLabel = {
     val l = new Label("")
     l.prefWidthProperty.bind(LogoRRRGlobals.settings.stageSettings.widthProperty)
     l.setStyle(LogoRRRFonts.jetBrainsMono(20))
+    l.setTextFill(Color.WHITE)
     l
   }
 
 
   val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 
-  private val logEntryChangeListener: ChangeListener[LogEntry] = JfxUtils.onNew[LogEntry](updateEntryLabel)
+  private val logEntryChangeListener: ChangeListener[LogEntry] = JfxUtils.onNew[LogEntry](updateFooter)
 
 
   /** if a change event for filtersList Property occurs, save it to disc */
@@ -161,7 +162,7 @@ class LogFileTab(val pathAsString: String
     val borderPane = new BorderPane()
     borderPane.setTop(opsBorderPane)
     borderPane.setCenter(splitPane)
-    borderPane.setBottom(entryLabel)
+    borderPane.setBottom(footerLabel)
     setContent(borderPane)
 
     logVisualView.blockViewPane.blockSizeProperty.bind(opsBorderPane.blockSizeProperty)
@@ -186,7 +187,7 @@ class LogFileTab(val pathAsString: String
     selectedEntryProperty.addListener(logEntryChangeListener)
 
     // if user changes selected item in listview, change footer as well
-    logTextView.listView.getSelectionModel.selectedItemProperty.addListener(logEntryChangeListener)
+    //logTextView.listView.getSelectionModel.selectedItemProperty.addListener(logEntryChangeListener)
 
     splitPane.getItems.addAll(logVisualView, logTextView)
 
@@ -227,16 +228,14 @@ class LogFileTab(val pathAsString: String
     stopTailer()
   }
 
-  def updateEntryLabel(logEntry: LogEntry): Unit = {
+  def updateFooter(logEntry: LogEntry): Unit = {
     Option(logEntry) match {
       case Some(entry) =>
-        entryLabel.setBackground(entry.background)
-        entryLabel.setTextFill(Color.WHITE)
-        entryLabel.setText(entry.value)
-        logTextView.select(logEntry)
+        footerLabel.setBackground(entry.background)
+        footerLabel.setText(entry.value)
       case None =>
-        entryLabel.setBackground(null)
-        entryLabel.setText("")
+        footerLabel.setBackground(null)
+        footerLabel.setText("")
     }
   }
 

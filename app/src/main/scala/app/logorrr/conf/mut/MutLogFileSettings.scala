@@ -1,8 +1,7 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.conf.BlockSettings
-import app.logorrr.model.{LogEntry, LogEntryInstantFormat, LogFileSettings}
-import app.logorrr.util.JfxUtils
+import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.views.Filter
 import javafx.beans.property._
 import javafx.collections.FXCollections
@@ -26,9 +25,10 @@ object MutLogFileSettings {
 
 class MutLogFileSettings extends Petrify[LogFileSettings] {
 
-
-  val selectedIndexProperty = new SimpleIntegerProperty()
-  selectedIndexProperty.addListener(JfxUtils.onNew(println))
+  val selectedIndexProperty = {
+    val ip = new SimpleIntegerProperty()
+    ip
+  }
 
   def getSelectedIndex = selectedIndexProperty.get()
 

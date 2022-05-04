@@ -2,7 +2,7 @@ package app.logorrr.views
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{ClipBoardUtils, LogoRRRFonts}
+import app.logorrr.util.{ClipBoardUtils, JfxUtils, LogoRRRFonts}
 import javafx.collections.transformation.FilteredList
 import javafx.geometry.Pos
 import javafx.scene.control._
@@ -116,6 +116,8 @@ class LogTextView(pathAsString: String
                   , timings: Map[Int, Instant]
                   , maxDuration: FiniteDuration = 1200 millis) extends BorderPane {
 
+  private val fixedCellSize = 26
+
   /** 'pragmatic way' to determine width of max elems in this view */
   val maxLength = filteredList.size().toString.length
 
@@ -123,15 +125,27 @@ class LogTextView(pathAsString: String
     val lv = new ListView[LogEntry]()
     lv.setItems(filteredList)
     val i = LogoRRRGlobals.getLogFileSettings(pathAsString).selectedIndexProperty.get()
-    println("index: " + i)
     lv.getSelectionModel.select(i)
-    LogoRRRGlobals.getLogFileSettings(pathAsString).selectedIndexProperty.bind(lv.getSelectionModel.selectedIndexProperty())
     lv
   }
-
-
+  listView.heightProperty().addListener(JfxUtils.onNew((s: Number) => println("jo " + s.doubleValue())))
+  listView.heightProperty().addListener(JfxUtils.onNew((n: Number) => println("jasdfo" + n.doubleValue() / 26.0)))
   listView.setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
-  listView.setFixedCellSize(26)
+  listView.setFixedCellSize(fixedCellSize)
+
+  LogoRRRGlobals.getLogFileSettings(pathAsString).selectedIndexProperty.addListener(JfxUtils.onNew((n: Number) => {
+    Option(listView.getItems.filtered((t: LogEntry) => t.lineNumber == n.intValue()).get(0)) match {
+      case Some(value) =>
+        val relativeIndex = listView.getItems.indexOf(value)
+        listView.getSelectionModel.select(relativeIndex)
+        listView.scrollTo(relativeIndex - ((listView.getHeight / fixedCellSize) / 2).toInt)
+        println(s"selectedIndex : ${n.intValue()}, scrollTo : $relativeIndex")
+      case None =>
+    }
+
+  }))
+
+
   setCenter(listView)
 
   class LogEntryListCell extends ListCell[LogEntry] {
@@ -166,7 +180,11 @@ class LogTextView(pathAsString: String
 
   }
 
-  def select(logEntry: LogEntry): Unit = listView.getSelectionModel.select(logEntry)
+  def select(logEntry: LogEntry): Unit = {
+    listView.getSelectionModel.select(logEntry)
+    val index = listView.getSelectionModel.getSelectedIndex - ((listView.getHeight / fixedCellSize) / 2).toInt
+    listView.scrollTo(index)
+  }
 
 }
 

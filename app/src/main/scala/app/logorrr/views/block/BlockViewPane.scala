@@ -31,7 +31,7 @@ class BlockViewPane[Elem <: BlockView.E]
     with HasBlockSizeProperty
     with CanLog {
 
-   override val blockSizeProperty: SimpleIntegerProperty = {
+  override val blockSizeProperty: SimpleIntegerProperty = {
     val p = new SimpleIntegerProperty()
     p.addListener(_ => repaint())
     p
@@ -45,7 +45,11 @@ class BlockViewPane[Elem <: BlockView.E]
   private val vbox = new VBox()
   private val repaintListener: ListChangeListener[Elem] = (_: ListChangeListener.Change[_ <: Elem]) => repaint()
 
-  val selectedElemProperty = new SimpleObjectProperty[Elem]()
+  val selectedElemProperty = {
+    val sp = new SimpleObjectProperty[Elem]()
+    sp
+  }
+
 
   private val entriesProperty = {
     val es = new SimpleListProperty[Elem](FXCollections.observableArrayList())
@@ -58,7 +62,6 @@ class BlockViewPane[Elem <: BlockView.E]
   def setEntries(es: ObservableList[Elem]): Unit = {
     entriesProperty.setValue(es)
   }
-
 
   widthProperty().addListener(JfxUtils.onNew[Number](_ => repaint()))
 
@@ -93,11 +96,11 @@ class BlockViewPane[Elem <: BlockView.E]
         val blockViews: Seq[BlockView[Elem]] = {
           // if virtual canvas height is lower than maxheight, just create one sqView and be done with it
           if (virtualHeight <= BlockImage.MaxHeight) {
-            val sqView = mkBlockView()
-            sqView.setWidth(getWidth.toInt)
-            sqView.setHeight(virtualHeight)
-            sqView.setEntries(entriesProperty)
-            Seq(sqView)
+            val blockView = mkBlockView()
+            blockView.setWidth(getWidth.toInt)
+            blockView.setHeight(virtualHeight)
+            blockView.setEntries(entriesProperty)
+            Seq(blockView)
           } else {
             // if the virtual canvas height exceeds SQImage.MaxHeight, iterate and create new SQViews
             val nrOfElemsInRow = (getWidth.toInt / blockSizeProperty.get()).toInt
@@ -125,7 +128,7 @@ class BlockViewPane[Elem <: BlockView.E]
         }
 
         vbox.getChildren.setAll(blockViews: _*)
-       // logTrace(s"Redraw ${blockViews.size} BlockViews")
+        // logTrace(s"Redraw ${blockViews.size} BlockViews")
         blockViews.foreach(_.repaint())
       } else {
         logWarn(s"Blocksize: ${getBlocksize()}, getWidth: ${getWidth} ")

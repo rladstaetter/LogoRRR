@@ -26,7 +26,14 @@ object LogFileSettings {
   val warning: Filter = new Filter("WARNING", Color.ORANGE.toString)
   val severe: Filter = new Filter("SEVERE", Color.RED.toString)
 
-  val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
+/*
+  val debug: Filter = new Filter("DEBUG", Color.GREY.toString)
+  val warn: Filter = new Filter("WARN", Color.ORANGE.toString)
+  val error: Filter = new Filter("ERROR", Color.RED.toString)
+*/
+
+  //val DefaultFilter: Seq[Filter] = Seq(debug,info,warn,error)
+   val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
 
   def apply(p: Path): LogFileSettings =
     LogFileSettings(p.toAbsolutePath.toString
