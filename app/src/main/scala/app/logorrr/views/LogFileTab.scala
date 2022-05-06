@@ -3,6 +3,7 @@ package app.logorrr.views
 import app.logorrr.conf.{BlockSettings, LogoRRRGlobals}
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util._
+import app.logorrr.views.text.LogTextView
 import app.logorrr.views.visual.LogVisualView
 import javafx.beans.binding.{Bindings, StringExpression}
 import javafx.beans.property.{SimpleListProperty, SimpleObjectProperty}

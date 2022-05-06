@@ -17,7 +17,7 @@ object LogEntryInstantFormat {
   implicit lazy val writer = deriveWriter[LogEntryInstantFormat]
 
   def parseInstant(line: String, entrySetting: LogEntryInstantFormat): Option[Instant] =
-    if (line.size >= entrySetting.dateTimeRange.end) {
+    if (line.length >= entrySetting.dateTimeRange.end) {
       Try {
         val dateTimeAsString = line.substring(entrySetting.dateTimeRange.start, entrySetting.dateTimeRange.end)
         val dtf: DateTimeFormatter = entrySetting.dateTimeFormatter
