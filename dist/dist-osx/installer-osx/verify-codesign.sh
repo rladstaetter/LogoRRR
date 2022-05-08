@@ -13,4 +13,4 @@ codesign -v -v target/temporary-app-image/LogoRRR.app
 
 # validate notarization
 # we currently create pkg's not dmg's, following command was left here for documentation
-# xcrun stapler validate target/unsigned-installer/LogoRRR-22.1.0.dmg
+# xcrun stapler validate target/unsigned-installer/LogoRRR-22.2.0.dmg

@@ -3,7 +3,7 @@
 LogoRRR is a simple utility to display a logfile and visualise certain classes of events. The main target audience are first or second level support engineers who need a tool to find patterns in log files.
 
 ## Screenshot
-![Screenshot of LogoRRR, version 22.1.0](docs/releases/22.1.0/screenshot-22.1.0.png?raw=true)
+![Screenshot of LogoRRR, version 22.2.0](docs/releases/22.2.0/screenshot-22.2.0.png?raw=true)
 
 ## Basic usage
 
@@ -19,7 +19,7 @@ See [Technology](Technology.md) for a short summary of used technologies.
 
 ## Installation 
 
-You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/21.4.0) from the releases page. There are installer for Windows and MacOs available.
+You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/22.1.0) from the releases page. There are installer for Windows and MacOs available.
 
 **Please note**: Because LogoRRR is not digitally signed you are going to see warnings when trying to download, install or start the application. This will not change until it is digitally signed. 
 
@@ -43,9 +43,12 @@ Of course, if you find this project useful, **please consider to donate to this 
 
 Alternatively, just hit the 'star' here on github, or drop me a line at twitter: [@logorrr](https://www.twitter.com/logorrr/). 
 
-A big shoutout goes to [@TheJeed](https://twitter.com/TheJeed) for sponsoring this project and boosting my motivation to continue working on it. Thank you!
+A big shoutout goes to @TheJeed and @raumzeitfalle for sponsoring this project and boosting my motivation to continue working on it. Thank you!
 
-I want to thank my employer [NEXTSENSE](https://www.nextsense-worldwide.com/) as well for generously providing vital infrastructure to create this application. 
+I want to thank my employer [NEXTSENSE](https://www.nextsense-worldwide.com/) as well for generously providing vital infrastructure to create this application.
+
+[Advanced Installer](https://www.advancedinstaller.com) sponsors this project too by providing a free license to their product which is used to create windows installers. Thank you.
+
 
 ## License
 

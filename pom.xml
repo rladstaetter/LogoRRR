@@ -10,7 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <revision>22.1.0</revision>
+        <revision>22.2.0</revision>
         <changelist>-SNAPSHOT</changelist>
 
         <scala.major.version>2.13</scala.major.version>
