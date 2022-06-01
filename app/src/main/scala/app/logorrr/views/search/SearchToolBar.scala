@@ -1,5 +1,6 @@
-package app.logorrr.views
+package app.logorrr.views.search
 
+import app.logorrr.views.Filter
 import app.logorrr.views.block.ColorUtil
 import javafx.scene.control._
 import javafx.scene.input.{KeyCode, KeyEvent}

@@ -2,7 +2,7 @@ package app.logorrr.views.text
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{ClipBoardUtils, JfxUtils, LogoRRRFonts}
+import app.logorrr.util.{ClipBoardUtils, JfxUtils}
 import javafx.collections.transformation.FilteredList
 import javafx.geometry.Pos
 import javafx.scene.control._
@@ -10,17 +10,22 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
 
 import java.time.Instant
+import scala.jdk.CollectionConverters._
 import scala.language.postfixOps
 
+
 object LogTextView {
+
 
   val timeBarColor = Color.BISQUE.darker()
   val timeBarOverflowColor = timeBarColor.darker()
 
-  class LogEntryElement(e: LogEntry
-                        , maxLength: Int
-                        , timings: Map[Int, Instant]
-                       ) extends BorderPane {
+
+  class LineNumberLogEntry(pathAsString: String
+                           , e: LogEntry
+                           , maxLength: Int
+                           , timings: Map[Int, Instant]
+                          ) extends BorderPane {
 
     /*
         val hBox = new HBox()
@@ -60,7 +65,7 @@ object LogTextView {
       l
     }
     private val label1: LineNumberLabel = LineNumberLabel(e.lineNumber, maxLength)
-    BorderPane.setAlignment(label1,Pos.CENTER)
+    BorderPane.setAlignment(label1, Pos.CENTER)
 
     setLeft(label1)
     setCenter(label)
@@ -89,14 +94,10 @@ class LogTextView(pathAsString: String
     lv.getSelectionModel.select(i)
     lv
   }
-  listView.heightProperty().addListener(JfxUtils.onNew((s: Number) => {
-    // println("jo " + s.doubleValue())
-  }))
-  listView.heightProperty().addListener(JfxUtils.onNew((n: Number) => {
-    // println("jasdfo" + n.doubleValue() / 26.0)
-  }))
+  //listView.heightProperty().addListener(JfxUtils.onNew((s: Number) => {}))
+  // listView.heightProperty().addListener(JfxUtils.onNew((n: Number) => {  }))
   listView.setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
-  listView.setFixedCellSize(fixedCellSize)
+  //  listView.setFixedCellSize(fixedCellSize)
 
   LogoRRRGlobals.getLogFileSettings(pathAsString).selectedIndexProperty.addListener(JfxUtils.onNew((n: Number) => {
     Option(listView.getItems.filtered((t: LogEntry) => t.lineNumber == n.intValue()).get(0)) match {
@@ -110,12 +111,11 @@ class LogTextView(pathAsString: String
 
   }))
 
-
   setCenter(listView)
 
   class LogEntryListCell extends ListCell[LogEntry] {
-
-    setStyle(LogoRRRFonts.jetBrainsMono(12))
+    styleProperty().bind(LogoRRRGlobals.getLogFileSettings(pathAsString).fontStyle)
+    //setStyle(LogoRRRFonts.jetBrainsMono(LogTextView.fontSize))
     setGraphic(null)
     val cm = new ContextMenu()
     val copyCurrentToClipboard = new MenuItem("copy text to clipboard")
@@ -127,7 +127,12 @@ class LogTextView(pathAsString: String
       Option(t) match {
         case Some(e) =>
           setText(null)
-          setGraphic(new LogTextView.LogEntryElement(e, maxLength, timings))
+          val filters = LogoRRRGlobals.getLogFileSettings(pathAsString).filtersProperty.get().asScala.toSeq
+          val entry = LogoRRRLogEntry(e, maxLength, filters)
+          entry.lineNumberLabel.styleProperty().bind(LogoRRRGlobals.getLogFileSettings(pathAsString).fontStyle)
+          entry.res.foreach(l => l.styleProperty().bind(LogoRRRGlobals.getLogFileSettings(pathAsString).fontStyle))
+          setGraphic(entry)
+          //setGraphic(new LogTextView.LineNumberLogEntry(e, maxLength, timings))
           copyCurrentToClipboard.setOnAction(_ => ClipBoardUtils.copyToClipboardText(e.value))
           setContextMenu(cm)
         case None =>
@@ -138,13 +143,13 @@ class LogTextView(pathAsString: String
     }
 
   }
-
-  def select(logEntry: LogEntry): Unit = {
-    listView.getSelectionModel.select(logEntry)
-    val index = listView.getSelectionModel.getSelectedIndex - ((listView.getHeight / fixedCellSize) / 2).toInt
-    listView.scrollTo(index)
-  }
-
+  /*
+    def select(logEntry: LogEntry): Unit = {
+      listView.getSelectionModel.select(logEntry)
+      val index = listView.getSelectionModel.getSelectedIndex - ((listView.getHeight / fixedCellSize) / 2).toInt
+      listView.scrollTo(index)
+    }
+  */
 }
 
 

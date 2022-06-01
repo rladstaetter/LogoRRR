@@ -2,6 +2,7 @@ package app.logorrr.views
 
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
+import app.logorrr.views.search.SearchTag
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
@@ -68,7 +69,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
   private def updateUnclassified(): Unit = {
     val unclassified = new UnclassifiedFilter(filterButtons.keySet)
     updateOccurrences(unclassified)
-    val searchTag = SearchTag(unclassified, occurrences, totalSize, updateActiveFilter, removeFilter)
+    val searchTag = search.SearchTag(unclassified, occurrences, totalSize, updateActiveFilter, removeFilter)
     someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
     getItems.add(0, searchTag)
     someUnclassifiedFilter = Option((unclassified, searchTag))
@@ -89,7 +90,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
 
   private def addSearchTag(filter: Filter): Unit = {
     updateOccurrences(filter)
-    val searchTag = SearchTag(filter, occurrences, totalSize, updateActiveFilter, removeFilter)
+    val searchTag = search.SearchTag(filter, occurrences, totalSize, updateActiveFilter, removeFilter)
     getItems.add(searchTag)
     filterButtons = filterButtons + (filter -> searchTag)
   }

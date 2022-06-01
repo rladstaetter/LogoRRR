@@ -1,5 +1,6 @@
-package app.logorrr.views
+package app.logorrr.views.search
 
+import app.logorrr.views.{Filter, FiltersToolBar}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.scene.control.{Button, ToggleButton}
 import javafx.scene.layout.HBox

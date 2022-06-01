@@ -3,6 +3,7 @@ package app.logorrr.views
 import app.logorrr.conf.{BlockSettings, LogoRRRGlobals}
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util._
+import app.logorrr.views.search.SearchToolBar
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.visual.LogVisualView
 import javafx.beans.binding.{Bindings, StringExpression}
@@ -52,10 +53,11 @@ object LogFileTab {
 class LogFileTab(val pathAsString: String
                  , val logEntries: ObservableList[LogEntry])
   extends Tab
-    with LogTailer
     with CanLog {
 
-  def repaint() = logVisualView.repaint()
+  val logoRRRTailer = LogoRRRTailer(pathAsString, logEntries)
+
+  def repaint(): Unit = logVisualView.repaint()
 
   /** contains time information for first and last entry for given log file */
   lazy val someTimeRange: Option[LogFileTab.TimeRange] =
@@ -71,7 +73,6 @@ class LogFileTab(val pathAsString: String
       }
     }
 
-  val tailer = new Tailer(Paths.get(pathAsString).toFile, new LogEntryListener(logEntries), 1000, true)
 
   /** list of search filters to be applied */
   val filtersListProperty = new SimpleListProperty[Filter](CollectionUtils.mkEmptyObservableList())
@@ -94,13 +95,13 @@ class LogFileTab(val pathAsString: String
   val settingsToolBar = new SettingsToolBar(pathAsString)
 
   val opsBorderPane: OpsBorderPane = {
-    val op = new OpsBorderPane(searchToolBar, filtersToolBar, settingsToolBar)
+    val op = new OpsBorderPane(pathAsString,searchToolBar, filtersToolBar, settingsToolBar)
     op.blockSizeProperty.set(LogoRRRGlobals.getLogFileSettings(pathAsString).blockWidthSettingsProperty.get())
+    op.fontSizeProperty.set(LogoRRRGlobals.getLogFileSettings(pathAsString).fontSizeProperty.get())
     op
   }
 
   val initialWidth = (Bindings.multiply(LogoRRRGlobals.settings.stageSettings.widthProperty, LogoRRRGlobals.getLogFileSettings(pathAsString).dividerPositionProperty))
-  //val initialWidth = (sceneWidth * initialLogFileSettings.dividerPosition).toInt
 
   private lazy val logVisualView = {
     val lvv = new LogVisualView(pathAsString, filteredList, initialWidth.intValue())
@@ -159,6 +160,7 @@ class LogFileTab(val pathAsString: String
     setContent(borderPane)
 
     logVisualView.blockViewPane.blockSizeProperty.bind(opsBorderPane.blockSizeProperty)
+    logTextView
     logVisualView.blockViewPane.blockSizeProperty.addListener(JfxUtils.onNew[Number](n => {
       LogoRRRGlobals.setBlockSettings(pathAsString, BlockSettings(n.intValue()))
     }))
@@ -193,7 +195,7 @@ class LogFileTab(val pathAsString: String
       t1: Number => LogoRRRGlobals.setDividerPosition(pathAsString, t1.doubleValue())
     })
 
-    startTailer()
+    logoRRRTailer.start()
 
     setDivider(LogoRRRGlobals.getLogFileSettings(pathAsString).dividerPositionProperty.get())
     initFiltersPropertyListChangeListener()
@@ -218,7 +220,7 @@ class LogFileTab(val pathAsString: String
 
   def shutdown(): Unit = {
     LogoRRRGlobals.removeLogFile(pathAsString)
-    stopTailer()
+    logoRRRTailer.stop()
   }
 
   def updateFooter(logEntry: LogEntry): Unit = {

@@ -1,8 +1,9 @@
 package app.logorrr.util
 
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.LogEntry
+import app.logorrr.views.Filter
 import javafx.collections.ObservableList
-import javafx.scene.paint.Color
 import org.apache.commons.io.input.{Tailer, TailerListener}
 
 /**
@@ -12,7 +13,8 @@ import org.apache.commons.io.input.{Tailer, TailerListener}
  *
  * @param ol list containing current entries
  */
-class LogEntryListener(ol: ObservableList[LogEntry])
+class LogEntryListener(pathAsString: String
+                       , ol: ObservableList[LogEntry])
   extends TailerListener with CanLog {
 
   var currentCnt = ol.size()
@@ -21,7 +23,8 @@ class LogEntryListener(ol: ObservableList[LogEntry])
 
   override def handle(l: String): Unit = {
     currentCnt = currentCnt + 1
-    val e = LogEntry(currentCnt, Color.BLUE, l, None)
+    val filters = LogoRRRGlobals.getLogFileSettings(pathAsString).getFilters()
+    val e = LogEntry(currentCnt, Filter.calcColor(l, filters), l, None)
     JfxUtils.execOnUiThread(ol.add(e))
   }
 

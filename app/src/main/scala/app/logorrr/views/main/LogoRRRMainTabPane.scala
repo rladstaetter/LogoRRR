@@ -1,7 +1,8 @@
-package app.logorrr.views
+package app.logorrr.views.main
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.views.LogFileTab
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.control.{Tab, TabPane}
 

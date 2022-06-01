@@ -40,7 +40,8 @@ object LogFileSettingsSpec {
     leif <- LogEntryInstantFormatSpec.gen
     someLogEntryInstantFormat <- Gen.oneOf(None, Option(leif))
     blockSettings <- BlockSettingsSpec.gen
-  } yield LogFileSettings(pathAsString, selectedIndex, firstOpened, dPos, filters, blockSettings, someLogEntryInstantFormat)
+    fontSize <- Gen.posNum[Int]
+  } yield LogFileSettings(pathAsString, selectedIndex, firstOpened, dPos, fontSize, filters, blockSettings, someLogEntryInstantFormat)
 }
 
 

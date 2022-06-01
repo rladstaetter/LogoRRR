@@ -34,12 +34,14 @@ object LogFileSettings {
 
   //val DefaultFilter: Seq[Filter] = Seq(debug,info,warn,error)
   val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
+  val DefaultFontSize = 12
 
   def apply(p: Path): LogFileSettings =
     LogFileSettings(p.toAbsolutePath.toString
       , DefaultSelectedIndex
       , Instant.now().toEpochMilli
       , DefaultDividerPosition
+      , DefaultFontSize
       , DefaultFilter
       , DefaultBlockSettings
       , DefaultLogFormat)
@@ -63,6 +65,7 @@ case class LogFileSettings(pathAsString: String
                            , selectedIndex: Int
                            , firstOpened: Long
                            , dividerPosition: Double
+                           , fontSize: Int
                            , filters: Seq[Filter]
                            , blockSettings: BlockSettings
                            , someLogEntrySetting: Option[LogEntryInstantFormat]) extends CanLog {
@@ -86,7 +89,7 @@ case class LogFileSettings(pathAsString: String
           FXCollections.observableArrayList()
       }
     } else {
-      logWarn(s"Could not read ${pathAsString} - does it exist?")
+      logWarn(s"Could not read $pathAsString - does it exist?")
       FXCollections.observableArrayList()
     }
   }

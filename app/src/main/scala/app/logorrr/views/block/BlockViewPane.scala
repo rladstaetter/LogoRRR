@@ -84,15 +84,15 @@ class BlockViewPane[Elem <: BlockView.E]
 
       val virtualHeight: Int =
         BlockView.calcVirtualHeight(
-          getBlocksize()
-          , getBlocksize()
+          getBlockSize()
+          , getBlockSize()
           , getWidth.toInt
           , getEntriesSize())
       /*
         assert(getBlockSize() > 0)
         assert(getWidth.toInt > 0, getWidth)
         */
-      if (getBlocksize() > 0 && getWidth.toInt > 0) {
+      if (getBlockSize() > 0 && getWidth.toInt > 0) {
         val blockViews: Seq[BlockView[Elem]] = {
           // if virtual canvas height is lower than maxheight, just create one sqView and be done with it
           if (virtualHeight <= BlockImage.MaxHeight) {
@@ -119,7 +119,7 @@ class BlockViewPane[Elem <: BlockView.E]
               }
               val blockViewEntries = entriesProperty.subList(curIndex, end)
               v.setEntries(blockViewEntries)
-              v.setHeight(BlockView.calcVirtualHeight(getBlocksize(), getBlocksize(), getWidth.toInt, blockViewEntries.size))
+              v.setHeight(BlockView.calcVirtualHeight(getBlockSize(), getBlockSize(), getWidth.toInt, blockViewEntries.size))
               lb.addOne(v)
               curIndex = curIndex + nrElemsInSqView
             }
@@ -131,7 +131,7 @@ class BlockViewPane[Elem <: BlockView.E]
         // logTrace(s"Redraw ${blockViews.size} BlockViews")
         blockViews.foreach(_.repaint())
       } else {
-        logWarn(s"Blocksize: ${getBlocksize()}, getWidth: ${getWidth} ")
+        logWarn(s"Blocksize: ${getBlockSize()}, getWidth: ${getWidth} ")
       }
     } else {
       logTrace("invisible ...")

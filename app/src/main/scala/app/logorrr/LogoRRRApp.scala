@@ -17,9 +17,6 @@ object LogoRRRApp {
 
 class LogoRRRApp extends javafx.application.Application with CanLog {
 
-  /**
-   * will be called by the java bootstrapper
-   */
   def start(stage: Stage): Unit = {
     val settings: Settings = SettingsIO.fromFile()
     LogoRRRGlobals.set(settings, getHostServices)
