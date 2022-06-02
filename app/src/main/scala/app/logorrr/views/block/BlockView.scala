@@ -75,7 +75,7 @@ class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
       val index = BlockView.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get)
       getEntryAt(index) match {
         case Some(value) => selectedEntryProperty.set(value)
-        case None => println("no element found")
+        case None => System.err.println("no element found")
       }
     }
   }

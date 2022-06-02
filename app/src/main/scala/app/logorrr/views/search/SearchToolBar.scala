@@ -22,10 +22,12 @@ object SearchOp {
                      , addFilterFn: Filter => Unit) extends Button("search") {
 
     setOnAction(_ => {
-      val filter = new Filter(searchTextField.getText, colorPicker.getValue.toString)
-      colorPicker.setValue(ColorUtil.randColor)
-      searchTextField.clear()
-      addFilterFn(filter)
+      if (searchTextField.getText.nonEmpty) {
+        val filter = new Filter(searchTextField.getText, colorPicker.getValue.toString)
+        colorPicker.setValue(ColorUtil.randColor)
+        searchTextField.clear()
+        addFilterFn(filter)
+      }
     })
 
   }

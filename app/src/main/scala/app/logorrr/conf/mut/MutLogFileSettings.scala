@@ -44,11 +44,7 @@ class MutLogFileSettings extends Petrify[LogFileSettings] {
 
   val fontStyle: ObservableValue[_ <: String] = new StringBinding {
     bind(fontSizeProperty)
-    override def computeValue(): String = {
-      val r = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
-      println(r)
-      r
-    }
+    override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
   }
 
   def getSelectedIndex = selectedIndexProperty.get()
