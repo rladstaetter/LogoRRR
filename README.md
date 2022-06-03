@@ -32,7 +32,7 @@ You can give it a try by downloading a [prebuilt installer for LogoRRR](https://
 
 ## Sponsoring
 
-Of course, if you find this project useful, **please consider to donate to this project.** For this reason I've set up a page at [buymeacoffee](https://www.buymeacoffee.com/rladstaetter).
+If you find this project useful you can [buymeacoffee](https://www.buymeacoffee.com/rladstaetter).
 
 Alternatively, just hit the 'star' here on github, or drop me a line at twitter: [@logorrr](https://www.twitter.com/logorrr/). 
 
