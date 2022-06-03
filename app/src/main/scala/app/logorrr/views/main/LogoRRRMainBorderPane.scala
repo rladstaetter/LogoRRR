@@ -7,7 +7,7 @@ import app.logorrr.views.LogFileTab
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
 
-import java.nio.file.Files
+import java.nio.file.{Files, Path}
 import scala.jdk.CollectionConverters.ListHasAsScala
 
 
@@ -16,7 +16,7 @@ import scala.jdk.CollectionConverters.ListHasAsScala
  *
  * @param initialSquareWidth width of squares to paint in visual view
  */
-class LogoRRRMainBorderPane  extends BorderPane with CanLog {
+class LogoRRRMainBorderPane extends BorderPane with CanLog {
 
   val logViewTabPane = new LogoRRRMainTabPane()
 
@@ -34,29 +34,35 @@ class LogoRRRMainBorderPane  extends BorderPane with CanLog {
     setOnDragDropped((event: DragEvent) => {
       for (f <- event.getDragboard.getFiles.asScala) {
         val path = f.toPath
-        val pathAsString = path.toAbsolutePath.toString
-        if (Files.exists(path)) {
-          if (!contains(pathAsString)) {
-            val logFileSettings = LogFileSettings(path)
-            LogoRRRGlobals.updateLogFile(logFileSettings)
-            addLogFileTab(LogFileTab(logFileSettings.pathAsString, logFileSettings.readEntries()))
-            selectLog(pathAsString)
-          } else {
-            logWarn(s"$pathAsString is already opened ...")
-          }
-        } else {
-          logWarn(s"$pathAsString does not exist.")
-        }
+        if (Files.isDirectory(path)) {
+          Files.list(path).filter((p: Path) => Files.isRegularFile(p)).forEach((t: Path) => dropLogFile(t))
+        } else dropLogFile(path)
       }
     })
 
     logViewTabPane.init()
   }
 
+  private def dropLogFile(path: Path): Unit = {
+    val pathAsString = path.toAbsolutePath.toString
+    if (Files.exists(path)) {
+      if (!contains(pathAsString)) {
+        val logFileSettings = LogFileSettings(path)
+        LogoRRRGlobals.updateLogFile(logFileSettings)
+        addLogFileTab(LogFileTab(logFileSettings.pathAsString, logFileSettings.readEntries()))
+        selectLog(pathAsString)
+      } else {
+        logWarn(s"$pathAsString is already opened ...")
+      }
+    } else {
+      logWarn(s"$pathAsString does not exist.")
+    }
+  }
+
   def shutdown(): Unit = logViewTabPane.shutdown()
 
   /** Adds a new logfile to display */
-  def addLogFileTab(tab : LogFileTab): Unit = logViewTabPane.add(tab)
+  def addLogFileTab(tab: LogFileTab): Unit = logViewTabPane.add(tab)
 
   def selectLog(path: String): Unit = logViewTabPane.selectLog(path)
 
