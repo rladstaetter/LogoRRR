@@ -1,17 +1,15 @@
 # LogoRRR
 
-LogoRRR is a simple utility to display a logfile and visualise certain classes of events. The main target audience are first or second level support engineers who need a tool to find patterns in log files.
-
-## Screenshot
 ![Screenshot of LogoRRR, version 22.2.0](docs/releases/22.2.0/screenshot-22.2.0.png?raw=true)
 
-## Basic usage
+LogoRRR is a simple utility to display a logfile and visualise certain classes of events. The main target audience are first or second level support engineers who need a tool to find patterns in log files.
+
 
 ![Shows basic functionality of LogoRRR as animated gif](docs/releases/21.3.1/screencast-21.3.1.gif?raw=true)
 
 For example, ERROR events are visualized as red rectangles, TRACE events as grey rectangles, INFO events as green ones etc. 
 
-You can start LogoRRR via double click from the desktop. Add a log file simply via drag'n drop.
+You can start LogoRRR via double click from the desktop. Add a log file or directories containg log files via drag'n drop or using the file menu.
 
 ## Technology
 
@@ -20,10 +18,6 @@ See [Technology](Technology.md) for a short summary of used technologies.
 ## Installation 
 
 You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/22.1.0) from the releases page. There are installer for Windows and MacOs available.
-
-**Please note**: Because LogoRRR is not digitally signed you are going to see warnings when trying to download, install or start the application. This will not change until it is digitally signed. 
-
-This situation will be better when there is an installation via [windows app store](https://github.com/rladstaetter/LogoRRR/issues/29) and [apple app store](https://github.com/rladstaetter/LogoRRR/issues/30) are available. 
 
 
 ## Features
@@ -35,7 +29,6 @@ This situation will be better when there is an installation via [windows app sto
 - Unix `tail -f` like functionality to watch ongoing events
 - Windows Installer 
 - MacOs installer
-
 
 ## Sponsoring
 
@@ -54,6 +47,3 @@ I want to thank my employer [NEXTSENSE](https://www.nextsense-worldwide.com/) as
 
 This software is licensed under Apache-2 License.
 
-## Development information
-
-If you want to build LogoRRR from source code read this document: [Build instructions](BuildInstructions.md)

@@ -30,3 +30,11 @@ The MacOs Installer is built via [jpackage](https://docs.oracle.com/en/java/java
 ## Misc
 
 Some helper tools are being implemented to help create the releases or creating screenshots and the application icons, all implemented in Scala.
+
+**Please note**: Because LogoRRR is not digitally signed you are going to see warnings when trying to download, install or start the application. This will not change until it is digitally signed.
+
+This situation will be better when there is an installation via [windows app store](https://github.com/rladstaetter/LogoRRR/issues/29) and [apple app store](https://github.com/rladstaetter/LogoRRR/issues/30) are available. 
+
+## Development information
+
+If you want to build LogoRRR from source code read this document: [Build instructions](BuildInstructions.md)
