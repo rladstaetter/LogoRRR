@@ -1,6 +1,6 @@
 package app.logorrr.views.block
 
-import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.util.{CanLog, ColorUtil, JfxUtils}
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.FXCollections

@@ -1,10 +1,13 @@
-package app.logorrr.views.block
+package app.logorrr.util
 
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 
 import scala.util.Random
 
+/**
+ * Utility to manage some operations dealing with color
+ */
 object ColorUtil {
 
   def mkR(width: Int, height: Int, color: Color = ColorUtil.randColor): Rectangle = {
@@ -24,11 +27,6 @@ object ColorUtil {
     , Random.nextDouble()
     , Random.nextDouble()
   )
-
-  def mkPixelArray(squareWidth: Int, color: Color): Array[Int] = {
-    val fillColor = ColorUtil.colVal(color)
-    Array.fill(squareWidth * squareWidth)(fillColor)
-  }
 
   /**
    * converts a javafx Color to an int suitable to put into an PixelBuffer Int Array

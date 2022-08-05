@@ -11,19 +11,7 @@ import javafx.scene.paint.Color
 
 import scala.collection.mutable.ListBuffer
 
-class RectButton(width: Int
-                 , height: Int
-                 , color: Color
-                 , eventHandler: EventHandler[ActionEvent]) extends Button {
-  setGraphic(ColorUtil.mkR(width, height, color))
-  // setPadding(new Insets(0, 0, 0, 0))
-  setOnAction(eventHandler)
-  setOnKeyPressed((event: KeyEvent) => {
-    if (event.getCode == KeyCode.ENTER) {
-      fire()
-    }
-  })
-}
+
 
 
 class BlockViewPane[Elem <: BlockView.E]
@@ -75,7 +63,6 @@ class BlockViewPane[Elem <: BlockView.E]
 
   def repaint(): Unit = {
     if (isVisible) {
-      logTrace("visible ...")
       // unbind old listeners or we have a memory problem
       vbox.getChildren.forEach {
         case c: BlockView[Elem] => c.unbind()
