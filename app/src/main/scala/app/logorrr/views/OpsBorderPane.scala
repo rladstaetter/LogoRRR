@@ -3,6 +3,7 @@ package app.logorrr.views
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.views.block.{HasBlockSizeProperty, RectButton}
 import app.logorrr.views.search.SearchToolBar
+import app.logorrr.views.text.TextSizeButton
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.geometry.Pos
 import javafx.scene.control.{Control, ToolBar}
@@ -24,7 +25,11 @@ class OpsBorderPane(pathAsString: String
 
   def getFontSize(): Int = LogoRRRGlobals.getLogFileSettings(pathAsString).getFontSize()
 
-  val stepSize = 4
+  /** increment/decrement block size */
+  val blockSizeStep = 4
+
+  /** increment / decrement font size */
+  val fontSizeStep = 2
 
   // bound to global var
   override val blockSizeProperty: SimpleIntegerProperty = new SimpleIntegerProperty()
@@ -32,23 +37,36 @@ class OpsBorderPane(pathAsString: String
   val fontSizeProperty: SimpleIntegerProperty = new SimpleIntegerProperty()
 
   val items: Seq[Control] = {
-    val smallerBtn =
-      new RectButton(2 * stepSize, 2 * stepSize, Color.GRAY,
+    val smallerRectBtn =
+      new RectButton(2 * blockSizeStep, 2 * blockSizeStep, Color.GRAY,
         _ => {
-          if (getBlockSize() - stepSize > 0) {
-            setBlockSize(getBlockSize() - stepSize)
-            setFontSize(getFontSize() - stepSize)
+          if (getBlockSize() - blockSizeStep > 0) {
+            setBlockSize(getBlockSize() - blockSizeStep)
           }
         })
-    val biggerBtn =
-      new RectButton(3 * stepSize, 3 * stepSize, Color.GRAY
+    val biggerRectBtn =
+      new RectButton(3 * blockSizeStep, 3 * blockSizeStep, Color.GRAY
         , _ => {
-          if (getBlockSize() + stepSize < 10 * stepSize) {
-            setBlockSize(getBlockSize() + stepSize)
-            setFontSize(getFontSize() + stepSize)
+          if (getBlockSize() + blockSizeStep < 10 * blockSizeStep) {
+            setBlockSize(getBlockSize() + blockSizeStep)
           }
         })
-    Seq(smallerBtn, biggerBtn)
+    val smallerTextBtn =
+      new TextSizeButton(6,
+        _ => {
+          if (getFontSize() - fontSizeStep > 0) {
+            setFontSize(getFontSize() - fontSizeStep)
+          }
+        })
+    val biggerTextBtn =
+      new TextSizeButton(9,
+        _ => {
+          if (getFontSize() + fontSizeStep < 10 * fontSizeStep) {
+            setFontSize(getFontSize() + fontSizeStep)
+          }
+        })
+
+    Seq(smallerRectBtn, biggerRectBtn, smallerTextBtn, biggerTextBtn)
   }
 
   private val box = new ToolBar(items: _*)
