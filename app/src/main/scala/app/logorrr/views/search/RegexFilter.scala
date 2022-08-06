@@ -14,7 +14,7 @@ class RegexMatcher(pattern: String, colorString: String) extends LMatcher {
 
   override def applyMatch(searchTerm: String): Boolean = {
     val r = compiledPattern.matcher(searchTerm).find()
-    println(r + " " + pattern + " " + searchTerm)
+    // println(r + " " + pattern + " " + searchTerm)
     r
   }
 }
