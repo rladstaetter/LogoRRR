@@ -1,29 +1,63 @@
 package app.logorrr.views.search
 
-import app.logorrr.util.ColorUtil
-import app.logorrr.views.Filter
+import app.logorrr.util.{ColorUtil, OsUtil}
+import javafx.beans.binding.StringBinding
 import javafx.scene.control._
 import javafx.scene.input.{KeyCode, KeyEvent}
 
-object SearchOp {
+import scala.jdk.CollectionConverters._
 
+/**
+ * Groups search ui widgets together.
+ *
+ * @param addFilterFn filter function which results from user interaction with SearchToolbar
+ */
+class SearchToolBar(addFilterFn: Filter => Unit) extends ToolBar {
 
-  class SearchColorPicker extends ColorPicker {
-    setValue(ColorUtil.randColor)
+  /** expose for key accelerator */
+  val searchTextField = {
+    val stf = new SearchTextField
+    stf.setTooltip(new Tooltip(s"enter search pattern\n\nshortcut: ${OsUtil.osFun("CTRL-F", "COMMAND-F")}"))
+    stf
+  }
+  private val colorPicker = {
+    val scp = new SearchColorPicker()
+    scp.setTooltip(new Tooltip("choose color"))
+    scp
   }
 
-  class SearchTextField extends TextField {
-    setPrefWidth(200)
-    setPromptText("<enter search string>")
+  /** expose for key accelerator */
+  val regexToggleButton = {
+    val sartb = new SearchActivateRegexToggleButton()
+    sartb.setTooltip(new Tooltip(
+      s"""activate regular expression search
+         |
+         |shortcut: ${OsUtil.osFun("CTRL-R", "COMMAND-R")}""".stripMargin))
+    sartb
   }
 
-  class SearchWidget(searchTextField: SearchTextField
-                     , colorPicker: ColorPicker
-                     , addFilterFn: Filter => Unit) extends Button("search") {
+  searchTextField.promptTextProperty().bind(new StringBinding {
+    bind(regexToggleButton.selectedProperty())
+
+    override def computeValue(): String =
+      if (regexToggleButton.isSelected) {
+        "<enter regex search string>"
+      } else {
+        "<enter search string>"
+      }
+  })
+
+
+  class SearchButton extends Button("search") {
 
     setOnAction(_ => {
       if (searchTextField.getText.nonEmpty) {
-        val filter = new Filter(searchTextField.getText, colorPicker.getValue.toString)
+        val filter =
+          if (regexToggleButton.isSelected) {
+            new RegexFilter(searchTextField.getText, colorPicker.getValue.toString)
+          } else {
+            new Filter(searchTextField.getText, colorPicker.getValue.toString)
+          }
         colorPicker.setValue(ColorUtil.randColor)
         searchTextField.clear()
         addFilterFn(filter)
@@ -32,33 +66,23 @@ object SearchOp {
 
   }
 
-}
+  private val searchButton = new SearchButton()
 
-
-case class SearchOp(addFilterFn: Filter => Unit) {
-  val searchTextField = new SearchOp.SearchTextField
-  val colorPicker = new SearchOp.SearchColorPicker()
-  val searchWidget = new SearchOp.SearchWidget(searchTextField, colorPicker, addFilterFn)
 
   // if 'ENTER' is pressed when focus is in searchField, execute a search right away.
   // I would prefer to instantiate an accelerator here as well, but there is a NPE if we do it in the constructor.
   // Because of that LogoRRRAccelerators class exists. On the other hand it is ok to have a central place to define
   // global shortcuts.
-  searchTextField.setOnKeyPressed((event: KeyEvent) => {
+  searchTextField.setOnKeyPressed(execSearchOnHitEnter)
+  regexToggleButton.setOnKeyPressed(execSearchOnHitEnter)
+  colorPicker.setOnKeyPressed(execSearchOnHitEnter)
+
+  def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {
-      searchWidget.fire()
+      searchButton.fire()
     }
-  })
+  }
 
-  val items = Seq(searchTextField, colorPicker, searchWidget)
-}
+  getItems.addAll(Seq(searchTextField, regexToggleButton, colorPicker, searchButton).asJava)
 
-
-class SearchToolBar(addFilterFn: Filter => Unit) extends ToolBar {
-
-  val searchOp = SearchOp(addFilterFn)
-  /** expose for key accelerator */
-  val searchTextField: SearchOp.SearchTextField = searchOp.searchTextField
-
-  getItems.addAll(searchOp.items: _*)
 }

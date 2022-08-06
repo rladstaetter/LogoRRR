@@ -2,7 +2,7 @@ package app.logorrr.views
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.views.block.{HasBlockSizeProperty, RectButton}
-import app.logorrr.views.search.SearchToolBar
+import app.logorrr.views.search.{FiltersToolBar, SearchToolBar}
 import app.logorrr.views.text.TextSizeButton
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.geometry.Pos

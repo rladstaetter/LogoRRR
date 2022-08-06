@@ -1,7 +1,8 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
-import app.logorrr.views.{Filter, SimpleRange}
+import app.logorrr.views.SimpleRange
+import app.logorrr.views.search.Filter
 import org.scalacheck.Gen
 
 import scala.util.Random

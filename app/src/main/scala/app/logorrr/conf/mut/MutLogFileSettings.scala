@@ -3,7 +3,7 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.BlockSettings
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.util.LogoRRRFonts
-import app.logorrr.views.Filter
+import app.logorrr.views.search.Filter
 import javafx.beans.binding.StringBinding
 import javafx.beans.property._
 import javafx.beans.value.ObservableValue
@@ -32,7 +32,6 @@ class MutLogFileSettings extends Petrify[LogFileSettings] {
 
   def getFilters() = filtersProperty.asScala.toSeq
 
-
   private val pathAsStringProperty = new SimpleStringProperty()
   private val firstOpenedProperty = new SimpleLongProperty()
   val selectedIndexProperty = new SimpleIntegerProperty()
@@ -46,8 +45,6 @@ class MutLogFileSettings extends Petrify[LogFileSettings] {
     bind(fontSizeProperty)
     override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
   }
-
-  def getSelectedIndex = selectedIndexProperty.get()
 
   def setBlockSettings(bs: BlockSettings): Unit = blockWidthSettingsProperty.set(bs.width)
 

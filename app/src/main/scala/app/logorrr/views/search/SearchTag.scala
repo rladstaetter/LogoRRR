@@ -1,8 +1,7 @@
 package app.logorrr.views.search
 
-import app.logorrr.views.{Filter, FiltersToolBar}
 import javafx.beans.{InvalidationListener, Observable}
-import javafx.scene.control.{Button, ToggleButton}
+import javafx.scene.control.{Button, ToggleButton, Tooltip}
 import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
@@ -16,9 +15,8 @@ object SearchTag {
             , updateActiveFilter: () => Unit
             , removeFilter: Filter => Unit): SearchTag = {
     val i = occurrences(filter)
-    val buttonTitle = filter.searchTerm + ": " + i + " " + FiltersToolBar.percentAsString(i, totalSize)
+    val buttonTitle = s"${filter.pattern}: $i ${FiltersToolBar.percentAsString(i, totalSize)}"
     val button = new ToggleButton(buttonTitle)
-
     val r = new Rectangle(10, 10)
     r.setFill(filter.color)
     r.setStroke(Color.WHITE)

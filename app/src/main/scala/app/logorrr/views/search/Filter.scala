@@ -1,6 +1,6 @@
-package app.logorrr.views
+package app.logorrr.views.search
 
-import app.logorrr.views.Filter.LMatcher
+import app.logorrr.views.search.Filter.LMatcher
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
@@ -66,15 +66,15 @@ object Filter {
  *
  * The idea is to encode each search term with a color such that one can immediately spot an occurence in the views.
  *
- * @param searchTerm text to search for
+ * @param pattern text to search for
  * @param colorString associated color
  */
 // TODO write encoder for pureconfig for color
-class Filter(val searchTerm: String
+class Filter(val pattern: String
              , val colorString: String) extends Fltr {
 
   val color: Color = Color.web(colorString)
 
-  val matcher: LMatcher = Filter.CaseInsensitiveTextMatcher(searchTerm, color)
+  val matcher: LMatcher = Filter.CaseInsensitiveTextMatcher(pattern, color)
 
 }
