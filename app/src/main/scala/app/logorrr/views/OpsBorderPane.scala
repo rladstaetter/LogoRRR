@@ -6,7 +6,7 @@ import app.logorrr.views.search.SearchToolBar
 import app.logorrr.views.text.TextSizeButton
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.geometry.Pos
-import javafx.scene.control.{Control, ToolBar}
+import javafx.scene.control.{Control, ToolBar, Tooltip}
 import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
 
@@ -44,6 +44,7 @@ class OpsBorderPane(pathAsString: String
             setBlockSize(getBlockSize() - blockSizeStep)
           }
         })
+    smallerRectBtn.setTooltip(new Tooltip("decrease block size"))
     val biggerRectBtn =
       new RectButton(3 * blockSizeStep, 3 * blockSizeStep, Color.GRAY
         , _ => {
@@ -51,6 +52,7 @@ class OpsBorderPane(pathAsString: String
             setBlockSize(getBlockSize() + blockSizeStep)
           }
         })
+    biggerRectBtn.setTooltip(new Tooltip("increase block size"))
     val smallerTextBtn =
       new TextSizeButton(6,
         _ => {
@@ -58,6 +60,7 @@ class OpsBorderPane(pathAsString: String
             setFontSize(getFontSize() - fontSizeStep)
           }
         })
+    smallerTextBtn.setTooltip(new Tooltip("decrease text size"))
     val biggerTextBtn =
       new TextSizeButton(9,
         _ => {
@@ -65,7 +68,7 @@ class OpsBorderPane(pathAsString: String
             setFontSize(getFontSize() + fontSizeStep)
           }
         })
-
+    biggerTextBtn.setTooltip(new Tooltip("increase text size"))
     Seq(smallerRectBtn, biggerRectBtn, smallerTextBtn, biggerTextBtn)
   }
 
