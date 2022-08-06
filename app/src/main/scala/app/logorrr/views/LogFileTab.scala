@@ -3,7 +3,7 @@ package app.logorrr.views
 import app.logorrr.conf.{BlockSettings, LogoRRRGlobals}
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util._
-import app.logorrr.views.search.SearchToolBar
+import app.logorrr.views.search.{Filter, FiltersToolBar, Fltr, SearchToolBar}
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.visual.LogVisualView
 import javafx.beans.binding.{Bindings, StringExpression}
@@ -169,6 +169,7 @@ class LogFileTab(val pathAsString: String
     selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](b => {
       if (b) {
         LogoRRRAccelerators.setActiveSearchTextField(searchToolBar.searchTextField)
+        LogoRRRAccelerators.setActiveRegexToggleButton(searchToolBar.regexToggleButton)
         JfxUtils.execOnUiThread(repaint())
       } else {
       }

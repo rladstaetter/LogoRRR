@@ -40,7 +40,7 @@ class LogoRRRMainTabPane()
       t1: Tab =>
         t1 match {
           case logFileTab: LogFileTab =>
-            logTrace("Selected: " + logFileTab.pathAsString)
+            logTrace(s"Selected: ${logFileTab.pathAsString}")
             LogoRRRGlobals.setSomeActive(Option(logFileTab.pathAsString))
             // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
             getSelectionModel.select(logFileTab)

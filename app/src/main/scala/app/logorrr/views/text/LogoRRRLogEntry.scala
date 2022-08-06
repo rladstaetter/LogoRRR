@@ -2,7 +2,7 @@ package app.logorrr.views.text
 
 import app.logorrr.model.LogEntry
 import app.logorrr.util.CanLog
-import app.logorrr.views.Filter
+import app.logorrr.views.search.Filter
 import javafx.scene.control.Label
 import javafx.scene.layout.HBox
 import javafx.scene.paint.Color
@@ -85,7 +85,7 @@ case class LogoRRRLogEntry(e: LogEntry
   lazy val res ={
     val lineParts =
       (for (f <- filters) yield {
-        LogoRRRLogEntry.calcParts(e.value, f.searchTerm, f.color)
+        LogoRRRLogEntry.calcParts(e.value, f.pattern, f.color)
       }).flatten
     LinePart.reduce(e.value, lineParts).map(p => LogoRRRLabel.mkL(p.value, p.someColor))
   }

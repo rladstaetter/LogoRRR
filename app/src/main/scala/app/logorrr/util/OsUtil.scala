@@ -21,4 +21,10 @@ object OsUtil {
   val isMac = currentOs == Mac
   val isWin = currentOs == Windows
 
+  def osFun[T](onWin : => T, onMac : => T) : T =
+    if (isWin) {
+      onWin
+    } else if (isMac) {
+      onMac
+    } else onMac // linux users have to wait for support of LogoRRR :(
 }

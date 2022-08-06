@@ -1,6 +1,6 @@
-package app.logorrr.views
+package app.logorrr.views.search
 
-import app.logorrr.views.Filter.{ExistsMatcher, LMatcher, NotExistsMatcher}
+import app.logorrr.views.search.Filter.{ExistsMatcher, LMatcher, NotExistsMatcher}
 import javafx.scene.paint.Color
 
 

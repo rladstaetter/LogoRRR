@@ -1,8 +1,8 @@
-package app.logorrr.views
+package app.logorrr.views.search
 
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.search.SearchTag
+import app.logorrr.views.search
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList

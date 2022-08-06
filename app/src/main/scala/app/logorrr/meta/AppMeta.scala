@@ -12,7 +12,7 @@ object AppMeta {
     case Left(e) => AppMeta("LogoRRR", "LATEST")
   }
 
-  val fullAppName = meta.appName + " " + meta.appVersion
+  val fullAppName = s"${meta.appName} ${meta.appVersion}"
   val appVersion = meta.appVersion
 
 }

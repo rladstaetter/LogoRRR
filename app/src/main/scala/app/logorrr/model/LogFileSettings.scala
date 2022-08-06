@@ -2,7 +2,7 @@ package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
 import app.logorrr.util.CanLog
-import app.logorrr.views.Filter
+import app.logorrr.views.search.Filter
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}

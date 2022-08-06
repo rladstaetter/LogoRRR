@@ -2,7 +2,7 @@ package app.logorrr.model
 
 import app.logorrr.model.LogEntryFileReader.logException
 import app.logorrr.util.CanLog
-import app.logorrr.views.{Filter, Fltr}
+import app.logorrr.views.search.{Filter, Fltr}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.paint.Color
 

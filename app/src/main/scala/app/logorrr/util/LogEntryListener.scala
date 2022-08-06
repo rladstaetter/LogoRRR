@@ -2,7 +2,7 @@ package app.logorrr.util
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.LogEntry
-import app.logorrr.views.Filter
+import app.logorrr.views.search.Filter
 import javafx.collections.ObservableList
 import org.apache.commons.io.input.{Tailer, TailerListener}
 

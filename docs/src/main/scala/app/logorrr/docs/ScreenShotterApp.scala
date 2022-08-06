@@ -47,7 +47,7 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
         Thread.sleep(5000)
         JfxUtils.execOnUiThread({
           ScreenShotterApp.persistNodeState(stage.getScene.getRoot, f)
-          logInfo("created " + f.toAbsolutePath.toString)
+          logInfo(s"created ${f.toAbsolutePath.toString}")
         })
       }
     }
