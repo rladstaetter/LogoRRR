@@ -17,7 +17,7 @@ See [Technology](Technology.md) for a short summary of used technologies.
 
 ## Installation 
 
-You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/22.1.0) from the releases page. There are installer for Windows and MacOs available.
+You can give it a try by downloading a [prebuilt installer for LogoRRR](https://github.com/rladstaetter/LogoRRR/releases/tag/22.2.0) from the releases page. There are installer for Windows and MacOs available.
 
 
 ## Features
