@@ -2,7 +2,7 @@
 
 ![Screenshot of LogoRRR, version 22.2.0](docs/releases/22.2.0/screenshot-22.2.0.png?raw=true)
 
-LogoRRR is a simple utility to display a logfile and visualise certain classes of events. The main target audience are first or second level support engineers who need a tool to find patterns in log files.
+LogoRRR is a simple utility to display logfiles and visualise certain classes of events. The target audience are first or second level support engineers who need a tool to find patterns in log files.
 
 
 ![Shows basic functionality of LogoRRR as animated gif](docs/releases/21.3.1/screencast-21.3.1.gif?raw=true)
@@ -22,13 +22,15 @@ You can give it a try by downloading a [prebuilt installer for LogoRRR](https://
 
 ## Features
 
-- Drag and drop log files to application to visualize/view them
-- Handle multiple log files in parallel
+- Drag and drop log files to visualize/view them
+- Drag and drop a directory to open all contained files
+- Handle multiple files in parallel
 - Filter log files for entries interactively
-- Basic search functionality
+- Case insensitive and regex search is supported
 - Unix `tail -f` like functionality to watch ongoing events
-- Windows Installer 
-- MacOs installer
+- LogoRRR remembers last opened files and settings upon restart
+- Keyboard shortcuts for more efficient usage 
+- Supported operating systems: Windows, MacOsX
 
 ## Sponsoring
 
