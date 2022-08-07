@@ -9,8 +9,6 @@ import javafx.event.{ActionEvent, EventHandler}
  * @param size size of 'T' icon
  * @param eventHandler event which will be triggered upon click
  */
-class TextSizeButton(size: Int
-                     , eventHandler: EventHandler[ActionEvent])
-  extends SymbolButton(size, 'T', eventHandler)
+class TextSizeButton(size: Int, eventHandler: EventHandler[ActionEvent]) extends SymbolButton(size, 'T', eventHandler)
 
 

@@ -3,11 +3,8 @@ package app.logorrr.views.block
 import app.logorrr.util.{CanLog, JfxUtils}
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
-import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.control._
-import javafx.scene.input.{KeyCode, KeyEvent}
 import javafx.scene.layout.VBox
-import javafx.scene.paint.Color
 
 import scala.collection.mutable.ListBuffer
 

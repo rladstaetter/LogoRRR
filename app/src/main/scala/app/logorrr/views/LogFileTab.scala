@@ -14,9 +14,7 @@ import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control._
 import javafx.scene.layout._
 import javafx.scene.paint.Color
-import org.apache.commons.io.input.Tailer
 
-import java.nio.file.Paths
 import java.time.Instant
 import java.util.stream.Collectors
 import scala.collection.mutable
@@ -160,7 +158,6 @@ class LogFileTab(val pathAsString: String
     setContent(borderPane)
 
     logVisualView.blockViewPane.blockSizeProperty.bind(opsBorderPane.blockSizeProperty)
-    logTextView
     logVisualView.blockViewPane.blockSizeProperty.addListener(JfxUtils.onNew[Number](n => {
       LogoRRRGlobals.setBlockSettings(pathAsString, BlockSettings(n.intValue()))
     }))
