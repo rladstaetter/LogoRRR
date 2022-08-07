@@ -34,7 +34,10 @@
             <id>OS.win.installer</id>
             <activation>
                 <file>
-                    <exists>C:\Program Files (x86)\Caphyon\Advanced Installer 18.4\bin\x86\AdvancedInstaller.com</exists>
+<!-- resolution for advanced installer compiler doesn't work due to some reason?
+                    <exists>${advanced.installer.compiler}</exists>
+-->
+                    <exists>C:\Program Files (x86)\Caphyon\Advanced Installer 19.4\bin\x86\AdvancedInstaller.com</exists>
                 </file>
             </activation>
             <modules>
