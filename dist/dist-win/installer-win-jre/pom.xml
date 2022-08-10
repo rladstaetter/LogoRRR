@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>app.logorrr.dist</groupId>
+        <artifactId>dist-win</artifactId>
+        <version>${revision}${changelist}</version>
+    </parent>
+
+    <artifactId>installer-win-jre</artifactId>
+    <name>app.logorrr.dist.win-jre.installer</name>
+    <description>Installer project using Advanced Installer technology to install LogoRRR with its own dedicated jre
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>app</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>build</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/ai</directory>
+                <includes>
+                    <include>logorrr-icon-128.ico</include>
+                </includes>
+                <targetPath>${project.build.directory}/installer/</targetPath>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/ai</directory>
+                <includes>
+                    <include>*.aip</include>
+                </includes>
+                <targetPath>${project.build.directory}/installer/</targetPath>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-deps</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <!-- important not to overwrite jar files because of name clashes (core.jar for example) -->
+                            <prependGroupId>true</prependGroupId>
+                            <outputDirectory>${project.build.directory}/installer/binaries/</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>create-product-code-logorrr-installer-jre</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>app.logorrr.build.ProductCodeUpdater</mainClass>
+                            <arguments>
+                                <argument>${project.build.directory}/installer/logorrr-installer-jre.aip</argument>
+                                <argument>${revision}</argument>
+                            </arguments>
+                            <includePluginDependencies>true</includePluginDependencies>
+                        </configuration>
+                    </execution>
+                    <!-- Create installer -->
+                    <execution>
+                        <id>create-installer-slim</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${advanced.installer.compiler}</executable>
+                            <workingDirectory>${project.build.directory}/installer/</workingDirectory>
+                            <arguments>
+                                <argument>/rebuild</argument>
+                                <argument>logorrr-installer-jre.aip</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

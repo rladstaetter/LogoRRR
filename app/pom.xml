@@ -15,6 +15,7 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
         </dependency>
+        <!-- needed for Tailer functionality -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

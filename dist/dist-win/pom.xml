@@ -43,6 +43,7 @@
             <modules>
                 <module>binary-win</module>
                 <module>installer-win</module>
+                <module>installer-win-jre</module>
             </modules>
         </profile>
     </profiles>
