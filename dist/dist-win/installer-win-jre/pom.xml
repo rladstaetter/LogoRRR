@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>installer-win-jre</artifactId>
-    <name>app.logorrr.dist.win-clasic.installer</name>
+    <name>app.logorrr.dist.win-jre.installer</name>
     <description>Installer project using Advanced Installer technology to install LogoRRR with its own dedicated jre
     </description>
 
