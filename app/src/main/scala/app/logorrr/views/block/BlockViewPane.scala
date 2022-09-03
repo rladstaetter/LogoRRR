@@ -62,7 +62,7 @@ class BlockViewPane[Elem <: BlockView.E]
     if (isVisible) {
       // unbind old listeners or we have a memory problem
       vbox.getChildren.forEach {
-        case c: BlockView[Elem] => c.unbind()
+        case c: BlockView[_] => c.unbind()
         case _ =>
       }
 
