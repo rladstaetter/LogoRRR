@@ -7,6 +7,7 @@ import javafx.scene.control.MenuBar
 import java.nio.file.Path
 
 class LogoRRRMenuBar(openLogFile: Path => Unit
+                     , closeAllLogFiles: => Unit
                      , closeApplication: => Unit)
   extends MenuBar
     with CanLog {
@@ -17,7 +18,7 @@ class LogoRRRMenuBar(openLogFile: Path => Unit
 
   private def init(): Unit = {
     getMenus.clear()
-    getMenus.addAll(new FileMenu(openLogFile, closeApplication), new HelpMenu())
+    getMenus.addAll(new FileMenu(openLogFile, closeAllLogFiles, closeApplication), new HelpMenu())
   }
 
   init()

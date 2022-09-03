@@ -20,6 +20,10 @@ object FileMenu {
     })
   }
 
+  class CloseAllMenuItem(removeAllLogFiles: => Unit) extends MenuItem("Close All") {
+    setOnAction(_ => removeAllLogFiles)
+  }
+
   class QuitMenuItem(closeApplication: => Unit) extends MenuItem("Quit") {
     setOnAction(e => closeApplication)
   }
@@ -45,18 +49,17 @@ object FileMenu {
   }
 
 
-  class CloseAllMenuItem(removeAllLogFiles: => Unit) extends MenuItem("Close All") {
-    setOnAction(_ => removeAllLogFiles)
-  }
 
 }
 
 class FileMenu(openLogFile: Path => Unit
+               , closeAllLogFiles: => Unit
                , closeApplication: => Unit) extends Menu("File") with CanLog {
 
   def init(): Unit = {
     getItems.clear()
     getItems.add(new FileMenu.OpenMenuItem(openLogFile))
+    getItems.add(new FileMenu.CloseAllMenuItem(closeAllLogFiles))
     if (OsUtil.isWin) {
       getItems.add(new FileMenu.QuitMenuItem(closeApplication))
     }
