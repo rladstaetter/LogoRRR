@@ -15,6 +15,11 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
         </dependency>
+        <!-- effect system -->
+        <dependency>
+            <groupId>dev.zio</groupId>
+            <artifactId>zio_${scala.major.version}</artifactId>
+        </dependency>
         <!-- needed for Tailer functionality -->
         <dependency>
             <groupId>commons-io</groupId>
