@@ -15,7 +15,7 @@ object SearchTag {
             , updateActiveFilter: () => Unit
             , removeFilter: Filter => Unit): SearchTag = {
     val i = occurrences(filter)
-    val buttonTitle = s"${filter.pattern}: $i ${FiltersToolBar.percentAsString(i, totalSize)}"
+    val buttonTitle = s"${filter.pattern} $i"
     val button = new ToggleButton(buttonTitle)
     val r = new Rectangle(10, 10)
     r.setFill(filter.color)
