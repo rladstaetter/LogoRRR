@@ -14,12 +14,6 @@ import scala.jdk.CollectionConverters._
 /** A toolbar with buttons which filter log events */
 object FiltersToolBar {
 
-  val percentFormatter = new DecimalFormat("#.##")
-
-  def percentAsString(value: Int, totalSize: Int): String = {
-    percentFormatter.format((100 * value.toDouble) / totalSize.toDouble) + "%"
-  }
-
   class RemoveButton(filter: Filter, removeFilter: Filter => Unit) extends Button("x") {
     setDisable(filter.isInstanceOf[UnclassifiedFilter])
     setOnAction(_ => removeFilter(filter))
@@ -32,10 +26,8 @@ object FiltersToolBar {
  * Depending on buttons pressed, filteredList will be mutated to show only selected items.
  *
  * @param filteredList list of entries which are displayed (can be filtered via buttons)
- * @param totalSize    number of all entries
  */
 class FiltersToolBar(filteredList: FilteredList[LogEntry]
-                     , totalSize: Int
                      , removeFilter: Filter => Unit) extends ToolBar {
 
   val filtersProperty = new SimpleListProperty[Filter]()
@@ -69,7 +61,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
   private def updateUnclassified(): Unit = {
     val unclassified = new UnclassifiedFilter(filterButtons.keySet)
     updateOccurrences(unclassified)
-    val searchTag = search.SearchTag(unclassified, occurrences, totalSize, updateActiveFilter, removeFilter)
+    val searchTag = search.SearchTag(unclassified, occurrences, updateActiveFilter, removeFilter)
     someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
     getItems.add(0, searchTag)
     someUnclassifiedFilter = Option((unclassified, searchTag))
@@ -90,7 +82,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
 
   private def addSearchTag(filter: Filter): Unit = {
     updateOccurrences(filter)
-    val searchTag = search.SearchTag(filter, occurrences, totalSize, updateActiveFilter, removeFilter)
+    val searchTag = search.SearchTag(filter, occurrences,  updateActiveFilter, removeFilter)
     getItems.add(searchTag)
     filterButtons = filterButtons + (filter -> searchTag)
   }

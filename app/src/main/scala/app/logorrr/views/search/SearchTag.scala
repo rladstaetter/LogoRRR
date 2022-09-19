@@ -11,7 +11,6 @@ object SearchTag {
 
   def apply(filter: Filter
             , occurrences: Map[Filter, Int]
-            , totalSize: Int
             , updateActiveFilter: () => Unit
             , removeFilter: Filter => Unit): SearchTag = {
     val i = occurrences(filter)
