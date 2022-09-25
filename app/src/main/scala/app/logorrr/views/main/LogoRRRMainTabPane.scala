@@ -27,9 +27,6 @@ class LogoRRRMainTabPane()
   extends TabPane
     with CanLog {
 
-  /** bound to sceneWidthProperty of parent logorrrMainBorderPane */
-  val sceneWidthProperty = new SimpleIntegerProperty()
-
   setStyle(LogoRRRMainTabPane.BackgroundStyle)
 
   /**
@@ -50,7 +47,6 @@ class LogoRRRMainTabPane()
   }
 
   def add(tab: LogFileTab): Unit = getTabs.add(tab)
-
 
   def contains(p: String): Boolean = getLogFileTabs.exists(lr => lr.pathAsString == p)
 

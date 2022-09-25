@@ -99,7 +99,7 @@ class LogFileTab(val pathAsString: String
     op
   }
 
-  val initialWidth = (Bindings.multiply(LogoRRRGlobals.settings.stageSettings.widthProperty, LogoRRRGlobals.getLogFileSettings(pathAsString).dividerPositionProperty))
+  val initialWidth = Bindings.multiply(LogoRRRGlobals.settings.stageSettings.widthProperty, LogoRRRGlobals.getLogFileSettings(pathAsString).dividerPositionProperty)
 
   private lazy val logVisualView = {
     val lvv = new LogVisualView(pathAsString, filteredList, initialWidth.intValue())
@@ -112,18 +112,8 @@ class LogFileTab(val pathAsString: String
 
   private val logTextView = new LogTextView(pathAsString, filteredList, timings)
 
-  val footerLabel = {
-    val l = new Label("")
-    l.prefWidthProperty.bind(LogoRRRGlobals.settings.stageSettings.widthProperty)
-    l.setStyle(LogoRRRFonts.jetBrainsMono(20))
-    l.setTextFill(Color.WHITE)
-    l
-  }
-
 
   val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
-
-  private val logEntryChangeListener: ChangeListener[LogEntry] = JfxUtils.onNew[LogEntry](updateFooter)
 
 
   /** if a change event for filtersList Property occurs, save it to disc */
@@ -154,7 +144,6 @@ class LogFileTab(val pathAsString: String
     val borderPane = new BorderPane()
     borderPane.setTop(opsBorderPane)
     borderPane.setCenter(splitPane)
-    borderPane.setBottom(footerLabel)
     setContent(borderPane)
 
     logVisualView.blockViewPane.blockSizeProperty.bind(opsBorderPane.blockSizeProperty)
@@ -177,7 +166,6 @@ class LogFileTab(val pathAsString: String
     textProperty.bind(computeTabTitle)
 
     selectedEntryProperty.bind(logVisualView.selectedEntryProperty)
-    selectedEntryProperty.addListener(logEntryChangeListener)
 
     // if user changes selected item in listview, change footer as well
     //logTextView.listView.getSelectionModel.selectedItemProperty.addListener(logEntryChangeListener)
@@ -221,16 +209,6 @@ class LogFileTab(val pathAsString: String
     logoRRRTailer.stop()
   }
 
-  def updateFooter(logEntry: LogEntry): Unit = {
-    Option(logEntry) match {
-      case Some(entry) =>
-        footerLabel.setBackground(entry.background)
-        footerLabel.setText(entry.value)
-      case None =>
-        footerLabel.setBackground(null)
-        footerLabel.setText("")
-    }
-  }
 
   def setDivider(pos: Double): Unit = splitPane.getDividers.get(0).setPosition(pos)
 
