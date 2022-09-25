@@ -85,7 +85,7 @@ class LogFileTab(val pathAsString: String
   private val searchToolBar = new SearchToolBar(addFilter)
 
   private val filtersToolBar = {
-    val fbtb = new FiltersToolBar(filteredList, logEntries.size, removeFilter)
+    val fbtb = new FiltersToolBar(filteredList, removeFilter)
     fbtb.filtersProperty.bind(filtersListProperty)
     fbtb
   }
