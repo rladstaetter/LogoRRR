@@ -89,6 +89,7 @@ class LogTextView(pathAsString: String
 
   val listView: ListView[LogEntry] = {
     val lv = new ListView[LogEntry]()
+    lv.getStyleClass.add("dense")
     lv.setItems(filteredList)
     val i = LogoRRRGlobals.getLogFileSettings(pathAsString).selectedIndexProperty.get()
     lv.getSelectionModel.select(i)

@@ -6,9 +6,9 @@ import app.logorrr.views.search
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
-import javafx.scene.control.{Button, ToolBar}
+import javafx.geometry.Insets
+import javafx.scene.control.{Button, Label, ToolBar}
 
-import java.text.DecimalFormat
 import scala.jdk.CollectionConverters._
 
 /** A toolbar with buttons which filter log events */
@@ -20,7 +20,8 @@ object FiltersToolBar {
     percentFormatter.format((100 * value.toDouble) / totalSize.toDouble) + "%"
   }
 
-  class RemoveButton(filter: Filter, removeFilter: Filter => Unit) extends Button("x") {
+  class RemoveButton(filter: Filter, removeFilter: Filter => Unit) extends Button {
+    setGraphic(new Label("ⓧ"))
     setDisable(filter.isInstanceOf[UnclassifiedFilter])
     setOnAction(_ => removeFilter(filter))
   }
@@ -69,7 +70,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
   private def updateUnclassified(): Unit = {
     val unclassified = new UnclassifiedFilter(filterButtons.keySet)
     updateOccurrences(unclassified)
-    val searchTag = search.SearchTag(unclassified, occurrences, totalSize, updateActiveFilter, removeFilter)
+    val searchTag = SearchTag(unclassified, occurrences, totalSize, updateActiveFilter, removeFilter)
     someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
     getItems.add(0, searchTag)
     someUnclassifiedFilter = Option((unclassified, searchTag))

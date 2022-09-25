@@ -114,6 +114,11 @@
                 <version>${openjfx.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.github.mkpaz</groupId>
+                <artifactId>atlantafx-base</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>2.8.0</version>
