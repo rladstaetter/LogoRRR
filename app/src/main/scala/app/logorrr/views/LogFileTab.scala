@@ -8,12 +8,10 @@ import app.logorrr.views.text.LogTextView
 import app.logorrr.views.visual.LogVisualView
 import javafx.beans.binding.{Bindings, StringExpression}
 import javafx.beans.property.{SimpleListProperty, SimpleObjectProperty}
-import javafx.beans.value.ChangeListener
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control._
 import javafx.scene.layout._
-import javafx.scene.paint.Color
 
 import java.time.Instant
 import java.util.stream.Collectors
@@ -23,6 +21,11 @@ import scala.concurrent.Future
 import scala.jdk.CollectionConverters._
 
 object LogFileTab {
+
+  private val BackgroundStyle: String =
+    """
+      |-fx-background-color: WHITE;
+      |""".stripMargin
 
   case class TimeRange(startTime: Instant, endTime: Instant)
 
@@ -53,6 +56,8 @@ class LogFileTab(val pathAsString: String
   extends Tab
     with CanLog {
 
+  setStyle(LogFileTab.BackgroundStyle)
+
   val logoRRRTailer = LogoRRRTailer(pathAsString, logEntries)
 
   def repaint(): Unit = logVisualView.repaint()
@@ -74,7 +79,6 @@ class LogFileTab(val pathAsString: String
 
   /** list of search filters to be applied */
   val filtersListProperty = new SimpleListProperty[Filter](CollectionUtils.mkEmptyObservableList())
-
 
   /** split visual view and text view */
   val splitPane = new SplitPane()

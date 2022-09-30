@@ -20,7 +20,6 @@ object LogoRRRMainTabPane {
       |-fx-background-size: 100%;
       |""".stripMargin
 
-
 }
 
 class LogoRRRMainTabPane()
@@ -46,7 +45,11 @@ class LogoRRRMainTabPane()
     })
   }
 
-  def add(tab: LogFileTab): Unit = getTabs.add(tab)
+
+  def add(tab: LogFileTab): Unit = {
+    getTabs.add(tab)
+    setStyle(null)
+  }
 
   def contains(p: String): Boolean = getLogFileTabs.exists(lr => lr.pathAsString == p)
 

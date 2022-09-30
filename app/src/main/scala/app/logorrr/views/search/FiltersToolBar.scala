@@ -6,8 +6,9 @@ import app.logorrr.views.search
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
-import javafx.geometry.Insets
-import javafx.scene.control.{Button, Label, ToolBar}
+import javafx.scene.control.{Button, ToolBar}
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
+import org.kordamp.ikonli.javafx.FontIcon
 
 import scala.jdk.CollectionConverters._
 
@@ -15,7 +16,7 @@ import scala.jdk.CollectionConverters._
 object FiltersToolBar {
 
   class RemoveButton(filter: Filter, removeFilter: Filter => Unit) extends Button {
-    setGraphic(new Label("ⓧ"))
+    setGraphic(new FontIcon(FontAwesomeSolid.TIMES_CIRCLE))
     setDisable(filter.isInstanceOf[UnclassifiedFilter])
     setOnAction(_ => removeFilter(filter))
   }
