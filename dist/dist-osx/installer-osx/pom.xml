@@ -128,7 +128,7 @@
                                 <argument>--compress=2</argument>
                                 <argument>--strip-debug</argument>
                                 <argument>--add-modules</argument>
-                                <argument>jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,jdk.unsupported
+                                <argument>jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported
                                 </argument>
                                 <argument>--include-locales=en</argument>
                                 <argument>--output</argument>

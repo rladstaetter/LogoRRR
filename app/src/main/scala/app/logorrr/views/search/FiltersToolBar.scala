@@ -7,14 +7,16 @@ import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.{Button, ToolBar}
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
+import org.kordamp.ikonli.javafx.FontIcon
 
-import java.text.DecimalFormat
 import scala.jdk.CollectionConverters._
 
 /** A toolbar with buttons which filter log events */
 object FiltersToolBar {
 
-  class RemoveButton(filter: Filter, removeFilter: Filter => Unit) extends Button("x") {
+  class RemoveButton(filter: Filter, removeFilter: Filter => Unit) extends Button {
+    setGraphic(new FontIcon(FontAwesomeSolid.TIMES_CIRCLE))
     setDisable(filter.isInstanceOf[UnclassifiedFilter])
     setOnAction(_ => removeFilter(filter))
   }
@@ -61,7 +63,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
   private def updateUnclassified(): Unit = {
     val unclassified = new UnclassifiedFilter(filterButtons.keySet)
     updateOccurrences(unclassified)
-    val searchTag = search.SearchTag(unclassified, occurrences, updateActiveFilter, removeFilter)
+    val searchTag = SearchTag(unclassified, occurrences, updateActiveFilter, removeFilter)
     someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
     getItems.add(0, searchTag)
     someUnclassifiedFilter = Option((unclassified, searchTag))

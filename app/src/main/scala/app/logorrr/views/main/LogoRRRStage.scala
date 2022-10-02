@@ -5,6 +5,8 @@ import app.logorrr.conf.mut.MutStageSettings
 import app.logorrr.meta.AppMeta
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.LogoRRRAccelerators
+import atlantafx.base.theme.PrimerLight
+import javafx.application.Application
 import javafx.scene.Scene
 import javafx.scene.image.Image
 import javafx.stage.{Stage, WindowEvent}
@@ -32,7 +34,7 @@ case class LogoRRRStage(stage: Stage) {
   stage.setTitle(AppMeta.fullAppName)
   stage.getIcons.add(LogoRRRStage.icon)
   stage.setScene(scene)
-
+  Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet())
   // make sure to cleanup on close
   stage.setOnCloseRequest((_: WindowEvent) => {
     LogoRRRGlobals.persist()

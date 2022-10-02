@@ -1,8 +1,7 @@
 package app.logorrr.views.search
 
 import javafx.beans.{InvalidationListener, Observable}
-import javafx.scene.control.{Button, ToggleButton}
-import javafx.scene.layout.HBox
+import javafx.scene.control.{Button, ToggleButton, ToolBar}
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 
@@ -40,6 +39,4 @@ object SearchTag {
 /**
  * Groups a toggle button to activate a filter and a button to remove it
  */
-class SearchTag(val toggleButton: ToggleButton, val closeButton: Button) extends HBox {
-  getChildren.addAll(toggleButton, closeButton)
-}
+class SearchTag(val toggleButton: ToggleButton, val closeButton: Button) extends ToolBar(toggleButton, closeButton)
