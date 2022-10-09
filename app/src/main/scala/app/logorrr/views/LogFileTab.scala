@@ -26,6 +26,15 @@ object LogFileTab {
   private val BackgroundStyle: String =
     """
       |-fx-background-color: WHITE;
+      |-fx-border-width: 1px 1px 1px 0px;
+      |-fx-border-color: LIGHTGREY;
+      |""".stripMargin
+
+  private val BackgroundSelectedStyle: String =
+    """
+      |-fx-background-color: floralwhite;
+      |-fx-border-width: 1px 1px 1px 0px;
+      |-fx-border-color: LIGHTGREY;
       |""".stripMargin
 
   case class TimeRange(startTime: Instant, endTime: Instant)
@@ -57,7 +66,14 @@ class LogFileTab(val pathAsString: String
   extends Tab
     with CanLog {
 
-  setStyle(LogFileTab.BackgroundStyle)
+
+  selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](b => {
+    if (b) {
+      setStyle(LogFileTab.BackgroundSelectedStyle)
+    } else {
+      setStyle(LogFileTab.BackgroundStyle)
+    }
+  }))
 
   val logoRRRTailer = LogoRRRTailer(pathAsString, logEntries)
 
