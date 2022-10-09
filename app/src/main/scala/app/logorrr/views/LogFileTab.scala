@@ -13,6 +13,7 @@ import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control._
 import javafx.scene.layout._
 
+import java.nio.file.Paths
 import java.time.Instant
 import java.util.stream.Collectors
 import scala.collection.mutable
@@ -193,7 +194,7 @@ class LogFileTab(val pathAsString: String
 
   /** compute title of tab */
   private def computeTabTitle: StringExpression = {
-    Bindings.concat(pathAsString, " (", Bindings.size(logEntries).asString, " lines)")
+    Bindings.concat(Paths.get(pathAsString).getFileName.toString, " (", Bindings.size(logEntries).asString, " lines)")
   }
 
   /**
