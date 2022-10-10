@@ -7,12 +7,25 @@ import javafx.scene.input.{KeyCode, KeyEvent}
 
 import scala.jdk.CollectionConverters._
 
+
+object SearchToolBar {
+
+  private val BackgroundSelectedStyle: String =
+    """
+      |-fx-background-color: CYAN;
+      |-fx-border-width: 1px 1px 1px 1px;
+      |-fx-border-color: BLUE;
+      |""".stripMargin
+
+}
 /**
  * Groups search ui widgets together.
  *
  * @param addFilterFn filter function which results from user interaction with SearchToolbar
  */
 class SearchToolBar(addFilterFn: Filter => Unit) extends ToolBar {
+
+  //setStyle(SearchToolBar.BackgroundSelectedStyle)
 
   /** expose for key accelerator */
   val searchTextField = {

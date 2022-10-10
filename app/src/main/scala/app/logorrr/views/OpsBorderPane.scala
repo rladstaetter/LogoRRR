@@ -73,15 +73,18 @@ class OpsBorderPane(pathAsString: String
   }
 
   private val box = new ToolBar(items: _*)
-  box.setMaxHeight(Double.PositiveInfinity)
   setLeft(box)
+  box.setMaxHeight(Double.PositiveInfinity)
   BorderPane.setAlignment(box, Pos.CENTER)
 
   setCenter(filtersToolBar)
-  BorderPane.setAlignment(searchToolBar, Pos.CENTER_LEFT)
+  filtersToolBar.setMaxHeight(Double.PositiveInfinity)
+  BorderPane.setAlignment(filtersToolBar, Pos.CENTER_LEFT)
 
   setRight(searchToolBar)
-  BorderPane.setAlignment(filtersToolBar, Pos.CENTER_LEFT)
+  BorderPane.setAlignment(searchToolBar, Pos.CENTER_LEFT)
+  searchToolBar.setMaxHeight(Double.PositiveInfinity)
+
 
 
 }
