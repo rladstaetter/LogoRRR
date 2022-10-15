@@ -24,7 +24,6 @@ object FiltersToolBar {
 
   class RemoveButton(filter: Filter, removeFilter: Filter => Unit) extends Button {
     setGraphic(new FontIcon(FontAwesomeSolid.TIMES_CIRCLE))
-    setDisable(filter.isInstanceOf[UnclassifiedFilter])
     setOnAction(_ => removeFilter(filter))
   }
 

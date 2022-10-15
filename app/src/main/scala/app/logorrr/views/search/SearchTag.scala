@@ -31,7 +31,11 @@ object SearchTag {
     /** filters can be removed, in this case update display */
     val removeButton = new FiltersToolBar.RemoveButton(filter, removeFilter)
 
-    new SearchTag(button, removeButton)
+    val st = new SearchTag(button)
+    if (!filter.isInstanceOf[UnclassifiedFilter]) {
+      st.getItems.add(removeButton)
+    }
+    st
   }
 
 }
@@ -39,4 +43,4 @@ object SearchTag {
 /**
  * Groups a toggle button to activate a filter and a button to remove it
  */
-class SearchTag(val toggleButton: ToggleButton, val closeButton: Button) extends ToolBar(toggleButton, closeButton)
+class SearchTag(val toggleButton: ToggleButton) extends ToolBar(toggleButton)
