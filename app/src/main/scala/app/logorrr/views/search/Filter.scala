@@ -34,8 +34,8 @@ object Filter {
   }
 
   /** matches if value matches search term (case insensitive) */
-  case class CaseInsensitiveTextMatcher(value: String, color: Color) extends LMatcher {
-    def applyMatch(searchTerm: String): Boolean = searchTerm.toLowerCase.contains(value.toLowerCase)
+  case class ContainsMatcher(value: String, color: Color) extends LMatcher {
+    def applyMatch(searchTerm: String): Boolean = searchTerm.contains(value.toLowerCase)
   }
 
   /**
@@ -75,6 +75,6 @@ class Filter(val pattern: String
 
   val color: Color = Color.web(colorString)
 
-  val matcher: LMatcher = Filter.CaseInsensitiveTextMatcher(pattern, color)
+  val matcher: LMatcher = Filter.ContainsMatcher(pattern, color)
 
 }
