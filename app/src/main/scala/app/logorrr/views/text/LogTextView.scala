@@ -129,11 +129,10 @@ class LogTextView(pathAsString: String
         case Some(e) =>
           setText(null)
           val filters = LogoRRRGlobals.getLogFileSettings(pathAsString).filtersProperty.get().asScala.toSeq
-          val entry = LogoRRRLogEntry(e, maxLength, filters)
+          val entry = LogTextViewLabel(e, maxLength, filters)
           entry.lineNumberLabel.styleProperty().bind(LogoRRRGlobals.getLogFileSettings(pathAsString).fontStyle)
-          entry.res.foreach(l => l.styleProperty().bind(LogoRRRGlobals.getLogFileSettings(pathAsString).fontStyle))
+          entry.labels.foreach(l => l.styleProperty().bind(LogoRRRGlobals.getLogFileSettings(pathAsString).fontStyle))
           setGraphic(entry)
-          //setGraphic(new LogTextView.LineNumberLogEntry(e, maxLength, timings))
           copyCurrentToClipboard.setOnAction(_ => ClipBoardUtils.copyToClipboardText(e.value))
           setContextMenu(cm)
         case None =>
@@ -144,13 +143,6 @@ class LogTextView(pathAsString: String
     }
 
   }
-  /*
-    def select(logEntry: LogEntry): Unit = {
-      listView.getSelectionModel.select(logEntry)
-      val index = listView.getSelectionModel.getSelectedIndex - ((listView.getHeight / fixedCellSize) / 2).toInt
-      listView.scrollTo(index)
-    }
-  */
 }
 
 

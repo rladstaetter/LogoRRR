@@ -7,7 +7,6 @@ import javafx.scene.paint.Color
 
 object LineNumberLabel {
 
-
   def apply(lineNumber: Int, maxLength: Int): LineNumberLabel = {
     val ldl = new LineNumberLabel
     val string = lineNumber.toString.reverse.padTo(maxLength, " ").reverse.mkString
