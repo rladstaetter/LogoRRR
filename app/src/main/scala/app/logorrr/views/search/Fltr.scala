@@ -1,40 +1,19 @@
 package app.logorrr.views.search
 
-import app.logorrr.views.search.Filter.{ExistsMatcher, LMatcher, NotExistsMatcher}
 import javafx.scene.paint.Color
-
-
 
 trait Fltr {
 
   val color: Color
 
-  val matcher: LMatcher
+  def applyMatch(searchTerm: String): Boolean
 
 }
 
 
 
-class UnclassifiedFilter(filters: Set[Filter]) extends Filter("Unclassified", Filter.unClassifiedFilterColor.toString) {
 
-  override val matcher = NotExistsMatcher(filters, Filter.unClassifiedFilterColor)
 
-}
 
-class AnyFilter(filters: Set[Filter]) extends Fltr {
-
-  override val color: Color = {
-    if (filters.isEmpty) {
-      Color.WHITE
-    } else if (filters.size == 1) {
-      filters.head.color
-    } else {
-      filters.tail.foldLeft(filters.head.color)((acc, sf) => acc.interpolate(sf.color, 0.5))
-    }
-  }
-
-  override val matcher: LMatcher = ExistsMatcher(filters, color)
-
-}
 
 

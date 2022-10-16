@@ -39,8 +39,6 @@ class MutSettings {
     logFileSettingsProperty.remove(pathAsString)
   }
 
-  def containsLogFileSetting(key: String): Boolean = logFileSettingsProperty.containsKey(key)
-
   def getStageSettings(): StageSettings = stageSettings.petrify()
 
   def set(settings: Settings) = {

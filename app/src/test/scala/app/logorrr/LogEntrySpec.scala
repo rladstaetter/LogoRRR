@@ -1,10 +1,24 @@
 package app.logorrr
 
+import app.logorrr.model.LogEntry
+import javafx.scene.paint.Color
+import org.scalacheck.Gen
 import org.scalatest.wordspec.AnyWordSpecLike
 
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId, ZoneOffset}
 
+object LogEntrySpec {
+
+  val gen: Gen[LogEntry] =
+    for {
+      l <- Gen.posNum[Int]
+      c <- Gen.const(Color.BLUE)
+      value <- Gen.alphaStr
+      someInstant <- Gen.const(None)
+    } yield LogEntry(l, c, value, someInstant)
+
+}
 class LogEntrySpec extends AnyWordSpecLike {
 
   "LogEntry" should {

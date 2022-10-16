@@ -1,7 +1,7 @@
 package app.logorrr.views.search
 
 import javafx.beans.{InvalidationListener, Observable}
-import javafx.scene.control.{Button, ToggleButton, ToolBar}
+import javafx.scene.control.{ToggleButton, ToolBar}
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 

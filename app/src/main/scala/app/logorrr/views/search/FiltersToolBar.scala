@@ -65,7 +65,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
   var occurrences: Map[Filter, Int] = Map().withDefaultValue(0)
 
   private def updateOccurrences(sf: Filter): Unit = {
-    occurrences = occurrences + (sf -> filteredList.getSource.asScala.count(e => sf.matcher.applyMatch(e.value)))
+    occurrences = occurrences + (sf -> filteredList.getSource.asScala.count(e => sf.applyMatch(e.value)))
   }
 
   private def updateUnclassified(): Unit = {
@@ -104,7 +104,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
 
   def updateActiveFilter(): Unit = {
     val filter = computeCurrentFilter()
-    filteredList.setPredicate((entry: LogEntry) => filter.matcher.applyMatch(entry.value))
+    filteredList.setPredicate((entry: LogEntry) => filter.applyMatch(entry.value))
   }
 
   updateUnclassified()

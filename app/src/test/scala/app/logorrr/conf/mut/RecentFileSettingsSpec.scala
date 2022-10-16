@@ -12,6 +12,7 @@ object FilterSpec {
   val gen: Gen[Filter] = for {
     f <- Gen.oneOf(LogFileSettings.DefaultFilter)
   } yield f
+
 }
 
 object SimpleRangeSpec {

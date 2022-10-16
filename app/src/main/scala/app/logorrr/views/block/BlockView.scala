@@ -19,8 +19,6 @@ object BlockView {
   val MinWidth = 200
 
   trait E {
-    def index: Int
-
     def color: Color
   }
 

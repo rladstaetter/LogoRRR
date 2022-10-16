@@ -1,8 +1,6 @@
 package app.logorrr.model
 
 import app.logorrr.views.block.BlockView
-import javafx.geometry.Insets
-import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}
 import javafx.scene.paint.Color
 
 import java.time.Instant
@@ -16,14 +14,7 @@ import scala.language.postfixOps
  * @param someInstant a timestamp if there is any
  * */
 case class LogEntry(lineNumber: Int
-                    , color: Color
+                    , color: Color // remove, should be calculated because of given filters
                     , value: String
                     , someInstant: Option[Instant])
-  extends BlockView.E {
-
-  val index: Int = lineNumber
-
-  lazy val background = new Background(new BackgroundFill(color, new CornerRadii(1.0), new Insets(0.0)))
-
-
-}
+  extends BlockView.E

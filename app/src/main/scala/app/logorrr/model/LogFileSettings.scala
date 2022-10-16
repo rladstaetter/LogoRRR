@@ -15,10 +15,10 @@ object LogFileSettings {
 
   implicit lazy val reader = deriveReader[LogFileSettings]
   implicit lazy val writer = deriveWriter[LogFileSettings]
+
   val DefaultSelectedIndex = 0
   val DefaultDividerPosition = 0.5
   val DefaultBlockSettings = BlockSettings(10)
-  //val DefaultLogFormat: Option[LogEntryInstantFormat] = Option(LogEntryInstantFormat.Default)
   val DefaultLogFormat: Option[LogEntryInstantFormat] = None
 
   val finest: Filter = new Filter("FINEST", Color.GREY.toString)
@@ -26,13 +26,6 @@ object LogFileSettings {
   val warning: Filter = new Filter("WARNING", Color.ORANGE.toString)
   val severe: Filter = new Filter("SEVERE", Color.RED.toString)
 
-  /*
-    val debug: Filter = new Filter("DEBUG", Color.GREY.toString)
-    val warn: Filter = new Filter("WARN", Color.ORANGE.toString)
-    val error: Filter = new Filter("ERROR", Color.RED.toString)
-  */
-
-  //val DefaultFilter: Seq[Filter] = Seq(debug,info,warn,error)
   val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
   val DefaultFontSize = 12
 
@@ -57,9 +50,6 @@ object LogFileSettings {
  *
  * Filters define which keywords are relevant for this given log file.
  *
- * @param pathAsString path to log file
- * @param someColumnDefinition where is
- * @param filters
  */
 case class LogFileSettings(pathAsString: String
                            , selectedIndex: Int
