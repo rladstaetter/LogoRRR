@@ -1,7 +1,7 @@
 package app.logorrr.views.text
 
 import app.logorrr.model.LogEntry
-import app.logorrr.views.search.{Filter, RegexFilter, UnclassifiedFilter}
+import app.logorrr.views.search.Filter
 import javafx.scene.paint.Color
 
 import scala.collection.mutable.ListBuffer

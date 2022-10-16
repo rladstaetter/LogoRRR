@@ -1,8 +1,6 @@
 package app.logorrr.model
 
 import app.logorrr.views.block.BlockView
-import javafx.geometry.Insets
-import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}
 import javafx.scene.paint.Color
 
 import java.time.Instant

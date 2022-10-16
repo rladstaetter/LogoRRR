@@ -1,7 +1,6 @@
 package app.logorrr.views.text
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.CanLog
 import app.logorrr.views.search.Filter
 import javafx.scene.control.Label
 import javafx.scene.layout.HBox
