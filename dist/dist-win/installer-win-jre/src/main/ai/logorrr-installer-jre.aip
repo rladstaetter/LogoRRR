@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="17.7" version="19.4" Modules="enterprise" RootPath="." Language="en" Id="{58553511-9F5D-4578-858E-45E77318D327}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="19.8.1" version="19.8.1" Modules="professional" RootPath="." Language="en" Id="{CA663507-AF62-42D0-BD28-FBCA1CC6FC3A}">
   <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
-    <ROW Name="HiddenItems" Value="ActSyncAppComponent;AutorunComponent;CPLAppletComponent;GameUxComponent;SilverlightSlnComponent;AppXAppDetailsComponent;FixupComponent;AppXCapabilitiesComponent;AppXDependenciesComponent;AppXProductDetailsComponent;AppXVisualAssetsComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
+    <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;MsiDriverPackagesComponent;UserAccountsComponent;ScheduledTasksComponent;SqlConnectionComponent;AutorunComponent;FirewallExceptionComponent;GameUxComponent;MsiDirectEditorComponent;SharePointSlnComponent;SilverlightSlnComponent;MultipleInstancesComponent;SccmComponent;ActSyncAppComponent;CPLAppletComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
     <ROW Property="AI_CURRENT_YEAR" Value="2022" ValueLocId="-"/>
     <ROW Property="AI_FINDEXE_TITLE" Value="Select the installation package for [|ProductName]" ValueLocId="AI.Property.FindExeTitle"/>
-    <ROW Property="AI_PACKAGING_TOOL" Value="Advanced Installer 19.4 build 4648ec91" ValueLocId="-"/>
-    <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_INTERNET_CONNECTION"/>
-    <ROW Property="AI_PRODUCTNAME_ARP" Value="LogoRRR"/>
-    <ROW Property="AI_UNINSTALLER" Value="msiexec.exe"/>
-    <ROW Property="ALLUSERS" Value="1" MultiBuildValue="DefaultBuild:"/>
+    <ROW Property="AI_FrameBtns" Value="default" MultiBuildValue="DefaultBuild:powderblue" MsiKey="AI_FrameBtns"/>
+    <ROW Property="AI_PACKAGING_TOOL" Value="Advanced Installer 19.8.1 build ff1d5dfa" ValueLocId="-"/>
+    <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_ADMIN_USER"/>
+    <ROW Property="ALLUSERS" Value="1" MultiBuildValue="DefaultBuild:2"/>
     <ROW Property="ARPCOMMENTS" Value="Installer for [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPHELPLINK" Value="https://www.logorrr.app/"/>
     <ROW Property="ARPNOREPAIR" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="ARPPRODUCTICON" Value="logorrricon128.exe" Type="8"/>
-    <ROW Property="ARPSYSTEMCOMPONENT" Value="1"/>
     <ROW Property="ARPURLINFOABOUT" Value="https://www.logorrr.app/"/>
     <ROW Property="ARPURLUPDATEINFO" Value="https://www.logorrr.app/"/>
     <ROW Property="CurrentJavaProductName" Value="CurrentJavaProductName"/>
@@ -39,272 +37,17 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
     <ROW Directory="DesktopFolder" Directory_Parent="TARGETDIR" DefaultDir="DESKTO~1|DesktopFolder" IsPseudoRoot="1"/>
-    <ROW Directory="ProgramMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="PROGRA~1|ProgramMenuFolder" IsPseudoRoot="1"/>
-    <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
-    <ROW Directory="bin_Dir" Directory_Parent="jre64_Dir" DefaultDir="bin"/>
-    <ROW Directory="com.azul.crs.client_Dir" Directory_Parent="legal_Dir" DefaultDir="COMAZU~1.CLI|com.azul.crs.client"/>
-    <ROW Directory="com.azul.tooling_Dir" Directory_Parent="legal_Dir" DefaultDir="COMAZU~1.TOO|com.azul.tooling"/>
-    <ROW Directory="conf_Dir" Directory_Parent="jre64_Dir" DefaultDir="conf"/>
-    <ROW Directory="java.base_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVA~1.BAS|java.base"/>
-    <ROW Directory="java.compiler_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVA~1.COM|java.compiler"/>
-    <ROW Directory="java.datatransfer_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVA~1.DAT|java.datatransfer"/>
-    <ROW Directory="java.desktop_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVA~1.DES|java.desktop"/>
-    <ROW Directory="java.instrument_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVA~1.INS|java.instrument"/>
-    <ROW Directory="java.logging_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVA~1.LOG|java.logging"/>
-    <ROW Directory="java.management.rmi_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVAMA~1.RMI|java.management.rmi"/>
-    <ROW Directory="java.management_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVA~1.MAN|java.management"/>
-    <ROW Directory="java.naming_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVA~1.NAM|java.naming"/>
-    <ROW Directory="java.net.http_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVANE~1.HTT|java.net.http"/>
-    <ROW Directory="java.prefs_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVA~1.PRE|java.prefs"/>
-    <ROW Directory="java.rmi_Dir" Directory_Parent="legal_Dir" DefaultDir="java.rmi"/>
-    <ROW Directory="java.scripting_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVA~1.SCR|java.scripting"/>
-    <ROW Directory="java.se_Dir" Directory_Parent="legal_Dir" DefaultDir="java.se"/>
-    <ROW Directory="java.security.jgss_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVASE~1.JGS|java.security.jgss"/>
-    <ROW Directory="java.security.sasl_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVASE~1.SAS|java.security.sasl"/>
-    <ROW Directory="java.smartcardio_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVA~1.SMA|java.smartcardio"/>
-    <ROW Directory="java.sql.rowset_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVASQ~1.ROW|java.sql.rowset"/>
-    <ROW Directory="java.sql_Dir" Directory_Parent="legal_Dir" DefaultDir="java.sql"/>
-    <ROW Directory="java.transaction.xa_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVATR~1.XA|java.transaction.xa"/>
-    <ROW Directory="java.xml.crypto_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVAXM~1.CRY|java.xml.crypto"/>
-    <ROW Directory="java.xml_Dir" Directory_Parent="legal_Dir" DefaultDir="java.xml"/>
-    <ROW Directory="javafx.base_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVAFX~1.BAS|javafx.base"/>
-    <ROW Directory="javafx.controls_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVAFX~1.CON|javafx.controls"/>
-    <ROW Directory="javafx.fxml_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVAFX~1.FXM|javafx.fxml"/>
-    <ROW Directory="javafx.graphics_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVAFX~1.GRA|javafx.graphics"/>
-    <ROW Directory="javafx.media_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVAFX~1.MED|javafx.media"/>
-    <ROW Directory="javafx.swing_Dir" Directory_Parent="legal_Dir" DefaultDir="JAVAFX~1.SWI|javafx.swing"/>
-    <ROW Directory="javafx.web_Dir" Directory_Parent="legal_Dir" DefaultDir="javafx.web"/>
-    <ROW Directory="jdk.accessibility_Dir" Directory_Parent="legal_Dir" DefaultDir="JDK~1.ACC|jdk.accessibility"/>
-    <ROW Directory="jdk.charsets_Dir" Directory_Parent="legal_Dir" DefaultDir="JDK~1.CHA|jdk.charsets"/>
-    <ROW Directory="jdk.crypto.cryptoki_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKCRY~1.CRY|jdk.crypto.cryptoki"/>
-    <ROW Directory="jdk.crypto.ec_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKCRY~1.EC|jdk.crypto.ec"/>
-    <ROW Directory="jdk.crypto.mscapi_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKCRY~1.MSC|jdk.crypto.mscapi"/>
-    <ROW Directory="jdk.dynalink_Dir" Directory_Parent="legal_Dir" DefaultDir="JDK~1.DYN|jdk.dynalink"/>
-    <ROW Directory="jdk.httpserver_Dir" Directory_Parent="legal_Dir" DefaultDir="JDK~1.HTT|jdk.httpserver"/>
-    <ROW Directory="jdk.incubator.foreign_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKINC~1.FOR|jdk.incubator.foreign"/>
-    <ROW Directory="jdk.incubator.vector_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKINC~1.VEC|jdk.incubator.vector"/>
-    <ROW Directory="jdk.internal.vm.ci_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKINT~1.CI|jdk.internal.vm.ci"/>
-    <ROW Directory="jdk.internal.vm.compiler.manage_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKINT~1.MAN|jdk.internal.vm.compiler.management"/>
-    <ROW Directory="jdk.internal.vm.compiler_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKINT~1.COM|jdk.internal.vm.compiler"/>
-    <ROW Directory="jdk.jdwp.agent_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKJDW~1.AGE|jdk.jdwp.agent"/>
-    <ROW Directory="jdk.jfr_Dir" Directory_Parent="legal_Dir" DefaultDir="jdk.jfr"/>
-    <ROW Directory="jdk.jsobject_Dir" Directory_Parent="legal_Dir" DefaultDir="JDK~1.JSO|jdk.jsobject"/>
-    <ROW Directory="jdk.localedata_Dir" Directory_Parent="legal_Dir" DefaultDir="JDK~1.LOC|jdk.localedata"/>
-    <ROW Directory="jdk.management.agent_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKMAN~1.AGE|jdk.management.agent"/>
-    <ROW Directory="jdk.management.jfr_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKMAN~1.JFR|jdk.management.jfr"/>
-    <ROW Directory="jdk.management_Dir" Directory_Parent="legal_Dir" DefaultDir="JDK~1.MAN|jdk.management"/>
-    <ROW Directory="jdk.naming.dns_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKNAM~1.DNS|jdk.naming.dns"/>
-    <ROW Directory="jdk.naming.rmi_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKNAM~1.RMI|jdk.naming.rmi"/>
-    <ROW Directory="jdk.net_Dir" Directory_Parent="legal_Dir" DefaultDir="jdk.net"/>
-    <ROW Directory="jdk.nio.mapmode_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKNIO~1.MAP|jdk.nio.mapmode"/>
-    <ROW Directory="jdk.random_Dir" Directory_Parent="legal_Dir" DefaultDir="JDK~1.RAN|jdk.random"/>
-    <ROW Directory="jdk.sctp_Dir" Directory_Parent="legal_Dir" DefaultDir="JDK~1.SCT|jdk.sctp"/>
-    <ROW Directory="jdk.security.auth_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKSEC~1.AUT|jdk.security.auth"/>
-    <ROW Directory="jdk.security.jgss_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKSEC~1.JGS|jdk.security.jgss"/>
-    <ROW Directory="jdk.unsupported.desktop_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKUNS~1.DES|jdk.unsupported.desktop"/>
-    <ROW Directory="jdk.unsupported_Dir" Directory_Parent="legal_Dir" DefaultDir="JDK~1.UNS|jdk.unsupported"/>
-    <ROW Directory="jdk.xml.dom_Dir" Directory_Parent="legal_Dir" DefaultDir="JDKXML~1.DOM|jdk.xml.dom"/>
-    <ROW Directory="jdk.zipfs_Dir" Directory_Parent="legal_Dir" DefaultDir="JDK~1.ZIP|jdk.zipfs"/>
-    <ROW Directory="jfr_Dir" Directory_Parent="lib_Dir" DefaultDir="jfr"/>
     <ROW Directory="jre64_Dir" Directory_Parent="APPDIR" DefaultDir="jre64"/>
-    <ROW Directory="legal_Dir" Directory_Parent="jre64_Dir" DefaultDir="legal"/>
-    <ROW Directory="lib_Dir" Directory_Parent="jre64_Dir" DefaultDir="lib"/>
-    <ROW Directory="limited_Dir" Directory_Parent="policy_Dir" DefaultDir="limited"/>
-    <ROW Directory="management_Dir" Directory_Parent="conf_Dir" DefaultDir="MANAGE~1|management"/>
-    <ROW Directory="policy_Dir" Directory_Parent="security_Dir" DefaultDir="policy"/>
-    <ROW Directory="security_2_Dir" Directory_Parent="lib_Dir" DefaultDir="security"/>
-    <ROW Directory="security_Dir" Directory_Parent="conf_Dir" DefaultDir="security"/>
-    <ROW Directory="server_Dir" Directory_Parent="bin_Dir" DefaultDir="server"/>
-    <ROW Directory="unlimited_Dir" Directory_Parent="policy_Dir" DefaultDir="UNLIMI~1|unlimited"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
-    <ROW Component="ADDITIONAL_LICENSE_INFO" ComponentId="{C66BA33B-2998-41BD-8960-43FC2932553C}" Directory_="com.azul.crs.client_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_100" ComponentId="{99083DC1-6CCA-430E-90E7-C6F16FCE4AC5}" Directory_="jdk.naming.dns_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_100" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_101" ComponentId="{935C97E2-682C-48FE-BECA-481ADE0C354A}" Directory_="jdk.naming.rmi_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_101" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_102" ComponentId="{FA4BD9C5-1BCD-4BA3-ABE6-266307A47405}" Directory_="jdk.net_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_102" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_103" ComponentId="{5F26C106-3ED6-40C2-88E9-B1D6AB2F8C31}" Directory_="jdk.nio.mapmode_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_103" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_104" ComponentId="{6505E39F-5389-4655-B00D-09D52F32AFCC}" Directory_="jdk.random_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_104" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_105" ComponentId="{E7F65F90-3594-4FDC-AFEC-EBA60279DD7F}" Directory_="jdk.sctp_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_105" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_106" ComponentId="{5DB83429-309A-4782-B57C-A0681CA2E521}" Directory_="jdk.security.auth_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_106" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_107" ComponentId="{1F697ED8-E7D6-414F-8302-84484A218A3F}" Directory_="jdk.security.jgss_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_107" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_108" ComponentId="{427AF0F3-6DF2-40DB-A231-B579F2944BE0}" Directory_="jdk.unsupported_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_108" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_109" ComponentId="{8D398614-950E-4949-9DC8-2742FC71E172}" Directory_="jdk.unsupported.desktop_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_109" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_110" ComponentId="{1922E7F0-CABB-4725-8590-15839F3E5401}" Directory_="jdk.xml.dom_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_110" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_111" ComponentId="{D0DBA923-AF41-43BA-94E3-468A622FC107}" Directory_="jdk.zipfs_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_111" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_51" ComponentId="{FAF9A38E-1EE0-4840-9F52-966207B7EFFF}" Directory_="com.azul.tooling_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_51" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_52" ComponentId="{BE21AFB8-9F78-4C97-AE92-6A20C732963D}" Directory_="java.base_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_52" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_53" ComponentId="{BEADA38D-FD3B-410F-B517-26DBC003A699}" Directory_="java.compiler_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_53" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_54" ComponentId="{6177945F-1E2D-423B-BE0B-6A31279053FC}" Directory_="java.datatransfer_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_54" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_55" ComponentId="{FD8C1A60-8823-499A-A524-3EFA05C34566}" Directory_="java.desktop_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_55" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_56" ComponentId="{34B84D3A-F016-4738-A02F-3CCE21B5B7A2}" Directory_="java.instrument_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_56" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_57" ComponentId="{4F8A8D9E-9950-4DA5-A9D1-40598170CFFE}" Directory_="java.logging_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_57" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_58" ComponentId="{5C5A1156-AB42-4F71-85ED-665849A96E87}" Directory_="java.management_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_58" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_59" ComponentId="{6696F74F-F3E3-46FE-A2C5-B70AA2C66654}" Directory_="java.management.rmi_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_59" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_60" ComponentId="{A61C0B1C-3A10-4A11-ACCC-588B1156F76C}" Directory_="java.naming_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_60" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_61" ComponentId="{E5260137-D822-42D8-8D49-07F11C9DC83A}" Directory_="java.net.http_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_61" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_62" ComponentId="{FC31B036-5F29-42ED-A5E7-F29068AE793A}" Directory_="java.prefs_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_62" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_63" ComponentId="{3CE54A1E-43CB-46DD-888F-663D2B9F1673}" Directory_="java.rmi_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_63" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_64" ComponentId="{D1BE73CF-FC5C-4271-A696-D79F01E8D65B}" Directory_="java.scripting_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_64" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_65" ComponentId="{0E56BA4F-6CE3-4517-B2A8-79807B4B3729}" Directory_="java.se_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_65" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_66" ComponentId="{D7F39105-EDC2-416F-9A34-4767BB759888}" Directory_="java.security.jgss_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_66" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_67" ComponentId="{ADFA36D7-9EC9-404C-BF72-3E04FD13E5A5}" Directory_="java.security.sasl_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_67" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_68" ComponentId="{2021406D-0B79-4EB6-88B8-A28BF3B56E0A}" Directory_="java.smartcardio_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_68" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_69" ComponentId="{18989E45-9563-4991-AB11-BA6A27B89A34}" Directory_="java.sql_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_69" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_70" ComponentId="{4219963F-DB67-459A-AB9D-2B05BF012E4A}" Directory_="java.sql.rowset_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_70" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_71" ComponentId="{771C1DC2-F53D-4336-8D61-00B266EC20AD}" Directory_="java.transaction.xa_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_71" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_72" ComponentId="{35D70DE7-B9F5-4D09-B1BA-617A35C47844}" Directory_="java.xml_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_72" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_73" ComponentId="{93157B34-2BBD-4712-BFB6-5CCEDD2127D2}" Directory_="java.xml.crypto_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_73" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_74" ComponentId="{252982E6-F8C7-4E2D-9204-E7F5D2F8D060}" Directory_="javafx.base_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_74" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_75" ComponentId="{47F16AAC-D80F-4BCD-8CC4-1A40E2D1CB7C}" Directory_="javafx.controls_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_75" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_76" ComponentId="{B905F1B6-6C02-4F12-90AC-21B4874852B1}" Directory_="javafx.fxml_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_76" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_77" ComponentId="{30F6CB50-A2C1-4019-A55B-02A2F4D2A484}" Directory_="javafx.graphics_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_77" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_78" ComponentId="{1A608F5E-EB8D-4463-BEFF-3F8E071CE0E0}" Directory_="javafx.media_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_78" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_79" ComponentId="{30EFAED5-BEB6-4047-A6A0-5ED5EA0C4A97}" Directory_="javafx.swing_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_79" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_80" ComponentId="{0706444C-40C5-47E9-B897-8235ADE32D2B}" Directory_="javafx.web_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_80" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_81" ComponentId="{0C56C428-1429-43B3-A4F3-40D739A1FDB2}" Directory_="jdk.accessibility_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_81" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_82" ComponentId="{A85FEFDF-82AA-4588-8E2A-A030C3916FAD}" Directory_="jdk.charsets_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_82" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_83" ComponentId="{52CA9673-8ADE-4E65-A8DD-514E53D97819}" Directory_="jdk.crypto.cryptoki_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_83" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_84" ComponentId="{79CAEA1B-D2FF-4A51-9025-F4B0DCF0658E}" Directory_="jdk.crypto.ec_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_84" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_85" ComponentId="{BAECCBD3-41F8-4CD9-B8AA-9B7CAE762152}" Directory_="jdk.crypto.mscapi_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_85" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_86" ComponentId="{94563FD8-2A42-4C15-9646-521DE8F28CE1}" Directory_="jdk.dynalink_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_86" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_87" ComponentId="{B2FCA09C-B8F0-49F4-B7C6-E7F6C144F16F}" Directory_="jdk.httpserver_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_87" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_88" ComponentId="{A623D4A7-6575-42BD-B055-A9C0B2143D5D}" Directory_="jdk.incubator.foreign_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_88" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_89" ComponentId="{255FF148-7719-4041-ABA3-EF0F8B183237}" Directory_="jdk.incubator.vector_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_89" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_90" ComponentId="{C67667DE-E0CA-4DA8-BF56-71644F7B27DC}" Directory_="jdk.internal.vm.ci_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_90" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_91" ComponentId="{2B1401CC-1675-47BB-9881-9619ABFCFC6F}" Directory_="jdk.internal.vm.compiler_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_91" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_92" ComponentId="{AF5E406F-B6E7-4297-9708-C170F5A8496B}" Directory_="jdk.internal.vm.compiler.manage_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_92" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_93" ComponentId="{99A3748C-17A7-41CF-B760-CC57E024C7A5}" Directory_="jdk.jdwp.agent_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_93" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_94" ComponentId="{89B1FAC7-64AE-489F-891C-8845AA0035D8}" Directory_="jdk.jfr_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_94" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_95" ComponentId="{131440FB-2A01-4689-B4AD-D47E63FF600A}" Directory_="jdk.jsobject_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_95" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_96" ComponentId="{8CE56C80-5D24-4CA8-BC89-B208D857F982}" Directory_="jdk.localedata_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_96" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_97" ComponentId="{D4EF29ED-DD35-4C2C-B531-28348F1F1EAE}" Directory_="jdk.management_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_97" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_98" ComponentId="{C784B669-8776-4723-B101-4489EF9304FF}" Directory_="jdk.management.agent_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_98" Type="0"/>
-    <ROW Component="ADDITIONAL_LICENSE_INFO_99" ComponentId="{0C37C2FB-EF77-4F46-B952-1E3062A8C165}" Directory_="jdk.management.jfr_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_99" Type="0"/>
-    <ROW Component="AI_CustomARPName" ComponentId="{D3F5E10C-3927-4746-8A3F-C00FE6E9E12A}" Directory_="APPDIR" Attributes="260" KeyPath="DisplayName" Options="1"/>
-    <ROW Component="AI_ExePath" ComponentId="{B2FF69B7-3DD1-41E4-8EA8-E0139034CAB8}" Directory_="APPDIR" Attributes="4" KeyPath="AI_ExePath"/>
-    <ROW Component="APPDIR" ComponentId="{A465202A-DB76-4ED2-BA7F-3587DD01C4C6}" Directory_="APPDIR" Attributes="0"/>
-    <ROW Component="DISCLAIMER" ComponentId="{4D13C0B6-0F1F-425C-A574-CB5457C9A4FD}" Directory_="jre64_Dir" Attributes="0" KeyPath="DISCLAIMER" Type="0"/>
-    <ROW Component="ProductInformation" ComponentId="{43865CFB-02A6-4676-BCDE-719491F3B668}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
-    <ROW Component="README.txt" ComponentId="{9A0F8D79-8FD1-4E6D-8ACF-0A5366B357F2}" Directory_="policy_Dir" Attributes="0" KeyPath="README.txt" Type="0"/>
-    <ROW Component="SHORTCUTDIR" ComponentId="{40A6D4E0-29A5-459A-9C8F-25835781B923}" Directory_="SHORTCUTDIR" Attributes="0"/>
-    <ROW Component="WinFallbackLookup.dll" ComponentId="{EA07C23A-0DCB-4FD1-B5C3-14603B807C46}" Directory_="bin_Dir" Attributes="256" KeyPath="WinFallbackLookup.dll"/>
-    <ROW Component="YourProduct.exe" ComponentId="{F7D5F405-A7F4-4535-BF36-F848254640D6}" Directory_="APPDIR" Attributes="0" KeyPath="YourProduct.exe"/>
-    <ROW Component="apimswincoreconsolel110.dll" ComponentId="{994F11FB-5770-43AF-82B4-3EA3B8ED9DFF}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoreconsolel110.dll"/>
-    <ROW Component="apimswincoreconsolel120.dll" ComponentId="{A1B8C5B3-8583-4334-A218-DAA0967B960F}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoreconsolel120.dll"/>
-    <ROW Component="apimswincoredatetimel110.dll" ComponentId="{80A70047-A4C2-4BB0-80CD-DAFFA4ED5CD8}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoredatetimel110.dll"/>
-    <ROW Component="apimswincoredebugl110.dll" ComponentId="{2794F00C-4168-4F8C-B1E6-B452D60F7BB6}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoredebugl110.dll"/>
-    <ROW Component="apimswincoreerrorhandlingl110.dll" ComponentId="{56B88340-693B-472D-A2AA-5466399588A7}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoreerrorhandlingl110.dll"/>
-    <ROW Component="apimswincorefibersl110.dll" ComponentId="{C859152B-DA4E-4348-91E3-147301AF3DB7}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincorefibersl110.dll"/>
-    <ROW Component="apimswincorefilel110.dll" ComponentId="{153F7899-DF29-4744-BC33-C02C0076D350}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincorefilel110.dll"/>
-    <ROW Component="apimswincorefilel120.dll" ComponentId="{85066F7D-9908-4441-A1F1-EC72C389BF85}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincorefilel120.dll"/>
-    <ROW Component="apimswincorefilel210.dll" ComponentId="{BEBD0A9E-D9E7-4A69-AD2D-A107D5BA4323}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincorefilel210.dll"/>
-    <ROW Component="apimswincorehandlel110.dll" ComponentId="{55A9BF01-E6F2-44FC-8376-4C5FC9CECB03}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincorehandlel110.dll"/>
-    <ROW Component="apimswincoreheapl110.dll" ComponentId="{3F0DD82B-F1B3-4AD5-9968-F19CC804D4A6}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoreheapl110.dll"/>
-    <ROW Component="apimswincoreinterlockedl110.dll" ComponentId="{47989B23-E35D-4B79-982E-A9835BAFACCB}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoreinterlockedl110.dll"/>
-    <ROW Component="apimswincorelibraryloaderl110.dll" ComponentId="{41410719-0C87-4136-A666-AA2A54B6B8A8}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincorelibraryloaderl110.dll"/>
-    <ROW Component="apimswincorelocalizationl120.dll" ComponentId="{8A475391-8ADA-4026-8422-070A589BEEBE}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincorelocalizationl120.dll"/>
-    <ROW Component="apimswincorememoryl110.dll" ComponentId="{617CC66D-1542-4F76-BA15-285CBD5A0F95}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincorememoryl110.dll"/>
-    <ROW Component="apimswincorenamedpipel110.dll" ComponentId="{3E85DFCB-A0AC-43E7-9FA0-EA425FC4DF35}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincorenamedpipel110.dll"/>
-    <ROW Component="apimswincoreprocessenvironmentl110.dll" ComponentId="{501603B9-6C9A-42CE-AFE1-AF9677AF9565}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoreprocessenvironmentl110.dll"/>
-    <ROW Component="apimswincoreprocessthreadsl110.dll" ComponentId="{D039E427-7D53-4745-BE5B-A38E989F0D29}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoreprocessthreadsl110.dll"/>
-    <ROW Component="apimswincoreprocessthreadsl111.dll" ComponentId="{728B55DA-3E3C-4423-BEEC-31DEB4E806E4}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoreprocessthreadsl111.dll"/>
-    <ROW Component="apimswincoreprofilel110.dll" ComponentId="{A03D8692-1D36-4927-9095-D2DE82DD46B9}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoreprofilel110.dll"/>
-    <ROW Component="apimswincorertlsupportl110.dll" ComponentId="{51BE046A-F266-42E5-A72A-847C4EC30615}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincorertlsupportl110.dll"/>
-    <ROW Component="apimswincorestringl110.dll" ComponentId="{25065295-A145-4790-9E2B-DA941F4E3540}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincorestringl110.dll"/>
-    <ROW Component="apimswincoresynchl110.dll" ComponentId="{570334DD-CF92-4E61-87D6-D6840BBE14A5}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoresynchl110.dll"/>
-    <ROW Component="apimswincoresynchl120.dll" ComponentId="{D7B92E33-AB37-4AEA-9872-08B1391FBBAA}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoresynchl120.dll"/>
-    <ROW Component="apimswincoresysinfol110.dll" ComponentId="{450384CD-962C-45A4-B126-505BF177505A}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoresysinfol110.dll"/>
-    <ROW Component="apimswincoretimezonel110.dll" ComponentId="{12C15900-0C88-4A7F-9BA3-E4B55F5168EC}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoretimezonel110.dll"/>
-    <ROW Component="apimswincoreutill110.dll" ComponentId="{646ABA7B-5999-44F0-B72B-252D6107D314}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincoreutill110.dll"/>
-    <ROW Component="apimswincrtconiol110.dll" ComponentId="{4571C525-A418-42D7-BAA1-3986E1813710}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtconiol110.dll"/>
-    <ROW Component="apimswincrtconvertl110.dll" ComponentId="{9D10B886-6CED-4096-AAF6-17B07A14CE2C}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtconvertl110.dll"/>
-    <ROW Component="apimswincrtenvironmentl110.dll" ComponentId="{088C7713-4C7D-43CF-B5FC-E07FF2EA3A5F}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtenvironmentl110.dll"/>
-    <ROW Component="apimswincrtfilesysteml110.dll" ComponentId="{B5D007F9-2960-4C69-B180-7F6547D66866}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtfilesysteml110.dll"/>
-    <ROW Component="apimswincrtheapl110.dll" ComponentId="{F0B2FD93-F10D-4812-BD25-7423A51B4205}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtheapl110.dll"/>
-    <ROW Component="apimswincrtlocalel110.dll" ComponentId="{C73E9AF0-CB90-479F-9690-3E6209EC45E3}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtlocalel110.dll"/>
-    <ROW Component="apimswincrtmathl110.dll" ComponentId="{6802B2B3-3E72-4CFF-B166-70DE62D2C3A3}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtmathl110.dll"/>
-    <ROW Component="apimswincrtmultibytel110.dll" ComponentId="{F58BEF63-DEC2-4635-B65D-733F9732E229}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtmultibytel110.dll"/>
-    <ROW Component="apimswincrtprivatel110.dll" ComponentId="{14E67A13-52A7-41B3-AB72-852EB9FB5537}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtprivatel110.dll"/>
-    <ROW Component="apimswincrtprocessl110.dll" ComponentId="{0F51D7B8-B025-4F76-B2E9-6485FDCB5873}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtprocessl110.dll"/>
-    <ROW Component="apimswincrtruntimel110.dll" ComponentId="{EEF2D47B-DAB1-4C61-8F93-D11682B75ACE}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtruntimel110.dll"/>
-    <ROW Component="apimswincrtstdiol110.dll" ComponentId="{BCE51AA3-87BE-4150-8EE7-DBFD7DC107D3}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtstdiol110.dll"/>
-    <ROW Component="apimswincrtstringl110.dll" ComponentId="{AC0FDDEA-14F4-4C9B-95B3-6C3186085DDE}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtstringl110.dll"/>
-    <ROW Component="apimswincrttimel110.dll" ComponentId="{317B15AF-B655-4817-8EB1-079C23C2A4D6}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrttimel110.dll"/>
-    <ROW Component="apimswincrtutilityl110.dll" ComponentId="{69B7B550-2BC6-4397-AFC9-5033D9CF2652}" Directory_="bin_Dir" Attributes="256" KeyPath="apimswincrtutilityl110.dll"/>
-    <ROW Component="app.logorrr.app22.3.0SNAPSHOT.jar" ComponentId="{C9C4F4B0-DABF-4CA8-BD5B-4C864CC55F4F}" Directory_="APPDIR" Attributes="0" KeyPath="app.logorrr.app22.3.0SNAPSHOT.jar" Type="0"/>
-    <ROW Component="awt.dll" ComponentId="{179C7B59-8AAF-4582-B1AC-5B994A322AD4}" Directory_="bin_Dir" Attributes="256" KeyPath="awt.dll"/>
-    <ROW Component="blocked.certs" ComponentId="{B0D08C29-7252-4039-B69B-B580BA9C6139}" Directory_="security_2_Dir" Attributes="0" KeyPath="blocked.certs" Type="0"/>
-    <ROW Component="classes.jsa" ComponentId="{CB9A8F8E-CE62-45D1-BC54-5EF3529CF401}" Directory_="server_Dir" Attributes="0" KeyPath="classes.jsa" Type="0"/>
-    <ROW Component="classlist" ComponentId="{AB95F3F1-D428-4FC8-B51C-CFC674D3217C}" Directory_="lib_Dir" Attributes="0" KeyPath="classlist" Type="0"/>
-    <ROW Component="decora_sse.dll" ComponentId="{6AE1E4AF-0187-4AC1-A647-7BD9076EBF75}" Directory_="bin_Dir" Attributes="256" KeyPath="decora_sse.dll"/>
-    <ROW Component="default.jfc" ComponentId="{C956B58C-D639-45C3-9828-404FD6431060}" Directory_="jfr_Dir" Attributes="0" KeyPath="default.jfc" Type="0"/>
-    <ROW Component="default_local.policy" ComponentId="{67F873FC-0141-4627-967E-AF1C66381CA9}" Directory_="limited_Dir" Attributes="0" KeyPath="default_local.policy" Type="0"/>
-    <ROW Component="default_local.policy_2" ComponentId="{CC46EC7F-9B65-4BB7-BF12-FA2495A3B3E3}" Directory_="unlimited_Dir" Attributes="0" KeyPath="default_local.policy_2" Type="0"/>
-    <ROW Component="dt_socket.dll" ComponentId="{C6B36B0B-B01A-410F-B062-B5F208085CAB}" Directory_="bin_Dir" Attributes="256" KeyPath="dt_socket.dll"/>
-    <ROW Component="fontmanager.dll" ComponentId="{668F53F2-3284-4969-9239-6CC25571A210}" Directory_="bin_Dir" Attributes="256" KeyPath="fontmanager.dll"/>
-    <ROW Component="freetype.dll" ComponentId="{A9861806-89FE-4FEB-B85A-9C915000D204}" Directory_="bin_Dir" Attributes="256" KeyPath="freetype.dll"/>
-    <ROW Component="fxplugins.dll" ComponentId="{7529CAA8-636B-4D67-8011-2AD06C09A12B}" Directory_="bin_Dir" Attributes="256" KeyPath="fxplugins.dll"/>
-    <ROW Component="glass.dll" ComponentId="{2F8E7235-866B-454A-991D-7367FA11FE10}" Directory_="bin_Dir" Attributes="256" KeyPath="glass.dll"/>
-    <ROW Component="gliblite.dll" ComponentId="{478AE753-C4FE-42BA-BB16-B0A4F9722AA3}" Directory_="bin_Dir" Attributes="256" KeyPath="gliblite.dll"/>
-    <ROW Component="gstreamerlite.dll" ComponentId="{2FF38072-0AC5-4D35-A7B4-FFE5CC1BA5B5}" Directory_="bin_Dir" Attributes="256" KeyPath="gstreamerlite.dll"/>
-    <ROW Component="instrument.dll" ComponentId="{A2AF4557-62C1-498F-B2ED-E43BCE229DB1}" Directory_="bin_Dir" Attributes="256" KeyPath="instrument.dll"/>
-    <ROW Component="j2gss.dll" ComponentId="{C775FA7E-8F13-4D6A-81CF-EB0FB20A6AEF}" Directory_="bin_Dir" Attributes="256" KeyPath="j2gss.dll"/>
-    <ROW Component="j2pcsc.dll" ComponentId="{5E80698E-1564-42C8-A336-E54F748B9838}" Directory_="bin_Dir" Attributes="256" KeyPath="j2pcsc.dll"/>
-    <ROW Component="j2pkcs11.dll" ComponentId="{40E30DE7-E1D5-40FE-A945-426A446A8D6D}" Directory_="bin_Dir" Attributes="256" KeyPath="j2pkcs11.dll"/>
-    <ROW Component="jaas.dll" ComponentId="{98DC0EAD-01F4-4A71-BFE7-5A053A937955}" Directory_="bin_Dir" Attributes="256" KeyPath="jaas.dll"/>
-    <ROW Component="jabswitch.exe" ComponentId="{4F197E31-C30B-4C33-9D1C-7657B52F4D38}" Directory_="bin_Dir" Attributes="256" KeyPath="jabswitch.exe"/>
-    <ROW Component="jaccessinspector.exe" ComponentId="{8DE1AC5A-3819-4CE8-9E25-568963EB8473}" Directory_="bin_Dir" Attributes="256" KeyPath="jaccessinspector.exe"/>
-    <ROW Component="jaccesswalker.exe" ComponentId="{841C5460-4B7C-41DD-B26F-AA0878A8F3AB}" Directory_="bin_Dir" Attributes="256" KeyPath="jaccesswalker.exe"/>
-    <ROW Component="java.dll" ComponentId="{C34CD8BD-844B-45E1-BD77-936F833CFE51}" Directory_="bin_Dir" Attributes="256" KeyPath="java.dll"/>
-    <ROW Component="java.exe" ComponentId="{D88144B7-04AA-44DF-9628-DCD32F1878AA}" Directory_="bin_Dir" Attributes="256" KeyPath="java.exe"/>
-    <ROW Component="java.policy" ComponentId="{DC5204CB-4A10-4F4C-9105-04588492543B}" Directory_="security_Dir" Attributes="0" KeyPath="java.policy" Type="0"/>
-    <ROW Component="javaaccessbridge.dll" ComponentId="{A2E931D7-41FC-46DB-9FC6-6D207B156DF4}" Directory_="bin_Dir" Attributes="256" KeyPath="javaaccessbridge.dll"/>
-    <ROW Component="javafx_font.dll" ComponentId="{0E1921E7-53E7-4788-9F91-8A4E14F130CF}" Directory_="bin_Dir" Attributes="256" KeyPath="javafx_font.dll"/>
-    <ROW Component="javafx_iio.dll" ComponentId="{B68E0CB6-BFFF-4972-8587-FAF77346B9C6}" Directory_="bin_Dir" Attributes="256" KeyPath="javafx_iio.dll"/>
-    <ROW Component="javajpeg.dll" ComponentId="{6CC9213E-9FD7-46EC-A828-8FBC76503F74}" Directory_="bin_Dir" Attributes="256" KeyPath="javajpeg.dll"/>
-    <ROW Component="javaw.exe" ComponentId="{FCC5E663-20C3-4B75-B67E-FA6C65E34F49}" Directory_="bin_Dir" Attributes="256" KeyPath="javaw.exe"/>
-    <ROW Component="jawt.dll" ComponentId="{458BC893-8E04-4355-8C33-D9E18E72CF98}" Directory_="bin_Dir" Attributes="256" KeyPath="jawt.dll"/>
-    <ROW Component="jdwp.dll" ComponentId="{C7785E08-2155-4787-98A9-CC9756602A30}" Directory_="bin_Dir" Attributes="256" KeyPath="jdwp.dll"/>
-    <ROW Component="jfr.exe" ComponentId="{0ADC199B-F39C-4B97-8B21-19B487B43AA3}" Directory_="bin_Dir" Attributes="256" KeyPath="jfr.exe"/>
-    <ROW Component="jfxmedia.dll" ComponentId="{79FC2226-55FB-4C66-98BA-31BD88BE12A2}" Directory_="bin_Dir" Attributes="256" KeyPath="jfxmedia.dll"/>
-    <ROW Component="jfxwebkit.dll" ComponentId="{888A9B47-8F37-4517-820E-4DB574480A90}" Directory_="bin_Dir" Attributes="256" KeyPath="jfxwebkit.dll"/>
-    <ROW Component="jimage.dll" ComponentId="{000AEFBE-3149-45C5-8F42-DFB88869EFA2}" Directory_="bin_Dir" Attributes="256" KeyPath="jimage.dll"/>
-    <ROW Component="jli.dll" ComponentId="{A2A986A6-1AD1-4862-8E4F-8CE1151C4FCB}" Directory_="bin_Dir" Attributes="256" KeyPath="jli.dll"/>
-    <ROW Component="jmxremote.access" ComponentId="{7B50EAF1-4464-4D1D-B8D5-18EDC93A03B6}" Directory_="management_Dir" Attributes="0" KeyPath="jmxremote.access" Type="0"/>
-    <ROW Component="jrunscript.exe" ComponentId="{CE6B1B2E-E270-4896-ACE1-47D1DF8992D5}" Directory_="bin_Dir" Attributes="256" KeyPath="jrunscript.exe"/>
-    <ROW Component="jsound.dll" ComponentId="{80952F09-786D-4FA4-B3F0-FBC552E93080}" Directory_="bin_Dir" Attributes="256" KeyPath="jsound.dll"/>
-    <ROW Component="jsvml.dll" ComponentId="{67B6427D-6F97-4FDE-8333-7BF2815E2431}" Directory_="bin_Dir" Attributes="256" KeyPath="jsvml.dll"/>
-    <ROW Component="jvm.dll" ComponentId="{6E4A83E4-6C4A-4135-8D3A-78008D73DF2A}" Directory_="server_Dir" Attributes="256" KeyPath="jvm.dll"/>
-    <ROW Component="keytool.exe" ComponentId="{AEC90D79-F594-4655-9132-F1F2AE584E1B}" Directory_="bin_Dir" Attributes="256" KeyPath="keytool.exe"/>
-    <ROW Component="kinit.exe" ComponentId="{53E71E0D-9EE7-499F-ABCE-9DB43DAC403C}" Directory_="bin_Dir" Attributes="256" KeyPath="kinit.exe"/>
-    <ROW Component="klist.exe" ComponentId="{6B3133B7-0000-445C-8012-6D40F2F57852}" Directory_="bin_Dir" Attributes="256" KeyPath="klist.exe"/>
-    <ROW Component="ktab.exe" ComponentId="{9EB42297-21F3-4EF6-A89F-702260B80ABF}" Directory_="bin_Dir" Attributes="256" KeyPath="ktab.exe"/>
-    <ROW Component="lcms.dll" ComponentId="{1988CE2F-31F2-4FB5-967D-EE346312620B}" Directory_="bin_Dir" Attributes="256" KeyPath="lcms.dll"/>
-    <ROW Component="logging.properties" ComponentId="{FA23420C-C840-4F0C-871E-0DBF06316358}" Directory_="conf_Dir" Attributes="0" KeyPath="logging.properties" Type="0"/>
-    <ROW Component="management.dll" ComponentId="{8179A9E4-D0A4-4C70-948B-6DFDD624801F}" Directory_="bin_Dir" Attributes="256" KeyPath="management.dll"/>
-    <ROW Component="management_agent.dll" ComponentId="{D59310C4-F131-43A0-AD5B-BD4FD2B330A6}" Directory_="bin_Dir" Attributes="256" KeyPath="management_agent.dll"/>
-    <ROW Component="management_ext.dll" ComponentId="{92047F4D-3761-49C7-B10A-1C025472AC93}" Directory_="bin_Dir" Attributes="256" KeyPath="management_ext.dll"/>
-    <ROW Component="mlib_image.dll" ComponentId="{48B632BA-7C2A-41A5-BFB9-6D1800501004}" Directory_="bin_Dir" Attributes="256" KeyPath="mlib_image.dll"/>
-    <ROW Component="msvcp140.dll" ComponentId="{E402051A-6E5F-4BF3-978B-FAB5FDE732B1}" Directory_="bin_Dir" Attributes="256" KeyPath="msvcp140.dll"/>
-    <ROW Component="net.dll" ComponentId="{828D5F6A-6964-4B99-910E-0DE25F5F8909}" Directory_="bin_Dir" Attributes="256" KeyPath="net.dll"/>
-    <ROW Component="nio.dll" ComponentId="{73675352-519C-4673-95E4-BAD348EE3561}" Directory_="bin_Dir" Attributes="256" KeyPath="nio.dll"/>
-    <ROW Component="prefs.dll" ComponentId="{DC09D05C-E3E4-4717-9C17-F02C32911290}" Directory_="bin_Dir" Attributes="256" KeyPath="prefs.dll"/>
-    <ROW Component="prism_common.dll" ComponentId="{7D6E7A7B-AA5A-46F3-B388-AB4E1C59C99B}" Directory_="bin_Dir" Attributes="256" KeyPath="prism_common.dll"/>
-    <ROW Component="prism_d3d.dll" ComponentId="{22D38E60-D222-4C0F-9172-252C00C0CAFA}" Directory_="bin_Dir" Attributes="256" KeyPath="prism_d3d.dll"/>
-    <ROW Component="prism_sw.dll" ComponentId="{B021BAA2-63BE-42C6-91C1-B932C04F2B2C}" Directory_="bin_Dir" Attributes="256" KeyPath="prism_sw.dll"/>
-    <ROW Component="rmi.dll" ComponentId="{257D0573-44B6-40E6-ABD2-74CDAA044075}" Directory_="bin_Dir" Attributes="256" KeyPath="rmi.dll"/>
-    <ROW Component="rmiregistry.exe" ComponentId="{5AE74640-07D2-4E89-9A14-13341013E145}" Directory_="bin_Dir" Attributes="256" KeyPath="rmiregistry.exe"/>
-    <ROW Component="splashscreen.dll" ComponentId="{1E142546-1D97-4AC4-BDD1-C45C188CEFCE}" Directory_="bin_Dir" Attributes="256" KeyPath="splashscreen.dll"/>
-    <ROW Component="sspi_bridge.dll" ComponentId="{176D8DDF-B69B-484F-9782-410EE32DB25D}" Directory_="bin_Dir" Attributes="256" KeyPath="sspi_bridge.dll"/>
-    <ROW Component="sunmscapi.dll" ComponentId="{6821121D-89CD-4C0C-B1BA-B5150A96DD8B}" Directory_="bin_Dir" Attributes="256" KeyPath="sunmscapi.dll"/>
-    <ROW Component="ucrtbase.dll" ComponentId="{B1634B30-88BA-435C-9BF7-E57315156757}" Directory_="bin_Dir" Attributes="256" KeyPath="ucrtbase.dll"/>
-    <ROW Component="vcruntime140.dll" ComponentId="{6FEE8FB1-59F4-4E1F-9A31-32277CC9600A}" Directory_="bin_Dir" Attributes="256" KeyPath="vcruntime140.dll"/>
-    <ROW Component="vcruntime140_1.dll" ComponentId="{3F10689F-E6B5-4E0C-A2C9-BF4F36468D9A}" Directory_="bin_Dir" Attributes="256" KeyPath="vcruntime140_1.dll"/>
-    <ROW Component="verify.dll" ComponentId="{36909D8C-E9DF-44D3-87E6-971361019A9B}" Directory_="bin_Dir" Attributes="256" KeyPath="verify.dll"/>
-    <ROW Component="w2k_lsa_auth.dll" ComponentId="{7AAEB903-9F26-4F37-B85C-09DDD3A74996}" Directory_="bin_Dir" Attributes="256" KeyPath="w2k_lsa_auth.dll"/>
-    <ROW Component="windowsaccessbridge64.dll" ComponentId="{59422062-7116-43B9-8BD7-C810DF108712}" Directory_="bin_Dir" Attributes="256" KeyPath="windowsaccessbridge64.dll"/>
-    <ROW Component="zip.dll" ComponentId="{66E3DDAF-2F08-4BEF-9F83-879185002EBA}" Directory_="bin_Dir" Attributes="256" KeyPath="zip.dll"/>
+    <ROW Component="AI_ExePath" ComponentId="{C91947AB-0D13-41A2-83FA-4726549ECDE6}" Directory_="APPDIR" Attributes="260" KeyPath="AI_ExePath"/>
+    <ROW Component="AI_INSTALLPERUSER" ComponentId="{85BBBFA7-E96F-4FB9-8C42-632CEB9AE05B}" Directory_="APPDIR" Attributes="260" KeyPath="AI_INSTALLPERUSER" Options="1"/>
+    <ROW Component="APPDIR" ComponentId="{99BCDB82-5F09-421C-A976-F47DD72C83E1}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="LogoRRR.exe" ComponentId="{5C3E2C2D-8ABA-4AF6-8D16-21634C619EE5}" Directory_="APPDIR" Attributes="0" KeyPath="LogoRRR.exe"/>
+    <ROW Component="ProductInformation" ComponentId="{C27207B5-935E-4050-A66D-1654F364C41C}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
+    <ROW Component="app.logorrr.app22.3.0SNAPSHOT.jar" ComponentId="{A6188203-4548-421B-AC90-11D613580D8C}" Directory_="APPDIR" Attributes="0" KeyPath="app.logorrr.app22.3.0SNAPSHOT.jar" Type="0"/>
+    <ROW Component="jre64" ComponentId="{3816678E-07F0-40C8-BBD2-D66C4681C0FE}" Directory_="jre64_Dir" Attributes="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
     <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
@@ -312,389 +55,31 @@
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
-    <ROW File="YourProduct.exe" Component_="YourProduct.exe" FileName="LogoRRR.exe" Attributes="0" SourcePath="&lt;AI_STUBS_64&gt;aijclw.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="app.logorrr.app22.3.0SNAPSHOT.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="APPLOG~1.JAR|app.logorrr.app-22.3.0-SNAPSHOT.jar" Attributes="0" SourcePath="binaries\app.logorrr.app-22.3.0-SNAPSHOT.jar" SelfReg="false"/>
-    <ROW File="app.logorrr.build22.3.0SNAPSHOT.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="APPLOG~2.JAR|app.logorrr.build-22.3.0-SNAPSHOT.jar" Attributes="0" SourcePath="binaries\app.logorrr.build-22.3.0-SNAPSHOT.jar" SelfReg="false"/>
-    <ROW File="app.logorrr.core22.3.0SNAPSHOT.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="APPLOG~3.JAR|app.logorrr.core-22.3.0-SNAPSHOT.jar" Attributes="0" SourcePath="binaries\app.logorrr.core-22.3.0-SNAPSHOT.jar" SelfReg="false"/>
-    <ROW File="com.chuusai.shapeless_2.132.3.7.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMCHU~1.JAR|com.chuusai.shapeless_2.13-2.3.7.jar" Attributes="0" SourcePath="binaries\com.chuusai.shapeless_2.13-2.3.7.jar" SelfReg="false"/>
-    <ROW File="com.github.pureconfig.pureconfig_2.130.17.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMGIT~1.JAR|com.github.pureconfig.pureconfig_2.13-0.17.1.jar" Attributes="0" SourcePath="binaries\com.github.pureconfig.pureconfig_2.13-0.17.1.jar" SelfReg="false"/>
-    <ROW File="com.github.pureconfig.pureconfigcore_2.130.17.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMGIT~2.JAR|com.github.pureconfig.pureconfig-core_2.13-0.17.1.jar" Attributes="0" SourcePath="binaries\com.github.pureconfig.pureconfig-core_2.13-0.17.1.jar" SelfReg="false"/>
-    <ROW File="com.github.pureconfig.pureconfiggeneric_2.130.17.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMGIT~3.JAR|com.github.pureconfig.pureconfig-generic_2.13-0.17.1.jar" Attributes="0" SourcePath="binaries\com.github.pureconfig.pureconfig-generic_2.13-0.17.1.jar" SelfReg="false"/>
-    <ROW File="com.github.pureconfig.pureconfiggenericbase_2.130.17.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMGIT~4.JAR|com.github.pureconfig.pureconfig-generic-base_2.13-0.17.1.jar" Attributes="0" SourcePath="binaries\com.github.pureconfig.pureconfig-generic-base_2.13-0.17.1.jar" SelfReg="false"/>
-    <ROW File="com.typesafe.config1.4.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMTYP~1.JAR|com.typesafe.config-1.4.1.jar" Attributes="0" SourcePath="binaries\com.typesafe.config-1.4.1.jar" SelfReg="false"/>
-    <ROW File="commonsio.commonsio2.8.0.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMMON~1.JAR|commons-io.commons-io-2.8.0.jar" Attributes="0" SourcePath="binaries\commons-io.commons-io-2.8.0.jar" SelfReg="false"/>
-    <ROW File="org.scalalang.scalalibrary2.13.8.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="ORGSCA~1.JAR|org.scala-lang.scala-library-2.13.8.jar" Attributes="0" SourcePath="binaries\org.scala-lang.scala-library-2.13.8.jar" SelfReg="false"/>
-    <ROW File="apimswincoreconsolel110.dll" Component_="apimswincoreconsolel110.dll" FileName="API-MS~1.DLL|api-ms-win-core-console-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-console-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoreconsolel120.dll" Component_="apimswincoreconsolel120.dll" FileName="API-MS~2.DLL|api-ms-win-core-console-l1-2-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-console-l1-2-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoredatetimel110.dll" Component_="apimswincoredatetimel110.dll" FileName="API-MS~3.DLL|api-ms-win-core-datetime-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-datetime-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoredebugl110.dll" Component_="apimswincoredebugl110.dll" FileName="API-MS~4.DLL|api-ms-win-core-debug-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-debug-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoreerrorhandlingl110.dll" Component_="apimswincoreerrorhandlingl110.dll" FileName="API-MS~5.DLL|api-ms-win-core-errorhandling-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-errorhandling-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincorefibersl110.dll" Component_="apimswincorefibersl110.dll" FileName="API-MS~6.DLL|api-ms-win-core-fibers-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-fibers-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincorefilel110.dll" Component_="apimswincorefilel110.dll" FileName="API-MS~7.DLL|api-ms-win-core-file-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-file-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincorefilel120.dll" Component_="apimswincorefilel120.dll" FileName="API-MS~8.DLL|api-ms-win-core-file-l1-2-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-file-l1-2-0.dll" SelfReg="false"/>
-    <ROW File="apimswincorefilel210.dll" Component_="apimswincorefilel210.dll" FileName="API-MS~9.DLL|api-ms-win-core-file-l2-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-file-l2-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincorehandlel110.dll" Component_="apimswincorehandlel110.dll" FileName="API-M~10.DLL|api-ms-win-core-handle-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-handle-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoreheapl110.dll" Component_="apimswincoreheapl110.dll" FileName="API-M~11.DLL|api-ms-win-core-heap-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-heap-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoreinterlockedl110.dll" Component_="apimswincoreinterlockedl110.dll" FileName="API-M~12.DLL|api-ms-win-core-interlocked-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-interlocked-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincorelibraryloaderl110.dll" Component_="apimswincorelibraryloaderl110.dll" FileName="API-M~13.DLL|api-ms-win-core-libraryloader-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-libraryloader-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincorelocalizationl120.dll" Component_="apimswincorelocalizationl120.dll" FileName="API-M~14.DLL|api-ms-win-core-localization-l1-2-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-localization-l1-2-0.dll" SelfReg="false"/>
-    <ROW File="apimswincorememoryl110.dll" Component_="apimswincorememoryl110.dll" FileName="API-M~15.DLL|api-ms-win-core-memory-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-memory-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincorenamedpipel110.dll" Component_="apimswincorenamedpipel110.dll" FileName="API-M~16.DLL|api-ms-win-core-namedpipe-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-namedpipe-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoreprocessenvironmentl110.dll" Component_="apimswincoreprocessenvironmentl110.dll" FileName="API-M~17.DLL|api-ms-win-core-processenvironment-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-processenvironment-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoreprocessthreadsl110.dll" Component_="apimswincoreprocessthreadsl110.dll" FileName="API-M~18.DLL|api-ms-win-core-processthreads-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-processthreads-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoreprocessthreadsl111.dll" Component_="apimswincoreprocessthreadsl111.dll" FileName="API-M~19.DLL|api-ms-win-core-processthreads-l1-1-1.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-processthreads-l1-1-1.dll" SelfReg="false"/>
-    <ROW File="apimswincoreprofilel110.dll" Component_="apimswincoreprofilel110.dll" FileName="API-M~20.DLL|api-ms-win-core-profile-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-profile-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincorertlsupportl110.dll" Component_="apimswincorertlsupportl110.dll" FileName="API-M~21.DLL|api-ms-win-core-rtlsupport-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-rtlsupport-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincorestringl110.dll" Component_="apimswincorestringl110.dll" FileName="API-M~22.DLL|api-ms-win-core-string-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-string-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoresynchl110.dll" Component_="apimswincoresynchl110.dll" FileName="API-M~23.DLL|api-ms-win-core-synch-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-synch-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoresynchl120.dll" Component_="apimswincoresynchl120.dll" FileName="API-M~24.DLL|api-ms-win-core-synch-l1-2-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-synch-l1-2-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoresysinfol110.dll" Component_="apimswincoresysinfol110.dll" FileName="API-M~25.DLL|api-ms-win-core-sysinfo-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-sysinfo-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoretimezonel110.dll" Component_="apimswincoretimezonel110.dll" FileName="API-M~26.DLL|api-ms-win-core-timezone-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-timezone-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincoreutill110.dll" Component_="apimswincoreutill110.dll" FileName="API-M~27.DLL|api-ms-win-core-util-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-core-util-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtconiol110.dll" Component_="apimswincrtconiol110.dll" FileName="API-M~28.DLL|api-ms-win-crt-conio-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-conio-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtconvertl110.dll" Component_="apimswincrtconvertl110.dll" FileName="API-M~29.DLL|api-ms-win-crt-convert-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-convert-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtenvironmentl110.dll" Component_="apimswincrtenvironmentl110.dll" FileName="API-M~30.DLL|api-ms-win-crt-environment-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-environment-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtfilesysteml110.dll" Component_="apimswincrtfilesysteml110.dll" FileName="API-M~31.DLL|api-ms-win-crt-filesystem-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-filesystem-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtheapl110.dll" Component_="apimswincrtheapl110.dll" FileName="API-M~32.DLL|api-ms-win-crt-heap-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-heap-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtlocalel110.dll" Component_="apimswincrtlocalel110.dll" FileName="API-M~33.DLL|api-ms-win-crt-locale-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-locale-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtmathl110.dll" Component_="apimswincrtmathl110.dll" FileName="API-M~34.DLL|api-ms-win-crt-math-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-math-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtmultibytel110.dll" Component_="apimswincrtmultibytel110.dll" FileName="API-M~35.DLL|api-ms-win-crt-multibyte-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-multibyte-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtprivatel110.dll" Component_="apimswincrtprivatel110.dll" FileName="API-M~36.DLL|api-ms-win-crt-private-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-private-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtprocessl110.dll" Component_="apimswincrtprocessl110.dll" FileName="API-M~37.DLL|api-ms-win-crt-process-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-process-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtruntimel110.dll" Component_="apimswincrtruntimel110.dll" FileName="API-M~38.DLL|api-ms-win-crt-runtime-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-runtime-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtstdiol110.dll" Component_="apimswincrtstdiol110.dll" FileName="API-M~39.DLL|api-ms-win-crt-stdio-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-stdio-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtstringl110.dll" Component_="apimswincrtstringl110.dll" FileName="API-M~40.DLL|api-ms-win-crt-string-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-string-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrttimel110.dll" Component_="apimswincrttimel110.dll" FileName="API-M~41.DLL|api-ms-win-crt-time-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-time-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="apimswincrtutilityl110.dll" Component_="apimswincrtutilityl110.dll" FileName="API-M~42.DLL|api-ms-win-crt-utility-l1-1-0.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\api-ms-win-crt-utility-l1-1-0.dll" SelfReg="false"/>
-    <ROW File="awt.dll" Component_="awt.dll" FileName="awt.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\awt.dll" SelfReg="false"/>
-    <ROW File="decora_sse.dll" Component_="decora_sse.dll" FileName="DECORA~1.DLL|decora_sse.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\decora_sse.dll" SelfReg="false"/>
-    <ROW File="dt_socket.dll" Component_="dt_socket.dll" FileName="DT_SOC~1.DLL|dt_socket.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\dt_socket.dll" SelfReg="false"/>
-    <ROW File="fontmanager.dll" Component_="fontmanager.dll" FileName="FONTMA~1.DLL|fontmanager.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\fontmanager.dll" SelfReg="false"/>
-    <ROW File="freetype.dll" Component_="freetype.dll" FileName="freetype.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\freetype.dll" SelfReg="false"/>
-    <ROW File="fxplugins.dll" Component_="fxplugins.dll" FileName="FXPLUG~1.DLL|fxplugins.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\fxplugins.dll" SelfReg="false"/>
-    <ROW File="glass.dll" Component_="glass.dll" FileName="glass.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\glass.dll" SelfReg="false"/>
-    <ROW File="gliblite.dll" Component_="gliblite.dll" FileName="GLIB-L~1.DLL|glib-lite.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\glib-lite.dll" SelfReg="false"/>
-    <ROW File="gstreamerlite.dll" Component_="gstreamerlite.dll" FileName="GSTREA~1.DLL|gstreamer-lite.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\gstreamer-lite.dll" SelfReg="false"/>
-    <ROW File="instrument.dll" Component_="instrument.dll" FileName="INSTRU~1.DLL|instrument.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\instrument.dll" SelfReg="false"/>
-    <ROW File="j2gss.dll" Component_="j2gss.dll" FileName="j2gss.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\j2gss.dll" SelfReg="false"/>
-    <ROW File="j2pcsc.dll" Component_="j2pcsc.dll" FileName="j2pcsc.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\j2pcsc.dll" SelfReg="false"/>
-    <ROW File="j2pkcs11.dll" Component_="j2pkcs11.dll" FileName="j2pkcs11.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\j2pkcs11.dll" SelfReg="false"/>
-    <ROW File="jaas.dll" Component_="jaas.dll" FileName="jaas.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jaas.dll" SelfReg="false"/>
-    <ROW File="jabswitch.exe" Component_="jabswitch.exe" FileName="JABSWI~1.EXE|jabswitch.exe" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jabswitch.exe" SelfReg="false"/>
-    <ROW File="jaccessinspector.exe" Component_="jaccessinspector.exe" FileName="JACCES~1.EXE|jaccessinspector.exe" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jaccessinspector.exe" SelfReg="false"/>
-    <ROW File="jaccesswalker.exe" Component_="jaccesswalker.exe" FileName="JACCES~2.EXE|jaccesswalker.exe" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jaccesswalker.exe" SelfReg="false"/>
-    <ROW File="java.dll" Component_="java.dll" FileName="java.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\java.dll" SelfReg="false"/>
-    <ROW File="java.exe" Component_="java.exe" FileName="java.exe" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\java.exe" SelfReg="false"/>
-    <ROW File="javaaccessbridge.dll" Component_="javaaccessbridge.dll" FileName="JAVAAC~1.DLL|javaaccessbridge.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\javaaccessbridge.dll" SelfReg="false"/>
-    <ROW File="javafx_font.dll" Component_="javafx_font.dll" FileName="JAVAFX~1.DLL|javafx_font.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\javafx_font.dll" SelfReg="false"/>
-    <ROW File="javafx_iio.dll" Component_="javafx_iio.dll" FileName="JAVAFX~2.DLL|javafx_iio.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\javafx_iio.dll" SelfReg="false"/>
-    <ROW File="javajpeg.dll" Component_="javajpeg.dll" FileName="javajpeg.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\javajpeg.dll" SelfReg="false"/>
-    <ROW File="javaw.exe" Component_="javaw.exe" FileName="javaw.exe" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\javaw.exe" SelfReg="false"/>
-    <ROW File="jawt.dll" Component_="jawt.dll" FileName="jawt.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jawt.dll" SelfReg="false"/>
-    <ROW File="jdwp.dll" Component_="jdwp.dll" FileName="jdwp.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jdwp.dll" SelfReg="false"/>
-    <ROW File="jfr.exe" Component_="jfr.exe" FileName="jfr.exe" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jfr.exe" SelfReg="false"/>
-    <ROW File="jfxmedia.dll" Component_="jfxmedia.dll" FileName="jfxmedia.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jfxmedia.dll" SelfReg="false"/>
-    <ROW File="jfxwebkit.dll" Component_="jfxwebkit.dll" FileName="JFXWEB~1.DLL|jfxwebkit.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jfxwebkit.dll" SelfReg="false"/>
-    <ROW File="jimage.dll" Component_="jimage.dll" FileName="jimage.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jimage.dll" SelfReg="false"/>
-    <ROW File="jli.dll" Component_="jli.dll" FileName="jli.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jli.dll" SelfReg="false"/>
-    <ROW File="jrunscript.exe" Component_="jrunscript.exe" FileName="JRUNSC~1.EXE|jrunscript.exe" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jrunscript.exe" SelfReg="false"/>
-    <ROW File="jsound.dll" Component_="jsound.dll" FileName="jsound.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jsound.dll" SelfReg="false"/>
-    <ROW File="jsvml.dll" Component_="jsvml.dll" FileName="jsvml.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\jsvml.dll" SelfReg="false"/>
-    <ROW File="keytool.exe" Component_="keytool.exe" FileName="keytool.exe" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\keytool.exe" SelfReg="false"/>
-    <ROW File="kinit.exe" Component_="kinit.exe" FileName="kinit.exe" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\kinit.exe" SelfReg="false"/>
-    <ROW File="klist.exe" Component_="klist.exe" FileName="klist.exe" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\klist.exe" SelfReg="false"/>
-    <ROW File="ktab.exe" Component_="ktab.exe" FileName="ktab.exe" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\ktab.exe" SelfReg="false"/>
-    <ROW File="lcms.dll" Component_="lcms.dll" FileName="lcms.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\lcms.dll" SelfReg="false"/>
-    <ROW File="management.dll" Component_="management.dll" FileName="MANAGE~1.DLL|management.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\management.dll" SelfReg="false"/>
-    <ROW File="management_agent.dll" Component_="management_agent.dll" FileName="MANAGE~2.DLL|management_agent.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\management_agent.dll" SelfReg="false"/>
-    <ROW File="management_ext.dll" Component_="management_ext.dll" FileName="MANAGE~3.DLL|management_ext.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\management_ext.dll" SelfReg="false"/>
-    <ROW File="mlib_image.dll" Component_="mlib_image.dll" FileName="MLIB_I~1.DLL|mlib_image.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\mlib_image.dll" SelfReg="false"/>
-    <ROW File="msvcp140.dll" Component_="msvcp140.dll" FileName="msvcp140.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\msvcp140.dll" SelfReg="false"/>
-    <ROW File="net.dll" Component_="net.dll" FileName="net.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\net.dll" SelfReg="false"/>
-    <ROW File="nio.dll" Component_="nio.dll" FileName="nio.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\nio.dll" SelfReg="false"/>
-    <ROW File="prefs.dll" Component_="prefs.dll" FileName="prefs.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\prefs.dll" SelfReg="false"/>
-    <ROW File="prism_common.dll" Component_="prism_common.dll" FileName="PRISM_~1.DLL|prism_common.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\prism_common.dll" SelfReg="false"/>
-    <ROW File="prism_d3d.dll" Component_="prism_d3d.dll" FileName="PRISM_~2.DLL|prism_d3d.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\prism_d3d.dll" SelfReg="false"/>
-    <ROW File="prism_sw.dll" Component_="prism_sw.dll" FileName="prism_sw.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\prism_sw.dll" SelfReg="false"/>
-    <ROW File="rmi.dll" Component_="rmi.dll" FileName="rmi.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\rmi.dll" SelfReg="false"/>
-    <ROW File="rmiregistry.exe" Component_="rmiregistry.exe" FileName="RMIREG~1.EXE|rmiregistry.exe" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\rmiregistry.exe" SelfReg="false"/>
-    <ROW File="classes.jsa" Component_="classes.jsa" FileName="classes.jsa" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\server\classes.jsa" SelfReg="false"/>
-    <ROW File="classes_nocoops.jsa" Component_="classes.jsa" FileName="CLASSE~1.JSA|classes_nocoops.jsa" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\server\classes_nocoops.jsa" SelfReg="false"/>
-    <ROW File="jvm.dll" Component_="jvm.dll" FileName="jvm.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\server\jvm.dll" SelfReg="false"/>
-    <ROW File="splashscreen.dll" Component_="splashscreen.dll" FileName="SPLASH~1.DLL|splashscreen.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\splashscreen.dll" SelfReg="false"/>
-    <ROW File="sspi_bridge.dll" Component_="sspi_bridge.dll" FileName="SSPI_B~1.DLL|sspi_bridge.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\sspi_bridge.dll" SelfReg="false"/>
-    <ROW File="sunmscapi.dll" Component_="sunmscapi.dll" FileName="SUNMSC~1.DLL|sunmscapi.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\sunmscapi.dll" SelfReg="false"/>
-    <ROW File="ucrtbase.dll" Component_="ucrtbase.dll" FileName="ucrtbase.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\ucrtbase.dll" SelfReg="false"/>
-    <ROW File="vcruntime140.dll" Component_="vcruntime140.dll" FileName="VCRUNT~1.DLL|vcruntime140.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\vcruntime140.dll" SelfReg="false"/>
-    <ROW File="vcruntime140_1.dll" Component_="vcruntime140_1.dll" FileName="VCRUNT~2.DLL|vcruntime140_1.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\vcruntime140_1.dll" SelfReg="false"/>
-    <ROW File="verify.dll" Component_="verify.dll" FileName="verify.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\verify.dll" SelfReg="false"/>
-    <ROW File="w2k_lsa_auth.dll" Component_="w2k_lsa_auth.dll" FileName="W2K_LS~1.DLL|w2k_lsa_auth.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\w2k_lsa_auth.dll" SelfReg="false"/>
-    <ROW File="windowsaccessbridge64.dll" Component_="windowsaccessbridge64.dll" FileName="WINDOW~1.DLL|windowsaccessbridge-64.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\windowsaccessbridge-64.dll" SelfReg="false"/>
-    <ROW File="WinFallbackLookup.dll" Component_="WinFallbackLookup.dll" FileName="WINFAL~1.DLL|WinFallbackLookup.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\WinFallbackLookup.dll" SelfReg="false"/>
-    <ROW File="zip.dll" Component_="zip.dll" FileName="zip.dll" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\bin\zip.dll" SelfReg="false"/>
-    <ROW File="logging.properties" Component_="logging.properties" FileName="LOGGIN~1.PRO|logging.properties" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\logging.properties" SelfReg="false"/>
-    <ROW File="jmxremote.access" Component_="jmxremote.access" FileName="JMXREM~1.ACC|jmxremote.access" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\management\jmxremote.access" SelfReg="false"/>
-    <ROW File="jmxremote.password.template" Component_="jmxremote.access" FileName="JMXREM~1.TEM|jmxremote.password.template" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\management\jmxremote.password.template" SelfReg="false"/>
-    <ROW File="management.properties" Component_="jmxremote.access" FileName="MANAGE~1.PRO|management.properties" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\management\management.properties" SelfReg="false"/>
-    <ROW File="net.properties" Component_="logging.properties" FileName="NET~1.PRO|net.properties" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\net.properties" SelfReg="false"/>
-    <ROW File="java.policy" Component_="java.policy" FileName="JAVA~1.POL|java.policy" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\security\java.policy" SelfReg="false"/>
-    <ROW File="java.security" Component_="java.policy" FileName="JAVA~1.SEC|java.security" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\security\java.security" SelfReg="false"/>
-    <ROW File="default_local.policy" Component_="default_local.policy" FileName="DEFAUL~1.POL|default_local.policy" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\security\policy\limited\default_local.policy" SelfReg="false"/>
-    <ROW File="default_US_export.policy" Component_="default_local.policy" FileName="DEFAUL~2.POL|default_US_export.policy" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\security\policy\limited\default_US_export.policy" SelfReg="false"/>
-    <ROW File="exempt_local.policy" Component_="default_local.policy" FileName="EXEMPT~1.POL|exempt_local.policy" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\security\policy\limited\exempt_local.policy" SelfReg="false"/>
-    <ROW File="README.txt" Component_="README.txt" FileName="README.txt" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\security\policy\README.txt" SelfReg="false"/>
-    <ROW File="default_local.policy_2" Component_="default_local.policy_2" FileName="DEFAUL~1.POL|default_local.policy" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\security\policy\unlimited\default_local.policy" SelfReg="false"/>
-    <ROW File="default_US_export.policy_2" Component_="default_local.policy_2" FileName="DEFAUL~2.POL|default_US_export.policy" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\security\policy\unlimited\default_US_export.policy" SelfReg="false"/>
-    <ROW File="sound.properties" Component_="logging.properties" FileName="SOUND~1.PRO|sound.properties" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\conf\sound.properties" SelfReg="false"/>
-    <ROW File="DISCLAIMER" Component_="DISCLAIMER" FileName="DISCLA~1|DISCLAIMER" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\DISCLAIMER" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO" Component_="ADDITIONAL_LICENSE_INFO" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\com.azul.crs.client\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION" Component_="ADDITIONAL_LICENSE_INFO" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\com.azul.crs.client\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE" Component_="ADDITIONAL_LICENSE_INFO" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\com.azul.crs.client\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_51" Component_="ADDITIONAL_LICENSE_INFO_51" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\com.azul.tooling\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_51" Component_="ADDITIONAL_LICENSE_INFO_51" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\com.azul.tooling\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_51" Component_="ADDITIONAL_LICENSE_INFO_51" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\com.azul.tooling\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_52" Component_="ADDITIONAL_LICENSE_INFO_52" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.base\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="aes.md" Component_="ADDITIONAL_LICENSE_INFO_52" FileName="aes.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.base\aes.md" SelfReg="false"/>
-    <ROW File="asm.md" Component_="ADDITIONAL_LICENSE_INFO_52" FileName="asm.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.base\asm.md" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_52" Component_="ADDITIONAL_LICENSE_INFO_52" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.base\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="clibutl.md" Component_="ADDITIONAL_LICENSE_INFO_52" FileName="c-libutl.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.base\c-libutl.md" SelfReg="false"/>
-    <ROW File="cldr.md" Component_="ADDITIONAL_LICENSE_INFO_52" FileName="cldr.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.base\cldr.md" SelfReg="false"/>
-    <ROW File="icu.md" Component_="ADDITIONAL_LICENSE_INFO_52" FileName="icu.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.base\icu.md" SelfReg="false"/>
-    <ROW File="LICENSE_52" Component_="ADDITIONAL_LICENSE_INFO_52" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.base\LICENSE" SelfReg="false"/>
-    <ROW File="public_suffix.md" Component_="ADDITIONAL_LICENSE_INFO_52" FileName="PUBLIC~1.MD|public_suffix.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.base\public_suffix.md" SelfReg="false"/>
-    <ROW File="unicode.md" Component_="ADDITIONAL_LICENSE_INFO_52" FileName="unicode.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.base\unicode.md" SelfReg="false"/>
-    <ROW File="wepoll.md" Component_="ADDITIONAL_LICENSE_INFO_52" FileName="wepoll.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.base\wepoll.md" SelfReg="false"/>
-    <ROW File="zlib.md" Component_="ADDITIONAL_LICENSE_INFO_52" FileName="zlib.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.base\zlib.md" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_53" Component_="ADDITIONAL_LICENSE_INFO_53" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.compiler\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_53" Component_="ADDITIONAL_LICENSE_INFO_53" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.compiler\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_53" Component_="ADDITIONAL_LICENSE_INFO_53" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.compiler\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_54" Component_="ADDITIONAL_LICENSE_INFO_54" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.datatransfer\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_54" Component_="ADDITIONAL_LICENSE_INFO_54" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.datatransfer\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_54" Component_="ADDITIONAL_LICENSE_INFO_54" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.datatransfer\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_55" Component_="ADDITIONAL_LICENSE_INFO_55" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.desktop\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_55" Component_="ADDITIONAL_LICENSE_INFO_55" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.desktop\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="colorimaging.md" Component_="ADDITIONAL_LICENSE_INFO_55" FileName="COLORI~1.MD|colorimaging.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.desktop\colorimaging.md" SelfReg="false"/>
-    <ROW File="freetype.md" Component_="ADDITIONAL_LICENSE_INFO_55" FileName="freetype.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.desktop\freetype.md" SelfReg="false"/>
-    <ROW File="giflib.md" Component_="ADDITIONAL_LICENSE_INFO_55" FileName="giflib.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.desktop\giflib.md" SelfReg="false"/>
-    <ROW File="harfbuzz.md" Component_="ADDITIONAL_LICENSE_INFO_55" FileName="harfbuzz.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.desktop\harfbuzz.md" SelfReg="false"/>
-    <ROW File="jpeg.md" Component_="ADDITIONAL_LICENSE_INFO_55" FileName="jpeg.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.desktop\jpeg.md" SelfReg="false"/>
-    <ROW File="lcms.md" Component_="ADDITIONAL_LICENSE_INFO_55" FileName="lcms.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.desktop\lcms.md" SelfReg="false"/>
-    <ROW File="libpng.md" Component_="ADDITIONAL_LICENSE_INFO_55" FileName="libpng.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.desktop\libpng.md" SelfReg="false"/>
-    <ROW File="LICENSE_55" Component_="ADDITIONAL_LICENSE_INFO_55" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.desktop\LICENSE" SelfReg="false"/>
-    <ROW File="mesa3d.md" Component_="ADDITIONAL_LICENSE_INFO_55" FileName="mesa3d.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.desktop\mesa3d.md" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_56" Component_="ADDITIONAL_LICENSE_INFO_56" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.instrument\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_56" Component_="ADDITIONAL_LICENSE_INFO_56" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.instrument\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_56" Component_="ADDITIONAL_LICENSE_INFO_56" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.instrument\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_57" Component_="ADDITIONAL_LICENSE_INFO_57" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.logging\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_57" Component_="ADDITIONAL_LICENSE_INFO_57" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.logging\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_57" Component_="ADDITIONAL_LICENSE_INFO_57" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.logging\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_58" Component_="ADDITIONAL_LICENSE_INFO_58" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.management\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_58" Component_="ADDITIONAL_LICENSE_INFO_58" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.management\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_58" Component_="ADDITIONAL_LICENSE_INFO_58" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.management\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_59" Component_="ADDITIONAL_LICENSE_INFO_59" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.management.rmi\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_59" Component_="ADDITIONAL_LICENSE_INFO_59" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.management.rmi\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_59" Component_="ADDITIONAL_LICENSE_INFO_59" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.management.rmi\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_60" Component_="ADDITIONAL_LICENSE_INFO_60" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.naming\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_60" Component_="ADDITIONAL_LICENSE_INFO_60" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.naming\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_60" Component_="ADDITIONAL_LICENSE_INFO_60" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.naming\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_61" Component_="ADDITIONAL_LICENSE_INFO_61" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.net.http\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_61" Component_="ADDITIONAL_LICENSE_INFO_61" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.net.http\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_61" Component_="ADDITIONAL_LICENSE_INFO_61" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.net.http\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_62" Component_="ADDITIONAL_LICENSE_INFO_62" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.prefs\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_62" Component_="ADDITIONAL_LICENSE_INFO_62" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.prefs\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_62" Component_="ADDITIONAL_LICENSE_INFO_62" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.prefs\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_63" Component_="ADDITIONAL_LICENSE_INFO_63" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.rmi\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_63" Component_="ADDITIONAL_LICENSE_INFO_63" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.rmi\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_63" Component_="ADDITIONAL_LICENSE_INFO_63" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.rmi\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_64" Component_="ADDITIONAL_LICENSE_INFO_64" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.scripting\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_64" Component_="ADDITIONAL_LICENSE_INFO_64" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.scripting\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_64" Component_="ADDITIONAL_LICENSE_INFO_64" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.scripting\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_65" Component_="ADDITIONAL_LICENSE_INFO_65" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.se\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_65" Component_="ADDITIONAL_LICENSE_INFO_65" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.se\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_65" Component_="ADDITIONAL_LICENSE_INFO_65" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.se\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_66" Component_="ADDITIONAL_LICENSE_INFO_66" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.security.jgss\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_66" Component_="ADDITIONAL_LICENSE_INFO_66" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.security.jgss\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_66" Component_="ADDITIONAL_LICENSE_INFO_66" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.security.jgss\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_67" Component_="ADDITIONAL_LICENSE_INFO_67" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.security.sasl\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_67" Component_="ADDITIONAL_LICENSE_INFO_67" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.security.sasl\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_67" Component_="ADDITIONAL_LICENSE_INFO_67" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.security.sasl\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_68" Component_="ADDITIONAL_LICENSE_INFO_68" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.smartcardio\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_68" Component_="ADDITIONAL_LICENSE_INFO_68" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.smartcardio\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_68" Component_="ADDITIONAL_LICENSE_INFO_68" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.smartcardio\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_69" Component_="ADDITIONAL_LICENSE_INFO_69" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.sql\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_69" Component_="ADDITIONAL_LICENSE_INFO_69" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.sql\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_69" Component_="ADDITIONAL_LICENSE_INFO_69" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.sql\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_70" Component_="ADDITIONAL_LICENSE_INFO_70" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.sql.rowset\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_70" Component_="ADDITIONAL_LICENSE_INFO_70" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.sql.rowset\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_70" Component_="ADDITIONAL_LICENSE_INFO_70" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.sql.rowset\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_71" Component_="ADDITIONAL_LICENSE_INFO_71" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.transaction.xa\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_71" Component_="ADDITIONAL_LICENSE_INFO_71" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.transaction.xa\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_71" Component_="ADDITIONAL_LICENSE_INFO_71" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.transaction.xa\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_72" Component_="ADDITIONAL_LICENSE_INFO_72" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.xml\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_72" Component_="ADDITIONAL_LICENSE_INFO_72" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.xml\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="bcel.md" Component_="ADDITIONAL_LICENSE_INFO_72" FileName="bcel.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.xml\bcel.md" SelfReg="false"/>
-    <ROW File="dom.md" Component_="ADDITIONAL_LICENSE_INFO_72" FileName="dom.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.xml\dom.md" SelfReg="false"/>
-    <ROW File="jcup.md" Component_="ADDITIONAL_LICENSE_INFO_72" FileName="jcup.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.xml\jcup.md" SelfReg="false"/>
-    <ROW File="LICENSE_72" Component_="ADDITIONAL_LICENSE_INFO_72" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.xml\LICENSE" SelfReg="false"/>
-    <ROW File="xalan.md" Component_="ADDITIONAL_LICENSE_INFO_72" FileName="xalan.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.xml\xalan.md" SelfReg="false"/>
-    <ROW File="xerces.md" Component_="ADDITIONAL_LICENSE_INFO_72" FileName="xerces.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.xml\xerces.md" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_73" Component_="ADDITIONAL_LICENSE_INFO_73" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.xml.crypto\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_73" Component_="ADDITIONAL_LICENSE_INFO_73" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.xml.crypto\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_73" Component_="ADDITIONAL_LICENSE_INFO_73" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.xml.crypto\LICENSE" SelfReg="false"/>
-    <ROW File="santuario.md" Component_="ADDITIONAL_LICENSE_INFO_73" FileName="SANTUA~1.MD|santuario.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\java.xml.crypto\santuario.md" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_74" Component_="ADDITIONAL_LICENSE_INFO_74" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.base\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_74" Component_="ADDITIONAL_LICENSE_INFO_74" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.base\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_74" Component_="ADDITIONAL_LICENSE_INFO_74" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.base\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_75" Component_="ADDITIONAL_LICENSE_INFO_75" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.controls\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_75" Component_="ADDITIONAL_LICENSE_INFO_75" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.controls\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_75" Component_="ADDITIONAL_LICENSE_INFO_75" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.controls\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_76" Component_="ADDITIONAL_LICENSE_INFO_76" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.fxml\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_76" Component_="ADDITIONAL_LICENSE_INFO_76" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.fxml\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_76" Component_="ADDITIONAL_LICENSE_INFO_76" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.fxml\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_77" Component_="ADDITIONAL_LICENSE_INFO_77" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.graphics\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_77" Component_="ADDITIONAL_LICENSE_INFO_77" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.graphics\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="jpeg_fx.md" Component_="ADDITIONAL_LICENSE_INFO_77" FileName="jpeg_fx.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.graphics\jpeg_fx.md" SelfReg="false"/>
-    <ROW File="LICENSE_77" Component_="ADDITIONAL_LICENSE_INFO_77" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.graphics\LICENSE" SelfReg="false"/>
-    <ROW File="mesa3d.md_1" Component_="ADDITIONAL_LICENSE_INFO_77" FileName="mesa3d.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.graphics\mesa3d.md" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_78" Component_="ADDITIONAL_LICENSE_INFO_78" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.media\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_78" Component_="ADDITIONAL_LICENSE_INFO_78" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.media\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="directshow.md" Component_="ADDITIONAL_LICENSE_INFO_78" FileName="DIRECT~1.MD|directshow.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.media\directshow.md" SelfReg="false"/>
-    <ROW File="glib.md" Component_="ADDITIONAL_LICENSE_INFO_78" FileName="glib.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.media\glib.md" SelfReg="false"/>
-    <ROW File="gstreamer.md" Component_="ADDITIONAL_LICENSE_INFO_78" FileName="GSTREA~1.MD|gstreamer.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.media\gstreamer.md" SelfReg="false"/>
-    <ROW File="libffi.md" Component_="ADDITIONAL_LICENSE_INFO_78" FileName="libffi.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.media\libffi.md" SelfReg="false"/>
-    <ROW File="LICENSE_78" Component_="ADDITIONAL_LICENSE_INFO_78" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.media\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_79" Component_="ADDITIONAL_LICENSE_INFO_79" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.swing\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_79" Component_="ADDITIONAL_LICENSE_INFO_79" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.swing\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_79" Component_="ADDITIONAL_LICENSE_INFO_79" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.swing\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_80" Component_="ADDITIONAL_LICENSE_INFO_80" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.web\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_80" Component_="ADDITIONAL_LICENSE_INFO_80" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.web\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="icu_web.md" Component_="ADDITIONAL_LICENSE_INFO_80" FileName="icu_web.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.web\icu_web.md" SelfReg="false"/>
-    <ROW File="libxml2.md" Component_="ADDITIONAL_LICENSE_INFO_80" FileName="libxml2.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.web\libxml2.md" SelfReg="false"/>
-    <ROW File="libxslt.md" Component_="ADDITIONAL_LICENSE_INFO_80" FileName="libxslt.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.web\libxslt.md" SelfReg="false"/>
-    <ROW File="LICENSE_80" Component_="ADDITIONAL_LICENSE_INFO_80" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.web\LICENSE" SelfReg="false"/>
-    <ROW File="webkit.md" Component_="ADDITIONAL_LICENSE_INFO_80" FileName="webkit.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\javafx.web\webkit.md" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_81" Component_="ADDITIONAL_LICENSE_INFO_81" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.accessibility\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_81" Component_="ADDITIONAL_LICENSE_INFO_81" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.accessibility\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_81" Component_="ADDITIONAL_LICENSE_INFO_81" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.accessibility\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_82" Component_="ADDITIONAL_LICENSE_INFO_82" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.charsets\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_82" Component_="ADDITIONAL_LICENSE_INFO_82" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.charsets\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_82" Component_="ADDITIONAL_LICENSE_INFO_82" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.charsets\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_83" Component_="ADDITIONAL_LICENSE_INFO_83" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.crypto.cryptoki\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_83" Component_="ADDITIONAL_LICENSE_INFO_83" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.crypto.cryptoki\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_83" Component_="ADDITIONAL_LICENSE_INFO_83" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.crypto.cryptoki\LICENSE" SelfReg="false"/>
-    <ROW File="pkcs11cryptotoken.md" Component_="ADDITIONAL_LICENSE_INFO_83" FileName="PKCS11~1.MD|pkcs11cryptotoken.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.crypto.cryptoki\pkcs11cryptotoken.md" SelfReg="false"/>
-    <ROW File="pkcs11wrapper.md" Component_="ADDITIONAL_LICENSE_INFO_83" FileName="PKCS11~2.MD|pkcs11wrapper.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.crypto.cryptoki\pkcs11wrapper.md" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_84" Component_="ADDITIONAL_LICENSE_INFO_84" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.crypto.ec\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_84" Component_="ADDITIONAL_LICENSE_INFO_84" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.crypto.ec\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_84" Component_="ADDITIONAL_LICENSE_INFO_84" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.crypto.ec\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_85" Component_="ADDITIONAL_LICENSE_INFO_85" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.crypto.mscapi\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_85" Component_="ADDITIONAL_LICENSE_INFO_85" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.crypto.mscapi\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_85" Component_="ADDITIONAL_LICENSE_INFO_85" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.crypto.mscapi\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_86" Component_="ADDITIONAL_LICENSE_INFO_86" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.dynalink\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_86" Component_="ADDITIONAL_LICENSE_INFO_86" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.dynalink\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="dynalink.md" Component_="ADDITIONAL_LICENSE_INFO_86" FileName="dynalink.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.dynalink\dynalink.md" SelfReg="false"/>
-    <ROW File="LICENSE_86" Component_="ADDITIONAL_LICENSE_INFO_86" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.dynalink\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_87" Component_="ADDITIONAL_LICENSE_INFO_87" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.httpserver\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_87" Component_="ADDITIONAL_LICENSE_INFO_87" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.httpserver\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_87" Component_="ADDITIONAL_LICENSE_INFO_87" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.httpserver\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_88" Component_="ADDITIONAL_LICENSE_INFO_88" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.incubator.foreign\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_88" Component_="ADDITIONAL_LICENSE_INFO_88" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.incubator.foreign\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_88" Component_="ADDITIONAL_LICENSE_INFO_88" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.incubator.foreign\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_89" Component_="ADDITIONAL_LICENSE_INFO_89" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.incubator.vector\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_89" Component_="ADDITIONAL_LICENSE_INFO_89" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.incubator.vector\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_89" Component_="ADDITIONAL_LICENSE_INFO_89" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.incubator.vector\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_90" Component_="ADDITIONAL_LICENSE_INFO_90" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.internal.vm.ci\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_90" Component_="ADDITIONAL_LICENSE_INFO_90" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.internal.vm.ci\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_90" Component_="ADDITIONAL_LICENSE_INFO_90" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.internal.vm.ci\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_91" Component_="ADDITIONAL_LICENSE_INFO_91" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.internal.vm.compiler\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_91" Component_="ADDITIONAL_LICENSE_INFO_91" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.internal.vm.compiler\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_91" Component_="ADDITIONAL_LICENSE_INFO_91" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.internal.vm.compiler\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_92" Component_="ADDITIONAL_LICENSE_INFO_92" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.internal.vm.compiler.management\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_92" Component_="ADDITIONAL_LICENSE_INFO_92" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.internal.vm.compiler.management\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_92" Component_="ADDITIONAL_LICENSE_INFO_92" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.internal.vm.compiler.management\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_93" Component_="ADDITIONAL_LICENSE_INFO_93" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.jdwp.agent\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_93" Component_="ADDITIONAL_LICENSE_INFO_93" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.jdwp.agent\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_93" Component_="ADDITIONAL_LICENSE_INFO_93" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.jdwp.agent\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_94" Component_="ADDITIONAL_LICENSE_INFO_94" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.jfr\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_94" Component_="ADDITIONAL_LICENSE_INFO_94" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.jfr\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_94" Component_="ADDITIONAL_LICENSE_INFO_94" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.jfr\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_95" Component_="ADDITIONAL_LICENSE_INFO_95" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.jsobject\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_95" Component_="ADDITIONAL_LICENSE_INFO_95" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.jsobject\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_95" Component_="ADDITIONAL_LICENSE_INFO_95" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.jsobject\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_96" Component_="ADDITIONAL_LICENSE_INFO_96" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.localedata\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_96" Component_="ADDITIONAL_LICENSE_INFO_96" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.localedata\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="cldr.md_2" Component_="ADDITIONAL_LICENSE_INFO_96" FileName="cldr.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.localedata\cldr.md" SelfReg="false"/>
-    <ROW File="LICENSE_96" Component_="ADDITIONAL_LICENSE_INFO_96" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.localedata\LICENSE" SelfReg="false"/>
-    <ROW File="thaidict.md" Component_="ADDITIONAL_LICENSE_INFO_96" FileName="thaidict.md" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.localedata\thaidict.md" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_97" Component_="ADDITIONAL_LICENSE_INFO_97" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.management\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_97" Component_="ADDITIONAL_LICENSE_INFO_97" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.management\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_97" Component_="ADDITIONAL_LICENSE_INFO_97" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.management\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_98" Component_="ADDITIONAL_LICENSE_INFO_98" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.management.agent\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_98" Component_="ADDITIONAL_LICENSE_INFO_98" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.management.agent\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_98" Component_="ADDITIONAL_LICENSE_INFO_98" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.management.agent\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_99" Component_="ADDITIONAL_LICENSE_INFO_99" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.management.jfr\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_99" Component_="ADDITIONAL_LICENSE_INFO_99" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.management.jfr\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_99" Component_="ADDITIONAL_LICENSE_INFO_99" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.management.jfr\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_100" Component_="ADDITIONAL_LICENSE_INFO_100" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.naming.dns\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_100" Component_="ADDITIONAL_LICENSE_INFO_100" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.naming.dns\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_100" Component_="ADDITIONAL_LICENSE_INFO_100" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.naming.dns\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_101" Component_="ADDITIONAL_LICENSE_INFO_101" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.naming.rmi\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_101" Component_="ADDITIONAL_LICENSE_INFO_101" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.naming.rmi\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_101" Component_="ADDITIONAL_LICENSE_INFO_101" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.naming.rmi\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_102" Component_="ADDITIONAL_LICENSE_INFO_102" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.net\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_102" Component_="ADDITIONAL_LICENSE_INFO_102" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.net\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_102" Component_="ADDITIONAL_LICENSE_INFO_102" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.net\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_103" Component_="ADDITIONAL_LICENSE_INFO_103" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.nio.mapmode\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_103" Component_="ADDITIONAL_LICENSE_INFO_103" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.nio.mapmode\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_103" Component_="ADDITIONAL_LICENSE_INFO_103" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.nio.mapmode\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_104" Component_="ADDITIONAL_LICENSE_INFO_104" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.random\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_104" Component_="ADDITIONAL_LICENSE_INFO_104" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.random\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_104" Component_="ADDITIONAL_LICENSE_INFO_104" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.random\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_105" Component_="ADDITIONAL_LICENSE_INFO_105" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.sctp\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_105" Component_="ADDITIONAL_LICENSE_INFO_105" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.sctp\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_105" Component_="ADDITIONAL_LICENSE_INFO_105" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.sctp\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_106" Component_="ADDITIONAL_LICENSE_INFO_106" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.security.auth\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_106" Component_="ADDITIONAL_LICENSE_INFO_106" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.security.auth\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_106" Component_="ADDITIONAL_LICENSE_INFO_106" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.security.auth\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_107" Component_="ADDITIONAL_LICENSE_INFO_107" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.security.jgss\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_107" Component_="ADDITIONAL_LICENSE_INFO_107" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.security.jgss\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_107" Component_="ADDITIONAL_LICENSE_INFO_107" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.security.jgss\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_108" Component_="ADDITIONAL_LICENSE_INFO_108" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.unsupported\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_108" Component_="ADDITIONAL_LICENSE_INFO_108" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.unsupported\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_108" Component_="ADDITIONAL_LICENSE_INFO_108" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.unsupported\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_109" Component_="ADDITIONAL_LICENSE_INFO_109" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.unsupported.desktop\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_109" Component_="ADDITIONAL_LICENSE_INFO_109" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.unsupported.desktop\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_109" Component_="ADDITIONAL_LICENSE_INFO_109" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.unsupported.desktop\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_110" Component_="ADDITIONAL_LICENSE_INFO_110" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.xml.dom\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_110" Component_="ADDITIONAL_LICENSE_INFO_110" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.xml.dom\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_110" Component_="ADDITIONAL_LICENSE_INFO_110" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.xml.dom\LICENSE" SelfReg="false"/>
-    <ROW File="ADDITIONAL_LICENSE_INFO_111" Component_="ADDITIONAL_LICENSE_INFO_111" FileName="ADDITI~1|ADDITIONAL_LICENSE_INFO" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.zipfs\ADDITIONAL_LICENSE_INFO" SelfReg="false"/>
-    <ROW File="ASSEMBLY_EXCEPTION_111" Component_="ADDITIONAL_LICENSE_INFO_111" FileName="ASSEMB~1|ASSEMBLY_EXCEPTION" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.zipfs\ASSEMBLY_EXCEPTION" SelfReg="false"/>
-    <ROW File="LICENSE_111" Component_="ADDITIONAL_LICENSE_INFO_111" FileName="LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\legal\jdk.zipfs\LICENSE" SelfReg="false"/>
-    <ROW File="classlist" Component_="classlist" FileName="CLASSL~1|classlist" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\classlist" SelfReg="false"/>
-    <ROW File="fontconfig.bfc" Component_="classlist" FileName="FONTCO~1.BFC|fontconfig.bfc" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\fontconfig.bfc" SelfReg="false"/>
-    <ROW File="fontconfig.properties.src" Component_="classlist" FileName="FONTCO~1.SRC|fontconfig.properties.src" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\fontconfig.properties.src" SelfReg="false"/>
-    <ROW File="javafxswt.jar" Component_="classlist" FileName="JAVAFX~1.JAR|javafx-swt.jar" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\javafx-swt.jar" SelfReg="false"/>
-    <ROW File="javafx.properties" Component_="classlist" FileName="JAVAFX~1.PRO|javafx.properties" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\javafx.properties" SelfReg="false"/>
-    <ROW File="jawt.lib" Component_="classlist" FileName="jawt.lib" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\jawt.lib" SelfReg="false"/>
-    <ROW File="default.jfc" Component_="default.jfc" FileName="default.jfc" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\jfr\default.jfc" SelfReg="false"/>
-    <ROW File="profile.jfc" Component_="default.jfc" FileName="profile.jfc" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\jfr\profile.jfc" SelfReg="false"/>
-    <ROW File="jrtfs.jar" Component_="classlist" FileName="jrt-fs.jar" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\jrt-fs.jar" SelfReg="false"/>
-    <ROW File="jvm.cfg" Component_="classlist" FileName="jvm.cfg" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\jvm.cfg" SelfReg="false"/>
-    <ROW File="jvm.lib" Component_="classlist" FileName="jvm.lib" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\jvm.lib" SelfReg="false"/>
-    <ROW File="modules" Component_="classlist" FileName="modules" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\modules" SelfReg="false"/>
-    <ROW File="psfont.properties.ja" Component_="classlist" FileName="PSFONT~1.JA|psfont.properties.ja" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\psfont.properties.ja" SelfReg="false"/>
-    <ROW File="psfontj2d.properties" Component_="classlist" FileName="PSFONT~1.PRO|psfontj2d.properties" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\psfontj2d.properties" SelfReg="false"/>
-    <ROW File="blocked.certs" Component_="blocked.certs" FileName="BLOCKE~1.CER|blocked.certs" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\security\blocked.certs" SelfReg="false"/>
-    <ROW File="cacerts" Component_="blocked.certs" FileName="cacerts" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\security\cacerts" SelfReg="false"/>
-    <ROW File="default.policy" Component_="blocked.certs" FileName="DEFAUL~1.POL|default.policy" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\security\default.policy" SelfReg="false"/>
-    <ROW File="public_suffix_list.dat" Component_="blocked.certs" FileName="PUBLIC~1.DAT|public_suffix_list.dat" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\security\public_suffix_list.dat" SelfReg="false"/>
-    <ROW File="tzdb.dat" Component_="classlist" FileName="tzdb.dat" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\tzdb.dat" SelfReg="false"/>
-    <ROW File="tzmappings" Component_="classlist" FileName="TZMAPP~1|tzmappings" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\lib\tzmappings" SelfReg="false"/>
-    <ROW File="OPENJFX_LICENSE" Component_="DISCLAIMER" FileName="OPENJF~1|OPENJFX_LICENSE" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\OPENJFX_LICENSE" SelfReg="false"/>
-    <ROW File="readme.txt_1" Component_="DISCLAIMER" FileName="readme.txt" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\readme.txt" SelfReg="false"/>
-    <ROW File="release" Component_="DISCLAIMER" FileName="release" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\release" SelfReg="false"/>
-    <ROW File="Welcome.html" Component_="DISCLAIMER" FileName="WELCOM~1.HTM|Welcome.html" Attributes="0" SourcePath="C:\Program Files\Java\zulu17.36.13-ca-fx-jre17.0.4-win_x64\Welcome.html" SelfReg="false"/>
+    <ROW File="LogoRRR.exe" Component_="LogoRRR.exe" FileName="LogoRRR.exe" Attributes="0" SourcePath="&lt;AI_STUBS_64&gt;aijclw.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="app.logorrr.app22.3.0SNAPSHOT.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="APPLOG~1.JAR|app.logorrr.app-22.3.0-SNAPSHOT.jar" Attributes="0" SourcePath="programfiles\app.logorrr.app-22.3.0-SNAPSHOT.jar" SelfReg="false"/>
+    <ROW File="app.logorrr.build22.3.0SNAPSHOT.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="APPLOG~2.JAR|app.logorrr.build-22.3.0-SNAPSHOT.jar" Attributes="0" SourcePath="programfiles\app.logorrr.build-22.3.0-SNAPSHOT.jar" SelfReg="false"/>
+    <ROW File="app.logorrr.core22.3.0SNAPSHOT.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="APPLOG~3.JAR|app.logorrr.core-22.3.0-SNAPSHOT.jar" Attributes="0" SourcePath="programfiles\app.logorrr.core-22.3.0-SNAPSHOT.jar" SelfReg="false"/>
+    <ROW File="com.chuusai.shapeless_2.132.3.7.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMCHU~1.JAR|com.chuusai.shapeless_2.13-2.3.7.jar" Attributes="0" SourcePath="programfiles\com.chuusai.shapeless_2.13-2.3.7.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfigcore_2.130.17.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMGIT~1.JAR|com.github.pureconfig.pureconfig-core_2.13-0.17.1.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-core_2.13-0.17.1.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfiggenericbase_2.130.17.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMGIT~2.JAR|com.github.pureconfig.pureconfig-generic-base_2.13-0.17.1.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-generic-base_2.13-0.17.1.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfiggeneric_2.130.17.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMGIT~3.JAR|com.github.pureconfig.pureconfig-generic_2.13-0.17.1.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-generic_2.13-0.17.1.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfig_2.130.17.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMGIT~4.JAR|com.github.pureconfig.pureconfig_2.13-0.17.1.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig_2.13-0.17.1.jar" SelfReg="false"/>
+    <ROW File="com.typesafe.config1.4.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMTYP~1.JAR|com.typesafe.config-1.4.1.jar" Attributes="0" SourcePath="programfiles\com.typesafe.config-1.4.1.jar" SelfReg="false"/>
+    <ROW File="commonsio.commonsio2.8.0.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="COMMON~1.JAR|commons-io.commons-io-2.8.0.jar" Attributes="0" SourcePath="programfiles\commons-io.commons-io-2.8.0.jar" SelfReg="false"/>
+    <ROW File="io.github.mkpaz.atlantafxbase1.0.0.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="IOGITH~1.JAR|io.github.mkpaz.atlantafx-base-1.0.0.jar" Attributes="0" SourcePath="programfiles\io.github.mkpaz.atlantafx-base-1.0.0.jar" SelfReg="false"/>
+    <ROW File="org.kordamp.ikonli.ikonlicore12.3.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="ORGKOR~1.JAR|org.kordamp.ikonli.ikonli-core-12.3.1.jar" Attributes="0" SourcePath="programfiles\org.kordamp.ikonli.ikonli-core-12.3.1.jar" SelfReg="false"/>
+    <ROW File="org.kordamp.ikonli.ikonlifontawesome5pack12.3.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="ORGKOR~2.JAR|org.kordamp.ikonli.ikonli-fontawesome5-pack-12.3.1.jar" Attributes="0" SourcePath="programfiles\org.kordamp.ikonli.ikonli-fontawesome5-pack-12.3.1.jar" SelfReg="false"/>
+    <ROW File="org.kordamp.ikonli.ikonlijavafx12.3.1.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="ORGKOR~3.JAR|org.kordamp.ikonli.ikonli-javafx-12.3.1.jar" Attributes="0" SourcePath="programfiles\org.kordamp.ikonli.ikonli-javafx-12.3.1.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxbase19win.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="ORGOPE~1.JAR|org.openjfx.javafx-base-19-win.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-base-19-win.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxbase19.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="ORGOPE~2.JAR|org.openjfx.javafx-base-19.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-base-19.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxcontrols19win.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="ORGOPE~3.JAR|org.openjfx.javafx-controls-19-win.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-controls-19-win.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxcontrols19.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="ORGOPE~4.JAR|org.openjfx.javafx-controls-19.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-controls-19.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxgraphics19win.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="ORGOPE~5.JAR|org.openjfx.javafx-graphics-19-win.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-graphics-19-win.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxgraphics19.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="ORGOPE~6.JAR|org.openjfx.javafx-graphics-19.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-graphics-19.jar" SelfReg="false"/>
+    <ROW File="org.scalalang.scalalibrary2.13.9.jar" Component_="app.logorrr.app22.3.0SNAPSHOT.jar" FileName="ORGSCA~1.JAR|org.scala-lang.scala-library-2.13.9.jar" Attributes="0" SourcePath="programfiles\org.scala-lang.scala-library-2.13.9.jar" SelfReg="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentPropComponent">
+    <ROW Property="AI_INSTALLPERUSER" Registry="AI_INSTALLPERUSER" HklmSearch="AI_INSTALLPERUSER" HkcuSearch="AI_INSTALLPERUSER_1" Hklm64Search="AI_INSTALLPERUSER_2" Hkcu64Search="AI_INSTALLPERUSER_3"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -703,7 +88,7 @@
     <ROW Action="AI_DetectSoftware" Sequence="151"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="." Languages="en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExeIconPath="logorrr-icon-128.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" Options="8" UseLargeSchema="true" ExeName="LogoRRR-${revision}-installer-jre" MsiPackageType="x64" JRE64Dir="jre64_Dir"/>
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="." Languages="en" InstallationType="2" CabsLocation="1" CompressCabs="false" UseLzma="true" LzmaMethod="2" LzmaCompressionLevel="2" PackageType="1" FilesInsideExe="true" ExeIconPath="logorrr-icon-128.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" Options="8" UseLargeSchema="true" ExeName="LogoRRR-${revision}-installer-jre" MsiPackageType="x64" JRE64Dir="jre64_Dir"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
     <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
@@ -711,18 +96,18 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
     <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
-    <ROW Fragment="FolderDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\FolderDlg.aip"/>
-    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceTypeDlg.aip"/>
-    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceWelcomeDlg.aip"/>
-    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;classic\fragments\SequenceDialogs.aip"/>
+    <ROW Fragment="InstallTypeDlg.aip" Path="&lt;AI_THEMES&gt;modern\fragments\InstallTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;modern\fragments\MaintenanceTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;modern\fragments\MaintenanceWelcomeDlg.aip"/>
+    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;modern\fragments\SequenceDialogs.aip"/>
     <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
     <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
     <ROW Fragment="Themes.aip" Path="&lt;AI_FRAGS&gt;Themes.aip"/>
-    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;classic\fragments\UI.aip"/>
+    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;modern\fragments\UI.aip"/>
     <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
-    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRemoveDlg.aip"/>
-    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRepairDlg.aip"/>
-    <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\WelcomeDlg.aip"/>
+    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;modern\fragments\VerifyRemoveDlg.aip"/>
+    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;modern\fragments\VerifyRepairDlg.aip"/>
+    <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;modern\fragments\WelcomeDlg.aip"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiActionTextComponent">
     <ROW Action="AI_DeleteLzma" Description="Deleting files extracted from archive" DescriptionLocId="ActionText.Description.AI_DeleteLzma" TemplateLocId="-"/>
@@ -733,6 +118,10 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiAppSearchComponent">
     <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_LM" Builds="DefaultBuild"/>
     <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_CU" Builds="DefaultBuild"/>
+    <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER"/>
+    <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER_1"/>
+    <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER_2"/>
+    <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER_3"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
     <ROW Name="Prereq.dll" SourcePath="&lt;AI_CUSTACTS&gt;Prereq.dll"/>
@@ -744,17 +133,17 @@
     <ROW Feature_="bitJREBundle" Level="0" Condition="NOT VersionNT64"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
-    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
-    <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="201"/>
-    <ROW Dialog_="FolderDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="InstallTypeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="101"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
     <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="197"/>
-    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="InstallTypeDlg" Condition="AI_INSTALL" Ordering="201"/>
     <ROW Dialog_="MaintenanceWelcomeDlg" Control_="Next" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="99"/>
-    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="101"/>
-    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="102"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="2"/>
     <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_MAINT" Ordering="198"/>
-    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="202"/>
-    <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="204"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="AddRemoveButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
     <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
     <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="601"/>
     <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
@@ -763,15 +152,16 @@
     <ROW Dialog_="VerifyRepairDlg" Control_="Repair" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="399" Options="1"/>
     <ROW Dialog_="VerifyRemoveDlg" Control_="Remove" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="299" Options="1"/>
     <ROW Dialog_="PatchWelcomeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_PATCH" Ordering="201"/>
-    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
     <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
-    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="203"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="205"/>
+    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
     <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
-    <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR" ManualDelete="false"/>
+    <ROW Directory_="jre64_Dir" Component_="jre64" ManualDelete="true"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
+    <ROW Action="AI_AuthorSinglePackage" Type="1" Source="aicustact.dll" Target="AI_AuthorSinglePackage" WithoutSeq="true"/>
     <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH_ORIGINAL" Target="[AI_SETUPEXEPATH]"/>
     <ROW Action="AI_DATA_SETTER" Type="51" Source="CustomActionData" Target="[AI_SETUPEXEPATH]"/>
     <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
@@ -786,217 +176,38 @@
     <ROW Action="AI_ExtractFiles" Type="1" Source="Prereq.dll" Target="ExtractSourceFiles" AdditionalSeq="AI_DATA_SETTER"/>
     <ROW Action="AI_ExtractLzma" Type="1025" Source="lzmaextractor.dll" Target="ExtractLZMAFiles"/>
     <ROW Action="AI_FindExeLzma" Type="1" Source="lzmaextractor.dll" Target="FindEXE"/>
-    <ROW Action="AI_GetArpIconPath" Type="1" Source="aicustact.dll" Target="GetArpIconPath"/>
     <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
     <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
     <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH" Target="[AI_SETUPEXEPATH_ORIGINAL]"/>
     <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
     <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_SETMIXINSTLOCATION" Type="1" Source="aicustact.dll" Target="MixedAllUsersInstallLocation"/>
     <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
-    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[AppDataFolder][ProductName]"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[AI_UserProgramFiles][Manufacturer]\[ProductName]"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
     <ROW Feature_="MainFeature" Component_="APPDIR"/>
     <ROW Feature_="MainFeature" Component_="ProductInformation"/>
-    <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
-    <ROW Feature_="MainFeature" Component_="AI_CustomARPName"/>
-    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoreconsolel110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoreconsolel120.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoredatetimel110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoredebugl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoreerrorhandlingl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincorefibersl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincorefilel110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincorefilel120.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincorefilel210.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincorehandlel110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoreheapl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoreinterlockedl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincorelibraryloaderl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincorelocalizationl120.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincorememoryl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincorenamedpipel110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoreprocessenvironmentl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoreprocessthreadsl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoreprocessthreadsl111.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoreprofilel110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincorertlsupportl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincorestringl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoresynchl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoresynchl120.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoresysinfol110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoretimezonel110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincoreutill110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtconiol110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtconvertl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtenvironmentl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtfilesysteml110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtheapl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtlocalel110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtmathl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtmultibytel110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtprivatel110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtprocessl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtruntimel110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtstdiol110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtstringl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrttimel110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="apimswincrtutilityl110.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="awt.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="decora_sse.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="dt_socket.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="fontmanager.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="freetype.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="fxplugins.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="glass.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="gliblite.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="gstreamerlite.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="instrument.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="j2gss.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="j2pcsc.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="j2pkcs11.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="jaas.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="jabswitch.exe"/>
-    <ROW Feature_="bitJREBundle" Component_="jaccessinspector.exe"/>
-    <ROW Feature_="bitJREBundle" Component_="jaccesswalker.exe"/>
-    <ROW Feature_="bitJREBundle" Component_="java.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="java.exe"/>
-    <ROW Feature_="bitJREBundle" Component_="javaaccessbridge.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="javafx_font.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="javafx_iio.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="javajpeg.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="javaw.exe"/>
-    <ROW Feature_="bitJREBundle" Component_="jawt.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="jdwp.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="jfr.exe"/>
-    <ROW Feature_="bitJREBundle" Component_="jfxmedia.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="jfxwebkit.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="jimage.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="jli.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="jrunscript.exe"/>
-    <ROW Feature_="bitJREBundle" Component_="jsound.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="jsvml.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="keytool.exe"/>
-    <ROW Feature_="bitJREBundle" Component_="kinit.exe"/>
-    <ROW Feature_="bitJREBundle" Component_="klist.exe"/>
-    <ROW Feature_="bitJREBundle" Component_="ktab.exe"/>
-    <ROW Feature_="bitJREBundle" Component_="lcms.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="management.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="management_agent.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="management_ext.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="mlib_image.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="msvcp140.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="net.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="nio.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="prefs.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="prism_common.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="prism_d3d.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="prism_sw.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="rmi.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="rmiregistry.exe"/>
-    <ROW Feature_="bitJREBundle" Component_="classes.jsa"/>
-    <ROW Feature_="bitJREBundle" Component_="jvm.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="splashscreen.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="sspi_bridge.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="sunmscapi.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="ucrtbase.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="vcruntime140.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="vcruntime140_1.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="verify.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="w2k_lsa_auth.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="windowsaccessbridge64.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="WinFallbackLookup.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="zip.dll"/>
-    <ROW Feature_="bitJREBundle" Component_="logging.properties"/>
-    <ROW Feature_="bitJREBundle" Component_="jmxremote.access"/>
-    <ROW Feature_="bitJREBundle" Component_="java.policy"/>
-    <ROW Feature_="bitJREBundle" Component_="default_local.policy"/>
-    <ROW Feature_="bitJREBundle" Component_="README.txt"/>
-    <ROW Feature_="bitJREBundle" Component_="default_local.policy_2"/>
-    <ROW Feature_="bitJREBundle" Component_="DISCLAIMER"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_51"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_52"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_53"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_54"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_55"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_56"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_57"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_58"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_59"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_60"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_61"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_62"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_63"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_64"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_65"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_66"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_67"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_68"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_69"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_70"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_71"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_72"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_73"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_74"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_75"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_76"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_77"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_78"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_79"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_80"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_81"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_82"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_83"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_84"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_85"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_86"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_87"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_88"/>
-    <ROW Feature_="MainFeature" Component_="YourProduct.exe"/>
+    <ROW Feature_="MainFeature" Component_="jre64"/>
     <ROW Feature_="MainFeature" Component_="app.logorrr.app22.3.0SNAPSHOT.jar"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_89"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_90"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_91"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_92"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_93"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_94"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_95"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_96"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_97"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_98"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_99"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_100"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_101"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_102"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_103"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_104"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_105"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_106"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_107"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_108"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_109"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_110"/>
-    <ROW Feature_="bitJREBundle" Component_="ADDITIONAL_LICENSE_INFO_111"/>
-    <ROW Feature_="bitJREBundle" Component_="classlist"/>
-    <ROW Feature_="bitJREBundle" Component_="default.jfc"/>
-    <ROW Feature_="bitJREBundle" Component_="blocked.certs"/>
+    <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
+    <ROW Feature_="MainFeature" Component_="LogoRRR.exe"/>
+    <ROW Feature_="MainFeature" Component_="AI_INSTALLPERUSER"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="logorrricon128.exe" SourcePath="logorrr-icon-128.ico" Index="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIniFileComponent">
-    <ROW IniFile="ApplicationType" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Application" Key="Application Type" Value="gui" Action="0" Component_="YourProduct.exe"/>
-    <ROW IniFile="ClassPath" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Class Path" Key="Class Path" Value="[APPDIR];[APPDIR]*.jar;" Action="0" Component_="YourProduct.exe"/>
-    <ROW IniFile="FailureCheck" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Application" Key="Failure Check" Value="yes" Action="0" Component_="YourProduct.exe"/>
-    <ROW IniFile="MainClass" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Java Runtime Environment" Key="Main Class" Value="app.logorrr.LogoRRRApp" Action="0" Component_="YourProduct.exe"/>
-    <ROW IniFile="MaximumVersion" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Java Runtime Environment" Key="Maximum Version" Value="any" Action="0" Component_="YourProduct.exe"/>
-    <ROW IniFile="MinimumVersion" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Java Runtime Environment" Key="Minimum Version" Value="any" Action="0" Component_="YourProduct.exe"/>
-    <ROW IniFile="SingleInstance" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Application" Key="Single Instance" Value="yes" Action="0" Component_="YourProduct.exe"/>
+    <ROW IniFile="ApplicationType" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Application" Key="Application Type" Value="gui" Action="0" Component_="LogoRRR.exe"/>
+    <ROW IniFile="ClassPath" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Class Path" Key="Class Path" Value="[APPDIR]*.jar;" Action="0" Component_="LogoRRR.exe"/>
+    <ROW IniFile="FailureCheck" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Application" Key="Failure Check" Value="yes" Action="0" Component_="LogoRRR.exe"/>
+    <ROW IniFile="MainClass" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Java Runtime Environment" Key="Main Class" Value="app.logorrr.LogoRRRAppLauncher" Action="0" Component_="LogoRRR.exe"/>
+    <ROW IniFile="MaximumVersion" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Java Runtime Environment" Key="Maximum Version" Value="any" Action="0" Component_="LogoRRR.exe"/>
+    <ROW IniFile="MinimumVersion" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Java Runtime Environment" Key="Minimum Version" Value="any" Action="0" Component_="LogoRRR.exe"/>
+    <ROW IniFile="OverrideWorkingDir" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Application" Key="Override WorkingDir" Value="yes" Action="0" Component_="LogoRRR.exe"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
@@ -1013,10 +224,10 @@
     <ROW Action="AI_FindExeLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="196" Builds="DefaultBuild"/>
     <ROW Action="AI_ExtractLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1549" Builds="DefaultBuild"/>
     <ROW Action="AI_DeleteRLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="1548" Builds="DefaultBuild"/>
-    <ROW Action="AI_DeleteLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="6597" Builds="DefaultBuild"/>
+    <ROW Action="AI_DeleteLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="6599" Builds="DefaultBuild"/>
     <ROW Action="AI_ExtractFiles" Sequence="1399" Builds="DefaultBuild"/>
     <ROW Action="AI_DATA_SETTER" Sequence="1398"/>
-    <ROW Action="AI_GetArpIconPath" Sequence="1401"/>
+    <ROW Action="AI_SETMIXINSTLOCATION" Sequence="748"/>
     <ROW Action="AI_DetectSoftware" Sequence="101"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
@@ -1026,67 +237,54 @@
     <ROW Action="AI_EnableDebugLog" Sequence="51"/>
     <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99"/>
     <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="102"/>
+    <ROW Action="AI_SETMIXINSTLOCATION" Sequence="748"/>
     <ROW Action="AI_DetectSoftware" Sequence="101"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiJavaComponent">
-    <ROW Name="Your Product.exe" Launcher="YourProduct.exe" MainClass="MainClass" ClassPath="ClassPath" JREMin="MinimumVersion" JREMax="MaximumVersion" IconPath="logorrr-icon-128.ico" AppType="ApplicationType" SingleInstance="SingleInstance" PlusList="APPDIR;" MinusList="#YourProduct.exe;" MacDescription="[|CurrentJavaProductName] [|ProductVersion] © [|Manufacturer], Inc, 2022" MacBundleId="com.[|Manufacturer].[|ProductName].[|CurrentJavaProductName]" FailureCheck="FailureCheck" UACExecutionLevel="0" Platform64="true"/>
+    <ROW Name="LogoRRR.exe" Launcher="LogoRRR.exe" MainClass="MainClass" ClassPath="ClassPath" JREMin="MinimumVersion" JREMax="MaximumVersion" IconPath="logorrr-icon-128.ico" AppType="ApplicationType" PlusList="APPDIR;" MinusList="#LogoRRR.exe;" MacDescription="[|CurrentJavaProductName] [|ProductVersion] © [|Manufacturer], Inc, 2022" MacBundleId="com.[|Manufacturer].[|ProductName].[|CurrentJavaProductName]" FailureCheck="FailureCheck" OverrideWkDir="OverrideWorkingDir" UACExecutionLevel="0" Platform64="true"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
     <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
-    <ROW Condition="AI_DETECTED_INTERNET_CONNECTION" Description="[ProductName] requires an active Internet connection for installation. Please check your network configuration and proxy settings." DescriptionLocId="AI.LaunchCondition.Internet" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="SETUPEXEDIR OR (REMOVE=&quot;ALL&quot;)" Description="This package can only be run from a bootstrapper." DescriptionLocId="AI.LaunchCondition.RequireBootstrapper" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRegLocatorComponent">
     <ROW Signature_="AI_EXE_PATH_CU" Root="1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Type="2"/>
     <ROW Signature_="AI_EXE_PATH_LM" Root="2" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Type="2"/>
+    <ROW Signature_="AI_INSTALLPERUSER" Root="2" Key="Software\[Manufacturer]\[UpgradeCode]" Name="AI_INSTALLPERUSER" Type="2"/>
+    <ROW Signature_="AI_INSTALLPERUSER_1" Root="1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="AI_INSTALLPERUSER" Type="2"/>
+    <ROW Signature_="AI_INSTALLPERUSER_2" Root="2" Key="Software\[Manufacturer]\[UpgradeCode]" Name="AI_INSTALLPERUSER" Type="18"/>
+    <ROW Signature_="AI_INSTALLPERUSER_3" Root="1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="AI_INSTALLPERUSER" Type="18"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
     <ROW Registry="AI_ExePath" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Value="[AI_SETUPEXEPATH]" Component_="AI_ExePath"/>
+    <ROW Registry="AI_INSTALLPERUSER" Root="-1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="AI_INSTALLPERUSER" Value="[AI_INSTALLPERUSER]" Component_="AI_INSTALLPERUSER"/>
     <ROW Registry="AdvancedInstaller" Root="-1" Key="Software\Caphyon\Advanced Installer" Name="\"/>
     <ROW Registry="Caphyon" Root="-1" Key="Software\Caphyon" Name="\"/>
-    <ROW Registry="Comments" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="Comments" Value="[ARPCOMMENTS]" Component_="AI_CustomARPName"/>
-    <ROW Registry="Contact" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="Contact" Value="[ARPCONTACT]" Component_="AI_CustomARPName"/>
-    <ROW Registry="CurrentVersion" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion" Name="\"/>
-    <ROW Registry="DisplayIcon" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="DisplayIcon" Value="[ARP_ICON_PATH]" Component_="AI_CustomARPName"/>
-    <ROW Registry="DisplayName" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="DisplayName" Value="[AI_PRODUCTNAME_ARP]" Component_="AI_CustomARPName"/>
-    <ROW Registry="DisplayVersion" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="DisplayVersion" Value="[ProductVersion]" Component_="AI_CustomARPName"/>
-    <ROW Registry="EstimatedSize" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="EstimatedSize" Value="#[AI_ARP_SIZE]" Component_="AI_CustomARPName" VirtualValue="#"/>
-    <ROW Registry="HelpLink" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="HelpLink" Value="[ARPHELPLINK]" Component_="AI_CustomARPName"/>
-    <ROW Registry="HelpTelephone" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="HelpTelephone" Value="[ARPHELPTELEPHONE]" Component_="AI_CustomARPName"/>
-    <ROW Registry="InstallLocation" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="InstallLocation" Value="[APPDIR]" Component_="AI_CustomARPName"/>
     <ROW Registry="LZMA" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA" Name="\"/>
     <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
-    <ROW Registry="Microsoft" Root="-1" Key="Software\Microsoft" Name="\"/>
     <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
     <ROW Registry="ProductCode" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]" Name="\"/>
     <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
-    <ROW Registry="ProductNameProductVersion" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="\"/>
     <ROW Registry="ProductVersion" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="\"/>
-    <ROW Registry="Publisher" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="Publisher" Value="[Manufacturer]" Component_="AI_CustomARPName"/>
-    <ROW Registry="Readme" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="Readme" Value="[ARPREADME]" Component_="AI_CustomARPName"/>
     <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
-    <ROW Registry="URLInfoAbout" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="URLInfoAbout" Value="[ARPURLINFOABOUT]" Component_="AI_CustomARPName"/>
-    <ROW Registry="URLUpdateInfo" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="URLUpdateInfo" Value="[ARPURLUPDATEINFO]" Component_="AI_CustomARPName"/>
-    <ROW Registry="Uninstall" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall" Name="\"/>
-    <ROW Registry="UninstallPath" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="UninstallPath" Value="[AI_UNINSTALLER] /i [ProductCode] AI_UNINSTALLER_CTP=1" Component_="AI_CustomARPName"/>
-    <ROW Registry="UninstallString" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="UninstallString" Value="[AI_UNINSTALLER] /i [ProductCode] AI_UNINSTALLER_CTP=1" Component_="AI_CustomARPName"/>
+    <ROW Registry="UpgradeCode" Root="-1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="\"/>
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
-    <ROW Registry="VersionMajor" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="VersionMajor" Value="#21" Component_="AI_CustomARPName" VirtualValue="#"/>
-    <ROW Registry="VersionMinor" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="VersionMinor" Value="#3" Component_="AI_CustomARPName" VirtualValue="#"/>
-    <ROW Registry="Windows" Root="-1" Key="Software\Microsoft\Windows" Name="\"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
-    <ROW Shortcut="LogoRRR" Directory_="DesktopFolder" Name="LogoRRR" Component_="YourProduct.exe" Target="[#YourProduct.exe]" Description="[|CurrentJavaProductName] [|ProductVersion]" Hotkey="0" Icon_="logorrricon128.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
-    <ROW Shortcut="YourProduct" Directory_="SHORTCUTDIR" Name="LogoRRR" Component_="YourProduct.exe" Target="[#YourProduct.exe]" Description="[|CurrentJavaProductName] [|ProductVersion]" Hotkey="0" Icon_="logorrricon128.exe" IconIndex="0" ShowCmd="1"/>
+    <ROW Shortcut="LogoRRR" Directory_="DesktopFolder" Name="LogoRRR" Component_="LogoRRR.exe" Target="[#LogoRRR.exe]" Description="[|CurrentJavaProductName] [|ProductVersion] © [|Manufacturer], Inc, 2022" Hotkey="0" IconIndex="0" ShowCmd="1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
-    <ATTRIBUTE name="UsedTheme" value="classic"/>
+    <ATTRIBUTE name="UsedTheme" value="modern"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiUpgradeComponent">
     <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="[|ProductVersion]" Attributes="257" ActionProperty="OLDPRODUCTS"/>
     <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.SynchronizedFolderComponent">
+    <ROW Directory_="APPDIR" SourcePath="programfiles" Feature="MainFeature" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6"/>
+    <ROW Directory_="jre64_Dir" SourcePath="jdk-19+36-jre" Feature="MainFeature" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="8"/>
   </COMPONENT>
 </DOCUMENT>

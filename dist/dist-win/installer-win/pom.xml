@@ -88,21 +88,7 @@
                             <includePluginDependencies>true</includePluginDependencies>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>create-product-code-logorrr-installer-slim</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>app.logorrr.build.ProductCodeUpdater</mainClass>
-                            <arguments>
-                                <argument>${project.build.directory}/installer/logorrr-installer-slim.aip</argument>
-                                <argument>${revision}</argument>
-                            </arguments>
-                            <includePluginDependencies>true</includePluginDependencies>
-                        </configuration>
-                    </execution>
+
                     <!-- Create installer -->
                     <execution>
                         <id>create-installer</id>
@@ -116,21 +102,6 @@
                             <arguments>
                                 <argument>/rebuild</argument>
                                 <argument>logorrr-installer.aip</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>create-installer-slim</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${advanced.installer.compiler}</executable>
-                            <workingDirectory>${project.build.directory}/installer/</workingDirectory>
-                            <arguments>
-                                <argument>/rebuild</argument>
-                                <argument>logorrr-installer-slim.aip</argument>
                             </arguments>
                         </configuration>
                     </execution>
