@@ -49,7 +49,7 @@
             </activation>
             <modules>
                 <module>dist-repackaged</module>
-                <module></module>
+                <module>dist-linux</module>
             </modules>
         </profile>
     </profiles>
