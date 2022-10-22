@@ -47,17 +47,15 @@
             <activation>
                 <os>
                     <family>unix</family>
-                    <name>mac os x</name>
+                    <name>Linux</name>
                 </os>
             </activation>
             <properties>
                 <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-                <graalvm.home>/Users/lad/bin/graalvm-ce-java11-21.3.0/Contents/Home</graalvm.home>
-                <jdk.home>/will/be/set/in/profiles</jdk.home>
+                <graalvm.home>/home/parallels/.sdkman/candidates/java/22.2.r11-grl</graalvm.home>
+                <jdk.home>/home/parallels/.sdkman/candidates/java/22.2.r11-grl</jdk.home>
                 <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
                 <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
-                <mac.codesign.binary>/usr/bin/codesign</mac.codesign.binary>
-                <mac.productsign.binary>/usr/bin/productsign</mac.productsign.binary>
             </properties>
         </profile>
         <profile>

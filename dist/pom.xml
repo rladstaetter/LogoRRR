@@ -39,6 +39,19 @@
                 <module>dist-osx</module>
             </modules>
         </profile>
+        <profile>
+            <id>OS.linux</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <name>Linux</name>
+                </os>
+            </activation>
+            <modules>
+                <module>dist-repackaged</module>
+                <module></module>
+            </modules>
+        </profile>
     </profiles>
 
 </project>
