@@ -173,6 +173,8 @@
                                 <argument>app-tmp-image/LogoRRR</argument>
                                 <argument>--app-version</argument>
                                 <argument>${revision}</argument>
+                                <argument>--icon</argument>
+                                <argument>classes/icon/icon_128x128.png</argument>
                                 <!--
                                 <argument>-resource-dir</argument>
                                 <argument>classes/res/</argument>
