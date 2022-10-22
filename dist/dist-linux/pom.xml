@@ -14,7 +14,8 @@
     <packaging>pom</packaging>
     <description>Distribution bundle for Linux</description>
 
-    <!-- todo -->
-
+    <modules>
+        <module>installer-linux</module>
+    </modules>
 
 </project>
