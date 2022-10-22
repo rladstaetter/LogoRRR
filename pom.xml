@@ -53,7 +53,7 @@
             <properties>
                 <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
                 <graalvm.home>/home/parallels/.sdkman/candidates/java/22.2.r11-grl</graalvm.home>
-                <jdk.home>/home/parallels/.sdkman/candidates/java/22.2.r11-grl</jdk.home>
+                <jdk.home>/home/parallels/.sdkman/candidates/java/19-zulu</jdk.home>
                 <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
                 <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
             </properties>

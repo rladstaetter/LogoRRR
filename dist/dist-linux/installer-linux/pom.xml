@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>app.logorrr.dist.osx</groupId>
+        <groupId>app.logorrr.dist.linux</groupId>
         <artifactId>dist-linux</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
@@ -125,8 +125,10 @@
                                 <argument>LogoRRR</argument>
                                 <argument>--app-version</argument>
                                 <argument>${revision}</argument>
-                                <argument>--resource-dir</argument>
+                                <!--
+                                <argument>-resource-dir</argument>
                                 <argument>classes/res/</argument>
+                                -->
                                 <argument>--vendor</argument>
                                 <argument>logorrr.app</argument>
                                 <argument>--description</argument>
@@ -168,13 +170,13 @@
                                 <argument>--name</argument>
                                 <argument>LogoRRR</argument>
                                 <argument>--app-image</argument>
-                                <argument>app-tmp-image/LogoRRR.app</argument>
-                                <argument>--mac-package-name</argument>
-                                <argument>LogoRRR</argument>
+                                <argument>app-tmp-image/LogoRRR</argument>
                                 <argument>--app-version</argument>
                                 <argument>${revision}</argument>
-                                <argument>--resource-dir</argument>
+                                <!--
+                                <argument>-resource-dir</argument>
                                 <argument>classes/res/</argument>
+                                -->
                                 <argument>--vendor</argument>
                                 <argument>logorrr.app</argument>
                                 <argument>--description</argument>

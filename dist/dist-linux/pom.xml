@@ -9,7 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>app.logorrr.dist.linux</groupId>
     <artifactId>dist-linux</artifactId>
+
     <name>app.logorrr.dist.linux</name>
     <packaging>pom</packaging>
     <description>Distribution bundle for Linux</description>
