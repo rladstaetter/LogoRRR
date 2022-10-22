@@ -4,6 +4,8 @@ import app.logorrr.util.{ColorUtil, OsUtil}
 import javafx.beans.binding.StringBinding
 import javafx.scene.control._
 import javafx.scene.input.{KeyCode, KeyEvent}
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
+import org.kordamp.ikonli.javafx.FontIcon
 
 import scala.jdk.CollectionConverters._
 
@@ -54,15 +56,16 @@ class SearchToolBar(addFilterFn: Filter => Unit) extends ToolBar {
 
     override def computeValue(): String =
       if (regexToggleButton.isSelected) {
-        "<enter regex search string>"
+        "<regex search string>"
       } else {
-        "<enter search string>"
+        "<search string>"
       }
   })
 
 
-  class SearchButton extends Button("search") {
+  class SearchButton extends Button {
 
+    setGraphic(new FontIcon(FontAwesomeSolid.SEARCH))
     setOnAction(_ => {
       if (searchTextField.getText.nonEmpty) {
         val filter =
