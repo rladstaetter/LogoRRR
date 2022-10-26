@@ -4,6 +4,7 @@ import app.logorrr.util.{ColorUtil, OsUtil}
 import javafx.beans.binding.StringBinding
 import javafx.scene.control._
 import javafx.scene.input.{KeyCode, KeyEvent}
+import javafx.scene.layout.HBox
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
 import org.kordamp.ikonli.javafx.FontIcon
 
@@ -17,6 +18,7 @@ object SearchToolBar {
       |-fx-background-color: CYAN;
       |-fx-border-width: 1px 1px 1px 1px;
       |-fx-border-color: BLUE;
+      |-fx-padding: 0px 0px 0px 3px;
       |""".stripMargin
 
 }
@@ -28,28 +30,14 @@ object SearchToolBar {
 class SearchToolBar(addFilterFn: Filter => Unit) extends ToolBar {
 
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
+  setStyle("""-fx-padding: 0px 0px 0px 4px;""")
 
   /** expose for key accelerator */
-  val searchTextField = {
-    val stf = new SearchTextField
-    stf.setTooltip(new Tooltip(s"enter search pattern\n\nshortcut: ${OsUtil.osFun("CTRL-F", "COMMAND-F")}"))
-    stf
-  }
-  private val colorPicker = {
-    val scp = new SearchColorPicker()
-    scp.setTooltip(new Tooltip("choose color"))
-    scp
-  }
+  val searchTextField = new SearchTextField
+  private val colorPicker = new SearchColorPicker()
 
   /** expose for key accelerator */
-  val regexToggleButton = {
-    val sartb = new SearchActivateRegexToggleButton()
-    sartb.setTooltip(new Tooltip(
-      s"""activate regular expression search
-         |
-         |shortcut: ${OsUtil.osFun("CTRL-R", "COMMAND-R")}""".stripMargin))
-    sartb
-  }
+  val regexToggleButton = new SearchActivateRegexToggleButton()
 
   searchTextField.promptTextProperty().bind(new StringBinding {
     bind(regexToggleButton.selectedProperty())
@@ -62,10 +50,8 @@ class SearchToolBar(addFilterFn: Filter => Unit) extends ToolBar {
       }
   })
 
+  class SearchButton extends CustomSearchButton {
 
-  class SearchButton extends Button {
-
-    setGraphic(new FontIcon(FontAwesomeSolid.SEARCH))
     setOnAction(_ => {
       if (searchTextField.getText.nonEmpty) {
         val filter =
@@ -84,7 +70,6 @@ class SearchToolBar(addFilterFn: Filter => Unit) extends ToolBar {
 
   private val searchButton = new SearchButton()
 
-
   // if 'ENTER' is pressed when focus is in searchField, execute a search right away.
   // I would prefer to instantiate an accelerator here as well, but there is a NPE if we do it in the constructor.
   // Because of that LogoRRRAccelerators class exists. On the other hand it is ok to have a central place to define
@@ -98,6 +83,10 @@ class SearchToolBar(addFilterFn: Filter => Unit) extends ToolBar {
       searchButton.fire()
     }
   }
+  val width = 356
+
+  setMaxWidth(width)
+  setMinWidth(width)
 
   getItems.addAll(Seq(searchTextField, regexToggleButton, colorPicker, searchButton).asJava)
 
