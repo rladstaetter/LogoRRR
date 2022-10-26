@@ -14,7 +14,7 @@
         <changelist>-SNAPSHOT</changelist>
 
         <scala.major.version>2.13</scala.major.version>
-        <scala.version>${scala.major.version}.9</scala.version>
+        <scala.version>${scala.major.version}.10</scala.version>
         <openjfx.version>19</openjfx.version>
         <gluonfx.plugin.version>1.0.15</gluonfx.plugin.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
@@ -40,6 +40,22 @@
                 <graalvm.home>C:\Program Files\Java\graalvm-svm-java11-windows-gluon-22.1.0.1-Final</graalvm.home>
                 <!-- see also dist/dist-win/pom.xml! -->
                 <advanced.installer.compiler>C:\Program Files (x86)\Caphyon\Advanced Installer 19.8.1\bin\x86\AdvancedInstaller.com</advanced.installer.compiler>
+            </properties>
+        </profile>
+        <profile>
+            <id>OS.linux</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <name>Linux</name>
+                </os>
+            </activation>
+            <properties>
+                <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
+                <graalvm.home>/home/lad/.sdkman/candidates/java/22.2.r11-grl</graalvm.home>
+                <jdk.home>/home/lad/.sdkman/candidates/java/19-zulu</jdk.home>
+                <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
+                <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
             </properties>
         </profile>
         <profile>
