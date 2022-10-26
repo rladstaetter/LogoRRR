@@ -8,23 +8,35 @@
     <description>LogoRRR - the log visualisation tool</description>
     <packaging>pom</packaging>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- make sure you either set following properties here or in your settings xml (preferred) -->
+
+        <!--
+        <graalvm.home>/path/to/graalvm</graalvm.home> all platforms
+        <jdk.home>/path/to/jdk</jdk.home> linux, windows
+        <osx.jdk.home.aarch64>/path/to/aarch64/jdk</osx.jdk.home.aarch64> see also build scripts
+        <osx.jdk.home.x64>/path/to/x64/jdk</osx.jdk.home.x64>
+        -->
 
         <revision>23.1.0</revision>
-        <changelist>-SNAPSHOT</changelist>
 
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.10</scala.version>
+
         <openjfx.version>19</openjfx.version>
-        <gluonfx.plugin.version>1.0.15</gluonfx.plugin.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
+        <ikonli.version>12.3.1</ikonli.version>
+        <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
+        <gluonfx.plugin.version>1.0.15</gluonfx.plugin.version>
+
+        <!-- no need to change these -->
+        <changelist>-SNAPSHOT</changelist>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>app.logorrr.LogoRRRApp</main.class>
         <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>
         <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
-        <!-- settings for x64 and aarch64 builds on mac, can be ignored for other platforms -->
-        <osx.jdk.home.aarch64>/Users/lad/.sdkman/candidates/java/19-zulu</osx.jdk.home.aarch64>
-        <osx.jdk.home.x64>/Users/lad/.sdkman/candidates/java/19.ea.19-open</osx.jdk.home.x64>
-        <ikonli.version>12.3.1</ikonli.version>
+        <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
+        <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
     </properties>
 
     <profiles>
@@ -50,13 +62,6 @@
                     <name>Linux</name>
                 </os>
             </activation>
-            <properties>
-                <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-                <graalvm.home>/home/lad/.sdkman/candidates/java/22.2.r11-grl</graalvm.home>
-                <jdk.home>/home/lad/.sdkman/candidates/java/19-zulu</jdk.home>
-                <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
-                <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
-            </properties>
         </profile>
         <profile>
             <id>OS.osx</id>
@@ -66,14 +71,42 @@
                 </os>
             </activation>
             <properties>
-                <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-                <graalvm.home>/Users/lad/bin/graalvm-ce-java11-21.3.0/Contents/Home</graalvm.home>
-                <jdk.home>/will/be/set/in/profiles</jdk.home>
-                <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
-                <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
                 <mac.codesign.binary>/usr/bin/codesign</mac.codesign.binary>
                 <mac.productsign.binary>/usr/bin/productsign</mac.productsign.binary>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-property</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>app.logorrr.dist.osx.developerid</property>
+                                            <message>You must set property 'app.logorrr.dist.osx.developerid' to create
+                                                a signed pkg file.
+                                            </message>
+                                        </requireProperty>
+                                        <requireProperty>
+                                            <property>graalvm.home</property>
+                                            <message>You have to set 'graalvm.home' and point to a correct graalvm
+                                                installation.
+                                            </message>
+                                        </requireProperty>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>OS.osx.arm64</id>
@@ -84,10 +117,35 @@
                 </os>
             </activation>
             <properties>
-                <!-- must point to a aarch64 sdk -->
                 <jdk.home>${osx.jdk.home.aarch64}</jdk.home>
             </properties>
-
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-property</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>osx.jdk.home.aarch64</property>
+                                            <message>You have to set 'osx.jdk.home.aarch64' and it must point to a
+                                                aarch64 jdk.
+                                            </message>
+                                        </requireProperty>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>OS.osx.x64</id>
@@ -101,6 +159,34 @@
                 <!-- must point to a x64 jdk installation -->
                 <jdk.home>${osx.jdk.home.x64}</jdk.home>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-property</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>osx.jdk.home.x64</property>
+                                            <message>You have to set 'osx.jdk.home.x64' and it must point to a x64
+                                                jdk.
+                                            </message>
+                                        </requireProperty>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
         </profile>
     </profiles>
 
@@ -359,6 +445,18 @@
                             <phase>initialize</phase>
                             <configuration>
                                 <rules>
+                                    <requireProperty>
+                                        <property>graalvm.home</property>
+                                        <message>You have to set 'graalvm.home' and point to a correct graalvm
+                                            installation.
+                                        </message>
+                                    </requireProperty>
+                                    <requireProperty>
+                                        <property>jdk.home</property>
+                                        <message>You have to set 'jdk.home' and point to a correct jdk
+                                            installation.
+                                        </message>
+                                    </requireProperty>
                                     <requireFilesExist>
                                         <files>
                                             <!-- simple check if graalvm home is correctly defined -->
@@ -372,8 +470,8 @@
                                         </message>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
-                                        <version>11</version>
-                                        <message>JDK 11 is necessary to execute build, download here:
+                                        <version>19</version>
+                                        <message>JDK 19 is necessary to execute build, download here:
                                             https://www.azul.com/downloads/zulu-community/?version=java-11-lts&amp;package=jdk
                                         </message>
                                     </requireJavaVersion>
