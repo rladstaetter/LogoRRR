@@ -114,7 +114,7 @@ class LogFileTab(val pathAsString: String
   val settingsToolBar = new SettingsToolBar(pathAsString)
 
   val opsBorderPane: OpsBorderPane = {
-    val op = new OpsBorderPane(pathAsString,searchToolBar, filtersToolBar, settingsToolBar)
+    val op = new OpsBorderPane(pathAsString, searchToolBar, filtersToolBar, settingsToolBar)
     op.blockSizeProperty.set(LogoRRRGlobals.getLogFileSettings(pathAsString).blockWidthSettingsProperty.get())
     op.fontSizeProperty.set(LogoRRRGlobals.getLogFileSettings(pathAsString).fontSizeProperty.get())
     op

@@ -5,9 +5,9 @@ import app.logorrr.views.block.{HasBlockSizeProperty, RectButton}
 import app.logorrr.views.search.{FiltersToolBar, SearchToolBar}
 import app.logorrr.views.text.TextSizeButton
 import javafx.beans.property.SimpleIntegerProperty
-import javafx.geometry.Pos
-import javafx.scene.control.{Control, ToolBar, Tooltip}
-import javafx.scene.layout.BorderPane
+import javafx.geometry.{Orientation, Pos}
+import javafx.scene.control.{Control, Separator, ToolBar, Tooltip}
+import javafx.scene.layout.{BorderPane, HBox}
 import javafx.scene.paint.Color
 
 /**
@@ -17,7 +17,7 @@ class OpsBorderPane(pathAsString: String
                     , searchToolBar: SearchToolBar
                     , filtersToolBar: FiltersToolBar
                     , settingsToolBar: SettingsToolBar)
-  extends BorderPane
+  extends HBox
     with HasBlockSizeProperty {
 
   def setFontSize(fontSize: Int): Unit =
@@ -72,19 +72,23 @@ class OpsBorderPane(pathAsString: String
     Seq(smallerRectBtn, biggerRectBtn, smallerTextBtn, biggerTextBtn)
   }
 
-  private val box = new ToolBar(items: _*)
-  setLeft(box)
-  box.setMaxHeight(Double.PositiveInfinity)
-  BorderPane.setAlignment(box, Pos.CENTER)
-
-  setCenter(filtersToolBar)
-  filtersToolBar.setMaxHeight(Double.PositiveInfinity)
-  BorderPane.setAlignment(filtersToolBar, Pos.CENTER_LEFT)
-
-  setRight(searchToolBar)
   BorderPane.setAlignment(searchToolBar, Pos.CENTER_LEFT)
   searchToolBar.setMaxHeight(Double.PositiveInfinity)
 
+  // setLeft(searchToolBar)
+
+  private val box = new ToolBar(items: _*)
+  box.setMinWidth(150)
+   box.setMaxHeight(Double.PositiveInfinity)
+  //  BorderPane.setAlignment(box, Pos.CENTER_LEFT)
+  //  setCenter(box)
+
+  filtersToolBar.setMaxHeight(Double.PositiveInfinity)
+  //  BorderPane.setAlignment(filtersToolBar, Pos.CENTER_LEFT)
+  //  setRight(filtersToolBar)
+  val is = Seq(searchToolBar, box,  filtersToolBar)
+  setAlignment(Pos.CENTER_LEFT)
+  getChildren.addAll(is: _*)
 
 
 }
