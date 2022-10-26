@@ -13,6 +13,6 @@ class SearchActivateRegexToggleButton
   setTooltip(new Tooltip(
     s"""activate regular expression search
        |
-       |shortcut: ${OsUtil.osFun("CTRL-R", "COMMAND-R")}""".stripMargin))
+       |shortcut: ${OsUtil.osFun("CTRL-R", "COMMAND-R","CTRL-R")}""".stripMargin))
 
 }
