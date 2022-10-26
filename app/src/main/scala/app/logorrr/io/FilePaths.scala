@@ -1,7 +1,7 @@
 package app.logorrr.io
 
 import app.logorrr.util.OsUtil
-import app.logorrr.util.OsUtil.{Mac, Os, Windows}
+import app.logorrr.util.OsUtil.{Linux, Mac, Os, Windows}
 
 import java.nio.file.{Path, Paths}
 
@@ -31,6 +31,7 @@ object FilePaths {
   val confPath: Map[Os, Path] =
     Map(Windows -> Paths.get("C:/ProgramData/LogoRRR/")
       , Mac -> Paths.get(System.getProperty("user.home")).resolve("Library/Application Support/app.logorrr/")
+      , Linux -> Paths.get(System.getProperty("user.home")).resolve(".logorrr/")
     )
 
   val settingsFilePath: Path = confPath(OsUtil.currentOs).resolve(settingsFileName)

@@ -11,20 +11,25 @@ object OsUtil {
 
   case object Mac extends Os
 
+  case object Linux extends Os
+
   val currentOs =
     if (System.getProperty("os.name").toLowerCase.contains("windows")) {
       Windows
-    } else {
+    } else if (System.getProperty("os.name").toLowerCase.contains("mac")) {
       Mac
+    } else {
+      Linux
     }
 
   val isMac = currentOs == Mac
   val isWin = currentOs == Windows
+  val isLinux = currentOs == Linux
 
-  def osFun[T](onWin : => T, onMac : => T) : T =
+  def osFun[T](onWin: => T, onMac: => T, onLinux: => T): T =
     if (isWin) {
       onWin
     } else if (isMac) {
       onMac
-    } else onMac // linux users have to wait for support of LogoRRR :(
+    } else onLinux
 }
