@@ -19,7 +19,6 @@ abstract class RectButton(width: Int
                           , tooltipMessage: String) extends Button {
 
   setTooltip(new Tooltip(tooltipMessage))
-
   setGraphic(ColorUtil.mkR(width, height, color))
   setOnKeyPressed((event: KeyEvent) => {
     if (event.getCode == KeyCode.ENTER) {
