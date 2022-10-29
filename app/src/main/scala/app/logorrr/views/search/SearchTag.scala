@@ -1,7 +1,7 @@
 package app.logorrr.views.search
 
 import javafx.beans.{InvalidationListener, Observable}
-import javafx.scene.control.{ToggleButton, ToolBar}
+import javafx.scene.control.{ToggleButton, ToolBar, Tooltip}
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 
@@ -13,8 +13,9 @@ object SearchTag {
             , updateActiveFilter: () => Unit
             , removeFilter: Filter => Unit): SearchTag = {
     val i = occurrences(filter)
-    val buttonTitle = s"${filter.pattern} $i"
-    val button = new ToggleButton(buttonTitle)
+    val button = new ToggleButton(filter.pattern)
+    val tooltipMessage = if (i == 1) "one item found" else s"$i items found"
+    button.setTooltip(new Tooltip(tooltipMessage))
     val r = new Rectangle(10, 10)
     r.setFill(filter.color)
     r.setStroke(Color.WHITE)
