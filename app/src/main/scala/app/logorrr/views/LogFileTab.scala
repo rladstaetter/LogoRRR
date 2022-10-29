@@ -188,6 +188,9 @@ class LogFileTab(val pathAsString: String
     /** don't monitor file anymore if tab is closed, free invalidation listeners */
     setOnClosed(_ => closeTab())
     textProperty.bind(computeTabTitle)
+    val tooltip = new Tooltip("jodel")
+    tooltip.textProperty().bind(Bindings.concat(Bindings.size(logEntries).asString, " lines"))
+    setTooltip(tooltip)
 
     selectedEntryProperty.bind(logVisualView.selectedEntryProperty)
 
@@ -212,9 +215,7 @@ class LogFileTab(val pathAsString: String
   }
 
   /** compute title of tab */
-  private def computeTabTitle: StringExpression = {
-    Bindings.concat(Paths.get(pathAsString).getFileName.toString, " (", Bindings.size(logEntries).asString, " lines)")
-  }
+  private def computeTabTitle: StringExpression = Bindings.concat(Paths.get(pathAsString).getFileName.toString)
 
   /**
    * Actions to perform if tab is closed:
