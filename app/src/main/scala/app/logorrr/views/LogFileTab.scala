@@ -3,12 +3,14 @@ package app.logorrr.views
 import app.logorrr.conf.{BlockSettings, LogoRRRGlobals}
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util._
+import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.ops.{OpsRegion, SettingsOps}
 import app.logorrr.views.search.{Filter, FiltersToolBar, Fltr, OpsToolBar}
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.visual.LogVisualView
 import javafx.beans.binding.{Bindings, StringExpression}
-import javafx.beans.property.{SimpleListProperty, SimpleObjectProperty}
+import javafx.beans.property.SimpleListProperty
+import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control._
@@ -67,7 +69,6 @@ class LogFileTab(val pathAsString: String
   extends Tab
     with CanLog {
 
-
   selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](b => {
     if (b) {
       setStyle(LogFileTab.BackgroundSelectedStyle)
@@ -76,7 +77,8 @@ class LogFileTab(val pathAsString: String
     }
   }))
 
-  val logoRRRTailer = LogoRRRTailer(pathAsString, logEntries)
+  // lazy since only if autoscroll is set start tailer
+  lazy val logTailer = LogTailer(pathAsString, logEntries)
 
   def repaint(): Unit = logVisualView.repaint()
 
@@ -136,8 +138,35 @@ class LogFileTab(val pathAsString: String
 
   private val logTextView = new LogTextView(pathAsString, filteredList, timings)
 
+  // val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 
-  val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
+  lazy val scrollToEndEventListener: InvalidationListener = (observable: Observable) => logTextView.scrollToEnd()
+
+  private def startTailer(): Unit = {
+    filteredList.addListener(scrollToEndEventListener)
+    logTailer.start()
+  }
+
+  private def stopTailer(): Unit = {
+    filteredList.removeListener(scrollToEndEventListener)
+    logTailer.stop()
+  }
+
+  def initAutoScroll(): Unit = {
+    LogoRRRGlobals.getLogFileSettings(pathAsString).autoScrollProperty.addListener(JfxUtils.onNew[java.lang.Boolean] {
+      b =>
+        if (b) {
+          startTailer()
+        } else {
+          stopTailer()
+        }
+    })
+
+    if (LogoRRRGlobals.getLogFileSettings(pathAsString).isAutoScroll()) {
+      startTailer()
+    }
+
+  }
 
 
   /** if a change event for filtersList Property occurs, save it to disc */
@@ -188,11 +217,11 @@ class LogFileTab(val pathAsString: String
     /** don't monitor file anymore if tab is closed, free invalidation listeners */
     setOnClosed(_ => closeTab())
     textProperty.bind(computeTabTitle)
-    val tooltip = new Tooltip("jodel")
+    val tooltip = new Tooltip()
     tooltip.textProperty().bind(Bindings.concat(Bindings.size(logEntries).asString, " lines"))
     setTooltip(tooltip)
 
-    selectedEntryProperty.bind(logVisualView.selectedEntryProperty)
+    // selectedEntryProperty.bind(logVisualView.selectedEntryProperty)
 
     // if user changes selected item in listview, change footer as well
     //logTextView.listView.getSelectionModel.selectedItemProperty.addListener(logEntryChangeListener)
@@ -208,7 +237,7 @@ class LogFileTab(val pathAsString: String
       t1: Number => LogoRRRGlobals.setDividerPosition(pathAsString, t1.doubleValue())
     })
 
-    logoRRRTailer.start()
+    initAutoScroll()
 
     setDivider(LogoRRRGlobals.getLogFileSettings(pathAsString).dividerPositionProperty.get())
     initFiltersPropertyListChangeListener()
@@ -230,8 +259,10 @@ class LogFileTab(val pathAsString: String
   }
 
   def shutdown(): Unit = {
+    if (LogoRRRGlobals.getLogFileSettings(pathAsString).isAutoScroll()) {
+      stopTailer()
+    }
     LogoRRRGlobals.removeLogFile(pathAsString)
-    logoRRRTailer.stop()
   }
 
 

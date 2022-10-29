@@ -1,5 +1,6 @@
 package app.logorrr.views.search
 
+import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.block.HasBlockSizeProperty
 import app.logorrr.views.ops.{DecreaseBlockSizeButton, IncreaseBlockSizeButton}
 import app.logorrr.views.text.{DecreaseTextSizeButton, IncreaseTextSizeButton}
@@ -38,7 +39,7 @@ class OpsToolBar(pathAsString: String, addFilterFn: Filter => Unit)
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
 
-  val width = 490
+  val width = 510
   setMaxWidth(width)
   setMinWidth(width)
 
@@ -54,6 +55,8 @@ class OpsToolBar(pathAsString: String, addFilterFn: Filter => Unit)
   val searchTextField = new SearchTextField(regexToggleButton)
 
   private val searchButton = new SearchButton(searchTextField, regexToggleButton, colorPicker, addFilterFn)
+
+  val autoScrollCheckBox = new AutoScrollCheckBox(pathAsString)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {
@@ -75,6 +78,10 @@ class OpsToolBar(pathAsString: String, addFilterFn: Filter => Unit)
     Seq(decreaseBlockSizeButton, increaseBlockSizeButton, decreaseTextSizeButton, increaseTextSizeButton)
   }
 
-  getItems.addAll(searchItems ++ sizeItems: _*)
+  val otherItems: Seq[Control] = {
+    Seq(autoScrollCheckBox)
+  }
+
+  getItems.addAll(searchItems ++ sizeItems ++ otherItems: _*)
 
 }

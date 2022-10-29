@@ -28,23 +28,31 @@ object MutLogFileSettings {
 }
 
 class MutLogFileSettings extends Petrify[LogFileSettings] {
-  def getFontSize(): Int = fontSizeProperty.get()
 
-  def getFilters() = filtersProperty.asScala.toSeq
 
   private val pathAsStringProperty = new SimpleStringProperty()
   private val firstOpenedProperty = new SimpleLongProperty()
   val selectedIndexProperty = new SimpleIntegerProperty()
   val dividerPositionProperty = new SimpleDoubleProperty()
   val fontSizeProperty = new SimpleIntegerProperty()
+  val autoScrollProperty = new SimpleBooleanProperty()
   val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList())
   val someLogEntrySettings = new SimpleObjectProperty[Option[LogEntryInstantFormat]]()
   val blockWidthSettingsProperty = new SimpleIntegerProperty()
 
   val fontStyle: ObservableValue[_ <: String] = new StringBinding {
     bind(fontSizeProperty)
+
     override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
   }
+
+  def setAutoScroll(autoScroll: Boolean): Unit = autoScrollProperty.set(autoScroll)
+
+  def isAutoScroll(): Boolean = autoScrollProperty.get()
+
+  def getFontSize(): Int = fontSizeProperty.get()
+
+  def getFilters() = filtersProperty.asScala.toSeq
 
   def setBlockSettings(bs: BlockSettings): Unit = blockWidthSettingsProperty.set(bs.width)
 
@@ -65,6 +73,7 @@ class MutLogFileSettings extends Petrify[LogFileSettings] {
     , fontSizeProperty.get()
     , filtersProperty.get().asScala.toSeq
     , BlockSettings(blockWidthSettingsProperty.get())
-    , someLogEntrySettings.get())
+    , someLogEntrySettings.get()
+    , autoScrollProperty.get())
 }
 

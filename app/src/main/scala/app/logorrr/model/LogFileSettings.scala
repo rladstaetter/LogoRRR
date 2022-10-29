@@ -20,6 +20,7 @@ object LogFileSettings {
   val DefaultDividerPosition = 0.5
   val DefaultBlockSettings = BlockSettings(10)
   val DefaultLogFormat: Option[LogEntryInstantFormat] = None
+  val DefaultAutoScroll = false
 
   val finest: Filter = new Filter("FINEST", Color.GREY.toString)
   val info: Filter = new Filter("INFO", Color.GREEN.toString)
@@ -37,7 +38,8 @@ object LogFileSettings {
       , DefaultFontSize
       , DefaultFilter
       , DefaultBlockSettings
-      , DefaultLogFormat)
+      , DefaultLogFormat
+      , DefaultAutoScroll)
 
 }
 
@@ -58,7 +60,8 @@ case class LogFileSettings(pathAsString: String
                            , fontSize: Int
                            , filters: Seq[Filter]
                            , blockSettings: BlockSettings
-                           , someLogEntrySetting: Option[LogEntryInstantFormat]) extends CanLog {
+                           , someLogEntrySetting: Option[LogEntryInstantFormat]
+                           , autoScroll: Boolean) extends CanLog {
 
   val path: Path = Paths.get(pathAsString)
 

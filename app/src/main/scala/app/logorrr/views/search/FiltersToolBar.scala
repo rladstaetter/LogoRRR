@@ -5,9 +5,7 @@ import app.logorrr.util.JfxUtils
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
-import javafx.scene.control.{Button, ToolBar}
-import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
-import org.kordamp.ikonli.javafx.FontIcon
+import javafx.scene.control.ToolBar
 
 import scala.jdk.CollectionConverters._
 
@@ -20,11 +18,6 @@ object FiltersToolBar {
       |-fx-border-width: 1px 1px 1px 1px;
       |-fx-border-color: RED;
       |""".stripMargin
-
-  class RemoveButton(filter: Filter, removeFilter: Filter => Unit) extends Button {
-    setGraphic(new FontIcon(FontAwesomeSolid.TIMES_CIRCLE))
-    setOnAction(_ => removeFilter(filter))
-  }
 
 }
 

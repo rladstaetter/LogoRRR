@@ -84,6 +84,7 @@ class LogTextView(pathAsString: String
 
   private val fixedCellSize = 26
 
+
   /** 'pragmatic way' to determine width of max elems in this view */
   val maxLength = filteredList.size().toString.length
 
@@ -113,6 +114,12 @@ class LogTextView(pathAsString: String
   }))
 
   setCenter(listView)
+
+
+  /** scroll to end of listview */
+  def scrollToEnd(): Unit = {
+    listView.scrollTo(listView.getItems.size)
+  }
 
   class LogEntryListCell extends ListCell[LogEntry] {
     styleProperty().bind(LogoRRRGlobals.getLogFileSettings(pathAsString).fontStyle)
