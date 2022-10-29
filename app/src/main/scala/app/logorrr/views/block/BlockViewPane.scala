@@ -9,8 +9,6 @@ import javafx.scene.layout.VBox
 import scala.collection.mutable.ListBuffer
 
 
-
-
 class BlockViewPane[Elem <: BlockView.E]
   extends ScrollPane
     with HasBlockSizeProperty

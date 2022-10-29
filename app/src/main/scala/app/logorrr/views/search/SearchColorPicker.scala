@@ -1,9 +1,7 @@
 package app.logorrr.views.search
 
 import app.logorrr.util.ColorUtil
-import javafx.scene.control.{Button, ColorPicker, Tooltip}
-import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
-import org.kordamp.ikonli.javafx.FontIcon
+import javafx.scene.control.{ColorPicker, Tooltip}
 
 class SearchColorPicker extends ColorPicker {
   setValue(ColorUtil.randColor)
@@ -14,9 +12,3 @@ class SearchColorPicker extends ColorPicker {
 
 }
 
-class CustomSearchButton extends Button {
-  setGraphic(new FontIcon(FontAwesomeSolid.SEARCH))
-  setTooltip(new Tooltip("search"))
-  setMaxWidth(40)
-
-}

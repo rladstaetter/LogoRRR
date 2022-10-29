@@ -2,7 +2,6 @@ package app.logorrr.views.search
 
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.search
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
@@ -38,7 +37,7 @@ object FiltersToolBar {
 class FiltersToolBar(filteredList: FilteredList[LogEntry]
                      , removeFilter: Filter => Unit) extends ToolBar {
 
-//  setStyle(FiltersToolBar.BackgroundSelectedStyle)
+  //  setStyle(FiltersToolBar.BackgroundSelectedStyle)
 
   val filtersProperty = new SimpleListProperty[Filter]()
 
@@ -92,7 +91,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
 
   private def addSearchTag(filter: Filter): Unit = {
     updateOccurrences(filter)
-    val searchTag = search.SearchTag(filter, occurrences,  updateActiveFilter, removeFilter)
+    val searchTag = SearchTag(filter, occurrences, updateActiveFilter, removeFilter)
     getItems.add(searchTag)
     filterButtons = filterButtons + (filter -> searchTag)
   }

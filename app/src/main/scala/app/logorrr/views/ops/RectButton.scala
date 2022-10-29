@@ -1,8 +1,7 @@
-package app.logorrr.views.block
+package app.logorrr.views.ops
 
 import app.logorrr.util.ColorUtil
-import javafx.event.{ActionEvent, EventHandler}
-import javafx.scene.control.Button
+import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.input.{KeyCode, KeyEvent}
 import javafx.scene.paint.Color
 
@@ -14,12 +13,14 @@ import javafx.scene.paint.Color
  * @param color color of rectangle
  * @param eventHandler
  */
-class RectButton(width: Int
-                 , height: Int
-                 , color: Color
-                 , eventHandler: EventHandler[ActionEvent]) extends Button {
+abstract class RectButton(width: Int
+                          , height: Int
+                          , color: Color
+                          , tooltipMessage: String) extends Button {
+
+  setTooltip(new Tooltip(tooltipMessage))
+
   setGraphic(ColorUtil.mkR(width, height, color))
-  setOnAction(eventHandler)
   setOnKeyPressed((event: KeyEvent) => {
     if (event.getCode == KeyCode.ENTER) {
       fire()
