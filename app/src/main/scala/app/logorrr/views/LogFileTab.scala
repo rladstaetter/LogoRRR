@@ -3,7 +3,8 @@ package app.logorrr.views
 import app.logorrr.conf.{BlockSettings, LogoRRRGlobals}
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util._
-import app.logorrr.views.search.{Filter, FiltersToolBar, Fltr, SearchToolBar}
+import app.logorrr.views.ops.{OpsRegion, SettingsOps}
+import app.logorrr.views.search.{Filter, FiltersToolBar, Fltr, OpsToolBar}
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.visual.LogVisualView
 import javafx.beans.binding.{Bindings, StringExpression}
@@ -103,7 +104,11 @@ class LogFileTab(val pathAsString: String
   /** list which holds all entries, default to display all (can be changed via buttons) */
   val filteredList = new FilteredList[LogEntry](logEntries)
 
-  private val searchToolBar = new SearchToolBar(addFilter)
+  private val opsToolBar = {
+    val op = new OpsToolBar(pathAsString, addFilter)
+    op.blockSizeProperty.set(LogoRRRGlobals.getLogFileSettings(pathAsString).blockWidthSettingsProperty.get())
+    op
+  }
 
   private val filtersToolBar = {
     val fbtb = new FiltersToolBar(filteredList, removeFilter)
@@ -111,12 +116,10 @@ class LogFileTab(val pathAsString: String
     fbtb
   }
 
-  val settingsToolBar = new SettingsToolBar(pathAsString)
+  val settingsOps = new SettingsOps(pathAsString)
 
-  val opsBorderPane: OpsBorderPane = {
-    val op = new OpsBorderPane(pathAsString, searchToolBar, filtersToolBar, settingsToolBar)
-    op.blockSizeProperty.set(LogoRRRGlobals.getLogFileSettings(pathAsString).blockWidthSettingsProperty.get())
-    op.fontSizeProperty.set(LogoRRRGlobals.getLogFileSettings(pathAsString).fontSizeProperty.get())
+  val opsRegion: OpsRegion = {
+    val op = new OpsRegion(opsToolBar, filtersToolBar, settingsOps)
     op
   }
 
@@ -163,11 +166,11 @@ class LogFileTab(val pathAsString: String
 
     /** top component for log view */
     val borderPane = new BorderPane()
-    borderPane.setTop(opsBorderPane)
+    borderPane.setTop(opsRegion)
     borderPane.setCenter(splitPane)
     setContent(borderPane)
 
-    logVisualView.blockViewPane.blockSizeProperty.bind(opsBorderPane.blockSizeProperty)
+    logVisualView.blockViewPane.blockSizeProperty.bind(opsRegion.opsToolBar.blockSizeProperty)
     logVisualView.blockViewPane.blockSizeProperty.addListener(JfxUtils.onNew[Number](n => {
       LogoRRRGlobals.setBlockSettings(pathAsString, BlockSettings(n.intValue()))
     }))
@@ -175,8 +178,8 @@ class LogFileTab(val pathAsString: String
     /* change active text field depending on visible tab */
     selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](b => {
       if (b) {
-        LogoRRRAccelerators.setActiveSearchTextField(searchToolBar.searchTextField)
-        LogoRRRAccelerators.setActiveRegexToggleButton(searchToolBar.regexToggleButton)
+        LogoRRRAccelerators.setActiveSearchTextField(opsToolBar.searchTextField)
+        LogoRRRAccelerators.setActiveRegexToggleButton(opsToolBar.regexToggleButton)
         JfxUtils.execOnUiThread(repaint())
       } else {
       }
@@ -185,6 +188,9 @@ class LogFileTab(val pathAsString: String
     /** don't monitor file anymore if tab is closed, free invalidation listeners */
     setOnClosed(_ => closeTab())
     textProperty.bind(computeTabTitle)
+    val tooltip = new Tooltip("jodel")
+    tooltip.textProperty().bind(Bindings.concat(Bindings.size(logEntries).asString, " lines"))
+    setTooltip(tooltip)
 
     selectedEntryProperty.bind(logVisualView.selectedEntryProperty)
 
@@ -209,9 +215,7 @@ class LogFileTab(val pathAsString: String
   }
 
   /** compute title of tab */
-  private def computeTabTitle: StringExpression = {
-    Bindings.concat(Paths.get(pathAsString).getFileName.toString, " (", Bindings.size(logEntries).asString, " lines)")
-  }
+  private def computeTabTitle: StringExpression = Bindings.concat(Paths.get(pathAsString).getFileName.toString)
 
   /**
    * Actions to perform if tab is closed:
@@ -237,15 +241,15 @@ class LogFileTab(val pathAsString: String
 
   def removeFilter(filter: Filter): Unit = filtersListProperty.remove(filter)
 
-
-  def getVisualViewWidth(): Double = {
-    val w = splitPane.getDividers.get(0).getPosition * splitPane.getWidth
-    if (w != 0.0) {
-      w
-    } else {
-      initialWidth.doubleValue()
+  /*
+    def getVisualViewWidth(): Double = {
+      val w = splitPane.getDividers.get(0).getPosition * splitPane.getWidth
+      if (w != 0.0) {
+        w
+      } else {
+        initialWidth.doubleValue()
+      }
     }
-  }
-
+  */
 
 }

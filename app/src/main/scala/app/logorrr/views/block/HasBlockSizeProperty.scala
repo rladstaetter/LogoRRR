@@ -10,5 +10,4 @@ trait HasBlockSizeProperty {
 
   def getBlockSize(): Int = blockSizeProperty.get()
 
-
 }

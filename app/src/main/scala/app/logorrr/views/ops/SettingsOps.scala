@@ -1,14 +1,15 @@
-package app.logorrr.views
+package app.logorrr.views.ops
 
 import app.logorrr.model.LogEntryInstantFormat
 import app.logorrr.util.JfxUtils
+import app.logorrr.views.SettingsBorderPane
 import javafx.scene.Scene
 import javafx.scene.control.{Button, ToolBar}
 import javafx.stage.{Modality, Stage}
 
 
 /* container to host settings button, positioned to the right of the application / separate for each log view */
-class SettingsToolBar(pathAsString: String) extends ToolBar {
+class SettingsOps(pathAsString: String) extends ToolBar {
   private val settingsButton = new Button("Settings")
   settingsButton.setOnAction(_ => {
     val stage = new Stage()

@@ -2,7 +2,6 @@ package app.logorrr.views.search
 
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.search
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
@@ -38,7 +37,7 @@ object FiltersToolBar {
 class FiltersToolBar(filteredList: FilteredList[LogEntry]
                      , removeFilter: Filter => Unit) extends ToolBar {
 
-//  setStyle(FiltersToolBar.BackgroundSelectedStyle)
+  //  setStyle(FiltersToolBar.BackgroundSelectedStyle)
 
   val filtersProperty = new SimpleListProperty[Filter]()
 
@@ -71,7 +70,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
   private def updateUnclassified(): Unit = {
     val unclassified = new UnclassifiedFilter(filterButtons.keySet)
     updateOccurrences(unclassified)
-    val searchTag = SearchTag(unclassified, occurrences, updateActiveFilter, removeFilter)
+    val searchTag = new SearchTag(unclassified, occurrences(unclassified), updateActiveFilter, removeFilter)
     someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
     getItems.add(0, searchTag)
     someUnclassifiedFilter = Option((unclassified, searchTag))
@@ -86,13 +85,13 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
    * @return
    */
   def computeCurrentFilter(): Fltr = {
-    new AnyFilter(someUnclassifiedFilter.map(fst => if (fst._2.toggleButton.isSelected) Set(fst._1) else Set()).getOrElse(Set()) ++
-      filterButtons.filter(fst => fst._2.toggleButton.isSelected).keySet)
+    new AnyFilter(someUnclassifiedFilter.map(fst => if (fst._2.isSelected) Set(fst._1) else Set()).getOrElse(Set()) ++
+      filterButtons.filter(fst => fst._2.isSelected).keySet)
   }
 
   private def addSearchTag(filter: Filter): Unit = {
     updateOccurrences(filter)
-    val searchTag = search.SearchTag(filter, occurrences,  updateActiveFilter, removeFilter)
+    val searchTag = new SearchTag(filter, occurrences(filter), updateActiveFilter, removeFilter)
     getItems.add(searchTag)
     filterButtons = filterButtons + (filter -> searchTag)
   }
