@@ -14,8 +14,10 @@ case class SimpleWriter(path: Path) extends Runnable {
 
   override def run(): Unit = {
     var linenumber = 1
+    Files.write(path, util.Arrays.asList("started, waiting 30 secs ..."), StandardOpenOption.CREATE, StandardOpenOption.APPEND)
+    Thread.sleep(30000)
     while (running) {
-      Thread.sleep(100)
+      Thread.sleep(50)
       val now = LocalDateTime.now();
       val str = s"${dtf.format(now)} $linenumber testlog "
       linenumber += 1
@@ -29,14 +31,13 @@ object LogProducer {
 
   def main(args: Array[String]): Unit = {
     if (args.nonEmpty) {
-
       val path = Paths.get(args(0))
       Files.deleteIfExists(path)
       val writer = SimpleWriter(path)
-      new Thread(writer).start()
 
-      val keyboard = new Scanner(System.in)
+      new Thread(writer).start()
       System.out.println(s"producing log entries in ${path.toAbsolutePath.toString}, press enter to stop")
+      val keyboard = new Scanner(System.in)
       keyboard.nextLine()
       writer.stop()
     } else {

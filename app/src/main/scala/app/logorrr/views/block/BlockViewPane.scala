@@ -124,8 +124,7 @@ class BlockViewPane[Elem <: BlockView.E]
 
   setContent(vbox)
 
-  def scrollToEnd(): Unit = {
+  def scrollToEnd(): Unit = setVvalue(getVmax)
 
-  }
 
 }
