@@ -1,6 +1,7 @@
 package app.logorrr.docs
 
 import app.logorrr.conf._
+import app.logorrr.io.Fs
 import app.logorrr.meta.AppMeta
 import app.logorrr.model.LogFileSettings
 import app.logorrr.util.{CanLog, JfxUtils}
@@ -9,7 +10,7 @@ import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Node
 import javafx.stage.Stage
 
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{Path, Paths}
 import javax.imageio.ImageIO
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,9 +41,9 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
           , Option(path.toAbsolutePath.toString))
       LogoRRRGlobals.set(settings, getHostServices)
       val bPath = Paths.get(s"docs/releases/${AppMeta.appVersion}/")
-      Files.createDirectories(bPath)
+      Fs.createDirectories(bPath)
       val f = bPath.resolve(s"${width}x$height.png")
-       LogoRRRStage(stage).show()
+      LogoRRRStage(stage).show()
       Future {
         Thread.sleep(5000)
         JfxUtils.execOnUiThread({

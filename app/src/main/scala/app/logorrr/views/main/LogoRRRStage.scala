@@ -34,7 +34,7 @@ case class LogoRRRStage(stage: Stage) {
   stage.setTitle(AppMeta.fullAppName)
   stage.getIcons.add(LogoRRRStage.icon)
   stage.setScene(scene)
-  Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet())
+  Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet)
   // make sure to cleanup on close
   stage.setOnCloseRequest((_: WindowEvent) => {
     LogoRRRGlobals.persist()

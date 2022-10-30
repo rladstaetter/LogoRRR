@@ -30,4 +30,12 @@ class LogVisualView(pathAsString: String, entries: ObservableList[LogEntry], can
   setCenter(blockViewPane)
 
 
+  /**
+   * makes sure that last line of block view is visible, useful for autoscroll feature
+   */
+  def scrollToEnd(): Unit = {
+    blockViewPane.scrollToEnd()
+  }
+
+
 }

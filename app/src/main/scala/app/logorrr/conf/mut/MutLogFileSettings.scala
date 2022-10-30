@@ -23,12 +23,12 @@ object MutLogFileSettings {
     s.setDividerPosition(logFileSettings.dividerPosition)
     s.filtersProperty.setAll(logFileSettings.filters.asJava)
     s.someLogEntrySettings.set(logFileSettings.someLogEntrySetting)
+    s.setAutoScroll(logFileSettings.autoScroll)
     s
   }
 }
 
-class MutLogFileSettings extends Petrify[LogFileSettings] {
-
+class MutLogFileSettings {
 
   private val pathAsStringProperty = new SimpleStringProperty()
   private val firstOpenedProperty = new SimpleLongProperty()
@@ -58,22 +58,30 @@ class MutLogFileSettings extends Petrify[LogFileSettings] {
 
   def setPathAsString(path: String): Unit = pathAsStringProperty.set(path)
 
+  def getPathAsString(): String = pathAsStringProperty.get()
+
   def setSelectedIndex(index: Int): Unit = selectedIndexProperty.set(index)
 
   def setFontSize(fontSize: Int): Unit = fontSizeProperty.set(fontSize)
 
   def setDividerPosition(dividerPosition: Double): Unit = dividerPositionProperty.set(dividerPosition)
 
+  def getDividerPosition(): Double = dividerPositionProperty.get()
+
   def getFirstOpened(): Long = firstOpenedProperty.get()
 
-  override def petrify(): LogFileSettings = LogFileSettings(pathAsStringProperty.get()
-    , selectedIndexProperty.get()
-    , firstOpenedProperty.get()
-    , dividerPositionProperty.get()
-    , fontSizeProperty.get()
-    , filtersProperty.get().asScala.toSeq
-    , BlockSettings(blockWidthSettingsProperty.get())
-    , someLogEntrySettings.get()
-    , autoScrollProperty.get())
+  def petrify(): LogFileSettings = {
+    val lfs =
+      LogFileSettings(pathAsStringProperty.get()
+        , selectedIndexProperty.get()
+        , firstOpenedProperty.get()
+        , dividerPositionProperty.get()
+        , fontSizeProperty.get()
+        , filtersProperty.get().asScala.toSeq
+        , BlockSettings(blockWidthSettingsProperty.get())
+        , someLogEntrySettings.get()
+        , autoScrollProperty.get())
+    lfs
+  }
 }
 

@@ -14,6 +14,7 @@ class BlockViewPane[Elem <: BlockView.E]
     with HasBlockSizeProperty
     with CanLog {
 
+
   override val blockSizeProperty: SimpleIntegerProperty = {
     val p = new SimpleIntegerProperty()
     p.addListener(_ => repaint())
@@ -116,11 +117,15 @@ class BlockViewPane[Elem <: BlockView.E]
         logWarn(s"Blocksize: ${getBlockSize()}, getWidth: ${getWidth} ")
       }
     } else {
-      logTrace("invisible ...")
+      // logTrace("invisible ...")
     }
     ()
   }
 
   setContent(vbox)
+
+  def scrollToEnd(): Unit = {
+
+  }
 
 }

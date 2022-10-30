@@ -4,6 +4,7 @@ import app.logorrr.conf.{Settings, StageSettings}
 import app.logorrr.model.LogFileSettings
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.FXCollections
+import javafx.stage.Window
 
 import java.util
 import scala.jdk.CollectionConverters._
@@ -27,21 +28,22 @@ object MutSettings {
 
 class MutSettings {
 
-  val stageSettings = new MutStageSettings
-  val logFileSettingsProperty = new SimpleMapProperty[String, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
-  val someActiveLogProperty = new SimpleObjectProperty[Option[String]](None)
+  /** contains mutable information for the application stage */
+  private val mutStageSettings = new MutStageSettings
 
-  def getLogFileSetting(key: String): MutLogFileSettings = logFileSettingsProperty.get(key)
+  /** contains mutable state information for all log files */
+  private val mutLogFileSettingsMapProperty = new SimpleMapProperty[String, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
 
-  def putLogFileSetting(logFileSettings: LogFileSettings): Unit = logFileSettingsProperty.put(logFileSettings.pathAsString, MutLogFileSettings(logFileSettings))
+  /** tracks which log file is active */
+  private val someActiveLogProperty = new SimpleObjectProperty[Option[String]](None)
 
-  def removeLogFileSetting(pathAsString: String): Unit = {
-    logFileSettingsProperty.remove(pathAsString)
-  }
+  def getMutLogFileSetting(key: String): MutLogFileSettings = mutLogFileSettingsMapProperty.get(key)
 
-  def getStageSettings(): StageSettings = stageSettings.petrify()
+  def putMutLogFileSetting(mutLogFileSettings: MutLogFileSettings): Unit = mutLogFileSettingsMapProperty.put(mutLogFileSettings.getPathAsString(), mutLogFileSettings)
 
-  def set(settings: Settings) = {
+  def removeLogFileSetting(pathAsString: String): Unit = mutLogFileSettingsMapProperty.remove(pathAsString)
+
+  def set(settings: Settings): Unit = {
     setStageSettings(settings.stageSettings)
     setLogFileSettings(settings.logFileSettings)
     setSomeActive(settings.someActive)
@@ -55,19 +57,52 @@ class MutSettings {
     val m = for ((k, v) <- logFileSettings) yield {
       k -> MutLogFileSettings(v)
     }
-    logFileSettingsProperty.putAll(m.asJava)
+    mutLogFileSettingsMapProperty.putAll(m.asJava)
   }
 
-
   def petrify(): Settings = {
-    val m = (for ((k, v) <- logFileSettingsProperty.get.asScala) yield k -> v.petrify()).toMap
-    Settings(stageSettings.petrify(), m, getSomeActive())
+    val logFileSettings: Map[String, LogFileSettings] = (for ((k, v) <- mutLogFileSettingsMapProperty.get.asScala) yield {
+      k -> v.petrify()
+    }).toMap
+    Settings(mutStageSettings.petrify(), logFileSettings, getSomeActive())
   }
 
   def setStageSettings(stageSettings: StageSettings): Unit = {
-    this.stageSettings.setX(stageSettings.x)
-    this.stageSettings.setY(stageSettings.y)
-    this.stageSettings.setHeight(stageSettings.height)
-    this.stageSettings.setWidth(stageSettings.width)
+    mutStageSettings.setX(stageSettings.x)
+    mutStageSettings.setY(stageSettings.y)
+    mutStageSettings.setHeight(stageSettings.height)
+    mutStageSettings.setWidth(stageSettings.width)
   }
+
+  def clearLogFileSettings(): Unit = {
+    mutLogFileSettingsMapProperty.clear()
+    setSomeActive(None)
+  }
+
+  def bindWindowProperties(window: Window): Unit = {
+    mutStageSettings.widthProperty.bind(window.getScene.widthProperty())
+    mutStageSettings.heightProperty.bind(window.getScene.heightProperty())
+    mutStageSettings.xProperty.bind(window.xProperty())
+    mutStageSettings.yProperty.bind(window.yProperty())
+  }
+
+  def unbindWindow(): Unit = {
+    mutStageSettings.widthProperty.unbind()
+    mutStageSettings.heightProperty.unbind()
+    mutStageSettings.xProperty.unbind()
+    mutStageSettings.yProperty.unbind()
+  }
+
+  def getStageY(): Double = mutStageSettings.yProperty.get()
+
+  def getStageX(): Double = mutStageSettings.xProperty.get()
+
+  def getStageHeight(): Int = mutStageSettings.heightProperty.get()
+
+  def getStageWidth(): Int = mutStageSettings.getWidth()
+
+  def getOrderedLogFileSettings(): Seq[LogFileSettings] =
+    mutLogFileSettingsMapProperty.get().values.asScala.toSeq.sortWith((lt, gt) => lt.getFirstOpened() < gt.getFirstOpened()).map(_.petrify())
+
+
 }

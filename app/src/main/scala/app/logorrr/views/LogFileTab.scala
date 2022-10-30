@@ -125,10 +125,8 @@ class LogFileTab(val pathAsString: String
     op
   }
 
-  val initialWidth = Bindings.multiply(LogoRRRGlobals.settings.stageSettings.widthProperty, LogoRRRGlobals.getLogFileSettings(pathAsString).dividerPositionProperty)
-
   private lazy val logVisualView = {
-    val lvv = new LogVisualView(pathAsString, filteredList, initialWidth.intValue())
+    val lvv = new LogVisualView(pathAsString, filteredList, LogoRRRGlobals.logVisualCanvasWidth(pathAsString))
     lvv.blockViewPane.visibleProperty().bind(selectedProperty())
     lvv
   }
@@ -140,7 +138,10 @@ class LogFileTab(val pathAsString: String
 
   // val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 
-  lazy val scrollToEndEventListener: InvalidationListener = (observable: Observable) => logTextView.scrollToEnd()
+  lazy val scrollToEndEventListener: InvalidationListener = (observable: Observable) => {
+    logVisualView.scrollToEnd()
+    logTextView.scrollToEnd()
+  }
 
   private def startTailer(): Unit = {
     filteredList.addListener(scrollToEndEventListener)
@@ -239,7 +240,7 @@ class LogFileTab(val pathAsString: String
 
     initAutoScroll()
 
-    setDivider(LogoRRRGlobals.getLogFileSettings(pathAsString).dividerPositionProperty.get())
+    setDivider(LogoRRRGlobals.getLogFileSettings(pathAsString).getDividerPosition())
     initFiltersPropertyListChangeListener()
   }
 
