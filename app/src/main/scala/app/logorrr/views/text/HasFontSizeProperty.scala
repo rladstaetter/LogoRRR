@@ -1,10 +1,10 @@
 package app.logorrr.views.text
 
 import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.model.LogIdAware
 
-trait HasFontSizeProperty {
 
-  def pathAsString: String
+trait HasFontSizeProperty extends LogIdAware {
 
   def setFontSize(fontSize: Int): Unit = LogoRRRGlobals.getLogFileSettings(pathAsString).setFontSize(fontSize)
 

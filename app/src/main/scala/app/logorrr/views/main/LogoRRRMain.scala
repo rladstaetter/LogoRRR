@@ -24,7 +24,7 @@ class LogoRRRMain(closeStage: => Unit)
   def init(): Unit = {
     setTop(mB)
     setCenter(ambp)
-    loadLogFiles(LogoRRRGlobals.allLogs())
+    loadLogFiles(LogoRRRGlobals.getOrderedLogFileSettings())
   }
 
   private def loadLogFiles(logs: Seq[LogFileSettings]): Unit = {
@@ -71,7 +71,7 @@ class LogoRRRMain(closeStage: => Unit)
   /** removes all log files */
   def closeAllLogFiles: Unit = {
     shutdown()
-    LogoRRRGlobals.resetLogs()
+    LogoRRRGlobals.clearLogFileSettings()
   }
 
   def selectLog(path: String): Unit = ambp.selectLog(path)

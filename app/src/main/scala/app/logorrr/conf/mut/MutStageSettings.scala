@@ -15,7 +15,7 @@ object MutStageSettings {
 }
 
 
-class MutStageSettings extends Petrify[StageSettings] {
+class MutStageSettings {
 
   val xProperty = new SimpleDoubleProperty()
 
@@ -31,9 +31,11 @@ class MutStageSettings extends Petrify[StageSettings] {
 
   def setWidth(width: Int): Unit = widthProperty.set(width)
 
+  def getWidth(): Int = widthProperty.get()
+
   def setHeight(height: Int): Unit = heightProperty.set(height)
 
-  override def petrify(): StageSettings =
+  def petrify(): StageSettings =
     StageSettings(xProperty.get()
       , yProperty.get()
       , widthProperty.get()

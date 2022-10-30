@@ -10,8 +10,6 @@ import javafx.beans.property.SimpleObjectProperty
 import javafx.stage.Window
 import pureconfig.ConfigWriter
 
-import scala.jdk.CollectionConverters._
-
 /**
  * Place LogoRRR's settings.
  *
@@ -19,12 +17,15 @@ import scala.jdk.CollectionConverters._
  */
 object LogoRRRGlobals extends CanLog {
 
-  def persist(): Unit = write(LogoRRRGlobals.getSettings())
+  val mutSettings = new MutSettings
 
-  def allLogs(): Seq[LogFileSettings] = {
-    settings.logFileSettingsProperty.get().values.asScala.toSeq.sortWith((lt, gt) => lt.getFirstOpened() < gt.getFirstOpened()).map(_.petrify())
+  private val hostServicesProperty = new SimpleObjectProperty[HostServices]()
+
+  def persist(): Unit = {
+    Fs.write(FilePaths.settingsFilePath, ConfigWriter[Settings].to(LogoRRRGlobals.getSettings()).render(renderOptions))
   }
 
+  def getOrderedLogFileSettings(): Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings()
 
   def bindWindow(window: Window): Unit = {
     window.setX(LogoRRRGlobals.getStageX())
@@ -32,96 +33,65 @@ object LogoRRRGlobals extends CanLog {
     window.setWidth(LogoRRRGlobals.getStageWidth())
     window.setHeight(LogoRRRGlobals.getStageHeight())
 
-    settings.stageSettings.widthProperty.bind(window.getScene.widthProperty())
-    settings.stageSettings.heightProperty.bind(window.getScene.heightProperty())
-    settings.stageSettings.xProperty.bind(window.xProperty())
-    settings.stageSettings.yProperty.bind(window.yProperty())
+    mutSettings.bindWindowProperties(window)
   }
 
-  def unbindWindow(): Unit = {
-    settings.stageSettings.widthProperty.unbind()
-    settings.stageSettings.heightProperty.unbind()
-    settings.stageSettings.xProperty.unbind()
-    settings.stageSettings.yProperty.unbind()
-  }
+  def unbindWindow(): Unit = mutSettings.unbindWindow()
 
-  def getStageWidth(): Int = settings.stageSettings.widthProperty.get()
+  def getStageWidth(): Int = mutSettings.getStageWidth()
 
-  def getStageHeight(): Int = settings.stageSettings.heightProperty.get()
+  def getStageHeight(): Int = mutSettings.getStageHeight()
 
-  def getStageX(): Double = settings.stageSettings.xProperty.get()
+  def getStageX(): Double = mutSettings.getStageX()
 
-  def getStageY(): Double = settings.stageSettings.yProperty.get()
-
-  val settings = new MutSettings
-  private val hostServicesProperty = new SimpleObjectProperty[HostServices]()
+  def getStageY(): Double = mutSettings.getStageY()
 
   def setHostServices(hostServices: HostServices): Unit = hostServicesProperty.set(hostServices)
 
   def getHostServices: HostServices = hostServicesProperty.get()
 
   def set(settings: Settings, hostServices: HostServices): Unit = {
-    this.settings.set(settings)
+    mutSettings.set(settings)
     setHostServices(hostServices)
   }
 
-  def getSettings(): Settings = settings.petrify()
+  def getSettings(): Settings = mutSettings.petrify()
 
-  /** persists settings */
-  def write(settings: Settings): Unit = {
-    Fs.write(FilePaths.settingsFilePath, ConfigWriter[Settings].to(settings).render(renderOptions))
-  }
+  def setSomeActive(sActive: Option[String]): Unit = mutSettings.setSomeActive(sActive)
 
-  private def update(fn: Settings => Settings): Unit = write(fn(LogoRRRGlobals.getSettings()))
-
-  def setSomeActive(sActive: Option[String]): Unit = settings.setSomeActive(sActive)
-
-  def getSomeActive(): Option[String] = settings.getSomeActive()
-
+  def getSomeActive(): Option[String] = mutSettings.getSomeActive()
 
   def removeLogFile(pathAsString: String): Unit = {
-    settings.removeLogFileSetting(pathAsString)
-    settings.setSomeActive(settings.getSomeActive() match {
+    mutSettings.removeLogFileSetting(pathAsString)
+    mutSettings.setSomeActive(mutSettings.getSomeActive() match {
       case Some(value) if value == pathAsString => None
       case x => x
     })
     logInfo(s"Removed file ${pathAsString} ...")
   }
 
-  def resetLogs(): Unit = {
-    settings.logFileSettingsProperty.clear()
-    settings.setSomeActive(None)
-  }
+  def clearLogFileSettings(): Unit = mutSettings.clearLogFileSettings()
 
   def getLogFileSettings(pathAsString: String): MutLogFileSettings = {
-    settings.getLogFileSetting(pathAsString)
+    mutSettings.getMutLogFileSetting(pathAsString)
   }
 
   def mupdate(t: MutLogFileSettings => Unit)(pathAsString: String): Unit =
-    Option(settings.getLogFileSetting(pathAsString)) match {
+    Option(mutSettings.getMutLogFileSetting(pathAsString)) match {
       case Some(logFileSettings) => t(logFileSettings)
       case None => logWarn(s"${pathAsString} not found.")
     }
 
-  def kupdate(t: StageSettings => Unit)(pathAsString: String): Unit =
-    Option(settings.getStageSettings()) match {
-      case Some(stageSettings: StageSettings) => t(stageSettings)
-      case None => logWarn(s"${pathAsString} not found.")
-    }
 
   def setSelectedIndex(pathAsString: String, index: Int): Unit = getLogFileSettings(pathAsString).setSelectedIndex(index)
 
   def setBlockSettings(pathAsString: String, bs: BlockSettings): Unit =
     mupdate({ lfs: MutLogFileSettings => lfs.setBlockSettings(bs) })(pathAsString)
 
-  def setDividerPosition(pathAsString: String, dividerPosition: Double): Unit = {
-    settings.getLogFileSetting(pathAsString).setDividerPosition(dividerPosition)
-    //  mupdate({ lfs: MutLogFileSettings => lfs.setDividerPosition(dividerPosition) })(pathAsString)
-  }
+  def setDividerPosition(pathAsString: String, dividerPosition: Double): Unit = mutSettings.getMutLogFileSetting(pathAsString).setDividerPosition(dividerPosition)
 
-  def updateLogFile(fs: LogFileSettings): Unit = {
-    settings.putLogFileSetting(fs)
-  }
+  def updateLogFile(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
 
+  def logVisualCanvasWidth(pathAsString: String): Int = (mutSettings.getStageWidth() * LogoRRRGlobals.getLogFileSettings(pathAsString).getDividerPosition()).intValue
 
 }

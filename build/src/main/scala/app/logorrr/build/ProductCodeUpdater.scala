@@ -1,8 +1,8 @@
 package app.logorrr.build
 
+import app.logorrr.io.Fs
 import app.logorrr.util.CanLog
 
-import java.nio.charset.Charset
 import java.nio.file.{Files, Paths}
 import java.util.UUID
 import scala.jdk.CollectionConverters._
@@ -22,13 +22,13 @@ object ProductCodeUpdater extends CanLog {
         val version = args(1)
         val installerName = p.getFileName.toString
         val uuid = UUID.nameUUIDFromBytes((installerName + version).map(_.toByte).toArray).toString
-        val lines =
+        val content =
           (for (l <- Files.readAllLines(p).asScala) yield {
             if (l.contains(needle)) {
               l.replace(needle, s"""<ROW Property="ProductCode" Value="1033:{${uuid}} " Type="16"/>""")
             } else l
           }).mkString("\r\n")
-        Files.write(p, lines.getBytes(Charset.forName("UTF-8")))
+        Fs.write(p, content)
       } else {
         logError(s"${p.toAbsolutePath} does not exist. Aborting ...")
       }

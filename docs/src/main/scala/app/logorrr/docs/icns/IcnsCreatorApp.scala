@@ -2,6 +2,7 @@ package app.logorrr.docs.icns
 
 import app.logorrr.build.Commander
 import app.logorrr.docs.{Area, IconCreatorApp, LogorrrIcon}
+import app.logorrr.io.Fs
 import javafx.scene.canvas.Canvas
 import javafx.stage.Stage
 
@@ -60,7 +61,7 @@ class IcnsCreatorApp extends javafx.application.Application {
   }
 
   def generateIcons(targetPath: Path): Unit = {
-    Files.createDirectories(targetPath)
+    Fs.createDirectories(targetPath)
     for (IconDef(Area(w, h), name) <- IconDef.seq) {
       val canvas = new Canvas(w, h)
       val gc2d = canvas.getGraphicsContext2D

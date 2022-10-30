@@ -1,5 +1,6 @@
 package app.logorrr.docs
 
+import app.logorrr.io.Fs
 import javafx.embed.swing.SwingFXUtils
 import javafx.geometry.Pos
 import javafx.scene.canvas.Canvas
@@ -9,13 +10,13 @@ import javafx.scene.paint.Color
 import javafx.scene.{Scene, SnapshotParameters}
 import javafx.stage.Stage
 
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{Path, Paths}
 import javax.imageio.ImageIO
 
 object IconCreatorApp {
 
   def writeIcons(canvases: Seq[(Area, Canvas)], path: Path): Unit = {
-    Files.createDirectories(path)
+    Fs.createDirectories(path)
     for ((Area(s, _), c) <- canvases) {
       val file = path.resolve(s"logorrr-icon-${s}.png")
       writeIcon(c, file)
@@ -61,23 +62,23 @@ class IconCreatorApp extends javafx.application.Application {
     stage.show()
   }
 
-/*
-  def drawRoundedRectangleWithShadow(gc2d: GraphicsContext
-                                     , color: Color
-                                     , x: Int
-                                     , y: Int
-                                     , size: Int): Unit = {
-    gc2d.setFill(color.darker)
-    gc2d.fillRoundRect(x, y, size, size, size.toDouble / 10, size.toDouble / 10)
-    gc2d.setFill(color)
-    gc2d.fillRoundRect(x, y, size - 1, size - 1, size.toDouble / 10, size.toDouble / 10)
-  }
+  /*
+    def drawRoundedRectangleWithShadow(gc2d: GraphicsContext
+                                       , color: Color
+                                       , x: Int
+                                       , y: Int
+                                       , size: Int): Unit = {
+      gc2d.setFill(color.darker)
+      gc2d.fillRoundRect(x, y, size, size, size.toDouble / 10, size.toDouble / 10)
+      gc2d.setFill(color)
+      gc2d.fillRoundRect(x, y, size - 1, size - 1, size.toDouble / 10, size.toDouble / 10)
+    }
 
-  private def fillRect(gc2d: GraphicsContext, x: Int, y: Int, w: Int, h: Int, fill: Color) = {
-    gc2d.beginPath()
-    gc2d.setFill(fill)
-    gc2d.fillRect(x, y, w, h)
-    gc2d.closePath()
-  }
-  */
+    private def fillRect(gc2d: GraphicsContext, x: Int, y: Int, w: Int, h: Int, fill: Color) = {
+      gc2d.beginPath()
+      gc2d.setFill(fill)
+      gc2d.fillRect(x, y, w, h)
+      gc2d.closePath()
+    }
+    */
 }
