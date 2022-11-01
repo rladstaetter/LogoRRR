@@ -1,13 +1,22 @@
 package app.logorrr.views.menubar
 
+import app.logorrr.io.FilePaths
 import app.logorrr.meta.AppMeta
 import app.logorrr.views.about.AboutScreen
-import app.logorrr.views.menubar.HelpMenu.AboutMenuItem
+import app.logorrr.views.menubar.HelpMenu.{AboutMenuItem, LogMenuItem}
 import javafx.scene.Scene
 import javafx.scene.control.{Menu, MenuItem}
 import javafx.stage.{Modality, Stage}
 
+import java.nio.file.Path
+
 object HelpMenu {
+
+  class LogMenuItem(openLogFile: Path => Unit) extends MenuItem("Open LogoRRRs log") {
+    setOnAction(_ => {
+      openLogFile(FilePaths.logFilePath)
+    })
+  }
 
   class AboutMenuItem extends MenuItem("About") {
     setOnAction(_ => {
@@ -22,6 +31,6 @@ object HelpMenu {
   }
 }
 
-class HelpMenu extends Menu("Help") {
-  getItems.add(new AboutMenuItem())
+class HelpMenu(openLogFile: Path => Unit) extends Menu("Help") {
+  getItems.addAll(new LogMenuItem(openLogFile), new AboutMenuItem())
 }
