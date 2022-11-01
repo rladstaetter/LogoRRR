@@ -4,7 +4,7 @@ import app.logorrr.conf.{BlockSettings, LogoRRRGlobals}
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util._
 import app.logorrr.views.autoscroll.LogTailer
-import app.logorrr.views.ops.{OpsRegion, SettingsOps}
+import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.search.{Filter, FiltersToolBar, Fltr, OpsToolBar}
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.visual.LogVisualView
@@ -110,10 +110,8 @@ class LogFileTab(val pathAsString: String
     fbtb
   }
 
-  val settingsOps = new SettingsOps(pathAsString)
-
   val opsRegion: OpsRegion = {
-    val op = new OpsRegion(opsToolBar, filtersToolBar, settingsOps)
+    val op = new OpsRegion(opsToolBar, filtersToolBar)
     op
   }
 

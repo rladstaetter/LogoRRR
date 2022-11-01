@@ -26,8 +26,6 @@ case class Settings(stageSettings: StageSettings
                     , logFileSettings: Map[String, LogFileSettings]
                     , someActive: Option[String]) {
 
-  def asOrderedSeq: Seq[LogFileSettings] = logFileSettings.values.toSeq.sortWith((lt, gt) => lt.firstOpened < gt.firstOpened)
-
   def remove(pathAsString: String): Settings = {
     copy(stageSettings
       , logFileSettings - pathAsString

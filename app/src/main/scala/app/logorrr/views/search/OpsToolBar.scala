@@ -44,7 +44,7 @@ class OpsToolBar(pathAsString: String
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
 
-  val width = OsUtil.osFun(512, 510, 512) // different layouts (may be dependent on font size renderings?)
+  val width = OsUtil.osFun(562, 560, 562) // different layouts (may be dependent on font size renderings?)
   setMaxWidth(width)
   setMinWidth(width)
 
@@ -62,6 +62,8 @@ class OpsToolBar(pathAsString: String
   private val searchButton = new SearchButton(searchTextField, regexToggleButton, colorPicker, addFilterFn)
 
   val autoScrollCheckBox = new AutoScrollCheckBox(pathAsString, logEntries)
+
+  val timerButton = new TimerButton(pathAsString, logEntries)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {
@@ -84,7 +86,7 @@ class OpsToolBar(pathAsString: String
   }
 
   val otherItems: Seq[Control] = {
-    Seq(autoScrollCheckBox)
+    Seq(autoScrollCheckBox, timerButton)
   }
 
   getItems.addAll(searchItems ++ sizeItems ++ otherItems: _*)
