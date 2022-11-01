@@ -308,7 +308,37 @@
                     </executions>
                     <configuration>
                         <scalaVersion>${scala.version}</scalaVersion>
+                        <args>
+                            <arg>-deprecation</arg>
+                            <arg>-encoding</arg>
+                            <arg>utf-8</arg>
+                            <arg>-explaintypes</arg>
+                            <arg>-feature</arg>
+                            <arg>-language:existentials</arg>
+                            <arg>-language:experimental.macros</arg>
+                            <arg>-language:higherKinds</arg>
+                            <arg>-language:implicitConversions</arg>
+                            <arg>-unchecked</arg>
+                            <arg>-Xcheckinit</arg>
+                            <arg>-Xlint:adapted-args</arg>
+                            <arg>-Xlint:constant</arg>
+                            <arg>-Xlint:delayedinit-select</arg>
+                            <arg>-Xlint:doc-detached</arg>
+                            <arg>-Xlint:inaccessible</arg>
+                            <arg>-Xlint:infer-any</arg>
+                            <arg>-Xlint:missing-interpolator</arg>
+                            <arg>-Xlint:nullary-unit</arg>
+                            <arg>-Xlint:option-implicit</arg>
+                            <arg>-Xlint:package-object-classes</arg>
+                            <arg>-Xlint:poly-implicit-overload</arg>
+                            <arg>-Xlint:private-shadow</arg>
+                            <arg>-Xlint:stars-align</arg>
+                            <arg>-Xlint:type-parameter-shadow</arg>
+                            <arg>-Ywarn-unused</arg>
+                            <arg>-Yrangepos</arg>
+                        </args>
                     </configuration>
+
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
