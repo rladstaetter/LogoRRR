@@ -22,7 +22,7 @@ object HelpMenu {
     setOnAction(_ => {
       val stage = new Stage()
       stage.initModality(Modality.APPLICATION_MODAL)
-      stage.setTitle(s"About ${AppMeta.fullAppName}")
+      stage.setTitle(s"About ${AppMeta.fullAppNameWithVersion}")
       val scene = new Scene(new AboutScreen, 440, 210)
       stage.setScene(scene)
       stage.setOnCloseRequest(_ => stage.close())
