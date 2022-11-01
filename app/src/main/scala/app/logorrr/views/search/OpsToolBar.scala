@@ -1,5 +1,6 @@
 package app.logorrr.views.search
 
+import app.logorrr.util.OsUtil
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.block.HasBlockSizeProperty
 import app.logorrr.views.ops.{DecreaseBlockSizeButton, IncreaseBlockSizeButton}
@@ -39,7 +40,7 @@ class OpsToolBar(pathAsString: String, addFilterFn: Filter => Unit)
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
 
-  val width = 510
+  val width = OsUtil.osFun(510, 510, 512) // different layouts (may be dependent on font size renderings?)
   setMaxWidth(width)
   setMinWidth(width)
 
