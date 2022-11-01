@@ -7,13 +7,16 @@ import javafx.stage.Stage
 
 object LogoRRRApp {
 
+  /** LogoRRRs own log formatting string */
+  val logFormat = """[%1$tF %1$tT.%1$tN] %3$-40s %4$-13s %5$s %6$s %n"""
+
   def main(args: Array[String]): Unit = {
     // LogUtil.init()
+    System.setProperty("java.util.logging.SimpleFormatter.format", logFormat)
     javafx.application.Application.launch(classOf[LogoRRRApp], args: _*)
   }
 
 }
-
 
 class LogoRRRApp extends javafx.application.Application with CanLog {
 

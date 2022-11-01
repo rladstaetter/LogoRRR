@@ -25,10 +25,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <modules>
-        <module>binary-win</module>
-    </modules>
-
     <profiles>
         <profile>
             <id>OS.win.installer</id>
@@ -41,8 +37,10 @@
                 </file>
             </activation>
             <modules>
+                <!-- graalvm builds disabled until https://github.com/rladstaetter/LogoRRR/issues/91 is resolved
                 <module>binary-win</module>
                 <module>installer-win</module>
+                -->
                 <module>installer-win-jre</module>
             </modules>
         </profile>

@@ -9,10 +9,11 @@ object AppMeta {
 
   private def meta: AppMeta = ConfigSource.resources("meta.conf").load[AppMeta] match {
     case Right(value) => value
-    case Left(e) => AppMeta("LogoRRR", "LATEST")
+    case Left(_) => AppMeta("LogoRRR", "LATEST")
   }
 
-  val fullAppName = s"${meta.appName} ${meta.appVersion}"
+  val fullAppName = s"${meta.appName}"
+  val fullAppNameWithVersion = s"${meta.appName} ${meta.appVersion}"
   val appVersion = meta.appVersion
 
 }

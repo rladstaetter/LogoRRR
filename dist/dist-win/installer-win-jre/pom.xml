@@ -94,7 +94,7 @@
                             <mainClass>app.logorrr.build.ProductCodeUpdater</mainClass>
                             <arguments>
                                 <argument>${project.build.directory}/installer/logorrr-installer-jre.aip</argument>
-                                <argument>${revision}</argument>
+                                <argument>${project.artifactId}-${revision}</argument>
                             </arguments>
                             <includePluginDependencies>true</includePluginDependencies>
                         </configuration>

@@ -18,7 +18,7 @@ class LogoRRRMenuBar(openLogFile: Path => Unit
 
   private def init(): Unit = {
     getMenus.clear()
-    getMenus.addAll(new FileMenu(openLogFile, closeAllLogFiles, closeApplication), new HelpMenu())
+    getMenus.addAll(new FileMenu(openLogFile, closeAllLogFiles, closeApplication), new HelpMenu(openLogFile))
   }
 
   init()

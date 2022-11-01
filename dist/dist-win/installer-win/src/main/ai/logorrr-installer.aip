@@ -20,7 +20,7 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://www.logorrr.app/"/>
     <ROW Property="ARPURLUPDATEINFO" Value="https://www.logorrr.app/"/>
     <ROW Property="Manufacturer" Value="LogoRRR.app"/>
-    <ROW Property="ProductCode" Value="1033:{5084AA10-2E78-4B77-8CA9-D9DD487E9784} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{aaaaaaaa-bbbb-cccc-dddd-ffffffffffff} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="LogoRRR"/>
     <ROW Property="ProductVersion" Value="23.1.0"/>

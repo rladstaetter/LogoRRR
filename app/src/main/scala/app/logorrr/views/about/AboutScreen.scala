@@ -37,11 +37,11 @@ class AboutScreen extends BorderPane {
 
   private def mkLogo(): ImageView = AboutScreen.logo.imageView()
 
-  private def mkHeader(): Label = AboutScreen.MonoLabel(AppMeta.fullAppName, 50)
+  private def mkHeader(): Label = AboutScreen.MonoLabel(AppMeta.fullAppNameWithVersion, 50)
 
   setPadding(new Insets(10, 10, 10, 10))
   setTop(mkHeader())
   setLeft(mkLogo())
-  setRight(new AboutScreen.HLinkView( AboutScreen.links))
+  setRight(new AboutScreen.HLinkView(AboutScreen.links))
 
 }

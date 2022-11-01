@@ -12,10 +12,10 @@
         <!-- make sure you either set following properties here or in your settings xml (preferred) -->
 
         <!--
-        <graalvm.home>/path/to/graalvm</graalvm.home> all platforms
-        <jdk.home>/path/to/jdk</jdk.home> linux, windows
-        <osx.jdk.home.aarch64>/path/to/aarch64/jdk</osx.jdk.home.aarch64> see also build scripts
-        <osx.jdk.home.x64>/path/to/x64/jdk</osx.jdk.home.x64>
+        <jdk.home>/path/to/jdk</jdk.home> (mac, linux, windows)
+        <graalvm.home>/path/to/graalvm</graalvm.home> (mac, linux, windows)
+        <osx.jdk.home.aarch64>/path/to/aarch64/jdk</osx.jdk.home.aarch64> (mac)
+        <osx.jdk.home.x64>/path/to/x64/jdk</osx.jdk.home.x64> (mac)
         -->
 
         <revision>23.1.0</revision>
@@ -49,7 +49,9 @@
             </activation>
             <properties>
                 <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
+                <!-- graalvm builds disabled until https://github.com/rladstaetter/LogoRRR/issues/91
                 <graalvm.home>C:\Program Files\Java\graalvm-svm-java11-windows-gluon-22.1.0.1-Final</graalvm.home>
+                -->
                 <!-- see also dist/dist-win/pom.xml! -->
                 <advanced.installer.compiler>C:\Program Files (x86)\Caphyon\Advanced Installer 19.8.1\bin\x86\AdvancedInstaller.com</advanced.installer.compiler>
             </properties>
@@ -93,12 +95,14 @@
                                                 a signed pkg file.
                                             </message>
                                         </requireProperty>
+                                        <!--
                                         <requireProperty>
                                             <property>graalvm.home</property>
                                             <message>You have to set 'graalvm.home' and point to a correct graalvm
                                                 installation.
                                             </message>
                                         </requireProperty>
+                                        -->
                                     </rules>
                                     <fail>true</fail>
                                 </configuration>
@@ -308,7 +312,37 @@
                     </executions>
                     <configuration>
                         <scalaVersion>${scala.version}</scalaVersion>
+                        <args>
+                            <arg>-deprecation</arg>
+                            <arg>-encoding</arg>
+                            <arg>utf-8</arg>
+                            <arg>-explaintypes</arg>
+                            <arg>-feature</arg>
+                            <arg>-language:existentials</arg>
+                            <arg>-language:experimental.macros</arg>
+                            <arg>-language:higherKinds</arg>
+                            <arg>-language:implicitConversions</arg>
+                            <arg>-unchecked</arg>
+                            <arg>-Xcheckinit</arg>
+                            <arg>-Xlint:adapted-args</arg>
+                            <arg>-Xlint:constant</arg>
+                            <arg>-Xlint:delayedinit-select</arg>
+                            <arg>-Xlint:doc-detached</arg>
+                            <arg>-Xlint:inaccessible</arg>
+                            <arg>-Xlint:infer-any</arg>
+                            <arg>-Xlint:missing-interpolator</arg>
+                            <arg>-Xlint:nullary-unit</arg>
+                            <arg>-Xlint:option-implicit</arg>
+                            <arg>-Xlint:package-object-classes</arg>
+                            <arg>-Xlint:poly-implicit-overload</arg>
+                            <arg>-Xlint:private-shadow</arg>
+                            <arg>-Xlint:stars-align</arg>
+                            <arg>-Xlint:type-parameter-shadow</arg>
+                            <arg>-Ywarn-unused</arg>
+                            <arg>-Yrangepos</arg>
+                        </args>
                     </configuration>
+
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -445,24 +479,25 @@
                             <phase>initialize</phase>
                             <configuration>
                                 <rules>
+                                    <!-- disable graalvm builds until https://github.com/rladstaetter/LogoRRR/issues/91 is resolved
                                     <requireProperty>
                                         <property>graalvm.home</property>
                                         <message>You have to set 'graalvm.home' and point to a correct graalvm
                                             installation.
                                         </message>
                                     </requireProperty>
+                                    <requireFilesExist>
+                                        <files>
+                                            <file>${graalvm.home}/GRAALVM-README.md</file>
+                                        </files>
+                                    </requireFilesExist>
+                                    -->
                                     <requireProperty>
                                         <property>jdk.home</property>
                                         <message>You have to set 'jdk.home' and point to a correct jdk
                                             installation.
                                         </message>
                                     </requireProperty>
-                                    <requireFilesExist>
-                                        <files>
-                                            <!-- simple check if graalvm home is correctly defined -->
-                                            <file>${graalvm.home}/GRAALVM-README.md</file>
-                                        </files>
-                                    </requireFilesExist>
                                     <requireMavenVersion>
                                         <version>[3.6.2,)</version>
                                         <message>Check for Maven version &gt;=3.6.2 failed. Upgrade your Maven
@@ -472,7 +507,7 @@
                                     <requireJavaVersion>
                                         <version>19</version>
                                         <message>JDK 19 is necessary to execute build, download here:
-                                            https://www.azul.com/downloads/zulu-community/?version=java-11-lts&amp;package=jdk
+                                            https://www.azul.com/downloads/zulu-community/?version=java-19-sts&amp;package=jdk
                                         </message>
                                     </requireJavaVersion>
                                 </rules>

@@ -25,30 +25,8 @@ object FileMenu {
   }
 
   class QuitMenuItem(closeApplication: => Unit) extends MenuItem("Quit") {
-    setOnAction(e => closeApplication)
+    setOnAction(_ => closeApplication)
   }
-
-  object RecentFilesMenu {
-
-
-    object RecentFileMenu {
-
-
-    }
-
-
-    class RecentFileMenu(path: Path) extends Menu(path.getFileName.toString) {
-
-    }
-
-
-  }
-
-  case class RecentFilesMenu(paths: Seq[Path]) extends Menu("Log Files") {
-    getItems.addAll(paths.map(p => new RecentFilesMenu.RecentFileMenu(p)): _*)
-  }
-
-
 
 }
 
