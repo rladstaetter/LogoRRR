@@ -40,7 +40,7 @@ class OpsToolBar(pathAsString: String, addFilterFn: Filter => Unit)
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
 
-  val width = OsUtil.osFun(510, 510, 512) // different layouts (may be dependent on font size renderings?)
+  val width = OsUtil.osFun(512, 510, 512) // different layouts (may be dependent on font size renderings?)
   setMaxWidth(width)
   setMinWidth(width)
 
