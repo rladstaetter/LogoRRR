@@ -16,7 +16,7 @@ class LogoRRRMain(closeStage: => Unit)
   extends BorderPane
     with CanLog {
 
-  val mB = new LogoRRRMenuBar(openLogFile, closeAllLogFiles, closeStage)
+  val mB = new LogoRRRMenuBar(openLogFile, closeAllLogFiles(), closeStage)
   val ambp = new LogoRRRMainBorderPane()
 
   init()
@@ -69,7 +69,7 @@ class LogoRRRMain(closeStage: => Unit)
   }
 
   /** removes all log files */
-  def closeAllLogFiles: Unit = {
+  def closeAllLogFiles(): Unit = {
     shutdown()
     LogoRRRGlobals.clearLogFileSettings()
   }

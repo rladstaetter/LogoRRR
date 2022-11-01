@@ -138,7 +138,7 @@ class LogFileTab(val pathAsString: String
 
   // val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 
-  lazy val scrollToEndEventListener: InvalidationListener = (observable: Observable) => {
+  lazy val scrollToEndEventListener: InvalidationListener = (_: Observable) => {
     logVisualView.scrollToEnd()
     logTextView.scrollToEnd()
   }

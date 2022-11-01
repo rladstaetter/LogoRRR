@@ -23,7 +23,7 @@ case class LogTailer(pathAsString: String
   /** start observing log file for changes */
   def start(): Unit = synchronized {
     currentTailer match {
-      case Some(value) => logWarn("Not starting new LogTailer, already one in progress ...")
+      case Some(_) => logWarn("Not starting new LogTailer, already one in progress ...")
       case None =>
         currentTailer = Option(mkTailer())
         timeR(currentTailer.foreach(t => new Thread(t).start()), s"Started LogTailer for file $pathAsString")

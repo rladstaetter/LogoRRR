@@ -4,7 +4,6 @@ import app.logorrr.views.block.BlockView
 import javafx.scene.paint.Color
 
 import java.time.Instant
-import scala.language.postfixOps
 
 /**
  * represents one line in a log file

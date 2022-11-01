@@ -5,7 +5,6 @@ import app.logorrr.util.CanLog
 import com.typesafe.config.ConfigRenderOptions
 import pureconfig.ConfigSource
 
-import java.nio.file.Path
 import scala.util.{Failure, Success, Try}
 
 /**

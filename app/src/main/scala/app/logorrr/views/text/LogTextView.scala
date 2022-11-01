@@ -4,75 +4,18 @@ import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{ClipBoardUtils, JfxUtils}
 import javafx.collections.transformation.FilteredList
-import javafx.geometry.Pos
 import javafx.scene.control._
 import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
 
 import java.time.Instant
 import scala.jdk.CollectionConverters._
-import scala.language.postfixOps
-
 
 object LogTextView {
 
-
   val timeBarColor = Color.BISQUE.darker()
+
   val timeBarOverflowColor = timeBarColor.darker()
-
-
-  class LineNumberLogEntry(pathAsString: String
-                           , e: LogEntry
-                           , maxLength: Int
-                           , timings: Map[Int, Instant]
-                          ) extends BorderPane {
-
-    /*
-        val hBox = new HBox()
-
-        val bg = new Background(new BackgroundFill(Color.YELLOW, new CornerRadii(size * 1.25), Insets.EMPTY))
-
-        private val labels: Seq[Label] =
-          for ((c, i) <- Seq(e.value, e.value, e.value).zipWithIndex) yield {
-            val l = new Label(c)
-            if (i % 2 == 0) {
-              l.setBackground(bg)
-              l.setTextFill(Color.BLACK)
-            }
-            //l.setStyle("-fx-background: rgb(255,0,255);")
-            // l.setTextFill(Color.rgb(Random.nextInt(255), Random.nextInt(255), Random.nextInt(255)))
-            l
-          }
-        hBox.getChildren.addAll(labels: _*)
-        BorderPane.setAlignment(hBox, Pos.CENTER_LEFT)
-        setLeft(LineDecoratorLabel(e, maxLength))
-        setCenter(hBox)
-
-        hBox.getChildren.addAll(labels: _*)
-        BorderPane.setAlignment(hBox, Pos.CENTER_LEFT)
-        setLeft(LineDecoratorLabel(e, maxLength))
-        setCenter(hBox)
-
-        hBox.getChildren.addAll(labels: _*)
-        BorderPane.setAlignment(hBox, Pos.CENTER_LEFT)
-        setLeft(LineDecoratorLabel(e, maxLength))
-        setCenter(hBox)
-      */
-
-    val label = {
-      val l = new Label(e.value)
-      BorderPane.setAlignment(l, Pos.CENTER_LEFT)
-      l
-    }
-    private val label1: LineNumberLabel = LineNumberLabel(e.lineNumber, maxLength)
-    BorderPane.setAlignment(label1, Pos.CENTER)
-
-    setLeft(label1)
-    setCenter(label)
-    e.someInstant foreach {
-      instant => setBottom(LineNumberBar(e, instant, timings))
-    }
-  }
 
 }
 

@@ -1,44 +1,14 @@
 package app.logorrr.model
 
-import app.logorrr.model.LogEntryFileReader.logException
 import app.logorrr.util.CanLog
 import app.logorrr.views.search.{Filter, Fltr}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.paint.Color
 
-import java.nio.charset.StandardCharsets
-import java.nio.file.{Files, Path}
+import java.nio.file.Path
 import java.time.Instant
-import java.util
 import java.util.stream
 import java.util.stream.Collectors
-import scala.language.postfixOps
-import scala.util.{Failure, Success, Try}
-
-object LogFileReader {
-  def readFromFile(logFile: Path): util.List[String] = {
-    Try {
-      Files.readAllLines(logFile)
-    } match {
-      case Failure(exception) =>
-        val msg = s"Could not read file ${logFile.toAbsolutePath.toString} with default charset, retrying with ISO_8859_1 ..."
-        logException(msg, exception)
-        Try {
-          Files.readAllLines(logFile, StandardCharsets.ISO_8859_1)
-        } match {
-          case Failure(exception) =>
-            val msg = s"Could not read file ${logFile.toAbsolutePath.toString} properly. Reason: ${exception.getMessage}."
-            logException(msg, exception)
-            util.Arrays.asList(msg)
-          case Success(value) =>
-            value
-        }
-      case Success(lines) => lines
-    }
-  }
-
-
-}
 
 /** Abstraction for a log file */
 object LogEntryFileReader extends CanLog {
@@ -60,7 +30,7 @@ object LogEntryFileReader extends CanLog {
     mkLogEntryList(l => Filter.calcColor(l, filters), l => LogEntryInstantFormat.parseInstant(l, logEntryTimeFormat))(logFilePath)
   }
 
-  def from(logFilePath: Path, filters: Seq[Fltr]): ObservableList[LogEntry] = mkLogEntryList(l => Filter.calcColor(l, filters), l => None)(logFilePath)
+  def from(logFilePath: Path, filters: Seq[Fltr]): ObservableList[LogEntry] = mkLogEntryList(l => Filter.calcColor(l, filters), _ => None)(logFilePath)
 
 
 }
