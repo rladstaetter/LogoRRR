@@ -10,6 +10,8 @@ object FilePaths {
 
   val settingsFileName = "logorrr.conf"
 
+  val logFileName = "logorrr.log"
+
   /**
    * Attention Mac Users Start:
    *
@@ -35,5 +37,7 @@ object FilePaths {
     )
 
   val settingsFilePath: Path = confPath(OsUtil.currentOs).resolve(settingsFileName)
+
+  val logFilePath: Path = confPath(OsUtil.currentOs).resolve(logFileName)
 
 }

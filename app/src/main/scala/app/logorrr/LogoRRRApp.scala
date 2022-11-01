@@ -12,11 +12,11 @@ object LogoRRRApp {
 
   def main(args: Array[String]): Unit = {
     // LogUtil.init()
+    System.setProperty("java.util.logging.SimpleFormatter.format", logFormat)
     javafx.application.Application.launch(classOf[LogoRRRApp], args: _*)
   }
 
 }
-
 
 class LogoRRRApp extends javafx.application.Application with CanLog {
 
