@@ -1,11 +1,13 @@
 package app.logorrr.views.search
 
+import app.logorrr.model.LogEntry
 import app.logorrr.util.OsUtil
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.block.HasBlockSizeProperty
 import app.logorrr.views.ops.{DecreaseBlockSizeButton, IncreaseBlockSizeButton}
 import app.logorrr.views.text.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.collections.ObservableList
 import javafx.scene.control._
 import javafx.scene.input.{KeyCode, KeyEvent}
 
@@ -33,7 +35,9 @@ object OpsToolBar {
  *
  * @param addFilterFn filter function which results from user interaction with SearchToolbar
  */
-class OpsToolBar(pathAsString: String, addFilterFn: Filter => Unit)
+class OpsToolBar(pathAsString: String
+                 , addFilterFn: Filter => Unit
+                 , logEntries: ObservableList[LogEntry])
   extends ToolBar
     with HasBlockSizeProperty {
 
@@ -57,7 +61,7 @@ class OpsToolBar(pathAsString: String, addFilterFn: Filter => Unit)
 
   private val searchButton = new SearchButton(searchTextField, regexToggleButton, colorPicker, addFilterFn)
 
-  val autoScrollCheckBox = new AutoScrollCheckBox(pathAsString)
+  val autoScrollCheckBox = new AutoScrollCheckBox(pathAsString, logEntries)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {

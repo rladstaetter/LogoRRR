@@ -107,7 +107,7 @@ class LogFileTab(val pathAsString: String
   val filteredList = new FilteredList[LogEntry](logEntries)
 
   private val opsToolBar = {
-    val op = new OpsToolBar(pathAsString, addFilter)
+    val op = new OpsToolBar(pathAsString, addFilter, logEntries)
     op.blockSizeProperty.set(LogoRRRGlobals.getLogFileSettings(pathAsString).blockWidthSettingsProperty.get())
     op
   }
