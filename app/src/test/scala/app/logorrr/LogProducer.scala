@@ -14,8 +14,8 @@ case class SimpleWriter(path: Path) extends Runnable {
 
   override def run(): Unit = {
     var linenumber = 1
-    Files.write(path, util.Arrays.asList("started, waiting 30 secs ..."), StandardOpenOption.CREATE, StandardOpenOption.APPEND)
-    Thread.sleep(30000)
+    Files.write(path, util.Arrays.asList("started, waiting 20 secs ..."), StandardOpenOption.CREATE, StandardOpenOption.APPEND)
+    Thread.sleep(20000)
     while (running) {
       Thread.sleep(50)
       val now = LocalDateTime.now();

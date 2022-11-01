@@ -66,16 +66,8 @@ object LogFileTab {
  * */
 class LogFileTab(val pathAsString: String
                  , val logEntries: ObservableList[LogEntry])
-  extends Tab
-    with CanLog {
+  extends Tab with CanLog {
 
-  selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](b => {
-    if (b) {
-      setStyle(LogFileTab.BackgroundSelectedStyle)
-    } else {
-      setStyle(LogFileTab.BackgroundStyle)
-    }
-  }))
 
   // lazy since only if autoscroll is set start tailer
   lazy val logTailer = LogTailer(pathAsString, logEntries)
@@ -136,7 +128,6 @@ class LogFileTab(val pathAsString: String
 
   private val logTextView = new LogTextView(pathAsString, filteredList, timings)
 
-  // val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 
   lazy val scrollToEndEventListener: InvalidationListener = (_: Observable) => {
     logVisualView.scrollToEnd()
@@ -214,13 +205,19 @@ class LogFileTab(val pathAsString: String
       } else {
       }
     }))
+    selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](b => {
+      if (b) {
+        setStyle(LogFileTab.BackgroundSelectedStyle)
+      } else {
+        setStyle(LogFileTab.BackgroundStyle)
+      }
+    }))
+
 
     /** don't monitor file anymore if tab is closed, free invalidation listeners */
     setOnClosed(_ => closeTab())
     textProperty.bind(computeTabTitle)
-    val tooltip = new Tooltip()
-    tooltip.textProperty().bind(Bindings.concat(Bindings.size(logEntries).asString, " lines"))
-    setTooltip(tooltip)
+    setTooltip(mkTabToolTip)
 
     // selectedEntryProperty.bind(logVisualView.selectedEntryProperty)
 
@@ -242,6 +239,16 @@ class LogFileTab(val pathAsString: String
 
     setDivider(LogoRRRGlobals.getLogFileSettings(pathAsString).getDividerPosition())
     initFiltersPropertyListChangeListener()
+  }
+
+  /** compute tab tooltip */
+  private def mkTabToolTip: Tooltip = {
+    val tooltip = new Tooltip()
+    tooltip.textProperty().bind(Bindings.concat(
+      pathAsString, "\n",
+      Bindings.size(logEntries).asString, " lines")
+    )
+    tooltip
   }
 
   /** compute title of tab */
