@@ -502,7 +502,7 @@
                                     <requireJavaVersion>
                                         <version>19</version>
                                         <message>JDK 19 is necessary to execute build, download here:
-                                            https://www.azul.com/downloads/zulu-community/?version=java-11-lts&amp;package=jdk
+                                            https://www.azul.com/downloads/zulu-community/?version=java-19-sts&amp;package=jdk
                                         </message>
                                     </requireJavaVersion>
                                 </rules>
