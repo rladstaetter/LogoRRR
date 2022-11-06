@@ -4,7 +4,7 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util.OsUtil
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.block.HasBlockSizeProperty
-import app.logorrr.views.ops.{DecreaseBlockSizeButton, IncreaseBlockSizeButton}
+import app.logorrr.views.ops.{ClearLogButton, DecreaseBlockSizeButton, IncreaseBlockSizeButton}
 import app.logorrr.views.text.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
@@ -44,7 +44,7 @@ class OpsToolBar(pathAsString: String
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
 
-  val width = OsUtil.osFun(562, 560, 562) // different layouts (may be dependent on font size renderings?)
+  val width = OsUtil.osFun(602, 600, 602) // different layouts (may be dependent on font size renderings?)
   setMaxWidth(width)
   setMinWidth(width)
 
@@ -61,7 +61,9 @@ class OpsToolBar(pathAsString: String
 
   private val searchButton = new SearchButton(searchTextField, regexToggleButton, colorPicker, addFilterFn)
 
-  val autoScrollCheckBox = new AutoScrollCheckBox(pathAsString, logEntries)
+  val autoScrollCheckBox = new AutoScrollCheckBox(pathAsString)
+
+  val clearLogButton = new ClearLogButton(logEntries)
 
   val timerButton = new TimerButton(pathAsString, logEntries)
 
@@ -86,7 +88,7 @@ class OpsToolBar(pathAsString: String
   }
 
   val otherItems: Seq[Control] = {
-    Seq(autoScrollCheckBox, timerButton)
+    Seq(autoScrollCheckBox, clearLogButton, timerButton)
   }
 
   getItems.addAll(searchItems ++ sizeItems ++ otherItems: _*)

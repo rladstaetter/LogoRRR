@@ -10,7 +10,7 @@ import javafx.stage.{Modality, Stage}
 import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
-case class TimerButton(pathAsString: String, logEntries: ObservableList[LogEntry])
+class TimerButton(pathAsString: String, logEntries: ObservableList[LogEntry])
   extends Button
     with CanLog {
   setGraphic(new FontIcon(FontAwesomeRegular.CLOCK))
