@@ -8,6 +8,7 @@ import app.logorrr.views.ops.{ClearLogButton, DecreaseBlockSizeButton, IncreaseB
 import app.logorrr.views.text.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
+import javafx.scene.Node
 import javafx.scene.control._
 import javafx.scene.input.{KeyCode, KeyEvent}
 
@@ -43,8 +44,11 @@ class OpsToolBar(pathAsString: String
 
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
-
-  val width = OsUtil.osFun(602, 600, 602) // different layouts (may be dependent on font size renderings?)
+  val w = 600
+  val macWidth = w
+  val winWidth = w + 2
+  val linuxWidth = w + 2
+  val width = OsUtil.osFun(winWidth, macWidth, linuxWidth) // different layouts (may be dependent on font size renderings?)
   setMaxWidth(width)
   setMinWidth(width)
 
@@ -65,7 +69,7 @@ class OpsToolBar(pathAsString: String
 
   val clearLogButton = new ClearLogButton(logEntries)
 
-  val timerButton = new TimerButton(pathAsString, logEntries)
+  val timerButton = new TimerButton(pathAsString)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {
@@ -87,7 +91,7 @@ class OpsToolBar(pathAsString: String
     Seq(decreaseBlockSizeButton, increaseBlockSizeButton, decreaseTextSizeButton, increaseTextSizeButton)
   }
 
-  val otherItems: Seq[Control] = {
+  val otherItems: Seq[Node] = {
     Seq(autoScrollCheckBox, clearLogButton, timerButton)
   }
 

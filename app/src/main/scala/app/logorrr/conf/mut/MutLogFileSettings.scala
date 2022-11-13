@@ -4,7 +4,7 @@ import app.logorrr.conf.BlockSettings
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.search.Filter
-import javafx.beans.binding.StringBinding
+import javafx.beans.binding.{BooleanBinding, StringBinding}
 import javafx.beans.property._
 import javafx.beans.value.ObservableValue
 import javafx.collections.FXCollections
@@ -39,6 +39,14 @@ class MutLogFileSettings {
   val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList())
   val someLogEntrySettings = new SimpleObjectProperty[Option[LogEntryInstantFormat]]()
   val blockWidthSettingsProperty = new SimpleIntegerProperty()
+
+  val hasLogEntrySetting = new BooleanBinding {
+    bind(someLogEntrySettings)
+
+    override def computeValue(): Boolean = {
+      Option(someLogEntrySettings.get()).exists(_.isDefined)
+    }
+  }
 
   val fontStyle: ObservableValue[_ <: String] = new StringBinding {
     bind(fontSizeProperty)
