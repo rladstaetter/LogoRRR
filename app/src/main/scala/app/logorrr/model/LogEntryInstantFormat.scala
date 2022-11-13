@@ -1,6 +1,6 @@
 package app.logorrr.model
 
-import app.logorrr.views.SimpleRange
+import app.logorrr.views.settings.SimpleRange
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.time.format.DateTimeFormatter
@@ -17,9 +17,9 @@ object LogEntryInstantFormat {
   implicit lazy val writer = deriveWriter[LogEntryInstantFormat]
 
   def parseInstant(line: String, entrySetting: LogEntryInstantFormat): Option[Instant] =
-    if (line.length >= entrySetting.dateTimeRange.end) {
+    if (line.length >= entrySetting.startColumn.end) {
       Try {
-        val dateTimeAsString = line.substring(entrySetting.dateTimeRange.start, entrySetting.dateTimeRange.end)
+        val dateTimeAsString = line.substring(entrySetting.startColumn.start, entrySetting.startColumn.end)
         val dtf: DateTimeFormatter = entrySetting.dateTimeFormatter
         LocalDateTime.parse(dateTimeAsString, dtf).toInstant(ZoneOffset.of(entrySetting.zoneOffset))
       }.toOption
@@ -28,7 +28,7 @@ object LogEntryInstantFormat {
 
 }
 
-case class LogEntryInstantFormat(dateTimeRange: SimpleRange
+case class LogEntryInstantFormat(startColumn: SimpleRange
                                  , dateTimePattern: String
                                  , zoneOffset: String = "+1") {
 

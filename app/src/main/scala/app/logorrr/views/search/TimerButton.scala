@@ -1,22 +1,23 @@
 package app.logorrr.views.search
 
 import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.model.LogEntryInstantFormat
-import app.logorrr.util.{CanLog, JfxUtils}
-import app.logorrr.views.SettingsBorderPane
-import javafx.scene.Scene
+import app.logorrr.model.{LogEntry, LogEntryInstantFormat}
+import app.logorrr.util.CanLog
+import app.logorrr.views.settings.TimerSettingStage
+import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.layout.StackPane
-import javafx.stage.{Modality, Stage}
 import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
-class TimerButton(pathAsString: String)
+
+class TimerButton(pathAsString: String
+                  , logEntriesToDisplay: ObservableList[LogEntry])
   extends StackPane
     with CanLog {
 
-
   def updateLogEntrySetting(leif: LogEntryInstantFormat): Unit = {
+    logError("implement update of global log entry format for this log file tab")
     logTrace(leif.toString)
   }
 
@@ -34,13 +35,8 @@ class TimerButton(pathAsString: String)
   button.setTooltip(new Tooltip("configure time format"))
 
   button.setOnAction(_ => {
-    val stage = new Stage()
-    stage.initModality(Modality.APPLICATION_MODAL)
-    stage.setTitle(s"Settings for ${pathAsString}")
-    val scene = new Scene(new SettingsBorderPane(pathAsString, updateLogEntrySetting, JfxUtils.closeStage(stage)), 950, 37)
-    stage.setScene(scene)
-    stage.setOnCloseRequest(_ => stage.close())
-    stage.showAndWait()
+    val timerSettingStage = new TimerSettingStage(pathAsString, updateLogEntrySetting, logEntriesToDisplay)
+    timerSettingStage.showAndWait()
   })
 
   private val icon = new FontIcon()

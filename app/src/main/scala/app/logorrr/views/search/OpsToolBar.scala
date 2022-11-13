@@ -5,6 +5,7 @@ import app.logorrr.util.OsUtil
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.block.HasBlockSizeProperty
 import app.logorrr.views.ops.{ClearLogButton, DecreaseBlockSizeButton, IncreaseBlockSizeButton}
+import app.logorrr.views.settings.TimerSettingsLogView
 import app.logorrr.views.text.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
@@ -69,7 +70,8 @@ class OpsToolBar(pathAsString: String
 
   val clearLogButton = new ClearLogButton(logEntries)
 
-  val timerButton = new TimerButton(pathAsString)
+  val firstNEntries = TimerSettingsLogView.mkEntriesToShow(logEntries)
+  val timerButton = new TimerButton(pathAsString, firstNEntries)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {

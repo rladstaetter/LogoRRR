@@ -16,13 +16,13 @@ import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control._
 import javafx.scene.layout._
 
-import java.nio.file.Paths
 import java.time.Instant
 import java.util.stream.Collectors
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.jdk.CollectionConverters._
+
 
 object LogFileTab {
 
@@ -68,9 +68,11 @@ class LogFileTab(val pathAsString: String
                  , val logEntries: ObservableList[LogEntry])
   extends Tab with CanLog {
 
-
   // lazy since only if autoscroll is set start tailer
   lazy val logTailer = LogTailer(pathAsString, logEntries)
+
+
+  private def getLogFileSettings = LogoRRRGlobals.getLogFileSettings(pathAsString)
 
   def repaint(): Unit = logVisualView.repaint()
 
@@ -100,7 +102,7 @@ class LogFileTab(val pathAsString: String
 
   private val opsToolBar = {
     val op = new OpsToolBar(pathAsString, addFilter, logEntries)
-    op.blockSizeProperty.set(LogoRRRGlobals.getLogFileSettings(pathAsString).blockWidthSettingsProperty.get())
+    op.blockSizeProperty.set(getLogFileSettings.blockWidthSettingsProperty.get())
     op
   }
 
@@ -143,7 +145,7 @@ class LogFileTab(val pathAsString: String
   }
 
   def initAutoScroll(): Unit = {
-    LogoRRRGlobals.getLogFileSettings(pathAsString).autoScrollProperty.addListener(JfxUtils.onNew[java.lang.Boolean] {
+    getLogFileSettings.autoScrollProperty.addListener(JfxUtils.onNew[java.lang.Boolean] {
       b =>
         if (b) {
           startTailer()
@@ -152,7 +154,7 @@ class LogFileTab(val pathAsString: String
         }
     })
 
-    if (LogoRRRGlobals.getLogFileSettings(pathAsString).isAutoScroll()) {
+    if (getLogFileSettings.isAutoScroll()) {
       startTailer()
     }
 
@@ -181,7 +183,7 @@ class LogFileTab(val pathAsString: String
   }
 
   def init(): Unit = {
-    filtersListProperty.bind(LogoRRRGlobals.getLogFileSettings(pathAsString).filtersProperty)
+    filtersListProperty.bind(getLogFileSettings.filtersProperty)
 
     /** top component for log view */
     val borderPane = new BorderPane()
@@ -235,7 +237,7 @@ class LogFileTab(val pathAsString: String
 
     initAutoScroll()
 
-    setDivider(LogoRRRGlobals.getLogFileSettings(pathAsString).getDividerPosition())
+    setDivider(getLogFileSettings.getDividerPosition())
     initFiltersPropertyListChangeListener()
   }
 
@@ -250,7 +252,7 @@ class LogFileTab(val pathAsString: String
   }
 
   /** compute title of tab */
-  private def computeTabTitle: StringExpression = Bindings.concat(Paths.get(pathAsString).getFileName.toString)
+  private def computeTabTitle: StringExpression = Bindings.concat(LogFileUtil.logFileName(pathAsString))
 
   /**
    * Actions to perform if tab is closed:
@@ -265,7 +267,7 @@ class LogFileTab(val pathAsString: String
   }
 
   def shutdown(): Unit = {
-    if (LogoRRRGlobals.getLogFileSettings(pathAsString).isAutoScroll()) {
+    if (getLogFileSettings.isAutoScroll()) {
       stopTailer()
     }
     LogoRRRGlobals.removeLogFile(pathAsString)

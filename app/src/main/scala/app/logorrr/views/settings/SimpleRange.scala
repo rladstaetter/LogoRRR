@@ -1,4 +1,4 @@
-package app.logorrr.views
+package app.logorrr.views.settings
 
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 

@@ -22,7 +22,7 @@ object MutLogFileSettings {
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
     s.setDividerPosition(logFileSettings.dividerPosition)
     s.filtersProperty.setAll(logFileSettings.filters.asJava)
-    s.someLogEntrySettings.set(logFileSettings.someLogEntrySetting)
+    s.someLogEntrySettings.set(logFileSettings.someLogEntryInstantFormat)
     s.setAutoScroll(logFileSettings.autoScroll)
     s
   }

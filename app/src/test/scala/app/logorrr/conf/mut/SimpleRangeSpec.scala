@@ -1,6 +1,6 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.views.SimpleRange
+import app.logorrr.views.settings.SimpleRange
 import org.scalacheck.Gen
 
 import scala.util.Random
