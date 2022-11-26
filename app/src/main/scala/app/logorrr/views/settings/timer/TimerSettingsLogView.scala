@@ -1,15 +1,15 @@
-package app.logorrr.views.settings
+package app.logorrr.views.settings.timer
 
-import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
+import javafx.beans.property.{ObjectProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.control.{ListCell, ListView}
 import javafx.scene.layout.BorderPane
 
 object TimerSettingsLogView {
 
-  val entriesToShow = 10
+  val entriesToShow = 13
 
   def mkEntriesToShow(logEntries: ObservableList[LogEntry]): ObservableList[LogEntry] = {
     val subList = logEntries.subList(0, if (logEntries.size() >= TimerSettingsLogView.entriesToShow) TimerSettingsLogView.entriesToShow else logEntries.size())
@@ -18,10 +18,18 @@ object TimerSettingsLogView {
 
 }
 
-class TimerSettingsLogView(pathAsString: String
+class TimerSettingsLogView(settings: MutLogFileSettings
                            , logEntries: ObservableList[LogEntry]) extends BorderPane {
 
-  private val mutLogFileSettings: MutLogFileSettings = LogoRRRGlobals.getLogFileSettings(pathAsString)
+  val startColProperty: ObjectProperty[java.lang.Integer] = new SimpleObjectProperty[java.lang.Integer](null)
+  val endColProperty: ObjectProperty[java.lang.Integer] = new SimpleObjectProperty[java.lang.Integer](null)
+
+  settings.someLogEntrySettingsProperty.get() match {
+    case Some(s) =>
+      setStartCol(s.startCol)
+      setEndCol(s.endCol)
+    case None =>
+  }
 
   /** 'pragmatic way' to determine width of max elems in this view */
   val maxLength = logEntries.size().toString.length
@@ -29,6 +37,14 @@ class TimerSettingsLogView(pathAsString: String
   val listView: ListView[LogEntry] = {
     val lv = new ListView[LogEntry]()
     lv.getStyleClass.add("dense")
+    lv.setStyle(
+      """
+        |.scroll-bar:horizontal .increment-arrow,
+        |.scroll-bar:horizontal .decrement-arrow,
+        |.scroll-bar:horizontal .increment-button,
+        |.scroll-bar:horizontal .decrement-button {
+        |    -fx-padding:0;
+        |}""".stripMargin)
     lv.setItems(logEntries)
     lv
   }
@@ -37,8 +53,12 @@ class TimerSettingsLogView(pathAsString: String
 
   setCenter(listView)
 
+  def setStartCol(i: Int): Unit = startColProperty.set(i)
+
+  def setEndCol(i: Int): Unit = endColProperty.set(i)
+
   class LogEntryListCell extends ListCell[LogEntry] {
-    styleProperty().bind(mutLogFileSettings.fontStyle)
+    styleProperty().bind(settings.fontStyleBinding)
     setGraphic(null)
 
     override def updateItem(t: LogEntry, b: Boolean): Unit = {
@@ -55,7 +75,11 @@ class TimerSettingsLogView(pathAsString: String
 
     private def calculateLabel(e: LogEntry): Unit = {
       setText(null)
-      val entry = TimerSettingsLogViewLabel(mutLogFileSettings, e, maxLength)
+      val entry = TimerSettingsLogViewLabel(settings
+        , e
+        , maxLength
+        , startColProperty
+        , endColProperty)
       setGraphic(entry)
     }
 

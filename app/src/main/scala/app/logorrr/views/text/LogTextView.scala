@@ -10,6 +10,7 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
 
 import java.time.Instant
+import scala.jdk.CollectionConverters._
 
 object LogTextView {
 
@@ -61,7 +62,7 @@ class LogTextView(pathAsString: String
   }
 
   class LogEntryListCell extends ListCell[LogEntry] {
-    styleProperty().bind(mutLogFileSettings.fontStyle)
+    styleProperty().bind(mutLogFileSettings.fontStyleBinding)
     setGraphic(null)
     val cm = new ContextMenu()
     val copyCurrentToClipboard = new MenuItem("copy text to clipboard")
@@ -82,7 +83,11 @@ class LogTextView(pathAsString: String
 
     private def calculateLabel(e: LogEntry): Unit = {
       setText(null)
-      val entry = LogTextViewLabel(mutLogFileSettings, e, maxLength)
+
+      val entry = LogTextViewLabel(e
+        , maxLength
+        , mutLogFileSettings.filtersProperty.get().asScala.toSeq
+        , mutLogFileSettings.fontStyleBinding)
       setGraphic(entry)
       copyCurrentToClipboard.setOnAction(_ => ClipBoardUtils.copyToClipboardText(e.value))
       setContextMenu(cm)

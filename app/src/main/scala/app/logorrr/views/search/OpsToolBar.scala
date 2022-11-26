@@ -5,7 +5,7 @@ import app.logorrr.util.OsUtil
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.block.HasBlockSizeProperty
 import app.logorrr.views.ops.{ClearLogButton, DecreaseBlockSizeButton, IncreaseBlockSizeButton}
-import app.logorrr.views.settings.TimerSettingsLogView
+import app.logorrr.views.settings.timer.TimerSettingsLogView
 import app.logorrr.views.text.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList

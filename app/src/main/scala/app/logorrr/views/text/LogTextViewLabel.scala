@@ -1,12 +1,11 @@
 package app.logorrr.views.text
 
-import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
+import app.logorrr.views.search.Filter
+import javafx.beans.binding.StringBinding
 import javafx.scene.control.Label
 import javafx.scene.layout._
 import javafx.scene.paint.Color
-
-import scala.jdk.CollectionConverters._
 
 /**
  * Represents a line in LogoRRR's TextView.
@@ -17,24 +16,24 @@ import scala.jdk.CollectionConverters._
  * @param maxLength
  * @param filters
  */
-case class LogTextViewLabel(settings: MutLogFileSettings
-                            , e: LogEntry
+case class LogTextViewLabel(e: LogEntry
                             , maxLength: Int
+                            , filters: Seq[Filter]
+                            , fontStyleBinding: StringBinding
                            ) extends HBox {
 
-  lazy val stringsAndColor: Seq[(String, Color)] =
-    FilterCalculator(e, settings.filtersProperty.get().asScala.toSeq).stringColorPairs
+  val stringsAndColor: Seq[(String, Color)] = FilterCalculator(e, filters).stringColorPairs
 
-  lazy val labels: Seq[Label] = stringsAndColor.map {
+  val labels: Seq[Label] = stringsAndColor.map {
     case (text, color) =>
       val l = LogoRRRLabel.mkL(text, color)
-      l.styleProperty().bind(settings.fontStyle)
+      l.styleProperty().bind(fontStyleBinding)
       l
   }
 
   val lineNumberLabel: LineNumberLabel = {
     val l = LineNumberLabel(e.lineNumber, maxLength)
-    l.styleProperty().bind(settings.fontStyle)
+    l.styleProperty().bind(fontStyleBinding)
     l
   }
 
