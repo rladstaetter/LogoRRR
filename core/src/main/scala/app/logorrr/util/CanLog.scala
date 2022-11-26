@@ -23,7 +23,7 @@ object Constants {
 
 object CanLog {
 
-  val handler = {
+  val fileHandler = {
     val h = new FileHandler(FilePaths.logFilePath.toAbsolutePath.toString, true)
     h.setLevel(Level.ALL)
     h.setFormatter(new SimpleFormatter)
@@ -53,7 +53,7 @@ trait CanLog {
   lazy val log = {
     val lggr = Logger.getLogger(this.getClass.getName)
     lggr.setLevel(Level.ALL)
-    lggr.addHandler(CanLog.handler)
+    lggr.addHandler(CanLog.fileHandler)
     lggr
   }
 
