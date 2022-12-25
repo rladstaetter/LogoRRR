@@ -37,14 +37,6 @@ class TimerSettingsLogView(settings: MutLogFileSettings
   val listView: ListView[LogEntry] = {
     val lv = new ListView[LogEntry]()
     lv.getStyleClass.add("dense")
-    lv.setStyle(
-      """
-        |.scroll-bar:horizontal .increment-arrow,
-        |.scroll-bar:horizontal .decrement-arrow,
-        |.scroll-bar:horizontal .increment-button,
-        |.scroll-bar:horizontal .decrement-button {
-        |    -fx-padding:0;
-        |}""".stripMargin)
     lv.setItems(logEntries)
     lv
   }
@@ -65,22 +57,16 @@ class TimerSettingsLogView(settings: MutLogFileSettings
       super.updateItem(t, b)
       Option(t) match {
         case Some(e) =>
-          calculateLabel(e)
+          setText(null)
+          setGraphic(TimerSettingsLogViewLabel(settings
+            , e
+            , maxLength
+            , startColProperty
+            , endColProperty))
         case None =>
           setGraphic(null)
           setText(null)
-          setContextMenu(null)
       }
-    }
-
-    private def calculateLabel(e: LogEntry): Unit = {
-      setText(null)
-      val entry = TimerSettingsLogViewLabel(settings
-        , e
-        , maxLength
-        , startColProperty
-        , endColProperty)
-      setGraphic(entry)
     }
 
   }

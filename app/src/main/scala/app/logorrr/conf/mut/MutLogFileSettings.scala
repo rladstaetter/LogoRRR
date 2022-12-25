@@ -32,18 +32,23 @@ class MutLogFileSettings {
   private val pathAsStringProperty = new SimpleStringProperty()
   private val firstOpenedProperty = new SimpleLongProperty()
   val selectedIndexProperty = new SimpleIntegerProperty()
-  val dividerPositionProperty = new SimpleDoubleProperty()
-  val fontSizeProperty = new SimpleIntegerProperty()
+  private val dividerPositionProperty = new SimpleDoubleProperty()
+  private val fontSizeProperty = new SimpleIntegerProperty()
+
   val autoScrollProperty = new SimpleBooleanProperty()
   val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList())
   val someLogEntrySettingsProperty = new SimpleObjectProperty[Option[LogEntryInstantFormat]](None)
   val blockWidthSettingsProperty = new SimpleIntegerProperty()
 
+  def getSomeLogEntrySetting: Option[LogEntryInstantFormat] = someLogEntrySettingsProperty.get()
+
   val hasLogEntrySettingBinding = new BooleanBinding {
     bind(someLogEntrySettingsProperty)
 
     override def computeValue(): Boolean = {
-      Option(someLogEntrySettingsProperty.get()).exists(_.isDefined)
+      val res = Option(someLogEntrySettingsProperty.get()).exists(_.isDefined)
+      println(s"compute to $res")
+      res
     }
   }
 
@@ -51,6 +56,10 @@ class MutLogFileSettings {
     bind(fontSizeProperty)
 
     override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
+  }
+
+  def setLogEntryInstantFormat(lef: LogEntryInstantFormat): Unit = {
+    someLogEntrySettingsProperty.set(Option(lef))
   }
 
   def setAutoScroll(autoScroll: Boolean): Unit = autoScrollProperty.set(autoScroll)

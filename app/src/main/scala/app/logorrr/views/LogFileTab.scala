@@ -17,7 +17,6 @@ import javafx.scene.control._
 import javafx.scene.layout._
 
 import java.time.Instant
-import java.util.stream.Collectors
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -71,9 +70,18 @@ class LogFileTab(val pathAsString: String
   // lazy since only if autoscroll is set start tailer
   lazy val logTailer = LogTailer(pathAsString, logEntries)
 
-
   private def getLogFileSettings = LogoRRRGlobals.getLogFileSettings(pathAsString)
 
+  /*
+    getLogFileSettings.hasLogEntrySettingBinding.addListener(JfxUtils.onNew[java.lang.Boolean](b => {
+      if (b) {
+        for (i <- 1 to logEntries.size()) {
+          val old = logEntries.get(i)
+          logEntries.set(i, old.copy(someInstant = LogEntryInstantFormat.parseInstant(old.value, getLogFileSettings.getSomeLogEntrySetting.orNull)))
+        }
+      }
+    }))
+  */
   def repaint(): Unit = logVisualView.repaint()
 
   /** contains time information for first and last entry for given log file */
@@ -123,10 +131,7 @@ class LogFileTab(val pathAsString: String
     lvv
   }
 
-  lazy val timings: Map[Int, Instant] =
-    logEntries.stream().collect(Collectors.toMap((le: LogEntry) => le.lineNumber, (le: LogEntry) => le.someInstant.getOrElse(Instant.now()))).asScala.toMap
-
-  private val logTextView = new LogTextView(pathAsString, filteredList, timings)
+  private val logTextView = new LogTextView(pathAsString, filteredList)
 
 
   lazy val scrollToEndEventListener: InvalidationListener = (_: Observable) => {

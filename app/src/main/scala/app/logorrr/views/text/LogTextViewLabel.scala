@@ -37,6 +37,10 @@ case class LogTextViewLabel(e: LogEntry
     l
   }
 
+  e.someInstant.foreach(
+    i => getChildren.add(LineTimerLabel(i))
+  )
+
   getChildren.add(lineNumberLabel)
   getChildren.addAll(labels: _*)
 

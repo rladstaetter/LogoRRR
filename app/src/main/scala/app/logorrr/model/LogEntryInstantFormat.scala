@@ -1,15 +1,16 @@
 package app.logorrr.model
 
+import app.logorrr.util.CanLog
 import app.logorrr.views.settings.timer.SimpleRange
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId, ZoneOffset}
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
-object LogEntryInstantFormat {
+object LogEntryInstantFormat extends CanLog {
 
-  val DefaultPattern = "yyyy-MM-dd HH:mm:ss.SSS"
+  val DefaultPattern = "yyyy-MM-dd HH:mm:ss.nnnnnnnnn"
   /** just my preferred time format */
   val Default = LogEntryInstantFormat(SimpleRange(1, 24), DefaultPattern)
 
@@ -17,13 +18,20 @@ object LogEntryInstantFormat {
   implicit lazy val writer = deriveWriter[LogEntryInstantFormat]
 
   def parseInstant(line: String, entrySetting: LogEntryInstantFormat): Option[Instant] =
-    if (line.length >= entrySetting.range.end) {
+    if (line.length >= entrySetting.endCol) {
+      val dateTimeAsString = line.substring(entrySetting.startCol, entrySetting.endCol)
       Try {
-        val dateTimeAsString = line.substring(entrySetting.range.start, entrySetting.range.end)
         val dtf: DateTimeFormatter = entrySetting.dateTimeFormatter
         LocalDateTime.parse(dateTimeAsString, dtf).toInstant(ZoneOffset.of(entrySetting.zoneOffset))
-      }.toOption
-    } else None
+      } match {
+        case Success(value) => Option(value)
+        case Failure(_) =>
+          logTrace(s"Could not parse '$dateTimeAsString' at pos (${entrySetting.startCol}/${entrySetting.endCol}) with pattern '$${entrySetting.dateTimePattern}'")
+          None
+      }
+    } else {
+      None
+    }
 
 
 }

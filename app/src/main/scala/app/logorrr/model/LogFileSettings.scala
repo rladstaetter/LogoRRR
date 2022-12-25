@@ -74,7 +74,7 @@ case class LogFileSettings(pathAsString: String
         case None => LogEntryFileReader.from(path, filters)
       }) match {
         case Success(logEntries) =>
-          logInfo(s"Opening ${pathAsString} ... ")
+          logTrace(s"Opened ${pathAsString} ... ")
           logEntries
         case Failure(ex) =>
           val msg = s"Could not import file ${pathAsString}"

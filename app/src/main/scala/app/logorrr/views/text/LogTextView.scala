@@ -9,10 +9,11 @@ import javafx.scene.control._
 import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
 
-import java.time.Instant
 import scala.jdk.CollectionConverters._
 
 object LogTextView {
+
+  private val fixedCellSize = 26
 
   val timeBarColor = Color.BISQUE.darker()
 
@@ -23,11 +24,7 @@ object LogTextView {
 
 class LogTextView(pathAsString: String
                   , filteredList: FilteredList[LogEntry]
-                  , timings: Map[Int, Instant]
                  ) extends BorderPane {
-
-  private val fixedCellSize = 26
-
   /** 'pragmatic way' to determine width of max elems in this view */
   val maxLength = filteredList.size().toString.length
 
@@ -48,7 +45,7 @@ class LogTextView(pathAsString: String
       case Some(value) =>
         val relativeIndex = listView.getItems.indexOf(value)
         listView.getSelectionModel.select(relativeIndex)
-        listView.scrollTo(relativeIndex - ((listView.getHeight / fixedCellSize) / 2).toInt)
+        listView.scrollTo(relativeIndex - ((listView.getHeight / LogTextView.fixedCellSize) / 2).toInt)
       case None =>
     }
 
