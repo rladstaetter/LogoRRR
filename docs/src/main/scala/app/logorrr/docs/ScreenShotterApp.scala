@@ -1,6 +1,7 @@
 package app.logorrr.docs
 
 import app.logorrr.conf._
+import app.logorrr.docs.Area._
 import app.logorrr.io.Fs
 import app.logorrr.meta.AppMeta
 import app.logorrr.model.LogFileSettings
@@ -33,7 +34,10 @@ object ScreenShotterApp {
 class ScreenShotterApp extends javafx.application.Application with CanLog {
 
   def start(stage: Stage): Unit = {
-    for (Area(width, height) <- Area.seq) {
+    val s0 = Seq[Area](R1280x800)
+    val s1 = Seq[Area](R1440x900)
+    val s2 = Seq[Area](R1920x1080)
+    for (Area(width, height) <- s2) {
       val path = Paths.get("logfiles/logic.2.log").toAbsolutePath
       val settings =
         Settings(StageSettings(0, 0, width, height)
