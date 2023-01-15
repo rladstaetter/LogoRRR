@@ -46,9 +46,7 @@ class MutLogFileSettings {
     bind(someLogEntrySettingsProperty)
 
     override def computeValue(): Boolean = {
-      val res = Option(someLogEntrySettingsProperty.get()).exists(_.isDefined)
-      println(s"compute to $res")
-      res
+      Option(someLogEntrySettingsProperty.get()).exists(_.isDefined)
     }
   }
 

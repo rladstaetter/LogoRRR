@@ -36,12 +36,12 @@ object LogProducer {
       val writer = SimpleWriter(path)
 
       new Thread(writer).start()
-      System.out.println(s"producing log entries in ${path.toAbsolutePath.toString}, press enter to stop")
+      Console.println(s"producing log entries in ${path.toAbsolutePath.toString}, press enter to stop")
       val keyboard = new Scanner(System.in)
       keyboard.nextLine()
       writer.stop()
     } else {
-      println("Usage: LogProducer <path to log file>")
+      Console.println("Usage: LogProducer <path to log file>")
     }
 
   }

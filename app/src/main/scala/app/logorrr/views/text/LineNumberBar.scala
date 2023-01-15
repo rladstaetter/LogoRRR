@@ -12,6 +12,7 @@ object LineNumberBar {
   val maxDuration: FiniteDuration = 1200 millis
 
 }
+
 case class LineNumberBar(e: LogEntry
                          , instant: Instant
                          , timings: Map[Int, Instant]
@@ -23,7 +24,6 @@ case class LineNumberBar(e: LogEntry
       case Some(nextTi) =>
         nextTi.toEpochMilli - instant.toEpochMilli
       case None =>
-        //   println(s"timings.size ${timings.size}, linenumber: ${e.lineNumber + 1}")
         0L
     }
 
