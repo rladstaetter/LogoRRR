@@ -45,7 +45,7 @@ class OpsToolBar(pathAsString: String
 
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
-  val w = 620
+  val w = 568
   val macWidth = w
   val winWidth = w + 2
   val linuxWidth = w + 2
@@ -94,7 +94,7 @@ class OpsToolBar(pathAsString: String
   }
 
   val otherItems: Seq[Node] = {
-    Seq(autoScrollCheckBox, clearLogButton, timerButton)
+    Seq(autoScrollCheckBox, clearLogButton)
   }
 
   getItems.addAll(searchItems ++ sizeItems ++ otherItems: _*)
