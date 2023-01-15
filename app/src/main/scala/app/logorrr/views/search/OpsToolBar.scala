@@ -45,7 +45,7 @@ class OpsToolBar(pathAsString: String
 
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
-  val w = 610
+  val w = 620
   val macWidth = w
   val winWidth = w + 2
   val linuxWidth = w + 2

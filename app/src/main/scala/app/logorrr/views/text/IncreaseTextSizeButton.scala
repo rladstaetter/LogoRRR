@@ -9,7 +9,7 @@ import app.logorrr.views.search.OpsToolBar
  * @param size size of 'T' icon
  * @param eventHandler event which will be triggered upon click
  */
-class IncreaseTextSizeButton(val pathAsString: String) extends TextSizeButton(12, "increase text size") {
+class IncreaseTextSizeButton(val pathAsString: String) extends TextSizeButton(16, "increase text size") {
 
   setOnAction(_ => {
     if (getFontSize() + OpsToolBar.fontSizeStep < 10 * OpsToolBar.fontSizeStep) {

@@ -6,8 +6,8 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.paint.Color
 
 class IncreaseBlockSizeButton(val blockSizeProperty: SimpleIntegerProperty) extends
-  RectButton(2 * OpsToolBar.blockSizeStep
-    , 2 * OpsToolBar.blockSizeStep
+  RectButton(4 * OpsToolBar.blockSizeStep
+    , 4 * OpsToolBar.blockSizeStep
     , Color.GRAY
     , "increase block size") with HasBlockSizeProperty {
 
