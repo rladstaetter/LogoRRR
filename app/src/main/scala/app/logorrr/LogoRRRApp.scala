@@ -1,6 +1,7 @@
 package app.logorrr
 
 import app.logorrr.conf.{LogoRRRGlobals, Settings, SettingsIO}
+import app.logorrr.meta.AppMeta
 import app.logorrr.util.CanLog
 import app.logorrr.views.main.LogoRRRStage
 import javafx.stage.Stage
@@ -21,6 +22,7 @@ object LogoRRRApp {
 class LogoRRRApp extends javafx.application.Application with CanLog {
 
   def start(stage: Stage): Unit = {
+    logInfo(s"Started " + AppMeta.fullAppNameWithVersion)
     val settings: Settings = SettingsIO.fromFile()
     LogoRRRGlobals.set(settings, getHostServices)
     LogoRRRStage(stage).show()

@@ -10,7 +10,7 @@ object CodeSigner {
 
   def main(args: Array[String]): Unit = {
     if (args.length != 4) {
-      System.out.println("CodeSigner <developerId> <codesign> <entitlements> <path to config>")
+      Console.println("CodeSigner <developerId> <codesign> <entitlements> <path to config>")
     } else {
       val developerId = args(0)
       val codesign = Paths.get(args(1))
@@ -19,7 +19,7 @@ object CodeSigner {
       if (Files.exists(file)) {
         Files.readAllLines(file).asScala.map(f => sign(codesign, entitlements, developerId, file.getParent.resolve(f)))
       } else {
-        System.out.println(s"${file.toAbsolutePath} does not exist, could not execute signing operation ...")
+        Console.println(s"${file.toAbsolutePath} does not exist, could not execute signing operation ...")
       }
     }
   }

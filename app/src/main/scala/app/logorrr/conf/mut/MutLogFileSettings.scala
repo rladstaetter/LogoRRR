@@ -4,9 +4,8 @@ import app.logorrr.conf.BlockSettings
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.search.Filter
-import javafx.beans.binding.StringBinding
+import javafx.beans.binding.{BooleanBinding, StringBinding}
 import javafx.beans.property._
-import javafx.beans.value.ObservableValue
 import javafx.collections.FXCollections
 
 import scala.jdk.CollectionConverters._
@@ -22,7 +21,7 @@ object MutLogFileSettings {
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
     s.setDividerPosition(logFileSettings.dividerPosition)
     s.filtersProperty.setAll(logFileSettings.filters.asJava)
-    s.someLogEntrySettings.set(logFileSettings.someLogEntrySetting)
+    s.someLogEntrySettingsProperty.set(logFileSettings.someLogEntryInstantFormat)
     s.setAutoScroll(logFileSettings.autoScroll)
     s
   }
@@ -33,17 +32,32 @@ class MutLogFileSettings {
   private val pathAsStringProperty = new SimpleStringProperty()
   private val firstOpenedProperty = new SimpleLongProperty()
   val selectedIndexProperty = new SimpleIntegerProperty()
-  val dividerPositionProperty = new SimpleDoubleProperty()
-  val fontSizeProperty = new SimpleIntegerProperty()
+  private val dividerPositionProperty = new SimpleDoubleProperty()
+  private val fontSizeProperty = new SimpleIntegerProperty()
+
   val autoScrollProperty = new SimpleBooleanProperty()
   val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList())
-  val someLogEntrySettings = new SimpleObjectProperty[Option[LogEntryInstantFormat]]()
+  val someLogEntrySettingsProperty = new SimpleObjectProperty[Option[LogEntryInstantFormat]](None)
   val blockWidthSettingsProperty = new SimpleIntegerProperty()
 
-  val fontStyle: ObservableValue[_ <: String] = new StringBinding {
+  def getSomeLogEntrySetting: Option[LogEntryInstantFormat] = someLogEntrySettingsProperty.get()
+
+  val hasLogEntrySettingBinding = new BooleanBinding {
+    bind(someLogEntrySettingsProperty)
+
+    override def computeValue(): Boolean = {
+      Option(someLogEntrySettingsProperty.get()).exists(_.isDefined)
+    }
+  }
+
+  val fontStyleBinding: StringBinding = new StringBinding {
     bind(fontSizeProperty)
 
     override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
+  }
+
+  def setLogEntryInstantFormat(lef: LogEntryInstantFormat): Unit = {
+    someLogEntrySettingsProperty.set(Option(lef))
   }
 
   def setAutoScroll(autoScroll: Boolean): Unit = autoScrollProperty.set(autoScroll)
@@ -79,7 +93,7 @@ class MutLogFileSettings {
         , fontSizeProperty.get()
         , filtersProperty.get().asScala.toSeq
         , BlockSettings(blockWidthSettingsProperty.get())
-        , someLogEntrySettings.get()
+        , someLogEntrySettingsProperty.get()
         , autoScrollProperty.get())
     lfs
   }

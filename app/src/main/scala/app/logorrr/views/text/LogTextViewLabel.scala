@@ -2,8 +2,9 @@ package app.logorrr.views.text
 
 import app.logorrr.model.LogEntry
 import app.logorrr.views.search.Filter
+import javafx.beans.binding.StringBinding
 import javafx.scene.control.Label
-import javafx.scene.layout.HBox
+import javafx.scene.layout._
 import javafx.scene.paint.Color
 
 /**
@@ -18,16 +19,31 @@ import javafx.scene.paint.Color
 case class LogTextViewLabel(e: LogEntry
                             , maxLength: Int
                             , filters: Seq[Filter]
+                            , fontStyleBinding: StringBinding
                            ) extends HBox {
 
-  lazy val stringsAndColor: Seq[(String, Color)] = FilterCalculator(e, filters).stringColorPairs
+  val stringsAndColor: Seq[(String, Color)] = FilterCalculator(e, filters).stringColorPairs
 
-  lazy val labels: Seq[Label] = stringsAndColor.map {
-    case (text, color) => LogoRRRLabel.mkL(text, color)
+  val labels: Seq[Label] = stringsAndColor.map {
+    case (text, color) =>
+      val l = LogoRRRLabel.mkL(text, color)
+      l.styleProperty().bind(fontStyleBinding)
+      l
   }
 
-  val lineNumberLabel: LineNumberLabel = LineNumberLabel(e.lineNumber, maxLength)
+  val lineNumberLabel: LineNumberLabel = {
+    val l = LineNumberLabel(e.lineNumber, maxLength)
+    l.styleProperty().bind(fontStyleBinding)
+    l
+  }
+
+  e.someInstant.foreach(
+    i => getChildren.add(LineTimerLabel(i))
+  )
+
   getChildren.add(lineNumberLabel)
   getChildren.addAll(labels: _*)
 
 }
+
+

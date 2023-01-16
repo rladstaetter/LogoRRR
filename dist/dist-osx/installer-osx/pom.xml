@@ -275,8 +275,7 @@
                             <workingDirectory>${project.basedir}</workingDirectory>
                             <arguments>
                                 <argument>--sign</argument>
-                                <argument>3rd Party Mac Developer Installer: ${app.logorrr.dist.osx.developerid}
-                                </argument>
+                                <argument>Developer ID Installer: ${app.logorrr.dist.osx.developerid}</argument>
                                 <argument>${project.build.directory}/installer/LogoRRR-${revision}.pkg</argument>
                                 <argument>${project.build.directory}/installer/LogoRRR-${revision}-${os.arch}.pkg</argument>
                             </arguments>

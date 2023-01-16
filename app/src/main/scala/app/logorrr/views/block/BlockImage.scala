@@ -81,7 +81,6 @@ class BlockImage[Elem <: BlockView.E] extends CanLog {
     assert(width <= BlockImage.MaxWidth, s"width was ${width} which exceeds ${BlockImage.MaxWidth}.")
     assert(height <= BlockImage.MaxHeight, s"height was ${height} which exceeds ${BlockImage.MaxHeight}.")
     assert(height * width > 0)
-    //      println(s"Allocating ${intWidth * intHeight} memory ...")
     Option(this.intBuffer) match {
       case Some(value) =>
         value.clear()

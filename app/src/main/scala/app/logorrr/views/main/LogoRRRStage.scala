@@ -3,7 +3,7 @@ package app.logorrr.views.main
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutStageSettings
 import app.logorrr.meta.AppMeta
-import app.logorrr.util.JfxUtils
+import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.LogoRRRAccelerators
 import atlantafx.base.theme.PrimerLight
 import javafx.application.Application
@@ -18,7 +18,7 @@ object LogoRRRStage {
 
 }
 
-case class LogoRRRStage(stage: Stage) {
+case class LogoRRRStage(stage: Stage) extends CanLog {
 
   val logorrrMain = new LogoRRRMain(JfxUtils.closeStage(stage))
 
@@ -35,13 +35,15 @@ case class LogoRRRStage(stage: Stage) {
   stage.getIcons.add(LogoRRRStage.icon)
   stage.setScene(scene)
   Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet)
-  // make sure to cleanup on close
-  stage.setOnCloseRequest((_: WindowEvent) => {
+  stage.setOnCloseRequest((_: WindowEvent) => closeApp())
+
+  private def closeApp(): Unit = {
     LogoRRRGlobals.persist()
     logorrrMain.shutdown()
     LogoRRRGlobals.unbindWindow()
     stage.sceneProperty.removeListener(LogoRRRScene.sceneListener)
-  })
+    logInfo(s"Stopped " + AppMeta.fullAppNameWithVersion)
+  }
 
   def show(): Unit = {
     stage.show()

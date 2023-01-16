@@ -30,7 +30,7 @@ object IconCreatorApp {
     c.snapshot(spp, writableImage)
     val renderedImage = SwingFXUtils.fromFXImage(writableImage, null)
     ImageIO.write(renderedImage, "png", target.toFile)
-    System.out.println(s"Wrote ${target.toAbsolutePath} .")
+    Console.println(s"Wrote ${target.toAbsolutePath} .")
   }
 
   def main(args: Array[String]): Unit = {

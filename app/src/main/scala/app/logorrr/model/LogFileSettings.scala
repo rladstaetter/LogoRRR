@@ -60,7 +60,7 @@ case class LogFileSettings(pathAsString: String
                            , fontSize: Int
                            , filters: Seq[Filter]
                            , blockSettings: BlockSettings
-                           , someLogEntrySetting: Option[LogEntryInstantFormat]
+                           , someLogEntryInstantFormat: Option[LogEntryInstantFormat]
                            , autoScroll: Boolean) extends CanLog {
 
   val path: Path = Paths.get(pathAsString)
@@ -69,12 +69,12 @@ case class LogFileSettings(pathAsString: String
 
   def readEntries(): ObservableList[LogEntry] = {
     if (isPathValid) {
-      Try(someLogEntrySetting match {
-        case Some(value) => LogEntryFileReader.from(path, filters, value)
+      Try(someLogEntryInstantFormat match {
+        case Some(instantFormat) => LogEntryFileReader.from(path, filters, instantFormat)
         case None => LogEntryFileReader.from(path, filters)
       }) match {
         case Success(logEntries) =>
-          logInfo(s"Opening ${pathAsString} ... ")
+          logTrace(s"Opened ${pathAsString} ... ")
           logEntries
         case Failure(ex) =>
           val msg = s"Could not import file ${pathAsString}"

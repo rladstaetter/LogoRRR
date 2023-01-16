@@ -4,7 +4,7 @@ import app.logorrr.conf.{BlockSettings, LogoRRRGlobals}
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util._
 import app.logorrr.views.autoscroll.LogTailer
-import app.logorrr.views.ops.{OpsRegion, SettingsOps}
+import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.search.{Filter, FiltersToolBar, Fltr, OpsToolBar}
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.visual.LogVisualView
@@ -16,13 +16,12 @@ import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control._
 import javafx.scene.layout._
 
-import java.nio.file.Paths
 import java.time.Instant
-import java.util.stream.Collectors
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.jdk.CollectionConverters._
+
 
 object LogFileTab {
 
@@ -66,20 +65,23 @@ object LogFileTab {
  * */
 class LogFileTab(val pathAsString: String
                  , val logEntries: ObservableList[LogEntry])
-  extends Tab
-    with CanLog {
-
-  selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](b => {
-    if (b) {
-      setStyle(LogFileTab.BackgroundSelectedStyle)
-    } else {
-      setStyle(LogFileTab.BackgroundStyle)
-    }
-  }))
+  extends Tab with CanLog {
 
   // lazy since only if autoscroll is set start tailer
   lazy val logTailer = LogTailer(pathAsString, logEntries)
 
+  private def getLogFileSettings = LogoRRRGlobals.getLogFileSettings(pathAsString)
+
+  /*
+    getLogFileSettings.hasLogEntrySettingBinding.addListener(JfxUtils.onNew[java.lang.Boolean](b => {
+      if (b) {
+        for (i <- 1 to logEntries.size()) {
+          val old = logEntries.get(i)
+          logEntries.set(i, old.copy(someInstant = LogEntryInstantFormat.parseInstant(old.value, getLogFileSettings.getSomeLogEntrySetting.orNull)))
+        }
+      }
+    }))
+  */
   def repaint(): Unit = logVisualView.repaint()
 
   /** contains time information for first and last entry for given log file */
@@ -108,7 +110,7 @@ class LogFileTab(val pathAsString: String
 
   private val opsToolBar = {
     val op = new OpsToolBar(pathAsString, addFilter, logEntries)
-    op.blockSizeProperty.set(LogoRRRGlobals.getLogFileSettings(pathAsString).blockWidthSettingsProperty.get())
+    op.blockSizeProperty.set(getLogFileSettings.blockWidthSettingsProperty.get())
     op
   }
 
@@ -118,10 +120,8 @@ class LogFileTab(val pathAsString: String
     fbtb
   }
 
-  val settingsOps = new SettingsOps(pathAsString)
-
   val opsRegion: OpsRegion = {
-    val op = new OpsRegion(opsToolBar, filtersToolBar, settingsOps)
+    val op = new OpsRegion(opsToolBar, filtersToolBar)
     op
   }
 
@@ -131,12 +131,8 @@ class LogFileTab(val pathAsString: String
     lvv
   }
 
-  lazy val timings: Map[Int, Instant] =
-    logEntries.stream().collect(Collectors.toMap((le: LogEntry) => le.lineNumber, (le: LogEntry) => le.someInstant.getOrElse(Instant.now()))).asScala.toMap
+  private val logTextView = new LogTextView(pathAsString, filteredList)
 
-  private val logTextView = new LogTextView(pathAsString, filteredList, timings)
-
-  // val selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
 
   lazy val scrollToEndEventListener: InvalidationListener = (_: Observable) => {
     logVisualView.scrollToEnd()
@@ -154,7 +150,7 @@ class LogFileTab(val pathAsString: String
   }
 
   def initAutoScroll(): Unit = {
-    LogoRRRGlobals.getLogFileSettings(pathAsString).autoScrollProperty.addListener(JfxUtils.onNew[java.lang.Boolean] {
+    getLogFileSettings.autoScrollProperty.addListener(JfxUtils.onNew[java.lang.Boolean] {
       b =>
         if (b) {
           startTailer()
@@ -163,7 +159,7 @@ class LogFileTab(val pathAsString: String
         }
     })
 
-    if (LogoRRRGlobals.getLogFileSettings(pathAsString).isAutoScroll()) {
+    if (getLogFileSettings.isAutoScroll()) {
       startTailer()
     }
 
@@ -192,7 +188,7 @@ class LogFileTab(val pathAsString: String
   }
 
   def init(): Unit = {
-    filtersListProperty.bind(LogoRRRGlobals.getLogFileSettings(pathAsString).filtersProperty)
+    filtersListProperty.bind(getLogFileSettings.filtersProperty)
 
     /** top component for log view */
     val borderPane = new BorderPane()
@@ -214,13 +210,19 @@ class LogFileTab(val pathAsString: String
       } else {
       }
     }))
+    selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](b => {
+      if (b) {
+        setStyle(LogFileTab.BackgroundSelectedStyle)
+      } else {
+        setStyle(LogFileTab.BackgroundStyle)
+      }
+    }))
+
 
     /** don't monitor file anymore if tab is closed, free invalidation listeners */
     setOnClosed(_ => closeTab())
     textProperty.bind(computeTabTitle)
-    val tooltip = new Tooltip()
-    tooltip.textProperty().bind(Bindings.concat(Bindings.size(logEntries).asString, " lines"))
-    setTooltip(tooltip)
+    setTooltip(mkTabToolTip)
 
     // selectedEntryProperty.bind(logVisualView.selectedEntryProperty)
 
@@ -240,12 +242,22 @@ class LogFileTab(val pathAsString: String
 
     initAutoScroll()
 
-    setDivider(LogoRRRGlobals.getLogFileSettings(pathAsString).getDividerPosition())
+    setDivider(getLogFileSettings.getDividerPosition())
     initFiltersPropertyListChangeListener()
   }
 
+  /** compute tab tooltip */
+  private def mkTabToolTip: Tooltip = {
+    val tooltip = new Tooltip()
+    tooltip.textProperty().bind(Bindings.concat(
+      pathAsString, "\n",
+      Bindings.size(logEntries).asString, " lines")
+    )
+    tooltip
+  }
+
   /** compute title of tab */
-  private def computeTabTitle: StringExpression = Bindings.concat(Paths.get(pathAsString).getFileName.toString)
+  private def computeTabTitle: StringExpression = Bindings.concat(LogFileUtil.logFileName(pathAsString))
 
   /**
    * Actions to perform if tab is closed:
@@ -260,7 +272,7 @@ class LogFileTab(val pathAsString: String
   }
 
   def shutdown(): Unit = {
-    if (LogoRRRGlobals.getLogFileSettings(pathAsString).isAutoScroll()) {
+    if (getLogFileSettings.isAutoScroll()) {
       stopTailer()
     }
     LogoRRRGlobals.removeLogFile(pathAsString)

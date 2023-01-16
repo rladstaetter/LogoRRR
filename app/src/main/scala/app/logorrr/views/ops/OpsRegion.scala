@@ -9,8 +9,7 @@ import javafx.scene.layout.HBox
  * Container to horizontally align search, filters and settings
  */
 class OpsRegion(val opsToolBar: OpsToolBar
-                , filtersToolBar: FiltersToolBar
-                , settingsToolBar: SettingsOps)
+                , filtersToolBar: FiltersToolBar)
   extends HBox {
 
   opsToolBar.setMaxHeight(Double.PositiveInfinity)

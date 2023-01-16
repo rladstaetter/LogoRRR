@@ -14,7 +14,7 @@ object FilterCalculatorSpec {
       e <- LogEntrySpec.gen
       maxLength <- Gen.posNum[Int]
       filters <- Gen.listOf(FilterSpec.gen)
-    } yield LogTextViewLabel(e, maxLength, filters)
+    } yield LogTextViewLabel(e, maxLength, filters, () => "")
 }
 
 class FilterCalculatorSpec extends LogoRRRSpec {
