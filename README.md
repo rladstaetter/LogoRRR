@@ -5,7 +5,7 @@ fact, when you get an error, you may simply want to see what happened as fast as
 is a tool that does precisely that and provides you with a quick way to filter out critical events or other points of
 interest.
 
-![Screenshot of LogoRRR, version 23.2.0](docs/releases/23.2.0/screenshot-23.2.0.png?raw=true)
+![Screenshot of LogoRRR, version 23.1.0](docs/releases/23.1.0/screenshot-23.1.0.png?raw=true)
 
 ## Usage
 
@@ -18,7 +18,7 @@ See [Technology](Technology.md) for a short summary of used technologies.
 ## Installation
 
 You can give it a try by downloading
-a [prebuilt installer for `LogoRRR`](https://github.com/rladstaetter/LogoRRR/releases/tag/23.2.0) from the releases
+a [prebuilt installer for `LogoRRR`](https://github.com/rladstaetter/LogoRRR/releases/tag/23.1.0) from the releases
 page. There are installer for Windows and MacOs available.
 
 ## Features
