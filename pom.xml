@@ -18,7 +18,7 @@
         <osx.jdk.home.x64>/path/to/x64/jdk</osx.jdk.home.x64> (mac)
         -->
 
-        <revision>23.1.0</revision>
+        <revision>23.2.0</revision>
 
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.10</scala.version>
