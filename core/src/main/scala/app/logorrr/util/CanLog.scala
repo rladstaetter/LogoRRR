@@ -9,10 +9,11 @@ package app.logorrr.util
 import app.logorrr.io.FilePaths
 
 import java.io.{PrintWriter, StringWriter}
+import java.nio.file.Files
 import java.util.logging._
 import scala.concurrent.duration._
 import scala.language.postfixOps
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 object Constants {
   val R = "\r"
@@ -24,7 +25,16 @@ object Constants {
 object CanLog {
 
   val fileHandler = {
-    val h = new FileHandler(FilePaths.logFilePath.toAbsolutePath.toString, true)
+    // check if we can log to the given log path, create the parent directory if it does not exist yet.
+    // if this doesn't work, use a fallback to console logger - see https://github.com/rladstaetter/LogoRRR/issues/136
+    val h = if (!Files.exists(FilePaths.logFilePath.getParent)) {
+      Try(Files.createDirectories(FilePaths.logFilePath.getParent)) match {
+        case Success(_) => new FileHandler(FilePaths.logFilePath.toAbsolutePath.toString, true)
+        case Failure(_) => new ConsoleHandler()
+      }
+    } else {
+      new FileHandler(FilePaths.logFilePath.toAbsolutePath.toString, true)
+    }
     h.setLevel(Level.ALL)
     h.setFormatter(new SimpleFormatter)
     h
