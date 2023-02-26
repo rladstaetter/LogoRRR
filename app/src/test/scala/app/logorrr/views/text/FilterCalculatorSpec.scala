@@ -20,7 +20,7 @@ object FilterCalculatorSpec {
 class FilterCalculatorSpec extends LogoRRRSpec {
 
   def applySingleFilter(logEntry: String, pattern: String): Seq[Seq[LinePart]] = {
-    FilterCalculator(LogEntry(0, Color.BLUE, logEntry, None), Seq(new Filter(pattern, "red"))).filteredParts
+    FilterCalculator(LogEntry(0, Color.BLUE, logEntry, None), Seq(new Filter(pattern, Color.RED))).filteredParts
   }
 
   "calcParts" should {
@@ -80,9 +80,9 @@ class FilterCalculatorSpec extends LogoRRRSpec {
 
   "filteredParts" should {
     val filters = Seq(
-      new Filter("a", "red")
-      , new Filter("b", "blue")
-      , new Filter("t", "yellow")
+      new Filter("a", Color.RED)
+      , new Filter("b", Color.BLUE)
+      , new Filter("t", Color.YELLOW)
     )
     val entry = LogEntry(0, Color.WHITE, "test a b c", None)
     val calculator = FilterCalculator(entry, filters)

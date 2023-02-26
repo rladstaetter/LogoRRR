@@ -22,10 +22,10 @@ object LogFileSettings {
   val DefaultLogFormat: Option[LogEntryInstantFormat] = None
   val DefaultAutoScroll = false
 
-  val finest: Filter = new Filter("FINEST", Color.GREY.toString)
-  val info: Filter = new Filter("INFO", Color.GREEN.toString)
-  val warning: Filter = new Filter("WARNING", Color.ORANGE.toString)
-  val severe: Filter = new Filter("SEVERE", Color.RED.toString)
+  val finest: Filter = new Filter("FINEST", Color.GREY)
+  val info: Filter = new Filter("INFO", Color.GREEN)
+  val warning: Filter = new Filter("WARNING", Color.ORANGE)
+  val severe: Filter = new Filter("SEVERE", Color.RED)
 
   val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
   val DefaultFontSize = 12
