@@ -18,12 +18,13 @@ object SettingsIO extends CanLog {
   /** read settings from default place and filter all paths which don't exist anymore */
   def fromFile(): Settings = {
     val settingsFilePath = FilePaths.settingsFilePath
+
     Try(ConfigSource.file(settingsFilePath).loadOrThrow[Settings].filterWithValidPaths()) match {
       case Failure(_) =>
         logWarn(s"Could not load $settingsFilePath, using default settings ...")
         Settings.Default
       case Success(value) =>
-        logTrace(s"vi \"${settingsFilePath}\"")
+        logInfo(s"Loaded settings from ${settingsFilePath}.")
         value
     }
   }
