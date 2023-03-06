@@ -134,7 +134,7 @@
                                 <argument>--description</argument>
                                 <argument>LogoRRR is a log file visualisation app, see https://www.logorrr.app/                                </argument>
                                 <argument>--copyright</argument>
-                                <argument>Copyright 2021-2022 www.logorrr.app</argument>
+                                <argument>Copyright 2021-2023 www.logorrr.app</argument>
                                 <argument>--type</argument>
                                 <argument>app-image</argument>
                                 <argument>--runtime-image</argument>
@@ -184,7 +184,7 @@
                                 <argument>--description</argument>
                                 <argument>LogoRRR is a log file visualisation app, see https://www.logorrr.app/</argument>
                                 <argument>--copyright</argument>
-                                <argument>Copyright 2021-2022 www.logorrr.app</argument>
+                                <argument>Copyright 2021-2023 www.logorrr.app</argument>
                                 <argument>--license-file</argument>
                                 <argument>${basedir}/../../../LICENSE</argument>
                                 <argument>--type</argument>
