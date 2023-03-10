@@ -3,9 +3,9 @@
 <plist version="1.0">
  <dict>
   <key>LSMinimumSystemVersion</key>
-  <string>10.11.0</string>
+  <string>12</string>
   <key>CFBundleDevelopmentRegion</key>
-  <string>English</string>
+  <string>en</string>
   <key>CFBundleAllowMixedLocalizations</key>
   <true/>
   <key>CFBundleExecutable</key>
@@ -22,18 +22,14 @@
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>
   <string>${revision}</string>
-  <key>CFBundleSignature</key>
-  <string>????</string>
   <!-- See https://developer.apple.com/app-store/categories/ for list of AppStore categories -->
   <key>LSApplicationCategoryType</key>
-  <string>public.app-category.utilities</string>
+  <string>public.app-category.developer-tools</string>
   <key>CFBundleVersion</key>
   <string>${revision}</string>
   <key>NSHumanReadableCopyright</key>
-  <string>Copyright 2021-2022 www.logorrr.app</string>
+  <string>Copyright 2021-2023 www.logorrr.app</string>
   <key>NSHighResolutionCapable</key>
   <string>true</string>
-  <key>NSMicrophoneUsageDescription</key>
-  <string>The application LogoRRR is requesting access to the microphone.</string>
  </dict>
 </plist>
