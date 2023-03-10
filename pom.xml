@@ -72,54 +72,6 @@
                 </os>
             </activation>
             <properties>
-                <mac.codesign.binary>/usr/bin/codesign</mac.codesign.binary>
-                <mac.productsign.binary>/usr/bin/productsign</mac.productsign.binary>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>enforce-property</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                                <configuration>
-                                    <rules>
-                                        <requireProperty>
-                                            <property>app.logorrr.dist.osx.developerid</property>
-                                            <message>You must set property 'app.logorrr.dist.osx.developerid' to create
-                                                a signed pkg file.
-                                            </message>
-                                        </requireProperty>
-                                        <!--
-                                        <requireProperty>
-                                            <property>graalvm.home</property>
-                                            <message>You have to set 'graalvm.home' and point to a correct graalvm
-                                                installation.
-                                            </message>
-                                        </requireProperty>
-                                        -->
-                                    </rules>
-                                    <fail>true</fail>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>OS.osx.arm64</id>
-            <activation>
-                <os>
-                    <name>mac os x</name>
-                    <arch>aarch64</arch>
-                </os>
-            </activation>
-            <properties>
                 <jdk.home>${osx.jdk.home.aarch64}</jdk.home>
             </properties>
             <build>
@@ -135,6 +87,20 @@
                                 </goals>
                                 <configuration>
                                     <rules>
+                                        <requireProperty>
+                                            <property>mac.signingkey.username</property>
+                                            <message>You must set property 'mac.signingkey.username' to create
+                                                a signed pkg file. A valid entry has to have the following form: 'John Doe (ABCDEFGHIJ)'
+                                            </message>
+                                        </requireProperty>
+                                        <!--
+                                        <requireProperty>
+                                            <property>graalvm.home</property>
+                                            <message>You have to set 'graalvm.home' and point to a correct graalvm
+                                                installation.
+                                            </message>
+                                        </requireProperty>
+                                        -->
                                         <requireProperty>
                                             <property>osx.jdk.home.aarch64</property>
                                             <message>You have to set 'osx.jdk.home.aarch64' and it must point to a

@@ -1,5 +1,0 @@
-../app-tmp-image/LogoRRR.app/Contents/MacOS/LogoRRR
-../app-tmp-image/LogoRRR.app/Contents/app/app-${project.version}.jar
-../app-tmp-image/LogoRRR.app/Contents/app/dist-repackaged-${project.version}.jar
-../app-tmp-image/LogoRRR.app/Contents/runtime/Contents/MacOS/libjli.dylib
-../app-tmp-image/LogoRRR.app/Contents/runtime/Contents/Home/lib/jspawnhelper
