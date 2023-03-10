@@ -15,7 +15,6 @@
         <jdk.home>/path/to/jdk</jdk.home> (mac, linux, windows)
         <graalvm.home>/path/to/graalvm</graalvm.home> (mac, linux, windows)
         <osx.jdk.home.aarch64>/path/to/aarch64/jdk</osx.jdk.home.aarch64> (mac)
-        <osx.jdk.home.x64>/path/to/x64/jdk</osx.jdk.home.x64> (mac)
         -->
 
         <revision>23.2.0</revision>
@@ -150,47 +149,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-        <profile>
-            <id>OS.osx.x64</id>
-            <activation>
-                <os>
-                    <name>mac os x</name>
-                    <arch>x86_64</arch>
-                </os>
-            </activation>
-            <properties>
-                <!-- must point to a x64 jdk installation -->
-                <jdk.home>${osx.jdk.home.x64}</jdk.home>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>enforce-property</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                                <configuration>
-                                    <rules>
-                                        <requireProperty>
-                                            <property>osx.jdk.home.x64</property>
-                                            <message>You have to set 'osx.jdk.home.x64' and it must point to a x64
-                                                jdk.
-                                            </message>
-                                        </requireProperty>
-                                    </rules>
-                                    <fail>true</fail>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-
         </profile>
     </profiles>
 
