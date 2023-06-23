@@ -22,11 +22,11 @@
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.10</scala.version>
 
-        <openjfx.version>21-ea+5</openjfx.version>
+        <openjfx.version>21-ea+21</openjfx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <ikonli.version>12.3.1</ikonli.version>
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-        <gluonfx.plugin.version>1.0.16</gluonfx.plugin.version>
+        <gluonfx.plugin.version>1.0.18</gluonfx.plugin.version>
 
         <!-- no need to change these -->
         <changelist>-SNAPSHOT</changelist>
