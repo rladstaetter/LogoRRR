@@ -21,7 +21,7 @@ See [Technology](Technology.md) for a short summary of used technologies.
 to [install `LogoRRR` from Apple's App Store](https://apps.apple.com/at/app/logorrr/id1583786769?l=en&mt=12).**
 
 Otherwise, you can give it a try by downloading
-a [prebuilt installer for `LogoRRR`](https://github.com/rladstaetter/LogoRRR/releases/tag/23.1.0) from github's releases
+a [prebuilt installer for `LogoRRR`](https://github.com/rladstaetter/LogoRRR/releases/tag/23.1.1) from github's releases
 page. There are installer for Windows and MacOs available.
 
 ## Features
