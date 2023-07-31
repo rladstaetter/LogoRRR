@@ -9,6 +9,6 @@ drop or using the file menu.
 
 ## Use `LogoRRR` as log monitor
 
-![Use LogoRRR as log monitor](docs/releases/23.2.0/logorrr-autoscroll.gif?raw=true)
+![Use LogoRRR as log monitor](docs/releases/23.1.0/logorrr-autoscroll.gif?raw=true)
 
 
