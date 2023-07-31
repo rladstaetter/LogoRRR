@@ -22,7 +22,7 @@
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.11</scala.version>
 
-        <openjfx.version>21-ea+21</openjfx.version>
+        <openjfx.version>21-ea+24</openjfx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <ikonli.version>12.3.1</ikonli.version>
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
@@ -147,7 +147,7 @@
             <dependency>
                 <groupId>io.github.mkpaz</groupId>
                 <artifactId>atlantafx-base</artifactId>
-                <version>1.1.0</version>
+                <version>2.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.kordamp.ikonli</groupId>
@@ -162,12 +162,12 @@
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.11.0</version>
+                <version>2.13.0</version>
             </dependency>
             <dependency>
                 <groupId>com.github.pureconfig</groupId>
                 <artifactId>pureconfig_${scala.major.version}</artifactId>
-                <version>0.17.2</version>
+                <version>0.17.4</version>
             </dependency>
             <dependency>
                 <groupId>org.scalatest</groupId>
