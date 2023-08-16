@@ -21,7 +21,7 @@ object OpsToolBar {
 
   /** increment / decrement font size */
   val fontSizeStep = 2
-
+/*
   private val BackgroundSelectedStyle: String =
     """
       |-fx-background-color: CYAN;
@@ -29,7 +29,7 @@ object OpsToolBar {
       |-fx-border-color: BLUE;
       |-fx-padding: 0px 0px 0px 3px;
       |""".stripMargin
-
+*/
 }
 
 /**

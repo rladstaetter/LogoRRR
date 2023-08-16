@@ -1,13 +1,14 @@
 package app.logorrr.conf
 
+import pureconfig.{ConfigReader, ConfigWriter}
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 
 
 object StageSettings {
 
-  implicit val reader = deriveReader[StageSettings]
-  implicit val writer = deriveWriter[StageSettings]
+  implicit val reader: ConfigReader[StageSettings] = deriveReader[StageSettings]
+  implicit val writer: ConfigWriter[StageSettings] = deriveWriter[StageSettings]
 
 
 }

@@ -2,6 +2,7 @@ package app.logorrr.model
 
 import app.logorrr.util.CanLog
 import app.logorrr.views.settings.timer.SimpleRange
+import pureconfig.{ConfigReader, ConfigWriter}
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.time.format.DateTimeFormatter
@@ -14,8 +15,8 @@ object LogEntryInstantFormat extends CanLog {
   /** just my preferred time format */
   val Default = LogEntryInstantFormat(SimpleRange(1, 24), DefaultPattern)
 
-  implicit lazy val reader = deriveReader[LogEntryInstantFormat]
-  implicit lazy val writer = deriveWriter[LogEntryInstantFormat]
+  implicit lazy val reader: ConfigReader[LogEntryInstantFormat] = deriveReader[LogEntryInstantFormat]
+  implicit lazy val writer: ConfigWriter[LogEntryInstantFormat] = deriveWriter[LogEntryInstantFormat]
 
   def parseInstant(line: String, entrySetting: LogEntryInstantFormat): Option[Instant] =
     if (line.length >= entrySetting.endCol) {

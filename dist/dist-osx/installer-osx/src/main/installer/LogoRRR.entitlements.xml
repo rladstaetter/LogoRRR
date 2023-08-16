@@ -2,6 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
     <dict>
+        <!-- https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_app-sandbox -->
         <key>com.apple.security.app-sandbox</key>
         <true/>
         <key>com.apple.security.cs.allow-dyld-environment-variables</key>
@@ -15,6 +16,9 @@
         <key>com.apple.security.cs.disable-library-validation</key>
         <true/>
         <key>com.apple.security.files.user-selected.read-only</key>
+        <true/>
+        <!-- to be able to access files see https://developer.apple.com/documentation/professional_video_applications/fcpxml_reference/asset/media-rep/bookmark/enabling_security-scoped_bookmark_and_url_access?language=swift -->
+        <key>com.apple.security.files.bookmarks.app-scope</key>
         <true/>
     </dict>
 </plist>

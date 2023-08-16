@@ -1,10 +1,11 @@
 package app.logorrr.conf
 
+import app.logorrr.OsxBridge
 import app.logorrr.conf.SettingsIO.renderOptions
 import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
 import app.logorrr.io.{FilePaths, Fs}
 import app.logorrr.model.LogFileSettings
-import app.logorrr.util.CanLog
+import app.logorrr.util.{CanLog, OsUtil}
 import javafx.application.HostServices
 import javafx.beans.property.SimpleObjectProperty
 import javafx.stage.Window
@@ -25,7 +26,7 @@ object LogoRRRGlobals extends CanLog {
     Fs.write(FilePaths.settingsFilePath, ConfigWriter[Settings].to(LogoRRRGlobals.getSettings()).render(renderOptions))
   }
 
-  def getOrderedLogFileSettings(): Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings()
+  def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings()
 
   def bindWindow(window: Window): Unit = {
     window.setX(LogoRRRGlobals.getStageX())
@@ -62,12 +63,18 @@ object LogoRRRGlobals extends CanLog {
   def getSomeActive(): Option[String] = mutSettings.getSomeActive()
 
   def removeLogFile(pathAsString: String): Unit = {
+
     mutSettings.removeLogFileSetting(pathAsString)
     mutSettings.setSomeActive(mutSettings.getSomeActive() match {
       case Some(value) if value == pathAsString => None
       case x => x
     })
-    logInfo(s"Removed file ${pathAsString} ...")
+
+    if (OsUtil.isMac) {
+      OsxBridge.releasePath(pathAsString)
+    }
+
+    logInfo(s"Removed file $pathAsString ...")
   }
 
   def clearLogFileSettings(): Unit = mutSettings.clearLogFileSettings()

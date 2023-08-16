@@ -1,11 +1,11 @@
 package app.logorrr.meta
 
-import pureconfig.ConfigSource
+import pureconfig.{ConfigReader, ConfigSource}
 import pureconfig.generic.semiauto.deriveReader
 
 object AppMeta {
 
-  implicit lazy val reader = deriveReader[AppMeta]
+  implicit lazy val reader: ConfigReader[AppMeta] = deriveReader[AppMeta]
 
   private def meta: AppMeta = ConfigSource.resources("meta.conf").load[AppMeta] match {
     case Right(value) => value

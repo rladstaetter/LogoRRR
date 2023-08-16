@@ -7,6 +7,7 @@
     <name>app.logorrr</name>
     <description>LogoRRR - the log visualisation tool</description>
     <packaging>pom</packaging>
+
     <properties>
 
         <!-- make sure you either set following properties here or in your settings xml (preferred) -->
@@ -73,7 +74,12 @@
             </activation>
             <properties>
                 <jdk.home>${osx.jdk.home.aarch64}</jdk.home>
+                <jdk.javac>${jdk.home}/bin/javac</jdk.javac>
+                <jdk.javah>${jdk.home}/bin/javah</jdk.javah>
             </properties>
+            <modules>
+                <module>native</module>
+            </modules>
             <build>
                 <plugins>
                     <plugin>
@@ -90,7 +96,8 @@
                                         <requireProperty>
                                             <property>mac.signingkey.username</property>
                                             <message>You must set property 'mac.signingkey.username' to create
-                                                a signed pkg file. A valid entry has to have the following form: 'John Doe (ABCDEFGHIJ)'
+                                                a signed pkg file. A valid entry has to have the following form: 'John
+                                                Doe (ABCDEFGHIJ)'
                                             </message>
                                         </requireProperty>
                                         <!--
@@ -106,6 +113,14 @@
                                             <message>You have to set 'osx.jdk.home.aarch64' and it must point to a
                                                 aarch64 jdk.
                                             </message>
+                                        </requireProperty>
+                                        <requireProperty>
+                                            <property>osx.swiftc</property>
+                                            <message>You have to set 'osx.swiftc' to the swiftc compiler.</message>
+                                        </requireProperty>
+                                        <requireProperty>
+                                            <property>osx.gcc</property>
+                                            <message>You have to set 'osx.gcc' to the gcc compiler.</message>
                                         </requireProperty>
                                     </rules>
                                     <fail>true</fail>
@@ -195,6 +210,13 @@
             <dependency>
                 <groupId>app.logorrr</groupId>
                 <artifactId>app</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>app.logorrr.native</groupId>
+                <artifactId>native-osx</artifactId>
+                <classifier>dylibs</classifier>
+                <type>zip</type>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -363,6 +385,11 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

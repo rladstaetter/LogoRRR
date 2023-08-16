@@ -29,8 +29,8 @@ object LogorrrIcon {
     val round = s / factor
     val xe = s / factor
     val ye = s / factor
-    val (x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) = (xe * 0, xe * 1, xe * 2, xe * 3, xe * 4, xe * 5, xe * 6, xe * 7, xe * 8, xe * 9, xe * 10)
-    val (y0, y1, y2, y3, y4, y5, y6, y7, y8, y9, y10) = (ye * 0, ye * 1, ye * 2, ye * 3, ye * 4, ye * 5, ye * 6, ye * 7, ye * 8, ye * 9, ye * 10)
+    val (x0,  _, x2,  _, _, _, _, x7, x8,  _, x10) = (xe * 0, xe * 1, xe * 2, xe * 3, xe * 4, xe * 5, xe * 6, xe * 7, xe * 8, xe * 9, xe * 10)
+    val (y0, y1,  _, y3, _, _, _,  _, y8, y9,   _) = (ye * 0, ye * 1, ye * 2, ye * 3, ye * 4, ye * 5, ye * 6, ye * 7, ye * 8, ye * 9, ye * 10)
 
     //rws(Color.WHITE, x0, y0, s, s, round)
     //drawRaster(Color.GREENYELLOW, x0, y0, s, s, factor)
@@ -51,8 +51,8 @@ object LogorrrIcon {
     val round = s / factor
     val xe = s / factor
     val ye = s / factor
-    val (x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10) = (xe * 0, xe * 1, xe * 2, xe * 3, xe * 4, xe * 5, xe * 6, xe * 7, xe * 8, xe * 9, xe * 10)
-    val (y0, y1, y2, y3, y4, y5, y6, y7, y8, y9, y10) = (ye * 0, ye * 1, ye * 2, ye * 3, ye * 4, ye * 5, ye * 6, ye * 7, ye * 8, ye * 9, ye * 10)
+    val (x0, _, x2,  _, _, _, _, x7, x8,  _, x10) = (xe * 0, xe * 1, xe * 2, xe * 3, xe * 4, xe * 5, xe * 6, xe * 7, xe * 8, xe * 9, xe * 10)
+    val (y0, y1, _, y3, _, _, _,  _, y8, y9,   _) = (ye * 0, ye * 1, ye * 2, ye * 3, ye * 4, ye * 5, ye * 6, ye * 7, ye * 8, ye * 9, ye * 10)
 
     //rws(Color.WHITE, x0, y0, s, s, round)
     //drawRaster(Color.GREENYELLOW, x0, y0, s, s, factor)

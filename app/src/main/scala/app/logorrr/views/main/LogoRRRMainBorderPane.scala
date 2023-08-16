@@ -13,8 +13,6 @@ import scala.jdk.CollectionConverters.ListHasAsScala
 
 /**
  * Main UI element, all other gui elements are in some way children of this Borderpane
- *
- * @param initialSquareWidth width of squares to paint in visual view
  */
 class LogoRRRMainBorderPane extends BorderPane with CanLog {
 
@@ -43,20 +41,26 @@ class LogoRRRMainBorderPane extends BorderPane with CanLog {
     logViewTabPane.init()
   }
 
+
   private def dropLogFile(path: Path): Unit = {
     val pathAsString = path.toAbsolutePath.toString
+
     if (Files.exists(path)) {
       if (!contains(pathAsString)) {
-        val logFileSettings = LogFileSettings(path)
-        LogoRRRGlobals.updateLogFile(logFileSettings)
-        addLogFileTab(LogFileTab(logFileSettings.pathAsString, logFileSettings.readEntries()))
-        selectLog(pathAsString)
+        addLogFile(path)
       } else {
         logWarn(s"$pathAsString is already opened ...")
       }
     } else {
       logWarn(s"$pathAsString does not exist.")
     }
+  }
+
+  def addLogFile(path: Path): Unit = {
+    val logFileSettings = LogFileSettings(path)
+    LogoRRRGlobals.updateLogFile(logFileSettings)
+    addLogFileTab(LogFileTab(logFileSettings.pathAsString, logFileSettings.readEntries()))
+    selectLog(path.toAbsolutePath.toString)
   }
 
   def shutdown(): Unit = logViewTabPane.shutdown()

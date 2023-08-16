@@ -10,8 +10,8 @@ object Filter {
   implicit lazy val colorReader: ConfigReader[Color] = ConfigReader[String].map(s => Color.web(s))
   implicit lazy val colorWriter: ConfigWriter[Color] = ConfigWriter[String].contramap(c => c.toString)
 
-  implicit lazy val reader = deriveReader[Filter]
-  implicit lazy val writer = deriveWriter[Filter]
+  implicit lazy val reader: ConfigReader[Filter] = deriveReader[Filter]
+  implicit lazy val writer: ConfigWriter[Filter] = deriveWriter[Filter]
 
 
   val unClassifiedFilterColor = Color.LIGHTGREY

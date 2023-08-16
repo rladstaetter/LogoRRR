@@ -29,16 +29,14 @@ case class FilterCalculator(logEntry: LogEntry
 
 
   /**
-   * For a given string and a search pattern, return all subindizes of this string
+   * For a given string and a search pattern, return all subindices of this string
    * where this search pattern matches.
    *
-   * If either [[logEntry]] or [[searchPattern]] are empty then return an empty list. If [[searchpattern]] length is
+   * If either logLine or searchPattern are empty then return an empty Seq. If searchpattern length is
    * greater than [[logEntry]] length then return the empty list.
    *
-   *
-   * @param logLine
-   * @param searchPattern
-   * @param color
+   * @param searchPattern a pattern
+   * @param color color to apply
    *
    * @return
    */

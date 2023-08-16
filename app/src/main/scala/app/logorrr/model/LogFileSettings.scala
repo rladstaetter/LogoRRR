@@ -1,10 +1,11 @@
 package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
-import app.logorrr.util.CanLog
+import app.logorrr.util.{CanLog, OsUtil}
 import app.logorrr.views.search.Filter
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.paint.Color
+import pureconfig.{ConfigReader, ConfigWriter}
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 import java.nio.file.{Files, Path, Paths}
@@ -13,19 +14,19 @@ import scala.util.{Failure, Success, Try}
 
 object LogFileSettings {
 
-  implicit lazy val reader = deriveReader[LogFileSettings]
-  implicit lazy val writer = deriveWriter[LogFileSettings]
+  implicit lazy val reader: ConfigReader[LogFileSettings] = deriveReader[LogFileSettings]
+  implicit lazy val writer: ConfigWriter[LogFileSettings] = deriveWriter[LogFileSettings]
 
-  val DefaultSelectedIndex = 0
-  val DefaultDividerPosition = 0.5
-  val DefaultBlockSettings = BlockSettings(10)
-  val DefaultLogFormat: Option[LogEntryInstantFormat] = None
-  val DefaultAutoScroll = false
+  private val DefaultSelectedIndex = 0
+  private val DefaultDividerPosition = 0.5
+  private val DefaultBlockSettings = BlockSettings(10)
+  private val DefaultLogFormat: Option[LogEntryInstantFormat] = None
+  private val DefaultAutoScroll = false
 
-  val finest: Filter = new Filter("FINEST", Color.GREY)
-  val info: Filter = new Filter("INFO", Color.GREEN)
-  val warning: Filter = new Filter("WARNING", Color.ORANGE)
-  val severe: Filter = new Filter("SEVERE", Color.RED)
+  private val finest: Filter = new Filter("FINEST", Color.GREY)
+  private val info: Filter = new Filter("INFO", Color.GREEN)
+  private val warning: Filter = new Filter("WARNING", Color.ORANGE)
+  private val severe: Filter = new Filter("SEVERE", Color.RED)
 
   val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
   val DefaultFontSize = 12
@@ -63,9 +64,15 @@ case class LogFileSettings(pathAsString: String
                            , someLogEntryInstantFormat: Option[LogEntryInstantFormat]
                            , autoScroll: Boolean) extends CanLog {
 
-  val path: Path = Paths.get(pathAsString)
+  val path: Path = Paths.get(pathAsString).toAbsolutePath
 
-  val isPathValid = Files.isReadable(path) && Files.isRegularFile(path)
+  val isPathValid =
+    if (OsUtil.isMac) {
+      Files.exists(path)
+    } else {
+      // without security bookmarks initialized, this returns false on mac
+      Files.isReadable(path) && Files.isRegularFile(path)
+    }
 
   def readEntries(): ObservableList[LogEntry] = {
     if (isPathValid) {
@@ -74,10 +81,10 @@ case class LogFileSettings(pathAsString: String
         case None => LogEntryFileReader.from(path, filters)
       }) match {
         case Success(logEntries) =>
-          logTrace(s"Opened ${pathAsString} ... ")
+          logTrace(s"Opened $pathAsString ... ")
           logEntries
         case Failure(ex) =>
-          val msg = s"Could not import file ${pathAsString}"
+          val msg = s"Could not import file $pathAsString"
           logException(msg, ex)
           FXCollections.observableArrayList()
       }

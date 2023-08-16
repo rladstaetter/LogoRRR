@@ -1,6 +1,7 @@
 package app.logorrr.conf
 
 import app.logorrr.model.LogFileSettings
+import pureconfig.{ConfigReader, ConfigWriter}
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 
 /**
@@ -11,8 +12,8 @@ import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
  */
 object Settings {
 
-  implicit lazy val reader = deriveReader[Settings]
-  implicit lazy val writer = deriveWriter[Settings]
+  implicit lazy val reader: ConfigReader[Settings] = deriveReader[Settings]
+  implicit lazy val writer: ConfigWriter[Settings] = deriveWriter[Settings]
 
   val Default = Settings(
     StageSettings(0, 0, 500, 500)

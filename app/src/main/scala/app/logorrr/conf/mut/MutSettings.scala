@@ -39,7 +39,9 @@ class MutSettings {
 
   def getMutLogFileSetting(key: String): MutLogFileSettings = mutLogFileSettingsMapProperty.get(key)
 
-  def putMutLogFileSetting(mutLogFileSettings: MutLogFileSettings): Unit = mutLogFileSettingsMapProperty.put(mutLogFileSettings.getPathAsString(), mutLogFileSettings)
+  def putMutLogFileSetting(mutLogFileSettings: MutLogFileSettings): Unit = {
+    mutLogFileSettingsMapProperty.put(mutLogFileSettings.getPathAsString(), mutLogFileSettings)
+  }
 
   def removeLogFileSetting(pathAsString: String): Unit = mutLogFileSettingsMapProperty.remove(pathAsString)
 
@@ -75,6 +77,7 @@ class MutSettings {
   }
 
   def clearLogFileSettings(): Unit = {
+
     mutLogFileSettingsMapProperty.clear()
     setSomeActive(None)
   }
@@ -101,8 +104,9 @@ class MutSettings {
 
   def getStageWidth(): Int = mutStageSettings.getWidth()
 
-  def getOrderedLogFileSettings(): Seq[LogFileSettings] =
+  def getOrderedLogFileSettings(): Seq[LogFileSettings] = {
     mutLogFileSettingsMapProperty.get().values.asScala.toSeq.sortWith((lt, gt) => lt.getFirstOpened() < gt.getFirstOpened()).map(_.petrify())
+  }
 
 
 }

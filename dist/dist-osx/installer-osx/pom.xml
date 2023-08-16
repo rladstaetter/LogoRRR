@@ -26,6 +26,12 @@
             <groupId>app.logorrr</groupId>
             <artifactId>build</artifactId>
         </dependency>
+        <dependency>
+            <groupId>app.logorrr.native</groupId>
+            <artifactId>native-osx</artifactId>
+            <classifier>dylibs</classifier>
+            <type>zip</type>
+        </dependency>
     </dependencies>
 
     <build>
@@ -78,6 +84,24 @@
                         </goals>
                         <configuration>
                             <!-- libs are needed by jpackage later on -->
+                            <outputDirectory>${project.build.directory}/libs/</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <includeScope>compile</includeScope>
+                            <includeScope>runtime</includeScope>
+                            <excludeArtifactIds>native-osx</excludeArtifactIds>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-native</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <!-- libs are needed by jpackage later on -->
+                            <includeArtifactIds>native-osx</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/libs/</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>

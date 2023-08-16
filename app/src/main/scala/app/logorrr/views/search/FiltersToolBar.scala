@@ -11,14 +11,14 @@ import scala.jdk.CollectionConverters._
 
 /** A toolbar with buttons which filter log events */
 object FiltersToolBar {
-
+/*
   private val BackgroundSelectedStyle: String =
     """
       |-fx-background-color: GREEN;
       |-fx-border-width: 1px 1px 1px 1px;
       |-fx-border-color: RED;
       |""".stripMargin
-
+*/
 }
 
 

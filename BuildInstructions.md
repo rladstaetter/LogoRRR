@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-There are several apps you will have to install to sucessfully build `LogoRRR`, but it isn't overly complicated.
+There are several apps you will have to install to successfully build `LogoRRR`, but it isn't overly complicated.
 
 Given you have followed the instructions for [maven-gluonfx-plugin](https://github.com/gluonhq/gluonfx-maven-plugin) you
 only have to provide the path to your GraalVM installation in the main pom.xml found at the root folder of the project.

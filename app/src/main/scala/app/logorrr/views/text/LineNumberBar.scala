@@ -28,7 +28,7 @@ case class LineNumberBar(e: LogEntry
     }
 
   if (duration > LineNumberBar.maxDuration.toMillis) {
-    val left = new Rectangle(LineNumberBar.maxDuration.toMillis, 10)
+    val left = new Rectangle(LineNumberBar.maxDuration.toMillis.toDouble, 10)
     left.setFill(LogTextView.timeBarColor)
     val right = new Rectangle(2, 10)
     right.setFill(LogTextView.timeBarOverflowColor)

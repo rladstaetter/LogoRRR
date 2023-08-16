@@ -20,7 +20,7 @@ object LogoRRRStage {
 
 case class LogoRRRStage(stage: Stage) extends CanLog {
 
-  val logorrrMain = new LogoRRRMain(JfxUtils.closeStage(stage))
+  private val logorrrMain = new LogoRRRMain(JfxUtils.closeStage(stage))
 
   val (width, height) = (LogoRRRGlobals.getStageWidth(), LogoRRRGlobals.getStageHeight())
 
