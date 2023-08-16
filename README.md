@@ -11,10 +11,6 @@ interest.
 
 If you want to see [LogoRRR in action](Usage.md), click [here](Usage.md).
 
-## Technology
-
-See [Technology](Technology.md) for a short summary of used technologies.
-
 ## Installation
 
 **For Mac Users, it is recommended to
@@ -35,6 +31,11 @@ page. There are installer for Windows and MacOs available.
 - Case sensitive and regex search
 - Unix `tail -f` like functionality to watch ongoing events
 - Keyboard shortcuts for more efficient usage
+
+## Technology
+
+See [Technology](Technology.md) for a short summary of used technologies.
+
 
 ## Sponsoring
 
