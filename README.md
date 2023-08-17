@@ -5,7 +5,7 @@ fact, when you get an error, you may simply want to see what happened as fast as
 is a tool that does precisely that and provides you with a quick way to filter out critical events or other points of
 interest.
 
-![Screenshot of LogoRRR, version 23.1.0](docs/releases/23.1.0/screenshot-23.1.0.png?raw=true)
+![Screenshot of LogoRRR, version 23.2.1](docs/releases/23.2.1/screenshot-23.2.1.png?raw=true)
 
 ## Usage
 

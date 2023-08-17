@@ -24,7 +24,7 @@ object SettingsIO extends CanLog {
         logWarn(s"Could not load $settingsFilePath, using default settings ...")
         Settings.Default
       case Success(value) =>
-        logInfo(s"Loaded settings from ${settingsFilePath}.")
+        logInfo(s"Loaded settings from $settingsFilePath.")
         value
     }
   }

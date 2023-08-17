@@ -62,7 +62,7 @@ class IcnsCreatorApp extends javafx.application.Application {
 
   def generateIcons(targetPath: Path): Unit = {
     Fs.createDirectories(targetPath)
-    for (IconDef(Area(w, h), name) <- IconDef.seq) {
+    for (IconDef(Area(w, h, _, _), name) <- IconDef.seq) {
       val canvas = new Canvas(w, h)
       val gc2d = canvas.getGraphicsContext2D
       LogorrrIcon.drawIcon(gc2d, w)

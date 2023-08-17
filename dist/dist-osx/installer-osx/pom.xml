@@ -39,36 +39,21 @@
             <resource>
                 <directory>src/main/installer</directory>
                 <includes>
-                    <include>res/**</include>
                     <include>icon/**</include>
-                    <include>LogoRRR.entitlements.xml</include>
                 </includes>
                 <filtering>false</filtering>
-                <targetPath>${build.directory}</targetPath>
+                <targetPath>${project.build.directory}</targetPath>
             </resource>
             <resource>
                 <directory>src/main/installer</directory>
                 <includes>
-                    <include>jpackage-commandline.options</include>
-                </includes>
-                <filtering>true</filtering>
-                <targetPath>${build.directory}</targetPath>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>sign-list.txt</include>
                     <include>res/Info.plist</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
+                    <include>res/product-def.plist</include>
                     <include>jpackage-commandline.options</include>
+                    <include>LogoRRR.entitlements.xml</include>
                 </includes>
                 <filtering>true</filtering>
-                <targetPath>${build.directory}</targetPath>
+                <targetPath>${project.build.directory}</targetPath>
             </resource>
         </resources>
         <plugins>

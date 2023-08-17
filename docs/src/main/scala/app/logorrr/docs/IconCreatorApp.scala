@@ -17,7 +17,7 @@ object IconCreatorApp {
 
   def writeIcons(canvases: Seq[(Area, Canvas)], path: Path): Unit = {
     Fs.createDirectories(path)
-    for ((Area(s, _), c) <- canvases) {
+    for ((Area(s, _, _, _), c) <- canvases) {
       val file = path.resolve(s"logorrr-icon-${s}.png")
       writeIcon(c, file)
     }
@@ -42,12 +42,12 @@ object IconCreatorApp {
 class IconCreatorApp extends javafx.application.Application {
 
   val iconSizes: Seq[Int] = Seq(512, 256, 128, 64, 32, 16)
-  val icons: Seq[Area] = iconSizes.map(i => Area(i, i))
+  val icons: Seq[Area] = iconSizes.map(i => Area(i, i,0,0))
 
   def start(stage: Stage): Unit = {
     val bp = new BorderPane()
     val ics =
-      for (a@Area(w, h) <- icons) yield {
+      for (a@Area(w, h,_,_) <- icons) yield {
         val canvas = new Canvas(w, h)
         val gc2d = canvas.getGraphicsContext2D
         LogorrrIcon.drawIcon(gc2d, w)
