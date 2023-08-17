@@ -1,7 +1,6 @@
 # Release Test
 
-This document lists certain usecases which should be tested before performing a release. If not noted otherwise, each
-test should be performed on each supported platform.
+This document lists certain usecases which should be tested before performing a release. If not noted otherwise, each test should be performed on each supported platform.
 
 ## T-INSTALL : install LogoRRR
 
