@@ -14,9 +14,9 @@ You can download the [Windows Installer here](https://github.com/rladstaetter/Lo
 
 ## MacOsX installation
 
-For Mac Users, it is recommended to to [download `LogoRRR` from Apple's App Store](https://apps.apple.com/at/app/logorrr/id1583786769?l=en&mt=12).
+`LogoRRR` is available on the OsX [App Store](https://apps.apple.com/at/app/logorrr/id1583786769?l=en&mt=12). You can [download](https://apps.apple.com/at/app/logorrr/id1583786769?l=en&mt=12) and install it securely and certified from there.
 
-## Linux installation for Linux
+## Linux installation
 
 You have to build the binaries yourself from source code by using `build-linux-aarch64.sh` or `build-linux-amd64.sh`, depending on your platform.
 
