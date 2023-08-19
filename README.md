@@ -7,18 +7,18 @@ interest.
 
 ![Screenshot of LogoRRR, version 23.2.1](docs/releases/23.2.1/screenshot-23.2.1.png?raw=true)
 
-## Usage
 
-If you want to see [LogoRRR in action](Usage.md), click [here](Usage.md).
+## Installation for Windows
 
-## Installation
+You can download the [Installer for Windows here](https://github.com/rladstaetter/LogoRRR/releases/tag/23.2.1).
 
-**For Mac Users, it is recommended to
-to [install `LogoRRR` from Apple's App Store](https://apps.apple.com/at/app/logorrr/id1583786769?l=en&mt=12).**
+## Installation for Apple OsX
 
-Otherwise, you can give it a try by downloading
-a [prebuilt installer for `LogoRRR`](https://github.com/rladstaetter/LogoRRR/releases/tag/23.1.1) from github's releases
-page. There are installer for Windows and MacOs available.
+For Mac Users, it is recommended to to [download `LogoRRR` from Apple's App Store](https://apps.apple.com/at/app/logorrr/id1583786769?l=en&mt=12).
+
+## Installation for Linux
+
+You have to build the binaries yourself from source code by using `build-linux-aarch64.sh` or `build-linux-amd64.sh`, depending on your platform.
 
 ## Features
 
@@ -32,26 +32,9 @@ page. There are installer for Windows and MacOs available.
 - Unix `tail -f` like functionality to watch ongoing events
 - Keyboard shortcuts for more efficient usage
 
-## Technology
+## Usage
 
-See [Technology](Technology.md) for a short summary of used technologies.
-
-
-## Sponsoring
-
-If you find this project useful you can [buymeacoffee](https://www.buymeacoffee.com/rladstaetter).
-
-Alternatively, just hit the 'star' here on github, or drop me a line at
-twitter: [@logorrr](https://www.twitter.com/logorrr/).
-
-A big shoutout goes to @TheJeed and @raumzeitfalle for sponsoring this project and boosting my motivation to continue
-working on it. Thank you!
-
-I want to thank my employer [NEXTSENSE](https://www.nextsense-worldwide.com/) as well for generously providing vital
-infrastructure to create this application.
-
-[Advanced Installer](https://www.advancedinstaller.com) sponsors this project too by providing a free license to their
-product which is used to create windows installers. Thank you.
+If you want to see [LogoRRR in action](Usage.md), click [here](Usage.md).
 
 ## License
 
