@@ -8,15 +8,15 @@ interest.
 ![Screenshot of LogoRRR, version 23.2.1](docs/releases/23.2.1/screenshot-23.2.1.png?raw=true)
 
 
-## Installation for Windows
+## Windows installation
 
-You can download the [Installer for Windows here](https://github.com/rladstaetter/LogoRRR/releases/tag/23.2.1).
+You can download the [Windows Installer here](https://github.com/rladstaetter/LogoRRR/releases/tag/23.2.1).
 
-## Installation for Apple OsX
+## MacOsX installation
 
 For Mac Users, it is recommended to to [download `LogoRRR` from Apple's App Store](https://apps.apple.com/at/app/logorrr/id1583786769?l=en&mt=12).
 
-## Installation for Linux
+## Linux installation for Linux
 
 You have to build the binaries yourself from source code by using `build-linux-aarch64.sh` or `build-linux-amd64.sh`, depending on your platform.
 
