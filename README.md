@@ -32,9 +32,9 @@ You have to build the binaries yourself from source code by using `build-linux-a
 - Unix `tail -f` like functionality to watch ongoing events
 - Keyboard shortcuts for more efficient usage
 
-## Usage
+## Screenshots
 
-If you want to see [LogoRRR in action](Usage.md), click [here](Usage.md).
+If you want to see [LogoRRR in action](Screenshots.md), click [here](Screenshots.md).
 
 ## License
 
