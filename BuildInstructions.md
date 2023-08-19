@@ -14,7 +14,7 @@ For the brave, there are build scripts in the main directory for each OS:
     build-linux-aarch64.sh
     build-linux-amd64.sh
     build-mac.sh
-    build-win-x64.bat
+    build-win.bat
 
 After configuring the project once properly, you can use those build scripts (which are trivial but handy) to
 build `LogoRRR`.
