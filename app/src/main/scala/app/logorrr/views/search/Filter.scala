@@ -48,7 +48,6 @@ object Filter {
  * @param pattern text to search for
  * @param color associated color
  */
-// TODO write encoder for pureconfig for color, see https://github.com/rladstaetter/LogoRRR/issues/105
 class Filter(val pattern: String, val color: Color) extends Fltr {
 
   override def applyMatch(searchTerm: String): Boolean = searchTerm.contains(pattern)

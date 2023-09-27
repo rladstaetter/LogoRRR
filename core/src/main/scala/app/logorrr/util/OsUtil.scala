@@ -5,6 +5,8 @@ package app.logorrr.util
  */
 object OsUtil {
 
+  val inTest = false
+
   sealed trait Os
 
   case object Windows extends Os

@@ -70,7 +70,7 @@ object LogoRRRGlobals extends CanLog {
       case x => x
     })
 
-    if (OsUtil.isMac) {
+    if (OsUtil.isMac && !OsUtil.inTest) {
       OsxBridge.releasePath(pathAsString)
     }
 
