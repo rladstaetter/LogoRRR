@@ -23,29 +23,29 @@ object LogoRRRGlobals extends CanLog {
   private val hostServicesProperty = new SimpleObjectProperty[HostServices]()
 
   def persist(): Unit = {
-    Fs.write(FilePaths.settingsFilePath, ConfigWriter[Settings].to(LogoRRRGlobals.getSettings()).render(renderOptions))
+    Fs.write(FilePaths.settingsFilePath, ConfigWriter[Settings].to(LogoRRRGlobals.getSettings).render(renderOptions))
   }
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings()
 
   def bindWindow(window: Window): Unit = {
-    window.setX(LogoRRRGlobals.getStageX())
-    window.setY(LogoRRRGlobals.getStageY())
-    window.setWidth(LogoRRRGlobals.getStageWidth())
-    window.setHeight(LogoRRRGlobals.getStageHeight())
+    window.setX(LogoRRRGlobals.getStageX)
+    window.setY(LogoRRRGlobals.getStageY)
+    window.setWidth(LogoRRRGlobals.getStageWidth)
+    window.setHeight(LogoRRRGlobals.getStageHeight)
 
     mutSettings.bindWindowProperties(window)
   }
 
   def unbindWindow(): Unit = mutSettings.unbindWindow()
 
-  def getStageWidth(): Int = mutSettings.getStageWidth()
+  def getStageWidth: Int = mutSettings.getStageWidth()
 
-  def getStageHeight(): Int = mutSettings.getStageHeight()
+  def getStageHeight: Int = mutSettings.getStageHeight()
 
-  def getStageX(): Double = mutSettings.getStageX()
+  def getStageX: Double = mutSettings.getStageX()
 
-  def getStageY(): Double = mutSettings.getStageY()
+  def getStageY: Double = mutSettings.getStageY()
 
   def setHostServices(hostServices: HostServices): Unit = hostServicesProperty.set(hostServices)
 
@@ -56,11 +56,11 @@ object LogoRRRGlobals extends CanLog {
     setHostServices(hostServices)
   }
 
-  def getSettings(): Settings = mutSettings.petrify()
+  def getSettings: Settings = mutSettings.petrify()
 
   def setSomeActive(sActive: Option[String]): Unit = mutSettings.setSomeActive(sActive)
 
-  def getSomeActive(): Option[String] = mutSettings.getSomeActive()
+  def getSomeActive: Option[String] = mutSettings.getSomeActive()
 
   def removeLogFile(pathAsString: String): Unit = {
 

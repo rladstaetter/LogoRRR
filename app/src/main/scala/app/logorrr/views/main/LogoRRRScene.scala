@@ -17,7 +17,7 @@ object LogoRRRScene {
    */
   def mkSceneListener(): ChangeListener[Scene] =
     JfxUtils.onNew[Scene](scene => {
-      val (x, y) = (LogoRRRGlobals.getStageX(), LogoRRRGlobals.getStageY())
+      val (x, y) = (LogoRRRGlobals.getStageX, LogoRRRGlobals.getStageY)
       scene.getWindow.setX(x)
       scene.getWindow.setY(y)
     })

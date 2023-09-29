@@ -38,7 +38,6 @@ class LogoRRRMainBorderPane extends BorderPane with CanLog {
       }
     })
 
-    logViewTabPane.init()
   }
 
 
@@ -49,7 +48,8 @@ class LogoRRRMainBorderPane extends BorderPane with CanLog {
       if (!contains(pathAsString)) {
         addLogFile(path)
       } else {
-        logWarn(s"$pathAsString is already opened ...")
+        logTrace(s"$pathAsString is already opened, selecting tab ...")
+        selectLog(pathAsString)
       }
     } else {
       logWarn(s"$pathAsString does not exist.")
