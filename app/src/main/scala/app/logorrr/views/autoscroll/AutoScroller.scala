@@ -8,6 +8,6 @@ trait AutoScroller {
 
   def setAutoScroll(autoScroll: Boolean): Unit = LogoRRRGlobals.getLogFileSettings(pathAsString).setAutoScroll(autoScroll)
 
-  def isAutoScroll(): Boolean = LogoRRRGlobals.getLogFileSettings(pathAsString).isAutoScroll()
+  def isAutoScroll(): Boolean = LogoRRRGlobals.getLogFileSettings(pathAsString).isAutoScroll
 
 }

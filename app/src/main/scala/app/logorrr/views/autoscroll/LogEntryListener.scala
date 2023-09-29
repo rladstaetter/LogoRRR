@@ -24,7 +24,7 @@ class LogEntryListener(pathAsString: String
 
   override def handle(l: String): Unit = {
     currentCnt = currentCnt + 1
-    val filters = LogoRRRGlobals.getLogFileSettings(pathAsString).getFilters()
+    val filters = LogoRRRGlobals.getLogFileSettings(pathAsString).getFilters
     val e = LogEntry(currentCnt, Filter.calcColor(l, filters), l, None)
     JfxUtils.execOnUiThread(ol.add(e))
   }

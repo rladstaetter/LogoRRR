@@ -159,7 +159,7 @@ class LogFileTab(val pathAsString: String
         }
     })
 
-    if (getLogFileSettings.isAutoScroll()) {
+    if (getLogFileSettings.isAutoScroll) {
       startTailer()
     }
 
@@ -272,7 +272,7 @@ class LogFileTab(val pathAsString: String
   }
 
   def shutdown(): Unit = {
-    if (getLogFileSettings.isAutoScroll()) {
+    if (getLogFileSettings.isAutoScroll) {
       stopTailer()
     }
     LogoRRRGlobals.removeLogFile(pathAsString)

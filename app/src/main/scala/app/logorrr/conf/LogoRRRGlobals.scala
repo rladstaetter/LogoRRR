@@ -70,7 +70,7 @@ object LogoRRRGlobals extends CanLog {
       case x => x
     })
 
-    if (OsUtil.isMac && !OsUtil.inTest) {
+    if (OsUtil.enableSecurityBookmarks) {
       OsxBridge.releasePath(pathAsString)
     }
 

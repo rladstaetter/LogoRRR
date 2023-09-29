@@ -16,12 +16,13 @@ import scala.util.{Failure, Success}
 class LogoRRRMain(closeStage: => Unit)
   extends BorderPane
     with CanLog {
+
   val mB = new LogoRRRMenuBar(getWindow _, openLogFile, closeAllLogFiles(), closeStage)
   val ambp = new LogoRRRMainBorderPane()
 
   init()
 
-  def getWindow(): Window = getScene.getWindow()
+  def getWindow: Window = getScene.getWindow()
 
   def init(): Unit = {
     setTop(mB)

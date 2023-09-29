@@ -40,7 +40,7 @@ class MutLogFileSettings {
   val someLogEntrySettingsProperty = new SimpleObjectProperty[Option[LogEntryInstantFormat]](None)
   val blockWidthSettingsProperty = new SimpleIntegerProperty()
 
-  val hasLogEntrySettingBinding = new BooleanBinding {
+  val hasLogEntrySettingBinding: BooleanBinding = new BooleanBinding {
     bind(someLogEntrySettingsProperty)
 
     override def computeValue(): Boolean = {
@@ -60,11 +60,11 @@ class MutLogFileSettings {
 
   def setAutoScroll(autoScroll: Boolean): Unit = autoScrollProperty.set(autoScroll)
 
-  def isAutoScroll(): Boolean = autoScrollProperty.get()
+  def isAutoScroll: Boolean = autoScrollProperty.get()
 
-  def getFontSize(): Int = fontSizeProperty.get()
+  def getFontSize: Int = fontSizeProperty.get()
 
-  def getFilters() = filtersProperty.asScala.toSeq
+  def getFilters: Seq[Filter] = filtersProperty.asScala.toSeq
 
   def setBlockSettings(bs: BlockSettings): Unit = blockWidthSettingsProperty.set(bs.width)
 

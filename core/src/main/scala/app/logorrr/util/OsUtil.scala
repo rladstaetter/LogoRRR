@@ -5,7 +5,6 @@ package app.logorrr.util
  */
 object OsUtil {
 
-  val inTest = false
 
   sealed trait Os
 
@@ -26,7 +25,11 @@ object OsUtil {
 
   val isMac = currentOs == Mac
   val isWin = currentOs == Windows
-  val isLinux = currentOs == Linux
+  // val isLinux = currentOs == Linux
+
+  val enableSecurityBookmarks = if (isMac) {
+    false
+  } else false
 
   def osFun[T](onWin: => T, onMac: => T, onLinux: => T): T =
     if (isWin) {
