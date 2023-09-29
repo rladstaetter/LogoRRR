@@ -86,7 +86,7 @@ object LogoRRRGlobals extends CanLog {
   def mupdate(t: MutLogFileSettings => Unit)(pathAsString: String): Unit =
     Option(mutSettings.getMutLogFileSetting(pathAsString)) match {
       case Some(logFileSettings) => t(logFileSettings)
-      case None => logWarn(s"${pathAsString} not found.")
+      case None => logWarn(s"$pathAsString not found.")
     }
 
 

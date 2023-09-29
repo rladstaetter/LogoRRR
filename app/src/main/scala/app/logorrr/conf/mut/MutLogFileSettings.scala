@@ -40,8 +40,6 @@ class MutLogFileSettings {
   val someLogEntrySettingsProperty = new SimpleObjectProperty[Option[LogEntryInstantFormat]](None)
   val blockWidthSettingsProperty = new SimpleIntegerProperty()
 
-  def getSomeLogEntrySetting: Option[LogEntryInstantFormat] = someLogEntrySettingsProperty.get()
-
   val hasLogEntrySettingBinding = new BooleanBinding {
     bind(someLogEntrySettingsProperty)
 
