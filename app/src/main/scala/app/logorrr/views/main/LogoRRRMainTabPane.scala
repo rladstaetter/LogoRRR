@@ -52,7 +52,7 @@ class LogoRRRMainTabPane()
 
   def contains(p: String): Boolean = getLogFileTabs.exists(lr => lr.pathAsString == p)
 
-  private def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
+  def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
     t =>
       t match {
         case l: LogFileTab => Option(l)

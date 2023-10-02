@@ -11,14 +11,14 @@ import scala.jdk.CollectionConverters._
 
 /** A toolbar with buttons which filter log events */
 object FiltersToolBar {
-/*
-  private val BackgroundSelectedStyle: String =
-    """
-      |-fx-background-color: GREEN;
-      |-fx-border-width: 1px 1px 1px 1px;
-      |-fx-border-color: RED;
-      |""".stripMargin
-*/
+  /*
+    private val BackgroundSelectedStyle: String =
+      """
+        |-fx-background-color: GREEN;
+        |-fx-border-width: 1px 1px 1px 1px;
+        |-fx-border-color: RED;
+        |""".stripMargin
+  */
 }
 
 
@@ -30,8 +30,13 @@ object FiltersToolBar {
 class FiltersToolBar(filteredList: FilteredList[LogEntry]
                      , removeFilter: Filter => Unit) extends ToolBar {
 
-  //  setStyle(FiltersToolBar.BackgroundSelectedStyle)
+  var filterButtons: Map[Filter, FilterButton] = Map[Filter, FilterButton]()
 
+  var someUnclassifiedFilter: Option[(Filter, FilterButton)] = None
+
+  var occurrences: Map[Filter, Int] = Map().withDefaultValue(0)
+
+  /** will be bound to the current active filter list */
   val filtersProperty = new SimpleListProperty[Filter]()
 
   init()
@@ -46,33 +51,53 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
   private def processFiltersChange(change: ListChangeListener.Change[_ <: Filter]): Unit = {
     while (change.next()) {
       if (change.wasAdded()) {
-        change.getAddedSubList.asScala.foreach(addSearchTag)
+        change.getAddedSubList.asScala.foreach(addFilterButton)
         updateUnclassified()
       } else if (change.wasRemoved()) {
-        change.getRemoved.asScala.foreach(removeSearchTag)
+        change.getRemoved.asScala.foreach(removeFilterButton)
         updateUnclassified()
       }
     }
   }
 
-  var filterButtons: Map[Filter, SearchTag] = Map[Filter, SearchTag]()
-
-  var someUnclassifiedFilter: Option[(Filter, SearchTag)] = None
-
-  var occurrences: Map[Filter, Int] = Map().withDefaultValue(0)
-
   private def updateOccurrences(sf: Filter): Unit = {
-    occurrences = occurrences + (sf -> filteredList.getSource.asScala.count(e => sf.applyMatch(e.value)))
+    occurrences = occurrences + (sf -> filteredList.getSource.asScala.count(e => sf.matches(e.value)))
   }
 
   private def updateUnclassified(): Unit = {
     val unclassified = new UnclassifiedFilter(filterButtons.keySet)
     updateOccurrences(unclassified)
-    val searchTag = new SearchTag(unclassified, occurrences(unclassified), updateActiveFilter, removeFilter)
+    val filterButton = new FilterButton(unclassified, occurrences(unclassified), updateActiveFilter, removeFilter)
     someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
-    getItems.add(0, searchTag)
-    someUnclassifiedFilter = Option((unclassified, searchTag))
+    getItems.add(0, filterButton)
+    someUnclassifiedFilter = Option((unclassified, filterButton))
     updateActiveFilter()
+  }
+
+  private def addFilterButton(filter: Filter): Unit = {
+    updateOccurrences(filter)
+    val searchTag = new FilterButton(filter, occurrences(filter), updateActiveFilter, removeFilter)
+    filter.bind(searchTag)
+    getItems.add(searchTag)
+    filterButtons = filterButtons.updated(filter, searchTag)
+  }
+
+  private def removeFilterButton(filter: Filter): Unit = {
+    val button = filterButtons(filter)
+    filter.unbind(button)
+    getItems.remove(button)
+    filterButtons = filterButtons.removed(filter)
+  }
+
+  def activeFilters(): Seq[Filter] = {
+    (for (i <- getItems.asScala) yield {
+      val st = i.asInstanceOf[FilterButton]
+      if (st.isUnclassified) {
+        None
+      } else {
+        Option(st.filter.withActive())
+      }
+    }).flatten.toSeq
   }
 
   /**
@@ -87,24 +112,9 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
       filterButtons.filter(fst => fst._2.isSelected).keySet)
   }
 
-  private def addSearchTag(filter: Filter): Unit = {
-    updateOccurrences(filter)
-    val searchTag = new SearchTag(filter, occurrences(filter), updateActiveFilter, removeFilter)
-    getItems.add(searchTag)
-    filterButtons = filterButtons + (filter -> searchTag)
-  }
-
-  private def removeSearchTag(filter: Filter): Unit = {
-    getItems.remove(filterButtons(filter))
-    filterButtons = filterButtons - filter
-  }
-
   def updateActiveFilter(): Unit = {
-    val filter = computeCurrentFilter()
-    filteredList.setPredicate((entry: LogEntry) => filter.applyMatch(entry.value))
+    filteredList.setPredicate((entry: LogEntry) => computeCurrentFilter().matches(entry.value))
   }
-
-  updateUnclassified()
 
 
 }

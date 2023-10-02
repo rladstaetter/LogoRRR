@@ -5,8 +5,8 @@ import app.logorrr.util.{CanLog, OsUtil}
 import app.logorrr.views.search.Filter
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.paint.Color
-import pureconfig.{ConfigReader, ConfigWriter}
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
+import pureconfig.{ConfigReader, ConfigWriter}
 
 import java.nio.file.{Files, Path, Paths}
 import java.time.Instant
@@ -23,10 +23,10 @@ object LogFileSettings {
   private val DefaultLogFormat: Option[LogEntryInstantFormat] = None
   private val DefaultAutoScroll = false
 
-  private val finest: Filter = new Filter("FINEST", Color.GREY)
-  private val info: Filter = new Filter("INFO", Color.GREEN)
-  private val warning: Filter = new Filter("WARNING", Color.ORANGE)
-  private val severe: Filter = new Filter("SEVERE", Color.RED)
+  private val finest: Filter = new Filter("FINEST", Color.GREY, true)
+  private val info: Filter = new Filter("INFO", Color.GREEN, true)
+  private val warning: Filter = new Filter("WARNING", Color.ORANGE, true)
+  private val severe: Filter = new Filter("SEVERE", Color.RED, true)
 
   val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
   val DefaultFontSize = 12

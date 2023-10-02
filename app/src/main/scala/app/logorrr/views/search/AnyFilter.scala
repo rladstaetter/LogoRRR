@@ -2,7 +2,7 @@ package app.logorrr.views.search
 
 import javafx.scene.paint.Color
 
-class AnyFilter(filters: Set[Filter]) extends Fltr {
+class AnyFilter(filters: Set[Filter]) extends Fltr(Color.WHITE) {
 
   override val color: Color = {
     if (filters.isEmpty) {
@@ -15,5 +15,5 @@ class AnyFilter(filters: Set[Filter]) extends Fltr {
   }
 
 
-  override def applyMatch(searchTerm: String): Boolean = filters.exists(_.applyMatch(searchTerm))
+  override def matches(searchTerm: String): Boolean = filters.exists(_.matches(searchTerm))
 }

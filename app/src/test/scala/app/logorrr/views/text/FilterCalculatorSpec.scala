@@ -20,7 +20,7 @@ object FilterCalculatorSpec {
 class FilterCalculatorSpec extends LogoRRRSpec {
 
   def applySingleFilter(logEntry: String, pattern: String): Seq[Seq[LinePart]] = {
-    FilterCalculator(LogEntry(0, Color.BLUE, logEntry, None), Seq(new Filter(pattern, Color.RED))).filteredParts
+    FilterCalculator(LogEntry(0,logEntry, None), Seq(new Filter(pattern, Color.RED, true))).filteredParts
   }
 
   "calcParts" should {
@@ -46,8 +46,8 @@ class FilterCalculatorSpec extends LogoRRRSpec {
       assert(partss.size == 1)
 
       val parts = partss.head
-      assert(parts(0).startIndex == 0)
-      assert(parts(0).endIndex == 0)
+      assert(parts.head.startIndex == 0)
+      assert(parts.head.endIndex == 0)
       assert(parts(1).startIndex == 1)
       assert(parts(1).endIndex == 1)
       assert(parts(2).startIndex == 2)
@@ -59,8 +59,8 @@ class FilterCalculatorSpec extends LogoRRRSpec {
       assert(partss.size == 1)
 
       val parts = partss.head
-      assert(parts(0).startIndex == 0)
-      assert(parts(0).endIndex == 1)
+      assert(parts.head.startIndex == 0)
+      assert(parts.head.endIndex == 1)
       assert(parts(1).startIndex == 2)
       assert(parts(1).endIndex == 3)
     }
@@ -80,9 +80,9 @@ class FilterCalculatorSpec extends LogoRRRSpec {
 
   "filteredParts" should {
     val filters = Seq(
-      new Filter("a", Color.RED)
-      , new Filter("b", Color.BLUE)
-      , new Filter("t", Color.YELLOW)
+      new Filter("a", Color.RED, true)
+      , new Filter("b", Color.BLUE, true)
+      , new Filter("t", Color.YELLOW, true)
     )
     val entry = LogEntry(0, "test a b c", None)
     val calculator = FilterCalculator(entry, filters)
@@ -90,7 +90,7 @@ class FilterCalculatorSpec extends LogoRRRSpec {
     "produce correct amount of matches" in {
       val filteredParts = calculator.filteredParts
       assert(filteredParts.size == 3)
-      assert(filteredParts(0).size == 1) // match a once
+      assert(filteredParts.head.size == 1) // match a once
       assert(filteredParts(1).size == 1) // match b once
       assert(filteredParts(2).size == 2) // match t twice
     }

@@ -114,7 +114,7 @@ class LogFileTab(val pathAsString: String
     op
   }
 
-  private val filtersToolBar = {
+  val filtersToolBar = {
     val fbtb = new FiltersToolBar(filteredList, removeFilter)
     fbtb.filtersProperty.bind(filtersListProperty)
     fbtb
@@ -259,9 +259,8 @@ class LogFileTab(val pathAsString: String
    * - update file menu
    *
    */
-  def closeTab(): Unit = {
-    shutdown()
-  }
+  def closeTab(): Unit = shutdown()
+
 
   def shutdown(): Unit = {
     if (getLogFileSettings.isAutoScroll) {
@@ -277,15 +276,5 @@ class LogFileTab(val pathAsString: String
 
   def removeFilter(filter: Filter): Unit = filtersListProperty.remove(filter)
 
-  /*
-    def getVisualViewWidth(): Double = {
-      val w = splitPane.getDividers.get(0).getPosition * splitPane.getWidth
-      if (w != 0.0) {
-        w
-      } else {
-        initialWidth.doubleValue()
-      }
-    }
-  */
 
 }

@@ -38,7 +38,7 @@ class LogoRRRMain(closeStage: => Unit)
 
   private def loadLogFiles(logs: Seq[LogFileSettings]): Unit = {
     val futures: Future[Seq[(String, ObservableList[LogEntry])]] = Future.sequence {
-      logInfo(s"Loading ${logs.length} log files: " + logs.map(_.pathAsString).mkString("['", "',`'", "']"))
+      logInfo(s"Loading ${logs.length} log files: ${logs.map(_.pathAsString).mkString("['", "',`'", "']")}")
       logs.filter(s => !ambp.contains(s.pathAsString)).map(s => Future((s.pathAsString, s.readEntries())))
     }
     futures.onComplete({

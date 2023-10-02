@@ -46,11 +46,17 @@ case class LogoRRRStage(stage: Stage) extends CanLog {
   stage.setOnCloseRequest((_: WindowEvent) => closeApp())
 
   private def closeApp(): Unit = {
+    // to save global filter state
+    for (t <- logorrrMain.ambp.logViewTabPane.getLogFileTabs) {
+      for ((f, i) <- t.filtersToolBar.activeFilters().zipWithIndex) {
+        LogoRRRGlobals.getLogFileSettings(t.pathAsString).setFilter(i, f)
+      }
+    }
     LogoRRRGlobals.persist()
     logorrrMain.shutdown()
     LogoRRRGlobals.unbindWindow()
     stage.sceneProperty.removeListener(LogoRRRStage.sceneListener)
-    logInfo(s"Stopped " + AppMeta.fullAppNameWithVersion)
+    logInfo(s"Stopped ${AppMeta.fullAppNameWithVersion}")
   }
 
   def show(): Unit = {
