@@ -8,6 +8,6 @@ trait HasFontSizeProperty extends LogIdAware {
 
   def setFontSize(fontSize: Int): Unit = LogoRRRGlobals.getLogFileSettings(pathAsString).setFontSize(fontSize)
 
-  def getFontSize(): Int = LogoRRRGlobals.getLogFileSettings(pathAsString).getFontSize
+  def getFontSize: Int = LogoRRRGlobals.getLogFileSettings(pathAsString).getFontSize
 
 }

@@ -9,8 +9,9 @@ import java.nio.file.Paths
 
 /**
  * If active, this class adds entries to the given logEntries observable list.
+ *
  * @param pathAsString path to log file
- * @param logEntries list which will be modified if log file changes
+ * @param logEntries   list which will be modified if log file changes
  */
 case class LogTailer(pathAsString: String
                      , logEntries: ObservableList[LogEntry])
@@ -18,7 +19,7 @@ case class LogTailer(pathAsString: String
 
   var currentTailer: Option[Tailer] = None
 
-  private def mkTailer(): Tailer = new Tailer(Paths.get(pathAsString).toFile, new LogEntryListener(pathAsString, logEntries), 40, true)
+  private def mkTailer(): Tailer = new Tailer(Paths.get(pathAsString).toFile, new LogEntryListener(logEntries), 40, true)
 
   /** start observing log file for changes */
   def start(): Unit = synchronized {

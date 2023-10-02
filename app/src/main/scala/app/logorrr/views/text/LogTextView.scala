@@ -15,9 +15,9 @@ object LogTextView {
 
   private val fixedCellSize = 26
 
-  val timeBarColor = Color.BISQUE.darker()
+  val timeBarColor: Color = Color.BISQUE.darker()
 
-  val timeBarOverflowColor = timeBarColor.darker()
+  val timeBarOverflowColor: Color = timeBarColor.darker()
 
 }
 

@@ -18,7 +18,7 @@ object BlockViewDemoApp {
 
   case class Block(index: Int, color: Color)
 
-  val cols = Seq(Color.RED
+  val cols: Seq[Color] = Seq(Color.RED
     , Color.GREEN
     , Color.BLUE
     , Color.ORANGE)
