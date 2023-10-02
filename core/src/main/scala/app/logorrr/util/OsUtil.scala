@@ -29,7 +29,7 @@ object OsUtil {
 
     // for releases / mac installers this value should always be true
     // set this flag only during development
-  val enableSecurityBookmarks: Boolean = false //isMac
+  val enableSecurityBookmarks: Boolean = isMac
 
   def osFun[T](onWin: => T, onMac: => T, onLinux: => T): T =
     if (isWin) {
