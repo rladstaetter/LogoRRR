@@ -9,8 +9,8 @@ import java.nio.file.Path
 object LogFileReader extends CanLog {
 
   def readFromFile(logFile: Path): Seq[String] = {
-    if (OsUtil.isMac && !OsUtil.inTest) {
-      logInfo("Registering security bookmark for " + logFile.toAbsolutePath.toString)
+    if (OsUtil.enableSecurityBookmarks) {
+      logInfo(s"Registering security bookmark for ${logFile.toAbsolutePath.toString}")
       OsxBridge.registerPath(logFile.toAbsolutePath.toString)
     }
     val lines = FileManager.fromPath(logFile)

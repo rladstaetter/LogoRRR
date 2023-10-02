@@ -12,8 +12,8 @@ import app.logorrr.views.search.OpsToolBar
 class IncreaseTextSizeButton(val pathAsString: String) extends TextSizeButton(16, "increase text size") {
 
   setOnAction(_ => {
-    if (getFontSize() + OpsToolBar.fontSizeStep < 10 * OpsToolBar.fontSizeStep) {
-      setFontSize(getFontSize() + OpsToolBar.fontSizeStep)
+    if (getFontSize + OpsToolBar.fontSizeStep < 10 * OpsToolBar.fontSizeStep) {
+      setFontSize(getFontSize + OpsToolBar.fontSizeStep)
     }
   })
 }

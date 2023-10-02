@@ -37,7 +37,7 @@ case class TimerSettingsLogViewLabel(settings: MutLogFileSettings
       val l = new Label(c.toString)
       l.setUserData(i) // save position of label for later
       l.setOnMouseClicked(applyStyleAtPos(i) _)
-      l.setTooltip(new Tooltip("column: " + i.toString))
+      l.setTooltip(new Tooltip(s"column: ${i.toString}"))
       l.setOnMouseEntered(_ => {
         l.setStyle(
           """-fx-border-color: RED;

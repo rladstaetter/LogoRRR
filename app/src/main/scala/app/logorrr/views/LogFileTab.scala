@@ -114,7 +114,7 @@ class LogFileTab(val pathAsString: String
     op
   }
 
-  private val filtersToolBar = {
+  val filtersToolBar = {
     val fbtb = new FiltersToolBar(filteredList, removeFilter)
     fbtb.filtersProperty.bind(filtersListProperty)
     fbtb
@@ -159,7 +159,7 @@ class LogFileTab(val pathAsString: String
         }
     })
 
-    if (getLogFileSettings.isAutoScroll()) {
+    if (getLogFileSettings.isAutoScroll) {
       startTailer()
     }
 
@@ -171,19 +171,11 @@ class LogFileTab(val pathAsString: String
     filtersListProperty.addListener(JfxUtils.mkListChangeListener(handleFilterChange))
   }
 
-  /** update all log entries with current filter settings */
-  def updateLogEntryColors(): Unit = {
-    val filters = filtersListProperty.get().asScala.toSeq
-    val lE: mutable.Seq[LogEntry] = for (old <- logEntries.asScala) yield old.copy(color = Filter.calcColor(old.value, filters))
-    logEntries.setAll(lE.asJava)
-  }
-
   private def handleFilterChange(change: ListChangeListener.Change[_ <: Fltr]): Unit = {
     while (change.next()) {
       Future {
         LogoRRRGlobals.persist()
       }
-      updateLogEntryColors()
     }
   }
 
@@ -267,12 +259,11 @@ class LogFileTab(val pathAsString: String
    * - update file menu
    *
    */
-  def closeTab(): Unit = {
-    shutdown()
-  }
+  def closeTab(): Unit = shutdown()
+
 
   def shutdown(): Unit = {
-    if (getLogFileSettings.isAutoScroll()) {
+    if (getLogFileSettings.isAutoScroll) {
       stopTailer()
     }
     LogoRRRGlobals.removeLogFile(pathAsString)
@@ -285,15 +276,5 @@ class LogFileTab(val pathAsString: String
 
   def removeFilter(filter: Filter): Unit = filtersListProperty.remove(filter)
 
-  /*
-    def getVisualViewWidth(): Double = {
-      val w = splitPane.getDividers.get(0).getPosition * splitPane.getWidth
-      if (w != 0.0) {
-        w
-      } else {
-        initialWidth.doubleValue()
-      }
-    }
-  */
 
 }

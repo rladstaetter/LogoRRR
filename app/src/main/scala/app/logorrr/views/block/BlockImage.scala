@@ -1,6 +1,9 @@
 package app.logorrr.views.block
 
+import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, ColorUtil, JfxUtils}
+import app.logorrr.views.search.Filter
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.FXCollections
@@ -9,6 +12,7 @@ import javafx.scene.image.{PixelBuffer, PixelFormat, WritableImage}
 import javafx.scene.paint.Color
 
 import java.nio.IntBuffer
+import scala.jdk.CollectionConverters.ListHasAsScala
 
 object BlockImage {
 
@@ -20,7 +24,9 @@ object BlockImage {
 
 }
 
-class BlockImage[Elem <: BlockView.E] extends CanLog {
+class BlockImage extends CanLog {
+
+  val filtersProperty = new SimpleListProperty[Filter]()
 
   var pixelBuffer: PixelBuffer[IntBuffer] = _
   var intBuffer: IntBuffer = _
@@ -31,7 +37,7 @@ class BlockImage[Elem <: BlockView.E] extends CanLog {
 
   private val redrawListener: InvalidationListener = (_: Observable) => repaint()
 
-  val entries = new SimpleListProperty[Elem](FXCollections.observableArrayList())
+  val entries = new SimpleListProperty[LogEntry](FXCollections.observableArrayList())
 
   /* if blockwidth is changed redraw */
   val blockWidthProperty = {
@@ -112,7 +118,7 @@ class BlockImage[Elem <: BlockView.E] extends CanLog {
             cleanBackground()
             var i = 0
             entries.forEach(e => {
-              drawRect(i, e.color)
+              drawRect(i, Filter.calcColor(e.value, filtersProperty.asScala.toSeq))
               i = i + 1
             })
             roi

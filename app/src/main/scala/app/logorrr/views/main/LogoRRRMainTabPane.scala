@@ -30,7 +30,7 @@ class LogoRRRMainTabPane()
   /**
    * Defines what should happen when a tab is selected
    * */
-  def init(): Unit = {
+  def initLogFileAddListener(): Unit = {
     getSelectionModel.selectedItemProperty().addListener(JfxUtils.onNew {
       t1: Tab =>
         t1 match {
@@ -52,7 +52,7 @@ class LogoRRRMainTabPane()
 
   def contains(p: String): Boolean = getLogFileTabs.exists(lr => lr.pathAsString == p)
 
-  private def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
+  def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
     t =>
       t match {
         case l: LogFileTab => Option(l)
@@ -69,10 +69,10 @@ class LogoRRRMainTabPane()
   def selectLog(pathAsString: String): Unit = {
     getLogFileTabs.find(_.pathAsString == pathAsString) match {
       case Some(value) =>
-        logTrace(s"Selects tab view with path ${pathAsString}.")
+        logTrace(s"Selects tab view with path $pathAsString.")
         getSelectionModel.select(value)
       case None =>
-        logWarn(s"Couldn't find tab with ${pathAsString}, selecting last tab ...")
+        logWarn(s"Couldn't find tab with $pathAsString, selecting last tab ...")
         selectLastLogFile()
     }
   }

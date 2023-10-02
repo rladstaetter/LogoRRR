@@ -1,5 +1,7 @@
 package app.logorrr.views.search
 
+import app.logorrr.views.search
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
@@ -24,7 +26,7 @@ object Filter {
    * - a melange of all colors from all hits in all other cases
    * */
   def calcColor(value: String, filters: Seq[Fltr]): Color = {
-    val hits = filters.filter(sf => sf.applyMatch(value))
+    val hits = filters.filter(sf => sf.matches(value))
     val color = {
       if (hits.isEmpty) {
         Color.LIGHTGREY
@@ -46,9 +48,29 @@ object Filter {
  * The idea is to encode each search term with a color such that one can immediately spot an occurence in the views.
  *
  * @param pattern text to search for
- * @param color associated color
+ * @param color   associated color
+ * @param active  is filter active
  */
-class Filter(val pattern: String, val color: Color) extends Fltr {
+class Filter(val pattern: String
+             , override val color: Color
+             , val active: Boolean) extends Fltr(color) {
 
-  override def applyMatch(searchTerm: String): Boolean = searchTerm.contains(pattern)
+
+  private lazy val activeProperty = new SimpleBooleanProperty(active)
+
+  def isActive = activeProperty.get()
+
+  def bind(filterButton: FilterButton): Unit = {
+    filterButton.selectedProperty().bindBidirectional(activeProperty)
+  }
+
+  def unbind(button: FilterButton): Unit = {
+    button.selectedProperty().unbindBidirectional(activeProperty)
+  }
+
+  override def matches(searchTerm: String): Boolean = searchTerm.contains(pattern)
+
+  def withActive(): Filter = {
+    new search.Filter(pattern, color, isActive)
+  }
 }

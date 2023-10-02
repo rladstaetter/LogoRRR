@@ -23,29 +23,29 @@ object LogoRRRGlobals extends CanLog {
   private val hostServicesProperty = new SimpleObjectProperty[HostServices]()
 
   def persist(): Unit = {
-    Fs.write(FilePaths.settingsFilePath, ConfigWriter[Settings].to(LogoRRRGlobals.getSettings()).render(renderOptions))
+    Fs.write(FilePaths.settingsFilePath, ConfigWriter[Settings].to(LogoRRRGlobals.getSettings).render(renderOptions))
   }
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings()
 
   def bindWindow(window: Window): Unit = {
-    window.setX(LogoRRRGlobals.getStageX())
-    window.setY(LogoRRRGlobals.getStageY())
-    window.setWidth(LogoRRRGlobals.getStageWidth())
-    window.setHeight(LogoRRRGlobals.getStageHeight())
+    window.setX(LogoRRRGlobals.getStageX)
+    window.setY(LogoRRRGlobals.getStageY)
+    window.setWidth(LogoRRRGlobals.getStageWidth)
+    window.setHeight(LogoRRRGlobals.getStageHeight)
 
     mutSettings.bindWindowProperties(window)
   }
 
   def unbindWindow(): Unit = mutSettings.unbindWindow()
 
-  def getStageWidth(): Int = mutSettings.getStageWidth()
+  def getStageWidth: Int = mutSettings.getStageWidth()
 
-  def getStageHeight(): Int = mutSettings.getStageHeight()
+  def getStageHeight: Int = mutSettings.getStageHeight()
 
-  def getStageX(): Double = mutSettings.getStageX()
+  def getStageX: Double = mutSettings.getStageX()
 
-  def getStageY(): Double = mutSettings.getStageY()
+  def getStageY: Double = mutSettings.getStageY()
 
   def setHostServices(hostServices: HostServices): Unit = hostServicesProperty.set(hostServices)
 
@@ -56,11 +56,11 @@ object LogoRRRGlobals extends CanLog {
     setHostServices(hostServices)
   }
 
-  def getSettings(): Settings = mutSettings.petrify()
+  def getSettings: Settings = mutSettings.petrify()
 
   def setSomeActive(sActive: Option[String]): Unit = mutSettings.setSomeActive(sActive)
 
-  def getSomeActive(): Option[String] = mutSettings.getSomeActive()
+  def getSomeActive: Option[String] = mutSettings.getSomeActive()
 
   def removeLogFile(pathAsString: String): Unit = {
 
@@ -70,7 +70,7 @@ object LogoRRRGlobals extends CanLog {
       case x => x
     })
 
-    if (OsUtil.isMac && !OsUtil.inTest) {
+    if (OsUtil.enableSecurityBookmarks) {
       OsxBridge.releasePath(pathAsString)
     }
 
@@ -86,11 +86,11 @@ object LogoRRRGlobals extends CanLog {
   def mupdate(t: MutLogFileSettings => Unit)(pathAsString: String): Unit =
     Option(mutSettings.getMutLogFileSetting(pathAsString)) match {
       case Some(logFileSettings) => t(logFileSettings)
-      case None => logWarn(s"${pathAsString} not found.")
+      case None => logWarn(s"$pathAsString not found.")
     }
 
 
-  def setSelectedIndex(pathAsString: String, index: Int): Unit = getLogFileSettings(pathAsString).setSelectedIndex(index)
+  def setSelectedIndex(pathAsString: String, index: Int): Unit = getLogFileSettings(pathAsString).selectedLineNumber(index)
 
   def setBlockSettings(pathAsString: String, bs: BlockSettings): Unit =
     mupdate({ lfs: MutLogFileSettings => lfs.setBlockSettings(bs) })(pathAsString)

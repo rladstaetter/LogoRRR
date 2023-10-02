@@ -1,9 +1,7 @@
 package app.logorrr.views.autoscroll
 
-import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
-import app.logorrr.views.search.Filter
 import javafx.collections.ObservableList
 import org.apache.commons.io.input.{Tailer, TailerListener}
 
@@ -14,18 +12,16 @@ import org.apache.commons.io.input.{Tailer, TailerListener}
  *
  * @param ol list containing current entries
  */
-class LogEntryListener(pathAsString: String
-                       , ol: ObservableList[LogEntry])
+class LogEntryListener(ol: ObservableList[LogEntry])
   extends TailerListener with CanLog {
 
-  var currentCnt = ol.size()
+  private var currentCnt = ol.size()
 
   override def init(tailer: Tailer): Unit = ()
 
   override def handle(l: String): Unit = {
     currentCnt = currentCnt + 1
-    val filters = LogoRRRGlobals.getLogFileSettings(pathAsString).getFilters()
-    val e = LogEntry(currentCnt, Filter.calcColor(l, filters), l, None)
+    val e = LogEntry(currentCnt, l, None)
     JfxUtils.execOnUiThread(ol.add(e))
   }
 

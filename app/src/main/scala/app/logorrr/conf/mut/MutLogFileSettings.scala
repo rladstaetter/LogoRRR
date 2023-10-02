@@ -14,13 +14,13 @@ object MutLogFileSettings {
 
   def apply(logFileSettings: LogFileSettings): MutLogFileSettings = {
     val s = new MutLogFileSettings
-    s.setSelectedIndex(logFileSettings.selectedIndex)
+    s.selectedLineNumber(logFileSettings.selectedLineNumber)
     s.setFontSize(logFileSettings.fontSize)
     s.setBlockSettings(logFileSettings.blockSettings)
     s.setPathAsString(logFileSettings.pathAsString)
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
     s.setDividerPosition(logFileSettings.dividerPosition)
-    s.filtersProperty.setAll(logFileSettings.filters.asJava)
+    s.setFilters(logFileSettings.filters)
     s.someLogEntrySettingsProperty.set(logFileSettings.someLogEntryInstantFormat)
     s.setAutoScroll(logFileSettings.autoScroll)
     s
@@ -31,7 +31,7 @@ class MutLogFileSettings {
 
   private val pathAsStringProperty = new SimpleStringProperty()
   private val firstOpenedProperty = new SimpleLongProperty()
-  val selectedIndexProperty = new SimpleIntegerProperty()
+  val selectedLineNumber = new SimpleIntegerProperty()
   private val dividerPositionProperty = new SimpleDoubleProperty()
   private val fontSizeProperty = new SimpleIntegerProperty()
 
@@ -40,9 +40,15 @@ class MutLogFileSettings {
   val someLogEntrySettingsProperty = new SimpleObjectProperty[Option[LogEntryInstantFormat]](None)
   val blockWidthSettingsProperty = new SimpleIntegerProperty()
 
-  def getSomeLogEntrySetting: Option[LogEntryInstantFormat] = someLogEntrySettingsProperty.get()
+  def setFilters(filters: Seq[Filter]): Unit = {
+    filtersProperty.setAll(filters.asJava)
+  }
 
-  val hasLogEntrySettingBinding = new BooleanBinding {
+  def setFilter(index: Int, filter: Filter): Unit = {
+    filtersProperty.set(index, filter)
+  }
+
+  val hasLogEntrySettingBinding: BooleanBinding = new BooleanBinding {
     bind(someLogEntrySettingsProperty)
 
     override def computeValue(): Boolean = {
@@ -62,11 +68,11 @@ class MutLogFileSettings {
 
   def setAutoScroll(autoScroll: Boolean): Unit = autoScrollProperty.set(autoScroll)
 
-  def isAutoScroll(): Boolean = autoScrollProperty.get()
+  def isAutoScroll: Boolean = autoScrollProperty.get()
 
-  def getFontSize(): Int = fontSizeProperty.get()
+  def getFontSize: Int = fontSizeProperty.get()
 
-  def getFilters() = filtersProperty.asScala.toSeq
+  def getFilters: Seq[Filter] = filtersProperty.asScala.toSeq
 
   def setBlockSettings(bs: BlockSettings): Unit = blockWidthSettingsProperty.set(bs.width)
 
@@ -74,7 +80,7 @@ class MutLogFileSettings {
 
   def getPathAsString(): String = pathAsStringProperty.get()
 
-  def setSelectedIndex(index: Int): Unit = selectedIndexProperty.set(index)
+  def selectedLineNumber(lineNumber: Int): Unit = selectedLineNumber.set(lineNumber)
 
   def setFontSize(fontSize: Int): Unit = fontSizeProperty.set(fontSize)
 
@@ -87,7 +93,7 @@ class MutLogFileSettings {
   def petrify(): LogFileSettings = {
     val lfs =
       LogFileSettings(pathAsStringProperty.get()
-        , selectedIndexProperty.get()
+        , selectedLineNumber.get()
         , firstOpenedProperty.get()
         , dividerPositionProperty.get()
         , fontSizeProperty.get()

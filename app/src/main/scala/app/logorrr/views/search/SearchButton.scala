@@ -18,9 +18,9 @@ class SearchButton(searchTextField: SearchTextField
     if (searchTextField.getText.nonEmpty) {
       val filter =
         if (regexToggleButton.isSelected) {
-          new RegexFilter(searchTextField.getText, colorPicker.getValue)
+          new RegexFilter(searchTextField.getText, colorPicker.getValue, true)
         } else {
-          new Filter(searchTextField.getText, colorPicker.getValue)
+          new Filter(searchTextField.getText, colorPicker.getValue, true)
         }
       colorPicker.setValue(ColorUtil.randColor)
       searchTextField.clear()
