@@ -13,10 +13,9 @@ object LogEntrySpec {
   val gen: Gen[LogEntry] =
     for {
       l <- Gen.posNum[Int]
-      c <- Gen.const(Color.BLUE)
       value <- Gen.alphaStr
       someInstant <- Gen.const(None)
-    } yield LogEntry(l, c, value, someInstant)
+    } yield LogEntry(l, value, someInstant)
 
 }
 class LogEntrySpec extends AnyWordSpecLike {

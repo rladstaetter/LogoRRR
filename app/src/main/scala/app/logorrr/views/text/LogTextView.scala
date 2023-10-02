@@ -34,13 +34,13 @@ class LogTextView(pathAsString: String
     val lv = new ListView[LogEntry]()
     lv.getStyleClass.add("dense")
     lv.setItems(filteredList)
-    val i = mutLogFileSettings.selectedIndexProperty.get()
+    val i = mutLogFileSettings.selectedLineNumber.get()
     lv.getSelectionModel.select(i)
     lv
   }
   listView.setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
 
-  mutLogFileSettings.selectedIndexProperty.addListener(JfxUtils.onNew((n: Number) => {
+  mutLogFileSettings.selectedLineNumber.addListener(JfxUtils.onNew((n: Number) => {
     Option(listView.getItems.filtered((t: LogEntry) => t.lineNumber == n.intValue()).get(0)) match {
       case Some(value) =>
         val relativeIndex = listView.getItems.indexOf(value)

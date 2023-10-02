@@ -27,9 +27,9 @@ object OsUtil {
   val isWin = currentOs == Windows
   // val isLinux = currentOs == Linux
 
-  val enableSecurityBookmarks = if (isMac) {
-    false
-  } else false
+    // for releases / mac installers this value should always be true
+    // set this flag only during development
+  val enableSecurityBookmarks = false //isMac
 
   def osFun[T](onWin: => T, onMac: => T, onLinux: => T): T =
     if (isWin) {

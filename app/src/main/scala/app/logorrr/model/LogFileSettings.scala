@@ -55,7 +55,7 @@ object LogFileSettings {
  *
  */
 case class LogFileSettings(pathAsString: String
-                           , selectedIndex: Int
+                           , selectedLineNumber: Int
                            , firstOpened: Long
                            , dividerPosition: Double
                            , fontSize: Int

@@ -171,19 +171,11 @@ class LogFileTab(val pathAsString: String
     filtersListProperty.addListener(JfxUtils.mkListChangeListener(handleFilterChange))
   }
 
-  /** update all log entries with current filter settings */
-  def updateLogEntryColors(): Unit = {
-    val filters = filtersListProperty.get().asScala.toSeq
-    val lE: mutable.Seq[LogEntry] = for (old <- logEntries.asScala) yield old.copy(color = Filter.calcColor(old.value, filters))
-    logEntries.setAll(lE.asJava)
-  }
-
   private def handleFilterChange(change: ListChangeListener.Change[_ <: Fltr]): Unit = {
     while (change.next()) {
       Future {
         LogoRRRGlobals.persist()
       }
-      updateLogEntryColors()
     }
   }
 

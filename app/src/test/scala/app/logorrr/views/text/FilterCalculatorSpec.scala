@@ -84,7 +84,7 @@ class FilterCalculatorSpec extends LogoRRRSpec {
       , new Filter("b", Color.BLUE)
       , new Filter("t", Color.YELLOW)
     )
-    val entry = LogEntry(0, Color.WHITE, "test a b c", None)
+    val entry = LogEntry(0, "test a b c", None)
     val calculator = FilterCalculator(entry, filters)
 
     "produce correct amount of matches" in {

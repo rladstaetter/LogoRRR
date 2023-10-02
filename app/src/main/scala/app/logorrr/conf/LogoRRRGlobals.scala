@@ -90,7 +90,7 @@ object LogoRRRGlobals extends CanLog {
     }
 
 
-  def setSelectedIndex(pathAsString: String, index: Int): Unit = getLogFileSettings(pathAsString).setSelectedIndex(index)
+  def setSelectedIndex(pathAsString: String, index: Int): Unit = getLogFileSettings(pathAsString).selectedLineNumber(index)
 
   def setBlockSettings(pathAsString: String, bs: BlockSettings): Unit =
     mupdate({ lfs: MutLogFileSettings => lfs.setBlockSettings(bs) })(pathAsString)

@@ -1,13 +1,14 @@
 package app.logorrr.views.block
 
+import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.views.search.Filter
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
 import javafx.event.EventHandler
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
-import javafx.scene.paint.Color
 
 import scala.math.BigDecimal.RoundingMode
 import scala.util.Try
@@ -17,10 +18,6 @@ object BlockView {
   val ScrollBarWidth = 17
 
   val MinWidth = 200
-
-  trait E {
-    def color: Color
-  }
 
 
   def indexOf(x: Int, y: Int, blockWidth: Int, blockViewWidth: Int): Int = y / blockWidth * (blockViewWidth / blockWidth) + x / blockWidth
@@ -57,16 +54,17 @@ object BlockView {
 /**
  * Displays a region with max 4096 x 4096 pixels and as many entries as can fit in this region.
  */
-class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
+class BlockView extends ImageView with CanLog {
 
   private val blockSizeProperty = new SimpleIntegerProperty()
   private val widthProperty = new SimpleIntegerProperty()
+  private val filtersProperty = new SimpleListProperty[Filter]()
 
-  val entriesProperty = new SimpleListProperty[Elem](FXCollections.observableArrayList())
+  val entriesProperty = new SimpleListProperty[LogEntry](FXCollections.observableArrayList())
 
-  val selectedEntryProperty: SimpleObjectProperty[Elem] = new SimpleObjectProperty[Elem]()
+  val selectedEntryProperty: SimpleObjectProperty[LogEntry] = new SimpleObjectProperty[LogEntry]()
 
-  var selectedListener: ChangeListener[Elem] = _
+  var selectedListener: ChangeListener[LogEntry] = _
 
   private val mouseEventHandler: EventHandler[MouseEvent] = new EventHandler[MouseEvent]() {
     override def handle(me: MouseEvent): Unit = {
@@ -85,11 +83,12 @@ class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
 
 
   private val blockImage = {
-    val bi = new BlockImage[Elem]
+    val bi = new BlockImage
     bi.widthProperty.bind(widthProperty)
     bi.blockWidthProperty.bind(blockSizeProperty)
     bi.blockHeightProperty.bind(blockSizeProperty)
     bi.entries.bind(entriesProperty)
+    bi.filtersProperty.bind(filtersProperty)
     bi
   }
 
@@ -114,9 +113,11 @@ class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
 
   def setWidth(width: Int): Unit = widthProperty.set(width)
 
-  def bind(blockSizeProperty: SimpleIntegerProperty
+  def bind(filtersProperty: SimpleListProperty[Filter]
+           , blockSizeProperty: SimpleIntegerProperty
            , blockViewWidthProperty: ReadOnlyDoubleProperty
-           , setEntry: Elem => Unit): Unit = {
+           , setEntry: LogEntry => Unit): Unit = {
+    this.filtersProperty.bind(filtersProperty)
     this.blockSizeProperty.bind(blockSizeProperty)
     this.blockViewWidthPropertyHolder = blockViewWidthProperty
     this.blockViewWidthPropertyHolder.addListener(widthListener)
@@ -129,9 +130,9 @@ class BlockView[Elem <: BlockView.E] extends ImageView with CanLog {
     this.selectedListener = null
   }
 
-  def setEntries(entries: java.util.List[Elem]): Unit = entriesProperty.setAll(entries)
+  def setEntries(entries: java.util.List[LogEntry]): Unit = entriesProperty.setAll(entries)
 
-  def getEntryAt(index: Int): Option[Elem] = Try(entriesProperty.get(index)).toOption
+  def getEntryAt(index: Int): Option[LogEntry] = Try(entriesProperty.get(index)).toOption
 
   def repaint(): Unit = blockImage.repaint()
 

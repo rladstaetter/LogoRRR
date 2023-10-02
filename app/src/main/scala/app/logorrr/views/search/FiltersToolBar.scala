@@ -34,7 +34,12 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
 
   val filtersProperty = new SimpleListProperty[Filter]()
 
-  filtersProperty.addListener(JfxUtils.mkListChangeListener[Filter](processFiltersChange))
+  init()
+
+  private def init(): Unit = {
+    filtersProperty.addListener(JfxUtils.mkListChangeListener[Filter](processFiltersChange))
+    updateUnclassified()
+  }
 
 
   /** if list is changed in any way, react to this event and either add or remove filter from UI */
