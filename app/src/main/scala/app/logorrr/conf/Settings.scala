@@ -1,8 +1,10 @@
 package app.logorrr.conf
 
 import app.logorrr.model.LogFileSettings
-import pureconfig.{ConfigReader, ConfigWriter}
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
+import pureconfig.{ConfigReader, ConfigWriter}
+
+import java.nio.file.Path
 
 /**
  * Global settings for LogoRRR
@@ -15,9 +17,10 @@ object Settings {
   implicit lazy val reader: ConfigReader[Settings] = deriveReader[Settings]
   implicit lazy val writer: ConfigWriter[Settings] = deriveWriter[Settings]
 
-  val Default = Settings(
-    StageSettings(0, 0, 500, 500)
+  val Default: Settings = Settings(
+    StageSettings(100, 100, 800, 600)
     , Map()
+    , None
     , None
   )
 
@@ -25,12 +28,13 @@ object Settings {
 
 case class Settings(stageSettings: StageSettings
                     , logFileSettings: Map[String, LogFileSettings]
-                    , someActive: Option[String]) {
+                    , someActive: Option[String]
+                    , someLastUsedDirectory: Option[Path]) {
 
   def remove(pathAsString: String): Settings = {
-    copy(stageSettings
-      , logFileSettings - pathAsString
-      , None)
+    copy(stageSettings = stageSettings
+      , logFileSettings = logFileSettings - pathAsString
+      , someActive = None)
   }
 
   /** updates recent files with given log setting */

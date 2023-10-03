@@ -9,7 +9,7 @@ class MutSettingsSpec extends LogoRRRSpec {
 
   "MutSettings" should {
     "deserialize" in {
-      val s = Settings(StageSettings(0.15142984837327833, 0.5216122226307276, 1, 1), Map(), None)
+      val s = Settings(StageSettings(0.15142984837327833, 0.5216122226307276, 1, 1), Map(), None, None)
       assert(s == MutSettings(s).petrify())
     }
     "de/serialize" in {

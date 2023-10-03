@@ -6,6 +6,7 @@ import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.FXCollections
 import javafx.stage.Window
 
+import java.nio.file.Path
 import java.util
 import scala.jdk.CollectionConverters._
 
@@ -28,6 +29,17 @@ object MutSettings {
 
 class MutSettings {
 
+  /** remembers last opened directory for the next execution */
+  val lastUsedDirectoryProperty = new SimpleObjectProperty[Option[Path]](None)
+
+  def getSomeLastUsedDirectory: Option[Path] = {
+    lastUsedDirectoryProperty.get()
+  }
+
+  def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit = {
+    lastUsedDirectoryProperty.set(someDirectory)
+  }
+
   /** contains mutable information for the application stage */
   private val mutStageSettings = new MutStageSettings
 
@@ -49,11 +61,12 @@ class MutSettings {
     setStageSettings(settings.stageSettings)
     setLogFileSettings(settings.logFileSettings)
     setSomeActive(settings.someActive)
+    setSomeLastUsedDirectory(settings.someLastUsedDirectory)
   }
 
   def setSomeActive(path: Option[String]): Unit = someActiveLogProperty.set(path)
 
-  def getSomeActive(): Option[String] = someActiveLogProperty.get()
+  def getSomeActive: Option[String] = someActiveLogProperty.get()
 
   def setLogFileSettings(logFileSettings: Map[String, LogFileSettings]): Unit = {
     val m = for ((k, v) <- logFileSettings) yield {
@@ -66,7 +79,7 @@ class MutSettings {
     val logFileSettings: Map[String, LogFileSettings] = (for ((k, v) <- mutLogFileSettingsMapProperty.get.asScala) yield {
       k -> v.petrify()
     }).toMap
-    Settings(mutStageSettings.petrify(), logFileSettings, getSomeActive())
+    Settings(mutStageSettings.petrify(), logFileSettings, getSomeActive, getSomeLastUsedDirectory)
   }
 
   def setStageSettings(stageSettings: StageSettings): Unit = {
@@ -96,15 +109,15 @@ class MutSettings {
     mutStageSettings.yProperty.unbind()
   }
 
-  def getStageY(): Double = mutStageSettings.yProperty.get()
+  def getStageY: Double = mutStageSettings.yProperty.get()
 
-  def getStageX(): Double = mutStageSettings.xProperty.get()
+  def getStageX: Double = mutStageSettings.xProperty.get()
 
-  def getStageHeight(): Int = mutStageSettings.heightProperty.get()
+  def getStageHeight: Int = mutStageSettings.heightProperty.get()
 
-  def getStageWidth(): Int = mutStageSettings.getWidth()
+  def getStageWidth: Int = mutStageSettings.getWidth()
 
-  def getOrderedLogFileSettings(): Seq[LogFileSettings] = {
+  def getOrderedLogFileSettings: Seq[LogFileSettings] = {
     mutLogFileSettingsMapProperty.get().values.asScala.toSeq.sortWith((lt, gt) => lt.getFirstOpened() < gt.getFirstOpened()).map(_.petrify())
   }
 

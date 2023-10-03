@@ -7,5 +7,5 @@ object SettingsSpec {
 
   val gen: Gen[Settings] = for {
     stageSettings <- StageSettingsSpec.gen
-  } yield Settings(stageSettings, Map(), None)
+  } yield Settings(stageSettings, Map(), None, None)
 }
