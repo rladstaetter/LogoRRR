@@ -11,6 +11,8 @@ import javafx.beans.property.SimpleObjectProperty
 import javafx.stage.Window
 import pureconfig.ConfigWriter
 
+import java.nio.file.Path
+
 /**
  * Place LogoRRR's settings.
  *
@@ -26,7 +28,7 @@ object LogoRRRGlobals extends CanLog {
     Fs.write(FilePaths.settingsFilePath, ConfigWriter[Settings].to(LogoRRRGlobals.getSettings).render(renderOptions))
   }
 
-  def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings()
+  def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings
 
   def bindWindow(window: Window): Unit = {
     window.setX(LogoRRRGlobals.getStageX)
@@ -39,13 +41,13 @@ object LogoRRRGlobals extends CanLog {
 
   def unbindWindow(): Unit = mutSettings.unbindWindow()
 
-  def getStageWidth: Int = mutSettings.getStageWidth()
+  def getStageWidth: Int = mutSettings.getStageWidth
 
-  def getStageHeight: Int = mutSettings.getStageHeight()
+  def getStageHeight: Int = mutSettings.getStageHeight
 
-  def getStageX: Double = mutSettings.getStageX()
+  def getStageX: Double = mutSettings.getStageX
 
-  def getStageY: Double = mutSettings.getStageY()
+  def getStageY: Double = mutSettings.getStageY
 
   def setHostServices(hostServices: HostServices): Unit = hostServicesProperty.set(hostServices)
 
@@ -60,12 +62,16 @@ object LogoRRRGlobals extends CanLog {
 
   def setSomeActive(sActive: Option[String]): Unit = mutSettings.setSomeActive(sActive)
 
-  def getSomeActive: Option[String] = mutSettings.getSomeActive()
+  def getSomeActive: Option[String] = mutSettings.getSomeActive
+
+  def getSomeLastUsedDirectory: Option[Path] = mutSettings.getSomeLastUsedDirectory
+
+  def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit = mutSettings.setSomeLastUsedDirectory(someDirectory)
 
   def removeLogFile(pathAsString: String): Unit = {
 
     mutSettings.removeLogFileSetting(pathAsString)
-    mutSettings.setSomeActive(mutSettings.getSomeActive() match {
+    mutSettings.setSomeActive(mutSettings.getSomeActive match {
       case Some(value) if value == pathAsString => None
       case x => x
     })
@@ -90,8 +96,6 @@ object LogoRRRGlobals extends CanLog {
     }
 
 
-  def setSelectedIndex(pathAsString: String, index: Int): Unit = getLogFileSettings(pathAsString).selectedLineNumber(index)
-
   def setBlockSettings(pathAsString: String, bs: BlockSettings): Unit =
     mupdate({ lfs: MutLogFileSettings => lfs.setBlockSettings(bs) })(pathAsString)
 
@@ -99,6 +103,6 @@ object LogoRRRGlobals extends CanLog {
 
   def updateLogFile(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
 
-  def logVisualCanvasWidth(pathAsString: String): Int = (mutSettings.getStageWidth() * LogoRRRGlobals.getLogFileSettings(pathAsString).getDividerPosition()).intValue
+  def logVisualCanvasWidth(pathAsString: String): Int = (mutSettings.getStageWidth * LogoRRRGlobals.getLogFileSettings(pathAsString).getDividerPosition()).intValue
 
 }
