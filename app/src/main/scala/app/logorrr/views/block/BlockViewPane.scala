@@ -31,12 +31,12 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
 
   // listeners
   private val repaintListener: ListChangeListener[LogEntry] = (_: ListChangeListener.Change[_ <: LogEntry]) => {
-    logTrace("repaint entries")
+    // logTrace("repaint entries")
     repaint()
   }
 
   private val blockSizeListener: InvalidationListener = (observable: Observable) => {
-    logTrace("repaint blocksize")
+    // logTrace("repaint blocksize")
     repaint()
   }
 
@@ -44,7 +44,7 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
     JfxUtils.onNew[LogEntry](logEntry => selectedLineNumberProperty.set(logEntry.lineNumber))
 
   private val widthListener = JfxUtils.onNew[Number](n => {
-    logTrace("repaint width:" + n.intValue())
+    // logTrace("repaint width:" + n.intValue())
     repaint()
   })
 
@@ -133,7 +133,7 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
         logWarn(s"Blocksize: $blockSize, getWidth: $getWidth ")
       }
     } else {
-      logTrace("invisible ...")
+      // logTrace("invisible ...")
     }
     ()
   }

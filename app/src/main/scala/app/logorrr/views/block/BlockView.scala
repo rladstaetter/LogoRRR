@@ -97,10 +97,10 @@ class BlockView(selectedLineNumberProperty: SimpleIntegerProperty
       if (proposedWidth > BlockView.MinWidth) {
         setWidth(proposedWidth)
       } else {
-        logTrace(s"Proposed width ($proposedWidth) < SQView.MinWidth (${BlockView.MinWidth}), not adjusting width of canvas ...")
+        // logTrace(s"Proposed width ($proposedWidth) < SQView.MinWidth (${BlockView.MinWidth}), not adjusting width of canvas ...")
       }
     } else {
-      logTrace(s"ScrollPaneWidth ($scrollPaneWidth) >= SQImage.MaxWidth (${BlockImage.MaxWidth}), not adjusting width of canvas ...")
+      // logTrace(s"ScrollPaneWidth ($scrollPaneWidth) >= SQImage.MaxWidth (${BlockImage.MaxWidth}), not adjusting width of canvas ...")
     }
   })
 

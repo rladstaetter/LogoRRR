@@ -49,7 +49,7 @@ object LogoRRRAccelerators extends CanLog {
     scene.getAccelerators.put(shortCutF, () => {
       Option(getActiveSearchTextField) match {
         case Some(tf) => tf.requestFocus()
-        case None => logTrace("no textfield active")
+        case None => // logTrace("no textfield active")
       }
     })
     scene.getAccelerators.put(shortCutR, () => {
@@ -60,7 +60,7 @@ object LogoRRRAccelerators extends CanLog {
           } else {
             regexToggleButton.setSelected(true)
           }
-        case None => logTrace("no regex togglebutton active")
+        case None => // logTrace("no regex togglebutton active")
       }
     })
 

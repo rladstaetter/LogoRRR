@@ -22,7 +22,7 @@ object LogFileReader extends CanLog {
     if (lines.isEmpty) {
       logWarn(s"${logFile.toAbsolutePath.toString} was empty.")
     } else {
-      logTrace(s"${logFile.toAbsolutePath.toString} has ${lines.size} lines.")
+      // logTrace(s"${logFile.toAbsolutePath.toString} has ${lines.size} lines.")
     }
   }
 }

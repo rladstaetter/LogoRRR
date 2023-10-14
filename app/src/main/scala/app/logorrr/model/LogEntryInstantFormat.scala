@@ -27,7 +27,7 @@ object LogEntryInstantFormat extends CanLog {
       } match {
         case Success(value) => Option(value)
         case Failure(_) =>
-          logTrace(s"Could not parse '$dateTimeAsString' at pos (${entrySetting.startCol}/${entrySetting.endCol}) with pattern '$${entrySetting.dateTimePattern}'")
+          // logTrace(s"Could not parse '$dateTimeAsString' at pos (${entrySetting.startCol}/${entrySetting.endCol}) with pattern '$${entrySetting.dateTimePattern}'")
           None
       }
     } else {
