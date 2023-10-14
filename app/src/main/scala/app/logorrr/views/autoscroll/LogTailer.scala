@@ -19,7 +19,7 @@ case class LogTailer(pathAsString: String
 
   var currentTailer: Option[Tailer] = None
 
-  private def mkTailer(): Tailer = new Tailer(Paths.get(pathAsString).toFile, new LogEntryListener(logEntries), 40, true)
+  private def mkTailer(): Tailer = new Tailer(Paths.get(pathAsString).toFile, new LogEntryListener(logEntries), 1000, true)
 
   /** start observing log file for changes */
   def start(): Unit = synchronized {

@@ -18,7 +18,7 @@ object IconCreatorApp {
   def writeIcons(canvases: Seq[(Area, Canvas)], path: Path): Unit = {
     Fs.createDirectories(path)
     for ((Area(s, _, _, _), c) <- canvases) {
-      val file = path.resolve(s"logorrr-icon-${s}.png")
+      val file = path.resolve(s"logorrr-icon-$s.png")
       writeIcon(c, file)
     }
   }

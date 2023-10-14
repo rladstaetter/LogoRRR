@@ -24,7 +24,7 @@ object Constants {
 
 object CanLog {
 
-  val fileHandler = {
+  val fileHandler: StreamHandler = {
     // check if we can log to the given log path, create the parent directory if it does not exist yet.
     // if this doesn't work, use a fallback to console logger - see https://github.com/rladstaetter/LogoRRR/issues/136
     val h = if (!Files.exists(FilePaths.logFilePath.getParent)) {
@@ -60,7 +60,7 @@ object CanLog {
  */
 trait CanLog {
 
-  lazy val log = {
+  lazy val log: Logger = {
     val lggr = Logger.getLogger(this.getClass.getName)
     lggr.setLevel(Level.ALL)
     lggr.addHandler(CanLog.fileHandler)

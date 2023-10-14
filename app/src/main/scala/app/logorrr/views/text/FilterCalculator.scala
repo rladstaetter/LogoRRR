@@ -92,7 +92,7 @@ case class FilterCalculator(logEntry: LogEntry
       // all colors for each filter.
       val cols: Seq[Option[Color]] =
       for {i <- 0 to value.length} yield {
-        val colors: Seq[Option[Color]] = (for (j <- jou) yield j(i))
+        val colors: Seq[Option[Color]] = for (j <- jou) yield j(i)
         colors.tail.foldLeft(colors.head)((acc, c) => {
           (acc, c) match {
             case (None, None) => None
@@ -107,7 +107,7 @@ case class FilterCalculator(logEntry: LogEntry
       // but the caveat is that we produce many single labels in the end which
       // is too slow. We try to reduce adjacent labels with the same color which
       // will typically result in a considerable smaller size of this sequence.
-      val valuesForEveryChar: Seq[(Char, Option[Color])] = (value zip cols)
+      val valuesForEveryChar: Seq[(Char, Option[Color])] = value zip cols
 
       // crunch sequence and concatenate entries with same colors
       valuesForEveryChar.foldLeft(Seq[(String, Color)]())({

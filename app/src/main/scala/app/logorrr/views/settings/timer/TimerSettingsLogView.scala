@@ -32,7 +32,7 @@ class TimerSettingsLogView(settings: MutLogFileSettings
   }
 
   /** 'pragmatic way' to determine width of max elems in this view */
-  val maxLength = logEntries.size().toString.length
+  val maxLength: Int = logEntries.size().toString.length
 
   val listView: ListView[LogEntry] = {
     val lv = new ListView[LogEntry]()

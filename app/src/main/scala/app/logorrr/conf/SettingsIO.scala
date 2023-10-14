@@ -13,7 +13,7 @@ import scala.util.{Failure, Success, Try}
 object SettingsIO extends CanLog {
 
   /** turn off ugly 'hardcoded value' messages */
-  val renderOptions = ConfigRenderOptions.defaults().setOriginComments(false)
+  val renderOptions: ConfigRenderOptions = ConfigRenderOptions.defaults().setOriginComments(false)
 
   /** read settings from default place and filter all paths which don't exist anymore */
   def fromFile(): Settings = {

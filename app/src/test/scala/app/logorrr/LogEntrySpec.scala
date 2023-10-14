@@ -1,7 +1,6 @@
 package app.logorrr
 
 import app.logorrr.model.LogEntry
-import javafx.scene.paint.Color
 import org.scalacheck.Gen
 import org.scalatest.wordspec.AnyWordSpecLike
 

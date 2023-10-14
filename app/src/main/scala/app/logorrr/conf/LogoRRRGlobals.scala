@@ -39,7 +39,9 @@ object LogoRRRGlobals extends CanLog {
     mutSettings.bindWindowProperties(window)
   }
 
-  def unbindWindow(): Unit = mutSettings.unbindWindow()
+  def shutdown(): Unit = {
+    mutSettings.unbindWindow()
+  }
 
   def getStageWidth: Int = mutSettings.getStageWidth
 
@@ -68,7 +70,7 @@ object LogoRRRGlobals extends CanLog {
 
   def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit = mutSettings.setSomeLastUsedDirectory(someDirectory)
 
-  def removeLogFile(pathAsString: String): Unit = {
+  def removeLogFile(pathAsString: String): Unit = timeR({
 
     mutSettings.removeLogFileSetting(pathAsString)
     mutSettings.setSomeActive(mutSettings.getSomeActive match {
@@ -80,8 +82,7 @@ object LogoRRRGlobals extends CanLog {
       OsxBridge.releasePath(pathAsString)
     }
 
-    logInfo(s"Removed file $pathAsString ...")
-  }
+  }, s"Removed file $pathAsString ...")
 
   def clearLogFileSettings(): Unit = mutSettings.clearLogFileSettings()
 

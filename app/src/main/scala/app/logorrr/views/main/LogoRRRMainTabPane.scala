@@ -2,7 +2,8 @@ package app.logorrr.views.main
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.util.{CanLog, JfxUtils}
-import app.logorrr.views.LogFileTab
+import app.logorrr.views.logfiletab.LogFileTab
+import javafx.beans.value.ChangeListener
 import javafx.scene.control.{Tab, TabPane}
 
 import scala.collection.mutable
@@ -25,23 +26,30 @@ class LogoRRRMainTabPane()
   extends TabPane
     with CanLog {
 
-  setStyle(LogoRRRMainTabPane.BackgroundStyle)
+  val selectedItemListener: ChangeListener[Tab] = JfxUtils.onNew {
+    t1: Tab =>
+      t1 match {
+        case logFileTab: LogFileTab =>
+          logTrace(s"Selected: ${logFileTab.pathAsString}")
+          LogoRRRGlobals.setSomeActive(Option(logFileTab.pathAsString))
+          // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
+          getSelectionModel.select(logFileTab)
+        case _ =>
+      }
+  }
+
+  init()
+
+  def init(): Unit = {
+    setStyle(LogoRRRMainTabPane.BackgroundStyle)
+  }
+
 
   /**
    * Defines what should happen when a tab is selected
    * */
   def initLogFileAddListener(): Unit = {
-    getSelectionModel.selectedItemProperty().addListener(JfxUtils.onNew {
-      t1: Tab =>
-        t1 match {
-          case logFileTab: LogFileTab =>
-            logTrace(s"Selected: ${logFileTab.pathAsString}")
-            LogoRRRGlobals.setSomeActive(Option(logFileTab.pathAsString))
-            // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
-            getSelectionModel.select(logFileTab)
-          case _ =>
-        }
-    })
+    getSelectionModel.selectedItemProperty().addListener(selectedItemListener)
   }
 
 
@@ -62,6 +70,7 @@ class LogoRRRMainTabPane()
 
   /** shutdown all tabs */
   def shutdown(): Unit = {
+    getSelectionModel.selectedItemProperty().removeListener(selectedItemListener)
     getLogFileTabs.foreach(_.shutdown())
     getTabs.clear()
   }

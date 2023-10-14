@@ -1,6 +1,5 @@
 package app.logorrr.views.block
 
-import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, ColorUtil, JfxUtils}
 import app.logorrr.views.search.Filter
@@ -34,13 +33,19 @@ class BlockImage extends CanLog {
   var background: Array[Int] = _
   var roi: Rectangle2D = _
 
-
   private val redrawListener: InvalidationListener = (_: Observable) => repaint()
 
   val entries = new SimpleListProperty[LogEntry](FXCollections.observableArrayList())
 
   /* if blockwidth is changed redraw */
-  val blockWidthProperty = {
+  val blockWidthProperty: SimpleIntegerProperty = {
+    val p = new SimpleIntegerProperty()
+    p.addListener(redrawListener)
+    p
+  }
+
+  /* if blockheight is changed redraw */
+  val blockHeightProperty: SimpleIntegerProperty = {
     val p = new SimpleIntegerProperty()
     p.addListener(redrawListener)
     p
@@ -48,11 +53,24 @@ class BlockImage extends CanLog {
 
   private def getBlockWidth(): Int = blockWidthProperty.get()
 
-  /* if blockheight is changed redraw */
-  val blockHeightProperty = {
-    val p = new SimpleIntegerProperty()
-    p.addListener(redrawListener)
-    p
+  def shutdown() : Unit = {
+    clearBackingPixelBuffer()
+
+    // just wipe out everything (?!)
+    Option(pixelBuffer).foreach(_.getBuffer.clear())
+    Option(intBuffer).foreach(_.clear())
+    this.rawInts = null
+    this.background = null
+    this.intBuffer = null
+    this.pixelBuffer = null
+    this.roi = null
+    imageProperty.set(null)
+    removeListener()
+  }
+
+  def removeListener(): Unit = {
+    blockWidthProperty.removeListener(redrawListener)
+    blockHeightProperty.removeListener(redrawListener)
   }
 
   private def getBlockHeight(): Int = blockHeightProperty.get()
@@ -63,9 +81,14 @@ class BlockImage extends CanLog {
    * height property is calculated on the fly depending on the blockwidth/blockheight,
    * width of SQImage, number of elements and max size of possible of texture (4096).
    * */
-  val heightProperty = {
+  val heightProperty: SimpleIntegerProperty = {
     val p = new SimpleIntegerProperty()
     p.addListener(JfxUtils.onNew[Number](height => resetBackingImage(getWidth(), height.intValue)))
+    p
+  }
+  val widthProperty: SimpleIntegerProperty = {
+    val p = new SimpleIntegerProperty()
+    p.addListener(JfxUtils.onNew[Number](_ => repaint()))
     p
   }
 
@@ -73,28 +96,18 @@ class BlockImage extends CanLog {
 
   def getHeight(): Int = heightProperty.get()
 
-  val widthProperty = {
-    val p = new SimpleIntegerProperty()
-    p.addListener(JfxUtils.onNew[Number](_ => repaint()))
-    p
-  }
-
   def getWidth(): Int = widthProperty.get()
 
   private def resetBackingImage(width: Int, height: Int): Unit = {
-    assert(width != 0, s"width was ${width}.")
-    assert(height != 0, s"height was ${height}.")
-    assert(width <= BlockImage.MaxWidth, s"width was ${width} which exceeds ${BlockImage.MaxWidth}.")
-    assert(height <= BlockImage.MaxHeight, s"height was ${height} which exceeds ${BlockImage.MaxHeight}.")
+    clearBackingPixelBuffer()
+
+    assert(width != 0, s"width was $width.")
+    assert(height != 0, s"height was $height.")
+    assert(width <= BlockImage.MaxWidth, s"width was $width which exceeds ${BlockImage.MaxWidth}.")
+    assert(height <= BlockImage.MaxHeight, s"height was $height which exceeds ${BlockImage.MaxHeight}.")
     assert(height * width > 0)
-    Option(this.intBuffer) match {
-      case Some(value) =>
-        value.clear()
-        this.rawInts = null
-      case None =>
-    }
+
     val bgColor = Color.WHITE
-    //val bgColor = ColorUtil.randColor
     val rawInts = Array.fill(width * height)(ColorUtil.toARGB(Color.WHITE))
     val buffer: IntBuffer = IntBuffer.wrap(rawInts)
     val pixelBuffer = new PixelBuffer[IntBuffer](width, height, buffer, PixelFormat.getIntArgbPreInstance)
@@ -107,9 +120,19 @@ class BlockImage extends CanLog {
     this.imageProperty.set(backingImage)
   }
 
+  def clearBackingPixelBuffer(): Unit = {
+    Option(this.intBuffer) match {
+      case Some(value) =>
+        value.clear()
+
+        this.rawInts = null
+      case None =>
+    }
+  }
+
   def cleanBackground(): Unit = System.arraycopy(background, 0, rawInts, 0, background.length)
 
-
+  // todo check visibility
   def repaint(): Unit = {
     Option(pixelBuffer) match {
       case Some(pb) =>
@@ -127,6 +150,25 @@ class BlockImage extends CanLog {
           logWarn(s"getBlockWidth() = ${getBlockWidth()}")
         }
       case None => // logTrace("pixelBuffer was null")
+    }
+  }
+
+  /**
+   * draws a filled rectangle on the given index
+   *
+   * @param e
+   */
+  def draw(index: Int, color: Color): Unit = {
+    Option(pixelBuffer) foreach {
+      pb =>
+        if (getBlockWidth() != 0) {
+          repaint()
+          pb.updateBuffer((_: PixelBuffer[IntBuffer]) => {
+            // drawRect(e.lineNumber - 1, Filter.calcColor(e.value, filtersProperty.asScala.toSeq).darker().darker())
+            drawRect(index, color)
+            roi
+          })
+        }
     }
   }
 

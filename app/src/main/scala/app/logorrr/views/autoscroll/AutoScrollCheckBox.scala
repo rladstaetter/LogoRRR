@@ -7,7 +7,7 @@ import javafx.scene.control.{CheckBox, Tooltip}
 
 class AutoScrollCheckBox(val pathAsString: String) extends CheckBox with LogIdAware {
   setTooltip(new Tooltip("autoscroll"))
-  selectedProperty().bindBidirectional(LogoRRRGlobals.getLogFileSettings(pathAsString).autoScrollProperty)
+  selectedProperty().bindBidirectional(LogoRRRGlobals.getLogFileSettings(pathAsString).autoScrollActiveProperty)
 
 
 }

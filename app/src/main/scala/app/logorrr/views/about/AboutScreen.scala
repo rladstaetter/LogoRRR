@@ -9,13 +9,14 @@ import javafx.scene.layout.{BorderPane, HBox, VBox}
 
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, ZoneId}
+import java.util.Properties
 
 
 object AboutScreen {
 
-  val logo = ImageCp("/app/logorrr/icon/logorrr-icon-128.png", 128, 128)
+  val logo: ImageCp = ImageCp("/app/logorrr/icon/logorrr-icon-128.png", 128, 128)
 
-  val links = Seq(
+  val links: Seq[HLink] = Seq(
     HLink("https://www.logorrr.app/", "https://www.logorrr.app/")
     , HLink("https://www.github.com/rladstaetter/LogoRRR/", "Source code")
     , HLink("https://github.com/rladstaetter/LogoRRR/issues/", "Report a bug"))
@@ -43,9 +44,9 @@ object BuildProps {
 }
 
 class BuildProps {
-  lazy val buildProps = PropsCp("/build.properties").asProperties(getClass)
+  lazy val buildProps: Properties = PropsCp("/build.properties").asProperties(getClass)
 
-  lazy val githash = buildProps.getProperty("revision")
+  lazy val githash: String = buildProps.getProperty("revision")
 
   lazy val timestamp: String = {
     val PATTERN_FORMAT = "dd.MM.yyyy"

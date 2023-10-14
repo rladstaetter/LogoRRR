@@ -16,7 +16,7 @@ object Filter {
   implicit lazy val writer: ConfigWriter[Filter] = deriveWriter[Filter]
 
 
-  val unClassifiedFilterColor = Color.LIGHTGREY
+  val unClassifiedFilterColor: Color = Color.LIGHTGREY
 
   /**
    * calculate a color for this log entry.
@@ -58,7 +58,7 @@ class Filter(val pattern: String
 
   private lazy val activeProperty = new SimpleBooleanProperty(active)
 
-  def isActive = activeProperty.get()
+  def isActive: Boolean = activeProperty.get()
 
   def bind(filterButton: FilterButton): Unit = {
     filterButton.selectedProperty().bindBidirectional(activeProperty)

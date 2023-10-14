@@ -46,10 +46,10 @@ class OpsToolBar(pathAsString: String
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
   val w = 570
-  val macWidth = w
-  val winWidth = w + 2
-  val linuxWidth = w + 2
-  val width = OsUtil.osFun(winWidth, macWidth, linuxWidth) // different layouts (may be dependent on font size renderings?)
+  val macWidth: Int = w
+  val winWidth: Int = w + 2
+  val linuxWidth: Int = w + 2
+  val width: Int = OsUtil.osFun(winWidth, macWidth, linuxWidth) // different layouts (may be dependent on font size renderings?)
   setMaxWidth(width)
   setMinWidth(width)
 
@@ -70,7 +70,7 @@ class OpsToolBar(pathAsString: String
 
   val clearLogButton = new ClearLogButton(logEntries)
 
-  val firstNEntries = TimerSettingsLogView.mkEntriesToShow(logEntries)
+  val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
   val timerButton = new TimerButton(pathAsString, firstNEntries)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
@@ -83,7 +83,7 @@ class OpsToolBar(pathAsString: String
   regexToggleButton.setOnKeyPressed(execSearchOnHitEnter)
   colorPicker.setOnKeyPressed(execSearchOnHitEnter)
 
-  val searchItems = Seq[Control](searchTextField, regexToggleButton, colorPicker, searchButton)
+  val searchItems: Seq[Control] = Seq[Control](searchTextField, regexToggleButton, colorPicker, searchButton)
 
   val sizeItems: Seq[Control] = {
     val decreaseBlockSizeButton = new DecreaseBlockSizeButton(blockSizeProperty)

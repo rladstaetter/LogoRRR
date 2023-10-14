@@ -14,7 +14,7 @@ object AppMeta {
 
   val fullAppName = s"${meta.appName}"
   val fullAppNameWithVersion = s"${meta.appName} ${meta.appVersion}"
-  val appVersion = meta.appVersion
+  val appVersion: String = meta.appVersion
 
 }
 

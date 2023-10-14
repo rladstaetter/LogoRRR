@@ -43,21 +43,20 @@ case class LogoRRRStage(stage: Stage) extends CanLog {
   stage.getIcons.add(LogoRRRStage.icon)
   stage.setScene(scene)
   Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet)
-  stage.setOnCloseRequest((_: WindowEvent) => closeApp())
+  stage.setOnCloseRequest((_: WindowEvent) => shutdown())
 
-  private def closeApp(): Unit = {
+  private def shutdown(): Unit = timeR({
     // to save global filter state
-    for (t <- logorrrMain.ambp.logViewTabPane.getLogFileTabs) {
-      for ((f, i) <- t.filtersToolBar.activeFilters().zipWithIndex) {
-        LogoRRRGlobals.getLogFileSettings(t.pathAsString).setFilter(i, f)
+    for (logFileTab <- logorrrMain.getLogFileTabs) {
+      for ((f, i) <- logFileTab.activeFilters.zipWithIndex) {
+        logFileTab.mutLogFileSettings.setFilter(i, f)
       }
     }
     LogoRRRGlobals.persist()
     logorrrMain.shutdown()
-    LogoRRRGlobals.unbindWindow()
+    LogoRRRGlobals.shutdown()
     stage.sceneProperty.removeListener(LogoRRRStage.sceneListener)
-    logInfo(s"Stopped ${AppMeta.fullAppNameWithVersion}")
-  }
+  }, s"Stopped ${AppMeta.fullAppNameWithVersion}")
 
   def show(): Unit = {
     stage.show()

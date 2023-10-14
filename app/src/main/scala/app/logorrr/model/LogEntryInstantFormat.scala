@@ -13,7 +13,7 @@ object LogEntryInstantFormat extends CanLog {
 
   val DefaultPattern = "yyyy-MM-dd HH:mm:ss.nnnnnnnnn"
   /** just my preferred time format */
-  val Default = LogEntryInstantFormat(SimpleRange(1, 24), DefaultPattern)
+  val Default: LogEntryInstantFormat = LogEntryInstantFormat(SimpleRange(1, 24), DefaultPattern)
 
   implicit lazy val reader: ConfigReader[LogEntryInstantFormat] = deriveReader[LogEntryInstantFormat]
   implicit lazy val writer: ConfigWriter[LogEntryInstantFormat] = deriveWriter[LogEntryInstantFormat]
@@ -40,7 +40,7 @@ object LogEntryInstantFormat extends CanLog {
 case class LogEntryInstantFormat(range: SimpleRange
                                  , dateTimePattern: String
                                  , zoneOffset: String = "+1") {
-  val startCol = range.start
-  val endCol = range.end
-  val dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimePattern).withZone(ZoneId.of(zoneOffset))
+  val startCol: Int = range.start
+  val endCol: Int = range.end
+  val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(dateTimePattern).withZone(ZoneId.of(zoneOffset))
 }

@@ -32,7 +32,7 @@ case class TimerSettingsLogViewLabel(settings: MutLogFileSettings
 
   val lineNumberLabel: LineNumberLabel = LineNumberLabel(e.lineNumber, maxLength)
   lineNumberLabel.styleProperty().bind(settings.fontStyleBinding)
-  val chars =
+  val chars: IndexedSeq[Label] =
     for ((c, i) <- e.value.zipWithIndex) yield {
       val l = new Label(c.toString)
       l.setUserData(i) // save position of label for later

@@ -3,7 +3,7 @@ package app.logorrr.docs.icns
 import app.logorrr.docs.Area
 
 object IconDef {
-  val seq = Seq(
+  val seq: Seq[IconDef] = Seq(
     IconDef(Area(16, 16, 16, 16), "icon_16x16.png")
     , IconDef(Area(32, 32, 32, 32), "icon_16x16@2x.png")
     , IconDef(Area(32, 32, 32, 32), "icon_32x32.png")

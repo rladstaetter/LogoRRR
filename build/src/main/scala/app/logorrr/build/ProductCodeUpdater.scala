@@ -25,7 +25,7 @@ object ProductCodeUpdater extends CanLog {
         val content =
           (for (l <- Files.readAllLines(p).asScala) yield {
             if (l.contains(needle)) {
-              l.replace(needle, s"""<ROW Property="ProductCode" Value="1033:{${uuid}} " Type="16"/>""")
+              l.replace(needle, s"""<ROW Property="ProductCode" Value="1033:{$uuid} " Type="16"/>""")
             } else l
           }).mkString("\r\n")
         Fs.write(p, content)

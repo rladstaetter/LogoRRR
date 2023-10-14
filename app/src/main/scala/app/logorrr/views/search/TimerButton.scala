@@ -1,6 +1,7 @@
 package app.logorrr.views.search
 
 import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.{LogEntry, LogEntryInstantFormat}
 import app.logorrr.util.CanLog
 import app.logorrr.views.settings.timer.TimerSettingStage
@@ -17,7 +18,7 @@ class TimerButton(pathAsString: String
   extends StackPane
     with CanLog {
 
-  def getSettings() = LogoRRRGlobals.getLogFileSettings(pathAsString)
+  def getSettings(): MutLogFileSettings = LogoRRRGlobals.getLogFileSettings(pathAsString)
 
   def updateLogEntrySetting(leif: LogEntryInstantFormat): Unit = {
     getSettings().setLogEntryInstantFormat(leif)

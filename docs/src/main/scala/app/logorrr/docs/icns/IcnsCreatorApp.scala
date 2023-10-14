@@ -10,7 +10,7 @@ import java.nio.file.{Files, Path, Paths}
 
 object IcnsCreatorApp {
 
-  val iconUtil = Paths.get("/usr/bin/iconutil")
+  val iconUtil: Path = Paths.get("/usr/bin/iconutil")
 
   /**
    * @return true if all helper programs exist

@@ -23,7 +23,7 @@ object ColorUtil {
       (color.getGreen * 255).toInt << 8 |
       (color.getBlue * 255).toInt
 
-  def randColor = Color.color(Random.nextDouble()
+  def randColor: Color = Color.color(Random.nextDouble()
     , Random.nextDouble()
     , Random.nextDouble()
   )

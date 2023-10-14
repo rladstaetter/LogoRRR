@@ -21,7 +21,7 @@ case class LinePart(value: String
 
   require(value.nonEmpty)
 
-  val endIndex = startIndex + value.length - 1
+  val endIndex: Int = startIndex + value.length - 1
 
   def hit(index: Int): Boolean = (startIndex <= index) && (index <= endIndex)
 

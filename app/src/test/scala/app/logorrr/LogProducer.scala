@@ -8,7 +8,7 @@ import java.util.Scanner
 
 case class SimpleWriter(path: Path) extends Runnable {
   var running = true
-  val dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss A");
+  val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss A");
 
   def stop(): Unit = running = false
 

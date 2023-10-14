@@ -14,7 +14,7 @@ object MutLogFileSettings {
 
   def apply(logFileSettings: LogFileSettings): MutLogFileSettings = {
     val s = new MutLogFileSettings
-    s.selectedLineNumber(logFileSettings.selectedLineNumber)
+    s.setSelectedLineNumber(logFileSettings.selectedLineNumber)
     s.setFontSize(logFileSettings.fontSize)
     s.setBlockSettings(logFileSettings.blockSettings)
     s.setPathAsString(logFileSettings.pathAsString)
@@ -31,11 +31,11 @@ class MutLogFileSettings {
 
   private val pathAsStringProperty = new SimpleStringProperty()
   private val firstOpenedProperty = new SimpleLongProperty()
-  val selectedLineNumber = new SimpleIntegerProperty()
+  val selectedLineNumberProperty = new SimpleIntegerProperty()
   private val dividerPositionProperty = new SimpleDoubleProperty()
   private val fontSizeProperty = new SimpleIntegerProperty()
 
-  val autoScrollProperty = new SimpleBooleanProperty()
+   val autoScrollActiveProperty = new SimpleBooleanProperty()
   val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList())
   val someLogEntrySettingsProperty = new SimpleObjectProperty[Option[LogEntryInstantFormat]](None)
   val blockWidthSettingsProperty = new SimpleIntegerProperty()
@@ -66,13 +66,11 @@ class MutLogFileSettings {
     someLogEntrySettingsProperty.set(Option(lef))
   }
 
-  def setAutoScroll(autoScroll: Boolean): Unit = autoScrollProperty.set(autoScroll)
+  def setAutoScroll(autoScroll: Boolean): Unit = autoScrollActiveProperty.set(autoScroll)
 
-  def isAutoScroll: Boolean = autoScrollProperty.get()
+  def isAutoScrollActive: Boolean = autoScrollActiveProperty.get()
 
   def getFontSize: Int = fontSizeProperty.get()
-
-  def getFilters: Seq[Filter] = filtersProperty.asScala.toSeq
 
   def setBlockSettings(bs: BlockSettings): Unit = blockWidthSettingsProperty.set(bs.width)
 
@@ -80,7 +78,7 @@ class MutLogFileSettings {
 
   def getPathAsString(): String = pathAsStringProperty.get()
 
-  def selectedLineNumber(lineNumber: Int): Unit = selectedLineNumber.set(lineNumber)
+  def setSelectedLineNumber(lineNumber: Int): Unit = selectedLineNumberProperty.set(lineNumber)
 
   def setFontSize(fontSize: Int): Unit = fontSizeProperty.set(fontSize)
 
@@ -93,14 +91,14 @@ class MutLogFileSettings {
   def petrify(): LogFileSettings = {
     val lfs =
       LogFileSettings(pathAsStringProperty.get()
-        , selectedLineNumber.get()
+        , selectedLineNumberProperty.get()
         , firstOpenedProperty.get()
         , dividerPositionProperty.get()
         , fontSizeProperty.get()
         , filtersProperty.get().asScala.toSeq
         , BlockSettings(blockWidthSettingsProperty.get())
         , someLogEntrySettingsProperty.get()
-        , autoScrollProperty.get())
+        , autoScrollActiveProperty.get())
     lfs
   }
 }

@@ -3,12 +3,13 @@ package app.logorrr.views.main
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.{CanLog, JfxUtils}
-import app.logorrr.views.LogFileTab
+import app.logorrr.views.logfiletab.LogFileTab
 import javafx.collections.ObservableList
 import javafx.scene.layout.BorderPane
 import javafx.stage.Window
 
 import java.nio.file.Path
+import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
@@ -21,6 +22,9 @@ class LogoRRRMain(closeStage: => Unit)
   val ambp = new LogoRRRMainBorderPane()
 
   init()
+
+
+  def getLogFileTabs: mutable.Seq[LogFileTab] = ambp.logViewTabPane.getLogFileTabs
 
   def getWindow: Window = getScene.getWindow()
 

@@ -9,7 +9,7 @@ class RegexFilter(override val pattern: String
                   , override val color: Color
                   , override val active: Boolean) extends Filter(pattern, color, active) {
 
-  val compiledPattern = Pattern.compile(pattern)
+  val compiledPattern: Pattern = Pattern.compile(pattern)
 
   override def matches(searchTerm: String): Boolean = compiledPattern.matcher(searchTerm).find()
 

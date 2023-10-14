@@ -1,9 +1,9 @@
 package app.logorrr.views.text
 
-import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{ClipBoardUtils, JfxUtils}
+import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 import javafx.scene.layout.BorderPane
@@ -22,25 +22,21 @@ object LogTextView {
 }
 
 
-class LogTextView(pathAsString: String
-                  , filteredList: FilteredList[LogEntry]
-                 ) extends BorderPane {
+class LogTextView(mutLogFileSettings: MutLogFileSettings
+                  , filteredList: FilteredList[LogEntry]) extends BorderPane {
   /** 'pragmatic way' to determine width of max elems in this view */
-  val maxLength = filteredList.size().toString.length
-
-  private val mutLogFileSettings: MutLogFileSettings = LogoRRRGlobals.getLogFileSettings(pathAsString)
+  val maxLength: Int = filteredList.size().toString.length
 
   val listView: ListView[LogEntry] = {
     val lv = new ListView[LogEntry]()
     lv.getStyleClass.add("dense")
     lv.setItems(filteredList)
-    val i = mutLogFileSettings.selectedLineNumber.get()
+    val i = mutLogFileSettings.selectedLineNumberProperty.get()
     lv.getSelectionModel.select(i)
     lv
   }
-  listView.setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
 
-  mutLogFileSettings.selectedLineNumber.addListener(JfxUtils.onNew((n: Number) => {
+  private val selectedLineNumberListener: ChangeListener[Number] = JfxUtils.onNew((n: Number) => {
     Option(listView.getItems.filtered((t: LogEntry) => t.lineNumber == n.intValue()).get(0)) match {
       case Some(value) =>
         val relativeIndex = listView.getItems.indexOf(value)
@@ -48,10 +44,25 @@ class LogTextView(pathAsString: String
         listView.scrollTo(relativeIndex - ((listView.getHeight / LogTextView.fixedCellSize) / 2).toInt)
       case None =>
     }
+  })
 
-  }))
+  init()
 
-  setCenter(listView)
+  /**
+   *
+   */
+  def init(): Unit = {
+    listView.getSelectionModel.selectedIndexProperty().addListener(JfxUtils.onNew({ i: Number => {
+      mutLogFileSettings.selectedLineNumberProperty.removeListener(selectedLineNumberListener)
+      mutLogFileSettings.setSelectedLineNumber(i.intValue())
+      mutLogFileSettings.selectedLineNumberProperty.addListener(selectedLineNumberListener)
+    }
+    }))
+    listView.setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
+    mutLogFileSettings.selectedLineNumberProperty.addListener(selectedLineNumberListener)
+
+    setCenter(listView)
+  }
 
   /** scroll to end of listview */
   def scrollToEnd(): Unit = {

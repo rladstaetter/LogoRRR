@@ -1,6 +1,7 @@
 package app.logorrr.views.block
 
 import app.logorrr.util.JfxUtils
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.FXCollections
 import javafx.geometry.Orientation
 import javafx.scene.Scene
@@ -29,7 +30,7 @@ object BlockViewDemoApp {
 }
 
 class BlockViewDemoApp extends javafx.application.Application {
-  import scala.jdk.CollectionConverters._
+
   override def start(primaryStage: Stage): Unit = {
 
     val bp = new BorderPane
@@ -38,7 +39,7 @@ class BlockViewDemoApp extends javafx.application.Application {
 
     val nrElemsChoiceBox = new ChoiceBox[Int]()
     val elems = FXCollections.observableArrayList(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000)
-    val blockViewPane = new BlockViewPane("string")
+    val blockViewPane = new BlockViewPane(new SimpleIntegerProperty())
     nrElemsChoiceBox.setItems(elems)
     nrElemsChoiceBox.getSelectionModel().selectedIndexProperty().addListener(JfxUtils.onNew[Number](n => {
       val nrElems = elems.get(n.intValue())

@@ -3,6 +3,7 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.{LogoRRRGlobals, StageSettings}
 import app.logorrr.util.JfxUtils
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
+import javafx.beans.value.ChangeListener
 import javafx.stage.Window
 
 /**
@@ -10,7 +11,7 @@ import javafx.stage.Window
  */
 object MutStageSettings {
 
-  val windowListener = JfxUtils.onNew[Window](window => LogoRRRGlobals.bindWindow(window))
+  val windowListener: ChangeListener[Window] = JfxUtils.onNew[Window](window => LogoRRRGlobals.bindWindow(window))
 
 }
 

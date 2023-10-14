@@ -3,7 +3,7 @@ package app.logorrr.views.main
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.LogFileSettings
 import app.logorrr.util.CanLog
-import app.logorrr.views.LogFileTab
+import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
 
@@ -16,8 +16,8 @@ import scala.jdk.CollectionConverters.ListHasAsScala
  */
 class LogoRRRMainBorderPane extends BorderPane with CanLog {
 
-  val logViewTabPane = new LogoRRRMainTabPane()
 
+  val logViewTabPane = new LogoRRRMainTabPane()
   setCenter(logViewTabPane)
 
   def init(): Unit = {

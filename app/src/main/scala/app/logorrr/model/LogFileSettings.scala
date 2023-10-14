@@ -66,7 +66,7 @@ case class LogFileSettings(pathAsString: String
 
   val path: Path = Paths.get(pathAsString).toAbsolutePath
 
-  val isPathValid =
+  val isPathValid: Boolean =
     if (OsUtil.isMac) {
       Files.exists(path)
     } else {
