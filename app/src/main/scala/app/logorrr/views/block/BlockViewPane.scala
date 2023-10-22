@@ -1,6 +1,5 @@
 package app.logorrr.views.block
 
-import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.search.Filter
@@ -35,7 +34,7 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
     repaint()
   }
 
-  private val blockSizeListener: InvalidationListener = (observable: Observable) => {
+  private val blockSizeListener: InvalidationListener = (_: Observable) => {
     // logTrace("repaint blocksize")
     repaint()
   }
@@ -43,7 +42,7 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
   private val selectedElemListener =
     JfxUtils.onNew[LogEntry](logEntry => selectedLineNumberProperty.set(logEntry.lineNumber))
 
-  private val widthListener = JfxUtils.onNew[Number](n => {
+  private val widthListener = JfxUtils.onNew[Number](_ => {
     // logTrace("repaint width:" + n.intValue())
     repaint()
   })
@@ -74,7 +73,7 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
 
   def setCanvasWidth(value: Double): Unit = super.setWidth(value)
 
-  def getEntriesSize(): Int = entriesProperty.size()
+  def getEntriesSize: Int = entriesProperty.size()
 
   def setEntries(es: ObservableList[LogEntry]): Unit = entriesProperty.setValue(es)
 

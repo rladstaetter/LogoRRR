@@ -29,7 +29,7 @@ object LogFileSettings {
   private val severe: Filter = new Filter("SEVERE", Color.RED, true)
 
   val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
-  val DefaultFontSize = 12
+  private val DefaultFontSize = 12
 
   def apply(p: Path): LogFileSettings =
     LogFileSettings(p.toAbsolutePath.toString

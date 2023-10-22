@@ -16,9 +16,9 @@ import scala.util.Try
 
 object BlockView {
 
-  val ScrollBarWidth = 17
+  private val ScrollBarWidth = 17
 
-  val MinWidth = 200
+  private val MinWidth = 200
 
 
   def indexOf(x: Int, y: Int, blockWidth: Int, blockViewWidth: Int): Int = y / blockWidth * (blockViewWidth / blockWidth) + x / blockWidth
@@ -128,11 +128,11 @@ class BlockView(name: String
 
   }
 
-  def addBindings(): Unit = {
+  private def addBindings(): Unit = {
     imageProperty().bind(blockImage.imageProperty)
   }
 
-  def removeBindings(): Unit = {
+  private def removeBindings(): Unit = {
     imageProperty().unbind()
   }
 
@@ -160,7 +160,7 @@ class BlockView(name: String
 
   def setEntries(entries: java.util.List[LogEntry]): Unit = entriesProperty.setAll(entries)
 
-  def getEntryAt(index: Int): Option[LogEntry] = Try(entriesProperty.get(index)).toOption
+  private def getEntryAt(index: Int): Option[LogEntry] = Try(entriesProperty.get(index)).toOption
 
   def repaint(ctx: String): Unit = blockImage.repaint(ctx)
 

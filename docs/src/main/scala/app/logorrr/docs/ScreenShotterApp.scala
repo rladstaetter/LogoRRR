@@ -1,12 +1,10 @@
 package app.logorrr.docs
 
-import app.logorrr.{LogoRRRAppLauncher, OsxBridge}
 import app.logorrr.conf._
 import app.logorrr.docs.Area._
-import app.logorrr.io.Fs
-import app.logorrr.meta.AppMeta
 import app.logorrr.util.CanLog
 import app.logorrr.views.main.LogoRRRStage
+import app.logorrr.{LogoRRRAppLauncher, OsxBridge}
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Node
 import javafx.stage.Stage

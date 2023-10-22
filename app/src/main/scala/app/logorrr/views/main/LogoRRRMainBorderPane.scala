@@ -48,7 +48,7 @@ class LogoRRRMainBorderPane extends BorderPane with CanLog {
       if (!contains(pathAsString)) {
         addLogFile(path)
       } else {
-        logTrace(s"$pathAsString is already opened, selecting tab ...")
+      // logTrace(s"$pathAsString is already opened, selecting tab ...")
         selectLog(pathAsString)
       }
     } else {

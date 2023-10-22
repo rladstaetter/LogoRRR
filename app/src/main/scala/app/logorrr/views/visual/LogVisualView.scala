@@ -28,7 +28,7 @@ class LogVisualView(selectedLineNumberProperty: SimpleIntegerProperty
 
     blockViewPane.setCanvasWidth(canvasWidth)
     blockViewPane.setBlockSize(8)
-    blockViewPane.getEntriesSize()
+    blockViewPane.getEntriesSize
     blockViewPane.setEntries(entries)
 
     setCenter(blockViewPane)
