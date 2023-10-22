@@ -18,7 +18,9 @@ import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control._
 import javafx.scene.layout._
 
+import java.awt.Desktop
 import java.lang
+import java.nio.file.Paths
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -47,8 +49,21 @@ object LogFileTab {
     logFileTab
   }
 
+  private def mkOpenInFinderItem(pathAsString : String): MenuItem = {
+    val text = if (OsUtil.isWin) {
+      "Show Log in Explorer"
+    } else if (OsUtil.isMac) {
+      "Show Log in Finder"
+    } else {
+      "Show Log ..."
+    }
+    val mi = new MenuItem(text)
+    mi.setOnAction(e => {
+      Desktop.getDesktop.open(Paths.get(pathAsString).getParent.toFile)
+    })
+    mi
+  }
 }
-
 
 /**
  * Represents a single 'document' UI approach for a log file.
@@ -60,6 +75,11 @@ object LogFileTab {
 class LogFileTab(val pathAsString: String
                  , val logEntries: ObservableList[LogEntry])
   extends Tab with TimerCode with CanLog {
+
+  val openInFinderItem = LogFileTab.mkOpenInFinderItem(pathAsString)
+
+  val cm = new ContextMenu(openInFinderItem)
+  setContextMenu(cm)
 
   // lazy since only if autoscroll is set start tailer
   private lazy val logTailer = LogTailer(pathAsString, logEntries)
