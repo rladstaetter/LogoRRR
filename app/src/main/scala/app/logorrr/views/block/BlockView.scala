@@ -55,7 +55,8 @@ object BlockView {
 /**
  * Displays a region with max 4096 x 4096 pixels and as many entries as can fit in this region.
  */
-class BlockView(selectedLineNumberProperty: SimpleIntegerProperty
+class BlockView(name: String
+                , selectedLineNumberProperty: SimpleIntegerProperty
                 , filtersProperty: SimpleListProperty[Filter]
                 , blockSizeProperty: SimpleIntegerProperty
                 , outerWidthProperty: ReadOnlyDoubleProperty
@@ -66,29 +67,32 @@ class BlockView(selectedLineNumberProperty: SimpleIntegerProperty
   val entriesProperty = new SimpleListProperty[LogEntry](FXCollections.observableArrayList())
 
   private val onClickListener: ChangeListener[LogEntry] = JfxUtils.onNew {
-    logEntry => selectedElemProperty.set(logEntry)
-    blockImage.draw(entriesProperty.indexOf(logEntry), Color.YELLOW)
+    logEntry =>
+      selectedElemProperty.set(logEntry)
+      val i = entriesProperty.indexOf(logEntry)
+      if (i >= 0) {
+        blockImage.lpb.draw(i, Color.YELLOW)
+      } else {
+        logWarn("onClickListener " + i)
+      }
   }
 
-  val selectedLineNumberListener = new ChangeListener[Number] {
+  private val selectedLineNumberListener = new ChangeListener[Number] {
     override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
       if (t.intValue() != t1.intValue()) {
-         blockImage.draw(t1.intValue(), Color.YELLOW)
+        blockImage.lpb.draw(t1.intValue(), Color.YELLOW)
       }
     }
   }
 
   val selectedEntryProperty: SimpleObjectProperty[LogEntry] = new SimpleObjectProperty[LogEntry]()
 
-  private val blockImage = {
-    val bi = new BlockImage
-    bi.widthProperty.bind(widthProperty)
-    bi.blockWidthProperty.bind(blockSizeProperty)
-    bi.blockHeightProperty.bind(blockSizeProperty)
-    bi.entries.bind(entriesProperty)
-    bi.filtersProperty.bind(filtersProperty)
-    bi
-  }
+  private val blockImage = new BlockImage(name
+    , widthProperty
+    , blockSizeProperty
+    , entriesProperty
+    , filtersProperty
+    , selectedElemProperty)
 
   private val widthListener = JfxUtils.onNew[Number](n => {
     val scrollPaneWidth = n.intValue()
@@ -97,13 +101,12 @@ class BlockView(selectedLineNumberProperty: SimpleIntegerProperty
       if (proposedWidth > BlockView.MinWidth) {
         setWidth(proposedWidth)
       } else {
-        // logTrace(s"Proposed width ($proposedWidth) < SQView.MinWidth (${BlockView.MinWidth}), not adjusting width of canvas ...")
+      // logTrace(s"Proposed width ($proposedWidth) < SQView.MinWidth (${BlockView.MinWidth}), not adjusting width of canvas ...")
       }
     } else {
-      // logTrace(s"ScrollPaneWidth ($scrollPaneWidth) >= SQImage.MaxWidth (${BlockImage.MaxWidth}), not adjusting width of canvas ...")
+    // logTrace(s"ScrollPaneWidth ($scrollPaneWidth) >= SQImage.MaxWidth (${BlockImage.MaxWidth}), not adjusting width of canvas ...")
     }
   })
-
 
 
   init()
@@ -150,6 +153,7 @@ class BlockView(selectedLineNumberProperty: SimpleIntegerProperty
     removeListener()
     removeBindings()
   }
+
   def setHeight(height: Int): Unit = blockImage.setHeight(height)
 
   def setWidth(width: Int): Unit = widthProperty.set(width)
@@ -158,6 +162,6 @@ class BlockView(selectedLineNumberProperty: SimpleIntegerProperty
 
   def getEntryAt(index: Int): Option[LogEntry] = Try(entriesProperty.get(index)).toOption
 
-  def repaint(): Unit = blockImage.repaint()
+  def repaint(ctx: String): Unit = blockImage.repaint(ctx)
 
 }

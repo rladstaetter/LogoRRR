@@ -14,15 +14,10 @@ object LogFileReader extends CanLog {
       OsxBridge.registerPath(logFile.toAbsolutePath.toString)
     }
     val lines = FileManager.fromPath(logFile)
-    logEmptyLogFile(logFile, lines)
+    if (lines.isEmpty) {
+      logWarn(s"${logFile.toAbsolutePath.toString} was empty.")
+    }
     lines
   }
 
-  private def logEmptyLogFile(logFile: Path, lines: Seq[String]): Unit = {
-    if (lines.isEmpty) {
-      logWarn(s"${logFile.toAbsolutePath.toString} was empty.")
-    } else {
-      // logTrace(s"${logFile.toAbsolutePath.toString} has ${lines.size} lines.")
-    }
-  }
 }

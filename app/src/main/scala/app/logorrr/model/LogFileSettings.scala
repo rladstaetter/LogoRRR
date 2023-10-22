@@ -77,14 +77,13 @@ case class LogFileSettings(pathAsString: String
   def readEntries(): ObservableList[LogEntry] = {
     if (isPathValid) {
       Try(someLogEntryInstantFormat match {
-        case Some(instantFormat) => LogEntryFileReader.from(path, filters, instantFormat)
-        case None => LogEntryFileReader.from(path, filters)
+        case Some(instantFormat) => LogEntryFileReader.from(path,  instantFormat)
+        case None => LogEntryFileReader.from(path)
       }) match {
         case Success(logEntries) =>
-          // logTrace(s"Opened $pathAsString ... ")
           logEntries
         case Failure(ex) =>
-          val msg = s"Could not import file $pathAsString"
+          val msg = s"Could not load file $pathAsString"
           logException(msg, ex)
           FXCollections.observableArrayList()
       }

@@ -12,7 +12,7 @@ import java.util
 object LogEntryFileReader extends CanLog {
 
   private def mkLogEntryList(parseEntryForTimeInstant: String => Option[Instant])
-                            (logFilePath: Path): ObservableList[LogEntry] = timeR({
+                            (logFilePath: Path): ObservableList[LogEntry] = {
     var lineNumber: Int = 0
     val arraylist = new util.ArrayList[LogEntry]()
     LogFileReader.readFromFile(logFilePath).map(l => {
@@ -20,13 +20,13 @@ object LogEntryFileReader extends CanLog {
       arraylist.add(LogEntry(lineNumber, l, parseEntryForTimeInstant(l)))
     })
     FXCollections.observableList(arraylist)
-  }, s"Imported ${logFilePath.toAbsolutePath.toString} ... ")
+  }
 
-  def from(logFilePath: Path, filters: Seq[Fltr], logEntryTimeFormat: LogEntryInstantFormat): ObservableList[LogEntry] = {
+  def from(logFilePath: Path,  logEntryTimeFormat: LogEntryInstantFormat): ObservableList[LogEntry] = {
     mkLogEntryList(l => LogEntryInstantFormat.parseInstant(l, logEntryTimeFormat))(logFilePath)
   }
 
-  def from(logFile: Path, filters: Seq[Fltr]): ObservableList[LogEntry] = mkLogEntryList(_ => None)(logFile)
+  def from(logFile: Path): ObservableList[LogEntry] = mkLogEntryList(_ => None)(logFile)
 
 
 }

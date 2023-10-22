@@ -16,7 +16,7 @@ class LogEntryFileReaderSpec extends AnyWordSpec {
       "exist" in assert(Files.exists(p))
       "be readable" in {
         if (!OsUtil.isMac) { // fixme: currently this guard exists since otherwise we would have to fiddle around loading native libs on mac
-          val r = LogEntryFileReader.from(p, Seq())
+          val r = LogEntryFileReader.from(p)
           assert(!r.isEmpty)
         }
       }
