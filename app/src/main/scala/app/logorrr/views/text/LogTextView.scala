@@ -3,7 +3,7 @@ package app.logorrr.views.text
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{ClipBoardUtils, JfxUtils}
-import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.beans.value.ChangeListener
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 import javafx.scene.layout.BorderPane
@@ -72,10 +72,12 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
   class LogEntryListCell extends ListCell[LogEntry] {
     styleProperty().bind(mutLogFileSettings.fontStyleBinding)
     setGraphic(null)
-    val cm = new ContextMenu()
+    
     val copyCurrentToClipboard = new MenuItem("copy text to clipboard")
-
-    cm.getItems.add(copyCurrentToClipboard)
+    val separator = new SeparatorMenuItem()
+    val ignoreAbove = new MenuItem("Ignore entries above")
+    val ignoreBelow = new MenuItem("Ignore entries below")
+    val cm = new ContextMenu(copyCurrentToClipboard, separator, ignoreAbove, ignoreBelow)
 
     override def updateItem(t: LogEntry, b: Boolean): Unit = {
       super.updateItem(t, b)
@@ -98,6 +100,17 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
         , mutLogFileSettings.fontStyleBinding)
       setGraphic(entry)
       copyCurrentToClipboard.setOnAction(_ => ClipBoardUtils.copyToClipboardText(e.value))
+      ignoreAbove.setOnAction(_ => {
+        val currPredicate = filteredList.getPredicate
+        filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && e.lineNumber <= entry.lineNumber)
+        // logTrace("Ignoring all before " + e.lineNumber)
+      })
+      ignoreBelow.setOnAction(_ => {
+        val currPredicate = filteredList.getPredicate
+        filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && entry.lineNumber <= e.lineNumber)
+        // logTrace("Ignoring all after " + e.lineNumber)
+      })
+
       setContextMenu(cm)
     }
   }
