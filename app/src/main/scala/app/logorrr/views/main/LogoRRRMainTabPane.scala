@@ -27,15 +27,12 @@ class LogoRRRMainTabPane()
     with CanLog {
 
   val selectedItemListener: ChangeListener[Tab] = JfxUtils.onNew {
-    t1: Tab =>
-      t1 match {
-        case logFileTab: LogFileTab =>
-          // logTrace(s"Selected: ${logFileTab.pathAsString}")
-          LogoRRRGlobals.setSomeActive(Option(logFileTab.pathAsString))
-          // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
-          getSelectionModel.select(logFileTab)
-        case _ =>
-      }
+    case logFileTab: LogFileTab =>
+      // logTrace(s"Selected: ${logFileTab.pathAsString}")
+      LogoRRRGlobals.setSomeActive(Option(logFileTab.pathAsString))
+      // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
+      getSelectionModel.select(logFileTab)
+    case _ =>
   }
 
   init()
@@ -61,11 +58,10 @@ class LogoRRRMainTabPane()
   def contains(p: String): Boolean = getLogFileTabs.exists(lr => lr.pathAsString == p)
 
   def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
-    t =>
-      t match {
-        case l: LogFileTab => Option(l)
-        case _ => None
-      }
+    _ match {
+      case l: LogFileTab => Option(l)
+      case _ => None
+    }
   }
 
   /** shutdown all tabs */
