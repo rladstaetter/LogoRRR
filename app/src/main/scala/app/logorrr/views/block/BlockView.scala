@@ -55,13 +55,14 @@ object BlockView {
 /**
  * Displays a region with max 4096 x 4096 pixels and as many entries as can fit in this region.
  */
-class BlockView(name: String
+class BlockView(val name: String
                 , selectedLineNumberProperty: SimpleIntegerProperty
                 , filtersProperty: SimpleListProperty[Filter]
                 , blockSizeProperty: SimpleIntegerProperty
                 , outerWidthProperty: ReadOnlyDoubleProperty
                 , selectedElemProperty: SimpleObjectProperty[LogEntry]) extends ImageView with CanLog {
 
+  // current width is needed to calculate the correct position for a block
   private val widthProperty = new SimpleIntegerProperty(outerWidthProperty.get().intValue())
 
   val entriesProperty = new SimpleListProperty[LogEntry](FXCollections.observableArrayList())
@@ -101,28 +102,28 @@ class BlockView(name: String
       if (proposedWidth > BlockView.MinWidth) {
         setWidth(proposedWidth)
       } else {
-      // logTrace(s"Proposed width ($proposedWidth) < SQView.MinWidth (${BlockView.MinWidth}), not adjusting width of canvas ...")
+        // logTrace(s"Proposed width ($proposedWidth) < SQView.MinWidth (${BlockView.MinWidth}), not adjusting width of canvas ...")
       }
     } else {
-    // logTrace(s"ScrollPaneWidth ($scrollPaneWidth) >= SQImage.MaxWidth (${BlockImage.MaxWidth}), not adjusting width of canvas ...")
+      // logTrace(s"ScrollPaneWidth ($scrollPaneWidth) >= SQImage.MaxWidth (${BlockImage.MaxWidth}), not adjusting width of canvas ...")
     }
   })
+
+  private val mouseEventHandler = new EventHandler[MouseEvent]() {
+    override def handle(me: MouseEvent): Unit = {
+      val index = BlockView.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get)
+      getEntryAt(index) match {
+        case Some(value) => selectedEntryProperty.set(value)
+        case None => System.err.println("no element found")
+      }
+    }
+  }
 
 
   init()
 
   def init(): Unit = {
-
-    setOnMouseClicked(new EventHandler[MouseEvent]() {
-      override def handle(me: MouseEvent): Unit = {
-        val index = BlockView.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get)
-        getEntryAt(index) match {
-          case Some(value) => selectedEntryProperty.set(value)
-          case None => System.err.println("no element found")
-        }
-      }
-    })
-
+    setOnMouseClicked(mouseEventHandler)
     addListener()
     addBindings()
 
@@ -149,9 +150,9 @@ class BlockView(name: String
   }
 
   def shutdown(): Unit = {
-    blockImage.shutdown()
     removeListener()
     removeBindings()
+    blockImage.shutdown()
   }
 
   def setHeight(height: Int): Unit = blockImage.setHeight(height)

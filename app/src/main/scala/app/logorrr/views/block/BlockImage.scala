@@ -60,10 +60,9 @@ class BlockImage(name: String
 
 
   def shutdown(): Unit = {
+    removeListener() // remove all listeners first
     lpb = null
-    // just wipe out everything (?!)
     imageProperty.set(null)
-    removeListener()
   }
 
 
@@ -92,7 +91,9 @@ class BlockImage(name: String
   }
 
   // todo check visibility
-  def repaint(ctx: String): Unit = lpb.repaint(ctx, filtersProperty.asScala.toSeq, selectedElemProperty.get())
+  def repaint(ctx: String): Unit = {
+    Option(lpb).foreach(_.repaint(ctx, filtersProperty.asScala.toSeq, selectedElemProperty.get()))
+  }
 
   def setHeight(height: Int): Unit = heightProperty.set(height)
 

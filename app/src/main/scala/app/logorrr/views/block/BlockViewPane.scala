@@ -144,7 +144,7 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
       }
 
       vbox.getChildren.setAll(blockViews: _*)
-      blockViews.foreach(_.repaint("blockview"))
+      blockViews.foreach(b => b.repaint("blockview " + b.name))
     }
     ()
   }
