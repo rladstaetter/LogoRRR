@@ -60,18 +60,18 @@ class BlockView(name: String
                 , filtersProperty: SimpleListProperty[Filter]
                 , blockSizeProperty: SimpleIntegerProperty
                 , outerWidthProperty: ReadOnlyDoubleProperty
-                , selectedElemProperty: SimpleObjectProperty[LogEntry]) extends ImageView with CanLog {
+                , selectedElemProperty: SimpleObjectProperty[LogEntry]
+                , entries: java.util.List[LogEntry]) extends ImageView with CanLog {
 
   private val widthProperty = new SimpleIntegerProperty(outerWidthProperty.get().intValue())
 
-  val entriesProperty = new SimpleListProperty[LogEntry](FXCollections.observableArrayList())
 
   private val onClickListener: ChangeListener[LogEntry] = JfxUtils.onNew {
     logEntry =>
       selectedElemProperty.set(logEntry)
-      val i = entriesProperty.indexOf(logEntry)
+      val i = entries.indexOf(logEntry)
       if (i >= 0) {
-        blockImage.lpb.draw(i, Color.YELLOW)
+        blockImage.draw(i, Color.YELLOW)
       } else {
         logWarn("onClickListener " + i)
       }
@@ -80,7 +80,7 @@ class BlockView(name: String
   private val selectedLineNumberListener = new ChangeListener[Number] {
     override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
       if (t.intValue() != t1.intValue()) {
-        blockImage.lpb.draw(t1.intValue(), Color.YELLOW)
+        blockImage.draw(t1.intValue(), Color.YELLOW)
       }
     }
   }
@@ -90,7 +90,7 @@ class BlockView(name: String
   private val blockImage = new BlockImage(name
     , widthProperty
     , blockSizeProperty
-    , entriesProperty
+    , entries
     , filtersProperty
     , selectedElemProperty)
 
@@ -101,31 +101,30 @@ class BlockView(name: String
       if (proposedWidth > BlockView.MinWidth) {
         setWidth(proposedWidth)
       } else {
-      // logTrace(s"Proposed width ($proposedWidth) < SQView.MinWidth (${BlockView.MinWidth}), not adjusting width of canvas ...")
+        // logTrace(s"Proposed width ($proposedWidth) < SQView.MinWidth (${BlockView.MinWidth}), not adjusting width of canvas ...")
       }
     } else {
-    // logTrace(s"ScrollPaneWidth ($scrollPaneWidth) >= SQImage.MaxWidth (${BlockImage.MaxWidth}), not adjusting width of canvas ...")
+      // logTrace(s"ScrollPaneWidth ($scrollPaneWidth) >= SQImage.MaxWidth (${BlockImage.MaxWidth}), not adjusting width of canvas ...")
     }
   })
+
+  val mouseEventHandler = new EventHandler[MouseEvent]() {
+    override def handle(me: MouseEvent): Unit = {
+      val index = BlockView.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get)
+      getEntryAt(index) match {
+        case Some(value) => selectedEntryProperty.set(value)
+        case None => System.err.println("no element found")
+      }
+    }
+  }
 
 
   init()
 
   def init(): Unit = {
-
-    setOnMouseClicked(new EventHandler[MouseEvent]() {
-      override def handle(me: MouseEvent): Unit = {
-        val index = BlockView.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get)
-        getEntryAt(index) match {
-          case Some(value) => selectedEntryProperty.set(value)
-          case None => System.err.println("no element found")
-        }
-      }
-    })
-
+    setOnMouseClicked(mouseEventHandler)
     addListener()
     addBindings()
-
   }
 
   private def addBindings(): Unit = {
@@ -158,9 +157,7 @@ class BlockView(name: String
 
   def setWidth(width: Int): Unit = widthProperty.set(width)
 
-  def setEntries(entries: java.util.List[LogEntry]): Unit = entriesProperty.setAll(entries)
-
-  private def getEntryAt(index: Int): Option[LogEntry] = Try(entriesProperty.get(index)).toOption
+  private def getEntryAt(index: Int): Option[LogEntry] = Try(entries.get(index)).toOption
 
   def repaint(ctx: String): Unit = blockImage.repaint(ctx)
 

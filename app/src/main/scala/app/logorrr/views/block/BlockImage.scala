@@ -25,12 +25,11 @@ object BlockImage {
 class BlockImage(name: String
                  , widthProperty: SimpleIntegerProperty
                  , blockSizeProperty: SimpleIntegerProperty
-                 , entriesProperty: SimpleListProperty[LogEntry]
+                 , entriesProperty: java.util.List[LogEntry]
                  , filtersProperty: SimpleListProperty[Filter]
                  , selectedElemProperty: SimpleObjectProperty[LogEntry]) extends CanLog {
 
-  var lpb: LPixelBuffer = _
-
+  private var lpb: LPixelBuffer = _
   /**
    * height property is calculated on the fly depending on the blockwidth/blockheight,
    * width of BlockImage, number of elements and max size of possible of texture (4096).
@@ -40,8 +39,8 @@ class BlockImage(name: String
   val imageProperty = new SimpleObjectProperty[WritableImage]()
 
   private val heightListener: ChangeListener[Number] = JfxUtils.onNew[Number](height => {
-  // logTrace("heightListener " + height)
-    resetBackingImage(getWidth, height.intValue)
+    // logTrace("heightListener " + height)
+    setImage(getWidth, height.intValue)
   })
 
   private val blockSizeListener: InvalidationListener = (_: Observable) => {
@@ -80,7 +79,7 @@ class BlockImage(name: String
   }
 
 
-  private def resetBackingImage(width: Int, height: Int): Unit = {
+  private def setImage(width: Int, height: Int): Unit = {
     lpb = LPixelBuffer(width
       , height
       , blockSizeProperty
@@ -92,10 +91,12 @@ class BlockImage(name: String
   }
 
   // todo check visibility
-  def repaint(ctx: String): Unit = lpb.repaint(ctx, filtersProperty.asScala.toSeq, selectedElemProperty.get())
+  def repaint(ctx: String): Unit = Option(lpb).foreach(_.repaint(ctx, filtersProperty.asScala.toSeq, selectedElemProperty.get()))
 
   def setHeight(height: Int): Unit = heightProperty.set(height)
 
   def getWidth: Int = widthProperty.get()
+
+  def draw(i: Int, color: Color): Unit = lpb.draw(i, color)
 
 }

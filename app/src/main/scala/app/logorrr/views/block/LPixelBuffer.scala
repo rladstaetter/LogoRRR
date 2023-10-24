@@ -14,7 +14,7 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
 case class LPixelBuffer(width: Int
                         , height: Int
                         , blockSizeProperty: SimpleIntegerProperty
-                        , entriesProperty: SimpleListProperty[LogEntry]
+                        , entries: java.util.List[LogEntry]
                         , filtersProperty: SimpleListProperty[Filter]
                         , selectedEntryProperty: SimpleObjectProperty[LogEntry]
                         , rawInts: Array[Int]) extends {
@@ -46,7 +46,7 @@ case class LPixelBuffer(width: Int
         updateBuffer((_: PixelBuffer[IntBuffer]) => {
           cleanBackground()
           var i = 0
-          entriesProperty.forEach(e => {
+          entries.forEach(e => {
             if (e.equals(selectedEntry)) {
               drawRect(i, Color.YELLOW)
             } else {

@@ -110,10 +110,10 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
             , filtersProperty
             , blockSizeProperty
             , widthProperty
-            , selectedElemProperty)
+            , selectedElemProperty
+            , entriesProperty)
           blockView.setWidth(getWidth.toInt)
           blockView.setHeight(blockHeight)
-          blockView.setEntries(entriesProperty)
           Seq(blockView)
         } else {
           // if the virtual canvas height exceeds SQImage.MaxHeight, iterate and create new SQViews
@@ -132,9 +132,14 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
             val blockViewEntries = entriesProperty.subList(curIndex, end)
             val name = s"${curIndex}_$end"
             val blockView =
-              new BlockView(name, selectedLineNumberProperty, filtersProperty, blockSizeProperty, widthProperty, selectedElemProperty)
+              new BlockView(name
+                , selectedLineNumberProperty
+                , filtersProperty
+                , blockSizeProperty
+                , widthProperty
+                , selectedElemProperty
+                , blockViewEntries)
             blockView.setWidth(getWidth.toInt)
-            blockView.setEntries(blockViewEntries)
             blockView.setHeight(BlockView.calcVirtualHeight(blockSize, blockSize, getWidth.toInt, blockViewEntries.size))
             lb.addOne(blockView)
             curIndex = curIndex + nrElemsInSqView
