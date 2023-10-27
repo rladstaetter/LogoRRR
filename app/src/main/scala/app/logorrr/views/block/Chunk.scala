@@ -6,35 +6,15 @@ import scala.collection.mutable.ListBuffer
 
 object Chunk {
 
-  /** creates a list of LogEntries with the given size */
-  def mkTestLogEntries(size: Int): java.util.List[LogEntry] = {
-    val entries = {
-      (0 until size).foldLeft(new java.util.ArrayList[LogEntry]())((acc, e) => {
-        acc.add(LogEntry(e, s"t $e", None))
-        acc
-      })
-    }
-    entries
-  }
-
-  def mkTestChunks(nrEntries: Int
-                   , width: Int
-                   , height: Int
-                   , blocksize: Int): Seq[Chunk] = {
-    val entries = mkTestLogEntries(nrEntries)
-    mkChunks(entries, width, height, blocksize)
-  }
-
   def mkChunks(entries: java.util.List[LogEntry]
-               , width: Double
-               , height: Double
+               , width: Int
+               , height: Int
                , blocksize: Int): Seq[Chunk] = {
     if (width != 0 && blocksize != 0) {
       // nr of chunks is calculated as follows:
       // how many entries fit into a chunk?
       // given their size and the width and height of a chunk it is easy to calculate.
-      val cols = (width / blocksize).toInt
-      val rows = (height / blocksize).toInt
+      val (cols, rows) = (width / blocksize, height / blocksize)
       val nrElements = rows * cols
 
       val entriesSize = entries.size()

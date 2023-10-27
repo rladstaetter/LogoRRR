@@ -1,11 +1,26 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
+import app.logorrr.util.MathUtil
 import app.logorrr.views.search.Filter
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.scene.control.ListCell
 
-class ChunkListCell(widthProperty: ReadOnlyDoubleProperty
+object ChunkListCell {
+
+  /**
+   * Given the current blocksize, returns an appropriate height for the cell. However, it won't surpass [[BlockImage.MaxHeight]].
+   *
+   * @param blockSize size of blocks to display
+   * @return an appropriate height for the ChunkListCell
+   */
+  // defines the default height for a ChunkListCell
+  def calcHeight(blockSize: Int): Int = Math.min(blockSize * 10, BlockImage.MaxHeight)
+
+}
+
+class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
+                    , widthProperty: ReadOnlyDoubleProperty
                     , blockSizeProperty: SimpleIntegerProperty) extends ListCell[Chunk] {
 
   setStyle(
@@ -20,33 +35,20 @@ class ChunkListCell(widthProperty: ReadOnlyDoubleProperty
     super.updateItem(t, empty)
 
     if (empty || Option(t).isEmpty) {
-      // println("empty or empty list")
       setGraphic(null)
       setText(null)
     } else {
-      // calculate height of cell
-      // we need the number of entries and the width to calculate the height
-      // println(t.name)
-      /*
-            val cols = widthProperty.get() / blockSizeProperty.get()
-            val height = t.entries.size
-            val heightProperty = new SimpleIntegerProperty(10)
-      */
-      // TODO set blockview
-      val name = t.name
-      //val height = BlockView.calcVirtualHeight(blockSizeProperty.get(),blockSizeProperty.get(),widthProperty.get().toInt,t.entries.size)
-      val height = blockSizeProperty.get() * 10
-      // println(s"Creating $name,width ${widthProperty.get()}, height: $height, entries: " + t.entries.size)
 
+      val name = t.name
+      val height = MathUtil.calcBoundedHeight(widthProperty, blockSizeProperty, t.entries)
       val bv = new BlockView(name = name
-        , selectedLineNumberProperty = new SimpleIntegerProperty(0)
+        , selectedLineNumberProperty
         , filtersProperty = new SimpleListProperty[Filter]
-        , blockSizeProperty = new SimpleIntegerProperty(10)
-        , outerWidthProperty = widthProperty
-        , selectedElemProperty = new SimpleObjectProperty[LogEntry]()
+        , blockSizeProperty = blockSizeProperty
+        , widthProperty = widthProperty
+        , selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
         , entries = t.entries
         , heightProperty = new SimpleIntegerProperty(height))
-      //, heightProperty)
       setGraphic(bv)
       setText(null)
     }

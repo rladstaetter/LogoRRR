@@ -90,6 +90,7 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
   }
 
   def repaint(): Unit = {
+    /*
     if (doRepaint()) {
       val blockSize = getBlockSize()
       // free old memory and listeners otherwise we get a memory leak
@@ -150,6 +151,8 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
 
       vbox.getChildren.setAll(blockViews: _*)
     }
+
+     */
     ()
   }
 

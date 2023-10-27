@@ -1,7 +1,7 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.CanLog
+import app.logorrr.util.{CanLog, MathUtil}
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty}
 import javafx.collections.FXCollections
 import javafx.scene.control.ListView
@@ -16,6 +16,7 @@ import javafx.scene.control.ListView
  * @param blockSizeProperty size of blocks to display
  */
 class ChunkListView(val entriesProperty: SimpleListProperty[LogEntry]
+                    , val selectedLineNumberProperty: SimpleIntegerProperty
                     , val blockSizeProperty: SimpleIntegerProperty)
   extends ListView[Chunk] with CanLog {
 
@@ -34,29 +35,29 @@ class ChunkListView(val entriesProperty: SimpleListProperty[LogEntry]
 */
     getStylesheets.add(getClass.getResource("ChunkListView.css").toExternalForm)
 
-    setCellFactory((lv: ListView[Chunk]) => new ChunkListCell(lv.widthProperty(), blockSizeProperty))
+    setCellFactory((lv: ListView[Chunk]) => new ChunkListCell(
+      selectedLineNumberProperty
+      , lv.widthProperty()
+      , blockSizeProperty))
 
   }
 
-  def cols = widthProperty().get() / blockSizeProperty.get()
+  def cols: Int = MathUtil.roundUp(widthProperty().get() / blockSizeProperty.get())
 
-  def rows = entriesProperty.size() / cols
+  def rows: Int = entriesProperty.size() / cols
 
-  def height = rows * blockSizeProperty.get()
+  def height: Int = rows * blockSizeProperty.get()
 
+
+  // if width/height of display is changed, also elements of this listview will change
+  // and shuffle between cells. this method recreates all listview entries.
   def recalculateListViewElements(): Unit = {
     val chunks = Chunk.mkChunks(entriesProperty
       , widthProperty().get().toInt
-      , boundedHeight
+      , MathUtil.calcBoundedHeight(widthProperty, blockSizeProperty, entriesProperty)
       , blockSizeProperty.get())
-    // for (c <- chunks) {
-    //  println(s"SuperChunk: ${c.name} ${c.entries.size}")
-    //}
     setItems(FXCollections.observableArrayList(chunks: _*))
   }
 
-  /** if height exceeds 10 x blocksize, return this value, else return computed height */
-  private def boundedHeight: Double = {
-    if (height >= blockSizeProperty.get() * 10) blockSizeProperty.get() * 10 else height
-  }
+
 }

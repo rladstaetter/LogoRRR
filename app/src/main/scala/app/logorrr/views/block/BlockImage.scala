@@ -11,8 +11,9 @@ object BlockImage {
 
   val MaxWidth = 4096
 
-  val MaxHeight = 100
-  val Height = 100
+  val MaxHeight = 4096
+
+  @deprecated val Height = 100 // remove when blockviewpane is gone
 
 }
 
@@ -22,16 +23,15 @@ class BlockImage(name: String
                  , blockSizeProperty: SimpleIntegerProperty
                  , entries: java.util.List[LogEntry]
                  , filtersProperty: SimpleListProperty[Filter]
-                 , selectedElemProperty: SimpleObjectProperty[LogEntry]
+                 , selectedEntryProperty: SimpleObjectProperty[LogEntry]
                  , heightProperty: SimpleIntegerProperty)
   extends WritableImage(LPixelBuffer(name
-    , widthProperty.get().toInt
-    , heightProperty.get()
+    , RectangularShape(widthProperty.get(), heightProperty.get())
     , blockSizeProperty
     , entries
     , filtersProperty
-    , selectedElemProperty
-    , Array.fill((widthProperty.get() * heightProperty.get()).toInt)(ColorUtil.toARGB(Color.WHITE)))) with CanLog {
+    , selectedEntryProperty
+    , Array.fill((widthProperty.get() * heightProperty.get()).toInt)(ColorUtil.toARGB(Color.GREEN)))) with CanLog {
 
   def draw(i: Int, color: Color): Unit = {
     logError("implement me")

@@ -4,12 +4,17 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, ColorUtil}
 import app.logorrr.views.search.Filter
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
-import javafx.geometry.Rectangle2D
 import javafx.scene.image.{PixelBuffer, PixelFormat}
 import javafx.scene.paint.Color
 
 import java.nio.IntBuffer
+import scala.jdk.CollectionConverters.CollectionHasAsScala
 
+/**
+ * Paint directly into a byte array for performant image manipulations.
+ */
+// TODO profile this code and compare it to an approach using the 'normal' image drawing facilities to see if
+// it is worth the ceremony ... :|
 object LPixelBuffer {
 
   private def drawRect(rawInts: Array[Int]
@@ -50,41 +55,37 @@ object LPixelBuffer {
       }
     }
   }
-
 }
 
+
 case class LPixelBuffer(name: String
-                        , width: Int
-                        , height: Int
+                        , shape: RectangularShape
                         , blockSizeProperty: SimpleIntegerProperty
                         , entries: java.util.List[LogEntry]
                         , filtersProperty: SimpleListProperty[Filter]
                         , selectedEntryProperty: SimpleObjectProperty[LogEntry]
-                        , rawInts: Array[Int]) extends {
-  private val buffer: IntBuffer = IntBuffer.wrap(rawInts)
-} with PixelBuffer[IntBuffer](width, height, buffer, PixelFormat.getIntArgbPreInstance) with CanLog {
+                        , rawInts: Array[Int]) extends
+  PixelBuffer[IntBuffer](shape.width.toInt
+    , shape.height.toInt
+    , IntBuffer.wrap(rawInts)
+    , PixelFormat.getIntArgbPreInstance) with CanLog {
 
   getBuffer.clear()
 
-  assert(width != 0, s"width was $width.")
-  assert(height != 0, s"height was $height.")
-  assert(height * width > 0)
+  assert(shape.width != 0, s"width was ${shape.width}.")
+  assert(shape.height != 0, s"height was ${shape.height}.")
+  assert(shape.height * shape.width > 0)
 
-  // checks in order not to overshoot the boundaries of underlying restrictions of the hardware accelerated api
-  assert(width <= BlockImage.MaxWidth, s"width was $width which exceeds ${BlockImage.MaxWidth}.")
-  assert(height <= BlockImage.MaxHeight, s"height was $height which exceeds ${BlockImage.Height}.")
-
-  private val blockColor = ColorUtil.randColor
-
-  lazy val background: Array[Int] = Array.fill(width * height)(ColorUtil.toARGB(Color.MAGENTA))
-
-  private val roi = new Rectangle2D(0, 0, width, height)
+  private val bgColor: Int = ColorUtil.toARGB(Color.WHITE)
+  lazy val background: Array[Int] = Array.fill(shape.area.toInt)(bgColor)
 
   paint()
 
   private def cleanBackground(): Unit = System.arraycopy(background, 0, rawInts, 0, background.length)
 
   def blockSize: Int = blockSizeProperty.get()
+
+  def filters = Option(filtersProperty.get()).map(_.asScala.toSeq).getOrElse(Seq())
 
   // todo check visibility
   def paint(): Unit = timeR({
@@ -93,19 +94,20 @@ case class LPixelBuffer(name: String
         logWarn("filters is null")
       } else
         updateBuffer((_: PixelBuffer[IntBuffer]) => {
-          logTrace("Painting " + name)
+          logTrace("Painting " + name + ", width : " + shape.width)
           cleanBackground()
           var i = 0
           entries.forEach(e => {
             if (e.equals(selectedEntryProperty.get())) {
-              LPixelBuffer.drawRect(rawInts, i, width, blockSize, Color.YELLOW)
+              LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, Color.YELLOW)
             } else {
-              LPixelBuffer.drawRect(rawInts, i, width, blockSize, blockColor)
-              // drawRect(i, Filter.calcColor(e.value, filters))
+              // LPixelBuffer.drawRect(rawInts, i, width, blockSize, blockColor)
+              //LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, Filter.calcColor(e.value, filters))
+              LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, ColorUtil.intToColor(i))
             }
             i = i + 1
           })
-          roi
+          shape
         })
     } else {
       logWarn(s"getBlockWidth() = $blockSize")
@@ -121,11 +123,10 @@ case class LPixelBuffer(name: String
       paint()
       updateBuffer((_: PixelBuffer[IntBuffer]) => {
         // drawRect(e.lineNumber - 1, Filter.calcColor(e.value, filtersProperty.asScala.toSeq).darker().darker())
-        LPixelBuffer.drawRect(rawInts, index, width, blockSize, color)
-        roi
+        LPixelBuffer.drawRect(rawInts, index, shape.width.toInt, blockSize, color)
+        shape
       })
     }
   }
-
 
 }

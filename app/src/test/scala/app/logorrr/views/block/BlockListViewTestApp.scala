@@ -7,13 +7,10 @@ import javafx.application.Application
 import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty}
 import javafx.collections.FXCollections
 import javafx.scene.Scene
-import javafx.scene.control.Label
 import javafx.stage.Stage
 
 import java.nio.file.{Path, Paths}
-import java.{lang, util}
-import java.util.Collections
-import scala.jdk.CollectionConverters.IterableHasAsJava
+import java.util
 
 /**
  * App to test block list view
@@ -30,27 +27,23 @@ object BlockListViewTestApp {
 
 class BlockListApp extends Application {
 
-  // return test log entries
-  private def mkTestEntries(): java.util.List[LogEntry] = {
-    val entries: util.List[LogEntry] = Chunk.mkTestLogEntries(1000 * 1000 * 100)
-    entries
-  }
-
   private def mkEntries(path: Path): java.util.List[LogEntry] = {
-    util.Arrays.asList((for ((l, i) <- LogFileReader.readFromFile(path).zipWithIndex) yield LogEntry(i, l, None)) : _*)
+    util.Arrays.asList((for ((l, i) <- LogFileReader.readFromFile(path).zipWithIndex) yield LogEntry(i, l, None)): _*)
   }
 
   def start(stage: Stage): Unit = {
 
     val width = 1000
-    val height = 100
-    val blockSize = 10
+    val height = 1000
+    val blockSize = 2
 
-    // val entries: java.util.List[LogEntry] = mkTestEntries()
-    val entries: java.util.List[LogEntry] = mkEntries(Paths.get("/Users/lad/logfiles/bmw-mexiko/logic.0.log"))
+    val entries: java.util.List[LogEntry] = ChunkSpec.mkTestLogEntries(1000 * 1000 * 100)
+    //val entries: java.util.List[LogEntry] = mkEntries(Paths.get("/Users/lad/logfiles/bmw-mexiko/logic.0.log"))
 
     val entriesProperty = new SimpleListProperty[LogEntry](FXCollections.observableArrayList(entries))
-    val bv = new ChunkListView(entriesProperty, new SimpleIntegerProperty(blockSize))
+    val bv = new ChunkListView(entriesProperty
+      , new SimpleIntegerProperty(10)
+      , new SimpleIntegerProperty(blockSize))
     val scene = new Scene(bv, width, height)
     bv.recalculateListViewElements()
 
