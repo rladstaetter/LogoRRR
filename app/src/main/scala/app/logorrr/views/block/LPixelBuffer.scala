@@ -9,79 +9,20 @@ import javafx.scene.image.{PixelBuffer, PixelFormat}
 import javafx.scene.paint.Color
 
 import java.nio.IntBuffer
-import scala.jdk.CollectionConverters.CollectionHasAsScala
 
-case class LPixelBuffer(width: Int
-                        , height: Int
-                        , blockSizeProperty: SimpleIntegerProperty
-                        , entries: java.util.List[LogEntry]
-                        , filtersProperty: SimpleListProperty[Filter]
-                        , selectedEntryProperty: SimpleObjectProperty[LogEntry]
-                        , rawInts: Array[Int]) extends {
-  private val buffer: IntBuffer = IntBuffer.wrap(rawInts)
-} with PixelBuffer[IntBuffer](width, height, buffer, PixelFormat.getIntArgbPreInstance) with CanLog {
+object LPixelBuffer {
 
-  assert(width != 0, s"width was $width.")
-  assert(height != 0, s"height was $height.")
-  assert(width <= BlockImage.MaxWidth, s"width was $width which exceeds ${BlockImage.MaxWidth}.")
-  assert(height <= BlockImage.MaxHeight, s"height was $height which exceeds ${BlockImage.MaxHeight}.")
-  assert(height * width > 0)
+  private def drawRect(rawInts: Array[Int]
+                       , i: Int
+                       , width: Int
+                       , blockSize: Int
+                       , color: Color): Unit = {
 
-  lazy val background: Array[Int] = Array.fill(width * height)(ColorUtil.toARGB(Color.AZURE))
-
-  private val roi = new Rectangle2D(0, 0, width, height)
-
-  private def cleanBackground(): Unit = System.arraycopy(background, 0, rawInts, 0, background.length)
-
-  def blockSize: Int = blockSizeProperty.get()
-
-  // todo check visibility
-  def repaint(ctx: String
-              , filters: Seq[Filter]
-              , selectedEntry: LogEntry): Unit = timeR({
-    if (blockSize != 0) {
-      if (Option(filters).isEmpty) {
-        logWarn("filters is null")
-      } else
-        updateBuffer((_: PixelBuffer[IntBuffer]) => {
-          cleanBackground()
-          var i = 0
-          entries.forEach(e => {
-            if (e.equals(selectedEntry)) {
-              drawRect(i, Color.YELLOW)
-            } else {
-              drawRect(i, Filter.calcColor(e.value, filters))
-            }
-            i = i + 1
-          })
-          roi
-        })
-    } else {
-      logWarn(s"getBlockWidth() = $blockSize")
-    }
-  }, s"$ctx repaint")
-
-
-  /**
-   * draws a filled rectangle on the given index
-   */
-  def draw(index: Int, color: Color): Unit = {
-    if (blockSize != 0) {
-      repaint(s"draw[$index]", filtersProperty.get().asScala.toSeq, selectedEntryProperty.get())
-      updateBuffer((_: PixelBuffer[IntBuffer]) => {
-        // drawRect(e.lineNumber - 1, Filter.calcColor(e.value, filtersProperty.asScala.toSeq).darker().darker())
-        drawRect(index, color)
-        roi
-      })
-    }
-  }
-
-  private def drawRect(i: Int, color: Color): Unit = {
     val nrOfBlocksInX = width / blockSize
     val xPos = (i % nrOfBlocksInX) * blockSize
     val yPos = (i / nrOfBlocksInX) * blockSize
-    drawRect(
-      color
+    LPixelBuffer.drawRect(rawInts
+      , color
       , xPos
       , yPos
       , blockSize
@@ -90,13 +31,13 @@ case class LPixelBuffer(width: Int
     )
   }
 
-  private def drawRect(color: Color
+  private def drawRect(rawInts: Array[Int]
+                       , color: Color
                        , x: Int
                        , y: Int
                        , width: Int
                        , height: Int
                        , canvasWidth: Int): Unit = {
-
     val col = ColorUtil.toARGB(color)
     val maxHeight = y + height
     val lineArray = Array.fill(width - 1)(col)
@@ -109,5 +50,82 @@ case class LPixelBuffer(width: Int
       }
     }
   }
+
+}
+
+case class LPixelBuffer(name: String
+                        , width: Int
+                        , height: Int
+                        , blockSizeProperty: SimpleIntegerProperty
+                        , entries: java.util.List[LogEntry]
+                        , filtersProperty: SimpleListProperty[Filter]
+                        , selectedEntryProperty: SimpleObjectProperty[LogEntry]
+                        , rawInts: Array[Int]) extends {
+  private val buffer: IntBuffer = IntBuffer.wrap(rawInts)
+} with PixelBuffer[IntBuffer](width, height, buffer, PixelFormat.getIntArgbPreInstance) with CanLog {
+
+  getBuffer.clear()
+
+  assert(width != 0, s"width was $width.")
+  assert(height != 0, s"height was $height.")
+  assert(height * width > 0)
+
+  // checks in order not to overshoot the boundaries of underlying restrictions of the hardware accelerated api
+  assert(width <= BlockImage.MaxWidth, s"width was $width which exceeds ${BlockImage.MaxWidth}.")
+  assert(height <= BlockImage.MaxHeight, s"height was $height which exceeds ${BlockImage.Height}.")
+
+  private val blockColor = ColorUtil.randColor
+
+  lazy val background: Array[Int] = Array.fill(width * height)(ColorUtil.toARGB(Color.MAGENTA))
+
+  private val roi = new Rectangle2D(0, 0, width, height)
+
+  paint()
+
+  private def cleanBackground(): Unit = System.arraycopy(background, 0, rawInts, 0, background.length)
+
+  def blockSize: Int = blockSizeProperty.get()
+
+  // todo check visibility
+  def paint(): Unit = timeR({
+    if (blockSize != 0) {
+      if (Option(filtersProperty).isEmpty) {
+        logWarn("filters is null")
+      } else
+        updateBuffer((_: PixelBuffer[IntBuffer]) => {
+          logTrace("Painting " + name)
+          cleanBackground()
+          var i = 0
+          entries.forEach(e => {
+            if (e.equals(selectedEntryProperty.get())) {
+              LPixelBuffer.drawRect(rawInts, i, width, blockSize, Color.YELLOW)
+            } else {
+              LPixelBuffer.drawRect(rawInts, i, width, blockSize, blockColor)
+              // drawRect(i, Filter.calcColor(e.value, filters))
+            }
+            i = i + 1
+          })
+          roi
+        })
+    } else {
+      logWarn(s"getBlockWidth() = $blockSize")
+    }
+  }, s"$name repaint")
+
+
+  /**
+   * draws a filled rectangle on the given index
+   */
+  def draw(index: Int, color: Color): Unit = {
+    if (blockSize != 0) {
+      paint()
+      updateBuffer((_: PixelBuffer[IntBuffer]) => {
+        // drawRect(e.lineNumber - 1, Filter.calcColor(e.value, filtersProperty.asScala.toSeq).darker().darker())
+        LPixelBuffer.drawRect(rawInts, index, width, blockSize, color)
+        roi
+      })
+    }
+  }
+
 
 }

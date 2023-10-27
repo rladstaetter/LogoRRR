@@ -5,7 +5,6 @@ import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.search.Filter
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
-import javafx.collections.FXCollections
 import javafx.event.EventHandler
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
@@ -61,10 +60,17 @@ class BlockView(name: String
                 , blockSizeProperty: SimpleIntegerProperty
                 , outerWidthProperty: ReadOnlyDoubleProperty
                 , selectedElemProperty: SimpleObjectProperty[LogEntry]
-                , entries: java.util.List[LogEntry]) extends ImageView with CanLog {
+                , entries: java.util.List[LogEntry]
+                , heightProperty: SimpleIntegerProperty) extends ImageView with CanLog {
 
+  setStyle(
+    """
+      |-fx-padding: 0;
+      |-fx-margin: 0;
+      |-fx-background-insets: 0;
+      | """.stripMargin)
+/*
   private val widthProperty = new SimpleIntegerProperty(outerWidthProperty.get().intValue())
-
 
   private val onClickListener: ChangeListener[LogEntry] = JfxUtils.onNew {
     logEntry =>
@@ -85,15 +91,17 @@ class BlockView(name: String
     }
   }
 
-  val selectedEntryProperty: SimpleObjectProperty[LogEntry] = new SimpleObjectProperty[LogEntry]()
 
+  val selectedEntryProperty: SimpleObjectProperty[LogEntry] = new SimpleObjectProperty[LogEntry]()
+*/
   private val blockImage = new BlockImage(name
-    , widthProperty
+    , outerWidthProperty
     , blockSizeProperty
     , entries
     , filtersProperty
-    , selectedElemProperty)
-
+    , selectedElemProperty
+    , heightProperty)
+/*
   private val widthListener = JfxUtils.onNew[Number](n => {
     val scrollPaneWidth = n.intValue()
     if (scrollPaneWidth < BlockImage.MaxWidth) {
@@ -107,7 +115,8 @@ class BlockView(name: String
       // logTrace(s"ScrollPaneWidth ($scrollPaneWidth) >= SQImage.MaxWidth (${BlockImage.MaxWidth}), not adjusting width of canvas ...")
     }
   })
-
+  */
+  /*
   val mouseEventHandler = new EventHandler[MouseEvent]() {
     override def handle(me: MouseEvent): Unit = {
       val index = BlockView.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get)
@@ -118,47 +127,37 @@ class BlockView(name: String
     }
   }
 
-
+*/
   init()
 
   def init(): Unit = {
-    setOnMouseClicked(mouseEventHandler)
+   // setOnMouseClicked(mouseEventHandler)
     addListener()
-    addBindings()
-  }
-
-  private def addBindings(): Unit = {
-    imageProperty().bind(blockImage.imageProperty)
-  }
-
-  private def removeBindings(): Unit = {
-    imageProperty().unbind()
-  }
-
-  def addListener(): Unit = {
-    selectedLineNumberProperty.addListener(selectedLineNumberListener)
-    selectedEntryProperty.addListener(onClickListener)
-    widthProperty.addListener(widthListener)
-  }
-
-  private def removeListener(): Unit = {
-    selectedLineNumberProperty.removeListener(selectedLineNumberListener)
-    selectedEntryProperty.removeListener(onClickListener)
-    widthProperty.removeListener(widthListener)
+    setImage(blockImage)
   }
 
   def shutdown(): Unit = {
     blockImage.shutdown()
     removeListener()
-    removeBindings()
+    setImage(null)
   }
 
-  def setHeight(height: Int): Unit = blockImage.setHeight(height)
+  def addListener(): Unit = {
+    // selectedLineNumberProperty.addListener(selectedLineNumberListener)
+    //selectedEntryProperty.addListener(onClickListener)
+   // widthProperty.addListener(widthListener)
+  }
 
-  def setWidth(width: Int): Unit = widthProperty.set(width)
+  private def removeListener(): Unit = {
+    //selectedLineNumberProperty.removeListener(selectedLineNumberListener)
+    //selectedEntryProperty.removeListener(onClickListener)
+    //widthProperty.removeListener(widthListener)
+  }
+
+
+  def setWidth(width: Int): Unit = logWarn("nono")//widthProperty.set(width)
 
   private def getEntryAt(index: Int): Option[LogEntry] = Try(entries.get(index)).toOption
 
-  def repaint(ctx: String): Unit = blockImage.repaint(ctx)
 
 }

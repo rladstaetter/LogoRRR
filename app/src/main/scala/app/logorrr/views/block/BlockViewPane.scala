@@ -103,7 +103,7 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
 
       val blockViews: Seq[BlockView] = {
         // if virtual canvas height is lower than maxheight, just create one sqView and be done with it
-        if (blockHeight <= BlockImage.MaxHeight) {
+        if (blockHeight <= BlockImage.Height) {
           val name = s"0_${getEntriesSize}"
           val blockView = new BlockView(name
             , selectedLineNumberProperty
@@ -111,14 +111,14 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
             , blockSizeProperty
             , widthProperty
             , selectedElemProperty
-            , entriesProperty)
+            , entriesProperty
+            , new SimpleIntegerProperty(300))
           blockView.setWidth(getWidth.toInt)
-          blockView.setHeight(blockHeight)
           Seq(blockView)
         } else {
           // if the virtual canvas height exceeds SQImage.MaxHeight, iterate and create new SQViews
           val nrOfElemsInRow = getWidth.toInt / blockSizeProperty.get()
-          val nrOfRowsPerSquareView = BlockImage.MaxHeight / blockSizeProperty.get()
+          val nrOfRowsPerSquareView = BlockImage.Height / blockSizeProperty.get()
           val nrElemsInSqView = nrOfRowsPerSquareView * nrOfElemsInRow
           var curIndex = 0
           val lb = new ListBuffer[BlockView]
@@ -138,9 +138,9 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
                 , blockSizeProperty
                 , widthProperty
                 , selectedElemProperty
-                , blockViewEntries)
+                , blockViewEntries
+                , new SimpleIntegerProperty(300))
             blockView.setWidth(getWidth.toInt)
-            blockView.setHeight(BlockView.calcVirtualHeight(blockSize, blockSize, getWidth.toInt, blockViewEntries.size))
             lb.addOne(blockView)
             curIndex = curIndex + nrElemsInSqView
           }
@@ -149,7 +149,6 @@ class BlockViewPane(selectedLineNumberProperty: SimpleIntegerProperty)
       }
 
       vbox.getChildren.setAll(blockViews: _*)
-      blockViews.foreach(_.repaint("blockview"))
     }
     ()
   }
