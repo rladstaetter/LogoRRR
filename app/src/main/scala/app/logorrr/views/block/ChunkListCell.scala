@@ -1,27 +1,18 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.MathUtil
+import app.logorrr.util.CanLog
 import app.logorrr.views.search.Filter
-import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
+import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty, SimpleObjectProperty}
+import javafx.collections.ObservableList
 import javafx.scene.control.ListCell
 
-object ChunkListCell {
-
-  /**
-   * Given the current blocksize, returns an appropriate height for the cell. However, it won't surpass [[BlockImage.MaxHeight]].
-   *
-   * @param blockSize size of blocks to display
-   * @return an appropriate height for the ChunkListCell
-   */
-  // defines the default height for a ChunkListCell
-  def calcHeight(blockSize: Int): Int = Math.min(blockSize * 10, BlockImage.MaxHeight)
-
-}
 
 class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
                     , widthProperty: ReadOnlyDoubleProperty
-                    , blockSizeProperty: SimpleIntegerProperty) extends ListCell[Chunk] {
+                    , blockSizeProperty: SimpleIntegerProperty
+                    , filtersProperty: ObservableList[Filter]
+                   ) extends ListCell[Chunk] with CanLog  {
 
   setStyle(
     """
@@ -36,21 +27,28 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
 
     if (empty || Option(t).isEmpty) {
       setGraphic(null)
-      setText(null)
     } else {
 
-      val name = t.name
-      val height = MathUtil.calcBoundedHeight(widthProperty, blockSizeProperty, t.entries)
-      val bv = new BlockView(name = name
-        , selectedLineNumberProperty
-        , filtersProperty = new SimpleListProperty[Filter]
-        , blockSizeProperty = blockSizeProperty
-        , widthProperty = widthProperty
-        , selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
-        , entries = t.entries
-        , heightProperty = new SimpleIntegerProperty(height))
-      setGraphic(bv)
-      setText(null)
+      if (widthProperty.get() > 0) {
+        if (blockSizeProperty.get() > 0) {
+          val bv = new BlockView(t.number
+            , selectedLineNumberProperty
+            , filtersProperty
+            , blockSizeProperty
+            , widthProperty
+            , selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
+            , entries = t.entries
+            , heightProperty = new SimpleIntegerProperty(t.height))
+          logTrace("Blockview " + t.number)
+          setGraphic(bv)
+        } else {
+          logTrace(s"Blocksize was ${blockSizeProperty.get()}, setting graphic to null")
+          setGraphic(null)
+        }
+      } else {
+        logTrace(s"Width was ${widthProperty.get()}, setting graphic to null")
+        setGraphic(null)
+      }
     }
   }
 }

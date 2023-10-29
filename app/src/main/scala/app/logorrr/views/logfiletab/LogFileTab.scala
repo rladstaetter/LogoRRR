@@ -49,7 +49,7 @@ object LogFileTab {
     logFileTab
   }
 
-  private def mkOpenInFinderItem(pathAsString : String): MenuItem = {
+  private def mkOpenInFinderItem(pathAsString: String): MenuItem = {
     val text = if (OsUtil.isWin) {
       "Show Log in Explorer"
     } else if (OsUtil.isMac) {
@@ -118,8 +118,8 @@ class LogFileTab(val pathAsString: String
     val lvv = new LogVisualView(mutLogFileSettings.selectedLineNumberProperty
       , mutLogFileSettings.filtersProperty
       , filteredList
-      , LogoRRRGlobals.logVisualCanvasWidth(pathAsString))
-    lvv.blockViewPane.visibleProperty().bind(selectedProperty())
+      , mutLogFileSettings.blockWidthSettingsProperty)
+    lvv.visibleProperty().bind(selectedProperty())
     lvv
   }
 
@@ -162,15 +162,12 @@ class LogFileTab(val pathAsString: String
     JfxUtils.mkListChangeListener(handleFilterChange)
   }
 
-  private val blockSizeListener = JfxUtils.onNew[Number](n => LogoRRRGlobals.setBlockSettings(pathAsString, BlockSettings(n.intValue())))
-
   /* change active text field depending on visible tab */
   private val selectedListener = JfxUtils.onNew[lang.Boolean](b => {
     if (b) {
       setStyle(LogFileTab.BackgroundSelectedStyle)
       LogoRRRAccelerators.setActiveSearchTextField(opsToolBar.searchTextField)
       LogoRRRAccelerators.setActiveRegexToggleButton(opsToolBar.regexToggleButton)
-      JfxUtils.execOnUiThread(repaint())
     } else {
       setStyle(LogFileTab.BackgroundStyle)
     }
@@ -205,7 +202,6 @@ class LogFileTab(val pathAsString: String
   }
 
   private def addListeners(): Unit = {
-    logVisualView.blockViewPane.blockSizeProperty.addListener(blockSizeListener)
     selectedProperty().addListener(selectedListener)
 
     splitPane.getDividers.get(0).positionProperty().addListener(dividerPositionListener)
@@ -215,12 +211,11 @@ class LogFileTab(val pathAsString: String
 
   private def initBindings(): Unit = {
     filtersListProperty.bind(mutLogFileSettings.filtersProperty)
-    logVisualView.blockViewPane.blockSizeProperty.bind(opsRegion.opsToolBar.blockSizeProperty)
+    //  logVisualView.blockViewPane.blockSizeProperty.bind(opsRegion.opsToolBar.blockSizeProperty)
     textProperty.bind(Bindings.concat(LogFileUtil.logFileName(pathAsString)))
   }
 
   private def removeListeners(): Unit = {
-    logVisualView.blockViewPane.blockSizeProperty.removeListener(blockSizeListener)
     selectedProperty().removeListener(selectedListener)
 
     splitPane.getDividers.get(0).positionProperty().removeListener(dividerPositionListener)
@@ -230,8 +225,6 @@ class LogFileTab(val pathAsString: String
   }
 
   def shutdown(): Unit = {
-    logVisualView.shutdown()
-
     if (mutLogFileSettings.isAutoScrollActive) {
       stopTailer()
     }
@@ -247,8 +240,6 @@ class LogFileTab(val pathAsString: String
   def addFilter(filter: Filter): Unit = filtersListProperty.add(filter)
 
   def removeFilter(filter: Filter): Unit = filtersListProperty.remove(filter)
-
-  def repaint(): Unit = logVisualView.repaint()
 
 
 }

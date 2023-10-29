@@ -8,7 +8,10 @@ class MathUtilSpec extends AnyWordSpec {
 
   "MathUtil" should {
     ".calcBoundedHeight" in {
-      assert(MathUtil.calcBoundedHeight(new SimpleDoubleProperty(911.0), new SimpleIntegerProperty(10), ChunkSpec.mkTestLogEntries(70)) != 0)
+      assert(MathUtil.calcBoundedHeight(new SimpleDoubleProperty(911.0),
+        new SimpleIntegerProperty(10),
+        ChunkSpec.mkTestLogEntries(70),
+        new SimpleDoubleProperty(1000))._3 != 0)
     }
 
   }

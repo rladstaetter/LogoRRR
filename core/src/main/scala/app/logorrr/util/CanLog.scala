@@ -71,7 +71,7 @@ trait CanLog {
 
   def logWarn(msg: String): Unit = Try(log.warning(msg))
 
-  def logTrace(msg: String): Unit = () // Try(log.finest(msg))
+  def logTrace(msg: String): Unit = Try(log.finest(msg))
 
   def logException(msg: String, t: Throwable): Unit = {
     logError(msg)

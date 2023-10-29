@@ -104,6 +104,4 @@ object LogoRRRGlobals extends CanLog {
 
   def updateLogFile(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
 
-  def logVisualCanvasWidth(pathAsString: String): Int = (mutSettings.getStageWidth * LogoRRRGlobals.getLogFileSettings(pathAsString).getDividerPosition()).intValue
-
 }

@@ -3,7 +3,8 @@ package app.logorrr.views.block
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, ColorUtil}
 import app.logorrr.views.search.Filter
-import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
+import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty}
+import javafx.collections.ObservableList
 import javafx.scene.image.{PixelBuffer, PixelFormat}
 import javafx.scene.paint.Color
 
@@ -57,18 +58,22 @@ object LPixelBuffer {
   }
 }
 
+case class Range(start: Int, end: Int)
 
-case class LPixelBuffer(name: String
+case class LPixelBuffer(blockNumber: Int
+                        , range: Range
                         , shape: RectangularShape
                         , blockSizeProperty: SimpleIntegerProperty
                         , entries: java.util.List[LogEntry]
-                        , filtersProperty: SimpleListProperty[Filter]
+                        , filtersProperty: ObservableList[Filter]
                         , selectedEntryProperty: SimpleObjectProperty[LogEntry]
                         , rawInts: Array[Int]) extends
-  PixelBuffer[IntBuffer](shape.width.toInt
-    , shape.height.toInt
+  PixelBuffer[IntBuffer](shape.width
+    , shape.height
     , IntBuffer.wrap(rawInts)
     , PixelFormat.getIntArgbPreInstance) with CanLog {
+
+  val name = range.start + "_" + range.end
 
   getBuffer.clear()
 
@@ -76,16 +81,16 @@ case class LPixelBuffer(name: String
   assert(shape.height != 0, s"height was ${shape.height}.")
   assert(shape.height * shape.width > 0)
 
-  private val bgColor: Int = ColorUtil.toARGB(Color.WHITE)
-  lazy val background: Array[Int] = Array.fill(shape.area.toInt)(bgColor)
+  private val bgColor: Int = ColorUtil.toARGB(Color.DARKMAGENTA)
+  lazy val background: Array[Int] = Array.fill(shape.area)(bgColor)
 
-  paint()
+   paint()
 
   private def cleanBackground(): Unit = System.arraycopy(background, 0, rawInts, 0, background.length)
 
   def blockSize: Int = blockSizeProperty.get()
 
-  def filters = Option(filtersProperty.get()).map(_.asScala.toSeq).getOrElse(Seq())
+  def filters = Option(filtersProperty).map(_.asScala.toSeq).getOrElse(Seq())
 
   // todo check visibility
   def paint(): Unit = timeR({
@@ -102,8 +107,8 @@ case class LPixelBuffer(name: String
               LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, Color.YELLOW)
             } else {
               // LPixelBuffer.drawRect(rawInts, i, width, blockSize, blockColor)
-              //LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, Filter.calcColor(e.value, filters))
-              LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, ColorUtil.intToColor(i))
+               LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, Filter.calcColor(e.value, filters))
+              // LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, ColorUtil.intToColor((blockNumber + 1)))
             }
             i = i + 1
           })

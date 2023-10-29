@@ -1,9 +1,10 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, MathUtil}
-import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty}
-import javafx.collections.FXCollections
+import app.logorrr.util.CanLog
+import app.logorrr.views.search.Filter
+import javafx.beans.property.SimpleIntegerProperty
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.control.ListView
 
 
@@ -15,47 +16,33 @@ import javafx.scene.control.ListView
  * @param entriesProperty   log entries to display
  * @param blockSizeProperty size of blocks to display
  */
-class ChunkListView(val entriesProperty: SimpleListProperty[LogEntry]
+class ChunkListView(val entriesProperty: ObservableList[LogEntry]
                     , val selectedLineNumberProperty: SimpleIntegerProperty
-                    , val blockSizeProperty: SimpleIntegerProperty)
+                    , val blockSizeProperty: SimpleIntegerProperty
+                    , val filtersProperty: ObservableList[Filter])
   extends ListView[Chunk] with CanLog {
 
-  init()
+  getStylesheets.add(getClass.getResource("/app/logorrr/views/block/ChunkListView.css").toExternalForm)
 
-  def init(): Unit = {
-    /*
-    setStyle(
-      """
-        |-fx-padding: 0;
-        |-fx-margin: 0;
-        |-fx-selection-bar: transparent;
-        |-fx-background-color: transparent;
-        |
-        |""".stripMargin)
-*/
-    getStylesheets.add(getClass.getResource("ChunkListView.css").toExternalForm)
-
-    setCellFactory((lv: ListView[Chunk]) => new ChunkListCell(
-      selectedLineNumberProperty
-      , lv.widthProperty()
-      , blockSizeProperty))
-
-  }
-
-  def cols: Int = MathUtil.roundUp(widthProperty().get() / blockSizeProperty.get())
-
-  def rows: Int = entriesProperty.size() / cols
-
-  def height: Int = rows * blockSizeProperty.get()
-
+  setCellFactory((lv: ListView[Chunk]) => new ChunkListCell(
+    selectedLineNumberProperty
+    , lv.widthProperty()
+    , blockSizeProperty
+    , filtersProperty))
 
   // if width/height of display is changed, also elements of this listview will change
   // and shuffle between cells. this method recreates all listview entries.
-  def recalculateListViewElements(): Unit = {
-    val chunks = Chunk.mkChunks(entriesProperty
-      , widthProperty().get().toInt
-      , MathUtil.calcBoundedHeight(widthProperty, blockSizeProperty, entriesProperty)
-      , blockSizeProperty.get())
+  def updateItems(): Unit = {
+    val chunks =
+      if (widthProperty.get() > 0) {
+        if (blockSizeProperty.get() > 0) {
+          Chunk.mkChunks(entriesProperty, widthProperty, blockSizeProperty, heightProperty)
+        } else {
+          Seq()
+        }
+      } else {
+        Seq()
+      }
     setItems(FXCollections.observableArrayList(chunks: _*))
   }
 

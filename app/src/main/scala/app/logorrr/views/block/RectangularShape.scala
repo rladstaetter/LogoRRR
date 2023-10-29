@@ -12,11 +12,11 @@ import javafx.geometry.Rectangle2D
  * @param width  width of given shape
  * @param height height of given shape.
  */
-case class RectangularShape(width: Double, height: Double) extends Rectangle2D(0.0, 0.0, width, height) {
+case class RectangularShape(width: Int, height: Int) extends Rectangle2D(0.0, 0.0, width, height) {
   // checks in order not to overshoot the boundaries of underlying restrictions of the hardware accelerated api
   assert(width <= BlockImage.MaxWidth, s"width was $width which exceeds ${BlockImage.MaxWidth}.")
   assert(height <= BlockImage.MaxHeight, s"height was $height which exceeds ${BlockImage.MaxHeight}.")
 
-  lazy val area = width * height
+  lazy val area: Int = width * height
 
 }

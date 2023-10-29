@@ -5,6 +5,7 @@ import app.logorrr.util.{CanLog, JfxUtils, MathUtil}
 import app.logorrr.views.search.Filter
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.collections.ObservableList
 import javafx.event.EventHandler
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseEvent
@@ -58,9 +59,9 @@ object BlockView {
 /**
  * Displays a region with max 4096 x 4096 pixels and as many entries as can fit in this region.
  */
-class BlockView(name: String
+class BlockView(blockNumber : Int
                 , selectedLineNumberProperty: SimpleIntegerProperty
-                , filtersProperty: SimpleListProperty[Filter]
+                , filtersProperty: ObservableList[Filter]
                 , blockSizeProperty: SimpleIntegerProperty
                 , widthProperty: ReadOnlyDoubleProperty
                 , selectedEntryProperty: SimpleObjectProperty[LogEntry]
@@ -98,7 +99,7 @@ class BlockView(name: String
 
     val selectedEntryProperty: SimpleObjectProperty[LogEntry] = new SimpleObjectProperty[LogEntry]()
   */
-  private val blockImage = new BlockImage(name
+  private val blockImage = new BlockImage(blockNumber
     , widthProperty
     , blockSizeProperty
     , entries
