@@ -1,7 +1,7 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.CanLog
+import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.search.Filter
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.collections.ObservableList
@@ -22,7 +22,7 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
       |
       |""".stripMargin)
 
-  override def updateItem(t: Chunk, empty: Boolean): Unit = {
+  override def updateItem(t: Chunk, empty: Boolean): Unit = JfxUtils.execOnUiThread {
     super.updateItem(t, empty)
 
     if (empty || Option(t).isEmpty) {
@@ -39,7 +39,6 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
             , selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
             , entries = t.entries
             , heightProperty = new SimpleIntegerProperty(t.height))
-          logTrace("Blockview " + t.number)
           setGraphic(bv)
         } else {
           logTrace(s"Blocksize was ${blockSizeProperty.get()}, setting graphic to null")

@@ -28,7 +28,7 @@ class LogoRRRMainTabPane()
 
   val selectedItemListener: ChangeListener[Tab] = JfxUtils.onNew {
     case logFileTab: LogFileTab =>
-      // logTrace(s"Selected: ${logFileTab.pathAsString}")
+      logTrace(s"Selected: ${logFileTab.pathAsString}")
       LogoRRRGlobals.setSomeActive(Option(logFileTab.pathAsString))
       // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
       getSelectionModel.select(logFileTab)
@@ -74,7 +74,7 @@ class LogoRRRMainTabPane()
   def selectLog(pathAsString: String): Unit = {
     getLogFileTabs.find(_.pathAsString == pathAsString) match {
       case Some(value) =>
-        // logTrace(s"Selects tab view with path $pathAsString.")
+        logTrace(s"Selects tab view with path $pathAsString.")
         getSelectionModel.select(value)
       case None =>
         logWarn(s"Couldn't find tab with $pathAsString, selecting last tab ...")

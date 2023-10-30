@@ -1,7 +1,7 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, ColorUtil}
+import app.logorrr.util.{CanLog, ColorUtil, JfxUtils}
 import app.logorrr.views.search.Filter
 import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.collections.ObservableList
@@ -14,27 +14,30 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
 /**
  * Paint directly into a byte array for performant image manipulations.
  */
-// TODO profile this code and compare it to an approach using the 'normal' image drawing facilities to see if
-// it is worth the ceremony ... :|
-object LPixelBuffer {
+object LPixelBuffer extends CanLog {
 
   private def drawRect(rawInts: Array[Int]
                        , i: Int
                        , width: Int
                        , blockSize: Int
                        , color: Color): Unit = {
+    if (width > blockSize) {
+      val nrOfBlocksInX = width / blockSize
+      //    val nrOfBlocksInX = if (width > blockSize) width / blockSize else blockSize
 
-    val nrOfBlocksInX = width / blockSize
-    val xPos = (i % nrOfBlocksInX) * blockSize
-    val yPos = (i / nrOfBlocksInX) * blockSize
-    LPixelBuffer.drawRect(rawInts
-      , color
-      , xPos
-      , yPos
-      , blockSize
-      , blockSize
-      , width
-    )
+      val xPos = (i % nrOfBlocksInX) * blockSize
+      val yPos = (i / nrOfBlocksInX) * blockSize
+      LPixelBuffer.drawRect(rawInts
+        , color
+        , xPos
+        , yPos
+        , blockSize
+        , blockSize
+        , width
+      )
+    } else {
+      logTrace("")
+    }
   }
 
   private def drawRect(rawInts: Array[Int]
@@ -81,10 +84,10 @@ case class LPixelBuffer(blockNumber: Int
   assert(shape.height != 0, s"height was ${shape.height}.")
   assert(shape.height * shape.width > 0)
 
-  private val bgColor: Int = ColorUtil.toARGB(Color.DARKMAGENTA)
+  private val bgColor: Int = ColorUtil.toARGB(Color.WHITE)
   lazy val background: Array[Int] = Array.fill(shape.area)(bgColor)
 
-   paint()
+  paint()
 
   private def cleanBackground(): Unit = System.arraycopy(background, 0, rawInts, 0, background.length)
 
@@ -93,31 +96,32 @@ case class LPixelBuffer(blockNumber: Int
   def filters = Option(filtersProperty).map(_.asScala.toSeq).getOrElse(Seq())
 
   // todo check visibility
-  def paint(): Unit = timeR({
+  def paint(): Unit = {
     if (blockSize != 0) {
       if (Option(filtersProperty).isEmpty) {
         logWarn("filters is null")
-      } else
-        updateBuffer((_: PixelBuffer[IntBuffer]) => {
-          logTrace("Painting " + name + ", width : " + shape.width)
-          cleanBackground()
-          var i = 0
-          entries.forEach(e => {
-            if (e.equals(selectedEntryProperty.get())) {
-              LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, Color.YELLOW)
-            } else {
-              // LPixelBuffer.drawRect(rawInts, i, width, blockSize, blockColor)
-               LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, Filter.calcColor(e.value, filters))
-              // LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, ColorUtil.intToColor((blockNumber + 1)))
-            }
-            i = i + 1
-          })
-          shape
-        })
+      } else {
+        JfxUtils.execOnUiThread(
+          updateBuffer((_: PixelBuffer[IntBuffer]) => {
+            cleanBackground()
+            var i = 0
+            entries.forEach(e => {
+              if (e.equals(selectedEntryProperty.get())) {
+                LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Color.YELLOW)
+              } else {
+                // LPixelBuffer.drawRect(rawInts, i, width, blockSize, blockColor)
+                //LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Filter.calcColor(e.value, filters))
+                LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, ColorUtil.randColor)
+              }
+              i = i + 1
+            })
+            shape
+          }))
+      }
     } else {
       logWarn(s"getBlockWidth() = $blockSize")
     }
-  }, s"$name repaint")
+  }
 
 
   /**

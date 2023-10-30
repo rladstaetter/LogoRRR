@@ -18,7 +18,7 @@ object Chunk {
       // how many entries fit into a chunk?
       // given their size and the width and height of a chunk it is easy to calculate.
       val (cols, rows, height) = MathUtil.calcBoundedHeight(widthProperty, blockSizeProperty, entriesProperty, listViewHeightProperty)
-      val nrElements = (height / blockSizeProperty.get() * cols)
+      val nrElements = height / blockSizeProperty.get() * cols
 
       val entriesSize = entriesProperty.size()
       var curIndex = 0
@@ -32,7 +32,7 @@ object Chunk {
         }
         val blockViewEntries = entriesProperty.subList(curIndex, end)
         if (blockViewEntries.size() > 0) {
-          lb.addOne(Chunk(lb.size, blockViewEntries, height))
+          lb.addOne(new Chunk(lb.size, blockViewEntries, height))
         }
         curIndex = curIndex + nrElements
       }
@@ -44,8 +44,8 @@ object Chunk {
   }
 }
 
-case class Chunk(number: Int
-                 , entries: java.util.List[LogEntry]
-                 , height: Int) {
+class Chunk(val number: Int
+            , val entries: java.util.List[LogEntry]
+            , val height: Int) {
   require(!entries.isEmpty, "entries was empty")
 }

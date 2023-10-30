@@ -50,13 +50,13 @@ class LogoRRRMain(closeStage: => Unit)
         JfxUtils.execOnUiThread({
           lfs.foreach({
             case (pathAsString, es) =>
-              // logTrace(s"Loading `$pathAsString` with ${es.size()} entries.")
+              logTrace(s"Loading `$pathAsString` with ${es.size()} entries.")
               ambp.addLogFileTab(LogFileTab(pathAsString, es))
           })
           // after loading everything, set active log like specified in the config file
           LogoRRRGlobals.getSomeActive match {
             case Some(selectedPath) =>
-              // logTrace(s"Active Path: $selectedPath")
+              logTrace(s"Active Path: $selectedPath")
               lfs.map(_._1).zipWithIndex.find(tpl => tpl._1 == selectedPath) match {
                 case Some((path, index)) =>
                   selectLog(path)
@@ -64,7 +64,7 @@ class LogoRRRMain(closeStage: => Unit)
                   logWarn("not found removing active entry")
                   LogoRRRGlobals.setSomeActive(None)
               }
-            case None => // logTrace("No active path entry found")
+            case None => logTrace("No active path entry found")
           }
           // only after loading all files we initialize the 'add' listener
           // otherwise we would overwrite the active log everytime
@@ -82,12 +82,12 @@ class LogoRRRMain(closeStage: => Unit)
   /** called when 'Open File' is selected. */
   def openLogFile(path: Path): Unit = {
     val pathAsString = path.toAbsolutePath.toString
-    // logTrace(s"Try to open log file $pathAsString")
+    logTrace(s"Try to open log file $pathAsString")
 
     if (!ambp.contains(pathAsString)) {
       ambp.addLogFile(path)
     } else {
-      // logTrace(s"$pathAsString is already opened, selecting tab ...")
+      logTrace(s"$pathAsString is already opened, selecting tab ...")
       ambp.selectLog(pathAsString)
     }
 

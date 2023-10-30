@@ -9,10 +9,10 @@ object Fs extends CanLog {
 
   def createDirectories(path: Path): Unit = {
     if (Files.exists(path)) {
-      // logTrace(s"Using directory ${path.toAbsolutePath.toString}")
+      logTrace(s"Using directory ${path.toAbsolutePath.toString}")
     } else {
       Files.createDirectories(path)
-      // logTrace(s"Created directory ${path.toAbsolutePath.toString}")
+      logTrace(s"Created directory ${path.toAbsolutePath.toString}")
     }
   }
 

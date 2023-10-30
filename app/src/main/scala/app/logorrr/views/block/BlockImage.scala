@@ -15,6 +15,9 @@ object BlockImage {
   // val MaxHeight = 4096
   val MaxHeight = 4096
 
+  /** defines how many table cells should be rendered per list height */
+  val DefaultBlocksPerPage = 4
+
   @deprecated val Height = 100 // remove when blockviewpane is gone
 
 

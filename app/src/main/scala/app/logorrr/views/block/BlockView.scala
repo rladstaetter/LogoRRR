@@ -1,17 +1,12 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, JfxUtils, MathUtil}
+import app.logorrr.util.{CanLog, MathUtil}
 import app.logorrr.views.search.Filter
-import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
-import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.collections.ObservableList
-import javafx.event.EventHandler
 import javafx.scene.image.ImageView
-import javafx.scene.input.MouseEvent
-import javafx.scene.paint.Color
 
-import scala.math.BigDecimal.RoundingMode
 import scala.util.Try
 
 object BlockView {
@@ -74,31 +69,7 @@ class BlockView(blockNumber : Int
       |-fx-margin: 0;
       |-fx-background-insets: 0;
       | """.stripMargin)
-  /*
-    private val widthProperty = new SimpleIntegerProperty(outerWidthProperty.get().intValue())
 
-    private val onClickListener: ChangeListener[LogEntry] = JfxUtils.onNew {
-      logEntry =>
-        selectedElemProperty.set(logEntry)
-        val i = entries.indexOf(logEntry)
-        if (i >= 0) {
-          blockImage.draw(i, Color.YELLOW)
-        } else {
-          logWarn("onClickListener " + i)
-        }
-    }
-
-    private val selectedLineNumberListener = new ChangeListener[Number] {
-      override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
-        if (t.intValue() != t1.intValue()) {
-          blockImage.draw(t1.intValue(), Color.YELLOW)
-        }
-      }
-    }
-
-
-    val selectedEntryProperty: SimpleObjectProperty[LogEntry] = new SimpleObjectProperty[LogEntry]()
-  */
   private val blockImage = new BlockImage(blockNumber
     , widthProperty
     , blockSizeProperty
@@ -107,33 +78,7 @@ class BlockView(blockNumber : Int
     , selectedEntryProperty
     , heightProperty
   )
-  /*
-    private val widthListener = JfxUtils.onNew[Number](n => {
-      val scrollPaneWidth = n.intValue()
-      if (scrollPaneWidth < BlockImage.MaxWidth) {
-        val proposedWidth = scrollPaneWidth - BlockView.ScrollBarWidth
-        if (proposedWidth > BlockView.MinWidth) {
-          setWidth(proposedWidth)
-        } else {
-          // logTrace(s"Proposed width ($proposedWidth) < SQView.MinWidth (${BlockView.MinWidth}), not adjusting width of canvas ...")
-        }
-      } else {
-        // logTrace(s"ScrollPaneWidth ($scrollPaneWidth) >= SQImage.MaxWidth (${BlockImage.MaxWidth}), not adjusting width of canvas ...")
-      }
-    })
-    */
-  /*
-  val mouseEventHandler = new EventHandler[MouseEvent]() {
-    override def handle(me: MouseEvent): Unit = {
-      val index = BlockView.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get)
-      getEntryAt(index) match {
-        case Some(value) => selectedEntryProperty.set(value)
-        case None => System.err.println("no element found")
-      }
-    }
-  }
 
-*/
   init()
 
   def init(): Unit = {
@@ -164,6 +109,60 @@ class BlockView(blockNumber : Int
   def setWidth(width: Int): Unit = logWarn("nono") //widthProperty.set(width)
 
   private def getEntryAt(index: Int): Option[LogEntry] = Try(entries.get(index)).toOption
+
+  /*
+    private val widthProperty = new SimpleIntegerProperty(outerWidthProperty.get().intValue())
+
+    private val onClickListener: ChangeListener[LogEntry] = JfxUtils.onNew {
+      logEntry =>
+        selectedElemProperty.set(logEntry)
+        val i = entries.indexOf(logEntry)
+        if (i >= 0) {
+          blockImage.draw(i, Color.YELLOW)
+        } else {
+          logWarn("onClickListener " + i)
+        }
+    }
+
+    private val selectedLineNumberListener = new ChangeListener[Number] {
+      override def changed(observableValue: ObservableValue[_ <: Number], t: Number, t1: Number): Unit = {
+        if (t.intValue() != t1.intValue()) {
+          blockImage.draw(t1.intValue(), Color.YELLOW)
+        }
+      }
+    }
+
+
+    val selectedEntryProperty: SimpleObjectProperty[LogEntry] = new SimpleObjectProperty[LogEntry]()
+  */
+
+  /*
+    private val widthListener = JfxUtils.onNew[Number](n => {
+      val scrollPaneWidth = n.intValue()
+      if (scrollPaneWidth < BlockImage.MaxWidth) {
+        val proposedWidth = scrollPaneWidth - BlockView.ScrollBarWidth
+        if (proposedWidth > BlockView.MinWidth) {
+          setWidth(proposedWidth)
+        } else {
+          logTrace(s"Proposed width ($proposedWidth) < SQView.MinWidth (${BlockView.MinWidth}), not adjusting width of canvas ...")
+        }
+      } else {
+        logTrace(s"ScrollPaneWidth ($scrollPaneWidth) >= SQImage.MaxWidth (${BlockImage.MaxWidth}), not adjusting width of canvas ...")
+      }
+    })
+    */
+  /*
+  val mouseEventHandler = new EventHandler[MouseEvent]() {
+    override def handle(me: MouseEvent): Unit = {
+      val index = BlockView.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get)
+      getEntryAt(index) match {
+        case Some(value) => selectedEntryProperty.set(value)
+        case None => System.err.println("no element found")
+      }
+    }
+  }
+
+*/
 
 
 }

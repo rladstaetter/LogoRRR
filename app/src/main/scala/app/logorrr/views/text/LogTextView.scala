@@ -2,7 +2,7 @@ package app.logorrr.views.text
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{ClipBoardUtils, JfxUtils}
+import app.logorrr.util.{CanLog, ClipBoardUtils, JfxUtils}
 import javafx.beans.value.ChangeListener
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
@@ -22,7 +22,7 @@ object LogTextView {
 
 
 class LogTextView(mutLogFileSettings: MutLogFileSettings
-                  , filteredList: FilteredList[LogEntry]) extends ListView[LogEntry] {
+                  , filteredList: FilteredList[LogEntry]) extends ListView[LogEntry] with CanLog {
   /** 'pragmatic way' to determine width of max elems in this view */
   val maxLength: Int = filteredList.size().toString.length
 
@@ -98,12 +98,12 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
       ignoreAbove.setOnAction(_ => {
         val currPredicate = filteredList.getPredicate
         filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && e.lineNumber <= entry.lineNumber)
-        // logTrace("Ignoring all before " + e.lineNumber)
+        logTrace("Ignoring all before " + e.lineNumber)
       })
       ignoreBelow.setOnAction(_ => {
         val currPredicate = filteredList.getPredicate
         filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && entry.lineNumber <= e.lineNumber)
-        // logTrace("Ignoring all after " + e.lineNumber)
+        logTrace("Ignoring all after " + e.lineNumber)
       })
 
       setContextMenu(cm)

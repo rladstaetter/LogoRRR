@@ -4,8 +4,11 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util.CanLog
 import app.logorrr.views.search.Filter
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.control.ListView
+
+import scala.util.{Failure, Success, Try}
 
 
 /**
@@ -22,6 +25,14 @@ class ChunkListView(val entriesProperty: ObservableList[LogEntry]
                     , val filtersProperty: ObservableList[Filter])
   extends ListView[Chunk] with CanLog {
 
+  entriesProperty.addListener(new InvalidationListener {
+    override def invalidated(observable: Observable): Unit = updateItems()
+  })
+
+  blockSizeProperty.addListener(new InvalidationListener {
+    override def invalidated(observable: Observable): Unit = updateItems()
+  })
+
   getStylesheets.add(getClass.getResource("/app/logorrr/views/block/ChunkListView.css").toExternalForm)
 
   setCellFactory((lv: ListView[Chunk]) => new ChunkListCell(
@@ -32,18 +43,29 @@ class ChunkListView(val entriesProperty: ObservableList[LogEntry]
 
   // if width/height of display is changed, also elements of this listview will change
   // and shuffle between cells. this method recreates all listview entries.
-  def updateItems(): Unit = {
+  def updateItems(): Unit = Try {
     val chunks =
       if (widthProperty.get() > 0) {
         if (blockSizeProperty.get() > 0) {
-          Chunk.mkChunks(entriesProperty, widthProperty, blockSizeProperty, heightProperty)
+          if (heightProperty().get() > 0) {
+            Chunk.mkChunks(entriesProperty, widthProperty, blockSizeProperty, heightProperty)
+          } else {
+            logWarn("heightProperty was " + heightProperty().get())
+            Seq()
+          }
         } else {
+          logWarn("blockSizeProperty was " + heightProperty().get())
           Seq()
         }
       } else {
+        logWarn("widthProperty was " + heightProperty().get())
         Seq()
       }
-    setItems(FXCollections.observableArrayList(chunks: _*))
+    val chunks1 = FXCollections.observableArrayList(chunks: _*)
+    setItems(chunks1)
+  } match {
+    case Success(value) => ()
+    case Failure(exception) => logException(exception.getMessage, exception)
   }
 
 

@@ -110,7 +110,7 @@ class TimerSettingsBorderPane(settings: MutLogFileSettings
       case Some(s) =>
         timeFormatTf.setText(s.dateTimePattern)
       case None =>
-        // logTrace("No time setting found ... ")
+        logTrace("No time setting found ... ")
     }
 
     setCenter(timerSettingsLogTextView)

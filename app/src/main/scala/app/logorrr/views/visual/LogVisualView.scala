@@ -16,8 +16,8 @@ class LogVisualView(selectedLineNumberProperty: SimpleIntegerProperty
     , blockSizeProperty
     , filtersProperty) with CanLog {
 
-  widthProperty().addListener(JfxUtils.onNew[Number](_ => {
-    // logTrace("repaint width:" + n.intValue())
+  widthProperty().addListener(JfxUtils.onNew[Number](n => {
+    logTrace("repaint width:" + n.intValue())
     updateItems()
     refresh()
   }))
