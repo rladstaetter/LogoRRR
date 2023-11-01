@@ -69,11 +69,7 @@ class LogFileTab(val pathAsString: String
   /** list which holds all entries, default to display all (can be changed via buttons) */
   private val filteredList = new FilteredList[LogEntry](entries)
 
-  private val opsToolBar = {
-    val op = new OpsToolBar(pathAsString, addFilter, entries)
-    op.blockSizeProperty.set(mutLogFileSettings.blockSizeProperty.get())
-    op
-  }
+  private val opsToolBar = new OpsToolBar(pathAsString, addFilter, entries, mutLogFileSettings.blockSizeProperty)
 
   private val filtersToolBar = {
     val fbtb = new FiltersToolBar(filteredList, removeFilter)

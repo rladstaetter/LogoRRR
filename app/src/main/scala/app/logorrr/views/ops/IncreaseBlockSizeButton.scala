@@ -12,7 +12,7 @@ class IncreaseBlockSizeButton(val blockSizeProperty: SimpleIntegerProperty) exte
     , "increase block size") with HasBlockSizeProperty {
 
   setOnAction(_ => {
-    if (getBlockSize() + OpsToolBar.blockSizeStep < 10 * OpsToolBar.blockSizeStep) {
+    if (getBlockSize() + OpsToolBar.blockSizeStep < 20 * OpsToolBar.blockSizeStep) {
       setBlockSize(getBlockSize() + OpsToolBar.blockSizeStep)
     }
   })
