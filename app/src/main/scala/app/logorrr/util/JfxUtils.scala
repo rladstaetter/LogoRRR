@@ -29,9 +29,6 @@ object JfxUtils extends CanLog {
 
   def onNew[T](f: T => Unit): ChangeListener[T] = (_: ObservableValue[_ <: T], _: T, t1: T) => f(t1)
 
-  def onNew2[T](f: (T, T) => Unit): ChangeListener[T] = (_: ObservableValue[_ <: T], oldVal: T, newVal: T) => f(oldVal, newVal)
-
-
   def mkListChangeListener[T](fn: ListChangeListener.Change[_ <: T] => Unit): ListChangeListener[T] = (change: ListChangeListener.Change[_ <: T]) => fn(change)
 
 }

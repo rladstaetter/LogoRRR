@@ -32,13 +32,13 @@ class MutLogFileSettings {
   private val pathAsStringProperty = new SimpleStringProperty()
   private val firstOpenedProperty = new SimpleLongProperty()
   val selectedLineNumberProperty = new SimpleIntegerProperty()
-  private val dividerPositionProperty = new SimpleDoubleProperty()
+  val dividerPositionProperty = new SimpleDoubleProperty()
   private val fontSizeProperty = new SimpleIntegerProperty()
 
   val autoScrollActiveProperty = new SimpleBooleanProperty()
   val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList())
   val someLogEntrySettingsProperty = new SimpleObjectProperty[Option[LogEntryInstantFormat]](None)
-  val blockWidthSettingsProperty = new SimpleIntegerProperty()
+  val blockSizeProperty = new SimpleIntegerProperty()
 
   def setFilters(filters: Seq[Filter]): Unit = {
     filtersProperty.setAll(filters.asJava)
@@ -72,7 +72,7 @@ class MutLogFileSettings {
 
   def getFontSize: Int = fontSizeProperty.get()
 
-  def setBlockSettings(bs: BlockSettings): Unit = blockWidthSettingsProperty.set(bs.width)
+  def setBlockSettings(bs: BlockSettings): Unit = blockSizeProperty.set(bs.size)
 
   def setPathAsString(path: String): Unit = pathAsStringProperty.set(path)
 
@@ -96,7 +96,7 @@ class MutLogFileSettings {
         , dividerPositionProperty.get()
         , fontSizeProperty.get()
         , filtersProperty.get().asScala.toSeq
-        , BlockSettings(blockWidthSettingsProperty.get())
+        , BlockSettings(blockSizeProperty.get())
         , someLogEntrySettingsProperty.get()
         , autoScrollActiveProperty.get())
     lfs

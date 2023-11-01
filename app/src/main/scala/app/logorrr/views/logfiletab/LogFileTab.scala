@@ -1,15 +1,15 @@
 package app.logorrr.views.logfiletab
 
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.conf.{BlockSettings, LogoRRRGlobals}
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
 import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.autoscroll.LogTailer
+import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.search.{Filter, FiltersToolBar, Fltr, OpsToolBar}
 import app.logorrr.views.text.LogTextView
-import app.logorrr.views.visual.LogVisualView
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.{InvalidationListener, Observable}
@@ -18,11 +18,10 @@ import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control._
 import javafx.scene.layout._
 
-import java.awt.Desktop
 import java.lang
-import java.nio.file.Paths
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{CancellationException, Future}
+import scala.util.{Failure, Success}
 
 
 object LogFileTab {
@@ -41,48 +40,24 @@ object LogFileTab {
       |-fx-border-color: LIGHTGREY;
       |""".stripMargin
 
-  def apply(pathAsString: String, logEntries: ObservableList[LogEntry]): LogFileTab = {
-    val logFileTab = new LogFileTab(pathAsString, logEntries)
-
-    /** activate invalidation listener on filtered list */
-    logFileTab.init()
-    logFileTab
-  }
-
-  private def mkOpenInFinderItem(pathAsString: String): MenuItem = {
-    val text = if (OsUtil.isWin) {
-      "Show Log in Explorer"
-    } else if (OsUtil.isMac) {
-      "Show Log in Finder"
-    } else {
-      "Show Log ..."
-    }
-    val mi = new MenuItem(text)
-    mi.setOnAction(e => {
-      Desktop.getDesktop.open(Paths.get(pathAsString).getParent.toFile)
-    })
-    mi
-  }
 }
+
 
 /**
  * Represents a single 'document' UI approach for a log file.
  *
  * One can view / interact with more than one log file at a time, using tabs here feels quite natural.
  *
- * @param logEntries report instance holding information of log file to be analyzed
+ * @param entries report instance holding information of log file to be analyzed
  * */
 class LogFileTab(val pathAsString: String
-                 , val logEntries: ObservableList[LogEntry])
-  extends Tab with TimerCode with CanLog {
+                 , val entries: ObservableList[LogEntry]) extends Tab
+  with TimerCode
+  with CanLog {
 
-  val openInFinderItem = LogFileTab.mkOpenInFinderItem(pathAsString)
-
-  val cm = new ContextMenu(openInFinderItem)
-  setContextMenu(cm)
 
   // lazy since only if autoscroll is set start tailer
-  private lazy val logTailer = LogTailer(pathAsString, logEntries)
+  private lazy val logTailer = LogTailer(pathAsString, entries)
 
   lazy val mutLogFileSettings: MutLogFileSettings = LogoRRRGlobals.getLogFileSettings(pathAsString)
 
@@ -93,11 +68,11 @@ class LogFileTab(val pathAsString: String
   private val splitPane = new SplitPane()
 
   /** list which holds all entries, default to display all (can be changed via buttons) */
-  private val filteredList = new FilteredList[LogEntry](logEntries)
+  private val filteredList = new FilteredList[LogEntry](entries)
 
   private val opsToolBar = {
-    val op = new OpsToolBar(pathAsString, addFilter, logEntries)
-    op.blockSizeProperty.set(mutLogFileSettings.blockWidthSettingsProperty.get())
+    val op = new OpsToolBar(pathAsString, addFilter, entries)
+    op.blockSizeProperty.set(mutLogFileSettings.blockSizeProperty.get())
     op
   }
 
@@ -107,28 +82,24 @@ class LogFileTab(val pathAsString: String
     fbtb
   }
 
-  def activeFilters: Seq[Filter] = filtersToolBar.activeFilters()
 
   private val opsRegion: OpsRegion = {
     val op = new OpsRegion(opsToolBar, filtersToolBar)
     op
   }
 
-  private lazy val logVisualView = {
-    val lvv = new LogVisualView(mutLogFileSettings.selectedLineNumberProperty
-      , mutLogFileSettings.filtersProperty
-      , filteredList
-      , mutLogFileSettings.blockWidthSettingsProperty)
-    lvv.visibleProperty().bind(selectedProperty())
-    lvv
+  private val chunkListView = {
+    val clv = ChunkListView(filteredList, mutLogFileSettings)
+    //clv.visibleProperty().bind(selectedProperty())
+    clv
   }
 
   private val logTextView = new LogTextView(mutLogFileSettings, filteredList)
 
   // start listener declarations
   private lazy val scrollToEndEventListener: InvalidationListener = (_: Observable) => {
-    logVisualView.scrollToEnd()
-    logTextView.scrollToEnd()
+    chunkListView.scrollTo(chunkListView.getItems.size())
+    logTextView.scrollTo(logTextView.getItems.size)
   }
 
   private def startTailer(): Unit = {
@@ -168,43 +139,69 @@ class LogFileTab(val pathAsString: String
       setStyle(LogFileTab.BackgroundSelectedStyle)
       LogoRRRAccelerators.setActiveSearchTextField(opsToolBar.searchTextField)
       LogoRRRAccelerators.setActiveRegexToggleButton(opsToolBar.regexToggleButton)
+      chunkListView.repaint()
     } else {
       setStyle(LogFileTab.BackgroundStyle)
     }
   })
 
-  private val dividerPositionListener = JfxUtils.onNew {
-    t1: Number => LogoRRRGlobals.setDividerPosition(pathAsString, t1.doubleValue())
+  def repaint(): Unit = {
+    chunkListView.repaint()
   }
 
+  /** execute repaints either in their own thread, if it takes too long cancel operation if there is a new value to process */
+  val throttler = new Throttler[Number, Unit](n => {
+    if (n.doubleValue() > 0.1) {
+      chunkListView.repaint()
+    }
+  })
+
+  val repaintChunkListViewListener = JfxUtils.onNew[Number](n => {
+    throttler.process(n).onComplete {
+      case Success(_) => LogoRRRGlobals.setDividerPosition(pathAsString, n.doubleValue())
+      case Failure(_: CancellationException) => logTrace(s"Computation for $n was cancelled.")
+      case Failure(e) => logException(s"Error processing $n: $e", e)
+    }
+  })
+
   def init(): Unit = {
+
+    setContextMenu(new ContextMenu(new OpenInFinderMenuItem(pathAsString)))
+    setTooltip(new LogFileTabToolTip(pathAsString, entries))
 
     initBindings()
 
     // setup split pane before listener initialisation
-    splitPane.getItems.addAll(logVisualView, logTextView)
-    setDivider(mutLogFileSettings.getDividerPosition())
+    splitPane.getItems.addAll(chunkListView, logTextView)
 
     addListeners()
 
-    /** don't monitor file anymore if tab is closed, free invalidation listeners */
-    setOnClosed(_ => shutdown())
+    /** don't monitor file anymore if tab is closed, free listeners */
+    setOnClosed(_ => {
+      shutdown()
+      LogoRRRGlobals.removeLogFile(pathAsString)
+    })
 
-    setTooltip(new LogFileTabToolTip(pathAsString, logEntries))
 
     if (mutLogFileSettings.isAutoScrollActive) {
       startTailer()
     }
 
+
     /** top component for log view */
     setContent(new BorderPane(splitPane, opsRegion, null, null, null))
 
+    divider.setPosition(mutLogFileSettings.getDividerPosition())
+
+    logTrace(s"Loading `$pathAsString` with ${entries.size()} entries.")
   }
 
-  private def addListeners(): Unit = {
-    selectedProperty().addListener(selectedListener)
 
-    splitPane.getDividers.get(0).positionProperty().addListener(dividerPositionListener)
+  private def addListeners(): Unit = {
+    chunkListView.addListener()
+    selectedProperty().addListener(selectedListener)
+    divider.positionProperty().addListener(repaintChunkListViewListener)
+
     mutLogFileSettings.autoScrollActiveProperty.addListener(autoScrollListener)
     filtersListProperty.addListener(filterChangeListener)
   }
@@ -216,9 +213,10 @@ class LogFileTab(val pathAsString: String
   }
 
   private def removeListeners(): Unit = {
+    chunkListView.removeListener()
     selectedProperty().removeListener(selectedListener)
 
-    splitPane.getDividers.get(0).positionProperty().removeListener(dividerPositionListener)
+    divider.positionProperty().removeListener(repaintChunkListViewListener)
 
     mutLogFileSettings.autoScrollActiveProperty.removeListener(autoScrollListener)
     filtersListProperty.removeListener(filterChangeListener)
@@ -229,17 +227,15 @@ class LogFileTab(val pathAsString: String
       stopTailer()
     }
     removeListeners()
-    LogoRRRGlobals.removeLogFile(pathAsString)
   }
-
-  def setDivider(pos: Double): Unit = {
-    splitPane.getDividers.get(0).setPosition(pos)
-  }
-
 
   def addFilter(filter: Filter): Unit = filtersListProperty.add(filter)
 
   def removeFilter(filter: Filter): Unit = filtersListProperty.remove(filter)
+
+  def activeFilters: Seq[Filter] = filtersToolBar.activeFilters()
+
+  def divider: SplitPane.Divider = splitPane.getDividers.get(0)
 
 
 }

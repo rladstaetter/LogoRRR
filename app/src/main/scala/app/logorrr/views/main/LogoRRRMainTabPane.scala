@@ -22,9 +22,7 @@ object LogoRRRMainTabPane {
 
 }
 
-class LogoRRRMainTabPane()
-  extends TabPane
-    with CanLog {
+class LogoRRRMainTabPane extends TabPane with CanLog {
 
   val selectedItemListener: ChangeListener[Tab] = JfxUtils.onNew {
     case logFileTab: LogFileTab =>
@@ -67,14 +65,17 @@ class LogoRRRMainTabPane()
   /** shutdown all tabs */
   def shutdown(): Unit = {
     getSelectionModel.selectedItemProperty().removeListener(selectedItemListener)
-    getLogFileTabs.foreach(_.shutdown())
+    getLogFileTabs.foreach(t => {
+      t.shutdown()
+      LogoRRRGlobals.removeLogFile(t.pathAsString)
+    })
     getTabs.clear()
   }
 
   def selectLog(pathAsString: String): Unit = {
     getLogFileTabs.find(_.pathAsString == pathAsString) match {
       case Some(value) =>
-        logTrace(s"Selects tab view with path $pathAsString.")
+        logTrace(s"Activating view for `$pathAsString`.")
         getSelectionModel.select(value)
       case None =>
         logWarn(s"Couldn't find tab with $pathAsString, selecting last tab ...")

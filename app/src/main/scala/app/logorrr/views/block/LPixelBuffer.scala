@@ -110,8 +110,8 @@ case class LPixelBuffer(blockNumber: Int
                 LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Color.YELLOW)
               } else {
                 // LPixelBuffer.drawRect(rawInts, i, width, blockSize, blockColor)
-                //LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Filter.calcColor(e.value, filters))
-                LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, ColorUtil.randColor)
+                LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Filter.calcColor(e.value, filters))
+                //LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, ColorUtil.randColor)
               }
               i = i + 1
             })

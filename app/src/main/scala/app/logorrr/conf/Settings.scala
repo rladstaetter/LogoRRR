@@ -31,12 +31,6 @@ case class Settings(stageSettings: StageSettings
                     , someActive: Option[String]
                     , someLastUsedDirectory: Option[Path]) {
 
-  def remove(pathAsString: String): Settings = {
-    copy(stageSettings = stageSettings
-      , logFileSettings = logFileSettings - pathAsString
-      , someActive = None)
-  }
-
   /** updates recent files with given log setting */
   def update(logFileSetting: LogFileSettings): Settings = {
     copy(stageSettings, logFileSettings + (logFileSetting.pathAsString -> logFileSetting))

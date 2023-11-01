@@ -42,21 +42,39 @@ case class LogoRRRStage(stage: Stage) extends CanLog {
   stage.setTitle(AppMeta.fullAppName)
   stage.getIcons.add(LogoRRRStage.icon)
   stage.setScene(scene)
-  Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet)
+  private val stylesheet: String = new PrimerLight().getUserAgentStylesheet
+  // Application.setUserAgentStylesheet(stylesheet)
   stage.setOnCloseRequest((_: WindowEvent) => shutdown())
 
   private def shutdown(): Unit = timeR({
-    // to save global filter state
-    for (logFileTab <- logorrrMain.getLogFileTabs) {
-      for ((f, i) <- logFileTab.activeFilters.zipWithIndex) {
-        logFileTab.mutLogFileSettings.setFilter(i, f)
-      }
-    }
-    LogoRRRGlobals.persist()
+    persistSettings()
+
     logorrrMain.shutdown()
-    LogoRRRGlobals.shutdown()
+    LogoRRRGlobals.unbindWindow()
     stage.sceneProperty.removeListener(LogoRRRStage.sceneListener)
-  }, s"Stopped ${AppMeta.fullAppNameWithVersion}")
+  }
+
+    , s"Stopped ${AppMeta.fullAppNameWithVersion}"
+  )
+
+  private def persistSettings(): Unit = {
+    // current global state
+    // follwoing code can be removed if filters are bound to
+    // global mutable Settings
+    val settings = LogoRRRGlobals.getSettings
+
+    // to save global filter state
+    val activeFilters =
+      (for (logFileTab <- logorrrMain.getLogFileTabs) yield {
+        logFileTab.pathAsString -> logFileTab.activeFilters
+      }).toMap
+
+    val updatedSettings =
+      for ((p, fltrs) <- activeFilters) yield {
+        p -> settings.logFileSettings(p).copy(filters = fltrs)
+      }
+    LogoRRRGlobals.persist(settings.copy(logFileSettings = updatedSettings))
+  }
 
   def show(): Unit = {
     stage.show()

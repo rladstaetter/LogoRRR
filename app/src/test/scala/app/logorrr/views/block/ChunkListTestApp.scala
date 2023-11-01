@@ -45,7 +45,7 @@ class ChunkListTestApp extends Application with CanLog {
     val blockSize = 10
     val selectedLineNumber = 0
 
-    val entries: java.util.List[LogEntry] = ChunkSpec.mkTestLogEntries(1000  )
+    val entries: java.util.List[LogEntry] = ChunkSpec.mkTestLogEntries(1000)
     //val entries: java.util.List[LogEntry] = mkEntries(Paths.get("/Users/lad/logfiles/biglog.txt"))
     val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList(LogFileSettings.DefaultFilter: _*))
     val entriesProperty = new SimpleListProperty[LogEntry](FXCollections.observableArrayList(entries))
@@ -56,6 +56,7 @@ class ChunkListTestApp extends Application with CanLog {
       , new SimpleIntegerProperty(selectedLineNumber)
       , new SimpleIntegerProperty(blockSize)
       , filtersProperty)
+    clv.addListener()
     val sp = new SplitPane(clv, new BorderPane(new Label("Test")))
 
     val slider = new Slider(2, 100, 10)
@@ -74,7 +75,7 @@ class ChunkListTestApp extends Application with CanLog {
     nrElemsChoiceBox.setItems(elems)
     nrElemsChoiceBox.getSelectionModel().selectedIndexProperty().addListener(JfxUtils.onNew[Number](n => {
       val nrElems = elems.get(n.intValue())
-      clv.entriesProperty.setAll(ChunkSpec.mkTestLogEntries(nrElems))
+      clv.entries.setAll(ChunkSpec.mkTestLogEntries(nrElems))
     }))
 
     bp.setTop(new ToolBar(nrBlocksLabel, nrElemsChoiceBox, slider))
@@ -83,8 +84,7 @@ class ChunkListTestApp extends Application with CanLog {
     val throttler =
       new Throttler[Number, Unit](n => {
         if (n.doubleValue() > 0.1) {
-          clv.updateItems()
-          clv.refresh()
+          clv.repaint()
         }
       })
 
@@ -101,13 +101,11 @@ class ChunkListTestApp extends Application with CanLog {
     val scene = new Scene(bp, width, height)
     stage.setScene(scene)
 
-    stage.showingProperty().addListener((obs, wasShowing, isNowShowing) => {
+    stage.showingProperty().addListener((_, _, isNowShowing) => {
       if (isNowShowing) {
-        clv.updateItems()
-        clv.refresh()
+        clv.repaint()
         System.out.println("Scene is loaded and displayed!")
       }
-
     })
 
     stage.show()

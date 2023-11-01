@@ -25,8 +25,7 @@ class LogoRRRApp extends javafx.application.Application with CanLog {
 
 
   def start(stage: Stage): Unit = {
-    logInfo(s"Started ${AppMeta.fullAppNameWithVersion}")
-    logInfo(s"Working directory: ${Paths.get("").toAbsolutePath.toString}")
+    logInfo(s"Started ${AppMeta.fullAppNameWithVersion} in ${Paths.get("").toAbsolutePath.toString}")
     val settings: Settings = SettingsIO.fromFile()
     LogoRRRGlobals.set(settings, getHostServices)
     LogoRRRStage(stage).show()

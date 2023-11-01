@@ -59,11 +59,6 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
 
   }
 
-  /** scroll to end of listview */
-  def scrollToEnd(): Unit = {
-    scrollTo(getItems.size)
-  }
-
   class LogEntryListCell extends ListCell[LogEntry] {
     styleProperty().bind(mutLogFileSettings.fontStyleBinding)
     setGraphic(null)

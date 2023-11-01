@@ -25,7 +25,11 @@ object LogoRRRGlobals extends CanLog {
   private val hostServicesProperty = new SimpleObjectProperty[HostServices]()
 
   def persist(): Unit = {
-    Fs.write(FilePaths.settingsFilePath, ConfigWriter[Settings].to(LogoRRRGlobals.getSettings).render(renderOptions))
+    persist(LogoRRRGlobals.getSettings)
+  }
+
+  def persist(settings: Settings): Unit = {
+    Fs.write(FilePaths.settingsFilePath, ConfigWriter[Settings].to(settings).render(renderOptions))
   }
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings
@@ -39,7 +43,7 @@ object LogoRRRGlobals extends CanLog {
     mutSettings.bindWindowProperties(window)
   }
 
-  def shutdown(): Unit = {
+  def unbindWindow(): Unit = {
     mutSettings.unbindWindow()
   }
 
@@ -60,6 +64,7 @@ object LogoRRRGlobals extends CanLog {
     setHostServices(hostServices)
   }
 
+  /** a case class representing current setting state */
   def getSettings: Settings = mutSettings.petrify()
 
   def setSomeActive(sActive: Option[String]): Unit = mutSettings.setSomeActive(sActive)

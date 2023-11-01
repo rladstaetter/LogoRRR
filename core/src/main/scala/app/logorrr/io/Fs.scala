@@ -5,6 +5,9 @@ import app.logorrr.util.CanLog
 import java.nio.charset.Charset
 import java.nio.file.{Files, Path}
 
+/**
+ * File related operations
+ */
 object Fs extends CanLog {
 
   def createDirectories(path: Path): Unit = {
