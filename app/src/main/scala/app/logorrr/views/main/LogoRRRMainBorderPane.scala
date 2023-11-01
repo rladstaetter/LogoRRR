@@ -2,7 +2,7 @@ package app.logorrr.views.main
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.model.LogFileSettings
-import app.logorrr.util.CanLog
+import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.input.{DragEvent, TransferMode}
 import javafx.scene.layout.BorderPane
@@ -56,7 +56,7 @@ class LogoRRRMainBorderPane extends BorderPane with CanLog {
     }
   }
 
-  def addLogFile(path: Path): Unit = {
+  def addLogFile(path: Path): Unit =  {
     val logFileSettings = LogFileSettings(path)
     LogoRRRGlobals.updateLogFile(logFileSettings)
     val tab = new LogFileTab(logFileSettings.pathAsString, logFileSettings.readEntries())

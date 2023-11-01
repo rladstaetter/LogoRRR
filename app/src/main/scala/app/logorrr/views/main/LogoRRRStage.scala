@@ -48,18 +48,14 @@ case class LogoRRRStage(stage: Stage) extends CanLog {
 
   private def shutdown(): Unit = timeR({
     persistSettings()
-
     logorrrMain.shutdown()
     LogoRRRGlobals.unbindWindow()
     stage.sceneProperty.removeListener(LogoRRRStage.sceneListener)
-  }
-
-    , s"Stopped ${AppMeta.fullAppNameWithVersion}"
-  )
+  }, s"Stopped ${AppMeta.fullAppNameWithVersion}")
 
   private def persistSettings(): Unit = {
     // current global state
-    // follwoing code can be removed if filters are bound to
+    // following code can be removed if filters are bound to
     // global mutable Settings
     val settings = LogoRRRGlobals.getSettings
 

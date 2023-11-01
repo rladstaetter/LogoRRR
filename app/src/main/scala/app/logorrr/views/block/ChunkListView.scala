@@ -2,8 +2,9 @@ package app.logorrr.views.block
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.util.CanLog
+import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.search.Filter
+import atlantafx.base.theme.Styles
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ObservableList}
@@ -42,7 +43,10 @@ class ChunkListView(val entries: ObservableList[LogEntry]
   var repaints = 0
 
   val repaintInvalidationListener = new InvalidationListener {
-    override def invalidated(observable: Observable): Unit = repaint()
+    override def invalidated(observable: Observable): Unit = {
+      logTrace("invalidated")
+      repaint()
+    }
   }
 
   getStylesheets.add(getClass.getResource("/app/logorrr/views/block/ChunkListView.css").toExternalForm)
@@ -95,15 +99,17 @@ class ChunkListView(val entries: ObservableList[LogEntry]
 
   def doRepaint: Boolean = widthProperty().get() > 0 & blockSizeProperty.get() > 0 && heightProperty.get() > 0
 
-  def repaint(): Unit = {
+  // do not remove JfxUtils.execOnUiThread
+  def repaint(): Unit = JfxUtils.execOnUiThread {
     if (doRepaint) {
       repaints += 1
       timeR({
         updateItems()
         refresh()
-      }, s"Repaint #$repaints")
+      }, s"Repainted #$repaints")
     } else {
-      logTrace(s"Not repainting: width=${widthProperty().get()}, blockSize=${blockSizeProperty.get()}, height: ${heightProperty().get()}")
+      val msg = s"Not repainted: width=${widthProperty().get()}, blockSize=${blockSizeProperty.get()}, height: ${heightProperty().get()}"
+      logTrace(msg)
     }
   }
 

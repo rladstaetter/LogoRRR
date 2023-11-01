@@ -55,7 +55,6 @@ class LogFileTab(val pathAsString: String
   with TimerCode
   with CanLog {
 
-
   // lazy since only if autoscroll is set start tailer
   private lazy val logTailer = LogTailer(pathAsString, entries)
 
@@ -90,7 +89,6 @@ class LogFileTab(val pathAsString: String
 
   private val chunkListView = {
     val clv = ChunkListView(filteredList, mutLogFileSettings)
-    //clv.visibleProperty().bind(selectedProperty())
     clv
   }
 
@@ -133,35 +131,41 @@ class LogFileTab(val pathAsString: String
     JfxUtils.mkListChangeListener(handleFilterChange)
   }
 
-  /* change active text field depending on visible tab */
   private val selectedListener = JfxUtils.onNew[lang.Boolean](b => {
     if (b) {
       setStyle(LogFileTab.BackgroundSelectedStyle)
+      /* change active text field depending on visible tab */
       LogoRRRAccelerators.setActiveSearchTextField(opsToolBar.searchTextField)
       LogoRRRAccelerators.setActiveRegexToggleButton(opsToolBar.regexToggleButton)
-      chunkListView.repaint()
+      repaint()
     } else {
       setStyle(LogFileTab.BackgroundStyle)
     }
   })
 
-  def repaint(): Unit = {
-    chunkListView.repaint()
-  }
+  def repaint(): Unit = chunkListView.repaint()
+
 
   /** execute repaints either in their own thread, if it takes too long cancel operation if there is a new value to process */
   val throttler = new Throttler[Number, Unit](n => {
     if (n.doubleValue() > 0.1) {
-      chunkListView.repaint()
+      repaint()
     }
   })
 
   val repaintChunkListViewListener = JfxUtils.onNew[Number](n => {
+    if (n.doubleValue() > 0.1) {
+      logTrace("divider")
+      repaint()
+    }
+    /*
     throttler.process(n).onComplete {
       case Success(_) => LogoRRRGlobals.setDividerPosition(pathAsString, n.doubleValue())
       case Failure(_: CancellationException) => logTrace(s"Computation for $n was cancelled.")
       case Failure(e) => logException(s"Error processing $n: $e", e)
     }
+
+     */
   })
 
   def init(): Unit = {
@@ -176,12 +180,18 @@ class LogFileTab(val pathAsString: String
 
     addListeners()
 
+    setOnSelectionChanged(e => {
+      if (isSelected) {
+        logTrace("selectionchanged")
+        chunkListView.repaint()
+      }
+    })
+
     /** don't monitor file anymore if tab is closed, free listeners */
     setOnClosed(_ => {
       shutdown()
       LogoRRRGlobals.removeLogFile(pathAsString)
     })
-
 
     if (mutLogFileSettings.isAutoScrollActive) {
       startTailer()
@@ -191,9 +201,9 @@ class LogFileTab(val pathAsString: String
     /** top component for log view */
     setContent(new BorderPane(splitPane, opsRegion, null, null, null))
 
-    divider.setPosition(mutLogFileSettings.getDividerPosition())
+    // divider.setPosition(mutLogFileSettings.getDividerPosition())
 
-    logTrace(s"Loading `$pathAsString` with ${entries.size()} entries.")
+    logTrace(s"Loaded `$pathAsString` with ${entries.size()} entries.")
   }
 
 

@@ -24,7 +24,7 @@ object LogoRRRMainTabPane {
 
 class LogoRRRMainTabPane extends TabPane with CanLog {
 
-  val selectedItemListener: ChangeListener[Tab] = JfxUtils.onNew {
+  val selectedLogFileTab: ChangeListener[Tab] = JfxUtils.onNew {
     case logFileTab: LogFileTab =>
       logTrace(s"Selected: ${logFileTab.pathAsString}")
       LogoRRRGlobals.setSomeActive(Option(logFileTab.pathAsString))
@@ -44,7 +44,7 @@ class LogoRRRMainTabPane extends TabPane with CanLog {
    * Defines what should happen when a tab is selected
    * */
   def initLogFileAddListener(): Unit = {
-    getSelectionModel.selectedItemProperty().addListener(selectedItemListener)
+    getSelectionModel.selectedItemProperty().addListener(selectedLogFileTab)
   }
 
 
@@ -64,7 +64,7 @@ class LogoRRRMainTabPane extends TabPane with CanLog {
 
   /** shutdown all tabs */
   def shutdown(): Unit = {
-    getSelectionModel.selectedItemProperty().removeListener(selectedItemListener)
+    getSelectionModel.selectedItemProperty().removeListener(selectedLogFileTab)
     getLogFileTabs.foreach(t => {
       t.shutdown()
       LogoRRRGlobals.removeLogFile(t.pathAsString)
