@@ -83,16 +83,13 @@ class LogFileTab(val pathAsString: String
     op
   }
 
-  private val chunkListView = {
-    val clv = ChunkListView(filteredList, mutLogFileSettings)
-    clv
-  }
+  private val borderedChunkListView = ChunkListView(filteredList, mutLogFileSettings)
 
   private val logTextView = new LogTextView(mutLogFileSettings, filteredList)
 
   // start listener declarations
   private lazy val scrollToEndEventListener: InvalidationListener = (_: Observable) => {
-    chunkListView.scrollTo(chunkListView.getItems.size())
+    borderedChunkListView.scrollTo(borderedChunkListView.getItems.size())
     logTextView.scrollTo(logTextView.getItems.size)
   }
 
@@ -139,7 +136,7 @@ class LogFileTab(val pathAsString: String
     }
   })
 
-  def repaint(): Unit = chunkListView.repaint()
+  def repaint(): Unit = borderedChunkListView.repaint()
 
 
   /** execute repaints either in their own thread, if it takes too long cancel operation if there is a new value to process */
@@ -172,14 +169,14 @@ class LogFileTab(val pathAsString: String
     initBindings()
 
     // setup split pane before listener initialisation
-    splitPane.getItems.addAll(chunkListView, logTextView)
+    splitPane.getItems.addAll(borderedChunkListView, logTextView)
 
     addListeners()
 
     setOnSelectionChanged(e => {
       if (isSelected) {
         logTrace("selectionchanged")
-        chunkListView.repaint()
+        borderedChunkListView.repaint()
       }
     })
 
@@ -204,7 +201,7 @@ class LogFileTab(val pathAsString: String
 
 
   private def addListeners(): Unit = {
-    chunkListView.addListener()
+    borderedChunkListView.addListeners()
     selectedProperty().addListener(selectedListener)
     divider.positionProperty().addListener(repaintChunkListViewListener)
 
@@ -219,7 +216,7 @@ class LogFileTab(val pathAsString: String
   }
 
   private def removeListeners(): Unit = {
-    chunkListView.removeListener()
+    borderedChunkListView.removeListeners()
     selectedProperty().removeListener(selectedListener)
 
     divider.positionProperty().removeListener(repaintChunkListViewListener)

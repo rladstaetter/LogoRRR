@@ -4,11 +4,11 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.search.Filter
-import atlantafx.base.theme.Styles
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.control.ListView
+import javafx.scene.layout.BorderPane
 
 import scala.util.{Failure, Success, Try}
 
@@ -26,12 +26,16 @@ object ChunkListView {
 }
 
 /**
- * Each ListCell contains one or more LogEntries; the cells group LogEntries together. This approach
- * allows us to use a vanilla ListView which takes care of painting the cells if needed, we don't need
- * to care about the virtual flow which is happening in the standard javafx library.
+ * Each ListCell contains one or more Logentries - those regions are called 'Chunks'.; Those chunks
+ * group LogEntries; this grouping serves no other purpose than to optimize painting all entries via
+ * a ListView. In this way we get a stable and prooven virtual flow implementation under the hood and we
+ * don't have to reinvent this again.
  *
- * @param entries           log entries to display
- * @param blockSizeProperty size of blocks to display
+ * @param entries                    log entries to display
+ * @param selectedLineNumberProperty which line is selected by the user
+ * @param blockSizeProperty          size of blocks to display
+ * @param filtersProperty            which filters are active
+ * @param dividersProperty           position of divider of splitpane
  */
 class ChunkListView(val entries: ObservableList[LogEntry]
                     , val selectedLineNumberProperty: SimpleIntegerProperty
@@ -43,10 +47,27 @@ class ChunkListView(val entries: ObservableList[LogEntry]
   var repaints = 0
 
   val repaintInvalidationListener = new InvalidationListener {
-    override def invalidated(observable: Observable): Unit = {
-      logTrace("invalidated")
-      repaint()
-    }
+    override def invalidated(observable: Observable): Unit = repaint()
+  }
+
+  val repaintChangeListener = JfxUtils.onNew[Number](_ => repaint())
+
+  def addListeners(): Unit = {
+    entries.addListener(repaintInvalidationListener)
+
+    dividersProperty.addListener(repaintChangeListener)
+    blockSizeProperty.addListener(repaintChangeListener)
+    widthProperty().addListener(repaintChangeListener)
+    heightProperty().addListener(repaintChangeListener)
+  }
+
+  def removeListeners(): Unit = {
+    entries.removeListener(repaintInvalidationListener)
+
+    dividersProperty.removeListener(repaintInvalidationListener)
+    blockSizeProperty.removeListener(repaintInvalidationListener)
+    widthProperty().removeListener(repaintInvalidationListener)
+    heightProperty().removeListener(repaintChangeListener)
   }
 
   getStylesheets.add(getClass.getResource("/app/logorrr/views/block/ChunkListView.css").toExternalForm)
@@ -57,18 +78,6 @@ class ChunkListView(val entries: ObservableList[LogEntry]
     , blockSizeProperty
     , filtersProperty))
 
-
-  def addListener(): Unit = {
-    entries.addListener(repaintInvalidationListener)
-    blockSizeProperty.addListener(repaintInvalidationListener)
-    dividersProperty.addListener(repaintInvalidationListener)
-  }
-
-  def removeListener(): Unit = {
-    entries.removeListener(repaintInvalidationListener)
-    blockSizeProperty.removeListener(repaintInvalidationListener)
-    dividersProperty.removeListener(repaintInvalidationListener)
-  }
 
   // if width/height of display is changed, also elements of this listview will change
   // and shuffle between cells. this method recreates all listview entries.
@@ -97,8 +106,15 @@ class ChunkListView(val entries: ObservableList[LogEntry]
     case Failure(exception) => logException(exception.getMessage, exception)
   }
 
-  def doRepaint: Boolean = widthProperty().get() > 0 & blockSizeProperty.get() > 0 && heightProperty.get() > 0
+  def doRepaint: Boolean = widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0
 
+  /**
+   * Repaint method takes care of painting the blocks on the raw byte array.
+   *
+   * This method may be called more often than necessary, the 'doRepaint' if statement makes sure we don't paint
+   * if not all prerequisites are met. Also, this has to run on the javafx thread such that those updates are displayed
+   * correctly.
+   */
   // do not remove JfxUtils.execOnUiThread
   def repaint(): Unit = JfxUtils.execOnUiThread {
     if (doRepaint) {
@@ -112,5 +128,6 @@ class ChunkListView(val entries: ObservableList[LogEntry]
       logTrace(msg)
     }
   }
-
 }
+
+

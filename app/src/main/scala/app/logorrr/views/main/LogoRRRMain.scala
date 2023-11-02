@@ -53,18 +53,21 @@ class LogoRRRMain(closeStage: => Unit)
               val tab = new LogFileTab(lfs.pathAsString, es)
               tab.init()
               mainBorderPane.addLogFileTab(tab)
+              tab.repaint()
           })
-          // after loading everything, set active log like specified in the config file
-          LogoRRRGlobals.getSomeActive.foreach(p => selectLog(p))
 
           // only after loading all files we initialize the 'add' listener
           // otherwise we would overwrite the active log everytime
-          mainBorderPane.logViewTabPane.initLogFileAddListener()
+          mainBorderPane.logViewTabPane.initSelectionListener()
+
+          // after loading everything, set active log like specified in the config file
+          LogoRRRGlobals.getSomeActive.foreach(p => selectLog(p))
+
         })
       case Failure(exception) =>
         logException("Could not load logfiles", exception)
         // init listener also in error case
-        mainBorderPane.logViewTabPane.initLogFileAddListener()
+        mainBorderPane.logViewTabPane.initSelectionListener()
     }
 
     )

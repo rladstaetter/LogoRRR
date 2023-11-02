@@ -30,7 +30,7 @@ class LogoRRRMainTabPane extends TabPane with CanLog {
       LogoRRRGlobals.setSomeActive(Option(logFileTab.pathAsString))
       // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
       getSelectionModel.select(logFileTab)
-    case _ =>
+    case _ => ???
   }
 
   init()
@@ -43,7 +43,7 @@ class LogoRRRMainTabPane extends TabPane with CanLog {
   /**
    * Defines what should happen when a tab is selected
    * */
-  def initLogFileAddListener(): Unit = {
+  def initSelectionListener(): Unit = {
     getSelectionModel.selectedItemProperty().addListener(selectedLogFileTab)
   }
 
@@ -75,7 +75,7 @@ class LogoRRRMainTabPane extends TabPane with CanLog {
   def selectLog(pathAsString: String): Unit = {
     getLogFileTabs.find(_.pathAsString == pathAsString) match {
       case Some(value) =>
-        logTrace(s"Activating view for `$pathAsString`.")
+        logTrace(s"Activated tab for `$pathAsString`.")
         getSelectionModel.select(value)
       case None =>
         logWarn(s"Couldn't find tab with $pathAsString, selecting last tab ...")
