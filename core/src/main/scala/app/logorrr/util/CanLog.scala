@@ -35,7 +35,7 @@ object CanLog {
     } else {
       new FileHandler(FilePaths.logFilePath.toAbsolutePath.toString, true)
     }
-    h.setLevel(Level.ALL)
+    h.setLevel(Level.INFO)
     h.setFormatter(new SimpleFormatter)
     h
   }
