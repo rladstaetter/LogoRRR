@@ -2,7 +2,7 @@ package app.logorrr.views.block
 
 import app.logorrr.LogoRRRApp
 import app.logorrr.model.{LogEntry, LogFileReader, LogFileSettings}
-import app.logorrr.util.{CanLog, JfxUtils, Throttler}
+import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.search.Filter
 import javafx.application.Application
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty}
@@ -13,7 +13,7 @@ import javafx.scene.control._
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
 import java.util
 import scala.concurrent.CancellationException
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -83,18 +83,9 @@ class ChunkListTestApp extends Application with CanLog {
     bp.setTop(new ToolBar(nrBlocksLabel, nrElemsChoiceBox, slider))
     bp.setCenter(sp)
 
-    val throttler =
-      new Throttler[Number, Unit](n => {
-        if (n.doubleValue() > 0.1) {
-          clv.repaint()
-        }
-      })
-
     val refreshListener = JfxUtils.onNew[Number](n => {
-      throttler.process(n).onComplete {
-        case Success(result) => ()
-        case Failure(e: CancellationException) => logTrace(s"Computation for $n was cancelled.")
-        case Failure(e) => logException(s"Error processing $n: $e", e)
+      if (n.doubleValue() > 0.1) {
+        clv.repaint()
       }
     })
 

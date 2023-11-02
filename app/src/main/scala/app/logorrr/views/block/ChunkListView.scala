@@ -54,6 +54,7 @@ class ChunkListView(val entries: ObservableList[LogEntry]
   def addListeners(): Unit = {
     entries.addListener(repaintInvalidationListener)
 
+    selectedLineNumberProperty.addListener(repaintChangeListener)
     dividersProperty.addListener(repaintChangeListener)
     blockSizeProperty.addListener(repaintChangeListener)
     widthProperty().addListener(repaintChangeListener)
@@ -63,9 +64,10 @@ class ChunkListView(val entries: ObservableList[LogEntry]
   def removeListeners(): Unit = {
     entries.removeListener(repaintInvalidationListener)
 
-    dividersProperty.removeListener(repaintInvalidationListener)
-    blockSizeProperty.removeListener(repaintInvalidationListener)
-    widthProperty().removeListener(repaintInvalidationListener)
+    selectedLineNumberProperty.addListener(repaintChangeListener)
+    dividersProperty.removeListener(repaintChangeListener)
+    blockSizeProperty.removeListener(repaintChangeListener)
+    widthProperty().removeListener(repaintChangeListener)
     heightProperty().removeListener(repaintChangeListener)
   }
 

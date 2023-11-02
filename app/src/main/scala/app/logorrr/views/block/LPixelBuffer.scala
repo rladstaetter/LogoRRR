@@ -70,7 +70,8 @@ case class LPixelBuffer(blockNumber: Int
                         , entries: java.util.List[LogEntry]
                         , filtersProperty: ObservableList[Filter]
                         , selectedEntryProperty: SimpleObjectProperty[LogEntry]
-                        , rawInts: Array[Int]) extends
+                        , rawInts: Array[Int]
+                        , selectedLineNumberProperty: SimpleIntegerProperty) extends
   PixelBuffer[IntBuffer](shape.width
     , shape.height
     , IntBuffer.wrap(rawInts)
@@ -106,7 +107,7 @@ case class LPixelBuffer(blockNumber: Int
             cleanBackground()
             var i = 0
             entries.forEach(e => {
-              if (e.equals(selectedEntryProperty.get())) {
+              if (e.lineNumber.equals(selectedLineNumberProperty.getValue() + 1)) {
                 LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Color.YELLOW)
               } else {
                 // LPixelBuffer.drawRect(rawInts, i, width, blockSize, blockColor)

@@ -77,6 +77,7 @@ class BlockView(blockNumber : Int
     , filtersProperty
     , selectedEntryProperty
     , heightProperty
+    , selectedLineNumberProperty
   )
 
   init()

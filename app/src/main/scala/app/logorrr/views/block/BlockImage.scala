@@ -30,7 +30,8 @@ class BlockImage(blockNumber: Int
                  , entries: java.util.List[LogEntry]
                  , filtersProperty: ObservableList[Filter]
                  , selectedEntryProperty: SimpleObjectProperty[LogEntry]
-                 , heightProperty: SimpleIntegerProperty)
+                 , heightProperty: SimpleIntegerProperty
+                 , selectedLineNumberProperty: SimpleIntegerProperty)
   extends WritableImage(LPixelBuffer(blockNumber
     , Range(entries.get(0).lineNumber, entries.get(entries.size - 1).lineNumber)
     , RectangularShape(widthProperty.get().toInt, heightProperty.get())
@@ -38,7 +39,8 @@ class BlockImage(blockNumber: Int
     , entries
     , filtersProperty
     , selectedEntryProperty
-    , Array.fill(widthProperty.get().toInt * heightProperty.get())(ColorUtil.toARGB(Color.GREEN)))) with CanLog {
+    , Array.fill(widthProperty.get().toInt * heightProperty.get())(ColorUtil.toARGB(Color.GREEN))
+    , selectedLineNumberProperty)) with CanLog {
 
   def draw(i: Int, color: Color): Unit = {
     logError("implement me")

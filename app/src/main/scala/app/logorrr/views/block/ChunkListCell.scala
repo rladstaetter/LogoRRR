@@ -8,6 +8,14 @@ import javafx.collections.ObservableList
 import javafx.scene.control.ListCell
 
 
+/**
+ * A listcell which can contain one or more log entries
+ *
+ * @param selectedLineNumberProperty
+ * @param widthProperty
+ * @param blockSizeProperty
+ * @param filtersProperty
+ */
 class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
                     , widthProperty: ReadOnlyDoubleProperty
                     , blockSizeProperty: SimpleIntegerProperty
@@ -28,7 +36,6 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
     if (empty || Option(t).isEmpty) {
       setGraphic(null)
     } else {
-
       if (widthProperty.get() > 0) {
         if (blockSizeProperty.get() > 0) {
           val bv = new BlockView(t.number

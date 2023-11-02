@@ -2,6 +2,7 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.io.Fs
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
 import app.logorrr.views.LogoRRRAccelerators
@@ -139,13 +140,6 @@ class LogFileTab(val pathAsString: String
   def repaint(): Unit = borderedChunkListView.repaint()
 
 
-  /** execute repaints either in their own thread, if it takes too long cancel operation if there is a new value to process */
-  val throttler = new Throttler[Number, Unit](n => {
-    if (n.doubleValue() > 0.1) {
-      repaint()
-    }
-  })
-
   val repaintChunkListViewListener = JfxUtils.onNew[Number](n => {
     if (n.doubleValue() > 0.1) {
       repaint()
@@ -203,7 +197,7 @@ class LogFileTab(val pathAsString: String
   private def initBindings(): Unit = {
     filtersListProperty.bind(mutLogFileSettings.filtersProperty)
     //  logVisualView.blockViewPane.blockSizeProperty.bind(opsRegion.opsToolBar.blockSizeProperty)
-    textProperty.bind(Bindings.concat(LogFileUtil.logFileName(pathAsString)))
+    textProperty.bind(Bindings.concat(Fs.logFileName(pathAsString)))
   }
 
   private def removeListeners(): Unit = {
