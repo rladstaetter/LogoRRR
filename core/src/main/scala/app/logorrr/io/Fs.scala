@@ -3,12 +3,15 @@ package app.logorrr.io
 import app.logorrr.util.CanLog
 
 import java.nio.charset.Charset
-import java.nio.file.{Files, Path}
+import java.nio.file.{Files, Path, Paths}
 
 /**
  * File related operations
  */
 object Fs extends CanLog {
+
+  /** compute file name from a LogFilePath */
+  def logFileName(pathAsString: String): String = Paths.get(pathAsString).getFileName.toString
 
   def createDirectories(path: Path): Unit = {
     if (Files.exists(path)) {

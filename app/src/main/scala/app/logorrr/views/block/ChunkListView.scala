@@ -8,7 +8,6 @@ import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.control.ListView
-import javafx.scene.layout.BorderPane
 
 import scala.util.{Failure, Success, Try}
 

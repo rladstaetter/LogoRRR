@@ -148,17 +148,8 @@ class LogFileTab(val pathAsString: String
 
   val repaintChunkListViewListener = JfxUtils.onNew[Number](n => {
     if (n.doubleValue() > 0.1) {
-      logTrace("divider")
       repaint()
     }
-    /*
-    throttler.process(n).onComplete {
-      case Success(_) => LogoRRRGlobals.setDividerPosition(pathAsString, n.doubleValue())
-      case Failure(_: CancellationException) => logTrace(s"Computation for $n was cancelled.")
-      case Failure(e) => logException(s"Error processing $n: $e", e)
-    }
-
-     */
   })
 
   def init(): Unit = {

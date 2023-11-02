@@ -1,11 +1,25 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.util.{CanLog, LogoRRRFileChooser, OsUtil}
+ import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.util.{CanLog, OsUtil}
 import javafx.scene.control.{Menu, MenuItem}
-import javafx.stage.Window
+import javafx.stage.{FileChooser, Window}
 
 import java.nio.file.Path
 
+class LogoRRRFileChooser(title: String) {
+
+  def showAndWait(window: Window): Option[Path] = {
+    val fc = new FileChooser
+    fc.setTitle(title)
+    LogoRRRGlobals.getSomeLastUsedDirectory.foreach(d => fc.setInitialDirectory(d.toFile))
+    val somePath = Option(fc.showOpenDialog(window)).map(_.toPath)
+    LogoRRRGlobals.setSomeLastUsedDirectory(somePath.map(_.getParent))
+    LogoRRRGlobals.persist()
+    somePath
+  }
+
+}
 object FileMenu {
 
   class OpenMenuItem(getWindow: () => Window

@@ -5,6 +5,8 @@ import javafx.scene.image.{Image, ImageView}
 import java.util.Properties
 
 
+abstract class CpResource(value: String)
+
 case class PropsCp(classPathResource : String) extends CpResource(classPathResource) {
 
   def asProperties(clazz: Class[_]): Properties = {
