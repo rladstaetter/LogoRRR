@@ -177,7 +177,7 @@ class LogFileTab(val pathAsString: String
     /** top component for log view */
     setContent(new BorderPane(splitPane, opsRegion, null, null, null))
 
-    // divider.setPosition(mutLogFileSettings.getDividerPosition())
+    divider.setPosition(mutLogFileSettings.getDividerPosition())
 
     logTrace(s"Loaded `$pathAsString` with ${entries.size()} entries.")
   }
@@ -201,8 +201,6 @@ class LogFileTab(val pathAsString: String
   private def removeListeners(): Unit = {
     chunkListView.removeListeners()
     selectedProperty().removeListener(selectedListener)
-
-    divider.positionProperty().removeListener(repaintChunkListViewListener)
 
     mutLogFileSettings.autoScrollActiveProperty.removeListener(autoScrollListener)
     filtersListProperty.removeListener(filterChangeListener)
