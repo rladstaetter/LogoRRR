@@ -1,7 +1,6 @@
 package app.logorrr.model
 
 import app.logorrr.util.CanLog
-import app.logorrr.views.search.Fltr
 import javafx.collections.{FXCollections, ObservableList}
 
 import java.nio.file.Path

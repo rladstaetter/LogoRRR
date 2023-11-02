@@ -3,7 +3,7 @@ package app.logorrr.views.block
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, ColorUtil, JfxUtils}
 import app.logorrr.views.search.Filter
-import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty}
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
 import javafx.scene.image.{PixelBuffer, PixelFormat}
 import javafx.scene.paint.Color
@@ -69,7 +69,6 @@ case class LPixelBuffer(blockNumber: Int
                         , blockSizeProperty: SimpleIntegerProperty
                         , entries: java.util.List[LogEntry]
                         , filtersProperty: ObservableList[Filter]
-                        , selectedEntryProperty: SimpleObjectProperty[LogEntry]
                         , rawInts: Array[Int]
                         , selectedLineNumberProperty: SimpleIntegerProperty) extends
   PixelBuffer[IntBuffer](shape.width
@@ -77,12 +76,12 @@ case class LPixelBuffer(blockNumber: Int
     , IntBuffer.wrap(rawInts)
     , PixelFormat.getIntArgbPreInstance) with CanLog {
 
-  val name = range.start + "_" + range.end
+  val name = s"${range.start}_${range.end}"
 
   getBuffer.clear()
 
-  assert(shape.width != 0, s"width was ${shape.width}.")
-  assert(shape.height != 0, s"height was ${shape.height}.")
+  assert(shape.width != 0, s"For $name, width was ${shape.width}.")
+  assert(shape.height != 0, s"For $name, height was ${shape.height}.")
   assert(shape.height * shape.width > 0)
 
   private val bgColor: Int = ColorUtil.toARGB(Color.WHITE)

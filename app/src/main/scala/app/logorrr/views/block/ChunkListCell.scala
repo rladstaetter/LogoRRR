@@ -3,9 +3,14 @@ package app.logorrr.views.block
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.search.Filter
-import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty, SimpleObjectProperty}
+import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
+import javafx.event.EventHandler
 import javafx.scene.control.ListCell
+import javafx.scene.image.ImageView
+import javafx.scene.input.MouseEvent
+
+import scala.util.Try
 
 
 /**
@@ -20,15 +25,23 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
                     , widthProperty: ReadOnlyDoubleProperty
                     , blockSizeProperty: SimpleIntegerProperty
                     , filtersProperty: ObservableList[Filter]
-                   ) extends ListCell[Chunk] with CanLog  {
+                   ) extends ListCell[Chunk] with CanLog {
 
-  setStyle(
-    """
-      |-fx-padding: 0;
-      |-fx-margin: 0;
-      |-fx-background-insets: 0;
-      |
-      |""".stripMargin)
+  // if user selects an entry in the ChunkListView set selectedLineNumberProperty. This property is observed
+  // via an listener and a yellow square will be painted.
+  val mouseEventHandler = new EventHandler[MouseEvent]() {
+    override def handle(me: MouseEvent): Unit = {
+      val index = BlockImage.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get.toInt)
+      getEntryAt(getItem, index) match {
+        case Some(value) =>
+          selectedLineNumberProperty.set(value.lineNumber)
+        case None => System.err.println("no element found")
+      }
+    }
+  }
+
+  setOnMouseClicked(mouseEventHandler)
+
 
   override def updateItem(t: Chunk, empty: Boolean): Unit = JfxUtils.execOnUiThread {
     super.updateItem(t, empty)
@@ -38,15 +51,14 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
     } else {
       if (widthProperty.get() > 0) {
         if (blockSizeProperty.get() > 0) {
-          val bv = new BlockView(t.number
+          val bv = new BlockImage(t.number
+            , entries = t.entries
             , selectedLineNumberProperty
             , filtersProperty
             , blockSizeProperty
             , widthProperty
-            , selectedEntryProperty = new SimpleObjectProperty[LogEntry]()
-            , entries = t.entries
             , heightProperty = new SimpleIntegerProperty(t.height))
-          setGraphic(bv)
+          setGraphic(new ImageView(bv))
         } else {
           logTrace(s"Blocksize was ${blockSizeProperty.get()}, setting graphic to null")
           setGraphic(null)
@@ -57,4 +69,7 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
       }
     }
   }
+
+  private def getEntryAt(chunk: Chunk, index: Int): Option[LogEntry] = Try(chunk.entries.get(index)).toOption
+
 }

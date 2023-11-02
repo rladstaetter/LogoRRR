@@ -17,7 +17,7 @@ object Chunk {
       // nr of chunks is calculated as follows:
       // how many entries fit into a chunk?
       // given their size and the width and height of a chunk it is easy to calculate.
-      val (cols, rows, height) = MathUtil.calcBoundedHeight(widthProperty, blockSizeProperty, entriesProperty, listViewHeightProperty)
+      val (cols, _, height) = MathUtil.calcBoundedHeight(widthProperty, blockSizeProperty, entriesProperty, listViewHeightProperty)
       val nrElements = height / blockSizeProperty.get() * cols
 
       val entriesSize = entriesProperty.size()

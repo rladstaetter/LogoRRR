@@ -2,7 +2,6 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.model.LogEntry
 import javafx.beans.binding.Bindings
-import javafx.beans.property.StringProperty
 import javafx.collections.ObservableList
 import javafx.scene.control.Tooltip
 import javafx.util.Duration

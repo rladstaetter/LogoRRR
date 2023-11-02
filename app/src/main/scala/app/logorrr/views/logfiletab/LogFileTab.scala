@@ -21,8 +21,7 @@ import javafx.scene.layout._
 
 import java.lang
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{CancellationException, Future}
-import scala.util.{Failure, Success}
+import scala.concurrent.Future
 
 
 object LogFileTab {
@@ -84,13 +83,13 @@ class LogFileTab(val pathAsString: String
     op
   }
 
-  private val borderedChunkListView = ChunkListView(filteredList, mutLogFileSettings)
+  private val chunkListView = ChunkListView(filteredList, mutLogFileSettings)
 
   private val logTextView = new LogTextView(mutLogFileSettings, filteredList)
 
   // start listener declarations
   private lazy val scrollToEndEventListener: InvalidationListener = (_: Observable) => {
-    borderedChunkListView.scrollTo(borderedChunkListView.getItems.size())
+    chunkListView.scrollTo(chunkListView.getItems.size())
     logTextView.scrollTo(logTextView.getItems.size)
   }
 
@@ -137,7 +136,7 @@ class LogFileTab(val pathAsString: String
     }
   })
 
-  def repaint(): Unit = borderedChunkListView.repaint()
+  def repaint(): Unit = chunkListView.repaint()
 
 
   val repaintChunkListViewListener = JfxUtils.onNew[Number](n => {
@@ -154,14 +153,13 @@ class LogFileTab(val pathAsString: String
     initBindings()
 
     // setup split pane before listener initialisation
-    splitPane.getItems.addAll(borderedChunkListView, logTextView)
+    splitPane.getItems.addAll(chunkListView, logTextView)
 
     addListeners()
 
-    setOnSelectionChanged(e => {
+    setOnSelectionChanged(_ => {
       if (isSelected) {
-        logTrace("selectionchanged")
-        borderedChunkListView.repaint()
+        chunkListView.repaint()
       }
     })
 
@@ -186,7 +184,7 @@ class LogFileTab(val pathAsString: String
 
 
   private def addListeners(): Unit = {
-    borderedChunkListView.addListeners()
+    chunkListView.addListeners()
     selectedProperty().addListener(selectedListener)
     divider.positionProperty().addListener(repaintChunkListViewListener)
 
@@ -201,7 +199,7 @@ class LogFileTab(val pathAsString: String
   }
 
   private def removeListeners(): Unit = {
-    borderedChunkListView.removeListeners()
+    chunkListView.removeListeners()
     selectedProperty().removeListener(selectedListener)
 
     divider.positionProperty().removeListener(repaintChunkListViewListener)

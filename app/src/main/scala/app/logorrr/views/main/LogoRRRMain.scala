@@ -18,7 +18,7 @@ class LogoRRRMain(closeStage: => Unit)
   extends BorderPane
     with CanLog {
 
-  val menuBar = new LogoRRRMenuBar(getWindow _, openLogFile, closeAllLogFiles(), closeStage)
+  val menuBar = new LogoRRRMenuBar(() => getWindow, openLogFile, closeAllLogFiles(), closeStage)
   val mainBorderPane = new LogoRRRMainBorderPane()
 
   init()

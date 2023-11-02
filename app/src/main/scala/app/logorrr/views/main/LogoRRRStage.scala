@@ -6,7 +6,6 @@ import app.logorrr.meta.AppMeta
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.LogoRRRAccelerators
 import atlantafx.base.theme.PrimerLight
-import javafx.application.Application
 import javafx.beans.value.ChangeListener
 import javafx.scene.Scene
 import javafx.scene.image.Image

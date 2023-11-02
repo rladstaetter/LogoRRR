@@ -55,7 +55,7 @@ case class TimerSettingsLogViewLabel(settings: MutLogFileSettings
     case _ =>
   }
 
-  private def applyStyleAtPos(pos: Int)(e : MouseEvent): Unit = {
+  private def applyStyleAtPos(pos: Int)(e: MouseEvent): Unit = {
     (Option(startColProperty.get), Option(endColProperty.get)) match {
       case (None, None) =>
         startColProperty.set(pos)

@@ -15,9 +15,6 @@ import javafx.stage.Stage
 
 import java.nio.file.Path
 import java.util
-import scala.concurrent.CancellationException
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{Failure, Success}
 
 /**
  * App to test block list view

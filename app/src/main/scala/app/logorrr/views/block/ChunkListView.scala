@@ -103,7 +103,7 @@ class ChunkListView(val entries: ObservableList[LogEntry]
     val chunks1 = FXCollections.observableArrayList(chunks: _*)
     setItems(chunks1)
   } match {
-    case Success(value) => ()
+    case Success(_) => ()
     case Failure(exception) => logException(exception.getMessage, exception)
   }
 

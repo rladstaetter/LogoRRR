@@ -1,9 +1,9 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, ColorUtil}
+import app.logorrr.util.{CanLog, ColorUtil, MathUtil}
 import app.logorrr.views.search.Filter
-import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty, SimpleObjectProperty}
+import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
 import javafx.scene.image.WritableImage
 import javafx.scene.paint.Color
@@ -12,42 +12,58 @@ object BlockImage {
 
   val MaxWidth = 4096
 
-  // val MaxHeight = 4096
   val MaxHeight = 4096
 
   /** defines how many table cells should be rendered per list height */
   val DefaultBlocksPerPage = 4
 
-  @deprecated val Height = 100 // remove when blockviewpane is gone
+  def indexOf(x: Int, y: Int, blockWidth: Int, blockViewWidth: Int): Int = y / blockWidth * (blockViewWidth / blockWidth) + x / blockWidth
+
+  /**
+   * Calculates overall height of virtual canvas
+   *
+   * @param blockWidth  width of a block
+   * @param blockHeight height of a block
+   * @param width       width of canvas
+   * @param nrEntries   number of elements
+   * @return
+   */
+  def calcVirtualHeight(blockWidth: Int
+                        , blockHeight: Int
+                        , width: Int
+                        , nrEntries: Int): Int = {
+    if (blockHeight == 0 || nrEntries == 0) {
+      0
+    } else {
+      if (width > blockWidth) {
+        val elemsPerRow = width.toDouble / blockWidth
+        val nrRows = nrEntries.toDouble / elemsPerRow
+        val decimal1: BigDecimal = MathUtil.roundUp(nrRows)
+        val res = decimal1.intValue * blockHeight
+        res
+      } else {
+        0
+      }
+    }
+  }
 
 
 }
 
 
 class BlockImage(blockNumber: Int
-                 , widthProperty: ReadOnlyDoubleProperty
-                 , blockSizeProperty: SimpleIntegerProperty
                  , entries: java.util.List[LogEntry]
+                 , selectedLineNumberProperty: SimpleIntegerProperty
                  , filtersProperty: ObservableList[Filter]
-                 , selectedEntryProperty: SimpleObjectProperty[LogEntry]
+                 , blockSizeProperty: SimpleIntegerProperty
+                 , widthProperty: ReadOnlyDoubleProperty
                  , heightProperty: SimpleIntegerProperty
-                 , selectedLineNumberProperty: SimpleIntegerProperty)
+                )
   extends WritableImage(LPixelBuffer(blockNumber
     , Range(entries.get(0).lineNumber, entries.get(entries.size - 1).lineNumber)
     , RectangularShape(widthProperty.get().toInt, heightProperty.get())
     , blockSizeProperty
     , entries
     , filtersProperty
-    , selectedEntryProperty
     , Array.fill(widthProperty.get().toInt * heightProperty.get())(ColorUtil.toARGB(Color.GREEN))
-    , selectedLineNumberProperty)) with CanLog {
-
-  def draw(i: Int, color: Color): Unit = {
-    logError("implement me")
-  }
-
-  def shutdown(): Unit = {
-    logError("implement me")
-  }
-
-}
+    , selectedLineNumberProperty)) with CanLog

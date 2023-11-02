@@ -5,9 +5,9 @@ import javafx.scene.image.{Image, ImageView}
 import java.util.Properties
 
 
-abstract class CpResource(value: String)
+abstract class CpResource
 
-case class PropsCp(classPathResource : String) extends CpResource(classPathResource) {
+case class PropsCp(classPathResource: String) extends CpResource {
 
   def asProperties(clazz: Class[_]): Properties = {
     val properties = new Properties()
@@ -22,7 +22,7 @@ case class PropsCp(classPathResource : String) extends CpResource(classPathResou
 
 }
 
-case class ImageCp(value: String, width: Int, height: Int) extends CpResource(value) {
+case class ImageCp(value: String, width: Int, height: Int) extends CpResource {
   def imageView(): ImageView =
     new ImageView(new Image(value, width, height, true, true, true))
 }
