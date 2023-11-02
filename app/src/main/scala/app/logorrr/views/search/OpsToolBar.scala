@@ -21,15 +21,15 @@ object OpsToolBar {
 
   /** increment / decrement font size */
   val fontSizeStep = 2
-/*
-  private val BackgroundSelectedStyle: String =
-    """
-      |-fx-background-color: CYAN;
-      |-fx-border-width: 1px 1px 1px 1px;
-      |-fx-border-color: BLUE;
-      |-fx-padding: 0px 0px 0px 3px;
-      |""".stripMargin
-*/
+  /*
+    private val BackgroundSelectedStyle: String =
+      """
+        |-fx-background-color: CYAN;
+        |-fx-border-width: 1px 1px 1px 1px;
+        |-fx-border-color: BLUE;
+        |-fx-padding: 0px 0px 0px 3px;
+        |""".stripMargin
+  */
 }
 
 /**
@@ -39,7 +39,8 @@ object OpsToolBar {
  */
 class OpsToolBar(pathAsString: String
                  , addFilterFn: Filter => Unit
-                 , logEntries: ObservableList[LogEntry])
+                 , logEntries: ObservableList[LogEntry]
+                 , val blockSizeProperty: SimpleIntegerProperty)
   extends ToolBar
     with HasBlockSizeProperty {
 
@@ -52,8 +53,6 @@ class OpsToolBar(pathAsString: String
   val width: Int = OsUtil.osFun(winWidth, macWidth, linuxWidth) // different layouts (may be dependent on font size renderings?)
   setMaxWidth(width)
   setMinWidth(width)
-
-  override val blockSizeProperty: SimpleIntegerProperty = new SimpleIntegerProperty()
 
   /** control which enables selecting color for a search tag */
   private val colorPicker = new SearchColorPicker()

@@ -1,101 +1,69 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, ColorUtil, JfxUtils}
+import app.logorrr.util.{CanLog, ColorUtil, MathUtil}
 import app.logorrr.views.search.Filter
-import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
-import javafx.beans.value.ChangeListener
-import javafx.beans.{InvalidationListener, Observable}
+import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
+import javafx.collections.ObservableList
 import javafx.scene.image.WritableImage
 import javafx.scene.paint.Color
 
-import scala.jdk.CollectionConverters.CollectionHasAsScala
-
 object BlockImage {
 
-  /** width is constrained by the maximum texture width which is set to 4096 */
   val MaxWidth = 4096
 
-  /** max height of a single SQView, constrained by maximum texture height (4096) */
   val MaxHeight = 4096
 
-}
+  /** defines how many table cells should be rendered per list height */
+  val DefaultBlocksPerPage = 4
 
-
-class BlockImage(name: String
-                 , widthProperty: SimpleIntegerProperty
-                 , blockSizeProperty: SimpleIntegerProperty
-                 , entriesProperty: SimpleListProperty[LogEntry]
-                 , filtersProperty: SimpleListProperty[Filter]
-                 , selectedElemProperty: SimpleObjectProperty[LogEntry]) extends CanLog {
-
-  var lpb: LPixelBuffer = _
+  def indexOf(x: Int, y: Int, blockWidth: Int, blockViewWidth: Int): Int = y / blockWidth * (blockViewWidth / blockWidth) + x / blockWidth
 
   /**
-   * height property is calculated on the fly depending on the blockwidth/blockheight,
-   * width of BlockImage, number of elements and max size of possible of texture (4096).
-   * */
-  val heightProperty: SimpleIntegerProperty = new SimpleIntegerProperty()
-
-  val imageProperty = new SimpleObjectProperty[WritableImage]()
-
-  private val heightListener: ChangeListener[Number] = JfxUtils.onNew[Number](height => {
-  // logTrace("heightListener " + height)
-    resetBackingImage(getWidth, height.intValue)
-  })
-
-  private val blockSizeListener: InvalidationListener = (_: Observable) => {
-    repaint("blockSizeListener")
+   * Calculates overall height of virtual canvas
+   *
+   * @param blockWidth  width of a block
+   * @param blockHeight height of a block
+   * @param width       width of canvas
+   * @param nrEntries   number of elements
+   * @return
+   */
+  def calcVirtualHeight(blockWidth: Int
+                        , blockHeight: Int
+                        , width: Int
+                        , nrEntries: Int): Int = {
+    if (blockHeight == 0 || nrEntries == 0) {
+      0
+    } else {
+      if (width > blockWidth) {
+        val elemsPerRow = width.toDouble / blockWidth
+        val nrRows = nrEntries.toDouble / elemsPerRow
+        val decimal1: BigDecimal = MathUtil.roundUp(nrRows)
+        val res = decimal1.intValue * blockHeight
+        res
+      } else {
+        0
+      }
+    }
   }
 
-  val widthListener: ChangeListener[Number] = JfxUtils.onNew[Number](_ => {
-    repaint("widthListener")
-  })
-
-  init()
-
-  def init(): Unit = {
-    addListener()
-  }
-
-
-  def shutdown(): Unit = {
-    lpb = null
-    // just wipe out everything (?!)
-    imageProperty.set(null)
-    removeListener()
-  }
-
-
-  def addListener(): Unit = {
-    heightProperty.addListener(heightListener)
-    widthProperty.addListener(widthListener)
-    blockSizeProperty.addListener(blockSizeListener)
-  }
-
-  def removeListener(): Unit = {
-    heightProperty.removeListener(heightListener)
-    widthProperty.removeListener(widthListener)
-    blockSizeProperty.removeListener(blockSizeListener)
-  }
-
-
-  private def resetBackingImage(width: Int, height: Int): Unit = {
-    lpb = LPixelBuffer(width
-      , height
-      , blockSizeProperty
-      , entriesProperty
-      , filtersProperty
-      , selectedElemProperty
-      , Array.fill(width * height)(ColorUtil.toARGB(Color.WHITE)))
-    this.imageProperty.set(new WritableImage(lpb))
-  }
-
-  // todo check visibility
-  def repaint(ctx: String): Unit = lpb.repaint(ctx, filtersProperty.asScala.toSeq, selectedElemProperty.get())
-
-  def setHeight(height: Int): Unit = heightProperty.set(height)
-
-  def getWidth: Int = widthProperty.get()
 
 }
+
+
+class BlockImage(blockNumber: Int
+                 , entries: java.util.List[LogEntry]
+                 , selectedLineNumberProperty: SimpleIntegerProperty
+                 , filtersProperty: ObservableList[Filter]
+                 , blockSizeProperty: SimpleIntegerProperty
+                 , widthProperty: ReadOnlyDoubleProperty
+                 , heightProperty: SimpleIntegerProperty
+                )
+  extends WritableImage(LPixelBuffer(blockNumber
+    , Range(entries.get(0).lineNumber, entries.get(entries.size - 1).lineNumber)
+    , RectangularShape(widthProperty.get().toInt, heightProperty.get())
+    , blockSizeProperty
+    , entries
+    , filtersProperty
+    , Array.fill(widthProperty.get().toInt * heightProperty.get())(ColorUtil.toARGB(Color.GREEN))
+    , selectedLineNumberProperty)) with CanLog

@@ -18,62 +18,56 @@ class LogoRRRMain(closeStage: => Unit)
   extends BorderPane
     with CanLog {
 
-  val mB = new LogoRRRMenuBar(getWindow _, openLogFile, closeAllLogFiles(), closeStage)
-  val ambp = new LogoRRRMainBorderPane()
+  val menuBar = new LogoRRRMenuBar(() => getWindow, openLogFile, closeAllLogFiles(), closeStage)
+  val mainBorderPane = new LogoRRRMainBorderPane()
 
   init()
 
 
-  def getLogFileTabs: mutable.Seq[LogFileTab] = ambp.logViewTabPane.getLogFileTabs
+  def getLogFileTabs: mutable.Seq[LogFileTab] = mainBorderPane.logViewTabPane.getLogFileTabs
 
   def getWindow: Window = getScene.getWindow()
 
   def init(): Unit = {
-    setTop(mB)
-    setCenter(ambp)
+    setTop(menuBar)
+    setCenter(mainBorderPane)
     val entries = LogoRRRGlobals.getOrderedLogFileSettings
     if (entries.nonEmpty) {
       loadLogFiles(LogoRRRGlobals.getOrderedLogFileSettings)
     } else {
       logInfo("No log files loaded.")
     }
-    JfxUtils.execOnUiThread(ambp.init())
+    JfxUtils.execOnUiThread(mainBorderPane.init())
   }
 
   private def loadLogFiles(logs: Seq[LogFileSettings]): Unit = {
-    val futures: Future[Seq[(String, ObservableList[LogEntry])]] = Future.sequence {
+    val futures: Future[Seq[(LogFileSettings, ObservableList[LogEntry])]] = Future.sequence {
       logInfo(s"Loading ${logs.length} log files: ${logs.map(_.pathAsString).mkString("['", "',`'", "']")}")
-      logs.filter(s => !ambp.contains(s.pathAsString)).map(s => Future((s.pathAsString, s.readEntries())))
+      logs.filter(s => !mainBorderPane.contains(s.pathAsString)).map(settings => Future((settings, settings.readEntries())))
     }
     futures.onComplete({
-      case Success(lfs: Seq[(String, ObservableList[LogEntry])]) =>
+      case Success(lfs: Seq[(LogFileSettings, ObservableList[LogEntry])]) =>
         JfxUtils.execOnUiThread({
           lfs.foreach({
-            case (pathAsString, es) =>
-              // logTrace(s"Loading `$pathAsString` with ${es.size()} entries.")
-              ambp.addLogFileTab(LogFileTab(pathAsString, es))
+            case (lfs, es) =>
+              val tab = new LogFileTab(lfs.pathAsString, es)
+              tab.init()
+              mainBorderPane.addLogFileTab(tab)
+              tab.repaint()
           })
-          // after loading everything, set active log like specified in the config file
-          LogoRRRGlobals.getSomeActive match {
-            case Some(selectedPath) =>
-              // logTrace(s"Active Path: $selectedPath")
-              lfs.map(_._1).zipWithIndex.find(tpl => tpl._1 == selectedPath) match {
-                case Some((path, index)) =>
-                  selectLog(path)
-                case None =>
-                  logWarn("not found removing active entry")
-                  LogoRRRGlobals.setSomeActive(None)
-              }
-            case None => // logTrace("No active path entry found")
-          }
+
           // only after loading all files we initialize the 'add' listener
           // otherwise we would overwrite the active log everytime
-          ambp.logViewTabPane.initLogFileAddListener()
+          mainBorderPane.logViewTabPane.initSelectionListener()
+
+          // after loading everything, set active log like specified in the config file
+          LogoRRRGlobals.getSomeActive.foreach(p => selectLog(p))
+
         })
       case Failure(exception) =>
         logException("Could not load logfiles", exception)
         // init listener also in error case
-        ambp.logViewTabPane.initLogFileAddListener()
+        mainBorderPane.logViewTabPane.initSelectionListener()
     }
 
     )
@@ -82,13 +76,13 @@ class LogoRRRMain(closeStage: => Unit)
   /** called when 'Open File' is selected. */
   def openLogFile(path: Path): Unit = {
     val pathAsString = path.toAbsolutePath.toString
-    // logTrace(s"Try to open log file $pathAsString")
+    logTrace(s"Try to open log file $pathAsString")
 
-    if (!ambp.contains(pathAsString)) {
-      ambp.addLogFile(path)
+    if (!mainBorderPane.contains(pathAsString)) {
+      mainBorderPane.addLogFile(path)
     } else {
-      // logTrace(s"$pathAsString is already opened, selecting tab ...")
-      ambp.selectLog(pathAsString)
+      logTrace(s"$pathAsString is already opened, selecting tab ...")
+      mainBorderPane.selectLog(pathAsString)
     }
 
   }
@@ -99,10 +93,10 @@ class LogoRRRMain(closeStage: => Unit)
     LogoRRRGlobals.clearLogFileSettings()
   }
 
-  def selectLog(path: String): Unit = ambp.selectLog(path)
+  def selectLog(path: String): Unit = mainBorderPane.selectLog(path)
 
-  def selectLastLogFile(): Unit = ambp.selectLastLogFile()
+  def selectLastLogFile(): Unit = mainBorderPane.selectLastLogFile()
 
-  def shutdown(): Unit = ambp.shutdown()
+  def shutdown(): Unit = mainBorderPane.shutdown()
 
 }

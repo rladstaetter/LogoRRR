@@ -11,7 +11,6 @@ object FileManager extends CanLog {
   private def openFileWithDetectedEncoding(path: Path): BufferedReader = {
     val encoding = FEncoding(path)
     if (encoding == Unknown) {
-      // logTrace(s"Reading ${path.toAbsolutePath.toString} with UTF-8 encoding.")
       new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile), UTF8.asString))
     } else {
       new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile), encoding.asString))

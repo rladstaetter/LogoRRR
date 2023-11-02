@@ -48,7 +48,7 @@ class LogoRRRMainBorderPane extends BorderPane with CanLog {
       if (!contains(pathAsString)) {
         addLogFile(path)
       } else {
-      // logTrace(s"$pathAsString is already opened, selecting tab ...")
+        logTrace(s"$pathAsString is already opened, selecting tab ...")
         selectLog(pathAsString)
       }
     } else {
@@ -56,10 +56,12 @@ class LogoRRRMainBorderPane extends BorderPane with CanLog {
     }
   }
 
-  def addLogFile(path: Path): Unit = {
+  def addLogFile(path: Path): Unit =  {
     val logFileSettings = LogFileSettings(path)
     LogoRRRGlobals.updateLogFile(logFileSettings)
-    addLogFileTab(LogFileTab(logFileSettings.pathAsString, logFileSettings.readEntries()))
+    val tab = new LogFileTab(logFileSettings.pathAsString, logFileSettings.readEntries())
+    addLogFileTab(tab)
+    tab.init()
     selectLog(path.toAbsolutePath.toString)
   }
 

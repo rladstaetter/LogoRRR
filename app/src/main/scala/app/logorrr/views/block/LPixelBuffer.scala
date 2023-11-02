@@ -1,102 +1,52 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, ColorUtil}
+import app.logorrr.util.{CanLog, ColorUtil, JfxUtils}
 import app.logorrr.views.search.Filter
-import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
-import javafx.geometry.Rectangle2D
+import javafx.beans.property.SimpleIntegerProperty
+import javafx.collections.ObservableList
 import javafx.scene.image.{PixelBuffer, PixelFormat}
 import javafx.scene.paint.Color
 
 import java.nio.IntBuffer
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
-case class LPixelBuffer(width: Int
-                        , height: Int
-                        , blockSizeProperty: SimpleIntegerProperty
-                        , entriesProperty: SimpleListProperty[LogEntry]
-                        , filtersProperty: SimpleListProperty[Filter]
-                        , selectedEntryProperty: SimpleObjectProperty[LogEntry]
-                        , rawInts: Array[Int]) extends {
-  private val buffer: IntBuffer = IntBuffer.wrap(rawInts)
-} with PixelBuffer[IntBuffer](width, height, buffer, PixelFormat.getIntArgbPreInstance) with CanLog {
+/**
+ * Paint directly into a byte array for performant image manipulations.
+ */
+object LPixelBuffer extends CanLog {
 
-  assert(width != 0, s"width was $width.")
-  assert(height != 0, s"height was $height.")
-  assert(width <= BlockImage.MaxWidth, s"width was $width which exceeds ${BlockImage.MaxWidth}.")
-  assert(height <= BlockImage.MaxHeight, s"height was $height which exceeds ${BlockImage.MaxHeight}.")
-  assert(height * width > 0)
+  private def drawRect(rawInts: Array[Int]
+                       , i: Int
+                       , width: Int
+                       , blockSize: Int
+                       , color: Color): Unit = {
+    if (width > blockSize) {
+      val nrOfBlocksInX = width / blockSize
+      //    val nrOfBlocksInX = if (width > blockSize) width / blockSize else blockSize
 
-  lazy val background: Array[Int] = Array.fill(width * height)(ColorUtil.toARGB(Color.AZURE))
-
-  private val roi = new Rectangle2D(0, 0, width, height)
-
-  private def cleanBackground(): Unit = System.arraycopy(background, 0, rawInts, 0, background.length)
-
-  def blockSize: Int = blockSizeProperty.get()
-
-  // todo check visibility
-  def repaint(ctx: String
-              , filters: Seq[Filter]
-              , selectedEntry: LogEntry): Unit = timeR({
-    if (blockSize != 0) {
-      if (Option(filters).isEmpty) {
-        logWarn("filters is null")
-      } else
-        updateBuffer((_: PixelBuffer[IntBuffer]) => {
-          cleanBackground()
-          var i = 0
-          entriesProperty.forEach(e => {
-            if (e.equals(selectedEntry)) {
-              drawRect(i, Color.YELLOW)
-            } else {
-              drawRect(i, Filter.calcColor(e.value, filters))
-            }
-            i = i + 1
-          })
-          roi
-        })
+      val xPos = (i % nrOfBlocksInX) * blockSize
+      val yPos = (i / nrOfBlocksInX) * blockSize
+      LPixelBuffer.drawRect(rawInts
+        , color
+        , xPos
+        , yPos
+        , blockSize
+        , blockSize
+        , width
+      )
     } else {
-      logWarn(s"getBlockWidth() = $blockSize")
-    }
-  }, s"$ctx repaint")
-
-
-  /**
-   * draws a filled rectangle on the given index
-   */
-  def draw(index: Int, color: Color): Unit = {
-    if (blockSize != 0) {
-      repaint(s"draw[$index]", filtersProperty.get().asScala.toSeq, selectedEntryProperty.get())
-      updateBuffer((_: PixelBuffer[IntBuffer]) => {
-        // drawRect(e.lineNumber - 1, Filter.calcColor(e.value, filtersProperty.asScala.toSeq).darker().darker())
-        drawRect(index, color)
-        roi
-      })
+      logTrace("")
     }
   }
 
-  private def drawRect(i: Int, color: Color): Unit = {
-    val nrOfBlocksInX = width / blockSize
-    val xPos = (i % nrOfBlocksInX) * blockSize
-    val yPos = (i / nrOfBlocksInX) * blockSize
-    drawRect(
-      color
-      , xPos
-      , yPos
-      , blockSize
-      , blockSize
-      , width
-    )
-  }
-
-  private def drawRect(color: Color
+  private def drawRect(rawInts: Array[Int]
+                       , color: Color
                        , x: Int
                        , y: Int
                        , width: Int
                        , height: Int
                        , canvasWidth: Int): Unit = {
-
     val col = ColorUtil.toARGB(color)
     val maxHeight = y + height
     val lineArray = Array.fill(width - 1)(col)
@@ -107,6 +57,84 @@ case class LPixelBuffer(width: Int
       } else {
         //   logWarn("out of bounds:" + (ly * canvasWidth + x) + " ly " + ly + ", rawints.length " + rawInts.length + "!")
       }
+    }
+  }
+}
+
+case class Range(start: Int, end: Int)
+
+case class LPixelBuffer(blockNumber: Int
+                        , range: Range
+                        , shape: RectangularShape
+                        , blockSizeProperty: SimpleIntegerProperty
+                        , entries: java.util.List[LogEntry]
+                        , filtersProperty: ObservableList[Filter]
+                        , rawInts: Array[Int]
+                        , selectedLineNumberProperty: SimpleIntegerProperty) extends
+  PixelBuffer[IntBuffer](shape.width
+    , shape.height
+    , IntBuffer.wrap(rawInts)
+    , PixelFormat.getIntArgbPreInstance) with CanLog {
+
+  val name = s"${range.start}_${range.end}"
+
+  getBuffer.clear()
+
+  assert(shape.width != 0, s"For $name, width was ${shape.width}.")
+  assert(shape.height != 0, s"For $name, height was ${shape.height}.")
+  assert(shape.height * shape.width > 0)
+
+  private val bgColor: Int = ColorUtil.toARGB(Color.WHITE)
+  lazy val background: Array[Int] = Array.fill(shape.area)(bgColor)
+
+  paint()
+
+  private def cleanBackground(): Unit = System.arraycopy(background, 0, rawInts, 0, background.length)
+
+  def blockSize: Int = blockSizeProperty.get()
+
+  def filters = Option(filtersProperty).map(_.asScala.toSeq).getOrElse(Seq())
+
+  // todo check visibility
+  def paint(): Unit = {
+    if (blockSize != 0) {
+      if (Option(filtersProperty).isEmpty) {
+        logWarn("filters is null")
+      } else {
+        JfxUtils.execOnUiThread(
+          updateBuffer((_: PixelBuffer[IntBuffer]) => {
+            cleanBackground()
+            var i = 0
+            entries.forEach(e => {
+              if (e.lineNumber.equals(selectedLineNumberProperty.getValue() + 1)) {
+                LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Color.YELLOW)
+              } else {
+                // LPixelBuffer.drawRect(rawInts, i, width, blockSize, blockColor)
+                LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Filter.calcColor(e.value, filters))
+                //LPixelBuffer.drawRect(rawInts, i, shape.width.toInt, blockSize, ColorUtil.randColor)
+              }
+              i = i + 1
+            })
+            shape
+          }))
+      }
+    } else {
+      logWarn(s"getBlockWidth() = $blockSize")
+    }
+  }
+
+
+  /**
+   * draws a filled rectangle on the given index
+   */
+  def draw(index: Int, color: Color): Unit = {
+    if (blockSize != 0) {
+      paint()
+      updateBuffer((_: PixelBuffer[IntBuffer]) => {
+        // drawRect(e.lineNumber - 1, Filter.calcColor(e.value, filtersProperty.asScala.toSeq).darker().darker())
+        LPixelBuffer.drawRect(rawInts, index, shape.width.toInt, blockSize, color)
+        shape
+      })
     }
   }
 

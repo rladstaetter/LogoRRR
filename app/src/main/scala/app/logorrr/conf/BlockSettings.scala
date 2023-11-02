@@ -10,6 +10,6 @@ object BlockSettings {
 
 }
 /**
- * @param width size of blocks
+ * @param size size of blocks
  */
-case class BlockSettings(width: Int)
+case class BlockSettings(size: Int)

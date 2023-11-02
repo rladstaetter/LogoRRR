@@ -1,0 +1,23 @@
+.list-view {
+    -fx-border-width: 0px;
+}
+
+.list-cell {
+    -fx-background-color: -color-cell-bg;
+    -fx-text-fill: -color-cell-fg;
+    -fx-padding: 0;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-selection-bar: transparent;
+    -fx-background-color: transparent;
+}
+
+.list-cell:odd {
+    -fx-background-color: transparent;
+}
+
+.list-cell:even {
+    -fx-background-color: transparent;
+}
+

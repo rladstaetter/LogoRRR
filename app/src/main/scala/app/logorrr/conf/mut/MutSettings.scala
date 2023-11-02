@@ -46,6 +46,8 @@ class MutSettings {
   /** contains mutable state information for all log files */
   private val mutLogFileSettingsMapProperty = new SimpleMapProperty[String, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
 
+  def isEmpty = mutLogFileSettingsMapProperty.isEmpty
+
   /** tracks which log file is active */
   private val someActiveLogProperty = new SimpleObjectProperty[Option[String]](None)
 

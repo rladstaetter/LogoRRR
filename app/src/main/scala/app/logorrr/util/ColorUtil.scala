@@ -23,6 +23,14 @@ object ColorUtil {
       (color.getGreen * 255).toInt << 8 |
       (color.getBlue * 255).toInt
 
+  def intToColor(rgba: Int): Color = {
+    val red = ((rgba >> 24) & 0xFF) / 255.0
+    val green = ((rgba >> 16) & 0xFF) / 255.0
+    val blue = ((rgba >> 8) & 0xFF) / 255.0
+    val alpha = (rgba & 0xFF) / 255.0
+    new Color(red, green, blue, alpha)
+  }
+
   def randColor: Color = Color.color(Random.nextDouble()
     , Random.nextDouble()
     , Random.nextDouble()
