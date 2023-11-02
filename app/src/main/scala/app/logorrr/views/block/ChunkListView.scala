@@ -71,7 +71,7 @@ class ChunkListView(val entries: ObservableList[LogEntry]
     heightProperty().removeListener(repaintChangeListener)
   }
 
-  getStylesheets.add(getClass.getResource("/app/logorrr/views/block/ChunkListView.css").toExternalForm)
+  getStylesheets.add(getClass.getResource("/app/logorrr/ChunkListView.css").toExternalForm)
 
   setCellFactory((lv: ListView[Chunk]) => new ChunkListCell(
     selectedLineNumberProperty

@@ -5,7 +5,7 @@ import app.logorrr.conf.mut.MutStageSettings
 import app.logorrr.meta.AppMeta
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.LogoRRRAccelerators
-import atlantafx.base.theme.PrimerLight
+import javafx.application.Application
 import javafx.beans.value.ChangeListener
 import javafx.scene.Scene
 import javafx.scene.image.Image
@@ -41,8 +41,9 @@ case class LogoRRRStage(stage: Stage) extends CanLog {
   stage.setTitle(AppMeta.fullAppName)
   stage.getIcons.add(LogoRRRStage.icon)
   stage.setScene(scene)
-  private val stylesheet: String = new PrimerLight().getUserAgentStylesheet
+  // private val stylesheet: String = new PrimerLight().getUserAgentStylesheet
   // Application.setUserAgentStylesheet(stylesheet)
+  Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
   stage.setOnCloseRequest((_: WindowEvent) => shutdown())
 
   private def shutdown(): Unit = timeR({
