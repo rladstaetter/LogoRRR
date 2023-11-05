@@ -55,7 +55,7 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
       val settings: Settings =
         fromFile(path)
       val updatedSettings = settings.copy(stageSettings = settings.stageSettings.copy(width = width, height = height))
-      OsxBridge.registerPath(updatedSettings.logFileSettings.values.head.pathAsString)
+//       OsxBridge.registerPath(updatedSettings.logFileSettings.values.head.pathAsString)
       LogoRRRGlobals.set(updatedSettings, getHostServices)
       LogoRRRStage(stage).show()
       /*
