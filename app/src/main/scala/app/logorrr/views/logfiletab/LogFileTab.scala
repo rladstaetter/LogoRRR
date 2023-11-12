@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleListProperty
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{ListChangeListener, ObservableList}
+import javafx.event.Event
 import javafx.scene.control._
 import javafx.scene.layout._
 
@@ -147,7 +148,7 @@ class LogFileTab(val pathAsString: String
 
   def init(): Unit = {
 
-    setContextMenu(new ContextMenu(new OpenInFinderMenuItem(pathAsString)))
+
     setTooltip(new LogFileTabToolTip(pathAsString, entries))
 
     initBindings()
@@ -164,10 +165,7 @@ class LogFileTab(val pathAsString: String
     })
 
     /** don't monitor file anymore if tab is closed, free listeners */
-    setOnClosed(_ => {
-      shutdown()
-      LogoRRRGlobals.removeLogFile(pathAsString)
-    })
+    setOnCloseRequest((t: Event) => cleanupBeforeClose())
 
     if (mutLogFileSettings.isAutoScrollActive) {
       startTailer()
@@ -179,9 +177,55 @@ class LogFileTab(val pathAsString: String
 
     divider.setPosition(mutLogFileSettings.getDividerPosition())
 
+    // we have to set the context menu in relation to the visibility of the tab itself
+    // otherwise those context menu actions can be performed without selecting the tab
+    // which is kind of confusing
+    selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean] {
+      case java.lang.Boolean.TRUE => {
+        // getTabPane can be null on initialisation
+        Option(getTabPane).foreach(_ => setContextMenu(mkContextMenu()))
+      }
+      case java.lang.Boolean.FALSE => setContextMenu(null)
+    })
+
     logTrace(s"Loaded `$pathAsString` with ${entries.size()} entries.")
   }
 
+
+  private def mkContextMenu(): ContextMenu = {
+    val openInFinderMenuItem = new OpenInFinderMenuItem(pathAsString)
+    val closeMenuItem = new CloseMenuItem(this)
+    val closeOtherFilesMenuItem = new CloseOtherFilesMenuItem(this)
+    val closeAllFilesMenuItem = new CloseAllFilesMenuItem(this)
+
+    // close left/right is not always shown. see https://github.com/rladstaetter/LogoRRR/issues/159
+    val leftRightCloser =
+      if (getTabPane.getTabs.size() == 1) {
+        Seq()
+        // current tab is the first one, show only 'right'
+      } else if (getTabPane.getTabs.indexOf(this) == 0) {
+        Seq(new CloseRightFilesMenuItem(this))
+        // we are at the end of the list
+      } else if (getTabPane.getTabs.indexOf(this) == getTabPane.getTabs.size - 1) {
+        Seq(new CloseLeftFilesMenuItem(this))
+        // we are somewhere in between, show both options
+      } else {
+        Seq(new CloseLeftFilesMenuItem(this), new CloseRightFilesMenuItem(this))
+      }
+
+    val items = Seq(closeMenuItem
+      , closeOtherFilesMenuItem
+      , closeAllFilesMenuItem) ++ leftRightCloser ++ Seq(openInFinderMenuItem)
+
+    val menu = new ContextMenu()
+    menu.getItems.addAll(items: _*)
+    menu
+  }
+
+  def cleanupBeforeClose(): Unit = {
+    shutdown()
+    LogoRRRGlobals.removeLogFile(pathAsString)
+  }
 
   private def addListeners(): Unit = {
     chunkListView.addListeners()
