@@ -1,1 +1,1 @@
-mvn clean install -T1C; open ./dist/dist-osx/installer-osx/target/installer/LogoRRR-23.3.0.pkg
+mvn clean install -T1C; open ./dist/dist-osx/installer-osx/target/installer/LogoRRR-24.1.0.pkg
