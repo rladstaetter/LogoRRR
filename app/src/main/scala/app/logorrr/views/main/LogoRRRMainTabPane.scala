@@ -30,7 +30,7 @@ class LogoRRRMainTabPane extends TabPane with CanLog {
       LogoRRRGlobals.setSomeActive(Option(logFileTab.pathAsString))
       // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
       getSelectionModel.select(logFileTab)
-    case _ => ???
+    case x => getSelectionModel.select(null)
   }
 
   init()
