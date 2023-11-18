@@ -63,11 +63,9 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
     styleProperty().bind(mutLogFileSettings.fontStyleBinding)
     setGraphic(null)
 
-    val copyCurrentToClipboard = new MenuItem("copy text to clipboard")
-    val separator = new SeparatorMenuItem()
     val ignoreAbove = new MenuItem("Ignore entries above")
     val ignoreBelow = new MenuItem("Ignore entries below")
-    val cm = new ContextMenu(copyCurrentToClipboard, separator, ignoreAbove, ignoreBelow)
+    val cm = new ContextMenu(ignoreAbove, ignoreBelow)
 
     override def updateItem(t: LogEntry, b: Boolean): Unit = {
       super.updateItem(t, b)
@@ -89,7 +87,6 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
         , mutLogFileSettings.filtersProperty.get().asScala.toSeq
         , mutLogFileSettings.fontStyleBinding)
       setGraphic(entry)
-      copyCurrentToClipboard.setOnAction(_ => ClipBoardUtils.copyToClipboardText(e.value))
       ignoreAbove.setOnAction(_ => {
         val currPredicate = filteredList.getPredicate
         filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && e.lineNumber <= entry.lineNumber)

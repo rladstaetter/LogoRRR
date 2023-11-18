@@ -70,7 +70,7 @@ class LogFileTab(val pathAsString: String
   /** list which holds all entries, default to display all (can be changed via buttons) */
   private val filteredList = new FilteredList[LogEntry](entries)
 
-  private val opsToolBar = new OpsToolBar(pathAsString, addFilter, entries, mutLogFileSettings.blockSizeProperty)
+  private val opsToolBar = new OpsToolBar(pathAsString, addFilter, entries, filteredList, mutLogFileSettings.blockSizeProperty)
 
   private val filtersToolBar = {
     val fbtb = new FiltersToolBar(filteredList, removeFilter)
@@ -140,7 +140,7 @@ class LogFileTab(val pathAsString: String
   def repaint(): Unit = chunkListView.repaint()
 
 
-  val repaintChunkListViewListener = JfxUtils.onNew[Number](n => {
+  private val repaintChunkListViewListener = JfxUtils.onNew[Number](n => {
     if (n.doubleValue() > 0.1) {
       repaint()
     }
@@ -181,10 +181,9 @@ class LogFileTab(val pathAsString: String
     // otherwise those context menu actions can be performed without selecting the tab
     // which is kind of confusing
     selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean] {
-      case java.lang.Boolean.TRUE => {
+      case java.lang.Boolean.TRUE =>
         // getTabPane can be null on initialisation
         Option(getTabPane).foreach(_ => setContextMenu(mkContextMenu()))
-      }
       case java.lang.Boolean.FALSE => setContextMenu(null)
     })
 
