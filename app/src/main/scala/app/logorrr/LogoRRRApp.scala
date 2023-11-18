@@ -8,7 +8,7 @@ import javafx.stage.Stage
 
 import java.nio.file.Paths
 
-object LogoRRRApp {
+object LogoRRRApp extends CanLog {
 
   /** LogoRRRs own log formatting string */
   val logFormat = """[%1$tF %1$tT.%1$tN] %3$-40s %4$-13s %5$s %6$s %n"""
@@ -16,6 +16,8 @@ object LogoRRRApp {
   def main(args: Array[String]): Unit = {
     System.setProperty("user.language", "en")
     System.setProperty("java.util.logging.SimpleFormatter.format", logFormat)
+    logInfo(s"Started ${AppMeta.fullAppNameWithVersion} in ${Paths.get("").toAbsolutePath.toString}")
+    LogoRRRNative.loadNativeLibraries()
     javafx.application.Application.launch(classOf[LogoRRRApp], args: _*)
   }
 
@@ -23,9 +25,7 @@ object LogoRRRApp {
 
 class LogoRRRApp extends javafx.application.Application with CanLog {
 
-
   def start(stage: Stage): Unit = {
-    logInfo(s"Started ${AppMeta.fullAppNameWithVersion} in ${Paths.get("").toAbsolutePath.toString}")
     val settings: Settings = SettingsIO.fromFile()
     LogoRRRGlobals.set(settings, getHostServices)
     LogoRRRStage(stage).show()

@@ -76,7 +76,6 @@ class LogoRRRMain(closeStage: => Unit)
   /** called when 'Open File' is selected. */
   def openLogFile(path: Path): Unit = {
     val pathAsString = path.toAbsolutePath.toString
-    logTrace(s"Try to open log file $pathAsString")
 
     if (!mainBorderPane.contains(pathAsString)) {
       mainBorderPane.addLogFile(path)
