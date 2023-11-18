@@ -4,11 +4,12 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util.OsUtil
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.block.HasBlockSizeProperty
-import app.logorrr.views.ops.{ClearLogButton, DecreaseBlockSizeButton, IncreaseBlockSizeButton}
+import app.logorrr.views.ops.{ClearLogButton, CopyLogButton, DecreaseBlockSizeButton, IncreaseBlockSizeButton}
 import app.logorrr.views.settings.timer.TimerSettingsLogView
 import app.logorrr.views.text.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
+import javafx.collections.transformation.FilteredList
 import javafx.scene.Node
 import javafx.scene.control._
 import javafx.scene.input.{KeyCode, KeyEvent}
@@ -40,18 +41,18 @@ object OpsToolBar {
 class OpsToolBar(pathAsString: String
                  , addFilterFn: Filter => Unit
                  , logEntries: ObservableList[LogEntry]
+                 , filteredList: FilteredList[LogEntry]
                  , val blockSizeProperty: SimpleIntegerProperty)
   extends ToolBar
     with HasBlockSizeProperty {
 
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
-  val w = 570
+  val w = 380
   val macWidth: Int = w
   val winWidth: Int = w + 2
   val linuxWidth: Int = w + 2
   val width: Int = OsUtil.osFun(winWidth, macWidth, linuxWidth) // different layouts (may be dependent on font size renderings?)
-  setMaxWidth(width)
   setMinWidth(width)
 
   /** control which enables selecting color for a search tag */
@@ -68,6 +69,8 @@ class OpsToolBar(pathAsString: String
   val autoScrollCheckBox = new AutoScrollCheckBox(pathAsString)
 
   val clearLogButton = new ClearLogButton(logEntries)
+
+  val copySelectionButton = new CopyLogButton(filteredList)
 
   val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
   val timerButton = new TimerButton(pathAsString, firstNEntries)
@@ -93,7 +96,7 @@ class OpsToolBar(pathAsString: String
   }
 
   val otherItems: Seq[Node] = {
-    Seq(autoScrollCheckBox, clearLogButton)
+    Seq(autoScrollCheckBox, clearLogButton, copySelectionButton)
   }
 
   getItems.addAll(searchItems ++ sizeItems ++ otherItems: _*)
