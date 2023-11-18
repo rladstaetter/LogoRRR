@@ -1,6 +1,7 @@
 package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
+import app.logorrr.io.{FileManager, LogEntryFileReader}
 import app.logorrr.util.{CanLog, OsUtil}
 import app.logorrr.views.search.Filter
 import javafx.collections.{FXCollections, ObservableList}
@@ -77,8 +78,8 @@ case class LogFileSettings(pathAsString: String
   def readEntries(): ObservableList[LogEntry] = {
     if (isPathValid) {
       Try(someLogEntryInstantFormat match {
-        case Some(instantFormat) => LogEntryFileReader.from(path,  instantFormat)
-        case None => LogEntryFileReader.from(path)
+        case None => FileManager.from(path)
+        case Some(instantFormat) => LogEntryFileReader.from(path, instantFormat)
       }) match {
         case Success(logEntries) =>
           logEntries

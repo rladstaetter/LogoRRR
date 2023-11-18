@@ -52,11 +52,7 @@ class FileMenu(getWindow: () => Window
 
   def init(): Unit = {
     getItems.clear()
-    // see issue https://github.com/rladstaetter/LogoRRR/issues/146
-    // for the moment, this menu item is not shown on mac as a workaround
-    if (!OsUtil.isMac) {
-      getItems.add(new FileMenu.OpenMenuItem(getWindow, openLogFile))
-    }
+    getItems.add(new FileMenu.OpenMenuItem(getWindow, openLogFile))
     getItems.add(new FileMenu.CloseAllMenuItem(closeAllLogFiles))
     if (OsUtil.isWin) {
       getItems.add(new FileMenu.QuitMenuItem(closeApplication))
