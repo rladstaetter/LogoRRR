@@ -8,10 +8,10 @@ import javafx.stage.{Stage, WindowEvent}
 object JfxUtils extends CanLog {
 
   def execOnUiThread(f: => Unit): Unit = {
-    if (!Platform.isFxApplicationThread) {
-      Platform.runLater(() => f)
-    } else {
+    if (Platform.isFxApplicationThread) {
       f
+    } else {
+      Platform.runLater(() => f)
     }
   }
 

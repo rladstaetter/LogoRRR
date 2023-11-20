@@ -8,7 +8,7 @@ import javafx.collections.ObservableList
 import javafx.event.EventHandler
 import javafx.scene.control.ListCell
 import javafx.scene.image.ImageView
-import javafx.scene.input.MouseEvent
+import javafx.scene.input.{MouseButton, MouseEvent}
 
 import scala.util.Try
 
@@ -25,17 +25,24 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
                     , widthProperty: ReadOnlyDoubleProperty
                     , blockSizeProperty: SimpleIntegerProperty
                     , filtersProperty: ObservableList[Filter]
+                    , selectInTextView: LogEntry => Unit
                    ) extends ListCell[Chunk] with CanLog {
 
   // if user selects an entry in the ChunkListView set selectedLineNumberProperty. This property is observed
   // via an listener and a yellow square will be painted.
   val mouseEventHandler = new EventHandler[MouseEvent]() {
     override def handle(me: MouseEvent): Unit = {
-      val index = BlockImage.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get.toInt)
-      getEntryAt(getItem, index) match {
-        case Some(value) =>
-          selectedLineNumberProperty.set(value.lineNumber)
-        case None => System.err.println("no element found")
+      // on left mouse button
+      if (me.getButton.equals(MouseButton.PRIMARY)) {
+        val index = BlockImage.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get.toInt)
+        getEntryAt(getItem, index) match {
+          case Some(value) =>
+            // set selected property such that the next repaint will highlight this entry
+            selectedLineNumberProperty.set(value.lineNumber)
+            // we have to select also the entry in the LogTextView, couldn't get it to work with bindings / listeners
+            selectInTextView(value)
+          case None => System.err.println("no element found")
+        }
       }
     }
   }

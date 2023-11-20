@@ -2,7 +2,7 @@ package app.logorrr.views.text
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, ClipBoardUtils, JfxUtils}
+import app.logorrr.util.{CanLog, JfxUtils}
 import javafx.beans.value.ChangeListener
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
@@ -23,41 +23,32 @@ object LogTextView {
 
 class LogTextView(mutLogFileSettings: MutLogFileSettings
                   , filteredList: FilteredList[LogEntry]) extends ListView[LogEntry] with CanLog {
-  /** 'pragmatic way' to determine width of max elems in this view */
-  val maxLength: Int = filteredList.size().toString.length
-
-
-  private val selectedLineNumberListener: ChangeListener[Number] = JfxUtils.onNew((n: Number) => {
-    Option(getItems.filtered((t: LogEntry) => t.lineNumber == n.intValue()).get(0)) match {
-      case Some(value) =>
-        val relativeIndex = getItems.indexOf(value)
-        getSelectionModel.select(relativeIndex)
-        scrollTo(relativeIndex - ((getHeight / LogTextView.fixedCellSize) / 2).toInt)
-      case None =>
-    }
-  })
 
   init()
 
-  /**
-   *
-   */
   def init(): Unit = {
     getStyleClass.add("dense")
     setItems(filteredList)
-    val i = mutLogFileSettings.selectedLineNumberProperty.get()
-    getSelectionModel.select(i)
+    getSelectionModel.select(mutLogFileSettings.selectedLineNumberProperty.get())
 
-    getSelectionModel.selectedIndexProperty().addListener(JfxUtils.onNew({ i: Number => {
-      mutLogFileSettings.selectedLineNumberProperty.removeListener(selectedLineNumberListener)
-      mutLogFileSettings.setSelectedLineNumber(i.intValue())
-      mutLogFileSettings.selectedLineNumberProperty.addListener(selectedLineNumberListener)
-    }
-    }))
+    getSelectionModel.selectedItemProperty().addListener(JfxUtils.onNew[LogEntry](e => mutLogFileSettings.setSelectedLineNumber(e.lineNumber)))
     setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
-    mutLogFileSettings.selectedLineNumberProperty.addListener(selectedLineNumberListener)
 
   }
+
+  /** 'pragmatic way' to determine width of max elems in this view */
+  def maxLength: Int = filteredList.size().toString.length
+
+  def selectLogEntry(logEntry: LogEntry): Unit = {
+    getSelectionModel.select(logEntry)
+    val relativeIndex = getItems.indexOf(logEntry)
+    getSelectionModel.select(relativeIndex)
+    val cellHeight = lookup(".list-cell").getBoundsInLocal.getHeight
+    val visibleItemCount = (getHeight / cellHeight).asInstanceOf[Int]
+    val idx = if (relativeIndex - visibleItemCount / 2 <= 0) 0 else relativeIndex - visibleItemCount / 2
+    scrollTo(idx)
+  }
+
 
   class LogEntryListCell extends ListCell[LogEntry] {
     styleProperty().bind(mutLogFileSettings.fontStyleBinding)

@@ -84,9 +84,12 @@ class LogFileTab(val pathAsString: String
     op
   }
 
-  private val chunkListView = ChunkListView(filteredList, mutLogFileSettings)
-
+  // display text to the right
   private val logTextView = new LogTextView(mutLogFileSettings, filteredList)
+
+  // graphical display to the left
+  private val chunkListView = ChunkListView(filteredList, mutLogFileSettings, logTextView.selectLogEntry)
+
 
   // start listener declarations
   private lazy val scrollToEndEventListener: InvalidationListener = (_: Observable) => {
