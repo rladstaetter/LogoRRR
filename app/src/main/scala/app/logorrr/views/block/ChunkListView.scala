@@ -15,12 +15,15 @@ import scala.util.{Failure, Success, Try}
 object ChunkListView {
 
   def apply(entries: ObservableList[LogEntry]
-            , settings: MutLogFileSettings): ChunkListView = {
+            , settings: MutLogFileSettings
+            , selectInTextView: LogEntry => Unit
+           ): ChunkListView = {
     new ChunkListView(entries
       , settings.selectedLineNumberProperty
       , settings.blockSizeProperty
       , settings.filtersProperty
-      , settings.dividerPositionProperty)
+      , settings.dividerPositionProperty
+      , selectInTextView)
   }
 }
 
@@ -40,7 +43,8 @@ class ChunkListView(val entries: ObservableList[LogEntry]
                     , val selectedLineNumberProperty: SimpleIntegerProperty
                     , val blockSizeProperty: SimpleIntegerProperty
                     , val filtersProperty: ObservableList[Filter]
-                    , val dividersProperty: SimpleDoubleProperty)
+                    , val dividersProperty: SimpleDoubleProperty
+                    , selectInTextView: LogEntry => Unit)
   extends ListView[Chunk] with CanLog {
 
   var repaints = 0
@@ -73,11 +77,11 @@ class ChunkListView(val entries: ObservableList[LogEntry]
 
   getStylesheets.add(getClass.getResource("/app/logorrr/ChunkListView.css").toExternalForm)
 
-  setCellFactory((lv: ListView[Chunk]) => new ChunkListCell(
-    selectedLineNumberProperty
+  setCellFactory((lv: ListView[Chunk]) => new ChunkListCell(selectedLineNumberProperty
     , lv.widthProperty()
     , blockSizeProperty
-    , filtersProperty))
+    , filtersProperty
+    , selectInTextView))
 
 
   // if width/height of display is changed, also elements of this listview will change

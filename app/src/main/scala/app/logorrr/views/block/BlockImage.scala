@@ -17,7 +17,11 @@ object BlockImage {
   /** defines how many table cells should be rendered per list height */
   val DefaultBlocksPerPage = 4
 
-  def indexOf(x: Int, y: Int, blockWidth: Int, blockViewWidth: Int): Int = y / blockWidth * (blockViewWidth / blockWidth) + x / blockWidth
+  // assuming we have a grid of rectangles, and x and y give the coordinate of a mouse click
+  // this function should return the correct index for the surrounding rectangle
+  def indexOf(x: Int, y: Int, blockWidth: Int, blockViewWidth: Int): Int = {
+    y / blockWidth * (blockViewWidth / blockWidth) + x / blockWidth
+  }
 
   /**
    * Calculates overall height of virtual canvas

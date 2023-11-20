@@ -55,7 +55,8 @@ class ChunkListTestApp extends Application with CanLog {
       , new SimpleIntegerProperty(selectedLineNumber)
       , new SimpleIntegerProperty(blockSize)
       , filtersProperty
-      , new SimpleDoubleProperty(dividerPosition))
+      , new SimpleDoubleProperty(dividerPosition)
+      , e => ())
     clv.addListeners()
     val sp = new SplitPane(clv, new BorderPane(new Label("Test")))
 
