@@ -6,13 +6,12 @@ import app.logorrr.views.search.OpsToolBar
 /**
  * UI element for changing text size
  *
- * @param size size of 'T' icon
- * @param eventHandler event which will be triggered upon click
+ * @param pathAsString to resolve current log file
  */
 class IncreaseTextSizeButton(val pathAsString: String) extends TextSizeButton(16, "increase text size") {
 
   setOnAction(_ => {
-    if (getFontSize + OpsToolBar.fontSizeStep < 10 * OpsToolBar.fontSizeStep) {
+    if (getFontSize + OpsToolBar.fontSizeStep < 50 * OpsToolBar.fontSizeStep) {
       setFontSize(getFontSize + OpsToolBar.fontSizeStep)
     }
   })

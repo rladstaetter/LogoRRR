@@ -20,7 +20,9 @@ object MathUtil extends CanLog {
                         , blockSizeProperty: SimpleIntegerProperty
                         , entriesProperty: java.util.List[LogEntry]
                         , listViewHeightProperty: ReadOnlyDoubleProperty): (Int, Int, Int) = {
-    val cols: Int = MathUtil.roundUp(widthProperty.get() / blockSizeProperty.get())
+    val w = if (widthProperty.get() - BlockImage.ScrollBarWidth >= 0) widthProperty.get() - BlockImage.ScrollBarWidth else widthProperty.get()
+
+    val cols: Int = MathUtil.roundUp(w / blockSizeProperty.get())
     val rows: Int = if (entriesProperty.size() < cols) 1 else entriesProperty.size() / cols
 
     // per default, use 4 cells per visible page, align height with blocksize such that
@@ -31,7 +33,6 @@ object MathUtil extends CanLog {
     // yields the best approximation of MaxHeight.
     val maxHeight = (BlockImage.MaxHeight / blockSizeProperty.get()) * blockSizeProperty.get()
     val height = Math.min(MathUtil.roundDown((listViewHeightProperty.get() / BlockImage.DefaultBlocksPerPage) / blockSizeProperty.get()) * blockSizeProperty.get(), maxHeight)
-    // val height: Int = Math.min(rows * blockSizeProperty.get(), BlockImage.MaxHeight)
     (cols, rows, height)
   }
 }

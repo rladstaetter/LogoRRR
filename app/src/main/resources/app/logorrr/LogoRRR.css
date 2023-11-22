@@ -1,5 +1,6 @@
 /*  based on primer-light.css from atlantafx */
 .root {
+    -color-logorrr-selected: #ffff00;
     -color-dark: #1b1f24;
     -color-light: #ffffff;
     -color-base-0: #f6f8fa;
@@ -3669,10 +3670,10 @@ Add support for NO_HEADER tweak in tables .table-view.no-header > .column-header
     -fx-padding: 0;
 }
 .scroll-bar:horizontal {
-    -fx-pref-height: 8px;
+    -fx-pref-height: 18px;
 }
 .scroll-bar:vertical {
-    -fx-pref-width: 8px;
+    -fx-pref-width: 18px;
 }
 .scroll-bar:hover, .scroll-bar:pressed, .scroll-bar:focused {
     -fx-opacity: 1;

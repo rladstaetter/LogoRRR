@@ -49,7 +49,7 @@ class ChunkListView(val entries: ObservableList[LogEntry]
 
   var repaints = 0
 
-  val repaintInvalidationListener = new InvalidationListener {
+  private val repaintInvalidationListener = new InvalidationListener {
     override def invalidated(observable: Observable): Unit = repaint()
   }
 
@@ -124,12 +124,10 @@ class ChunkListView(val entries: ObservableList[LogEntry]
   def repaint(): Unit = JfxUtils.execOnUiThread {
     if (doRepaint) {
       repaints += 1
-      timeR({
-        updateItems()
-        refresh()
-      }, s"Repainted #$repaints")
+      updateItems()
+      refresh()
     } else {
-      val msg = s"Not repainted: width=${widthProperty().get()}, blockSize=${blockSizeProperty.get()}, height: ${heightProperty().get()}"
+      val msg = s"Not repainted. (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})"
       logTrace(msg)
     }
   }

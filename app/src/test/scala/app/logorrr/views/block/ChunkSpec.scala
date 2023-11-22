@@ -57,7 +57,7 @@ class ChunkSpec extends AnyWordSpec {
     }
     // default chunk size is 4
     "test default chunk size" in {
-      val chunks = mkChunks(1000, 100, 10, 1000)
+      val chunks = mkChunks(1000, 100 + BlockImage.ScrollBarWidth, 10, 1000)
       assert(chunks.size == 4)
       assert(chunks.forall(c => c.entries.size == 250))
       assert(chunks.last.entries.get(chunks.last.entries.size - 1).lineNumber == 999)

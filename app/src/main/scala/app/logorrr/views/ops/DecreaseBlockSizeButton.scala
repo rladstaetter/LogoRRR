@@ -6,14 +6,16 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.paint.Color
 
 class DecreaseBlockSizeButton(val blockSizeProperty: SimpleIntegerProperty) extends
-  RectButton(2 * OpsToolBar.blockSizeStep
-    , 2 * OpsToolBar.blockSizeStep
-    , Color.GRAY
-    , "decrease block size") with HasBlockSizeProperty {
+  RectButton(width = 8
+    , height = 8
+    , color = Color.GRAY
+    , tooltipMessage = "decrease block size") with HasBlockSizeProperty {
 
   setOnAction(_ => {
-    if (getBlockSize() - OpsToolBar.blockSizeStep > 0) {
+    if (getBlockSize() - OpsToolBar.blockSizeStep >= 2) {
       setBlockSize(getBlockSize() - OpsToolBar.blockSizeStep)
+    } else {
+      setBlockSize(2)
     }
   })
 
