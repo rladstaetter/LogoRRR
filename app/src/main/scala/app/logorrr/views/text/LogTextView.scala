@@ -3,7 +3,6 @@ package app.logorrr.views.text
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
-import javafx.beans.value.ChangeListener
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 import javafx.scene.paint.Color
@@ -28,17 +27,24 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
 
   def init(): Unit = {
     getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
-
+    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
     setItems(filteredList)
-    getSelectionModel.select(mutLogFileSettings.selectedLineNumberProperty.get())
+    Option(filteredList.filtered(l => l.lineNumber == mutLogFileSettings.selectedLineNumberProperty.get()).get(0)) match {
+      case Some(selectedEntry) =>
+        selectLogEntry(selectedEntry)
+      case None => // do nothing
+    }
 
     getSelectionModel.selectedItemProperty().addListener(JfxUtils.onNew[LogEntry](e => {
       Option(e) match {
-        case Some(value) =>       mutLogFileSettings.setSelectedLineNumber(value.lineNumber)
+        case Some(value) =>
+          // implicitly sets active element in chunkview via global settings binding
+          mutLogFileSettings.setSelectedLineNumber(value.lineNumber)
         case None => logTrace("Selected item was null")
       }
     }))
-    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
+
+    // when changing font size, repaint
     mutLogFileSettings.fontSizeProperty.addListener(JfxUtils.onNew[Number](n => {
       refresh() // otherwise listview is not repainted correctly since calculation of the cellheight is broken atm
     }))

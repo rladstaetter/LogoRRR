@@ -44,10 +44,6 @@ class MutLogFileSettings {
     filtersProperty.setAll(filters.asJava)
   }
 
-  def setFilter(index: Int, filter: Filter): Unit = {
-    filtersProperty.set(index, filter)
-  }
-
   val hasLogEntrySettingBinding: BooleanBinding = new BooleanBinding {
     bind(someLogEntrySettingsProperty)
 
