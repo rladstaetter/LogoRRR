@@ -15,11 +15,6 @@ import scala.util.Try
 
 /**
  * A listcell which can contain one or more log entries
- *
- * @param selectedLineNumberProperty
- * @param widthProperty
- * @param blockSizeProperty
- * @param filtersProperty
  */
 class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
                     , widthProperty: ReadOnlyDoubleProperty
@@ -30,11 +25,11 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
 
   // if user selects an entry in the ChunkListView set selectedLineNumberProperty. This property is observed
   // via an listener and a yellow square will be painted.
-  val mouseEventHandler = new EventHandler[MouseEvent]() {
+  private val mouseEventHandler = new EventHandler[MouseEvent]() {
     override def handle(me: MouseEvent): Unit = {
       // on left mouse button
       if (me.getButton.equals(MouseButton.PRIMARY)) {
-        val index = BlockImage.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get.toInt)
+        val index = BlockImage.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get.toInt - BlockImage.ScrollBarWidth)
         getEntryAt(getItem, index) match {
           case Some(value) =>
             // set selected property such that the next repaint will highlight this entry

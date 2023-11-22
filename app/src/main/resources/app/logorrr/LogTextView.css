@@ -19,3 +19,12 @@
     -fx-background-color: transparent;
 }
 
+.list-cell:filled:selected {
+    -color-cell-fg: -color-cell-fg-selected-focused;
+    -fx-background-color: -color-logorrr-selected;
+}
+
+.list-cell:filled:selected {
+    -color-cell-fg: -color-cell-fg-selected-focused;
+    -fx-background-color: -color-logorrr-selected;
+}

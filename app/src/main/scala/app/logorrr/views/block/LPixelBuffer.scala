@@ -1,7 +1,7 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, ColorUtil, JfxUtils}
+import app.logorrr.util.{CanLog, ColorUtil}
 import app.logorrr.views.search.Filter
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
@@ -98,19 +98,21 @@ case class LPixelBuffer(blockNumber: Int
   // todo check visibility
   private def paint(): Unit = {
     if (blockSize != 0) {
-      updateBuffer((_: PixelBuffer[IntBuffer]) => {
-        cleanBackground()
-        var i = 0
-        entries.forEach(e => {
-          if (e.lineNumber.equals(selectedLineNumberProperty.getValue())) {
-            LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Color.YELLOW)
-          } else {
-            LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Filter.calcColor(e.value, filters))
-          }
-          i = i + 1
+      if (shape.width > blockSize) {
+        updateBuffer((_: PixelBuffer[IntBuffer]) => {
+          cleanBackground()
+          var i = 0
+          entries.forEach(e => {
+            if (e.lineNumber.equals(selectedLineNumberProperty.getValue())) {
+              LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Color.YELLOW)
+            } else {
+              LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Filter.calcColor(e.value, filters))
+            }
+            i = i + 1
+          })
+          shape
         })
-        shape
-      })
+      }
     }
   }
 

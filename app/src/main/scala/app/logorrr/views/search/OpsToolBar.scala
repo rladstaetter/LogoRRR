@@ -18,19 +18,11 @@ import javafx.scene.input.{KeyCode, KeyEvent}
 object OpsToolBar {
 
   /** increment/decrement block size */
-  val blockSizeStep = 4
+  val blockSizeStep = 2
 
   /** increment / decrement font size */
-  val fontSizeStep = 2
-  /*
-    private val BackgroundSelectedStyle: String =
-      """
-        |-fx-background-color: CYAN;
-        |-fx-border-width: 1px 1px 1px 1px;
-        |-fx-border-color: BLUE;
-        |-fx-padding: 0px 0px 0px 3px;
-        |""".stripMargin
-  */
+  val fontSizeStep = 1
+
 }
 
 /**

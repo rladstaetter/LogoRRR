@@ -14,6 +14,9 @@ object BlockImage {
 
   val MaxHeight = 4096
 
+  // width of Scrollbars
+  val ScrollBarWidth = 18
+
   /** defines how many table cells should be rendered per list height */
   val DefaultBlocksPerPage = 4
 
@@ -65,7 +68,7 @@ class BlockImage(blockNumber: Int
                 )
   extends WritableImage(LPixelBuffer(blockNumber
     , Range(entries.get(0).lineNumber, entries.get(entries.size - 1).lineNumber)
-    , RectangularShape(widthProperty.get().toInt, heightProperty.get())
+    , RectangularShape(if (widthProperty.get().toInt - BlockImage.ScrollBarWidth > 0) widthProperty.get().toInt - BlockImage.ScrollBarWidth else widthProperty.get().toInt, heightProperty.get())
     , blockSizeProperty
     , entries
     , filtersProperty

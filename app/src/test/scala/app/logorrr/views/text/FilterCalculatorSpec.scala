@@ -4,6 +4,7 @@ import app.logorrr.conf.mut.FilterSpec
 import app.logorrr.model.LogEntry
 import app.logorrr.views.search.Filter
 import app.logorrr.{LogEntrySpec, LogoRRRSpec}
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.paint.Color
 import org.scalacheck.{Gen, Prop}
 
@@ -14,7 +15,7 @@ object FilterCalculatorSpec {
       e <- LogEntrySpec.gen
       maxLength <- Gen.posNum[Int]
       filters <- Gen.listOf(FilterSpec.gen)
-    } yield LogTextViewLabel(e, maxLength, filters, () => "")
+    } yield LogTextViewLabel(e, maxLength, filters, () => "", new SimpleIntegerProperty())
 }
 
 class FilterCalculatorSpec extends LogoRRRSpec {

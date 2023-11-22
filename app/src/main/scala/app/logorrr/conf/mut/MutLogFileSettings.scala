@@ -33,7 +33,7 @@ class MutLogFileSettings {
   private val firstOpenedProperty = new SimpleLongProperty()
   val selectedLineNumberProperty = new SimpleIntegerProperty()
   val dividerPositionProperty = new SimpleDoubleProperty()
-  private val fontSizeProperty = new SimpleIntegerProperty()
+  val fontSizeProperty = new SimpleIntegerProperty()
 
   val autoScrollActiveProperty = new SimpleBooleanProperty()
   val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList())

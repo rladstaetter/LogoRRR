@@ -27,13 +27,21 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
   init()
 
   def init(): Unit = {
-    getStyleClass.add("dense")
+    getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
+
     setItems(filteredList)
     getSelectionModel.select(mutLogFileSettings.selectedLineNumberProperty.get())
 
-    getSelectionModel.selectedItemProperty().addListener(JfxUtils.onNew[LogEntry](e => mutLogFileSettings.setSelectedLineNumber(e.lineNumber)))
+    getSelectionModel.selectedItemProperty().addListener(JfxUtils.onNew[LogEntry](e => {
+      Option(e) match {
+        case Some(value) =>       mutLogFileSettings.setSelectedLineNumber(value.lineNumber)
+        case None => logTrace("Selected item was null")
+      }
+    }))
     setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
-
+    mutLogFileSettings.fontSizeProperty.addListener(JfxUtils.onNew[Number](n => {
+      refresh() // otherwise listview is not repainted correctly since calculation of the cellheight is broken atm
+    }))
   }
 
   /** 'pragmatic way' to determine width of max elems in this view */
@@ -43,7 +51,11 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
     getSelectionModel.select(logEntry)
     val relativeIndex = getItems.indexOf(logEntry)
     getSelectionModel.select(relativeIndex)
-    val cellHeight = lookup(".list-cell").getBoundsInLocal.getHeight
+    // font size dictates the height of a cell
+    // kind of a hack, has to be enough for the moment
+    val cellHeight = mutLogFileSettings.getFontSize
+    // to lookup the cell height, equally a hack
+    // val cellHeight = lookup(".list-cell").getBoundsInLocal.getHeight
     val visibleItemCount = (getHeight / cellHeight).asInstanceOf[Int]
     val idx = if (relativeIndex - visibleItemCount / 2 <= 0) 0 else relativeIndex - visibleItemCount / 2
     scrollTo(idx)
@@ -65,18 +77,16 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
           calculateLabel(e)
         case None =>
           setGraphic(null)
-          setText(null)
           setContextMenu(null)
       }
     }
 
     private def calculateLabel(e: LogEntry): Unit = {
-      setText(null)
-
       val entry = LogTextViewLabel(e
         , maxLength
         , mutLogFileSettings.filtersProperty.get().asScala.toSeq
-        , mutLogFileSettings.fontStyleBinding)
+        , mutLogFileSettings.fontStyleBinding
+        , mutLogFileSettings.fontSizeProperty)
       setGraphic(entry)
       ignoreAbove.setOnAction(_ => {
         val currPredicate = filteredList.getPredicate
