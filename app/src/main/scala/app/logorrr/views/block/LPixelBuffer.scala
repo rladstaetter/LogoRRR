@@ -78,6 +78,7 @@ case class LPixelBuffer(blockNumber: Int
 
   private val name = s"${range.start}_${range.end}"
   private val bgColor: Int = ColorUtil.toARGB(Color.WHITE)
+  // private val bgColor: Int = ColorUtil.toARGB(ColorUtil.randColor)
   lazy val background: Array[Int] = Array.fill(shape.area)(bgColor)
 
   init()

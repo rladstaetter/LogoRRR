@@ -27,38 +27,71 @@ object ChunkListView {
   }
 }
 
+
 /**
  * Each ListCell contains one or more Logentries - those regions are called 'Chunks'.; Those chunks
  * group LogEntries; this grouping serves no other purpose than to optimize painting all entries via
  * a ListView. In this way we get a stable and prooven virtual flow implementation under the hood and we
  * don't have to reinvent this again.
  *
- * @param entries                    log entries to display
+ * @param logEntries                 log entries to display
  * @param selectedLineNumberProperty which line is selected by the user
  * @param blockSizeProperty          size of blocks to display
  * @param filtersProperty            which filters are active
  * @param dividersProperty           position of divider of splitpane
  */
-class ChunkListView(val entries: ObservableList[LogEntry]
+class ChunkListView(val logEntries: ObservableList[LogEntry]
                     , val selectedLineNumberProperty: SimpleIntegerProperty
                     , val blockSizeProperty: SimpleIntegerProperty
                     , val filtersProperty: ObservableList[Filter]
                     , val dividersProperty: SimpleDoubleProperty
                     , selectInTextView: LogEntry => Unit)
-  extends ListView[Chunk] with CanLog {
-
-  var repaints = 0
+  extends ListView[Chunk]
+    with CanLog {
 
   private val repaintInvalidationListener = new InvalidationListener {
-    override def invalidated(observable: Observable): Unit = repaint()
+    override def invalidated(observable: Observable): Unit = {
+      repaint()
+    }
   }
 
   val repaintChangeListener = JfxUtils.onNew[Number](_ => repaint())
+  val refreshListener = JfxUtils.onNew[Number](_ => {
+    repaint()
+  })
 
-  def addListeners(): Unit = {
-    entries.addListener(repaintInvalidationListener)
+  def init(): Unit = {
+    addListeners()
+  }
 
-    selectedLineNumberProperty.addListener(repaintChangeListener)
+  def scrollToActiveChunk(): Unit = {
+    if (!getItems.isEmpty) {
+      val filteredChunks = getItems.filtered(c => {
+        var found = false
+        c.entries.forEach(e => if (found) found else {
+          found = e.lineNumber == selectedLineNumberProperty.get()
+        })
+        found
+      })
+      if (!filteredChunks.isEmpty) {
+        Option(filteredChunks.get(0)) match {
+          case Some(chunk) =>
+            getSelectionModel.select(chunk)
+            val relativeIndex = getItems.indexOf(chunk)
+            getSelectionModel.select(relativeIndex)
+            JfxUtils.scrollTo[Chunk](this, chunk.height, relativeIndex)
+          case None =>
+        }
+      }
+    } else {
+      logTrace("Empty entries")
+    }
+  }
+
+  private def addListeners(): Unit = {
+    logEntries.addListener(repaintInvalidationListener)
+
+    selectedLineNumberProperty.addListener(refreshListener)
     dividersProperty.addListener(repaintChangeListener)
     blockSizeProperty.addListener(repaintChangeListener)
     widthProperty().addListener(repaintChangeListener)
@@ -66,9 +99,9 @@ class ChunkListView(val entries: ObservableList[LogEntry]
   }
 
   def removeListeners(): Unit = {
-    entries.removeListener(repaintInvalidationListener)
+    logEntries.removeListener(repaintInvalidationListener)
 
-    selectedLineNumberProperty.addListener(repaintChangeListener)
+    selectedLineNumberProperty.addListener(refreshListener)
     dividersProperty.removeListener(repaintChangeListener)
     blockSizeProperty.removeListener(repaintChangeListener)
     widthProperty().removeListener(repaintChangeListener)
@@ -83,36 +116,6 @@ class ChunkListView(val entries: ObservableList[LogEntry]
     , filtersProperty
     , selectInTextView))
 
-
-  // if width/height of display is changed, also elements of this listview will change
-  // and shuffle between cells. this method recreates all listview entries.
-  def updateItems(): Unit = Try {
-    val chunks =
-      if (widthProperty.get() > 0) {
-        if (blockSizeProperty.get() > 0) {
-          if (heightProperty().get() > 0) {
-            Chunk.mkChunks(entries, widthProperty, blockSizeProperty, heightProperty)
-          } else {
-            logWarn("heightProperty was " + heightProperty().get())
-            Seq()
-          }
-        } else {
-          logWarn("blockSizeProperty was " + blockSizeProperty.get())
-          Seq()
-        }
-      } else {
-        logWarn("widthProperty was " + widthProperty().get())
-        Seq()
-      }
-    val chunks1 = FXCollections.observableArrayList(chunks: _*)
-    setItems(chunks1)
-  } match {
-    case Success(_) => ()
-    case Failure(exception) => logException(exception.getMessage, exception)
-  }
-
-  def doRepaint: Boolean = widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0
-
   /**
    * Repaint method takes care of painting the blocks on the raw byte array.
    *
@@ -121,10 +124,15 @@ class ChunkListView(val entries: ObservableList[LogEntry]
    * correctly.
    */
   // do not remove JfxUtils.execOnUiThread
-  def repaint(): Unit = JfxUtils.execOnUiThread {
-    if (doRepaint) {
-      repaints += 1
-      updateItems()
+  def repaint(): Unit = {
+    if (widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0) {
+      Try {
+        val chunks = Chunk.mkChunks(logEntries, widthProperty, blockSizeProperty, heightProperty)
+        setItems(FXCollections.observableArrayList(chunks: _*))
+      } match {
+        case Success(_) => ()
+        case Failure(exception) => logException(exception.getMessage, exception)
+      }
       refresh()
     } else {
       val msg = s"Not repainted. (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})"

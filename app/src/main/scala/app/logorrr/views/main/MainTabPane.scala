@@ -1,15 +1,18 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.model.LogFileSettings
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.beans.value.ChangeListener
 import javafx.scene.control.{Tab, TabPane}
+import javafx.scene.input.{DragEvent, TransferMode}
 
+import java.nio.file.{Files, Path}
 import scala.collection.mutable
 import scala.jdk.CollectionConverters._
 
-object LogoRRRMainTabPane {
+object MainTabPane {
 
   private val BackgroundStyle: String =
     """
@@ -22,7 +25,9 @@ object LogoRRRMainTabPane {
 
 }
 
-class LogoRRRMainTabPane extends TabPane with CanLog {
+class MainTabPane extends TabPane with CanLog {
+
+  setStyle(MainTabPane.BackgroundStyle)
 
   val selectedLogFileTab: ChangeListener[Tab] = JfxUtils.onNew {
     case logFileTab: LogFileTab =>
@@ -33,10 +38,9 @@ class LogoRRRMainTabPane extends TabPane with CanLog {
     case x => getSelectionModel.select(null)
   }
 
-  init()
 
   def init(): Unit = {
-    setStyle(LogoRRRMainTabPane.BackgroundStyle)
+    initDnD()
   }
 
 
@@ -72,17 +76,70 @@ class LogoRRRMainTabPane extends TabPane with CanLog {
     getTabs.clear()
   }
 
-  def selectLog(pathAsString: String): Unit = {
+  def selectLog(pathAsString: String): LogFileTab = {
+    logTrace(s"selecting tab `$pathAsString` ...")
     getLogFileTabs.find(_.pathAsString == pathAsString) match {
-      case Some(value) =>
+      case Some(logFileTab) =>
         logTrace(s"Activated tab for `$pathAsString`.")
-        getSelectionModel.select(value)
+        getSelectionModel.select(logFileTab)
+        logFileTab
       case None =>
         logWarn(s"Couldn't find tab with $pathAsString, selecting last tab ...")
         selectLastLogFile()
+        getTabs.get(getTabs.size() - 1).asInstanceOf[LogFileTab]
     }
   }
 
   def selectLastLogFile(): Unit = getSelectionModel.selectLast() // select last added file repaint it on selection
+
+
+  private def initDnD(): Unit = {
+    /** needed to activate drag'n drop */
+    setOnDragOver((event: DragEvent) => {
+      if (event.getDragboard.hasFiles) {
+        event.acceptTransferModes(TransferMode.ANY: _*)
+      }
+    })
+
+    /** try to interpret dropped element as log file, activate view */
+    setOnDragDropped((event: DragEvent) => {
+      for (f <- event.getDragboard.getFiles.asScala) {
+        val path = f.toPath
+        if (Files.isDirectory(path)) {
+          Files.list(path).filter((p: Path) => Files.isRegularFile(p)).forEach((t: Path) => dropLogFile(t))
+        } else dropLogFile(path)
+      }
+    })
+  }
+
+  private def dropLogFile(path: Path): Unit = {
+    val pathAsString = path.toAbsolutePath.toString
+
+    if (Files.exists(path)) {
+      if (!contains(pathAsString)) {
+        addLogFile(path)
+      } else {
+        logTrace(s"$pathAsString is already opened, selecting tab ...")
+        selectLog(pathAsString)
+      }
+    } else {
+      logWarn(s"$pathAsString does not exist.")
+    }
+  }
+
+  def addLogFile(path: Path): Unit = {
+    val logFileSettings = LogFileSettings(path)
+    LogoRRRGlobals.registerSettings(logFileSettings)
+
+    val tab = new LogFileTab(LogoRRRGlobals.getLogFileSettings(logFileSettings.pathAsString), logFileSettings.readEntries())
+    addLogFileTab(tab)
+    tab.init()
+    selectLog(path.toAbsolutePath.toString)
+  }
+
+
+  /** Adds a new logfile to display */
+  def addLogFileTab(tab: LogFileTab): Unit = JfxUtils.execOnUiThread(add(tab))
+
 
 }

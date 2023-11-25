@@ -4,6 +4,7 @@ import app.logorrr.conf.{LogoRRRGlobals, Settings, SettingsIO}
 import app.logorrr.meta.AppMeta
 import app.logorrr.util.CanLog
 import app.logorrr.views.main.LogoRRRStage
+import javafx.application.Application
 import javafx.stage.Stage
 
 import java.nio.file.Paths
@@ -26,6 +27,8 @@ object LogoRRRApp extends CanLog {
 class LogoRRRApp extends javafx.application.Application with CanLog {
 
   def start(stage: Stage): Unit = {
+    // make sure to set css before anything is initalized otherwise the rules won't apply
+    Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
     val settings: Settings = SettingsIO.fromFile()
     LogoRRRGlobals.set(settings, getHostServices)
     LogoRRRStage(stage).show()

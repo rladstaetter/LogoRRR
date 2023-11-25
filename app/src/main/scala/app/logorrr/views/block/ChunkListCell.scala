@@ -20,7 +20,7 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
                     , widthProperty: ReadOnlyDoubleProperty
                     , blockSizeProperty: SimpleIntegerProperty
                     , filtersProperty: ObservableList[Filter]
-                    , selectInTextView: LogEntry => Unit
+                    , scrollTo: LogEntry => Unit
                    ) extends ListCell[Chunk] with CanLog {
 
   // if user selects an entry in the ChunkListView set selectedLineNumberProperty. This property is observed
@@ -32,10 +32,10 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
         val index = BlockImage.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, widthProperty.get.toInt - BlockImage.ScrollBarWidth)
         getEntryAt(getItem, index) match {
           case Some(value) =>
-            // set selected property such that the next repaint will highlight this entry
             selectedLineNumberProperty.set(value.lineNumber)
             // we have to select also the entry in the LogTextView, couldn't get it to work with bindings / listeners
-            selectInTextView(value)
+            scrollTo(value)
+
           case None => System.err.println("no element found")
         }
       }

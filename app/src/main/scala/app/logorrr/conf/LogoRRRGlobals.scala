@@ -95,18 +95,6 @@ object LogoRRRGlobals extends CanLog {
     mutSettings.getMutLogFileSetting(pathAsString)
   }
 
-  def mupdate(t: MutLogFileSettings => Unit)(pathAsString: String): Unit =
-    Option(mutSettings.getMutLogFileSetting(pathAsString)) match {
-      case Some(logFileSettings) => t(logFileSettings)
-      case None => logWarn(s"$pathAsString not found.")
-    }
-
-
-  def setBlockSettings(pathAsString: String, bs: BlockSettings): Unit =
-    mupdate({ lfs: MutLogFileSettings => lfs.setBlockSettings(bs) })(pathAsString)
-
-  def setDividerPosition(pathAsString: String, dividerPosition: Double): Unit = mutSettings.getMutLogFileSetting(pathAsString).setDividerPosition(dividerPosition)
-
-  def updateLogFile(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
+  def registerSettings(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
 
 }

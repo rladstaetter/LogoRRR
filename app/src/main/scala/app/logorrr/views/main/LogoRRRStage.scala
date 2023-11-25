@@ -25,7 +25,9 @@ object LogoRRRStage {
 
 }
 
+
 case class LogoRRRStage(stage: Stage) extends CanLog {
+
 
   private val logorrrMain = new LogoRRRMain(JfxUtils.closeStage(stage))
 
@@ -43,7 +45,6 @@ case class LogoRRRStage(stage: Stage) extends CanLog {
   stage.setScene(scene)
   // private val stylesheet: String = new PrimerLight().getUserAgentStylesheet
   // Application.setUserAgentStylesheet(stylesheet)
-  Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
   stage.setOnCloseRequest((_: WindowEvent) => shutdown())
 
   private def shutdown(): Unit = timeR({
@@ -62,7 +63,7 @@ case class LogoRRRStage(stage: Stage) extends CanLog {
     // to save global filter state
     val activeFilters =
       (for (logFileTab <- logorrrMain.getLogFileTabs) yield {
-        logFileTab.pathAsString -> (logFileTab.activeFilters, logFileTab.divider.positionProperty().get())
+        logFileTab.pathAsString -> (logFileTab.mainTabContent.activeFilters, logFileTab.mainTabContent.divider.positionProperty().get())
       }).toMap
 
     val updatedSettings =

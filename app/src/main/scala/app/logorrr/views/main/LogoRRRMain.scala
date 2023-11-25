@@ -11,77 +11,73 @@ import javafx.stage.Window
 import java.nio.file.Path
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.util.{Failure, Success}
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
-class LogoRRRMain(closeStage: => Unit)
-  extends BorderPane
-    with CanLog {
+class LogoRRRMain(closeStage: => Unit) extends BorderPane with CanLog {
 
-  val menuBar = new LogoRRRMenuBar(() => getWindow, openLogFile, closeAllLogFiles(), closeStage)
-  val mainBorderPane = new LogoRRRMainBorderPane()
+  val menuBar = new MainMenuBar(() => getWindow, openLogFile, closeAllLogFiles(), closeStage)
+  val mainTabPane = new MainTabPane
 
   init()
 
-
-  def getLogFileTabs: mutable.Seq[LogFileTab] = mainBorderPane.logViewTabPane.getLogFileTabs
+  def getLogFileTabs: mutable.Seq[LogFileTab] = mainTabPane.getLogFileTabs
 
   def getWindow: Window = getScene.getWindow()
 
   def init(): Unit = {
     setTop(menuBar)
-    setCenter(mainBorderPane)
+    setCenter(mainTabPane)
     val entries = LogoRRRGlobals.getOrderedLogFileSettings
     if (entries.nonEmpty) {
       loadLogFiles(LogoRRRGlobals.getOrderedLogFileSettings)
     } else {
       logInfo("No log files loaded.")
     }
-    JfxUtils.execOnUiThread(mainBorderPane.init())
+    mainTabPane.init()
   }
 
-  private def loadLogFiles(logs: Seq[LogFileSettings]): Unit = {
-    val futures: Future[Seq[(LogFileSettings, ObservableList[LogEntry])]] = Future.sequence {
-      logInfo(s"Loading ${logs.length} log files: ${logs.map(_.pathAsString).mkString("['", "',`'", "']")}")
-      logs.filter(s => !mainBorderPane.contains(s.pathAsString)).map(settings => Future((settings, settings.readEntries())))
-    }
-    futures.onComplete({
-      case Success(lfs: Seq[(LogFileSettings, ObservableList[LogEntry])]) =>
-        JfxUtils.execOnUiThread({
-          lfs.foreach({
-            case (lfs, es) =>
-              val tab = new LogFileTab(lfs.pathAsString, es)
-              tab.init()
-              mainBorderPane.addLogFileTab(tab)
-              tab.repaint()
-          })
-
-          // only after loading all files we initialize the 'add' listener
-          // otherwise we would overwrite the active log everytime
-          mainBorderPane.logViewTabPane.initSelectionListener()
-
-          // after loading everything, set active log like specified in the config file
-          LogoRRRGlobals.getSomeActive.foreach(p => selectLog(p))
-
+  private def loadLogFiles(settings: Seq[LogFileSettings]): Unit = {
+    val futures: Future[Seq[LogFileTab]] = Future.sequence {
+      logInfo(s"Loading ${settings.length} log files: ${settings.map(_.pathAsString).mkString("['", "',`'", "']")}")
+      val filtered =
+        settings.map(lfs => Future {
+          val tab = new LogFileTab(LogoRRRGlobals.getLogFileSettings(lfs.pathAsString), lfs.readEntries())
+          tab.init()
+          tab
         })
-      case Failure(exception) =>
-        logException("Could not load logfiles", exception)
-        // init listener also in error case
-        mainBorderPane.logViewTabPane.initSelectionListener()
+      filtered
     }
+    val lfs = Await.result(futures, Duration.Inf)
 
-    )
+    println("no jfx thread before this")
+    lfs.foreach(tab => mainTabPane.addLogFileTab(tab))
+
+    // only after loading all files we initialize the 'add' listener
+    // otherwise we would overwrite the active log everytime
+    mainTabPane.initSelectionListener()
+
+    // after loading everything, set active log like specified in the config file
+    // select log has to be performed on the fx thread
+    LogoRRRGlobals.getSomeActive.foreach(pathAsString => {
+      JfxUtils.execOnUiThread({
+        val lft = selectLog(pathAsString)
+        lft.scrollToActiveChunk()
+        lft.repaint()
+      })
+    })
   }
 
   /** called when 'Open File' is selected. */
   def openLogFile(path: Path): Unit = {
     val pathAsString = path.toAbsolutePath.toString
 
-    if (!mainBorderPane.contains(pathAsString)) {
-      mainBorderPane.addLogFile(path)
+    if (!mainTabPane.contains(pathAsString)) {
+      mainTabPane.addLogFile(path)
     } else {
-      logTrace(s"$pathAsString is already opened, selecting tab ...")
-      mainBorderPane.selectLog(pathAsString)
+      val lft = mainTabPane.selectLog(pathAsString)
+      lft.scrollToActiveChunk()
+      lft.repaint()
     }
 
   }
@@ -92,10 +88,10 @@ class LogoRRRMain(closeStage: => Unit)
     LogoRRRGlobals.clearLogFileSettings()
   }
 
-  def selectLog(path: String): Unit = mainBorderPane.selectLog(path)
+  def selectLog(pathAsString: String): LogFileTab = mainTabPane.selectLog(pathAsString)
 
-  def selectLastLogFile(): Unit = mainBorderPane.selectLastLogFile()
+  def selectLastLogFile(): Unit = mainTabPane.selectLastLogFile()
 
-  def shutdown(): Unit = mainBorderPane.shutdown()
+  def shutdown(): Unit = mainTabPane.shutdown()
 
 }

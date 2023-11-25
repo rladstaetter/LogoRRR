@@ -56,8 +56,8 @@ class ChunkListTestApp extends Application with CanLog {
       , new SimpleIntegerProperty(blockSize)
       , filtersProperty
       , new SimpleDoubleProperty(dividerPosition)
-      , e => ())
-    clv.addListeners()
+      , _ => ())
+    clv.init()
     val sp = new SplitPane(clv, new BorderPane(new Label("Test")))
 
     val slider = new Slider(2, 100, 10)
@@ -76,7 +76,7 @@ class ChunkListTestApp extends Application with CanLog {
     nrElemsChoiceBox.setItems(elems)
     nrElemsChoiceBox.getSelectionModel.selectedIndexProperty().addListener(JfxUtils.onNew[Number](n => {
       val nrElems = elems.get(n.intValue())
-      clv.entries.setAll(ChunkSpec.mkTestLogEntries(nrElems))
+      clv.logEntries.setAll(ChunkSpec.mkTestLogEntries(nrElems))
     }))
 
     bp.setTop(new ToolBar(nrBlocksLabel, nrElemsChoiceBox, slider))
