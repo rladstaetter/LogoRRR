@@ -61,9 +61,6 @@ class LogFileTab(val pathAsString: String
 
   lazy val mutLogFileSettings: MutLogFileSettings = LogoRRRGlobals.getLogFileSettings(pathAsString)
 
-  /** list of search filters to be applied */
-  private val filtersListProperty = new SimpleListProperty[Filter](CollectionUtils.mkEmptyObservableList())
-
   /** split visual view and text view */
   private val splitPane = new SplitPane()
 
@@ -74,7 +71,7 @@ class LogFileTab(val pathAsString: String
 
   private val filtersToolBar = {
     val fbtb = new FiltersToolBar(filteredList, removeFilter)
-    fbtb.filtersProperty.bind(filtersListProperty)
+    fbtb.filtersProperty.bind(mutLogFileSettings.filtersProperty)
     fbtb
   }
 
@@ -235,7 +232,7 @@ class LogFileTab(val pathAsString: String
     divider.positionProperty().addListener(repaintChunkListViewListener)
 
     mutLogFileSettings.autoScrollActiveProperty.addListener(autoScrollListener)
-    filtersListProperty.addListener(filterChangeListener)
+    mutLogFileSettings.filtersProperty.addListener(filterChangeListener)
   }
 
   private def initBindings(): Unit = {
@@ -249,7 +246,7 @@ class LogFileTab(val pathAsString: String
     selectedProperty().removeListener(selectedListener)
 
     mutLogFileSettings.autoScrollActiveProperty.removeListener(autoScrollListener)
-    filtersListProperty.removeListener(filterChangeListener)
+    mutLogFileSettings.filtersProperty.removeListener(filterChangeListener)
   }
 
   def shutdown(): Unit = {
@@ -259,9 +256,9 @@ class LogFileTab(val pathAsString: String
     removeListeners()
   }
 
-  def addFilter(filter: Filter): Unit = filtersListProperty.add(filter)
+  def addFilter(filter: Filter): Unit = mutLogFileSettings.filtersProperty.add(filter)
 
-  def removeFilter(filter: Filter): Unit = filtersListProperty.remove(filter)
+  def removeFilter(filter: Filter): Unit = mutLogFileSettings.filtersProperty.remove(filter)
 
   def activeFilters: Seq[Filter] = filtersToolBar.activeFilters()
 
