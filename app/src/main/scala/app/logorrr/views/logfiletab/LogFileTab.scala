@@ -76,10 +76,7 @@ class LogFileTab(val pathAsString: String
   }
 
 
-  private val opsRegion: OpsRegion = {
-    val op = new OpsRegion(opsToolBar, filtersToolBar)
-    op
-  }
+  private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, filtersToolBar)
 
   // display text to the right
   private val logTextView = new LogTextView(mutLogFileSettings, filteredList)
