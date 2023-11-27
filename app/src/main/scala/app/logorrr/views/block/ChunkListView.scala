@@ -5,7 +5,6 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.search.Filter
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
-import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.control.ListView
 
@@ -49,18 +48,28 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
   extends ListView[Chunk]
     with CanLog {
 
-  private val repaintInvalidationListener = new InvalidationListener {
-    override def invalidated(observable: Observable): Unit = {
-      repaint()
-    }
-  }
 
-  val repaintChangeListener = JfxUtils.onNew[Number](_ => repaint())
-  val refreshListener = JfxUtils.onNew[Number](_ => {
-    repaint()
-  })
+  private val repaintInvalidationListener = JfxUtils.mkInvalidationListener(_ => calculateItems("invalidation"))
+
+  val selectedRp = repaintChangeListener("selected")
+  val dividersRp = repaintChangeListener("dividers")
+  val blockSizeRp = repaintChangeListener("blockSize")
+  val widthRp = repaintChangeListener("width")
+  val heightRp = repaintChangeListener("height")
+
+  def repaintChangeListener(ctx: String) = JfxUtils.onNew[Number](n => calculateItems(ctx + s" (${n.intValue()})"))
 
   def init(): Unit = {
+    getStylesheets.add(getClass.getResource("/app/logorrr/ChunkListView.css").toExternalForm)
+
+    setCellFactory((lv: ListView[Chunk]) =>
+      new ChunkListCell(selectedLineNumberProperty
+        , lv.widthProperty()
+        , blockSizeProperty
+        , filtersProperty
+        , selectInTextView)
+    )
+
     addListeners()
   }
 
@@ -90,31 +99,23 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
 
   private def addListeners(): Unit = {
     logEntries.addListener(repaintInvalidationListener)
-
-    selectedLineNumberProperty.addListener(refreshListener)
-    dividersProperty.addListener(repaintChangeListener)
-    blockSizeProperty.addListener(repaintChangeListener)
-    widthProperty().addListener(repaintChangeListener)
-    heightProperty().addListener(repaintChangeListener)
+    selectedLineNumberProperty.addListener(selectedRp)
+    dividersProperty.addListener(dividersRp)
+    blockSizeProperty.addListener(blockSizeRp)
+    widthProperty().addListener(widthRp)
+    heightProperty().addListener(heightRp)
   }
 
   def removeListeners(): Unit = {
     logEntries.removeListener(repaintInvalidationListener)
 
-    selectedLineNumberProperty.addListener(refreshListener)
-    dividersProperty.removeListener(repaintChangeListener)
-    blockSizeProperty.removeListener(repaintChangeListener)
-    widthProperty().removeListener(repaintChangeListener)
-    heightProperty().removeListener(repaintChangeListener)
+    selectedLineNumberProperty.removeListener(selectedRp)
+    dividersProperty.removeListener(dividersRp)
+    blockSizeProperty.removeListener(blockSizeRp)
+    widthProperty().removeListener(widthRp)
+    heightProperty().removeListener(heightRp)
   }
 
-  getStylesheets.add(getClass.getResource("/app/logorrr/ChunkListView.css").toExternalForm)
-
-  setCellFactory((lv: ListView[Chunk]) => new ChunkListCell(selectedLineNumberProperty
-    , lv.widthProperty()
-    , blockSizeProperty
-    , filtersProperty
-    , selectInTextView))
 
   /**
    * Repaint method takes care of painting the blocks on the raw byte array.
@@ -123,9 +124,9 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
    * if not all prerequisites are met. Also, this has to run on the javafx thread such that those updates are displayed
    * correctly.
    */
-  // do not remove JfxUtils.execOnUiThread
-  def repaint(): Unit = {
+  def calculateItems(ctx: String): Unit = {
     if (widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0) {
+      logTrace(s"repaint $ctx")
       Try {
         val chunks = Chunk.mkChunks(logEntries, widthProperty, blockSizeProperty, heightProperty)
         setItems(FXCollections.observableArrayList(chunks: _*))
@@ -135,7 +136,7 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
       }
       refresh()
     } else {
-      val msg = s"Not repainted. (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})"
+      val msg = s"repaint NOT: (ctx: $ctx, width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})"
       logTrace(msg)
     }
   }

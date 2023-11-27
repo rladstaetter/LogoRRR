@@ -27,7 +27,7 @@ object LogoRRRApp extends CanLog {
 class LogoRRRApp extends javafx.application.Application with CanLog {
 
   def start(stage: Stage): Unit = {
-    // make sure to set css before anything is initalized otherwise the rules won't apply
+    // make sure to set css before anything is initialized otherwise the rules won't apply
     Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
     val settings: Settings = SettingsIO.fromFile()
     LogoRRRGlobals.set(settings, getHostServices)

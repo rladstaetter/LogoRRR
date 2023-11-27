@@ -26,10 +26,10 @@ object MainTabPane {
 }
 
 class MainTabPane extends TabPane with CanLog {
-
+  // leave her otherwise css rendering breaks
   setStyle(MainTabPane.BackgroundStyle)
 
-  val selectedLogFileTab: ChangeListener[Tab] = JfxUtils.onNew {
+  val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew {
     case logFileTab: LogFileTab =>
       logTrace(s"Selected: ${logFileTab.pathAsString}")
       LogoRRRGlobals.setSomeActive(Option(logFileTab.pathAsString))
@@ -38,8 +38,8 @@ class MainTabPane extends TabPane with CanLog {
     case x => getSelectionModel.select(null)
   }
 
-
   def init(): Unit = {
+
     initDnD()
   }
 
@@ -48,13 +48,7 @@ class MainTabPane extends TabPane with CanLog {
    * Defines what should happen when a tab is selected
    * */
   def initSelectionListener(): Unit = {
-    getSelectionModel.selectedItemProperty().addListener(selectedLogFileTab)
-  }
-
-
-  def add(tab: LogFileTab): Unit = {
-    getTabs.add(tab)
-    setStyle(null)
+    getSelectionModel.selectedItemProperty().addListener(selectedTabListener)
   }
 
   def contains(p: String): Boolean = getLogFileTabs.exists(lr => lr.pathAsString == p)
@@ -68,7 +62,7 @@ class MainTabPane extends TabPane with CanLog {
 
   /** shutdown all tabs */
   def shutdown(): Unit = {
-    getSelectionModel.selectedItemProperty().removeListener(selectedLogFileTab)
+    getSelectionModel.selectedItemProperty().removeListener(selectedTabListener)
     getLogFileTabs.foreach(t => {
       t.shutdown()
       LogoRRRGlobals.removeLogFile(t.pathAsString)
@@ -77,7 +71,7 @@ class MainTabPane extends TabPane with CanLog {
   }
 
   def selectLog(pathAsString: String): LogFileTab = {
-    logTrace(s"selecting tab `$pathAsString` ...")
+    Thread.sleep(2000)
     getLogFileTabs.find(_.pathAsString == pathAsString) match {
       case Some(logFileTab) =>
         logTrace(s"Activated tab for `$pathAsString`.")
@@ -139,7 +133,9 @@ class MainTabPane extends TabPane with CanLog {
 
 
   /** Adds a new logfile to display */
-  def addLogFileTab(tab: LogFileTab): Unit = JfxUtils.execOnUiThread(add(tab))
-
+  def addLogFileTab(tab: LogFileTab): Unit = {
+    getTabs.add(tab)
+    setStyle(null)
+  }
 
 }

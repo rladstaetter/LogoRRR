@@ -63,7 +63,7 @@ case class LogoRRRStage(stage: Stage) extends CanLog {
     // to save global filter state
     val activeFilters =
       (for (logFileTab <- logorrrMain.getLogFileTabs) yield {
-        logFileTab.pathAsString -> (logFileTab.mainTabContent.activeFilters, logFileTab.mainTabContent.divider.positionProperty().get())
+        logFileTab.pathAsString -> (logFileTab.mainTabContent.activeFilters, logFileTab.mainTabContent.getDividerPosition)
       }).toMap
 
     val updatedSettings =

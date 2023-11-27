@@ -96,15 +96,17 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
       /* change active text field depending on visible tab */
       LogoRRRAccelerators.setActiveSearchTextField(mainTabContent.opsToolBar.searchTextField)
       LogoRRRAccelerators.setActiveRegexToggleButton(mainTabContent.opsToolBar.regexToggleButton)
-      repaint()
+      mainTabContent.repaintChunk()
     } else {
       setStyle(LogFileTab.BackgroundStyle)
     }
   })
 
-  def repaint(): Unit = mainTabContent.repaintChunk()
 
-  def scrollToActiveChunk() :Unit = mainTabContent.scrollToActiveChunk()
+  def scrollToActiveElementAndRepaint() :Unit = {
+    mainTabContent.repaintChunk()
+    mainTabContent.scrollToActiveElement()
+  }
 
   def init(): Unit = timeR({
     setTooltip(new LogFileTabToolTip(pathAsString, entries))
@@ -117,8 +119,7 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
 
     setOnSelectionChanged(_ => {
       if (isSelected) {
-        mainTabContent.scrollToActiveChunk()
-        mainTabContent.repaintChunk()
+        scrollToActiveElementAndRepaint()
       }
     })
 
@@ -143,7 +144,7 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
         Option(getTabPane).foreach(_ => setContextMenu(mkContextMenu()))
       case java.lang.Boolean.FALSE => setContextMenu(null)
     })
-  }, s"Loaded `$pathAsString` with ${entries.size()} entries.")
+  }, s"Init `$pathAsString`")
 
 
   private def mkContextMenu(): ContextMenu = {

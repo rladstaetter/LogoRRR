@@ -1,6 +1,7 @@
 package app.logorrr.util
 
 import javafx.application.Platform
+import javafx.beans.{InvalidationListener, Observable}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.ListChangeListener
 import javafx.scene.control.ListView
@@ -34,6 +35,7 @@ object JfxUtils extends CanLog {
     )
   }
 
+  def mkInvalidationListener(invalidated: Observable => Unit): InvalidationListener = (observable: Observable) => invalidated(observable)
 
   def onNew[T](f: T => Unit): ChangeListener[T] = (_: ObservableValue[_ <: T], _: T, t1: T) => f(t1)
 

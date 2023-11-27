@@ -48,15 +48,15 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   private lazy val pane = new SplitPane(chunkListView, logTextView)
 
-  private lazy val repaintChunkListViewListener = JfxUtils.onNew[Number](n => {
+  private lazy val dividerPositionRepaintListener = JfxUtils.onNew[Number](n => {
     if (n.doubleValue() > 0.1) {
-      chunkListView.repaint()
+      chunkListView.calculateItems("dividerPosition")
     }
   })
 
   def init(): Unit = {
     divider.setPosition(mutLogFileSettings.getDividerPosition())
-    divider.positionProperty().addListener(repaintChunkListViewListener)
+    divider.positionProperty().addListener(dividerPositionRepaintListener)
 
     setTop(opsRegion)
     setCenter(pane)
@@ -67,10 +67,12 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   }
 
 
-  def divider: SplitPane.Divider = pane.getDividers.get(0)
+  private def divider: SplitPane.Divider = pane.getDividers.get(0)
+
+  def getDividerPosition = divider.getPosition
 
   def removeListeners(): Unit = {
-    divider.positionProperty().removeListener(repaintChunkListViewListener)
+    divider.positionProperty().removeListener(dividerPositionRepaintListener)
     chunkListView.removeListeners()
   }
 
@@ -78,9 +80,9 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   def removeFilter(filter: Filter): Unit = mutLogFileSettings.filtersProperty.remove(filter)
 
-  def repaintChunk(): Unit = chunkListView.repaint()
+  def repaintChunk(): Unit = chunkListView.calculateItems("rrrepaint")
 
-  def scrollToActiveChunk() = {
+  def scrollToActiveElement(): Unit = {
     chunkListView.scrollToActiveChunk()
     logTextView.scrollToActiveLogEntry()
   }

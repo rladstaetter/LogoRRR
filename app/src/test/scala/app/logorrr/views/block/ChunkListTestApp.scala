@@ -84,7 +84,7 @@ class ChunkListTestApp extends Application with CanLog {
 
     val refreshListener = JfxUtils.onNew[Number](n => {
       if (n.doubleValue() > 0.1) {
-        clv.repaint()
+        clv.calculateItems("testapp")
       }
     })
 
@@ -95,8 +95,8 @@ class ChunkListTestApp extends Application with CanLog {
 
     stage.showingProperty().addListener((_, _, isNowShowing) => {
       if (isNowShowing) {
-        clv.repaint()
-        System.out.println("Scene is loaded and displayed!")
+        clv.calculateItems("testapp")
+        logTrace("Scene is loaded and displayed!")
       }
     })
 
