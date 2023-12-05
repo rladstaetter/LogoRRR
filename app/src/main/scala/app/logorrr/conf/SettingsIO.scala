@@ -1,10 +1,10 @@
 package app.logorrr.conf
 
-import app.logorrr.io.FilePaths
 import app.logorrr.util.CanLog
 import com.typesafe.config.ConfigRenderOptions
 import pureconfig.ConfigSource
 
+import java.nio.file.Path
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -16,15 +16,13 @@ object SettingsIO extends CanLog {
   val renderOptions: ConfigRenderOptions = ConfigRenderOptions.defaults().setOriginComments(false)
 
   /** read settings from default place and filter all paths which don't exist anymore */
-  def fromFile(): Settings = {
-    val settingsFilePath = FilePaths.settingsFilePath
-
+  def fromFile(settingsFilePath : Path): Settings = {
     Try(ConfigSource.file(settingsFilePath).loadOrThrow[Settings].filterWithValidPaths()) match {
       case Failure(_) =>
         logWarn(s"Could not load $settingsFilePath, using default settings ...")
         Settings.Default
       case Success(value) =>
-        logInfo(s"Loaded settings from $settingsFilePath.")
+        logTrace(s"Loaded settings from '$settingsFilePath'.")
         value
     }
   }

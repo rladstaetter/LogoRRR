@@ -72,5 +72,5 @@ class BlockImage(blockNumber: Int
     , blockSizeProperty
     , entries
     , filtersProperty
-    , Array.fill(widthProperty.get().toInt * heightProperty.get())(ColorUtil.toARGB(Color.GREEN))
+    , Array.fill(widthProperty.get().toInt * heightProperty.get())(LPixelBuffer.defaultBackgroundColor)
     , selectedLineNumberProperty)) with CanLog

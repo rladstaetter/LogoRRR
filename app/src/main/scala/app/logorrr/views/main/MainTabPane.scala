@@ -31,15 +31,14 @@ class MainTabPane extends TabPane with CanLog {
 
   val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew {
     case logFileTab: LogFileTab =>
-      logTrace(s"Selected: ${logFileTab.pathAsString}")
-      LogoRRRGlobals.setSomeActive(Option(logFileTab.pathAsString))
+      logTrace(s"Selected: '${logFileTab.pathAsString}'")
+      LogoRRRGlobals.setSomeActiveLogFile(Option(logFileTab.pathAsString))
       // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
       getSelectionModel.select(logFileTab)
-    case x => getSelectionModel.select(null)
+    case _ => getSelectionModel.select(null)
   }
 
   def init(): Unit = {
-
     initDnD()
   }
 
@@ -71,21 +70,19 @@ class MainTabPane extends TabPane with CanLog {
   }
 
   def selectLog(pathAsString: String): LogFileTab = {
-    Thread.sleep(2000)
     getLogFileTabs.find(_.pathAsString == pathAsString) match {
       case Some(logFileTab) =>
-        logTrace(s"Activated tab for `$pathAsString`.")
+        logTrace(s"Activated tab for '$pathAsString'.")
         getSelectionModel.select(logFileTab)
         logFileTab
       case None =>
-        logWarn(s"Couldn't find tab with $pathAsString, selecting last tab ...")
+        logWarn(s"Couldn't find '$pathAsString', selecting last tab ...")
         selectLastLogFile()
         getTabs.get(getTabs.size() - 1).asInstanceOf[LogFileTab]
     }
   }
 
-  def selectLastLogFile(): Unit = getSelectionModel.selectLast() // select last added file repaint it on selection
-
+  def selectLastLogFile(): Unit = getSelectionModel.selectLast()
 
   private def initDnD(): Unit = {
     /** needed to activate drag'n drop */
@@ -125,15 +122,14 @@ class MainTabPane extends TabPane with CanLog {
     val logFileSettings = LogFileSettings(path)
     LogoRRRGlobals.registerSettings(logFileSettings)
 
-    val tab = new LogFileTab(LogoRRRGlobals.getLogFileSettings(logFileSettings.pathAsString), logFileSettings.readEntries())
-    addLogFileTab(tab)
-    tab.init()
+    addLogFileTab(new LogFileTab(LogoRRRGlobals.getLogFileSettings(logFileSettings.pathAsString), logFileSettings.readEntries()))
     selectLog(path.toAbsolutePath.toString)
   }
 
 
-  /** Adds a new logfile to display */
+  /** Adds a new logfile to display and initializes bindings and listeners */
   def addLogFileTab(tab: LogFileTab): Unit = {
+    tab.init()
     getTabs.add(tab)
     setStyle(null)
   }

@@ -2,7 +2,6 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.util.JfxUtils
 import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.search.{Filter, FiltersToolBar, OpsToolBar}
@@ -14,9 +13,10 @@ import javafx.scene.control.SplitPane
 import javafx.scene.layout.BorderPane
 
 class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
-                        , val entries: ObservableList[LogEntry]
-                        , filteredList: FilteredList[LogEntry]) extends BorderPane {
+                        , val entries: ObservableList[LogEntry]) extends BorderPane {
 
+  /** list which holds all entries, default to display all (can be changed via buttons) */
+  private val filteredList = new FilteredList[LogEntry](entries)
 
   // display text to the right
   private val logTextView = new LogTextView(mutLogFileSettings, filteredList)
@@ -46,17 +46,11 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, filtersToolBar)
 
-  private lazy val pane = new SplitPane(chunkListView, logTextView)
+  private val pane = new SplitPane(chunkListView, logTextView)
 
-  private lazy val dividerPositionRepaintListener = JfxUtils.onNew[Number](n => {
-    if (n.doubleValue() > 0.1) {
-      chunkListView.calculateItems("dividerPosition")
-    }
-  })
 
   def init(): Unit = {
     divider.setPosition(mutLogFileSettings.getDividerPosition())
-    divider.positionProperty().addListener(dividerPositionRepaintListener)
 
     setTop(opsRegion)
     setCenter(pane)
@@ -69,10 +63,9 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   private def divider: SplitPane.Divider = pane.getDividers.get(0)
 
-  def getDividerPosition = divider.getPosition
+  def getDividerPosition: Double = divider.getPosition
 
   def removeListeners(): Unit = {
-    divider.positionProperty().removeListener(dividerPositionRepaintListener)
     chunkListView.removeListeners()
   }
 
@@ -80,7 +73,10 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   def removeFilter(filter: Filter): Unit = mutLogFileSettings.filtersProperty.remove(filter)
 
-  def repaintChunk(): Unit = chunkListView.calculateItems("rrrepaint")
+  /**
+   * Called if a tab is selected
+   */
+  def recalculateChunkListView(): Unit = chunkListView.recalculateAndUpdateItems("recalculateChunkListView")
 
   def scrollToActiveElement(): Unit = {
     chunkListView.scrollToActiveChunk()

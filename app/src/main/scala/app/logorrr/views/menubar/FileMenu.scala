@@ -29,7 +29,7 @@ object FileMenu {
     setOnAction(_ => {
       new LogoRRRFileChooser("Open log file").showAndWait(getWindow()) match {
         case Some(logFile) => openLogFile(logFile)
-        case None => logInfo("Cancelled open file ...")
+        case None => logTrace("Cancelled open file ...")
       }
 
     })

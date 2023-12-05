@@ -32,7 +32,7 @@ object FileManager extends CanLog {
 
   def fromPathUsingSecurityBookmarks(logFile: Path): Seq[String] = {
     if (OsUtil.enableSecurityBookmarks) {
-      logInfo(s"Registering security bookmark for `${logFile.toAbsolutePath.toString}`")
+      logTrace(s"Registering security bookmark for '${logFile.toAbsolutePath.toString}'")
       OsxBridge.registerPath(logFile.toAbsolutePath.toString)
     }
     val lines = FileManager.fromPath(logFile)

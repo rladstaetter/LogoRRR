@@ -23,6 +23,7 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
 
   def scrollToActiveLogEntry(): Unit = {
     if (getHeight != 0) {
+      logTrace(s"!!! scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
       val candidates = filteredList.filtered(l => l.lineNumber == mutLogFileSettings.selectedLineNumberProperty.get())
       if (!candidates.isEmpty) {
         Option(candidates.get(0)) match {
@@ -33,10 +34,10 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
           case None => // do nothing
         }
       } else {
-        logError("is empty")
+        logWarn(s"NOT scrollToActiveLogEntry: no active element was set, not changing scroll position.")
       }
     } else {
-      logError("getheight is 0")
+      logWarn(s"NOT scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
     }
   }
 
@@ -93,12 +94,12 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
       ignoreAbove.setOnAction(_ => {
         val currPredicate = filteredList.getPredicate
         filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && e.lineNumber <= entry.lineNumber)
-        logTrace("Ignoring all before " + e.lineNumber)
+        logTrace("Ignoring all entries prior to line number " + e.lineNumber)
       })
       ignoreBelow.setOnAction(_ => {
         val currPredicate = filteredList.getPredicate
         filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && entry.lineNumber <= e.lineNumber)
-        logTrace("Ignoring all after " + e.lineNumber)
+        logTrace("Ignoring all entries after line number " + e.lineNumber)
       })
 
       setContextMenu(cm)

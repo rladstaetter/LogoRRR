@@ -54,18 +54,15 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
 
   private lazy val logTailer = LogTailer(pathAsString, entries)
 
-  /** list which holds all entries, default to display all (can be changed via buttons) */
-  private val filteredList = new FilteredList[LogEntry](entries)
-
-  val mainTabContent = new LogFileTabContent(mutLogFileSettings, entries, filteredList)
+  val logFileTabContent = new LogFileTabContent(mutLogFileSettings, entries)
 
   private def startTailer(): Unit = {
-    mainTabContent.addTailerListener()
+    logFileTabContent.addTailerListener()
     logTailer.start()
   }
 
   private def stopTailer(): Unit = {
-    mainTabContent.removeTailerListener()
+    logFileTabContent.removeTailerListener()
     logTailer.stop()
   }
 
@@ -94,18 +91,18 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
     if (b) {
       setStyle(LogFileTab.BackgroundSelectedStyle)
       /* change active text field depending on visible tab */
-      LogoRRRAccelerators.setActiveSearchTextField(mainTabContent.opsToolBar.searchTextField)
-      LogoRRRAccelerators.setActiveRegexToggleButton(mainTabContent.opsToolBar.regexToggleButton)
-      mainTabContent.repaintChunk()
+      LogoRRRAccelerators.setActiveSearchTextField(logFileTabContent.opsToolBar.searchTextField)
+      LogoRRRAccelerators.setActiveRegexToggleButton(logFileTabContent.opsToolBar.regexToggleButton)
+      recalculateChunkListViewAndScrollToActiveElement()
     } else {
       setStyle(LogFileTab.BackgroundStyle)
     }
   })
 
 
-  def scrollToActiveElementAndRepaint() :Unit = {
-    mainTabContent.repaintChunk()
-    mainTabContent.scrollToActiveElement()
+  def recalculateChunkListViewAndScrollToActiveElement() :Unit = {
+    logFileTabContent.recalculateChunkListView()
+    logFileTabContent.scrollToActiveElement()
   }
 
   def init(): Unit = timeR({
@@ -115,25 +112,17 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
 
     addListeners()
 
-    mainTabContent.init()
-
-    setOnSelectionChanged(_ => {
-      if (isSelected) {
-        scrollToActiveElementAndRepaint()
-      }
-    })
+    logFileTabContent.init()
 
     /** don't monitor file anymore if tab is closed, free listeners */
-    setOnCloseRequest((t: Event) => cleanupBeforeClose())
+    setOnCloseRequest((_: Event) => cleanupBeforeClose())
 
     if (mutLogFileSettings.isAutoScrollActive) {
       startTailer()
     }
 
-
     /** top component for log view */
-    setContent(mainTabContent)
-
+    setContent(logFileTabContent)
 
     // we have to set the context menu in relation to the visibility of the tab itself
     // otherwise those context menu actions can be performed without selecting the tab
@@ -144,7 +133,8 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
         Option(getTabPane).foreach(_ => setContextMenu(mkContextMenu()))
       case java.lang.Boolean.FALSE => setContextMenu(null)
     })
-  }, s"Init `$pathAsString`")
+
+  }, s"Init '$pathAsString'")
 
 
   private def mkContextMenu(): ContextMenu = {
@@ -196,7 +186,7 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
   private def removeListeners(): Unit = {
     selectedProperty().removeListener(selectedListener)
 
-    mainTabContent.removeListeners()
+    logFileTabContent.removeListeners()
     mutLogFileSettings.autoScrollActiveProperty.removeListener(autoScrollListener)
     mutLogFileSettings.filtersProperty.removeListener(filterChangeListener)
   }

@@ -16,6 +16,8 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
  */
 object LPixelBuffer extends CanLog {
 
+  val defaultBackgroundColor: Int = ColorUtil.toARGB(Color.WHITE)
+
   private def drawRect(rawInts: Array[Int]
                        , i: Int
                        , width: Int
@@ -23,8 +25,6 @@ object LPixelBuffer extends CanLog {
                        , color: Color): Unit = {
     if (width > blockSize) {
       val nrOfBlocksInX = width / blockSize
-      //    val nrOfBlocksInX = if (width > blockSize) width / blockSize else blockSize
-
       val xPos = (i % nrOfBlocksInX) * blockSize
       val yPos = (i / nrOfBlocksInX) * blockSize
       LPixelBuffer.drawRect(rawInts
@@ -77,9 +77,7 @@ case class LPixelBuffer(blockNumber: Int
     , PixelFormat.getIntArgbPreInstance) with CanLog {
 
   private val name = s"${range.start}_${range.end}"
-  private val bgColor: Int = ColorUtil.toARGB(Color.WHITE)
-  // private val bgColor: Int = ColorUtil.toARGB(ColorUtil.randColor)
-  lazy val background: Array[Int] = Array.fill(shape.area)(bgColor)
+  lazy val background: Array[Int] = Array.fill(shape.area)(LPixelBuffer.defaultBackgroundColor)
 
   init()
 

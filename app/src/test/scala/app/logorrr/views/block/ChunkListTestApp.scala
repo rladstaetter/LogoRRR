@@ -24,7 +24,7 @@ object ChunkListTestApp {
 
   def main(args: Array[String]): Unit = {
     System.setProperty("user.language", "en")
-    System.setProperty("java.util.logging.SimpleFormatter.format", LogoRRRApp.logFormat)
+    System.setProperty("java.util.logging.SimpleFormatter.format", CanLog.LogFormat)
     javafx.application.Application.launch(classOf[ChunkListTestApp], args: _*)
   }
 
@@ -84,7 +84,7 @@ class ChunkListTestApp extends Application with CanLog {
 
     val refreshListener = JfxUtils.onNew[Number](n => {
       if (n.doubleValue() > 0.1) {
-        clv.calculateItems("testapp")
+        clv.recalculateAndUpdateItems("testapp")
       }
     })
 
@@ -95,7 +95,7 @@ class ChunkListTestApp extends Application with CanLog {
 
     stage.showingProperty().addListener((_, _, isNowShowing) => {
       if (isNowShowing) {
-        clv.calculateItems("testapp")
+        clv.recalculateAndUpdateItems("testapp")
         logTrace("Scene is loaded and displayed!")
       }
     })

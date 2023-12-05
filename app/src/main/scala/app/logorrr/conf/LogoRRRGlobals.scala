@@ -67,18 +67,19 @@ object LogoRRRGlobals extends CanLog {
   /** a case class representing current setting state */
   def getSettings: Settings = mutSettings.petrify()
 
-  def setSomeActive(sActive: Option[String]): Unit = mutSettings.setSomeActive(sActive)
+  def setSomeActiveLogFile(sActive: Option[String]): Unit = {
+    mutSettings.setSomeActive(sActive)
+  }
 
-  def getSomeActive: Option[String] = mutSettings.getSomeActive
+  def getSomeActiveLogFile: Option[String] = mutSettings.getSomeActiveLogFile
 
   def getSomeLastUsedDirectory: Option[Path] = mutSettings.getSomeLastUsedDirectory
 
   def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit = mutSettings.setSomeLastUsedDirectory(someDirectory)
 
   def removeLogFile(pathAsString: String): Unit = timeR({
-
     mutSettings.removeLogFileSetting(pathAsString)
-    mutSettings.setSomeActive(mutSettings.getSomeActive match {
+    mutSettings.setSomeActive(mutSettings.getSomeActiveLogFile match {
       case Some(value) if value == pathAsString => None
       case x => x
     })
