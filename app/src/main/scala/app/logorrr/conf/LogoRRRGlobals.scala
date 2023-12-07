@@ -67,18 +67,19 @@ object LogoRRRGlobals extends CanLog {
   /** a case class representing current setting state */
   def getSettings: Settings = mutSettings.petrify()
 
-  def setSomeActive(sActive: Option[String]): Unit = mutSettings.setSomeActive(sActive)
+  def setSomeActiveLogFile(sActive: Option[String]): Unit = {
+    mutSettings.setSomeActive(sActive)
+  }
 
-  def getSomeActive: Option[String] = mutSettings.getSomeActive
+  def getSomeActiveLogFile: Option[String] = mutSettings.getSomeActiveLogFile
 
   def getSomeLastUsedDirectory: Option[Path] = mutSettings.getSomeLastUsedDirectory
 
   def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit = mutSettings.setSomeLastUsedDirectory(someDirectory)
 
   def removeLogFile(pathAsString: String): Unit = timeR({
-
     mutSettings.removeLogFileSetting(pathAsString)
-    mutSettings.setSomeActive(mutSettings.getSomeActive match {
+    mutSettings.setSomeActive(mutSettings.getSomeActiveLogFile match {
       case Some(value) if value == pathAsString => None
       case x => x
     })
@@ -95,18 +96,6 @@ object LogoRRRGlobals extends CanLog {
     mutSettings.getMutLogFileSetting(pathAsString)
   }
 
-  def mupdate(t: MutLogFileSettings => Unit)(pathAsString: String): Unit =
-    Option(mutSettings.getMutLogFileSetting(pathAsString)) match {
-      case Some(logFileSettings) => t(logFileSettings)
-      case None => logWarn(s"$pathAsString not found.")
-    }
-
-
-  def setBlockSettings(pathAsString: String, bs: BlockSettings): Unit =
-    mupdate({ lfs: MutLogFileSettings => lfs.setBlockSettings(bs) })(pathAsString)
-
-  def setDividerPosition(pathAsString: String, dividerPosition: Double): Unit = mutSettings.getMutLogFileSetting(pathAsString).setDividerPosition(dividerPosition)
-
-  def updateLogFile(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
+  def registerSettings(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
 
 }

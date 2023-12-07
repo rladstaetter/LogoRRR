@@ -24,7 +24,7 @@ object ChunkListTestApp {
 
   def main(args: Array[String]): Unit = {
     System.setProperty("user.language", "en")
-    System.setProperty("java.util.logging.SimpleFormatter.format", LogoRRRApp.logFormat)
+    System.setProperty("java.util.logging.SimpleFormatter.format", CanLog.LogFormat)
     javafx.application.Application.launch(classOf[ChunkListTestApp], args: _*)
   }
 
@@ -56,8 +56,8 @@ class ChunkListTestApp extends Application with CanLog {
       , new SimpleIntegerProperty(blockSize)
       , filtersProperty
       , new SimpleDoubleProperty(dividerPosition)
-      , e => ())
-    clv.addListeners()
+      , _ => ())
+    clv.init()
     val sp = new SplitPane(clv, new BorderPane(new Label("Test")))
 
     val slider = new Slider(2, 100, 10)
@@ -76,7 +76,7 @@ class ChunkListTestApp extends Application with CanLog {
     nrElemsChoiceBox.setItems(elems)
     nrElemsChoiceBox.getSelectionModel.selectedIndexProperty().addListener(JfxUtils.onNew[Number](n => {
       val nrElems = elems.get(n.intValue())
-      clv.entries.setAll(ChunkSpec.mkTestLogEntries(nrElems))
+      clv.logEntries.setAll(ChunkSpec.mkTestLogEntries(nrElems))
     }))
 
     bp.setTop(new ToolBar(nrBlocksLabel, nrElemsChoiceBox, slider))
@@ -84,7 +84,7 @@ class ChunkListTestApp extends Application with CanLog {
 
     val refreshListener = JfxUtils.onNew[Number](n => {
       if (n.doubleValue() > 0.1) {
-        clv.repaint()
+        clv.recalculateAndUpdateItems("testapp")
       }
     })
 
@@ -95,8 +95,8 @@ class ChunkListTestApp extends Application with CanLog {
 
     stage.showingProperty().addListener((_, _, isNowShowing) => {
       if (isNowShowing) {
-        clv.repaint()
-        System.out.println("Scene is loaded and displayed!")
+        clv.recalculateAndUpdateItems("testapp")
+        logTrace("Scene is loaded and displayed!")
       }
     })
 

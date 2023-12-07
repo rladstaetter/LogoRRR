@@ -24,6 +24,12 @@ object Constants {
 
 object CanLog {
 
+  /** LogoRRRs own log formatting string */
+  val LogFormat = """[%1$tF %1$tT.%1$tN] %3$-40s %4$-13s %5$s %6$s %n"""
+
+  /* before deploying make sure this is set to Level.INFO */
+  val LogLevel = Level.INFO
+
   val fileHandler: StreamHandler = {
     // check if we can log to the given log path, create the parent directory if it does not exist yet.
     // if this doesn't work, use a fallback to console logger - see https://github.com/rladstaetter/LogoRRR/issues/136
@@ -35,8 +41,9 @@ object CanLog {
     } else {
       new FileHandler(FilePaths.logFilePath.toAbsolutePath.toString, true)
     }
-    h.setLevel(Level.INFO)
+    h.setLevel(LogLevel)
     h.setFormatter(new SimpleFormatter)
+
     h
   }
 
@@ -52,7 +59,6 @@ object CanLog {
     }
   }
 
-
 }
 
 /**
@@ -62,7 +68,7 @@ trait CanLog {
 
   lazy val log: Logger = {
     val lggr = Logger.getLogger(this.getClass.getName)
-    lggr.setLevel(Level.ALL)
+    lggr.setLevel(CanLog.LogLevel)
     lggr.addHandler(CanLog.fileHandler)
     lggr
   }
@@ -91,8 +97,8 @@ trait CanLog {
   /**
    * If execution time of function 'a' exceeds errorThreshold, an error log message is written, otherwise a trace log
    *
-   * @param a              action to perform
-   * @param msg            message to decorate a in the log
+   * @param a             action to perform
+   * @param msg           message to decorate a in the log
    * @param warnThreshold max duration for an operation until a 'exceeded time' log message is issued
    * @tparam A type of result
    * @return

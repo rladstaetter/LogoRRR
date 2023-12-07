@@ -3,42 +3,59 @@ package app.logorrr.views.text
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
-import javafx.beans.value.ChangeListener
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
-import javafx.scene.paint.Color
 
 import scala.jdk.CollectionConverters._
 
-object LogTextView {
-
-  private val fixedCellSize = 26
-
-  val timeBarColor: Color = Color.BISQUE.darker()
-
-  val timeBarOverflowColor: Color = timeBarColor.darker()
-
-}
-
-
 class LogTextView(mutLogFileSettings: MutLogFileSettings
-                  , filteredList: FilteredList[LogEntry]) extends ListView[LogEntry] with CanLog {
+                  , filteredList: FilteredList[LogEntry])
+  extends ListView[LogEntry]
+    with CanLog {
 
-  init()
+  def scrollToItem(item: LogEntry): Unit = {
+    getSelectionModel.select(item)
+    val relativeIndex = getItems.indexOf(item)
+    getSelectionModel.select(relativeIndex)
+    val cellHeight = mutLogFileSettings.getFontSize
+    JfxUtils.scrollTo[LogEntry](this, cellHeight, relativeIndex)
+  }
+
+  def scrollToActiveLogEntry(): Unit = {
+    if (getHeight != 0) {
+      logTrace(s"!!! scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
+      val candidates = filteredList.filtered(l => l.lineNumber == mutLogFileSettings.selectedLineNumberProperty.get())
+      if (!candidates.isEmpty) {
+        Option(candidates.get(0)) match {
+          case Some(selectedEntry) =>
+            scrollToItem(selectedEntry)
+            // to trigger ChunkListView scrollTo and repaint
+            mutLogFileSettings.setSelectedLineNumber(selectedEntry.lineNumber)
+          case None => // do nothing
+        }
+      } else {
+        logWarn(s"NOT scrollToActiveLogEntry: no active element was set, not changing scroll position.")
+      }
+    } else {
+      logWarn(s"NOT scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
+    }
+  }
 
   def init(): Unit = {
     getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
-
+    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
     setItems(filteredList)
-    getSelectionModel.select(mutLogFileSettings.selectedLineNumberProperty.get())
 
     getSelectionModel.selectedItemProperty().addListener(JfxUtils.onNew[LogEntry](e => {
       Option(e) match {
-        case Some(value) =>       mutLogFileSettings.setSelectedLineNumber(value.lineNumber)
+        case Some(value) =>
+          // implicitly sets active element in chunkview via global settings binding
+          mutLogFileSettings.setSelectedLineNumber(value.lineNumber)
         case None => logTrace("Selected item was null")
       }
     }))
-    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
+
+    // when changing font size, repaint
     mutLogFileSettings.fontSizeProperty.addListener(JfxUtils.onNew[Number](n => {
       refresh() // otherwise listview is not repainted correctly since calculation of the cellheight is broken atm
     }))
@@ -46,21 +63,6 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
 
   /** 'pragmatic way' to determine width of max elems in this view */
   def maxLength: Int = filteredList.size().toString.length
-
-  def selectLogEntry(logEntry: LogEntry): Unit = {
-    getSelectionModel.select(logEntry)
-    val relativeIndex = getItems.indexOf(logEntry)
-    getSelectionModel.select(relativeIndex)
-    // font size dictates the height of a cell
-    // kind of a hack, has to be enough for the moment
-    val cellHeight = mutLogFileSettings.getFontSize
-    // to lookup the cell height, equally a hack
-    // val cellHeight = lookup(".list-cell").getBoundsInLocal.getHeight
-    val visibleItemCount = (getHeight / cellHeight).asInstanceOf[Int]
-    val idx = if (relativeIndex - visibleItemCount / 2 <= 0) 0 else relativeIndex - visibleItemCount / 2
-    scrollTo(idx)
-  }
-
 
   class LogEntryListCell extends ListCell[LogEntry] {
     styleProperty().bind(mutLogFileSettings.fontStyleBinding)
@@ -72,6 +74,7 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
 
     override def updateItem(t: LogEntry, b: Boolean): Unit = {
       super.updateItem(t, b)
+
       Option(t) match {
         case Some(e) =>
           calculateLabel(e)
@@ -91,12 +94,12 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
       ignoreAbove.setOnAction(_ => {
         val currPredicate = filteredList.getPredicate
         filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && e.lineNumber <= entry.lineNumber)
-        logTrace("Ignoring all before " + e.lineNumber)
+        logTrace("Ignoring all entries prior to line number " + e.lineNumber)
       })
       ignoreBelow.setOnAction(_ => {
         val currPredicate = filteredList.getPredicate
         filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && entry.lineNumber <= e.lineNumber)
-        logTrace("Ignoring all after " + e.lineNumber)
+        logTrace("Ignoring all entries after line number " + e.lineNumber)
       })
 
       setContextMenu(cm)

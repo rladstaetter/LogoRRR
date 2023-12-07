@@ -7,10 +7,10 @@ import javafx.stage.Window
 
 import java.nio.file.Path
 
-class LogoRRRMenuBar(getWindow: () => Window
-                     , openLogFile: Path => Unit
-                     , closeAllLogFiles: => Unit
-                     , closeApplication: => Unit)
+class MainMenuBar(getWindow: () => Window
+                  , openLogFile: Path => Unit
+                  , closeAllLogFiles: => Unit
+                  , closeApplication: => Unit)
   extends MenuBar
     with CanLog {
 

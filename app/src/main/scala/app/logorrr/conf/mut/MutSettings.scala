@@ -68,7 +68,7 @@ class MutSettings {
 
   def setSomeActive(path: Option[String]): Unit = someActiveLogProperty.set(path)
 
-  def getSomeActive: Option[String] = someActiveLogProperty.get()
+  def getSomeActiveLogFile: Option[String] = someActiveLogProperty.get()
 
   def setLogFileSettings(logFileSettings: Map[String, LogFileSettings]): Unit = {
     val m = for ((k, v) <- logFileSettings) yield {
@@ -81,7 +81,7 @@ class MutSettings {
     val logFileSettings: Map[String, LogFileSettings] = (for ((k, v) <- mutLogFileSettingsMapProperty.get.asScala) yield {
       k -> v.petrify()
     }).toMap
-    Settings(mutStageSettings.petrify(), logFileSettings, getSomeActive, getSomeLastUsedDirectory)
+    Settings(mutStageSettings.petrify(), logFileSettings, getSomeActiveLogFile, getSomeLastUsedDirectory)
   }
 
   def setStageSettings(stageSettings: StageSettings): Unit = {
