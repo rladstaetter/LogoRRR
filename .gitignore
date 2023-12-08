@@ -2,7 +2,6 @@
 **/target/**
 logfiles/
 .idea/
-.run/
 .hydra/
 *.iml
 **/.flattened-pom.xml
