@@ -102,7 +102,7 @@ case class LPixelBuffer(blockNumber: Int
           cleanBackground()
           var i = 0
           entries.forEach(e => {
-            if (e.lineNumber.equals(selectedLineNumberProperty.getValue())) {
+            if (e.lineNumber == selectedLineNumberProperty.getValue) {
               LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Color.YELLOW)
             } else {
               LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, Filter.calcColor(e.value, filters))
