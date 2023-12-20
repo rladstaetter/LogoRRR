@@ -59,7 +59,6 @@
                 <graalvm.home>C:\Program Files\Java\graalvm-svm-java11-windows-gluon-22.1.0.1-Final</graalvm.home>
                 -->
                 <!-- see also dist/dist-win/pom.xml! -->
-                <advanced.installer.compiler>C:\Program Files (x86)\Caphyon\Advanced Installer 19.8.1\bin\x86\AdvancedInstaller.com</advanced.installer.compiler>
             </properties>
         </profile>
         <profile>
