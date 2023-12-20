@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="19.8.1" version="19.8.1" Modules="professional" RootPath="." Language="en" Id="{CA663507-AF62-42D0-BD28-FBCA1CC6FC3A}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="19.8.1" version="20.3.2" Modules="professional" RootPath="." Language="en" Id="{CA663507-AF62-42D0-BD28-FBCA1CC6FC3A}">
   <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
     <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;MsiDriverPackagesComponent;UserAccountsComponent;ScheduledTasksComponent;SqlConnectionComponent;AutorunComponent;FirewallExceptionComponent;GameUxComponent;MsiDirectEditorComponent;SharePointSlnComponent;SilverlightSlnComponent;MultipleInstancesComponent;SccmComponent;ActSyncAppComponent;CPLAppletComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
-    <ROW Property="AI_CURRENT_YEAR" Value="2022" ValueLocId="-"/>
+    <ROW Property="AI_CURRENT_YEAR" Value="2024" ValueLocId="-"/>
     <ROW Property="AI_FINDEXE_TITLE" Value="Select the installation package for [|ProductName]" ValueLocId="AI.Property.FindExeTitle"/>
     <ROW Property="AI_FrameBtns" Value="default" MultiBuildValue="DefaultBuild:powderblue" MsiKey="AI_FrameBtns"/>
-    <ROW Property="AI_PACKAGING_TOOL" Value="Advanced Installer 19.8.1 build ff1d5dfa" ValueLocId="-"/>
+    <ROW Property="AI_PACKAGING_TOOL" Value="Advanced Installer 20.3.2 build 850835f9" ValueLocId="-"/>
     <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_ADMIN_USER"/>
     <ROW Property="ALLUSERS" Value="1" MultiBuildValue="DefaultBuild:2"/>
     <ROW Property="ARPCOMMENTS" Value="Installer for [|ProductName]." ValueLocId="*"/>
@@ -70,13 +70,20 @@
     <ROW File="org.kordamp.ikonli.ikonlicore12.3.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGKOR~1.JAR|org.kordamp.ikonli.ikonli-core-12.3.1.jar" Attributes="0" SourcePath="programfiles\org.kordamp.ikonli.ikonli-core-12.3.1.jar" SelfReg="false"/>
     <ROW File="org.kordamp.ikonli.ikonlifontawesome5pack12.3.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGKOR~2.JAR|org.kordamp.ikonli.ikonli-fontawesome5-pack-12.3.1.jar" Attributes="0" SourcePath="programfiles\org.kordamp.ikonli.ikonli-fontawesome5-pack-12.3.1.jar" SelfReg="false"/>
     <ROW File="org.kordamp.ikonli.ikonlijavafx12.3.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGKOR~3.JAR|org.kordamp.ikonli.ikonli-javafx-12.3.1.jar" Attributes="0" SourcePath="programfiles\org.kordamp.ikonli.ikonli-javafx-12.3.1.jar" SelfReg="false"/>
-    <ROW File="org.openjfx.javafxbase19win.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOPE~1.JAR|org.openjfx.javafx-base-19-win.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-base-19-win.jar" SelfReg="false"/>
-    <ROW File="org.openjfx.javafxbase19.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOPE~2.JAR|org.openjfx.javafx-base-19.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-base-19.jar" SelfReg="false"/>
-    <ROW File="org.openjfx.javafxcontrols19win.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOPE~3.JAR|org.openjfx.javafx-controls-19-win.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-controls-19-win.jar" SelfReg="false"/>
-    <ROW File="org.openjfx.javafxcontrols19.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOPE~4.JAR|org.openjfx.javafx-controls-19.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-controls-19.jar" SelfReg="false"/>
-    <ROW File="org.openjfx.javafxgraphics19win.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOPE~5.JAR|org.openjfx.javafx-graphics-19-win.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-graphics-19-win.jar" SelfReg="false"/>
-    <ROW File="org.openjfx.javafxgraphics19.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOPE~6.JAR|org.openjfx.javafx-graphics-19.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-graphics-19.jar" SelfReg="false"/>
-    <ROW File="org.scalalang.scalalibrary2.13.9.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGSCA~1.JAR|org.scala-lang.scala-library-2.13.9.jar" Attributes="0" SourcePath="programfiles\org.scala-lang.scala-library-2.13.9.jar" SelfReg="false"/>
+    <ROW File="com.chuusai.shapeless_2.132.3.10.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMCHU~2.JAR|com.chuusai.shapeless_2.13-2.3.10.jar" Attributes="0" SourcePath="programfiles\com.chuusai.shapeless_2.13-2.3.10.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfigcore_2.130.17.4.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~5.JAR|com.github.pureconfig.pureconfig-core_2.13-0.17.4.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-core_2.13-0.17.4.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfiggenericbase_2.130.17.4.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~6.JAR|com.github.pureconfig.pureconfig-generic-base_2.13-0.17.4.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-generic-base_2.13-0.17.4.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfiggeneric_2.130.17.4.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~7.JAR|com.github.pureconfig.pureconfig-generic_2.13-0.17.4.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-generic_2.13-0.17.4.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfig_2.130.17.4.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~8.JAR|com.github.pureconfig.pureconfig_2.13-0.17.4.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig_2.13-0.17.4.jar" SelfReg="false"/>
+    <ROW File="com.typesafe.config1.4.2.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMTYP~2.JAR|com.typesafe.config-1.4.2.jar" Attributes="0" SourcePath="programfiles\com.typesafe.config-1.4.2.jar" SelfReg="false"/>
+    <ROW File="commonsio.commonsio2.13.0.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMMON~2.JAR|commons-io.commons-io-2.13.0.jar" Attributes="0" SourcePath="programfiles\commons-io.commons-io-2.13.0.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxbase22ea11win.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOPE~7.JAR|org.openjfx.javafx-base-22-ea+11-win.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-base-22-ea+11-win.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxbase22ea11.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOPE~8.JAR|org.openjfx.javafx-base-22-ea+11.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-base-22-ea+11.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxcontrols22ea11win.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOPE~9.JAR|org.openjfx.javafx-controls-22-ea+11-win.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-controls-22-ea+11-win.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxcontrols22ea11.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOP~10.JAR|org.openjfx.javafx-controls-22-ea+11.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-controls-22-ea+11.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxgraphics22ea11win.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOP~11.JAR|org.openjfx.javafx-graphics-22-ea+11-win.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-graphics-22-ea+11-win.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxgraphics22ea11.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOP~12.JAR|org.openjfx.javafx-graphics-22-ea+11.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-graphics-22-ea+11.jar" SelfReg="false"/>
+    <ROW File="org.scalalang.scalalibrary2.13.12.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGSCA~2.JAR|org.scala-lang.scala-library-2.13.12.jar" Attributes="0" SourcePath="programfiles\org.scala-lang.scala-library-2.13.12.jar" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentPropComponent">
     <ROW Property="AI_INSTALLPERUSER" Registry="AI_INSTALLPERUSER" HklmSearch="AI_INSTALLPERUSER" HkcuSearch="AI_INSTALLPERUSER_1" Hklm64Search="AI_INSTALLPERUSER_2" Hkcu64Search="AI_INSTALLPERUSER_3"/>
@@ -178,6 +185,7 @@
     <ROW Action="AI_FindExeLzma" Type="1" Source="lzmaextractor.dll" Target="FindEXE"/>
     <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
     <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
     <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH" Target="[AI_SETUPEXEPATH_ORIGINAL]"/>
     <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
     <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
@@ -239,9 +247,10 @@
     <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="102"/>
     <ROW Action="AI_SETMIXINSTLOCATION" Sequence="748"/>
     <ROW Action="AI_DetectSoftware" Sequence="101"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiJavaComponent">
-    <ROW Name="LogoRRR.exe" Launcher="LogoRRR.exe" MainClass="MainClass" ClassPath="ClassPath" JREMin="MinimumVersion" JREMax="MaximumVersion" IconPath="logorrr-icon-128.ico" AppType="ApplicationType" PlusList="APPDIR;" MinusList="#LogoRRR.exe;" MacDescription="[|CurrentJavaProductName] [|ProductVersion] © [|Manufacturer], Inc, 2022" MacBundleId="com.[|Manufacturer].[|ProductName].[|CurrentJavaProductName]" FailureCheck="FailureCheck" OverrideWkDir="OverrideWorkingDir" UACExecutionLevel="0" Platform64="true"/>
+    <ROW Name="LogoRRR.exe" Launcher="LogoRRR.exe" MainClass="MainClass" ClassPath="ClassPath" JREMin="MinimumVersion" JREMax="MaximumVersion" IconPath="logorrr-icon-128.ico" AppType="ApplicationType" PlusList="APPDIR;" MinusList="#LogoRRR.exe;" MacDescription="[|CurrentJavaProductName] [|ProductVersion] © [|Manufacturer], Inc, 2022" MacBundleId="com.[|Manufacturer].[|ProductName].[|CurrentJavaProductName]" FailureCheck="FailureCheck" OverrideWkDir="OverrideWorkingDir" UACExecutionLevel="0" Platform64="true" ExeMetadata="FileDescription:LogoRRR"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
     <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
@@ -274,7 +283,7 @@
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
-    <ROW Shortcut="LogoRRR" Directory_="DesktopFolder" Name="LogoRRR" Component_="LogoRRR.exe" Target="[#LogoRRR.exe]" Description="[|CurrentJavaProductName] [|ProductVersion] © [|Manufacturer], Inc, 2022" Hotkey="0" IconIndex="0" ShowCmd="1"/>
+    <ROW Shortcut="LogoRRR" Directory_="DesktopFolder" Name="LogoRRR" Component_="LogoRRR.exe" Target="[#LogoRRR.exe]" Description="LogoRRR" Hotkey="0" IconIndex="0" ShowCmd="1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="modern"/>
