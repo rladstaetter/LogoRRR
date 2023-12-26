@@ -1,5 +1,4 @@
-# Convert mov to gif
+# Convert mp4 to gif
 
-ffmpeg -i logorrr-poc.mov -pix_fmt rgb8 -s 389x308 out.gif
-convert out.gif -verbose -coalesce -layers OptimizeFrame out-preopt.gif
-gifsicle -O2 out-preopt.gif -o out-final.gif
+ffmpeg -i \#177-copy-to-clipboard.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" -c:v gif -f gif \#177-copy-to-clipboard.gif
+

@@ -64,8 +64,9 @@ class OpsToolBar(pathAsString: String
 
   val copySelectionButton = new CopyLogButton(filteredList)
 
-  val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
-  val timerButton = new TimerButton(pathAsString, firstNEntries)
+//  val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
+
+//  val timerButton = new TimerButton(pathAsString, firstNEntries)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {
