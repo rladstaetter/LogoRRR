@@ -1,12 +1,11 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, ColorUtil, MathUtil}
+import app.logorrr.util.{CanLog, MathUtil}
 import app.logorrr.views.search.Filter
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
 import javafx.scene.image.WritableImage
-import javafx.scene.paint.Color
 
 object BlockImage {
 

@@ -63,7 +63,7 @@ object LogoRRRStage extends CanLog {
     }
   }
 
-  def init(stage: Stage, logorrrMain: LogoRRRMain) {
+  def init(stage: Stage, logorrrMain: LogoRRRMain): Unit = {
 
     val (width, height) = (LogoRRRGlobals.getStageWidth, LogoRRRGlobals.getStageHeight)
 

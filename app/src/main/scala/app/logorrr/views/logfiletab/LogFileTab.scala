@@ -9,7 +9,6 @@ import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.search.Fltr
 import javafx.beans.binding.Bindings
-import javafx.collections.transformation.FilteredList
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.event.Event
 import javafx.scene.control._
