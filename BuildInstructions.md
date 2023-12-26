@@ -88,25 +88,20 @@ trick.
 
 ## Running from IntelliJ
 
-Running JavaFX applications in IntelliJ needs a some more work if you work with modularized Java. There are builds of
-Java which incorporate JavaFX (from Azul for example) where following steps are not necessary. However, if you use
-GraalVM or AdoptOpenJDK builds, you have to provide special VM Parameters in order to start a JavaFX application from
-your IDE.
+The project contains run configurations for IntelliJ, which need a little bit of setup. This has to be done only once.
 
-As such, you have to provide following parameters:
+Change to the `env` directory and enter following command:
 
-    --module-path <path to your javafx sdk lib directory> --add-modules javafx.controls,javafx.fxml
+  init-ide.bat                  ... for Windows
+  init-ide.sh                   ... for Mac or Linux
 
-For me following settings work:
-
-    --module-path /Users/lad/gh/javafx-sdk-16/lib --add-modules javafx.controls,javafx.fxml
-
-Note that you have to download this javafx-sdk separately and install it once on your computer, you can get it
-on [Gluon's Download Page for JavaFX](https://gluonhq.com/products/javafx/).
+This will download the appropriate openjfx sdk which is needed to run LogoRRR from the IDE via the preconfigured run configuration. Thanks to [Gluon](https://www.gluonhq.com/) for providing pre built binaries of those SDKs!
 
 A comprehensive tutorial how to get started with developing JavaFX can be found on [openjfx.io](https://openjfx.io).
 
 ## Configuring GraalVM native-image
+
+**NOTE: at the moment the [Graalvm build is not active](https://github.com/rladstaetter/LogoRRR/issues/192)** 
 
 `gluonfx-maven-plugin` helps to configure GraalVM compilation by providing a command which creates a configuration for
 `native-image` by analysing the runtime behavior of an application. Navigate to the `./dist/dist-win/binary-win/` or
