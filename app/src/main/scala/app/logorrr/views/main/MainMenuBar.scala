@@ -15,6 +15,7 @@ class MainMenuBar(getWindow: () => Window
     with CanLog {
 
   setUseSystemMenuBar(OsUtil.isMac)
+  setManaged(!OsUtil.isMac) // set managed to false for mac to fix visual glitch (https://github.com/rladstaetter/LogoRRR/issues/179)
 
   private def init(): Unit = {
     getMenus.clear()
