@@ -1,4 +1,4 @@
-package app.logorrr.views.text
+package app.logorrr.views.text.toolbaractions
 
 import app.logorrr.views.ops.TextSizeButton
 import app.logorrr.views.search.OpsToolBar

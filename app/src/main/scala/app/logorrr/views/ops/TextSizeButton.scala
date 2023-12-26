@@ -6,12 +6,12 @@ import javafx.scene.control.{Button, Label, Tooltip}
 import javafx.scene.input.{KeyCode, KeyEvent}
 import javafx.scene.paint.Color
 
-abstract class TextSizeButton(size: Int, tooltipMessage: String)
+abstract class TextSizeButton(fontSize: Int, tooltipMessage: String)
   extends Button
     with HasFontSizeProperty {
 
   private val label = new Label("T")
-  label.setStyle(LogoRRRFonts.jetBrainsMono(size))
+  label.setStyle(LogoRRRFonts.jetBrainsMono(fontSize))
   label.setTextFill(Color.DARKGREY)
   setGraphic(label)
   setTooltip(new Tooltip(tooltipMessage))
