@@ -83,4 +83,18 @@
       <option name="Make" enabled="true" />
     </method>
   </configuration>
+  <configuration default="false" name="LogoRRRApp" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="app.logorrr.LogoRRRApp" />
+    <module name="app" />
+    <option name="VM_PARAMETERS" value="-Djava.library.path=$PROJECT_DIR$/native/native-osx/target --module-path $USER_HOME$/Documents/nxs-arm/env/openjfx/target/javafx-sdk-19/lib/ --add-modules javafx.controls,javafx.fxml --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED -Djava.util.logging.config.file=$USER_HOME$/Documents/nxs-arm/develop-logging.properties -Duser.language=en" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="app.logorrr.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
 </component>
