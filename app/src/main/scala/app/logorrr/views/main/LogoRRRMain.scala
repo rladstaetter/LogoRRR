@@ -5,7 +5,6 @@ import app.logorrr.model.LogFileSettings
 import app.logorrr.util.CanLog
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.layout.BorderPane
-import javafx.stage.Window
 
 import java.nio.file.Path
 import scala.collection.mutable
@@ -16,14 +15,12 @@ import scala.concurrent.{Await, Future}
 class LogoRRRMain(closeStage: => Unit) extends BorderPane with CanLog {
 
   val mainTabPane = new MainTabPane
-
+  val bar = new MainMenuBar(() => getScene.getWindow, openLogFile, closeAllLogFiles(), closeStage)
 
   def getLogFileTabs: mutable.Seq[LogFileTab] = mainTabPane.getLogFileTabs
 
-  def getWindow: Window = getScene.getWindow()
-
   def init(): Unit = {
-    setTop(new MainMenuBar(() => getWindow, openLogFile, closeAllLogFiles(), closeStage))
+    setTop(bar)
     setCenter(mainTabPane)
     val entries = LogoRRRGlobals.getOrderedLogFileSettings
     if (entries.nonEmpty) {
