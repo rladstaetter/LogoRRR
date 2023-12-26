@@ -8,7 +8,7 @@ import javafx.scene.paint.Color
 
 object LogoRRRLabel {
 
-  def mkBg(color: Color) = new Background(new BackgroundFill(color, new CornerRadii(1.25), Insets.EMPTY))
+  private def mkBg(color: Color) = new Background(new BackgroundFill(color, new CornerRadii(1.25), Insets.EMPTY))
 
   def mkL(msg: String, color: Color): Label = {
     val l = new Label(msg)

@@ -3,6 +3,7 @@ package app.logorrr.views.text
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.views.text.contextactions.{IgnoreAboveMenuItem, IgnoreBelowMenuItem}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 
@@ -61,23 +62,18 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
     }))
   }
 
-  /** 'pragmatic way' to determine width of max elems in this view */
+  /** determine width of max elems in this view */
   def maxLength: Int = filteredList.size().toString.length
 
   class LogEntryListCell extends ListCell[LogEntry] {
     styleProperty().bind(mutLogFileSettings.fontStyleBinding)
     setGraphic(null)
 
-    val ignoreAbove = new MenuItem("Ignore entries above")
-    val ignoreBelow = new MenuItem("Ignore entries below")
-    val cm = new ContextMenu(ignoreAbove, ignoreBelow)
-
     override def updateItem(t: LogEntry, b: Boolean): Unit = {
       super.updateItem(t, b)
 
       Option(t) match {
-        case Some(e) =>
-          calculateLabel(e)
+        case Some(e) => calculateLabel(e)
         case None =>
           setGraphic(null)
           setContextMenu(null)
@@ -90,21 +86,21 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
         , mutLogFileSettings.filtersProperty.get().asScala.toSeq
         , mutLogFileSettings.fontStyleBinding
         , mutLogFileSettings.fontSizeProperty)
-      setGraphic(entry)
-      ignoreAbove.setOnAction(_ => {
-        val currPredicate = filteredList.getPredicate
-        filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && e.lineNumber <= entry.lineNumber)
-        logTrace("Ignoring all entries prior to line number " + e.lineNumber)
-      })
-      ignoreBelow.setOnAction(_ => {
-        val currPredicate = filteredList.getPredicate
-        filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && entry.lineNumber <= e.lineNumber)
-        logTrace("Ignoring all entries after line number " + e.lineNumber)
-      })
 
-      setContextMenu(cm)
+      setGraphic(entry)
+
+      val ignoreAboveMenuItem = new IgnoreAboveMenuItem(mutLogFileSettings
+        , e
+        , filteredList
+        , scrollToActiveLogEntry)
+      val ignoreBelowMenuItem = new IgnoreBelowMenuItem(e, filteredList)
+
+      setContextMenu(new ContextMenu(ignoreAboveMenuItem, ignoreBelowMenuItem))
     }
   }
 }
+
+
+
 
 
