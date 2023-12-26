@@ -16,9 +16,12 @@ import java.nio.file.Paths
 // have fun and thanks for reading the code!
 object LogoRRRApp {
 
+  /** LogoRRRs own log formatting string */
+  val LogFormat = """[%1$tF %1$tT.%1$tN] %3$-40s %4$-13s %5$s %6$s %n"""
+
   def main(args: Array[String]): Unit = {
     System.setProperty("user.language", "en")
-    System.setProperty("java.util.logging.SimpleFormatter.format", CanLog.LogFormat)
+    System.setProperty("java.util.logging.SimpleFormatter.format", LogFormat)
     // make sure to set css before anything is initialized otherwise the rules won't apply
     LogoRRRNative.loadNativeLibraries()
 

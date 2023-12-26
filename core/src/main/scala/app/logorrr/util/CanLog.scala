@@ -1,10 +1,4 @@
-/*
- *  Copyright (c) 2018 NEXTSENSE GmbH. All rights reserved.
- *  This file is subject to the terms and conditions defined in https://www.nextsense-worldwide.com/files/content/unternehmen/T&C.pdf
- */
-
 package app.logorrr.util
-
 
 import app.logorrr.io.FilePaths
 
@@ -15,35 +9,31 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 import scala.util.{Failure, Success, Try}
 
-object Constants {
+object CanLog {
+
   val R = "\r"
   val N = "\n"
   val RN = s"$R$N"
-}
-
-
-object CanLog {
-
-  /** LogoRRRs own log formatting string */
-  val LogFormat = """[%1$tF %1$tT.%1$tN] %3$-40s %4$-13s %5$s %6$s %n"""
 
   /* before deploying make sure this is set to Level.INFO */
   val LogLevel = Level.INFO
+
+  /** if set to true, the LogoRRRs log file grows without boundaries */
+  val appendLogs = false
 
   val fileHandler: StreamHandler = {
     // check if we can log to the given log path, create the parent directory if it does not exist yet.
     // if this doesn't work, use a fallback to console logger - see https://github.com/rladstaetter/LogoRRR/issues/136
     val h = if (!Files.exists(FilePaths.logFilePath.getParent)) {
       Try(Files.createDirectories(FilePaths.logFilePath.getParent)) match {
-        case Success(_) => new FileHandler(FilePaths.logFilePath.toAbsolutePath.toString, true)
+        case Success(_) => new FileHandler(FilePaths.logFilePath.toAbsolutePath.toString, appendLogs)
         case Failure(_) => new ConsoleHandler()
       }
     } else {
-      new FileHandler(FilePaths.logFilePath.toAbsolutePath.toString, true)
+      new FileHandler(FilePaths.logFilePath.toAbsolutePath.toString, appendLogs)
     }
     h.setLevel(LogLevel)
     h.setFormatter(new SimpleFormatter)
-
     h
   }
 
@@ -83,8 +73,8 @@ trait CanLog {
     logError(msg)
     Option(t).foreach {
       t =>
-        for (l <- CanLog.throwToString(t).split(Constants.N)) {
-          val msg = l.replaceAll(Constants.R, "").replaceAll(Constants.RN, "").replaceAll(Constants.N, "")
+        for (l <- CanLog.throwToString(t).split(CanLog.N)) {
+          val msg = l.replaceAll(CanLog.R, "").replaceAll(CanLog.RN, "").replaceAll(CanLog.N, "")
           if (msg.nonEmpty) {
             log.severe(msg)
           }

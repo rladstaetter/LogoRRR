@@ -35,8 +35,7 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
             selectedLineNumberProperty.set(value.lineNumber)
             // we have to select also the entry in the LogTextView, couldn't get it to work with bindings / listeners
             scrollTo(value)
-
-          case None => System.err.println("no element found")
+          case None => logTrace("no element found")
         }
       }
     }

@@ -23,7 +23,7 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
 
   def scrollToActiveLogEntry(): Unit = {
     if (getHeight != 0) {
-      logTrace(s"!!! scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
+      logTrace(s"scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
       val candidates = filteredList.filtered(l => l.lineNumber == mutLogFileSettings.selectedLineNumberProperty.get())
       if (!candidates.isEmpty) {
         Option(candidates.get(0)) match {
@@ -34,10 +34,10 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
           case None => // do nothing
         }
       } else {
-        logWarn(s"NOT scrollToActiveLogEntry: no active element was set, not changing scroll position.")
+        logTrace(s"NOT scrollToActiveLogEntry: no active element was set, not changing scroll position.")
       }
     } else {
-      logWarn(s"NOT scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
+      logTrace(s"NOT scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
     }
   }
 

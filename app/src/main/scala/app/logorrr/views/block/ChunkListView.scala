@@ -110,7 +110,7 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
         }
       }
     } else {
-      logWarn("ListView[Chunk] is empty, not scrolling to active chunk.")
+      logTrace("ListView[Chunk] is empty, not scrolling to active chunk.")
     }
   }
 
@@ -136,7 +136,7 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
    */
   def recalculateAndUpdateItems(ctx: String): Unit = { // TODO remove context information
     if (widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0) {
-      logTrace(s"!!! recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
+      logTrace(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
       Try {
         val chunks = Chunk.mkChunks(logEntries, widthProperty, blockSizeProperty, heightProperty)
         setItems(FXCollections.observableArrayList(chunks: _*))

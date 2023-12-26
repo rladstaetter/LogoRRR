@@ -24,7 +24,7 @@ object ChunkListTestApp {
 
   def main(args: Array[String]): Unit = {
     System.setProperty("user.language", "en")
-    System.setProperty("java.util.logging.SimpleFormatter.format", CanLog.LogFormat)
+    System.setProperty("java.util.logging.SimpleFormatter.format", LogoRRRApp.LogFormat)
     javafx.application.Application.launch(classOf[ChunkListTestApp], args: _*)
   }
 
