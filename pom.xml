@@ -23,7 +23,7 @@
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.12</scala.version>
 
-        <openjfx.version>22-ea+11</openjfx.version>
+        <openjfx.version>21.0.1</openjfx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <ikonli.version>12.3.1</ikonli.version>
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
@@ -59,6 +59,7 @@
                 <graalvm.home>C:\Program Files\Java\graalvm-svm-java11-windows-gluon-22.1.0.1-Final</graalvm.home>
                 -->
                 <!-- see also dist/dist-win/pom.xml! -->
+                <openjfx.os.prefix>windows</openjfx.os.prefix>
             </properties>
         </profile>
         <profile>
@@ -69,6 +70,9 @@
                     <name>Linux</name>
                 </os>
             </activation>
+            <properties>
+                <openjfx.os.prefix>linux</openjfx.os.prefix>
+            </properties>
         </profile>
         <profile>
             <id>OS.osx</id>
@@ -81,6 +85,7 @@
                 <jdk.home>${osx.jdk.home.aarch64}</jdk.home>
                 <jdk.javac>${jdk.home}/bin/javac</jdk.javac>
                 <jdk.javah>${jdk.home}/bin/javah</jdk.javah>
+                <openjfx.os.prefix>osx</openjfx.os.prefix>
             </properties>
             <modules>
                 <module>native</module>
@@ -136,8 +141,13 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>env.intellij</id>
+            <modules>
+                <module>env</module>
+            </modules>
+        </profile>
     </profiles>
-
 
     <modules>
         <module>core</module>

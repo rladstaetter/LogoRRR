@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>app.logorrr</groupId>
+        <artifactId>logorrr</artifactId>
+        <version>${revision}${changelist}</version>
+    </parent>
+    <artifactId>env</artifactId>
+    <name>app.logorrr.env</name>
+    <packaging>pom</packaging>
+    <description>Downloads and provides openjfx sdk (needed for intellij run configurations)</description>
+    <properties>
+        <openjfx.sdk.download.url>https://download2.gluonhq.com/openjfx/21.0.1/openjfx-${openjfx.version}_${openjfx.os.prefix}-${os.arch}_bin-sdk.zip</openjfx.sdk.download.url>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>fetch-openjfx-sdk</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <url>${openjfx.sdk.download.url}</url>
+                    <unpack>true</unpack>
+                    <outputDirectory>${project.build.directory}/</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
