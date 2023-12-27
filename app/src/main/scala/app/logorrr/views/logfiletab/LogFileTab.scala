@@ -7,6 +7,7 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util._
 import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.autoscroll.LogTailer
+import app.logorrr.views.logfiletab.actions.{CloseAllFilesMenuItem, CloseLeftFilesMenuItem, CloseMenuItem, CloseOtherFilesMenuItem, CloseRightFilesMenuItem, OpenInFinderMenuItem}
 import app.logorrr.views.search.Fltr
 import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
@@ -114,7 +115,7 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
     logFileTabContent.init()
 
     /** don't monitor file anymore if tab is closed, free listeners */
-    setOnCloseRequest((_: Event) => cleanupBeforeClose())
+    setOnCloseRequest((_: Event) => shutdown())
 
     if (mutLogFileSettings.isAutoScrollActive) {
       startTailer()
@@ -166,11 +167,6 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
     menu
   }
 
-  def cleanupBeforeClose(): Unit = {
-    shutdown()
-    LogoRRRGlobals.removeLogFile(pathAsString)
-  }
-
   private def addListeners(): Unit = {
     selectedProperty().addListener(selectedListener)
 
@@ -195,6 +191,7 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
       stopTailer()
     }
     removeListeners()
+    LogoRRRGlobals.removeLogFile(pathAsString)
   }
 
 

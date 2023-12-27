@@ -42,7 +42,6 @@ class MainTabPane extends TabPane with CanLog {
     initDnD()
   }
 
-
   /**
    * Defines what should happen when a tab is selected
    * */
@@ -62,10 +61,7 @@ class MainTabPane extends TabPane with CanLog {
   /** shutdown all tabs */
   def shutdown(): Unit = {
     getSelectionModel.selectedItemProperty().removeListener(selectedTabListener)
-    getLogFileTabs.foreach(t => {
-      t.shutdown()
-      LogoRRRGlobals.removeLogFile(t.pathAsString)
-    })
+    getLogFileTabs.foreach(_.shutdown())
     getTabs.clear()
   }
 
