@@ -23,6 +23,11 @@
             <groupId>org.scalacheck</groupId>
             <artifactId>scalacheck_3</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.pureconfig</groupId>
+            <artifactId>pureconfig-core_3</artifactId>
+            <version>0.17.4</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
