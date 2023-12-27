@@ -25,6 +25,9 @@ class CloseLeftFilesMenuItem(fileTab: => LogFileTab) extends MenuItem("Close Fil
       }.toSeq
     }
     tabPane.getTabs.removeAll(toBeDeleted: _*)
+    // reinit context menu since there are no files left on the left side and thus the option should not be shown anymore
+    tabPane.getTabs.get(0).asInstanceOf[LogFileTab].initContextMenu()
+
   })
 
 }

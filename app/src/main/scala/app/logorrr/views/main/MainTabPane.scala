@@ -123,6 +123,7 @@ class MainTabPane extends TabPane with CanLog {
   def addLogFileTab(tab: LogFileTab): Unit = {
     tab.init()
     getTabs.add(tab)
+    tab.initContextMenu()
   }
 
 }
