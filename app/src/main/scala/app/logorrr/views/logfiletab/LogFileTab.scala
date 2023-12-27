@@ -136,10 +136,14 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
 
   }, s"Init '$pathAsString'")
 
+  def initContextMenu(): Unit = setContextMenu(mkContextMenu())
+
+
 
   private def mkContextMenu(): ContextMenu = {
-    val openInFinderMenuItem = new OpenInFinderMenuItem(pathAsString)
     val closeMenuItem = new CloseMenuItem(this)
+    val openInFinderMenuItem = new OpenInFinderMenuItem(pathAsString)
+
     val closeOtherFilesMenuItem = new CloseOtherFilesMenuItem(this)
     val closeAllFilesMenuItem = new CloseAllFilesMenuItem(this)
 
@@ -158,13 +162,19 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
         Seq(new CloseLeftFilesMenuItem(this), new CloseRightFilesMenuItem(this))
       }
 
-    val items = Seq(closeMenuItem
-      , closeOtherFilesMenuItem
-      , closeAllFilesMenuItem) ++ leftRightCloser ++ Seq(openInFinderMenuItem)
 
-    val menu = new ContextMenu()
-    menu.getItems.addAll(items: _*)
-    menu
+    val items = {
+      // special handling if there is only one tab
+      if (getTabPane.getTabs.size() == 1) {
+        Seq(closeMenuItem, openInFinderMenuItem)
+      } else {
+        Seq(closeMenuItem
+          , closeOtherFilesMenuItem
+          , closeAllFilesMenuItem) ++ leftRightCloser ++ Seq(openInFinderMenuItem)
+      }
+    }
+
+    new ContextMenu(items: _*)
   }
 
   private def addListeners(): Unit = {

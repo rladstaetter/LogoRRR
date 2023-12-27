@@ -19,6 +19,8 @@ class CloseOtherFilesMenuItem(fileTab: => LogFileTab) extends MenuItem("Close Ot
       }.toSeq
     }
     tabPane.getTabs.removeAll(toBeDeleted: _*)
+    // reinit context menu since only one tab is left
+    tabPane.getTabs.get(0).asInstanceOf[LogFileTab].initContextMenu()
   })
 
 }
