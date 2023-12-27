@@ -13,15 +13,15 @@
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
+            <artifactId>scala3-library_3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_${scala.major.version}</artifactId>
+            <artifactId>scalatest_3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scalacheck</groupId>
-            <artifactId>scalacheck_${scala.major.version}</artifactId>
+            <artifactId>scalacheck_3</artifactId>
         </dependency>
     </dependencies>
     <build>

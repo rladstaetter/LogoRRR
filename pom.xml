@@ -20,8 +20,8 @@
 
         <revision>24.2.0</revision>
 
-        <scala.major.version>2.13</scala.major.version>
-        <scala.version>${scala.major.version}.12</scala.version>
+        <scala.major.version>3.3</scala.major.version>
+        <scala.version>${scala.major.version}.1</scala.version>
 
         <openjfx.version>21.0.1</openjfx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
@@ -161,7 +161,7 @@
         <dependencies>
             <dependency>
                 <groupId>org.scala-lang</groupId>
-                <artifactId>scala-library</artifactId>
+                <artifactId>scala3-library_3</artifactId>
                 <version>${scala.version}</version>
             </dependency>
             <dependency>
@@ -196,25 +196,25 @@
             </dependency>
             <dependency>
                 <groupId>com.github.pureconfig</groupId>
-                <artifactId>pureconfig_${scala.major.version}</artifactId>
+                <artifactId>pureconfig_2.13</artifactId>
                 <version>0.17.4</version>
             </dependency>
             <dependency>
                 <groupId>org.scalatest</groupId>
-                <artifactId>scalatest_${scala.major.version}</artifactId>
-                <version>3.2.11</version>
+                <artifactId>scalatest_3</artifactId>
+                <version>3.3.0-SNAP4</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.scalatestplus</groupId>
-                <artifactId>scalacheck-1-15_${scala.major.version}</artifactId>
-                <version>3.2.11.0</version>
+                <artifactId>scalacheck-1-17_3</artifactId>
+                <version>3.2.16.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.scalacheck</groupId>
-                <artifactId>scalacheck_${scala.major.version}</artifactId>
-                <version>1.15.4</version>
+                <artifactId>scalacheck_3</artifactId>
+                <version>1.17.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -300,23 +300,6 @@
                             <arg>-language:higherKinds</arg>
                             <arg>-language:implicitConversions</arg>
                             <arg>-unchecked</arg>
-                            <arg>-Xcheckinit</arg>
-                            <arg>-Xlint:adapted-args</arg>
-                            <arg>-Xlint:constant</arg>
-                            <arg>-Xlint:delayedinit-select</arg>
-                            <arg>-Xlint:doc-detached</arg>
-                            <arg>-Xlint:inaccessible</arg>
-                            <arg>-Xlint:infer-any</arg>
-                            <arg>-Xlint:missing-interpolator</arg>
-                            <arg>-Xlint:nullary-unit</arg>
-                            <arg>-Xlint:option-implicit</arg>
-                            <arg>-Xlint:package-object-classes</arg>
-                            <arg>-Xlint:poly-implicit-overload</arg>
-                            <arg>-Xlint:private-shadow</arg>
-                            <arg>-Xlint:stars-align</arg>
-                            <arg>-Xlint:type-parameter-shadow</arg>
-                            <arg>-Ywarn-unused</arg>
-                            <arg>-Yrangepos</arg>
                         </args>
                     </configuration>
 
