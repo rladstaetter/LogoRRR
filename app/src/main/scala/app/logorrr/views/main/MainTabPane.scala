@@ -26,7 +26,7 @@ object MainTabPane {
 }
 
 class MainTabPane extends TabPane with CanLog {
-  // leave her otherwise css rendering breaks
+  // leave here otherwise css rendering breaks
   setStyle(MainTabPane.BackgroundStyle)
 
   val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew {
@@ -39,7 +39,22 @@ class MainTabPane extends TabPane with CanLog {
   }
 
   def init(): Unit = {
-    initDnD()
+    /** needed to activate drag'n drop */
+    setOnDragOver((event: DragEvent) => {
+      if (event.getDragboard.hasFiles) {
+        event.acceptTransferModes(TransferMode.ANY: _*)
+      }
+    })
+
+    /** try to interpret dropped element as log file, activate view */
+    setOnDragDropped((event: DragEvent) => {
+      for (f <- event.getDragboard.getFiles.asScala) {
+        val path = f.toPath
+        if (Files.isDirectory(path)) {
+          Files.list(path).filter((p: Path) => Files.isRegularFile(p)).forEach((t: Path) => dropLogFile(t))
+        } else dropLogFile(path)
+      }
+    })
   }
 
   /**
@@ -80,25 +95,6 @@ class MainTabPane extends TabPane with CanLog {
 
   def selectLastLogFile(): Unit = getSelectionModel.selectLast()
 
-  private def initDnD(): Unit = {
-    /** needed to activate drag'n drop */
-    setOnDragOver((event: DragEvent) => {
-      if (event.getDragboard.hasFiles) {
-        event.acceptTransferModes(TransferMode.ANY: _*)
-      }
-    })
-
-    /** try to interpret dropped element as log file, activate view */
-    setOnDragDropped((event: DragEvent) => {
-      for (f <- event.getDragboard.getFiles.asScala) {
-        val path = f.toPath
-        if (Files.isDirectory(path)) {
-          Files.list(path).filter((p: Path) => Files.isRegularFile(p)).forEach((t: Path) => dropLogFile(t))
-        } else dropLogFile(path)
-      }
-    })
-  }
-
   private def dropLogFile(path: Path): Unit = {
     val pathAsString = path.toAbsolutePath.toString
 
@@ -127,7 +123,6 @@ class MainTabPane extends TabPane with CanLog {
   def addLogFileTab(tab: LogFileTab): Unit = {
     tab.init()
     getTabs.add(tab)
-    setStyle(null)
   }
 
 }

@@ -7,7 +7,7 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util._
 import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.autoscroll.LogTailer
-import app.logorrr.views.logfiletab.actions.{CloseAllFilesMenuItem, CloseLeftFilesMenuItem, CloseMenuItem, CloseOtherFilesMenuItem, CloseRightFilesMenuItem, OpenInFinderMenuItem}
+import app.logorrr.views.logfiletab.actions._
 import app.logorrr.views.search.Fltr
 import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
@@ -100,7 +100,7 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
   })
 
 
-  def recalculateChunkListViewAndScrollToActiveElement() :Unit = {
+  def recalculateChunkListViewAndScrollToActiveElement(): Unit = {
     logFileTabContent.recalculateChunkListView()
     logFileTabContent.scrollToActiveElement()
   }
