@@ -116,7 +116,7 @@ class MainTabPane extends TabPane with CanLog {
     val logFileSettings = LogFileSettings(fileId)
     LogoRRRGlobals.registerSettings(logFileSettings)
 
-    addLogFileTab(new LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), logFileSettings.readEntries()))
+    addLogFileTab(LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), logFileSettings.readEntries()))
     selectLog(fileId)
   }
 

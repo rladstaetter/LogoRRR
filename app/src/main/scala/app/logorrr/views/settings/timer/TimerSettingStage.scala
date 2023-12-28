@@ -1,7 +1,6 @@
 package app.logorrr.views.settings.timer
 
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.Fs
 import app.logorrr.model.{LogEntry, LogEntryInstantFormat}
 import app.logorrr.util.JfxUtils
 import javafx.collections.ObservableList

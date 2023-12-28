@@ -37,7 +37,7 @@ class LogoRRRMain(closeStage: => Unit) extends BorderPane with CanLog {
       settings.map(lfs => Future {
         timeR({
           val entries = lfs.readEntries()
-          val tab = new LogFileTab(LogoRRRGlobals.getLogFileSettings(lfs.fileId), entries)
+          val tab = LogFileTab(LogoRRRGlobals.getLogFileSettings(lfs.fileId), entries)
           mainTabPane.addLogFileTab(tab)
           tab
         }, s"Loaded '${lfs.fileId}'")

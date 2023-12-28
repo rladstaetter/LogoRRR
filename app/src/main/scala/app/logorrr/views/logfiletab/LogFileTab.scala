@@ -2,7 +2,7 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.{FileId, Fs}
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
 import app.logorrr.views.LogoRRRAccelerators
@@ -35,6 +35,13 @@ object LogFileTab {
       |-fx-border-color: LIGHTGREY;
       |""".stripMargin
 
+  def apply(mutLogFileSettings: MutLogFileSettings
+            , entries: ObservableList[LogEntry]): LogFileTab = {
+    new LogFileTab(mutLogFileSettings.getFileId
+      , mutLogFileSettings
+      , entries)
+  }
+
 }
 
 
@@ -45,12 +52,13 @@ object LogFileTab {
  *
  * @param entries report instance holding information of log file to be analyzed
  * */
-class LogFileTab(val mutLogFileSettings: MutLogFileSettings
+class LogFileTab(val fileId: FileId
+                 , val mutLogFileSettings: MutLogFileSettings
                  , val entries: ObservableList[LogEntry]) extends Tab
   with TimerCode
   with CanLog {
 
-  val fileId: FileId = mutLogFileSettings.getFileId()
+  assert(fileId == mutLogFileSettings.getFileId)
 
   private lazy val logTailer = LogTailer(fileId, entries)
 
