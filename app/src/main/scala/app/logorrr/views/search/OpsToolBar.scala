@@ -1,5 +1,6 @@
 package app.logorrr.views.search
 
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util.OsUtil
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
@@ -29,7 +30,7 @@ object OpsToolBar {
  *
  * @param addFilterFn filter function which results from user interaction with SearchToolbar
  */
-class OpsToolBar(pathAsString: String
+class OpsToolBar(fileId: FileId
                  , addFilterFn: Filter => Unit
                  , logEntries: ObservableList[LogEntry]
                  , filteredList: FilteredList[LogEntry]
@@ -57,7 +58,7 @@ class OpsToolBar(pathAsString: String
 
   private val searchButton = new SearchButton(searchTextField, regexToggleButton, colorPicker, addFilterFn)
 
-  val autoScrollCheckBox = new AutoScrollCheckBox(pathAsString)
+  val autoScrollCheckBox = new AutoScrollCheckBox(fileId)
 
   val clearLogButton = new ClearLogButton(logEntries)
 
@@ -82,8 +83,8 @@ class OpsToolBar(pathAsString: String
   val sizeItems: Seq[Control] = {
     val decreaseBlockSizeButton = new DecreaseBlockSizeButton(blockSizeProperty)
     val increaseBlockSizeButton = new IncreaseBlockSizeButton(blockSizeProperty)
-    val decreaseTextSizeButton = new DecreaseTextSizeButton(pathAsString)
-    val increaseTextSizeButton = new IncreaseTextSizeButton(pathAsString)
+    val decreaseTextSizeButton = new DecreaseTextSizeButton(fileId)
+    val increaseTextSizeButton = new IncreaseTextSizeButton(fileId)
     Seq(decreaseBlockSizeButton, increaseBlockSizeButton, decreaseTextSizeButton, increaseTextSizeButton)
   }
 

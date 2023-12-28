@@ -2,7 +2,7 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.Fs
+import app.logorrr.io.{FileId, Fs}
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
 import app.logorrr.views.LogoRRRAccelerators
@@ -50,9 +50,9 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
   with TimerCode
   with CanLog {
 
-  val pathAsString: String = mutLogFileSettings.getPathAsString()
+  val fileId: FileId = mutLogFileSettings.getFileId()
 
-  private lazy val logTailer = LogTailer(pathAsString, entries)
+  private lazy val logTailer = LogTailer(fileId, entries)
 
   val logFileTabContent = new LogFileTabContent(mutLogFileSettings, entries)
 
@@ -106,7 +106,7 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
   }
 
   def init(): Unit = timeR({
-    setTooltip(new LogFileTabToolTip(pathAsString, entries))
+    setTooltip(new LogFileTabToolTip(fileId, entries))
 
     initBindings()
 
@@ -134,15 +134,14 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
       case java.lang.Boolean.FALSE => setContextMenu(null)
     })
 
-  }, s"Init '$pathAsString'")
+  }, s"Init '$fileId'")
 
   def initContextMenu(): Unit = setContextMenu(mkContextMenu())
 
 
-
   private def mkContextMenu(): ContextMenu = {
     val closeMenuItem = new CloseMenuItem(this)
-    val openInFinderMenuItem = new OpenInFinderMenuItem(pathAsString)
+    val openInFinderMenuItem = new OpenInFinderMenuItem(fileId)
 
     val closeOtherFilesMenuItem = new CloseOtherFilesMenuItem(this)
     val closeAllFilesMenuItem = new CloseAllFilesMenuItem(this)
@@ -184,9 +183,8 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
     mutLogFileSettings.filtersProperty.addListener(filterChangeListener)
   }
 
-  private def initBindings(): Unit = {
-    textProperty.bind(Bindings.concat(Fs.logFileName(pathAsString)))
-  }
+  private def initBindings(): Unit = textProperty.bind(Bindings.concat(fileId.fileName))
+
 
   private def removeListeners(): Unit = {
     selectedProperty().removeListener(selectedListener)
@@ -201,7 +199,7 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
       stopTailer()
     }
     removeListeners()
-    LogoRRRGlobals.removeLogFile(pathAsString)
+    LogoRRRGlobals.removeLogFile(fileId)
   }
 
 

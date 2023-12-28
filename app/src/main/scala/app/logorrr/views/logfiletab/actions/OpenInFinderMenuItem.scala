@@ -1,5 +1,6 @@
 package app.logorrr.views.logfiletab.actions
 
+import app.logorrr.io.FileId
 import app.logorrr.util.OsUtil
 import javafx.scene.control.MenuItem
 
@@ -16,8 +17,8 @@ object OpenInFinderMenuItem {
   }
 }
 
-class OpenInFinderMenuItem(pathAsString: String) extends MenuItem(OpenInFinderMenuItem.menuItemText) {
+class OpenInFinderMenuItem(fileId: FileId) extends MenuItem(OpenInFinderMenuItem.menuItemText) {
 
-  setOnAction(_ => Desktop.getDesktop.open(Paths.get(pathAsString).getParent.toFile))
+  setOnAction(_ => Desktop.getDesktop.open(fileId.asPath.getParent.toFile))
 
 }

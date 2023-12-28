@@ -11,7 +11,7 @@ import java.nio.file.{Files, Path, Paths}
 object Fs extends CanLog {
 
   /** compute file name from a LogFilePath */
-  def logFileName(pathAsString: String): String = Paths.get(pathAsString).getFileName.toString
+  def logFileName(fileId: FileId): String = fileId.fileName
 
   def createDirectories(path: Path): Unit = {
     if (Files.exists(path)) {

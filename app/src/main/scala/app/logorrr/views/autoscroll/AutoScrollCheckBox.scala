@@ -1,13 +1,14 @@
 package app.logorrr.views.autoscroll
 
 import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.model.LogIdAware
+import app.logorrr.io.FileId
+import app.logorrr.model.HasFileId
 import javafx.scene.control.{CheckBox, Tooltip}
 
 
-class AutoScrollCheckBox(val pathAsString: String) extends CheckBox with LogIdAware {
+class AutoScrollCheckBox(val fileId: FileId) extends CheckBox with HasFileId {
   setTooltip(new Tooltip("autoscroll"))
-  selectedProperty().bindBidirectional(LogoRRRGlobals.getLogFileSettings(pathAsString).autoScrollActiveProperty)
+  selectedProperty().bindBidirectional(LogoRRRGlobals.getLogFileSettings(fileId).autoScrollActiveProperty)
 
 
 }

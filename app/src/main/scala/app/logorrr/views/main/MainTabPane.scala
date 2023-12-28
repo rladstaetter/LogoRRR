@@ -1,6 +1,7 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.logfiletab.LogFileTab
@@ -31,8 +32,8 @@ class MainTabPane extends TabPane with CanLog {
 
   val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew {
     case logFileTab: LogFileTab =>
-      logTrace(s"Selected: '${logFileTab.pathAsString}'")
-      LogoRRRGlobals.setSomeActiveLogFile(Option(logFileTab.pathAsString))
+      logTrace(s"Selected: '${logFileTab.fileId}'")
+      LogoRRRGlobals.setSomeActiveLogFile(Option(logFileTab.fileId))
       // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
       getSelectionModel.select(logFileTab)
     case _ => getSelectionModel.select(null)
@@ -64,7 +65,7 @@ class MainTabPane extends TabPane with CanLog {
     getSelectionModel.selectedItemProperty().addListener(selectedTabListener)
   }
 
-  def contains(p: String): Boolean = getLogFileTabs.exists(lr => lr.pathAsString == p)
+  def contains(p: FileId): Boolean = getLogFileTabs.exists(lr => lr.fileId == p)
 
   def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
     _ match {
@@ -80,14 +81,14 @@ class MainTabPane extends TabPane with CanLog {
     getTabs.clear()
   }
 
-  def selectLog(pathAsString: String): LogFileTab = {
-    getLogFileTabs.find(_.pathAsString == pathAsString) match {
+  def selectLog(fileId: FileId): LogFileTab = {
+    getLogFileTabs.find(_.fileId == fileId) match {
       case Some(logFileTab) =>
-        logTrace(s"Activated tab for '$pathAsString'.")
+        logTrace(s"Activated tab for '$fileId'.")
         getSelectionModel.select(logFileTab)
         logFileTab
       case None =>
-        logWarn(s"Couldn't find '$pathAsString', selecting last tab ...")
+        logWarn(s"Couldn't find '$fileId', selecting last tab ...")
         selectLastLogFile()
         getTabs.get(getTabs.size() - 1).asInstanceOf[LogFileTab]
     }
@@ -96,26 +97,27 @@ class MainTabPane extends TabPane with CanLog {
   def selectLastLogFile(): Unit = getSelectionModel.selectLast()
 
   private def dropLogFile(path: Path): Unit = {
-    val pathAsString = path.toAbsolutePath.toString
+    val fileId = FileId(path)
 
     if (Files.exists(path)) {
-      if (!contains(pathAsString)) {
+      if (!contains(fileId)) {
         addLogFile(path)
       } else {
-        logTrace(s"$pathAsString is already opened, selecting tab ...")
-        selectLog(pathAsString)
+        logTrace(s"${fileId.absolutePathAsString} is already opened, selecting tab ...")
+        selectLog(fileId)
       }
     } else {
-      logWarn(s"$pathAsString does not exist.")
+      logWarn(s"${fileId.absolutePathAsString} does not exist.")
     }
   }
 
   def addLogFile(path: Path): Unit = {
-    val logFileSettings = LogFileSettings(path)
+    val fileId = FileId(path)
+    val logFileSettings = LogFileSettings(fileId)
     LogoRRRGlobals.registerSettings(logFileSettings)
 
-    addLogFileTab(new LogFileTab(LogoRRRGlobals.getLogFileSettings(logFileSettings.pathAsString), logFileSettings.readEntries()))
-    selectLog(path.toAbsolutePath.toString)
+    addLogFileTab(new LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), logFileSettings.readEntries()))
+    selectLog(fileId)
   }
 
 

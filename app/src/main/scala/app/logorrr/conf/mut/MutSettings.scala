@@ -1,6 +1,7 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.conf.{Settings, StageSettings}
+import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.FXCollections
@@ -19,7 +20,7 @@ object MutSettings {
   def apply(settings: Settings): MutSettings = {
     val s = new MutSettings
     s.setStageSettings(settings.stageSettings)
-    s.setLogFileSettings(settings.logFileSettings)
+    s.setLogFileSettings(settings.fileSettings)
     s.setSomeActive(settings.someActive)
     s
   }
@@ -44,42 +45,40 @@ class MutSettings {
   private val mutStageSettings = new MutStageSettings
 
   /** contains mutable state information for all log files */
-  private val mutLogFileSettingsMapProperty = new SimpleMapProperty[String, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
-
-  def isEmpty = mutLogFileSettingsMapProperty.isEmpty
+  private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
 
   /** tracks which log file is active */
-  private val someActiveLogProperty = new SimpleObjectProperty[Option[String]](None)
+  private val someActiveLogProperty = new SimpleObjectProperty[Option[FileId]](None)
 
-  def getMutLogFileSetting(key: String): MutLogFileSettings = mutLogFileSettingsMapProperty.get(key)
+  def getMutLogFileSetting(key: FileId): MutLogFileSettings = mutLogFileSettingsMapProperty.get(key)
 
   def putMutLogFileSetting(mutLogFileSettings: MutLogFileSettings): Unit = {
-    mutLogFileSettingsMapProperty.put(mutLogFileSettings.getPathAsString(), mutLogFileSettings)
+    mutLogFileSettingsMapProperty.put(mutLogFileSettings.getFileId, mutLogFileSettings)
   }
 
-  def removeLogFileSetting(pathAsString: String): Unit = mutLogFileSettingsMapProperty.remove(pathAsString)
+  def removeLogFileSetting(pathAsString: FileId): Unit = mutLogFileSettingsMapProperty.remove(pathAsString)
 
   def set(settings: Settings): Unit = {
     setStageSettings(settings.stageSettings)
-    setLogFileSettings(settings.logFileSettings)
+    setLogFileSettings(settings.fileSettings)
     setSomeActive(settings.someActive)
     setSomeLastUsedDirectory(settings.someLastUsedDirectory)
   }
 
-  def setSomeActive(path: Option[String]): Unit = someActiveLogProperty.set(path)
+  def setSomeActive(path: Option[FileId]): Unit = someActiveLogProperty.set(path)
 
-  def getSomeActiveLogFile: Option[String] = someActiveLogProperty.get()
+  def getSomeActiveLogFile: Option[FileId] = someActiveLogProperty.get()
 
   def setLogFileSettings(logFileSettings: Map[String, LogFileSettings]): Unit = {
     val m = for ((k, v) <- logFileSettings) yield {
-      k -> MutLogFileSettings(v)
+      FileId(k) -> MutLogFileSettings(v)
     }
     mutLogFileSettingsMapProperty.putAll(m.asJava)
   }
 
   def petrify(): Settings = {
     val logFileSettings: Map[String, LogFileSettings] = (for ((k, v) <- mutLogFileSettingsMapProperty.get.asScala) yield {
-      k -> v.petrify()
+      k.absolutePathAsString -> v.petrify()
     }).toMap
     Settings(mutStageSettings.petrify(), logFileSettings, getSomeActiveLogFile, getSomeLastUsedDirectory)
   }
@@ -120,7 +119,7 @@ class MutSettings {
   def getStageWidth: Int = mutStageSettings.getWidth()
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = {
-    mutLogFileSettingsMapProperty.get().values.asScala.toSeq.sortWith((lt, gt) => lt.getFirstOpened() < gt.getFirstOpened()).map(_.petrify())
+    mutLogFileSettingsMapProperty.get().values.asScala.toSeq.sortWith((lt, gt) => lt.getFirstOpened < gt.getFirstOpened).map(_.petrify())
   }
 
 

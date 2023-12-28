@@ -1,6 +1,7 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.conf.BlockSettings
+import app.logorrr.io.FileId
 import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.search.Filter
@@ -17,7 +18,7 @@ object MutLogFileSettings {
     s.setSelectedLineNumber(logFileSettings.selectedLineNumber)
     s.setFontSize(logFileSettings.fontSize)
     s.setBlockSettings(logFileSettings.blockSettings)
-    s.setPathAsString(logFileSettings.pathAsString)
+    s.setFileId(logFileSettings.fileId)
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
     s.setDividerPosition(logFileSettings.dividerPosition)
     s.setFilters(logFileSettings.filters)
@@ -27,9 +28,11 @@ object MutLogFileSettings {
   }
 }
 
+
+
 class MutLogFileSettings {
 
-  private val pathAsStringProperty = new SimpleStringProperty()
+  private val fileIdProperty = new SimpleObjectProperty[FileId]()
   private val firstOpenedProperty = new SimpleLongProperty()
   val selectedLineNumberProperty = new SimpleIntegerProperty()
   val dividerPositionProperty = new SimpleDoubleProperty()
@@ -70,9 +73,9 @@ class MutLogFileSettings {
 
   def setBlockSettings(bs: BlockSettings): Unit = blockSizeProperty.set(bs.size)
 
-  def setPathAsString(path: String): Unit = pathAsStringProperty.set(path)
+  def setFileId(path: FileId): Unit = fileIdProperty.set(path)
 
-  def getPathAsString(): String = pathAsStringProperty.get()
+  def getFileId: FileId = fileIdProperty.get()
 
   def setSelectedLineNumber(lineNumber: Int): Unit = selectedLineNumberProperty.set(lineNumber)
 
@@ -80,13 +83,13 @@ class MutLogFileSettings {
 
   def setDividerPosition(dividerPosition: Double): Unit = dividerPositionProperty.set(dividerPosition)
 
-  def getDividerPosition(): Double = dividerPositionProperty.get()
+  def getDividerPosition: Double = dividerPositionProperty.get()
 
-  def getFirstOpened(): Long = firstOpenedProperty.get()
+  def getFirstOpened: Long = firstOpenedProperty.get()
 
   def petrify(): LogFileSettings = {
     val lfs =
-      LogFileSettings(pathAsStringProperty.get()
+      LogFileSettings(fileIdProperty.get()
         , selectedLineNumberProperty.get()
         , firstOpenedProperty.get()
         , dividerPositionProperty.get()

@@ -1,6 +1,7 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
 import app.logorrr.util.CanLog
 import app.logorrr.views.logfiletab.LogFileTab
@@ -36,10 +37,10 @@ class LogoRRRMain(closeStage: => Unit) extends BorderPane with CanLog {
       settings.map(lfs => Future {
         timeR({
           val entries = lfs.readEntries()
-          val tab = new LogFileTab(LogoRRRGlobals.getLogFileSettings(lfs.pathAsString), entries)
+          val tab = new LogFileTab(LogoRRRGlobals.getLogFileSettings(lfs.fileId), entries)
           mainTabPane.addLogFileTab(tab)
           tab
-        }, s"Loaded '${lfs.pathAsString}'")
+        }, s"Loaded '${lfs.fileId}'")
       })
     }
     val logFileTabs: Seq[LogFileTab] = Await.result(futures, Duration.Inf)
@@ -54,12 +55,12 @@ class LogoRRRMain(closeStage: => Unit) extends BorderPane with CanLog {
 
   /** called when 'Open File' is selected. */
   def openLogFile(path: Path): Unit = {
-    val pathAsString = path.toAbsolutePath.toString
+    val fileId = FileId(path)
 
-    if (!mainTabPane.contains(pathAsString)) {
+    if (!mainTabPane.contains(fileId)) {
       mainTabPane.addLogFile(path)
     } else {
-      mainTabPane.selectLog(pathAsString).recalculateChunkListViewAndScrollToActiveElement()
+      mainTabPane.selectLog(fileId).recalculateChunkListViewAndScrollToActiveElement()
     }
 
   }
@@ -70,7 +71,7 @@ class LogoRRRMain(closeStage: => Unit) extends BorderPane with CanLog {
     LogoRRRGlobals.clearLogFileSettings()
   }
 
-  def selectLog(pathAsString: String): LogFileTab = mainTabPane.selectLog(pathAsString)
+  def selectLog(pathAsString: FileId): LogFileTab = mainTabPane.selectLog(pathAsString)
 
   def selectLastLogFile(): Unit = mainTabPane.selectLastLogFile()
 

@@ -1,7 +1,7 @@
 package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
-import app.logorrr.io.{FileManager, LogEntryFileReader}
+import app.logorrr.io.{FileId, FileManager, LogEntryFileReader}
 import app.logorrr.util.{CanLog, OsUtil}
 import app.logorrr.views.search.Filter
 import javafx.collections.{FXCollections, ObservableList}
@@ -32,8 +32,8 @@ object LogFileSettings {
   val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
   private val DefaultFontSize = 12
 
-  def apply(p: Path): LogFileSettings =
-    LogFileSettings(p.toAbsolutePath.toString
+  def apply(fileId: FileId): LogFileSettings =
+    LogFileSettings(fileId
       , DefaultSelectedIndex
       , Instant.now().toEpochMilli
       , DefaultDividerPosition
@@ -55,7 +55,7 @@ object LogFileSettings {
  * Filters define which keywords are relevant for this given log file.
  *
  */
-case class LogFileSettings(pathAsString: String
+case class LogFileSettings(fileId: FileId
                            , selectedLineNumber: Int
                            , firstOpened: Long
                            , dividerPosition: Double
@@ -65,7 +65,7 @@ case class LogFileSettings(pathAsString: String
                            , someLogEntryInstantFormat: Option[LogEntryInstantFormat]
                            , autoScroll: Boolean) extends CanLog {
 
-  val path: Path = Paths.get(pathAsString).toAbsolutePath
+  val path: Path = Paths.get(fileId.value).toAbsolutePath
 
   val isPathValid: Boolean =
     if (OsUtil.isMac) {
@@ -84,12 +84,12 @@ case class LogFileSettings(pathAsString: String
         case Success(logEntries) =>
           logEntries
         case Failure(ex) =>
-          val msg = s"Could not load file $pathAsString"
+          val msg = s"Could not load file $fileId"
           logException(msg, ex)
           FXCollections.observableArrayList()
       }
     } else {
-      logWarn(s"Could not read $pathAsString - does it exist?")
+      logWarn(s"Could not read $fileId - does it exist?")
       FXCollections.observableArrayList()
     }
   }
