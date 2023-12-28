@@ -19,15 +19,15 @@ Older releases versions are available on the [releases page](https://github.com/
 
 ## Features
 
-- Supports **Windows, Mac Os X, Linux**
-- `LogoRRR` remembers last opened files and settings upon restart
-- Drag and drop log files
-- Drag and drop a directory to open all contained files
-- Handle multiple files in parallel
-- Filter log files for entries interactively
-- Case sensitive and regex search
-- Unix `tail -f` like functionality to watch ongoing events
-- Keyboard shortcuts for more efficient usage
+- **Cross-Platform Compatibility**: Easily use on **Windows, macOS, Linux**.
+- **Drag and Drop**: Just drag and drop log files or directories for instant access.
+- **Interactive Filtering**: Effortlessly filter log entries to find exactly what you need.
+- **Multi-File Handling**: Manage and view multiple log files simultaneously.
+- **Advanced Search Options**: Utilize case-sensitive and regex searches for precise results.
+- **Real-Time Monitoring**: Stay updated with Unix `tail -f` like functionality for ongoing events.
+- **Efficiency at Your Fingertips**: Quick keyboard shortcuts streamline your workflow.
+- **User-Friendly Memory**: `LogoRRR` smartly recalls your last files and settings on restart.
+
 
 ## Screenshots
 
