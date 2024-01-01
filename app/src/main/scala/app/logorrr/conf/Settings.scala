@@ -39,7 +39,7 @@ case class Settings(stageSettings: StageSettings
 
   def filterWithValidPaths(): Settings = copy(fileSettings = fileSettings.filter { case (_, d) =>
     // if entry is part of a zip file, test the path of the zip file
-    if (d.fileId.isZip) {
+    if (d.fileId.isZipEntry) {
       IoManager.isPathValid(d.fileId.extractZipFileId.asPath)
     } else {
       IoManager.isPathValid(d.path)

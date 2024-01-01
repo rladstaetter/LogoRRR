@@ -87,7 +87,7 @@ object LogoRRRGlobals extends CanLog {
     })
 
     if (OsUtil.enableSecurityBookmarks) {
-      if (fileId.isZip) {
+      if (fileId.isZipEntry) {
         // only release path if no other file is opened anymore for this particular zip file
         val zipInQuestion = fileId.extractZipFileId
         if (!LogoRRRGlobals.getOrderedLogFileSettings.map(_.fileId.extractZipFileId).contains(zipInQuestion)) {

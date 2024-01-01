@@ -1,6 +1,7 @@
 package app.logorrr.views.menubar
 
- import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.io.FileId
 import app.logorrr.util.{CanLog, OsUtil}
 import javafx.scene.control.{Menu, MenuItem}
 import javafx.stage.{FileChooser, Window}
@@ -20,15 +21,15 @@ class LogoRRRFileChooser(title: String) {
   }
 
 }
+
 object FileMenu {
 
-  class OpenMenuItem(getWindow: () => Window
-                     , openLogFile: Path => Unit)
+  class OpenMenuItem(getWindow: () => Window, openFile: FileId => Unit)
     extends MenuItem("Open") with CanLog {
 
     setOnAction(_ => {
       new LogoRRRFileChooser("Open log file").showAndWait(getWindow()) match {
-        case Some(logFile) => openLogFile(logFile)
+        case Some(logFile) => openFile(FileId(logFile))
         case None => logTrace("Cancelled open file ...")
       }
 
@@ -46,13 +47,13 @@ object FileMenu {
 }
 
 class FileMenu(getWindow: () => Window
-               , openLogFile: Path => Unit
+               , openFile: FileId => Unit
                , closeAllLogFiles: => Unit
                , closeApplication: => Unit) extends Menu("File") with CanLog {
 
   def init(): Unit = {
     getItems.clear()
-    getItems.add(new FileMenu.OpenMenuItem(getWindow, openLogFile))
+    getItems.add(new FileMenu.OpenMenuItem(getWindow, openFile))
     getItems.add(new FileMenu.CloseAllMenuItem(closeAllLogFiles))
     if (OsUtil.isWin) {
       getItems.add(new FileMenu.QuitMenuItem(closeApplication))

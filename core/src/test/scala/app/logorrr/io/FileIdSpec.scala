@@ -13,7 +13,7 @@ class FileIdSpec extends AnyWordSpec {
   }
   "zipentrypath" in {
     val id = FileId("real/path/a.zip@an/entry/file.log")
-    assert(id.isZip)
+    assert(id.isZipEntry)
     assert(id.zipEntryPath == "a.zip@an/entry/file.log")
   }
   "zippath" in {

@@ -116,9 +116,10 @@ object IoManager extends CanLog {
    * map represents the file name in the zip file, and the value is the contents of the file as string.
    *
    * @param zipFile the zip file
+   * @param filters if empty, return all files, else only those which match given file ids
    * @return
    */
-  def unzip(zipFile: Path, filters: Set[FileId]): Map[FileId, ObservableList[LogEntry]] = {
+  def unzip(zipFile: Path, filters: Set[FileId] = Set()): Map[FileId, ObservableList[LogEntry]] = {
     registerPath(zipFile)
     var resultMap: Map[FileId, ObservableList[LogEntry]] = Map()
     try {
@@ -148,4 +149,7 @@ object IoManager extends CanLog {
       OsxBridge.registerPath(zipFile.toAbsolutePath.toString)
     }
   }
+
+  def isZip(path : Path) : Boolean = path.getFileName.toString.endsWith(".zip")
+
 }

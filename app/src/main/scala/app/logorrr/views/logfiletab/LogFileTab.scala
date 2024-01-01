@@ -68,7 +68,7 @@ class LogFileTab(val fileId: FileId
   with TimerCode
   with CanLog {
 
-  if (fileId.isZip) {
+  if (fileId.isZipEntry) {
     setStyle(LogFileTab.ZipBackgroundStyle)
   } else {
     setStyle(LogFileTab.BackgroundStyle)
@@ -113,7 +113,7 @@ class LogFileTab(val fileId: FileId
 
   private val selectedListener = JfxUtils.onNew[lang.Boolean](b => {
     if (b) {
-      if (fileId.isZip) {
+      if (fileId.isZipEntry) {
         setStyle(LogFileTab.ZipBackgroundSelectedStyle)
       } else {
         setStyle(LogFileTab.BackgroundSelectedStyle)
@@ -124,7 +124,7 @@ class LogFileTab(val fileId: FileId
       LogoRRRAccelerators.setActiveRegexToggleButton(logFileTabContent.opsToolBar.regexToggleButton)
       recalculateChunkListViewAndScrollToActiveElement()
     } else {
-      if (fileId.isZip) {
+      if (fileId.isZipEntry) {
         setStyle(LogFileTab.ZipBackgroundStyle)
       } else {
         setStyle(LogFileTab.BackgroundStyle)
@@ -217,7 +217,7 @@ class LogFileTab(val fileId: FileId
   }
 
   private def initBindings(): Unit = {
-    if (fileId.isZip) {
+    if (fileId.isZipEntry) {
       textProperty.bind(Bindings.concat(fileId.zipEntryPath))
     } else {
       textProperty.bind(Bindings.concat(fileId.fileName))

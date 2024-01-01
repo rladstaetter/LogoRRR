@@ -34,7 +34,7 @@ case class FileId(value: String) {
     extractZipFileId.fileName + value.substring(value.indexOf(".zip@") + 4, value.length)
   }
 
-  def isZip: Boolean = value.contains(".zip@")
+  def isZipEntry: Boolean = value.contains(".zip@")
 
   def asPath: Path = Paths.get(value)
 

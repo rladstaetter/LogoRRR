@@ -54,29 +54,41 @@ class MainTabPane extends TabPane with CanLog {
         val path = f.toPath
         if (Files.isDirectory(path)) {
           dropDirectory(path)
-        } else if (path.getFileName.toString.endsWith(".zip")) {
-          // by default read all files which are contained in the zip file
-          IoManager.unzip(path, Set()).foreach {
-            case (fileId, entries) =>
-              if (!contains(fileId)) {
-                {
-                  addEntriesFromZip(LogFileSettings(fileId), entries)
-                  selectLog(fileId)
-                }
-              } else {
-                logTrace(s"${fileId.absolutePathAsString} is already opened, selecting tab ...")
-                selectLog(fileId)
-              }
-          }
+        } else if (IoManager.isZip(path)) {
+          openZipFile(path)
         } else {
-          dropLogFile(path)
+          openFile(FileId(path))
         }
       }
     })
   }
 
+  // by default read all files which are contained in the zip file
+
+  /**
+   * Unzips given path, interprets contents as log files and adds them to the GUI
+   *
+   * @param path zip file to open
+   */
+  def openZipFile(path: Path): Unit = {
+    if (IoManager.isZip(path)) {
+      IoManager.unzip(path).foreach {
+        case (fileId, entries) =>
+          if (!contains(fileId)) {
+            addEntriesFromZip(LogFileSettings(fileId), entries)
+            selectFile(fileId)
+          } else {
+            logTrace(s"${fileId.absolutePathAsString} is already opened, selecting tab ...")
+            selectFile(fileId)
+          }
+      }
+    } else {
+      logWarn(s"Tried to open file as zip, but filename was: '${path.toAbsolutePath.toString}'.")
+    }
+  }
+
   private def dropDirectory(path: Path): Unit = {
-    Files.list(path).filter((p: Path) => Files.isRegularFile(p)).forEach((t: Path) => dropLogFile(t))
+    Files.list(path).filter((p: Path) => Files.isRegularFile(p)).forEach((t: Path) => openFile(FileId(t)))
   }
 
   /**
@@ -102,7 +114,7 @@ class MainTabPane extends TabPane with CanLog {
     getTabs.clear()
   }
 
-  def selectLog(fileId: FileId): LogFileTab = {
+  def selectFile(fileId: FileId): LogFileTab = {
     getLogFileTabs.find(_.fileId == fileId) match {
       case Some(logFileTab) =>
         logTrace(s"Activated tab for '$fileId'.")
@@ -117,28 +129,25 @@ class MainTabPane extends TabPane with CanLog {
 
   def selectLastLogFile(): Unit = getSelectionModel.selectLast()
 
-  private def dropLogFile(path: Path): Unit = {
-    val fileId = FileId(path)
-
-    if (Files.exists(path)) {
+  private def openFile(fileId: FileId): Unit = {
+    if (Files.exists(fileId.asPath)) {
       if (!contains(fileId)) {
-        addLogFile(path)
+        addFile(fileId)
       } else {
         logTrace(s"${fileId.absolutePathAsString} is already opened, selecting tab ...")
-        selectLog(fileId)
+        selectFile(fileId)
       }
     } else {
       logWarn(s"${fileId.absolutePathAsString} does not exist.")
     }
   }
 
-  def addLogFile(path: Path): Unit = {
-    val fileId = FileId(path)
+  def addFile(fileId: FileId): Unit = {
     val logFileSettings = LogFileSettings(fileId)
     LogoRRRGlobals.registerSettings(logFileSettings)
     val entries = IoManager.readEntries(logFileSettings.path, logFileSettings.someLogEntryInstantFormat)
     addLogFileTab(LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), entries))
-    selectLog(fileId)
+    selectFile(fileId)
   }
 
   def addEntriesFromZip(logFileSettings: LogFileSettings, entries: ObservableList[LogEntry]): LogFileTab = timeR({
