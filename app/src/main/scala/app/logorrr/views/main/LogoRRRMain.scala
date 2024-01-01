@@ -1,7 +1,7 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.io.FileId
+import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.util.CanLog
 import app.logorrr.views.logfiletab.LogFileTab
@@ -23,29 +23,56 @@ class LogoRRRMain(closeStage: => Unit) extends BorderPane with CanLog {
   def init(): Unit = {
     setTop(bar)
     setCenter(mainTabPane)
+    mainTabPane.init()
+  }
+
+  def initLogFilesFromConfig(): Unit = {
     val entries = LogoRRRGlobals.getOrderedLogFileSettings
     if (entries.nonEmpty) {
       loadLogFiles(LogoRRRGlobals.getOrderedLogFileSettings)
     } else {
       logTrace("No log files loaded.")
     }
-    mainTabPane.init()
   }
 
   private def loadLogFiles(settings: Seq[LogFileSettings]): Unit = {
-    val futures: Future[Seq[LogFileTab]] = Future.sequence {
-      settings.map(lfs => Future {
+    val (zipSettings, fileSettings) = settings.partition(p => p.fileId.isZip)
+    val zipSettingsMap: Map[FileId, LogFileSettings] = zipSettings.map(s => s.fileId -> s).toMap
+    // zips is a map which contains fileIds as keys which have to be loaded, and as values their corresponding
+    // settings. this is necessary as not to lose settings from previous runs
+    val zips: Map[FileId, Seq[FileId]] = FileId.reduceZipFiles(zipSettingsMap.keys.toSeq)
+
+    val futures: Future[Seq[Option[LogFileTab]]] = Future.sequence {
+
+      // load zip files also in parallel
+      val zipFutures: Seq[Future[Option[LogFileTab]]] =
+        zips.keys.toSeq.flatMap(f => {
+          timeR({
+            IoManager.unzip(f.asPath, zips(f).toSet).map {
+              // only if settings contains given fileId - user could have removed it by closing the tab - load this file
+              case (fileId, entries) =>
+                Future {
+                  if (zipSettingsMap.contains(fileId)) {
+                    Option(mainTabPane.addEntriesFromZip(zipSettingsMap(fileId), entries))
+                  } else None
+                }
+            }
+          }, s"Loaded zip file '${f.absolutePathAsString}'.")
+        })
+
+      val fileBasedSettings: Seq[Future[Option[LogFileTab]]] = fileSettings.map(lfs => Future {
         timeR({
-          val entries = lfs.readEntries()
+          val entries = IoManager.readEntries(lfs.path, lfs.someLogEntryInstantFormat)
           val tab = LogFileTab(LogoRRRGlobals.getLogFileSettings(lfs.fileId), entries)
           mainTabPane.addLogFileTab(tab)
-          tab
-        }, s"Loaded '${lfs.fileId}'")
+          Option(tab)
+        }, s"Loaded '${lfs.fileId.absolutePathAsString}' from filesystem ...")
       })
-    }
-    val logFileTabs: Seq[LogFileTab] = Await.result(futures, Duration.Inf)
-    logTrace("Loaded " + logFileTabs.size + " files ... ")
 
+      zipFutures ++ fileBasedSettings
+    }
+    val logFileTabs = Await.result(futures, Duration.Inf).flatten
+    logTrace("Loaded " + logFileTabs.size + " files ... ")
 
     // only after loading all files we initialize the 'add' listener
     // otherwise we would overwrite the active log everytime
@@ -53,11 +80,14 @@ class LogoRRRMain(closeStage: => Unit) extends BorderPane with CanLog {
 
   }
 
+
+  def contains(fileId: FileId): Boolean = mainTabPane.contains(fileId)
+
   /** called when 'Open File' is selected. */
   def openLogFile(path: Path): Unit = {
     val fileId = FileId(path)
 
-    if (!mainTabPane.contains(fileId)) {
+    if (!contains(fileId)) {
       mainTabPane.addLogFile(path)
     } else {
       mainTabPane.selectLog(fileId).recalculateChunkListViewAndScrollToActiveElement()
@@ -71,7 +101,7 @@ class LogoRRRMain(closeStage: => Unit) extends BorderPane with CanLog {
     LogoRRRGlobals.clearLogFileSettings()
   }
 
-  def selectLog(pathAsString: FileId): LogFileTab = mainTabPane.selectLog(pathAsString)
+  def selectLog(fileId: FileId): LogFileTab = mainTabPane.selectLog(fileId)
 
   def selectLastLogFile(): Unit = mainTabPane.selectLastLogFile()
 

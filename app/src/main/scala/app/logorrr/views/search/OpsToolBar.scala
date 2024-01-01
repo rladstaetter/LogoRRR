@@ -66,7 +66,7 @@ class OpsToolBar(fileId: FileId
 
 //  val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
 
-//  val timerButton = new TimerButton(pathAsString, firstNEntries)
+//  val timerButton = new TimerButton(fileId, firstNEntries)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {

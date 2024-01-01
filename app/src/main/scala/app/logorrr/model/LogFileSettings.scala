@@ -1,17 +1,15 @@
 package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
-import app.logorrr.io.{FileId, FileManager, LogEntryFileReader}
-import app.logorrr.util.{CanLog, OsUtil}
+import app.logorrr.io.FileId
+import app.logorrr.util.CanLog
 import app.logorrr.views.search.Filter
-import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
 
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{Path, Paths}
 import java.time.Instant
-import scala.util.{Failure, Success, Try}
 
 object LogFileSettings {
 
@@ -66,32 +64,5 @@ case class LogFileSettings(fileId: FileId
                            , autoScroll: Boolean) extends CanLog {
 
   val path: Path = Paths.get(fileId.value).toAbsolutePath
-
-  val isPathValid: Boolean =
-    if (OsUtil.isMac) {
-      Files.exists(path)
-    } else {
-      // without security bookmarks initialized, this returns false on mac
-      Files.isReadable(path) && Files.isRegularFile(path)
-    }
-
-  def readEntries(): ObservableList[LogEntry] = {
-    if (isPathValid) {
-      Try(someLogEntryInstantFormat match {
-        case None => FileManager.from(path)
-        case Some(instantFormat) => LogEntryFileReader.from(path, instantFormat)
-      }) match {
-        case Success(logEntries) =>
-          logEntries
-        case Failure(ex) =>
-          val msg = s"Could not load file $fileId"
-          logException(msg, ex)
-          FXCollections.observableArrayList()
-      }
-    } else {
-      logWarn(s"Could not read $fileId - does it exist?")
-      FXCollections.observableArrayList()
-    }
-  }
 
 }

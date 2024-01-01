@@ -20,7 +20,7 @@ import java.nio.file.Path
  */
 object LogoRRRGlobals extends CanLog {
 
-  val mutSettings = new MutSettings
+  private val mutSettings = new MutSettings
 
   private val hostServicesProperty = new SimpleObjectProperty[HostServices]()
 
@@ -60,16 +60,18 @@ object LogoRRRGlobals extends CanLog {
   def getHostServices: HostServices = hostServicesProperty.get()
 
   def set(settings: Settings, hostServices: HostServices): Unit = {
-    mutSettings.set(settings)
+    mutSettings.setStageSettings(settings.stageSettings)
+    mutSettings.setLogFileSettings(settings.fileSettings)
+    mutSettings.setSomeActive(settings.someActive)
+    mutSettings.setSomeLastUsedDirectory(settings.someLastUsedDirectory)
+
     setHostServices(hostServices)
   }
 
   /** a case class representing current setting state */
   def getSettings: Settings = mutSettings.petrify()
 
-  def setSomeActiveLogFile(sActive: Option[FileId]): Unit = {
-    mutSettings.setSomeActive(sActive)
-  }
+  def setSomeActiveLogFile(sActive: Option[FileId]): Unit = mutSettings.setSomeActive(sActive)
 
   def getSomeActiveLogFile: Option[FileId] = mutSettings.getSomeActiveLogFile
 
@@ -85,15 +87,24 @@ object LogoRRRGlobals extends CanLog {
     })
 
     if (OsUtil.enableSecurityBookmarks) {
-      OsxBridge.releasePath(fileId.absolutePathAsString)
+      if (fileId.isZip) {
+        // only release path if no other file is opened anymore for this particular zip file
+        val zipInQuestion = fileId.extractZipFileId
+        if (!LogoRRRGlobals.getOrderedLogFileSettings.map(_.fileId.extractZipFileId).contains(zipInQuestion)) {
+          OsxBridge.releasePath(fileId.extractZipFileId.absolutePathAsString)
+        }
+      } else {
+        OsxBridge.releasePath(fileId.absolutePathAsString)
+      }
     }
 
   }, s"Removed file $fileId ...")
 
   def clearLogFileSettings(): Unit = mutSettings.clearLogFileSettings()
 
+  def registerSettings(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
+
   def getLogFileSettings(fileId: FileId): MutLogFileSettings = mutSettings.getMutLogFileSetting(fileId)
 
-  def registerSettings(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
 
 }

@@ -11,31 +11,13 @@ import java.nio.file.Path
 import java.util
 import scala.jdk.CollectionConverters._
 
-// This avoids passing around references to settings in all classes.
-// This approach is some sort of experiment and the current state of my knowledge to cope with
-// this problem when doing this sort of stuff in JavaFX. Happy to get input on how to solve the global
-// configuration problem any better.
-object MutSettings {
-
-  def apply(settings: Settings): MutSettings = {
-    val s = new MutSettings
-    s.setStageSettings(settings.stageSettings)
-    s.setLogFileSettings(settings.fileSettings)
-    s.setSomeActive(settings.someActive)
-    s
-  }
-
-}
-
 
 class MutSettings {
 
   /** remembers last opened directory for the next execution */
   val lastUsedDirectoryProperty = new SimpleObjectProperty[Option[Path]](None)
 
-  def getSomeLastUsedDirectory: Option[Path] = {
-    lastUsedDirectoryProperty.get()
-  }
+  def getSomeLastUsedDirectory: Option[Path] = lastUsedDirectoryProperty.get()
 
   def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit = {
     lastUsedDirectoryProperty.set(someDirectory)
@@ -56,14 +38,7 @@ class MutSettings {
     mutLogFileSettingsMapProperty.put(mutLogFileSettings.getFileId, mutLogFileSettings)
   }
 
-  def removeLogFileSetting(pathAsString: FileId): Unit = mutLogFileSettingsMapProperty.remove(pathAsString)
-
-  def set(settings: Settings): Unit = {
-    setStageSettings(settings.stageSettings)
-    setLogFileSettings(settings.fileSettings)
-    setSomeActive(settings.someActive)
-    setSomeLastUsedDirectory(settings.someLastUsedDirectory)
-  }
+  def removeLogFileSetting(fileId: FileId): Unit = mutLogFileSettingsMapProperty.remove(fileId)
 
   def setSomeActive(path: Option[FileId]): Unit = someActiveLogProperty.set(path)
 
@@ -91,7 +66,6 @@ class MutSettings {
   }
 
   def clearLogFileSettings(): Unit = {
-
     mutLogFileSettingsMapProperty.clear()
     setSomeActive(None)
   }
@@ -119,7 +93,8 @@ class MutSettings {
   def getStageWidth: Int = mutStageSettings.getWidth()
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = {
-    mutLogFileSettingsMapProperty.get().values.asScala.toSeq.sortWith((lt, gt) => lt.getFirstOpened < gt.getFirstOpened).map(_.petrify())
+    val seq = mutLogFileSettingsMapProperty.get().values.asScala.toSeq
+    seq.sortWith((lt, gt) => lt.getFirstOpened < gt.getFirstOpened).map(_.petrify())
   }
 
 

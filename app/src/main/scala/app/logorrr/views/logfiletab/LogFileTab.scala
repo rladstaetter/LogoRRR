@@ -21,19 +21,29 @@ import scala.concurrent.Future
 
 object LogFileTab {
 
+  /** background for file log tabs */
   private val BackgroundStyle: String =
-    """
-      |-fx-background-color: WHITE;
-      |-fx-border-width: 1px 1px 1px 0px;
-      |-fx-border-color: LIGHTGREY;
-      |""".stripMargin
+    """|-fx-background-color: white;
+       |-fx-border-width: 1px 1px 1px 0px;
+       |-fx-border-color: lightgrey""".stripMargin
 
+  /** background selected for file log tabs */
   private val BackgroundSelectedStyle: String =
-    """
-      |-fx-background-color: floralwhite;
-      |-fx-border-width: 1px 1px 1px 0px;
-      |-fx-border-color: LIGHTGREY;
-      |""".stripMargin
+    """|-fx-background-color: floralwhite;
+       |-fx-border-width: 1px 1px 1px 0px;
+       |-fx-border-color: lightgrey""".stripMargin
+
+  /** background for zipfile log tabs */
+  private val ZipBackgroundStyle: String =
+    """|-fx-background-color: white;
+       |-fx-border-width: 1px 1px 1px 0px;
+       |-fx-border-color: lightgrey""".stripMargin
+
+  /** background selected for file log tabs */
+  private val ZipBackgroundSelectedStyle: String =
+    """|-fx-background-color: floralwhite;
+       |-fx-border-width: 1px 1px 1px 0px;
+       |-fx-border-color: lightgrey""".stripMargin
 
   def apply(mutLogFileSettings: MutLogFileSettings
             , entries: ObservableList[LogEntry]): LogFileTab = {
@@ -57,6 +67,12 @@ class LogFileTab(val fileId: FileId
                  , val entries: ObservableList[LogEntry]) extends Tab
   with TimerCode
   with CanLog {
+
+  if (fileId.isZip) {
+    setStyle(LogFileTab.ZipBackgroundStyle)
+  } else {
+    setStyle(LogFileTab.BackgroundStyle)
+  }
 
   assert(fileId == mutLogFileSettings.getFileId)
 
@@ -97,13 +113,22 @@ class LogFileTab(val fileId: FileId
 
   private val selectedListener = JfxUtils.onNew[lang.Boolean](b => {
     if (b) {
-      setStyle(LogFileTab.BackgroundSelectedStyle)
+      if (fileId.isZip) {
+        setStyle(LogFileTab.ZipBackgroundSelectedStyle)
+      } else {
+        setStyle(LogFileTab.BackgroundSelectedStyle)
+      }
+
       /* change active text field depending on visible tab */
       LogoRRRAccelerators.setActiveSearchTextField(logFileTabContent.opsToolBar.searchTextField)
       LogoRRRAccelerators.setActiveRegexToggleButton(logFileTabContent.opsToolBar.regexToggleButton)
       recalculateChunkListViewAndScrollToActiveElement()
     } else {
-      setStyle(LogFileTab.BackgroundStyle)
+      if (fileId.isZip) {
+        setStyle(LogFileTab.ZipBackgroundStyle)
+      } else {
+        setStyle(LogFileTab.BackgroundStyle)
+      }
     }
   })
 
@@ -142,7 +167,7 @@ class LogFileTab(val fileId: FileId
       case java.lang.Boolean.FALSE => setContextMenu(null)
     })
 
-  }, s"Init '$fileId'")
+  }, s"Init '${fileId.value}'")
 
   def initContextMenu(): Unit = setContextMenu(mkContextMenu())
 
@@ -191,7 +216,13 @@ class LogFileTab(val fileId: FileId
     mutLogFileSettings.filtersProperty.addListener(filterChangeListener)
   }
 
-  private def initBindings(): Unit = textProperty.bind(Bindings.concat(fileId.fileName))
+  private def initBindings(): Unit = {
+    if (fileId.isZip) {
+      textProperty.bind(Bindings.concat(fileId.zipEntryPath))
+    } else {
+      textProperty.bind(Bindings.concat(fileId.fileName))
+    }
+  }
 
 
   private def removeListeners(): Unit = {

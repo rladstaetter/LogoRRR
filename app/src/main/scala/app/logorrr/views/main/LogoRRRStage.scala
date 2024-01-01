@@ -55,9 +55,13 @@ object LogoRRRStage extends CanLog {
   def show(stage: Stage, logorrrMain: LogoRRRMain): Unit = {
     stage.show()
     LogoRRRGlobals.getSomeActiveLogFile match {
-      case Some(pathAsString) =>
-        val tab = logorrrMain.selectLog(pathAsString)
-        tab.recalculateChunkListViewAndScrollToActiveElement()
+      case Some(fileId) =>
+        if (logorrrMain.contains(fileId)) {
+          val tab = logorrrMain.selectLog(fileId)
+          tab.recalculateChunkListViewAndScrollToActiveElement()
+        } else {
+          logWarn(s"Not found: '${fileId.absolutePathAsString}'")
+        }
       case None =>
         logorrrMain.selectLastLogFile()
     }

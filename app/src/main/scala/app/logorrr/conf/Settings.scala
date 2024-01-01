@@ -1,6 +1,6 @@
 package app.logorrr.conf
 
-import app.logorrr.io.FileId
+import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.LogFileSettings
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
@@ -37,7 +37,14 @@ case class Settings(stageSettings: StageSettings
     copy(stageSettings, fileSettings + (logFileSetting.fileId.value -> logFileSetting))
   }
 
-  def filterWithValidPaths(): Settings = copy(fileSettings = fileSettings.filter { case (_, d) => d.isPathValid })
+  def filterWithValidPaths(): Settings = copy(fileSettings = fileSettings.filter { case (_, d) =>
+    // if entry is part of a zip file, test the path of the zip file
+    if (d.fileId.isZip) {
+      IoManager.isPathValid(d.fileId.extractZipFileId.asPath)
+    } else {
+      IoManager.isPathValid(d.path)
+    }
+  })
 
 
 }

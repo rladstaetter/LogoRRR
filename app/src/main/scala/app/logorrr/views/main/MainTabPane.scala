@@ -1,11 +1,12 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.io.FileId
-import app.logorrr.model.LogFileSettings
+import app.logorrr.io.{FileId, IoManager}
+import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.beans.value.ChangeListener
+import javafx.collections.ObservableList
 import javafx.scene.control.{Tab, TabPane}
 import javafx.scene.input.{DragEvent, TransferMode}
 
@@ -32,7 +33,7 @@ class MainTabPane extends TabPane with CanLog {
 
   val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew {
     case logFileTab: LogFileTab =>
-      logTrace(s"Selected: '${logFileTab.fileId}'")
+      logTrace(s"Selected: '${logFileTab.fileId.value}'")
       LogoRRRGlobals.setSomeActiveLogFile(Option(logFileTab.fileId))
       // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
       getSelectionModel.select(logFileTab)
@@ -52,10 +53,30 @@ class MainTabPane extends TabPane with CanLog {
       for (f <- event.getDragboard.getFiles.asScala) {
         val path = f.toPath
         if (Files.isDirectory(path)) {
-          Files.list(path).filter((p: Path) => Files.isRegularFile(p)).forEach((t: Path) => dropLogFile(t))
-        } else dropLogFile(path)
+          dropDirectory(path)
+        } else if (path.getFileName.toString.endsWith(".zip")) {
+          // by default read all files which are contained in the zip file
+          IoManager.unzip(path, Set()).foreach {
+            case (fileId, entries) =>
+              if (!contains(fileId)) {
+                {
+                  addEntriesFromZip(LogFileSettings(fileId), entries)
+                  selectLog(fileId)
+                }
+              } else {
+                logTrace(s"${fileId.absolutePathAsString} is already opened, selecting tab ...")
+                selectLog(fileId)
+              }
+          }
+        } else {
+          dropLogFile(path)
+        }
       }
     })
+  }
+
+  private def dropDirectory(path: Path): Unit = {
+    Files.list(path).filter((p: Path) => Files.isRegularFile(p)).forEach((t: Path) => dropLogFile(t))
   }
 
   /**
@@ -115,11 +136,17 @@ class MainTabPane extends TabPane with CanLog {
     val fileId = FileId(path)
     val logFileSettings = LogFileSettings(fileId)
     LogoRRRGlobals.registerSettings(logFileSettings)
-
-    addLogFileTab(LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), logFileSettings.readEntries()))
+    val entries = IoManager.readEntries(logFileSettings.path, logFileSettings.someLogEntryInstantFormat)
+    addLogFileTab(LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), entries))
     selectLog(fileId)
   }
 
+  def addEntriesFromZip(logFileSettings: LogFileSettings, entries: ObservableList[LogEntry]): LogFileTab = timeR({
+    LogoRRRGlobals.registerSettings(logFileSettings)
+    val tab = LogFileTab(LogoRRRGlobals.getLogFileSettings(logFileSettings.fileId), entries)
+    addLogFileTab(tab)
+    tab
+  }, s"Added ${logFileSettings.fileId.absolutePathAsString} to TabPane")
 
   /** Adds a new logfile to display and initializes bindings and listeners */
   def addLogFileTab(tab: LogFileTab): Unit = {

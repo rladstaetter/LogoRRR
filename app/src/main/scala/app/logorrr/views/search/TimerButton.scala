@@ -14,12 +14,12 @@ import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
 
-class TimerButton(pathAsString: FileId
+class TimerButton(fileId: FileId
                   , logEntriesToDisplay: ObservableList[LogEntry])
   extends StackPane
     with CanLog {
 
-  def getSettings: MutLogFileSettings = LogoRRRGlobals.getLogFileSettings(pathAsString)
+  def getSettings: MutLogFileSettings = LogoRRRGlobals.getLogFileSettings(fileId)
 
   def updateLogEntrySetting(leif: LogEntryInstantFormat): Unit = {
     getSettings.setLogEntryInstantFormat(leif)
@@ -43,7 +43,7 @@ class TimerButton(pathAsString: FileId
     new TimerSettingStage(getSettings, updateLogEntrySetting, logEntriesToDisplay).showAndWait()
   })
 
-  private val binding: BooleanBinding = LogoRRRGlobals.getLogFileSettings(pathAsString).hasLogEntrySettingBinding.not()
+  private val binding: BooleanBinding = LogoRRRGlobals.getLogFileSettings(fileId).hasLogEntrySettingBinding.not()
 
   private val icon = new FontIcon()
   icon.setStyle("-fx-icon-code:fas-exclamation-circle;-fx-icon-color:rgba(255, 0, 0, 1);-fx-icon-size:8;")
