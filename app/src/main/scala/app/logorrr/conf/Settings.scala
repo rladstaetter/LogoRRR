@@ -1,5 +1,6 @@
 package app.logorrr.conf
 
+import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.LogFileSettings
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
@@ -27,16 +28,23 @@ object Settings {
 }
 
 case class Settings(stageSettings: StageSettings
-                    , logFileSettings: Map[String, LogFileSettings]
-                    , someActive: Option[String]
+                    , fileSettings: Map[String, LogFileSettings] // has to stay Map[String,LogFileSettings] because of Reader/Writer derivation
+                    , someActive: Option[FileId]
                     , someLastUsedDirectory: Option[Path]) {
 
   /** updates recent files with given log setting */
   def update(logFileSetting: LogFileSettings): Settings = {
-    copy(stageSettings, logFileSettings + (logFileSetting.pathAsString -> logFileSetting))
+    copy(stageSettings, fileSettings + (logFileSetting.fileId.value -> logFileSetting))
   }
 
-  def filterWithValidPaths(): Settings = copy(logFileSettings = logFileSettings.filter { case (_, d) => d.isPathValid })
+  def filterWithValidPaths(): Settings = copy(fileSettings = fileSettings.filter { case (_, d) =>
+    // if entry is part of a zip file, test the path of the zip file
+    if (d.fileId.isZip) {
+      IoManager.isPathValid(d.fileId.extractZipFileId.asPath)
+    } else {
+      IoManager.isPathValid(d.path)
+    }
+  })
 
 
 }

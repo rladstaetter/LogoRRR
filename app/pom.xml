@@ -37,9 +37,6 @@
         <dependency>
             <groupId>com.github.pureconfig</groupId>
             <artifactId>pureconfig_${scala.major.version}</artifactId>
-            <!-- comment scope if you want to start app in intellij
-            <scope>provided</scope>
-            -->
         </dependency>
         <dependency>
             <groupId>app.logorrr</groupId>

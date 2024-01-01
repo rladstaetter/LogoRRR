@@ -2,6 +2,7 @@ package app.logorrr.views.search
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.io.FileId
 import app.logorrr.model.{LogEntry, LogEntryInstantFormat}
 import app.logorrr.util.CanLog
 import app.logorrr.views.settings.timer.TimerSettingStage
@@ -13,15 +14,15 @@ import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
 
-class TimerButton(pathAsString: String
+class TimerButton(fileId: FileId
                   , logEntriesToDisplay: ObservableList[LogEntry])
   extends StackPane
     with CanLog {
 
-  def getSettings(): MutLogFileSettings = LogoRRRGlobals.getLogFileSettings(pathAsString)
+  def getSettings: MutLogFileSettings = LogoRRRGlobals.getLogFileSettings(fileId)
 
   def updateLogEntrySetting(leif: LogEntryInstantFormat): Unit = {
-    getSettings().setLogEntryInstantFormat(leif)
+    getSettings.setLogEntryInstantFormat(leif)
     LogoRRRGlobals.persist()
   }
 
@@ -39,10 +40,10 @@ class TimerButton(pathAsString: String
   button.setTooltip(new Tooltip("configure time format"))
 
   button.setOnAction(_ => {
-    new TimerSettingStage(getSettings(), updateLogEntrySetting, logEntriesToDisplay).showAndWait()
+    new TimerSettingStage(getSettings, updateLogEntrySetting, logEntriesToDisplay).showAndWait()
   })
 
-  private val binding: BooleanBinding = LogoRRRGlobals.getLogFileSettings(pathAsString).hasLogEntrySettingBinding.not()
+  private val binding: BooleanBinding = LogoRRRGlobals.getLogFileSettings(fileId).hasLogEntrySettingBinding.not()
 
   private val icon = new FontIcon()
   icon.setStyle("-fx-icon-code:fas-exclamation-circle;-fx-icon-color:rgba(255, 0, 0, 1);-fx-icon-size:8;")

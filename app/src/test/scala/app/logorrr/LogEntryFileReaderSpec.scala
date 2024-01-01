@@ -1,6 +1,6 @@
 package app.logorrr
 
-import app.logorrr.io.FileManager
+import app.logorrr.io.IoManager
 import app.logorrr.util.OsUtil
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -15,7 +15,7 @@ class LogEntryFileReaderSpec extends AnyWordSpec {
       "exist" in assert(Files.exists(p))
       "be readable" in {
         if (!OsUtil.isMac) { // fixme: currently this guard exists since otherwise we would have to fiddle around loading native libs on mac
-          val r = FileManager.from(p)
+          val r = IoManager.from(p)
           assert(!r.isEmpty)
         }
       }

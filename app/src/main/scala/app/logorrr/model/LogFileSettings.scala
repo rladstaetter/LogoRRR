@@ -1,17 +1,15 @@
 package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
-import app.logorrr.io.{FileManager, LogEntryFileReader}
-import app.logorrr.util.{CanLog, OsUtil}
+import app.logorrr.io.FileId
+import app.logorrr.util.CanLog
 import app.logorrr.views.search.Filter
-import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
 
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{Path, Paths}
 import java.time.Instant
-import scala.util.{Failure, Success, Try}
 
 object LogFileSettings {
 
@@ -32,8 +30,8 @@ object LogFileSettings {
   val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
   private val DefaultFontSize = 12
 
-  def apply(p: Path): LogFileSettings =
-    LogFileSettings(p.toAbsolutePath.toString
+  def apply(fileId: FileId): LogFileSettings =
+    LogFileSettings(fileId
       , DefaultSelectedIndex
       , Instant.now().toEpochMilli
       , DefaultDividerPosition
@@ -55,7 +53,7 @@ object LogFileSettings {
  * Filters define which keywords are relevant for this given log file.
  *
  */
-case class LogFileSettings(pathAsString: String
+case class LogFileSettings(fileId: FileId
                            , selectedLineNumber: Int
                            , firstOpened: Long
                            , dividerPosition: Double
@@ -65,33 +63,6 @@ case class LogFileSettings(pathAsString: String
                            , someLogEntryInstantFormat: Option[LogEntryInstantFormat]
                            , autoScroll: Boolean) extends CanLog {
 
-  val path: Path = Paths.get(pathAsString).toAbsolutePath
-
-  val isPathValid: Boolean =
-    if (OsUtil.isMac) {
-      Files.exists(path)
-    } else {
-      // without security bookmarks initialized, this returns false on mac
-      Files.isReadable(path) && Files.isRegularFile(path)
-    }
-
-  def readEntries(): ObservableList[LogEntry] = {
-    if (isPathValid) {
-      Try(someLogEntryInstantFormat match {
-        case None => FileManager.from(path)
-        case Some(instantFormat) => LogEntryFileReader.from(path, instantFormat)
-      }) match {
-        case Success(logEntries) =>
-          logEntries
-        case Failure(ex) =>
-          val msg = s"Could not load file $pathAsString"
-          logException(msg, ex)
-          FXCollections.observableArrayList()
-      }
-    } else {
-      logWarn(s"Could not read $pathAsString - does it exist?")
-      FXCollections.observableArrayList()
-    }
-  }
+  val path: Path = Paths.get(fileId.value).toAbsolutePath
 
 }

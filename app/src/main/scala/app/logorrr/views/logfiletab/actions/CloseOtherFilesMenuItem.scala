@@ -10,7 +10,7 @@ class CloseOtherFilesMenuItem(fileTab: => LogFileTab) extends MenuItem("Close Ot
   setOnAction(_ => {
     val toBeDeleted: Seq[Tab] = {
       tabPane.getTabs.asScala.flatMap { t =>
-        if (t.asInstanceOf[LogFileTab].pathAsString == fileTab.pathAsString) {
+        if (t.asInstanceOf[LogFileTab].fileId == fileTab.fileId) {
           None
         } else {
           t.asInstanceOf[LogFileTab].shutdown()

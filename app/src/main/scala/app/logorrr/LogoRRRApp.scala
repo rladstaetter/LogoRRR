@@ -34,6 +34,7 @@ object LogoRRRApp {
     LogoRRRGlobals.set(settings, hostServices)
     val logoRRRMain = new LogoRRRMain(JfxUtils.closeStage(stage))
     LogoRRRStage.init(stage, logoRRRMain)
+    logoRRRMain.initLogFilesFromConfig()
     LogoRRRStage.show(stage, logoRRRMain)
   }
 }

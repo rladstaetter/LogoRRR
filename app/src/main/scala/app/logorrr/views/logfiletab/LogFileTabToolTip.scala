@@ -1,5 +1,6 @@
 package app.logorrr.views.logfiletab
 
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import javafx.beans.binding.Bindings
 import javafx.collections.ObservableList
@@ -9,8 +10,8 @@ import javafx.util.Duration
 /**
  * Displays meta information of given file
  */
-class LogFileTabToolTip(pathAsString: String
+class LogFileTabToolTip(fileId: FileId
                         , logEntries: ObservableList[LogEntry]) extends Tooltip {
   this.setShowDelay(Duration.millis(100))
-  this.textProperty.bind(Bindings.concat(pathAsString, "\n", Bindings.size(logEntries).asString, " lines"))
+  this.textProperty.bind(Bindings.concat(fileId.absolutePathAsString, "\n", Bindings.size(logEntries).asString, " lines"))
 }

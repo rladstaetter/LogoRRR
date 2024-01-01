@@ -39,7 +39,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   def removeTailerListener(): Unit = filteredList.removeListener(scrollToEndEventListener)
 
-  val opsToolBar = new OpsToolBar(mutLogFileSettings.getPathAsString(), addFilter, entries, filteredList, mutLogFileSettings.blockSizeProperty)
+  val opsToolBar = new OpsToolBar(mutLogFileSettings.getFileId, addFilter, entries, filteredList, mutLogFileSettings.blockSizeProperty)
 
   private val filtersToolBar = {
     val fbtb = new FiltersToolBar(filteredList, removeFilter)
@@ -53,7 +53,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
 
   def init(): Unit = {
-    divider.setPosition(mutLogFileSettings.getDividerPosition())
+    divider.setPosition(mutLogFileSettings.getDividerPosition)
 
     setTop(opsRegion)
     setCenter(pane)

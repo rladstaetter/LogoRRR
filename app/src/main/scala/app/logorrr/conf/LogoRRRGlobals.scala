@@ -3,7 +3,7 @@ package app.logorrr.conf
 import app.logorrr.OsxBridge
 import app.logorrr.conf.SettingsIO.renderOptions
 import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
-import app.logorrr.io.{FilePaths, Fs}
+import app.logorrr.io.{FileId, FilePaths, Fs}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.util.{CanLog, OsUtil}
 import javafx.application.HostServices
@@ -20,7 +20,7 @@ import java.nio.file.Path
  */
 object LogoRRRGlobals extends CanLog {
 
-  val mutSettings = new MutSettings
+  private val mutSettings = new MutSettings
 
   private val hostServicesProperty = new SimpleObjectProperty[HostServices]()
 
@@ -60,42 +60,51 @@ object LogoRRRGlobals extends CanLog {
   def getHostServices: HostServices = hostServicesProperty.get()
 
   def set(settings: Settings, hostServices: HostServices): Unit = {
-    mutSettings.set(settings)
+    mutSettings.setStageSettings(settings.stageSettings)
+    mutSettings.setLogFileSettings(settings.fileSettings)
+    mutSettings.setSomeActive(settings.someActive)
+    mutSettings.setSomeLastUsedDirectory(settings.someLastUsedDirectory)
+
     setHostServices(hostServices)
   }
 
   /** a case class representing current setting state */
   def getSettings: Settings = mutSettings.petrify()
 
-  def setSomeActiveLogFile(sActive: Option[String]): Unit = {
-    mutSettings.setSomeActive(sActive)
-  }
+  def setSomeActiveLogFile(sActive: Option[FileId]): Unit = mutSettings.setSomeActive(sActive)
 
-  def getSomeActiveLogFile: Option[String] = mutSettings.getSomeActiveLogFile
+  def getSomeActiveLogFile: Option[FileId] = mutSettings.getSomeActiveLogFile
 
   def getSomeLastUsedDirectory: Option[Path] = mutSettings.getSomeLastUsedDirectory
 
   def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit = mutSettings.setSomeLastUsedDirectory(someDirectory)
 
-  def removeLogFile(pathAsString: String): Unit = timeR({
-    mutSettings.removeLogFileSetting(pathAsString)
+  def removeLogFile(fileId: FileId): Unit = timeR({
+    mutSettings.removeLogFileSetting(fileId)
     mutSettings.setSomeActive(mutSettings.getSomeActiveLogFile match {
-      case Some(value) if value == pathAsString => None
+      case Some(value) if value == fileId => None
       case x => x
     })
 
     if (OsUtil.enableSecurityBookmarks) {
-      OsxBridge.releasePath(pathAsString)
+      if (fileId.isZip) {
+        // only release path if no other file is opened anymore for this particular zip file
+        val zipInQuestion = fileId.extractZipFileId
+        if (!LogoRRRGlobals.getOrderedLogFileSettings.map(_.fileId.extractZipFileId).contains(zipInQuestion)) {
+          OsxBridge.releasePath(fileId.extractZipFileId.absolutePathAsString)
+        }
+      } else {
+        OsxBridge.releasePath(fileId.absolutePathAsString)
+      }
     }
 
-  }, s"Removed file $pathAsString ...")
+  }, s"Removed file $fileId ...")
 
   def clearLogFileSettings(): Unit = mutSettings.clearLogFileSettings()
 
-  def getLogFileSettings(pathAsString: String): MutLogFileSettings = {
-    mutSettings.getMutLogFileSetting(pathAsString)
-  }
-
   def registerSettings(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
+
+  def getLogFileSettings(fileId: FileId): MutLogFileSettings = mutSettings.getMutLogFileSetting(fileId)
+
 
 }
