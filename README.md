@@ -7,6 +7,9 @@ interest.
 
 ![Screenshot of LogoRRR, version 24.2.0](docs/releases/24.2.0/182-add-zipfile-support.gif?raw=true)
 
+More  [Screenshots](Screenshots.md) are available [here](Screenshots.md).
+
+
 ## Windows and Linux installation
 
 **You can download the latest [Windows and Linux installers here](https://github.com/rladstaetter/LogoRRR/releases/tag/24.1.0)**
@@ -28,10 +31,6 @@ Older releases versions are available on the [releases page](https://github.com/
 - **Efficiency at Your Fingertips**: Quick keyboard shortcuts streamline your workflow.
 - **User-Friendly Memory**: `LogoRRR` smartly recalls your last files and settings on restart.
 
-
-## Screenshots
-
-If you want to see [LogoRRR in action](Screenshots.md), click [here](Screenshots.md).
 
 ## License
 
