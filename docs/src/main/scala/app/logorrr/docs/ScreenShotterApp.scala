@@ -38,7 +38,7 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
     val s1 = Seq[Area](R1440x900)
     val s2 = Seq[Area](R2560x1600)
     val s3 = Seq[Area](R2880x1800)
-    for (Area(w, h, _, _) <- s3) {
+    for (Area(w, h, _, _) <- s0) {
       val path = Paths.get(s"docs/src/main/resources/screenshotter-$w-$h.conf")
       val settings: Settings = SettingsIO.fromFile(path)
       val updatedSettings = settings.copy(stageSettings = settings.stageSettings.copy(width = w, height = h + 28))
