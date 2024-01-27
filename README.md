@@ -5,7 +5,7 @@ fact, when you get an error, you may simply want to see what happened as fast as
 is a tool that does precisely that and provides you with a quick way to filter out critical events or other points of
 interest.
 
-![Screenshot of LogoRRR, version 24.2.0](docs/releases/24.2.0/screenshot-24.2.0.gif?raw=true)
+[![Watch a video of LogoRRRs features](https://img.youtube.com/vi/5ogC95PX0Ag/maxresdefault.jpg)](https://youtu.be/5ogC95PX0Ag)
 
 More  [Screenshots](Screenshots.md) are available [here](Screenshots.md).
 
@@ -32,7 +32,6 @@ Older releases versions are available on the [releases page](https://github.com/
 - **Efficiency at Your Fingertips**: Quick keyboard shortcuts streamline your workflow.
 - **Easy export**: Copy your extracted data to the clipboard - to include it in emails for example.
 - **Remembers settings**: `LogoRRR` smartly recalls your last files and settings on restart.
-
 
 ## License
 
