@@ -1,6 +1,5 @@
 package app.logorrr.io
 
-import app.logorrr.LogoRRRNative
 import org.scalatest.wordspec.AnyWordSpec
 
 import java.nio.file.Paths

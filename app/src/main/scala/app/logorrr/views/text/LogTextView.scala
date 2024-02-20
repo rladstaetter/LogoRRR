@@ -57,7 +57,7 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
     }))
 
     // when changing font size, repaint
-    mutLogFileSettings.fontSizeProperty.addListener(JfxUtils.onNew[Number](n => {
+    mutLogFileSettings.fontSizeProperty.addListener(JfxUtils.onNew[Number](_ => {
       refresh() // otherwise listview is not repainted correctly since calculation of the cellheight is broken atm
     }))
   }

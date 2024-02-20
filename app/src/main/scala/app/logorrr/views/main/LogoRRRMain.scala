@@ -7,7 +7,6 @@ import app.logorrr.util.CanLog
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.layout.BorderPane
 
-import java.nio.file.Path
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration

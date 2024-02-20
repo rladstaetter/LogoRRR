@@ -289,6 +289,7 @@
                     </executions>
                     <configuration>
                         <scalaVersion>${scala.version}</scalaVersion>
+                        <failOnError>true</failOnError>
                         <args>
                             <arg>-deprecation</arg>
                             <arg>-encoding</arg>
@@ -317,6 +318,7 @@
                             <arg>-Xlint:type-parameter-shadow</arg>
                             <arg>-Ywarn-unused</arg>
                             <arg>-Yrangepos</arg>
+                            <arg>-Werror</arg>
                         </args>
                     </configuration>
 

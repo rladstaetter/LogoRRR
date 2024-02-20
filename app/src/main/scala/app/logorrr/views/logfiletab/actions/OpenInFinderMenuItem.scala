@@ -5,7 +5,6 @@ import app.logorrr.util.OsUtil
 import javafx.scene.control.MenuItem
 
 import java.awt.Desktop
-import java.nio.file.Paths
 
 object OpenInFinderMenuItem {
   val menuItemText: String = if (OsUtil.isWin) {

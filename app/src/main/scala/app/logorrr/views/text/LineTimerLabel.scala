@@ -9,6 +9,7 @@ object LineTimerLabel {
 
   def apply(instant: Instant): LineTimerLabel = {
     val ldl = new LineTimerLabel
+    ldl.setText(instant.toString)
     ldl
   }
 }

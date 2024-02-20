@@ -2,10 +2,8 @@ package app.logorrr.io
 
 import app.logorrr.util.CanLog
 
-import java.io.IOException
 import java.nio.charset.Charset
 import java.nio.file._
-import java.nio.file.attribute.BasicFileAttributes
 
 /**
  * File related operations

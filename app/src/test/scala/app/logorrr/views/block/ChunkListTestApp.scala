@@ -1,7 +1,6 @@
 package app.logorrr.views.block
 
 import app.logorrr.LogoRRRApp
-import app.logorrr.io.IoManager
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.search.Filter
@@ -13,9 +12,6 @@ import javafx.scene.Scene
 import javafx.scene.control._
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
-
-import java.nio.file.Path
-import java.util
 
 /**
  * App to test block list view
@@ -31,11 +27,11 @@ object ChunkListTestApp {
 }
 
 class ChunkListTestApp extends Application with CanLog {
-
+/*
   private def mkEntries(path: Path): java.util.List[LogEntry] = {
     util.Arrays.asList((for ((l, i) <- IoManager.fromPathUsingSecurityBookmarks(path).zipWithIndex) yield LogEntry(i, l, None)): _*)
   }
-
+*/
   def start(stage: Stage): Unit = {
 
     val width = 1000

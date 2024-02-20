@@ -6,8 +6,6 @@ import app.logorrr.views.menubar.{FileMenu, HelpMenu}
 import javafx.scene.control.MenuBar
 import javafx.stage.Window
 
-import java.nio.file.Path
-
 class MainMenuBar(getWindow: () => Window
                   , openFile: FileId => Unit
                   , closeAllLogFiles: => Unit

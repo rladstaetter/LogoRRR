@@ -6,13 +6,13 @@ import app.logorrr.util.CanLog
 import javafx.collections.ObservableList
 import org.apache.commons.io.input.Tailer
 
-import java.nio.file.Paths
+import java.time.Duration
 
 /**
  * If active, this class adds entries to the given logEntries observable list.
  *
- * @param fileId path to log file
- * @param logEntries   list which will be modified if log file changes
+ * @param fileId     path to log file
+ * @param logEntries list which will be modified if log file changes
  */
 case class LogTailer(fileId: FileId
                      , logEntries: ObservableList[LogEntry])
@@ -20,7 +20,14 @@ case class LogTailer(fileId: FileId
 
   var currentTailer: Option[Tailer] = None
 
-  private def mkTailer(): Tailer = new Tailer(fileId.asPath.toFile, new LogEntryListener(logEntries), 1000, true)
+  private def mkTailer(): Tailer = {
+    Tailer.builder()
+      .setFile(fileId.asPath.toFile)
+      .setTailerListener(new LogEntryListener(logEntries))
+      .setDelayDuration(Duration.ofMillis(1000))
+      .setTailFromEnd(true)
+      .get()
+  }
 
   /** start observing log file for changes */
   def start(): Unit = synchronized {
@@ -35,7 +42,7 @@ case class LogTailer(fileId: FileId
   def stop(): Unit = timeR({
     currentTailer match {
       case Some(tailer) =>
-        tailer.stop()
+        tailer.close()
         currentTailer = None
       case None =>
         logWarn("No LogTailer was active, ignoring ...")
