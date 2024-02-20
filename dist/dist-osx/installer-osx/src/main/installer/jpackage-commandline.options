@@ -20,7 +20,7 @@
 --mac-app-category public.app-category.developer-tools
 --dest installer
 --add-modules jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported
---jlink-options "--strip-native-commands --no-header-files --no-man-pages --compress=2 --strip-debug --include-locales=en"
+--jlink-options "--strip-native-commands --no-header-files --no-man-pages --compress=zip-6 --strip-debug --include-locales=en"
 --app-version ${revision}
 --main-class ${main.launcher.class}
 --java-options -Xmx4096m
