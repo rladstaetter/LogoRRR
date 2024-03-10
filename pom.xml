@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>app.logorrr</groupId>
     <artifactId>logorrr</artifactId>
@@ -7,28 +7,21 @@
     <name>app.logorrr</name>
     <description>LogoRRR - the log visualisation tool</description>
     <packaging>pom</packaging>
-
     <properties>
-
         <!-- make sure you either set following properties here or in your settings xml (preferred) -->
-
         <!--
-        <jdk.home>/path/to/jdk</jdk.home> (mac, linux, windows)
-        <graalvm.home>/path/to/graalvm</graalvm.home> (mac, linux, windows)
-        <osx.jdk.home.aarch64>/path/to/aarch64/jdk</osx.jdk.home.aarch64> (mac)
-        -->
-
+            <jdk.home>/path/to/jdk</jdk.home> (mac, linux, windows)
+            <graalvm.home>/path/to/graalvm</graalvm.home> (mac, linux, windows)
+            <osx.jdk.home.aarch64>/path/to/aarch64/jdk</osx.jdk.home.aarch64> (mac)
+            -->
         <revision>24.3.0</revision>
-
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.12</scala.version>
-
         <openjfx.version>21.0.1</openjfx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <ikonli.version>12.3.1</ikonli.version>
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
         <gluonfx.plugin.version>1.0.18</gluonfx.plugin.version>
-
         <!-- no need to change these -->
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,14 +30,13 @@
         <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
         <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
         <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
+        <jmh.version>1.33</jmh.version>
     </properties>
-
     <scm>
         <connection>scm:git:https://github.com/rladstaetter/LogoRRR.git</connection>
         <developerConnection>scm:git:https://github.com/rladstaetter/LogoRRR.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
-
     <profiles>
         <profile>
             <id>OS.windows</id>
@@ -56,8 +48,8 @@
             <properties>
                 <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
                 <!-- graalvm builds disabled until https://github.com/rladstaetter/LogoRRR/issues/91
-                <graalvm.home>C:\Program Files\Java\graalvm-svm-java11-windows-gluon-22.1.0.1-Final</graalvm.home>
-                -->
+                        <graalvm.home>C:\Program Files\Java\graalvm-svm-java11-windows-gluon-22.1.0.1-Final</graalvm.home>
+                        -->
                 <!-- see also dist/dist-win/pom.xml! -->
                 <openjfx.os.prefix>windows</openjfx.os.prefix>
             </properties>
@@ -111,13 +103,13 @@
                                             </message>
                                         </requireProperty>
                                         <!--
-                                        <requireProperty>
-                                            <property>graalvm.home</property>
-                                            <message>You have to set 'graalvm.home' and point to a correct graalvm
-                                                installation.
-                                            </message>
-                                        </requireProperty>
-                                        -->
+                                                            <requireProperty>
+                                                                <property>graalvm.home</property>
+                                                                <message>You have to set 'graalvm.home' and point to a correct graalvm
+                                                                    installation.
+                                                                </message>
+                                                            </requireProperty>
+                                                            -->
                                         <requireProperty>
                                             <property>osx.jdk.home.aarch64</property>
                                             <message>You have to set 'osx.jdk.home.aarch64' and it must point to a
@@ -147,8 +139,13 @@
                 <module>env</module>
             </modules>
         </profile>
+        <profile>
+            <id>benchmarks</id>
+            <modules>
+                <module>benchmarks</module>
+            </modules>
+        </profile>
     </profiles>
-
     <modules>
         <module>core</module>
         <module>build</module>
@@ -156,7 +153,6 @@
         <module>dist</module>
         <module>docs</module>
     </modules>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -244,6 +240,17 @@
                 <artifactId>dist-repackaged</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-core</artifactId>
+                <version>${jmh.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-generator-annprocess</artifactId>
+                <version>${jmh.version}</version>
+                <scope>provided</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
@@ -321,7 +328,6 @@
                             <arg>-Werror</arg>
                         </args>
                     </configuration>
-
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -464,18 +470,18 @@
                             <configuration>
                                 <rules>
                                     <!-- disable graalvm builds until https://github.com/rladstaetter/LogoRRR/issues/91 is resolved
-                                    <requireProperty>
-                                        <property>graalvm.home</property>
-                                        <message>You have to set 'graalvm.home' and point to a correct graalvm
-                                            installation.
-                                        </message>
-                                    </requireProperty>
-                                    <requireFilesExist>
-                                        <files>
-                                            <file>${graalvm.home}/GRAALVM-README.md</file>
-                                        </files>
-                                    </requireFilesExist>
-                                    -->
+                                                      <requireProperty>
+                                                          <property>graalvm.home</property>
+                                                          <message>You have to set 'graalvm.home' and point to a correct graalvm
+                                                              installation.
+                                                          </message>
+                                                      </requireProperty>
+                                                      <requireFilesExist>
+                                                          <files>
+                                                              <file>${graalvm.home}/GRAALVM-README.md</file>
+                                                          </files>
+                                                      </requireFilesExist>
+                                                      -->
                                     <requireProperty>
                                         <property>jdk.home</property>
                                         <message>You have to set 'jdk.home' and point to a correct jdk
@@ -519,6 +525,19 @@
                     <groupId>com.googlecode.maven-download-plugin</groupId>
                     <artifactId>download-maven-plugin</artifactId>
                     <version>1.6.8</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.openjdk.jmh</groupId>
+                    <artifactId>jmh-maven-plugin</artifactId>
+                    <version>${jmh.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>clean</goal>
+                                <goal>test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
