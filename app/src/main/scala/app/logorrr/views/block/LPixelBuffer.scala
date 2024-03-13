@@ -26,7 +26,7 @@ object LPixelBuffer extends CanLog {
     val nrOfBlocksInX = width / blockSize
     val xPos = (i % nrOfBlocksInX) * blockSize
     val yPos = (i / nrOfBlocksInX) * blockSize
-    drawRect(rawInts
+    drawSquare(rawInts
       , color
       , xPos
       , yPos
@@ -36,13 +36,13 @@ object LPixelBuffer extends CanLog {
     )
   }
 
-  private def drawRect(rawInts: Array[Int],
-                       col: Int,
-                       x: Int,
-                       y: Int,
-                       width: Int,
-                       height: Int,
-                       canvasWidth: Int): Unit = {
+  private def drawSquare(rawInts: Array[Int],
+                         col: Int,
+                         x: Int,
+                         y: Int,
+                         width: Int,
+                         height: Int,
+                         canvasWidth: Int): Unit = {
 
     val maxHeight = y + height
     val length = width - 1
@@ -100,29 +100,50 @@ case class LPixelBuffer(blockNumber: Int
 
   def filters: Seq[Filter] = Option(filtersProperty).map(_.asScala.toSeq).getOrElse(Seq())
 
-
-
-  // todo check visibility
   private def paint(): Unit = {
-    if (blockSize != 0) {
-      if (shape.width > blockSize) {
-        updateBuffer((_: PixelBuffer[IntBuffer]) => {
-          cleanBackground()
-          var i = 0
-          entries.forEach(e => {
-            if (e.lineNumber == selectedLineNumberProperty.getValue) {
-              LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, yellow)
-            } else {
-              val col = ColorUtil.toARGB(Filter.calcColor(e.value, filters))
-              LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, col)
-            }
-            i = i + 1
-          })
-          shape
-        })
+    if (blockSize != 0 && shape.width > blockSize) {
+      if (blockSize == 1) {
+        paintPixels()
+      } else if (blockSize > 1) {
+        paintRects()
       }
     }
   }
 
+  /**
+   * if blocksize is only equal to 1, set it pixel by pixel
+   */
+  private def paintPixels(): Unit = {
+    updateBuffer((_: PixelBuffer[IntBuffer]) => {
+      cleanBackground()
+      var i = 0
+      entries.forEach(e => {
+        if (e.lineNumber == selectedLineNumberProperty.getValue) {
+          rawInts(i) = yellow
+        } else {
+          val col = ColorUtil.toARGB(Filter.calcColor(e.value, filters))
+          rawInts(i) = col
+        }
+        i = i + 1
+      })
+      shape
+    })
+  }
 
+  private def paintRects(): Unit = {
+    updateBuffer((_: PixelBuffer[IntBuffer]) => {
+      cleanBackground()
+      var i = 0
+      entries.forEach(e => {
+        if (e.lineNumber == selectedLineNumberProperty.getValue) {
+          LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, yellow)
+        } else {
+          val col = ColorUtil.toARGB(Filter.calcColor(e.value, filters))
+          LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, col)
+        }
+        i = i + 1
+      })
+      shape
+    })
+  }
 }
