@@ -41,7 +41,6 @@ class ChunkListTestApp extends Application with CanLog {
     val selectedLineNumber = 0
 
     val entries: java.util.List[LogEntry] = ChunkSpec.mkTestLogEntries(1000)
-    //val entries: java.util.List[LogEntry] = mkEntries(Paths.get("/Users/lad/logfiles/biglog.txt"))
     val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList(LogFileSettings.DefaultFilter: _*))
     val entriesProperty = new SimpleListProperty[LogEntry](FXCollections.observableArrayList(entries))
 

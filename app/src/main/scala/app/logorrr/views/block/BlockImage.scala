@@ -7,6 +7,15 @@ import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
 import javafx.scene.image.WritableImage
 
+object BlockConstants {
+
+  /**
+   * minimum block size
+   */
+  val MinSize = 1
+
+}
+
 object BlockImage {
 
   val MaxWidth = 4096
