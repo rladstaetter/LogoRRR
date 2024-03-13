@@ -22,12 +22,16 @@ object LPixelBuffer extends CanLog {
                , i: Int
                , width: Int
                , blockSize: Int
-               , color: Int): Unit = {
+               , color: Int
+               , darkColor: Int
+               , brightColor: Int): Unit = {
     val nrOfBlocksInX = width / blockSize
     val xPos = (i % nrOfBlocksInX) * blockSize
     val yPos = (i / nrOfBlocksInX) * blockSize
     drawSquare(rawInts
       , color
+      , darkColor
+      , brightColor
       , xPos
       , yPos
       , blockSize
@@ -36,17 +40,18 @@ object LPixelBuffer extends CanLog {
     )
   }
 
-  private def drawSquare(rawInts: Array[Int],
-                         col: Int,
-                         x: Int,
-                         y: Int,
-                         width: Int,
-                         height: Int,
-                         canvasWidth: Int): Unit = {
-
+  private def drawSquare(rawInts: Array[Int]
+                         , col: Int
+                         , darkCol: Int
+                         , brightCol: Int
+                         , x: Int
+                         , y: Int
+                         , width: Int
+                         , height: Int
+                         , canvasWidth: Int): Unit = {
     val maxHeight = y + height
     val length = width - 1
-    val almostLength = length - 1
+    val squarewidth = length - 1
     // Calculate start and end indices for updating rawInts
     val startIdx = y * canvasWidth + x
     val endIdx = maxHeight * canvasWidth + x + length
@@ -56,12 +61,30 @@ object LPixelBuffer extends CanLog {
       // Update rawInts directly without array copying
       for (ly <- y until maxHeight - 1) {
         val startPos = ly * canvasWidth + x
-        val endPos = startPos + length
-        if (startPos >= 0 && endPos < rawInts.length) {
+       // val endPos = startPos + length
+        // if (startPos >= 0 && endPos < rawInts.length) {
           // Fill the portion of rawInts with lineArray
-          for (i <- 0 to almostLength) rawInts(startPos + i) = col
-        }
+          for (i <- 0 to squarewidth) rawInts(startPos + i) = col
+        //}
       }
+
+      // paint highlights & shadows if sequare is big enough
+      if ((width >= 2) && (height >= 2)) {
+        // first highlight: upper left corner to upper right corner
+        for (i <- 0 to squarewidth) rawInts(y * canvasWidth + x + i) = brightCol
+        // first highlight: lower left corner to lower right corner
+        for (i <- 0 to squarewidth) rawInts((maxHeight - 1) * canvasWidth + x + i) = darkCol
+
+        // calculate x positions : starting from (y * canvasWidth + x) being the upper left corner,
+        // with a step size of canvasWidth we get the coordinates of the left border
+        for (ly <- y until maxHeight - 1) {
+          rawInts(ly * canvasWidth + x) = brightCol
+          // the same for the right border, but with another offset
+          rawInts(ly * canvasWidth + x + length) = darkCol
+        }
+
+      }
+
     }
   }
 }
@@ -83,7 +106,10 @@ case class LPixelBuffer(blockNumber: Int
   private val name = s"${range.start}_${range.end}"
 
   lazy val background: Array[Int] = Array.fill(shape.area)(LPixelBuffer.defaultBackgroundColor)
-  private lazy val yellow = ColorUtil.toARGB(Color.YELLOW)
+  private val highlightedColor = Color.YELLOW
+  private lazy val yellow = ColorUtil.toARGB(highlightedColor)
+  private lazy val yellowBright = ColorUtil.toARGB(highlightedColor.brighter())
+  private lazy val yellowDark = ColorUtil.toARGB(highlightedColor.darker)
 
   init()
 
@@ -136,10 +162,19 @@ case class LPixelBuffer(blockNumber: Int
       var i = 0
       entries.forEach(e => {
         if (e.lineNumber == selectedLineNumberProperty.getValue) {
-          LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, yellow)
+          LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, yellow, yellowBright, yellowDark)
         } else {
-          val col = ColorUtil.toARGB(Filter.calcColor(e.value, filters))
-          LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, col)
+          val color = Filter.calcColor(e.value, filters)
+          val colorDark = color.darker()
+          val colorBright = color.brighter()
+          LPixelBuffer.drawRect(rawInts
+            , i
+            , shape.width
+            , blockSize
+            , ColorUtil.toARGB(color)
+            , ColorUtil.toARGB(colorDark)
+            , ColorUtil.toARGB(colorBright)
+          )
         }
         i = i + 1
       })
