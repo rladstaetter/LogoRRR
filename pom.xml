@@ -161,6 +161,12 @@
                 <version>${scala.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.testfx</groupId>
+                <artifactId>testfx-core</artifactId>
+                <version>4.0.18</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-controls</artifactId>
                 <version>${openjfx.version}</version>
