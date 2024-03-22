@@ -1,11 +1,10 @@
-package app.logorrr.testfx
+package org.testfx.api
 
 import javafx.application.{Application, HostServices, Preloader}
 import javafx.stage.Stage
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.scalacheck.Checkers
-import org.testfx.api.{FxRobot, FxToolkit}
 
 abstract class TestFxSpec extends FxRobot with AnyWordSpecLike with Checkers with BeforeAndAfterAll with ApplicationFixture {
   me =>

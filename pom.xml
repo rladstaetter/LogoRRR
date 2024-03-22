@@ -150,6 +150,7 @@
         <module>core</module>
         <module>build</module>
         <module>app</module>
+        <module>app-tests</module>
         <module>dist</module>
         <module>docs</module>
     </modules>

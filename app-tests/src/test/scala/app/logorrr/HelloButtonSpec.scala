@@ -1,11 +1,10 @@
 package app.logorrr
 
-import app.logorrr.testfx.TestFxSpec
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
-import org.testfx.api.FxAssert
+import org.testfx.api.{FxAssert, TestFxSpec}
 import org.testfx.matcher.control.LabeledMatchers
 
 class HelloButtonSpec extends TestFxSpec {

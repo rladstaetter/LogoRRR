@@ -8,45 +8,18 @@
         <artifactId>logorrr</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
-    <artifactId>app</artifactId>
-    <description>Main application code for LogoRRR</description>
-    <inceptionYear>2021</inceptionYear>
-    <name>app.logorrr.app</name>
+    <artifactId>app-tests</artifactId>
+    <description>Frontend / Integration tests for LogoRRR</description>
+    <inceptionYear>2024</inceptionYear>
+    <name>app.logorrr.app-tests</name>
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
         </dependency>
-        <!-- uncomment if atlantafx is needed for enhancing css
-        <dependency>
-            <groupId>io.github.mkpaz</groupId>
-            <artifactId>atlantafx-base</artifactId>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>org.kordamp.ikonli</groupId>
-            <artifactId>ikonli-javafx</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.kordamp.ikonli</groupId>
-            <artifactId>ikonli-fontawesome5-pack</artifactId>
-        </dependency>
-        <!-- needed for Tailer functionality -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.pureconfig</groupId>
-            <artifactId>pureconfig_${scala.major.version}</artifactId>
-        </dependency>
         <dependency>
             <groupId>app.logorrr</groupId>
-            <artifactId>core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>build</artifactId>
+            <artifactId>app</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -70,23 +43,6 @@
         </dependency>
     </dependencies>
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>app/**</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>application.conf</include>
-                    <include>meta.conf</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

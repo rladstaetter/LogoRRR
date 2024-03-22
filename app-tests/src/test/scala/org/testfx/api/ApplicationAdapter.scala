@@ -1,4 +1,4 @@
-package app.logorrr.testfx
+package org.testfx.api
 
 import javafx.application.Application
 import javafx.stage.Stage
