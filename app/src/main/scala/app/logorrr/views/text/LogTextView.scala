@@ -14,6 +14,8 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
   extends ListView[LogEntry]
     with CanLog {
 
+  setId("")
+
   def scrollToItem(item: LogEntry): Unit = {
     getSelectionModel.select(item)
     val relativeIndex = getItems.indexOf(item)

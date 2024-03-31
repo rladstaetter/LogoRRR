@@ -52,8 +52,9 @@ object LogFileTab {
       , entries)
   }
 
-}
+  def idFor(fileId: FileId): String = "logfiletab-" + HashUtil.md5Sum(fileId)
 
+}
 
 /**
  * Represents a single 'document' UI approach for a log file.
@@ -67,6 +68,8 @@ class LogFileTab(val fileId: FileId
                  , val entries: ObservableList[LogEntry]) extends Tab
   with TimerCode
   with CanLog {
+
+  setId(LogFileTab.idFor(fileId))
 
   if (fileId.isZipEntry) {
     setStyle(LogFileTab.ZipBackgroundStyle)

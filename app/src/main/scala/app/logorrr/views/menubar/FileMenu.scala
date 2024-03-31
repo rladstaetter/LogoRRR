@@ -2,7 +2,9 @@ package app.logorrr.views.menubar
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
+import app.logorrr.services.fileservices.LogoRRRFileOpenService
 import app.logorrr.util.{CanLog, OsUtil}
+import app.logorrr.views.LogoRRRNodes
 import javafx.scene.control.{Menu, MenuItem}
 import javafx.stage.{FileChooser, Window}
 
@@ -22,13 +24,15 @@ class LogoRRRFileChooser(title: String) {
 
 }
 
+
 object FileMenu {
 
-  class OpenMenuItem(getWindow: () => Window, openFile: FileId => Unit)
+  class OpenMenuItem(fileOpenService: LogoRRRFileOpenService
+                     , openFile: FileId => Unit)
     extends MenuItem("Open") with CanLog {
-
+    setId(LogoRRRNodes.FileMenuOpenFile)
     setOnAction(_ => {
-      new LogoRRRFileChooser("Open log file").showAndWait(getWindow()) match {
+      fileOpenService.openFile match {
         case Some(logFile) => openFile(FileId(logFile))
         case None => logTrace("Cancelled open file ...")
       }
@@ -46,17 +50,23 @@ object FileMenu {
 
 }
 
-class FileMenu(getWindow: () => Window
+class FileMenu(fileOpenService: LogoRRRFileOpenService
                , openFile: FileId => Unit
                , closeAllLogFiles: => Unit
                , closeApplication: => Unit) extends Menu("File") with CanLog {
 
+  setId(LogoRRRNodes.FileMenu)
+
+  lazy val openMenuItem = new FileMenu.OpenMenuItem(fileOpenService, openFile)
+  lazy val closeAllMenuItem = new FileMenu.CloseAllMenuItem(closeAllLogFiles)
+  lazy val quitMenuItem = new FileMenu.QuitMenuItem(closeApplication)
+
   def init(): Unit = {
     getItems.clear()
-    getItems.add(new FileMenu.OpenMenuItem(getWindow, openFile))
-    getItems.add(new FileMenu.CloseAllMenuItem(closeAllLogFiles))
+    getItems.add(openMenuItem)
+    getItems.add(closeAllMenuItem)
     if (OsUtil.isWin) {
-      getItems.add(new FileMenu.QuitMenuItem(closeApplication))
+      getItems.add(quitMenuItem)
     }
   }
 

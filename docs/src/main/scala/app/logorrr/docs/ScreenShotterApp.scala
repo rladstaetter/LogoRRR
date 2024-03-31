@@ -4,6 +4,9 @@ import app.logorrr.conf._
 import app.logorrr.docs.Area._
 import app.logorrr.io.Fs
 import app.logorrr.meta.AppMeta
+import app.logorrr.services.LogoRRRServices
+import app.logorrr.services.fileservices.NativeOpenFileService
+import app.logorrr.services.hostservices.NativeHostServices
 import app.logorrr.util.CanLog
 import app.logorrr.{LogoRRRApp, LogoRRRNative}
 import javafx.application.Application
@@ -45,7 +48,12 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
       val settings: Settings = SettingsIO.fromFile(path)
       val updatedSettings = settings.copy(stageSettings = settings.stageSettings.copy(width = w, height = h + 28))
 
-      LogoRRRApp.start(stage, updatedSettings, getHostServices)
+      val services = LogoRRRServices(
+        new NativeHostServices(getHostServices)
+        , new NativeOpenFileService(() => stage.getScene.getWindow)
+        , isUnderTest = false)
+
+      LogoRRRApp.start(stage, updatedSettings, services)
 
       val bPath = Paths.get(s"docs/releases/${AppMeta.appVersion}/")
       Fs.createDirectories(bPath)

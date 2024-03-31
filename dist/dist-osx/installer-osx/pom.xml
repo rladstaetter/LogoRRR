@@ -32,6 +32,12 @@
             <classifier>dylibs</classifier>
             <type>zip</type>
         </dependency>
+        <!-- adds dependency to force app-tests to be run before proceeding with this module -->
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>app-tests</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -75,7 +81,7 @@
                             <overWriteIfNewer>true</overWriteIfNewer>
                             <includeScope>compile</includeScope>
                             <includeScope>runtime</includeScope>
-                            <excludeArtifactIds>native-osx</excludeArtifactIds>
+                            <excludeArtifactIds>native-osx,app-tests</excludeArtifactIds>
                         </configuration>
                     </execution>
                     <execution>
