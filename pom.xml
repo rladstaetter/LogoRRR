@@ -16,12 +16,12 @@
             -->
         <revision>24.3.0</revision>
         <scala.major.version>2.13</scala.major.version>
-        <scala.version>${scala.major.version}.12</scala.version>
-        <openjfx.version>21.0.1</openjfx.version>
+        <scala.version>${scala.major.version}.13</scala.version>
+        <openjfx.version>22</openjfx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <ikonli.version>12.3.1</ikonli.version>
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-        <gluonfx.plugin.version>1.0.18</gluonfx.plugin.version>
+        <gluonfx.plugin.version>1.0.22</gluonfx.plugin.version>
         <!-- no need to change these -->
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
