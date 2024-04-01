@@ -6,9 +6,10 @@ import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.control.TabPane
 import org.junit.jupiter.api.Test
 
-import java.nio.file.Paths
-
-class OpenAndCloseFileTest extends LogoRRRSingleFileApplicationTest(Paths.get("src/test/resources/app/logorrr/OpenFileTest.log")) {
+/**
+ * Checks if a file can be opened and closed
+ */
+class OpenAndCloseFileTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
 
   /**
    * checks if an open file creates a new logfiletab with an id matching the file opened.
