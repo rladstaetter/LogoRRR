@@ -30,7 +30,7 @@ object FileMenu {
   class OpenMenuItem(fileOpenService: LogoRRRFileOpenService
                      , openFile: FileId => Unit)
     extends MenuItem("Open") with CanLog {
-    setId(LogoRRRNodes.FileMenuOpenFile)
+    setId(LogoRRRNodes.FileMenuOpenFile.value)
     setOnAction(_ => {
       fileOpenService.openFile match {
         case Some(logFile) => openFile(FileId(logFile))
@@ -41,6 +41,7 @@ object FileMenu {
   }
 
   class CloseAllMenuItem(removeAllLogFiles: => Unit) extends MenuItem("Close All") {
+    setId(LogoRRRNodes.FileMenuCloseAll.value)
     setOnAction(_ => removeAllLogFiles)
   }
 
@@ -55,7 +56,7 @@ class FileMenu(fileOpenService: LogoRRRFileOpenService
                , closeAllLogFiles: => Unit
                , closeApplication: => Unit) extends Menu("File") with CanLog {
 
-  setId(LogoRRRNodes.FileMenu)
+  setId(LogoRRRNodes.FileMenu.value)
 
   lazy val openMenuItem = new FileMenu.OpenMenuItem(fileOpenService, openFile)
   lazy val closeAllMenuItem = new FileMenu.CloseAllMenuItem(closeAllLogFiles)

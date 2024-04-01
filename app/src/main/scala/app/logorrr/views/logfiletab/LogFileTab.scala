@@ -5,7 +5,7 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
-import app.logorrr.views.LogoRRRAccelerators
+import app.logorrr.views.{LogoRRRAccelerators, LogoRRRNode}
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.logfiletab.actions._
 import app.logorrr.views.search.Fltr
@@ -52,7 +52,7 @@ object LogFileTab {
       , entries)
   }
 
-  def idFor(fileId: FileId): String = "logfiletab-" + HashUtil.md5Sum(fileId)
+  def idFor(fileId: FileId): LogoRRRNode = LogoRRRNode("logfiletab-" + HashUtil.md5Sum(fileId))
 
 }
 
@@ -69,7 +69,7 @@ class LogFileTab(val fileId: FileId
   with TimerCode
   with CanLog {
 
-  setId(LogFileTab.idFor(fileId))
+  setId(LogFileTab.idFor(fileId).value)
 
   if (fileId.isZipEntry) {
     setStyle(LogFileTab.ZipBackgroundStyle)
