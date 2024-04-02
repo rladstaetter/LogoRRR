@@ -1,17 +1,18 @@
-package app.logorrr
+package app.logorrr.usecases.openclose
 
 import app.logorrr.io.FileId
 import app.logorrr.views.LogoRRRNodes
 import app.logorrr.views.logfiletab.LogFileTab
+import app.logorrr.{MultipleFileApplicationTest, TestFiles}
 import javafx.scene.control.TabPane
 import org.junit.jupiter.api.Test
 
 /**
  * Check if multiple files can be opened and then closed again via file menu 'close all'
  */
-class MultipleFileTest extends MultipleFileApplicationTest(TestFiles.seq) {
+class OpenAndCloseMultipleFilesViaMenuTest extends MultipleFileApplicationTest(TestFiles.seq) {
 
-  @Test def openFileTest(): Unit = {
+  @Test def openFilesAndCloseAllViaMenu(): Unit = {
     TestFiles.seq.foreach {
       p => openFile(FileId(p))
     }

@@ -34,6 +34,12 @@ class TestFxBaseApplicationTest extends ApplicationTest {
     })
   }
 
+  def waitForVisibility(query: String): Unit = {
+    WaitForAsyncUtils.waitFor(2, TimeUnit.SECONDS, new Callable[java.lang.Boolean] {
+      override def call(): java.lang.Boolean = lookup(query).`match`(NodeQueryUtils.isVisible).tryQuery.isPresent
+    })
+  }
+
   def waitForPredicate[A <: Node](id: LogoRRRNode, clazz: Class[A], predicate: A => Boolean): Unit = {
     WaitForAsyncUtils.waitFor(2, TimeUnit.SECONDS, new Callable[java.lang.Boolean] {
       override def call(): java.lang.Boolean = {
