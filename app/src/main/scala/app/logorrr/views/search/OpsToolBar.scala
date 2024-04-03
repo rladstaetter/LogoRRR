@@ -54,9 +54,9 @@ class OpsToolBar(fileId: FileId
   val regexToggleButton = new SearchActivateRegexToggleButton()
 
   /** textfield to enter search queries */
-  val searchTextField = new SearchTextField(regexToggleButton)
+  val searchTextField = new SearchTextField(fileId, regexToggleButton)
 
-  private val searchButton = new SearchButton(searchTextField, regexToggleButton, colorPicker, addFilterFn)
+  private val searchButton = new SearchButton(fileId, searchTextField, regexToggleButton, colorPicker, addFilterFn)
 
   val autoScrollCheckBox = new AutoScrollCheckBox(fileId)
 
@@ -64,9 +64,9 @@ class OpsToolBar(fileId: FileId
 
   val copySelectionButton = new CopyLogButton(filteredList)
 
-//  val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
+  //  val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
 
-//  val timerButton = new TimerButton(fileId, firstNEntries)
+  //  val timerButton = new TimerButton(fileId, firstNEntries)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {
