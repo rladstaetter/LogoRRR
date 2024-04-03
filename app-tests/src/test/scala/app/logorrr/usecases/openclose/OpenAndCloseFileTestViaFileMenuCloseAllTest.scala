@@ -18,16 +18,16 @@ class OpenAndCloseFileTestViaFileMenuCloseAllTest extends SingleFileApplicationT
   @Test def openAndCloseFileTest(): Unit = {
     // wait until file menu is visible
     waitForVisibility(LogoRRRNodes.FileMenu)
-    clickOn(LogoRRRNodes.FileMenu)
+    clickOnNode(LogoRRRNodes.FileMenu)
     waitForVisibility(LogoRRRNodes.FileMenuOpenFile)
-    clickOn(LogoRRRNodes.FileMenuOpenFile)
+    clickOnNode(LogoRRRNodes.FileMenuOpenFile)
     waitForVisibility(LogFileTab.idFor(FileId(path)))
 
     // file menu is already visible, we don't need to wait again
     // click on file menu and then close all button
-    clickOn(LogoRRRNodes.FileMenu)
+    clickOnNode(LogoRRRNodes.FileMenu)
     waitForVisibility(LogoRRRNodes.FileMenuCloseAll)
-    clickOn(LogoRRRNodes.FileMenuCloseAll)
+    clickOnNode(LogoRRRNodes.FileMenuCloseAll)
 
     waitForPredicate[TabPane](LogoRRRNodes.MainTabPane, classOf[TabPane], tabPane => {
       tabPane.getTabs.isEmpty

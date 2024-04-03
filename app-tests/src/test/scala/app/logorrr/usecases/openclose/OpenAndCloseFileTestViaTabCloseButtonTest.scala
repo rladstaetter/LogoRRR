@@ -5,6 +5,7 @@ import app.logorrr.views.LogoRRRNodes
 import app.logorrr.views.logfiletab.LogFileTab
 import app.logorrr.{SingleFileApplicationTest, TestFiles}
 import javafx.scene.control.TabPane
+import javafx.scene.layout.StackPane
 import org.junit.jupiter.api.Test
 
 /**
@@ -18,16 +19,19 @@ class OpenAndCloseFileTestViaTabCloseButtonTest extends SingleFileApplicationTes
   @Test def openAndCloseFileTest(): Unit = {
     // wait until file menu is visible
     waitForVisibility(LogoRRRNodes.FileMenu)
-    clickOn(LogoRRRNodes.FileMenu)
+    clickOnNode(LogoRRRNodes.FileMenu)
     waitForVisibility(LogoRRRNodes.FileMenuOpenFile)
-    clickOn(LogoRRRNodes.FileMenuOpenFile)
+    clickOnNode(LogoRRRNodes.FileMenuOpenFile)
     waitForVisibility(LogFileTab.idFor(FileId(path)))
 
-    // hack to access close button of first tab
-    val tabCloseButtonQuery = s"${LogoRRRNodes.MainTabPane.ref} > .tab-header-area > .headers-region > .tab > .tab-container > .tab-close-button"
-    waitForVisibility(tabCloseButtonQuery)
+    // yields only one tab since there is only one loaded
+    val tabsQuery = LogoRRRNodes.LogFileHeaderTabs
 
-    clickOn(tabCloseButtonQuery)
+    val closeButtonQuery = clickOn(lookup(tabsQuery).query[StackPane]()).lookup(LogoRRRNodes.LogFileHeaderTabCloseButton)
+    waitForVisibility(closeButtonQuery)
+
+    clickOn(closeButtonQuery.queryAs[StackPane](classOf[StackPane]))
+
 
     waitForPredicate[TabPane](LogoRRRNodes.MainTabPane, classOf[TabPane], tabPane => {
       tabPane.getTabs.isEmpty

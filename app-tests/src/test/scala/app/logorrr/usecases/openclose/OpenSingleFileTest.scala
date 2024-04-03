@@ -16,9 +16,9 @@ class OpenSingleFileTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
    */
   @Test def openFileTest(): Unit = {
     waitForVisibility(LogoRRRNodes.FileMenu)
-    clickOn(LogoRRRNodes.FileMenu)
+    clickOnNode(LogoRRRNodes.FileMenu)
     waitForVisibility(LogoRRRNodes.FileMenuOpenFile)
-    clickOn(LogoRRRNodes.FileMenuOpenFile)
+    clickOnNode(LogoRRRNodes.FileMenuOpenFile)
     waitForVisibility(LogFileTab.idFor(FileId(path)))
   }
 
