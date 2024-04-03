@@ -1,9 +1,8 @@
 package app.logorrr.usecases.openclose
 
-import app.logorrr.io.FileId
 import app.logorrr.views.LogoRRRNodes
-import app.logorrr.views.logfiletab.LogFileTab
-import app.logorrr.{MultipleFileApplicationTest, TestFiles}
+import app.logorrr.TestFiles
+import app.logorrr.usecases.MultipleFileApplicationTest
 import javafx.scene.control.TabPane
 import javafx.scene.layout.StackPane
 import org.junit.jupiter.api.Test
@@ -18,7 +17,7 @@ class OpenAndCloseMultipleFilesViaCloseButtonTest extends MultipleFileApplicatio
 
   @Test def openFilesAndCloseOneByOneViaTabCloseButton(): Unit = {
     TestFiles.seq.foreach {
-      p => openFile(FileId(p))
+      p => openFile(p)
     }
 
     val tabCards = lookup(LogoRRRNodes.LogFileHeaderTabs).queryAll[StackPane]().asScala
@@ -35,11 +34,5 @@ class OpenAndCloseMultipleFilesViaCloseButtonTest extends MultipleFileApplicatio
 
   }
 
-  private def openFile(fileId: FileId): Unit = {
-    waitForVisibility(LogoRRRNodes.FileMenu)
-    clickOnNode(LogoRRRNodes.FileMenu)
-    waitForVisibility(LogoRRRNodes.FileMenuOpenFile)
-    clickOnNode(LogoRRRNodes.FileMenuOpenFile)
-    waitForVisibility(LogFileTab.idFor(fileId))
-  }
+
 }

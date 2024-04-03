@@ -1,4 +1,4 @@
-package app.logorrr
+package app.logorrr.usecases
 
 import app.logorrr.views.LogoRRRNode
 import javafx.scene.Node
@@ -16,7 +16,6 @@ import scala.concurrent.duration.{DurationInt, FiniteDuration}
  * provides helper methods to work with LogoRRR's UI components
  */
 class TestFxBaseApplicationTest extends ApplicationTest {
-
 
   @AfterEach
   @throws[Exception]

@@ -1,9 +1,7 @@
 package app.logorrr.usecases.openclose
 
-import app.logorrr.io.FileId
-import app.logorrr.views.LogoRRRNodes
-import app.logorrr.views.logfiletab.LogFileTab
-import app.logorrr.{SingleFileApplicationTest, TestFiles}
+import app.logorrr.TestFiles
+import app.logorrr.usecases.SingleFileApplicationTest
 import org.junit.jupiter.api.Test
 
 /**
@@ -14,12 +12,7 @@ class OpenSingleFileTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
   /**
    * checks if an open file creates a new logfiletab with an id matching the file opened.
    */
-  @Test def openFileTest(): Unit = {
-    waitForVisibility(LogoRRRNodes.FileMenu)
-    clickOnNode(LogoRRRNodes.FileMenu)
-    waitForVisibility(LogoRRRNodes.FileMenuOpenFile)
-    clickOnNode(LogoRRRNodes.FileMenuOpenFile)
-    waitForVisibility(LogFileTab.idFor(FileId(path)))
-  }
+  @Test def openFileTest(): Unit = openFile(path)
 
 }
+
