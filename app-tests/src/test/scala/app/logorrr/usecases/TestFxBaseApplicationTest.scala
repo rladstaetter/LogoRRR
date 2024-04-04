@@ -1,6 +1,6 @@
 package app.logorrr.usecases
 
-import app.logorrr.views.LogoRRRNode
+import app.logorrr.views.UiNode
 import javafx.scene.Node
 import javafx.scene.input.{KeyCode, MouseButton}
 import org.junit.jupiter.api.AfterEach
@@ -27,9 +27,9 @@ class TestFxBaseApplicationTest extends ApplicationTest {
     release(Array[MouseButton](): _*)
   }
 
-  def clickOnNode(node: LogoRRRNode): FxRobotInterface = clickOn(node.ref)
+  def clickOn(node: UiNode): FxRobotInterface = clickOn(node.ref)
 
-  def waitForVisibility(id: LogoRRRNode): Unit = waitForVisibility(lookup(id.ref))
+  def waitForVisibility(id: UiNode): Unit = waitForVisibility(lookup(id.ref))
 
   def waitForVisibility(query: String): Unit = waitForVisibility(lookup(query))
 
@@ -39,7 +39,7 @@ class TestFxBaseApplicationTest extends ApplicationTest {
     })
   }
 
-  def waitForPredicate[A <: Node](id: LogoRRRNode, clazz: Class[A], predicate: A => Boolean): Unit = {
+  def waitForPredicate[A <: Node](id: UiNode, clazz: Class[A], predicate: A => Boolean): Unit = {
     WaitForAsyncUtils.waitFor(2, TimeUnit.SECONDS, new Callable[java.lang.Boolean] {
       override def call(): java.lang.Boolean = {
         predicate(lookup(id.ref).queryAs(clazz))

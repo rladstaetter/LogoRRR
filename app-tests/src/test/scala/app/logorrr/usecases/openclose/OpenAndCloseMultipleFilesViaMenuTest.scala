@@ -1,6 +1,6 @@
 package app.logorrr.usecases.openclose
 
-import app.logorrr.views.LogoRRRNodes
+import app.logorrr.views.UiNodes
 import app.logorrr.TestFiles
 import app.logorrr.usecases.MultipleFileApplicationTest
 import javafx.scene.control.TabPane
@@ -17,12 +17,12 @@ class OpenAndCloseMultipleFilesViaMenuTest extends MultipleFileApplicationTest(T
       p => openFile(p)
     }
     // now close them all again
-    clickOnNode(LogoRRRNodes.FileMenu)
-    waitForVisibility(LogoRRRNodes.FileMenuCloseAll)
+    clickOn(UiNodes.FileMenu)
+    waitForVisibility(UiNodes.FileMenuCloseAll)
 
-    clickOnNode(LogoRRRNodes.FileMenuCloseAll)
+    clickOn(UiNodes.FileMenuCloseAll)
 
-    waitForPredicate[TabPane](LogoRRRNodes.MainTabPane, classOf[TabPane], tabPane => {
+    waitForPredicate[TabPane](UiNodes.MainTabPane, classOf[TabPane], tabPane => {
       tabPane.getTabs.isEmpty
     })
 

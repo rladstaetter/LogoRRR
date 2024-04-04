@@ -1,6 +1,6 @@
 package app.logorrr.usecases.openclose
 
-import app.logorrr.views.LogoRRRNodes
+import app.logorrr.views.UiNodes
 import app.logorrr.TestFiles
 import app.logorrr.usecases.MultipleFileApplicationTest
 import javafx.scene.control.TabPane
@@ -20,15 +20,15 @@ class OpenAndCloseMultipleFilesViaCloseButtonTest extends MultipleFileApplicatio
       p => openFile(p)
     }
 
-    val tabCards = lookup(LogoRRRNodes.LogFileHeaderTabs).queryAll[StackPane]().asScala
+    val tabCards = lookup(UiNodes.LogFileHeaderTabs).queryAll[StackPane]().asScala
 
     for (n <- tabCards) {
-      val nodeQuery: NodeQuery = clickOn(n).lookup(LogoRRRNodes.LogFileHeaderTabCloseButton)
+      val nodeQuery: NodeQuery = clickOn(n).lookup(UiNodes.LogFileHeaderTabCloseButton)
       waitForVisibility(nodeQuery)
       clickOn(nodeQuery.queryAs[StackPane](classOf[StackPane]))
     }
 
-    waitForPredicate[TabPane](LogoRRRNodes.MainTabPane, classOf[TabPane], tabPane => {
+    waitForPredicate[TabPane](UiNodes.MainTabPane, classOf[TabPane], tabPane => {
       tabPane.getTabs.isEmpty
     })
 

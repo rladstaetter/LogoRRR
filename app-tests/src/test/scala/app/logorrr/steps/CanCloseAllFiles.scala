@@ -1,7 +1,7 @@
 package app.logorrr.steps
 
 import app.logorrr.usecases.TestFxBaseApplicationTest
-import app.logorrr.views.LogoRRRNodes
+import app.logorrr.views.UiNodes
 import org.testfx.api.FxRobotInterface
 
 /**
@@ -11,9 +11,9 @@ trait CanCloseAllFiles {
   self: TestFxBaseApplicationTest =>
 
   protected def closeAllFiles(): FxRobotInterface = {
-    clickOnNode(LogoRRRNodes.FileMenu)
-    waitForVisibility(LogoRRRNodes.FileMenuCloseAll)
-    clickOnNode(LogoRRRNodes.FileMenuCloseAll)
+    clickOn(UiNodes.FileMenu)
+    waitForVisibility(UiNodes.FileMenuCloseAll)
+    clickOn(UiNodes.FileMenuCloseAll)
   }
 
 }

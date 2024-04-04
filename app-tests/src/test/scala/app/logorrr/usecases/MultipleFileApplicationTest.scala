@@ -1,5 +1,6 @@
 package app.logorrr.usecases
 
+import app.logorrr.conf.Settings
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.fileservices.OpenMultipleFilesService
 import app.logorrr.services.hostservices.MockHostServices
@@ -17,7 +18,8 @@ class MultipleFileApplicationTest(val files: Seq[Path])
     with CanStartApplication
     with CanOpenFile {
 
-  val services = LogoRRRServices(new MockHostServices
+  val services = LogoRRRServices(Settings.Default
+    ,new MockHostServices
     , new OpenMultipleFilesService(files)
     , isUnderTest = true)
 

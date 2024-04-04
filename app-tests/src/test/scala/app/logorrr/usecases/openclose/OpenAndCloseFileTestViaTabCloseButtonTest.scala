@@ -2,7 +2,7 @@ package app.logorrr.usecases.openclose
 
 import app.logorrr.TestFiles
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.LogoRRRNodes
+import app.logorrr.views.UiNodes
 import javafx.scene.control.TabPane
 import javafx.scene.layout.StackPane
 import org.junit.jupiter.api.Test
@@ -22,14 +22,14 @@ class OpenAndCloseFileTestViaTabCloseButtonTest extends SingleFileApplicationTes
     openFile(path)
 
     // yields only one tab since there is only one loaded
-    val tabsQuery = LogoRRRNodes.LogFileHeaderTabs
+    val tabsQuery = UiNodes.LogFileHeaderTabs
 
-    val closeButtonQuery = clickOn(lookup(tabsQuery).query[StackPane]()).lookup(LogoRRRNodes.LogFileHeaderTabCloseButton)
+    val closeButtonQuery = clickOn(lookup(tabsQuery).query[StackPane]()).lookup(UiNodes.LogFileHeaderTabCloseButton)
     waitForVisibility(closeButtonQuery)
 
     clickOn(closeButtonQuery.queryAs[StackPane](classOf[StackPane]))
 
-    waitForPredicate[TabPane](LogoRRRNodes.MainTabPane, classOf[TabPane], tabPane => {
+    waitForPredicate[TabPane](UiNodes.MainTabPane, classOf[TabPane], tabPane => {
       tabPane.getTabs.isEmpty
     })
 

@@ -48,12 +48,12 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
       val settings: Settings = SettingsIO.fromFile(path)
       val updatedSettings = settings.copy(stageSettings = settings.stageSettings.copy(width = w, height = h + 28))
 
-      val services = LogoRRRServices(
-        new NativeHostServices(getHostServices)
+      val services = LogoRRRServices(updatedSettings
+        , new NativeHostServices(getHostServices)
         , new NativeOpenFileService(() => stage.getScene.getWindow)
         , isUnderTest = false)
 
-      LogoRRRApp.start(stage, updatedSettings, services)
+      LogoRRRApp.start(stage, services)
 
       val bPath = Paths.get(s"docs/releases/${AppMeta.appVersion}/")
       Fs.createDirectories(bPath)

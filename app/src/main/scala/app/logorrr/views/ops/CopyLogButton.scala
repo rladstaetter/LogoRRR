@@ -1,6 +1,9 @@
 package app.logorrr.views.ops
 
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
+import app.logorrr.util.HashUtil
+import app.logorrr.views.{UiNode, UiNodeAware}
 import javafx.animation.AnimationTimer
 import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
@@ -10,12 +13,21 @@ import org.kordamp.ikonli.javafx.FontIcon
 
 import scala.collection.mutable.ListBuffer
 
+object CopyLogButton extends UiNodeAware {
+
+  def uiNode(id: FileId): UiNode = UiNode("copylogbutton-" + HashUtil.md5Sum(id))
+
+}
+
+
 /**
  * Copy current contents to clipboard.
  *
  * @param logEntries current active log entries
  */
-class CopyLogButton(logEntries: ObservableList[LogEntry]) extends Button {
+class CopyLogButton(id: FileId, logEntries: ObservableList[LogEntry]) extends Button {
+
+  setId(CopyLogButton.uiNode(id).value)
 
   private val icon = new FontIcon(FontAwesomeSolid.COPY)
   private val iconLight = new FontIcon(FontAwesomeRegular.COPY)
@@ -36,7 +48,7 @@ class CopyLogButton(logEntries: ObservableList[LogEntry]) extends Button {
       val bounds = localToScreen(getBoundsInLocal)
       val x = bounds.getMinX
       val y = bounds.getMaxY
-      defaultToolTip.show(this,x,y)
+      defaultToolTip.show(this, x, y)
 
       mkTimer().start() // visual response to click
     })

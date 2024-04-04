@@ -4,7 +4,7 @@ import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.{CanLog, JfxUtils}
-import app.logorrr.views.LogoRRRNodes
+import app.logorrr.views.UiNodes
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.beans.value.ChangeListener
 import javafx.collections.ObservableList
@@ -31,7 +31,7 @@ object MainTabPane {
 class MainTabPane extends TabPane with CanLog {
   // leave here otherwise css rendering breaks
   setStyle(MainTabPane.BackgroundStyle)
-  setId(LogoRRRNodes.MainTabPane.value)
+  setId(UiNodes.MainTabPane.value)
 
   val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew {
     case logFileTab: LogFileTab =>

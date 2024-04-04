@@ -1,6 +1,5 @@
 package app.logorrr.steps
 
-import app.logorrr.conf.Settings
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.LogoRRRApp
 import app.logorrr.usecases.TestFxBaseApplicationTest
@@ -16,7 +15,7 @@ trait CanStartApplication {
 
   @throws[Exception]
   override def start(stage: Stage): Unit = {
-    LogoRRRApp.start(stage, Settings.Default, services)
+    LogoRRRApp.start(stage, services)
     stage.toFront()
   }
 }

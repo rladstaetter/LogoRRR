@@ -3,7 +3,7 @@ package app.logorrr.usecases.openclose
 import app.logorrr.TestFiles
 import app.logorrr.steps.CanCloseAllFiles
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.LogoRRRNodes
+import app.logorrr.views.UiNodes
 import javafx.scene.control.TabPane
 import org.junit.jupiter.api.Test
 
@@ -26,7 +26,7 @@ class OpenAndCloseFileTestViaFileMenuCloseAllTest extends SingleFileApplicationT
     // click on file menu and then close all button
     closeAllFiles()
 
-    waitForPredicate[TabPane](LogoRRRNodes.MainTabPane, classOf[TabPane], tabPane => {
+    waitForPredicate[TabPane](UiNodes.MainTabPane, classOf[TabPane], tabPane => {
       tabPane.getTabs.isEmpty
     })
 

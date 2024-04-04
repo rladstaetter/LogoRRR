@@ -1,5 +1,6 @@
 package app.logorrr.usecases
 
+import app.logorrr.conf.Settings
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.fileservices.OpenSingleFileService
 import app.logorrr.services.hostservices.MockHostServices
@@ -14,9 +15,10 @@ import java.nio.file.Path
 class SingleFileApplicationTest(val path: Path)
   extends TestFxBaseApplicationTest
     with CanStartApplication
-    with CanOpenFile{
+    with CanOpenFile {
 
-  val services = LogoRRRServices(new MockHostServices
+  val services = LogoRRRServices(Settings.Default
+    , new MockHostServices
     , new OpenSingleFileService(Option(path))
     , isUnderTest = true)
 

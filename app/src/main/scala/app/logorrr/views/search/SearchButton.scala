@@ -3,14 +3,14 @@ package app.logorrr.views.search
 
 import app.logorrr.io.FileId
 import app.logorrr.util.{ColorUtil, HashUtil}
-import app.logorrr.views.LogoRRRNode
+import app.logorrr.views.UiNode
 import javafx.scene.control.{Button, Tooltip}
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
 import org.kordamp.ikonli.javafx.FontIcon
 
 object SearchButton {
 
-  def id(id: FileId): LogoRRRNode = LogoRRRNode("searchbutton-" + HashUtil.md5Sum(id))
+  def id(id: FileId): UiNode = UiNode("searchbutton-" + HashUtil.md5Sum(id))
 
 }
 
