@@ -18,10 +18,13 @@ import javafx.scene.input.{KeyCode, KeyEvent}
 object OpsToolBar {
 
   /** increment/decrement block size */
-  val blockSizeStep = 2
+  val blockSizeStep: Int = 2
+
+  /** max reachable block size */
+  val MaxBlockSize: Int = 70 * OpsToolBar.blockSizeStep
 
   /** increment / decrement font size */
-  val fontSizeStep = 1
+  val fontSizeStep: Int = 1
 
 }
 

@@ -7,9 +7,13 @@ import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.fileservices.OpenSingleFileService
 import app.logorrr.services.hostservices.MockHostServices
 import app.logorrr.usecases.SingleFileApplicationTest
+import app.logorrr.views.search.OpsToolBar
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import org.junit.jupiter.api.Test
 
+/**
+ * * Test if multiple symmetric applications of increase and decrease actions lead to the same result again
+ */
 class SimpleTextSizeTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
 
   override val services: LogoRRRServices = LogoRRRServices(Settings.Default.copy(stageSettings = StageSettings(100, 100, 1200, 600))
@@ -25,13 +29,12 @@ class SimpleTextSizeTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
     val count = 10
 
     for (_ <- 1 to count) increaseTextSize(fileId)
-    assert(size + count == LogoRRRGlobals.getLogFileSettings(fileId).getFontSize)
+    assert(size + (OpsToolBar.fontSizeStep * count) == LogoRRRGlobals.getLogFileSettings(fileId).getFontSize)
 
     // decrease again
     for (_ <- 1 to 10) decreaseTextSize(fileId)
     assert(size == LogoRRRGlobals.getLogFileSettings(fileId).getFontSize)
   }
-
 
   private def increaseTextSize(fileId: FileId): Unit = {
     waitForVisibility(IncreaseTextSizeButton.uiNode(fileId))

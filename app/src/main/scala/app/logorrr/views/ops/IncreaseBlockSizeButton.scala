@@ -10,19 +10,22 @@ import javafx.scene.paint.Color
 
 object IncreaseBlockSizeButton extends UiNodeAware {
 
+  /** size of icon to increase block size */
+  val Size = 16
+
   override def uiNode(id: FileId): UiNode = UiNode("increaseblocksizebutton-" + HashUtil.md5Sum(id))
 }
 
-class IncreaseBlockSizeButton(id: FileId, val blockSizeProperty: SimpleIntegerProperty) extends
-  RectButton(width = 16
-    , height = 16
+class IncreaseBlockSizeButton(id: FileId, val blockSizeProperty: SimpleIntegerProperty)
+  extends SquareButton(size = IncreaseBlockSizeButton.Size
     , color = Color.GRAY
     , tooltipMessage = "increase block size") with HasBlockSizeProperty {
 
   setId(IncreaseBlockSizeButton.uiNode(id).value)
   setOnAction(_ => {
-    if (getBlockSize() + OpsToolBar.blockSizeStep < 70 * OpsToolBar.blockSizeStep) {
-      setBlockSize(getBlockSize() + OpsToolBar.blockSizeStep)
+
+    if (getBlockSize + OpsToolBar.blockSizeStep < OpsToolBar.MaxBlockSize) {
+      setBlockSize(getBlockSize + OpsToolBar.blockSizeStep)
     }
   })
 

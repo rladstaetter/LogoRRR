@@ -9,20 +9,21 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.paint.Color
 
 object DecreaseBlockSizeButton extends UiNodeAware {
+  /** size of icon to decrease block size */
+  val Size = 8
 
   override def uiNode(id: FileId): UiNode = UiNode("decreaseblocksizebutton-" + HashUtil.md5Sum(id))
 }
 
 class DecreaseBlockSizeButton(id: FileId, val blockSizeProperty: SimpleIntegerProperty) extends
-  RectButton(width = 8
-    , height = 8
+  SquareButton(size = DecreaseBlockSizeButton.Size
     , color = Color.GRAY
     , tooltipMessage = "decrease block size") with HasBlockSizeProperty {
 
   setId(DecreaseBlockSizeButton.uiNode(id).value)
   setOnAction(_ => {
-    if (getBlockSize() - OpsToolBar.blockSizeStep > BlockConstants.MinSize) {
-      setBlockSize(getBlockSize() - OpsToolBar.blockSizeStep)
+    if (getBlockSize - OpsToolBar.blockSizeStep > BlockConstants.MinSize) {
+      setBlockSize(getBlockSize - OpsToolBar.blockSizeStep)
     } else {
       setBlockSize(BlockConstants.MinSize)
     }
