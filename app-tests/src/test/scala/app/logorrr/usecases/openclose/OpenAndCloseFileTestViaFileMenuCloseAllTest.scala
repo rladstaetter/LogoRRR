@@ -7,13 +7,15 @@ import app.logorrr.views.UiNodes
 import javafx.scene.control.TabPane
 import org.junit.jupiter.api.Test
 
+import java.nio.file.Path
+
 /**
  * Checks if a file can be opened and closed
  */
 class OpenAndCloseFileTestViaFileMenuCloseAllTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
   with CanCloseAllFiles {
 
-  override val path = TestFiles.simpleLog0
+  override val path: Path = TestFiles.simpleLog0
 
   /**
    * checks if an open file creates a new logfiletab with an id matching the file opened.

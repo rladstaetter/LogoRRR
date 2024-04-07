@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 class SimpleTextSizeTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
 
-  override val services = LogoRRRServices(Settings.Default.copy(stageSettings = StageSettings(100, 100, 1200, 600))
+  override val services: LogoRRRServices = LogoRRRServices(Settings.Default.copy(stageSettings = StageSettings(100, 100, 1200, 600))
     , new MockHostServices
     , new OpenSingleFileService(Option(path))
     , isUnderTest = true)

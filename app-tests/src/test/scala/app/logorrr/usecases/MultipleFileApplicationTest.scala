@@ -18,7 +18,7 @@ class MultipleFileApplicationTest(val files: Seq[Path])
     with CanStartApplication
     with CanOpenFile {
 
-  val services = LogoRRRServices(Settings.Default
+  val services: LogoRRRServices = LogoRRRServices(Settings.Default
     ,new MockHostServices
     , new OpenMultipleFilesService(files)
     , isUnderTest = true)
