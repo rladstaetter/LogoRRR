@@ -21,6 +21,6 @@ class SimpleSearchTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
 
   private def searchFor(needle: String) = {
     clickOn(SearchTextField.uiNode(FileId(path)).ref).write(needle)
-    clickOn(SearchButton.id(FileId(path)).ref)
+    clickOn(SearchButton.uiNode(FileId(path)).ref)
   }
 }

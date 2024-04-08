@@ -1,14 +1,13 @@
 package app.logorrr.views.text.toolbaractions
 
 import app.logorrr.io.FileId
-import app.logorrr.util.HashUtil
 import app.logorrr.views.ops.TextSizeButton
 import app.logorrr.views.search.OpsToolBar
 import app.logorrr.views.{UiNode, UiNodeAware}
 
 object IncreaseTextSizeButton extends UiNodeAware {
 
-  override def uiNode(id: FileId): UiNode = UiNode("increasetextsizebutton-" + HashUtil.md5Sum(id))
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[IncreaseTextSizeButton])
 }
 
 

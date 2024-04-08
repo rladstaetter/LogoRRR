@@ -1,11 +1,8 @@
-package app.logorrr.usecases.chunkview
+package app.logorrr.usecases.blockview
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.{LogoRRRGlobals, Settings, StageSettings}
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
-import app.logorrr.services.LogoRRRServices
-import app.logorrr.services.fileservices.OpenSingleFileService
-import app.logorrr.services.hostservices.MockHostServices
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.ops.{DecreaseBlockSizeButton, IncreaseBlockSizeButton}
 import app.logorrr.views.search.OpsToolBar
@@ -15,11 +12,6 @@ import org.junit.jupiter.api.Test
  * Test if multiple symmetric applications of increase and decrease actions lead to the same result again
  */
 class SimpleBlockSizeTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
-
-  override val services: LogoRRRServices = LogoRRRServices(Settings.Default.copy(stageSettings = StageSettings(100, 100, 1200, 600))
-    , new MockHostServices
-    , new OpenSingleFileService(Option(path))
-    , isUnderTest = true)
 
   @Test def search(): Unit = {
     openFile(path)

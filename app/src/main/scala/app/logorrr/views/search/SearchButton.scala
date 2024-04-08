@@ -2,15 +2,15 @@ package app.logorrr.views.search
 
 
 import app.logorrr.io.FileId
-import app.logorrr.util.{ColorUtil, HashUtil}
-import app.logorrr.views.UiNode
+import app.logorrr.util.ColorUtil
+import app.logorrr.views.{UiNode, UiNodeAware}
 import javafx.scene.control.{Button, Tooltip}
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
 import org.kordamp.ikonli.javafx.FontIcon
 
-object SearchButton {
+object SearchButton extends UiNodeAware {
 
-  def id(id: FileId): UiNode = UiNode("searchbutton-" + HashUtil.md5Sum(id))
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchButton])
 
 }
 
@@ -20,7 +20,7 @@ class SearchButton(fileId: FileId
                    , colorPicker: SearchColorPicker
                    , addFilterFn: Filter => Unit) extends Button {
 
-  setId(SearchButton.id(fileId).value)
+  setId(SearchButton.uiNode(fileId).value)
   setGraphic(new FontIcon(FontAwesomeSolid.SEARCH))
   setTooltip(new Tooltip("search"))
   setMaxWidth(40)

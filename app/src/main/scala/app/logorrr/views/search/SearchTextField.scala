@@ -1,7 +1,7 @@
 package app.logorrr.views.search
 
 import app.logorrr.io.FileId
-import app.logorrr.util.{HashUtil, OsUtil}
+import app.logorrr.util.OsUtil
 import app.logorrr.views.{UiNode, UiNodeAware}
 import javafx.beans.binding.StringBinding
 import javafx.scene.control.{TextField, Tooltip}
@@ -10,7 +10,7 @@ import javafx.scene.control.{TextField, Tooltip}
 
 object SearchTextField extends UiNodeAware {
 
-  def uiNode(id: FileId): UiNode = UiNode("searchtextfield-" + HashUtil.md5Sum(id))
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchTextField])
 
 }
 

@@ -1,13 +1,13 @@
 package app.logorrr.views.search
 
 import app.logorrr.io.FileId
-import app.logorrr.util.{ColorUtil, HashUtil}
+import app.logorrr.util.ColorUtil
 import app.logorrr.views.{UiNode, UiNodeAware}
 import javafx.scene.control.{ColorPicker, Tooltip}
 
 object SearchColorPicker extends UiNodeAware {
 
-  override def uiNode(id: FileId): UiNode = UiNode("searchcolorpicker-" + HashUtil.md5Sum(id))
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchColorPicker])
 }
 
 class SearchColorPicker(id : FileId) extends ColorPicker {

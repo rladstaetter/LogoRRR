@@ -2,7 +2,6 @@ package app.logorrr.views.ops
 
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
-import app.logorrr.util.HashUtil
 import app.logorrr.views.{UiNode, UiNodeAware}
 import javafx.animation.AnimationTimer
 import javafx.collections.ObservableList
@@ -15,7 +14,7 @@ import scala.collection.mutable.ListBuffer
 
 object CopyLogButton extends UiNodeAware {
 
-  def uiNode(id: FileId): UiNode = UiNode("copylogbutton-" + HashUtil.md5Sum(id))
+  def uiNode(id: FileId): UiNode = UiNode(id, classOf[CopyLogButton])
 
 }
 

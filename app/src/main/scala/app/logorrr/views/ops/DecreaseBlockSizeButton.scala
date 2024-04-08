@@ -1,7 +1,6 @@
 package app.logorrr.views.ops
 
 import app.logorrr.io.FileId
-import app.logorrr.util.HashUtil
 import app.logorrr.views.block.{BlockConstants, HasBlockSizeProperty}
 import app.logorrr.views.search.OpsToolBar
 import app.logorrr.views.{UiNode, UiNodeAware}
@@ -12,7 +11,7 @@ object DecreaseBlockSizeButton extends UiNodeAware {
   /** size of icon to decrease block size */
   val Size = 8
 
-  override def uiNode(id: FileId): UiNode = UiNode("decreaseblocksizebutton-" + HashUtil.md5Sum(id))
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[DecreaseBlockSizeButton])
 }
 
 class DecreaseBlockSizeButton(id: FileId, val blockSizeProperty: SimpleIntegerProperty) extends

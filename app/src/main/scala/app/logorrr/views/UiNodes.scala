@@ -1,5 +1,16 @@
 package app.logorrr.views
 
+import app.logorrr.io.FileId
+import app.logorrr.util.HashUtil
+
+object UiNode {
+
+  def apply(fileId: FileId, clazz: Class[_]): UiNode = {
+    UiNode(clazz.getSimpleName + "-" + HashUtil.md5Sum(fileId))
+  }
+
+}
+
 case class UiNode(value: String) {
 
   lazy val ref: String = "#" + value
@@ -29,7 +40,6 @@ object UiNodes {
 
   /** css rule to target the close button of a LogFileHeaderTab */
   val LogFileHeaderTabCloseButton = ".tab-container > .tab-close-button"
-
 
 
 }

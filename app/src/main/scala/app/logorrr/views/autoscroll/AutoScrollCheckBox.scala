@@ -8,13 +8,13 @@ import javafx.scene.control.{CheckBox, Tooltip}
 
 object AutoScrollCheckBox extends UiNodeAware {
 
-  override def uiNode(id: FileId): UiNode = UiNode("autoscrollcheckbox-" + id)
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[AutoScrollCheckBox])
+
 }
 
 class AutoScrollCheckBox(val fileId: FileId) extends CheckBox with HasFileId {
-  setId(AutoScrollCheckBox.uiNode(fileId).ref)
+  setId(AutoScrollCheckBox.uiNode(fileId).value)
   setTooltip(new Tooltip("autoscroll"))
   selectedProperty().bindBidirectional(LogoRRRGlobals.getLogFileSettings(fileId).autoScrollActiveProperty)
-
 
 }

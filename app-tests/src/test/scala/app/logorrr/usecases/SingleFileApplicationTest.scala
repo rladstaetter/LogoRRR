@@ -17,7 +17,7 @@ class SingleFileApplicationTest(val path: Path)
     with CanStartApplication
     with CanOpenFile {
 
-  val services: LogoRRRServices = LogoRRRServices(Settings.Default
+  final def services: LogoRRRServices = LogoRRRServices(Settings.Default
     , new MockHostServices
     , new OpenSingleFileService(Option(path))
     , isUnderTest = true)

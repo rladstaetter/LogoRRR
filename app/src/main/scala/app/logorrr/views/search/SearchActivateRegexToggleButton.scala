@@ -1,14 +1,14 @@
 package app.logorrr.views.search
 
 import app.logorrr.io.FileId
-import app.logorrr.util.{HashUtil, LogoRRRFonts, OsUtil}
+import app.logorrr.util.{LogoRRRFonts, OsUtil}
 import app.logorrr.views.{UiNode, UiNodeAware}
 import javafx.scene.control.{Label, ToggleButton, Tooltip}
 import javafx.scene.paint.Color
 
 object SearchActivateRegexToggleButton extends UiNodeAware {
 
-  override def uiNode(id: FileId): UiNode = UiNode("searchactivateregextogglebutton-" + HashUtil.md5Sum(id))
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchActivateRegexToggleButton])
 
 }
 

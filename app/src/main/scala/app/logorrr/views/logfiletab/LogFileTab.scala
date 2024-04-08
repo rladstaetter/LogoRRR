@@ -5,10 +5,10 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
-import app.logorrr.views.{LogoRRRAccelerators, UiNode, UiNodeAware}
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.logfiletab.actions._
 import app.logorrr.views.search.Fltr
+import app.logorrr.views.{LogoRRRAccelerators, UiNode, UiNodeAware}
 import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.event.Event
@@ -52,7 +52,7 @@ object LogFileTab extends UiNodeAware {
       , entries)
   }
 
-  def uiNode(fileId: FileId): UiNode = UiNode("logfiletab-" + HashUtil.md5Sum(fileId))
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogFileTab])
 
 }
 
