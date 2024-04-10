@@ -6,8 +6,8 @@ import app.logorrr.io.FilePaths
 import app.logorrr.meta.AppMeta
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.fileservices.NativeOpenFileService
-import app.logorrr.services.hostservices.NativeHostServices
-import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.services.hostservices.{MacNativeHostService, NativeHostServices}
+import app.logorrr.util.{CanLog, JfxUtils, OsUtil}
 import app.logorrr.views.main.{LogoRRRMain, LogoRRRStage}
 import javafx.application.Application
 import javafx.stage.Stage
@@ -49,7 +49,11 @@ object LogoRRRApp extends CanLog {
 class LogoRRRApp extends javafx.application.Application with CanLog {
 
   def start(stage: Stage): Unit = {
-    val hostServices = new NativeHostServices(getHostServices)
+    val hostServices = {
+      if (OsUtil.isMac) {
+        new MacNativeHostService
+      } else new NativeHostServices(getHostServices)
+    }
 
 
     val services = logorrr.services.LogoRRRServices(

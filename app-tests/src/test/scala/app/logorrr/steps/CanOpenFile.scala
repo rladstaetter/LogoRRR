@@ -10,15 +10,14 @@ import java.nio.file.Path
 /**
  * Mix in if you need to be able to open a file in your test
  */
-trait CanOpenFile {
-  self: TestFxBaseApplicationTest =>
+trait CanOpenFile extends VisibleItemActions {
+  self: TestFxBaseApplicationTest  =>
 
   protected def openFile(path: Path): Unit = {
-    waitForVisibility(UiNodes.FileMenu)
-    clickOn(UiNodes.FileMenu)
-    waitForVisibility(UiNodes.FileMenuOpenFile)
-    clickOn(UiNodes.FileMenuOpenFile)
+    waitAndClickVisibleItem(UiNodes.FileMenu)
+    waitAndClickVisibleItem(UiNodes.FileMenuOpenFile)
     waitForVisibility(LogFileTab.uiNode(FileId(path)))
   }
 
 }
+

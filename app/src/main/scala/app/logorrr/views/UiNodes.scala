@@ -30,6 +30,16 @@ object UiNodes {
    */
   val FileMenuCloseAll: UiNode = UiNode("file_menu_close_all")
 
+  /** help menu */
+  val HelpMenu: UiNode = UiNode("help_menu")
+
+
+  /** help menu - about */
+  val HelpMenuAbout: UiNode = UiNode("help_menu_about")
+
+  /** help menu - open log */
+  val HelpMenuOpenLogorrLog: UiNode = UiNode("help_menu_open_log")
+
   /**
    * ID of main tab pane where all log files are placed
    */
@@ -41,5 +51,15 @@ object UiNodes {
   /** css rule to target the close button of a LogFileHeaderTab */
   val LogFileHeaderTabCloseButton = ".tab-container > .tab-close-button"
 
+  /** open logorrrs main site */
+  val AboutDialogOpenLogorrrMainSite: UiNode = UiNode("about_stage_logorrr_app")
 
+  /** have a look at the development blog */
+  val AboutDialogOpenDevelopmentBlog: UiNode = UiNode("about_stage_devel_blog")
+
+  /** report a bug or a feature request */
+  val AboutDialogOpenIssuePage: UiNode = UiNode("about_stage_report_issues")
+
+  /** contains information about log formatter */
+  val OpenDateFormatterSite: UiNode = UiNode("date_time_formatter_url")
 }

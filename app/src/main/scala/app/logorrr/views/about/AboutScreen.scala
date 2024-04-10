@@ -2,6 +2,7 @@ package app.logorrr.views.about
 
 import app.logorrr.meta.AppMeta
 import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts, PropsCp}
+import app.logorrr.views.UiNodes
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control._
 import javafx.scene.image.ImageView
@@ -16,10 +17,10 @@ object AboutScreen {
 
   val logo: ImageCp = ImageCp("/app/logorrr/icon/logorrr-icon-128.png", 128, 128)
 
-  val links: Seq[HLink] = Seq(
-    HLink("https://www.logorrr.app/", "https://www.logorrr.app/")
-    , HLink("https://www.github.com/rladstaetter/LogoRRR/", "Source code")
-    , HLink("https://github.com/rladstaetter/LogoRRR/issues/", "Request a feature or report a bug"))
+  lazy val links: Seq[HLink] = Seq(
+    HLink(UiNodes.AboutDialogOpenLogorrrMainSite, "https://www.logorrr.app/", "https://www.logorrr.app/")
+    , HLink(UiNodes.AboutDialogOpenDevelopmentBlog, "https://www.logorrr.app/posts/index.html", "Development blog")
+    , HLink(UiNodes.AboutDialogOpenIssuePage, "https://github.com/rladstaetter/LogoRRR/issues/", "Request a feature or report a bug"))
 
   case class MonoLabel(text: String, size: Int) extends Label(text) {
     setStyle(LogoRRRFonts.jetBrainsMono(size))
@@ -44,6 +45,7 @@ object BuildProps {
 }
 
 class BuildProps {
+
   lazy val buildProps: Properties = PropsCp("/build.properties").asProperties(getClass)
 
   lazy val githash: String = buildProps.getProperty("revision")
