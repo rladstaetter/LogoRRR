@@ -25,11 +25,3 @@ class SingleFileApplicationTest(val path: Path)
 
 }
 
-class ShowAboutDialogTest extends TestFxBaseApplicationTest with CanStartApplication {
-
-  final def services: LogoRRRServices = LogoRRRServices(Settings.Default
-    , new MockHostServices
-    , new EmptyFileService
-    , isUnderTest = true)
-
-}
