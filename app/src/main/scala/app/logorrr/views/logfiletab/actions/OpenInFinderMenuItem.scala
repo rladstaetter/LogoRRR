@@ -8,16 +8,21 @@ import java.awt.Desktop
 
 object OpenInFinderMenuItem {
   val menuItemText: String = if (OsUtil.isWin) {
-    "Show Log in Explorer"
+    "Show File in Explorer"
   } else if (OsUtil.isMac) {
-    "Show Log in Finder"
+    "Show File in Finder"
   } else {
-    "Show Log ..."
+    "Show File ..."
   }
 }
 
 class OpenInFinderMenuItem(fileId: FileId) extends MenuItem(OpenInFinderMenuItem.menuItemText) {
 
-  setOnAction(_ => Desktop.getDesktop.open(fileId.asPath.getParent.toFile))
+  setOnAction(_ => {
+    val directoryToOpen = fileId.asPath.getParent.toFile
+    new Thread(new Runnable {
+      override def run(): Unit = Desktop.getDesktop.open(directoryToOpen)
+    }).start()
+  })
 
 }
