@@ -46,12 +46,14 @@ object FileMenu {
   }
 
   class QuitMenuItem(closeApplication: => Unit) extends MenuItem("Quit") {
+    setId(UiNodes.FileMenuQuitApplication.value)
     setOnAction(_ => closeApplication)
   }
 
 }
 
-class FileMenu(fileOpenService: LogoRRRFileOpenService
+class FileMenu(isUnderTest : Boolean
+                ,fileOpenService: LogoRRRFileOpenService
                , openFile: FileId => Unit
                , closeAllLogFiles: => Unit
                , closeApplication: => Unit) extends Menu("File") with CanLog {
@@ -66,7 +68,7 @@ class FileMenu(fileOpenService: LogoRRRFileOpenService
     getItems.clear()
     getItems.add(openMenuItem)
     getItems.add(closeAllMenuItem)
-    if (OsUtil.isWin) {
+    if (OsUtil.isWin || isUnderTest) {
       getItems.add(quitMenuItem)
     }
   }

@@ -1,9 +1,17 @@
 package app.logorrr.views.logfiletab.actions
 
+import app.logorrr.io.FileId
+import app.logorrr.views.{UiNode, UiNodeAware}
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.control.{MenuItem, Tab}
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
+
+object CloseLeftFilesMenuItem extends UiNodeAware {
+
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseLeftFilesMenuItem])
+
+}
 
 class CloseLeftFilesMenuItem(fileTab: => LogFileTab) extends MenuItem("Close Files to the Left") {
   private val tabPane = fileTab.getTabPane

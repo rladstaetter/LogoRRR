@@ -5,15 +5,15 @@ import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts, PropsCp}
 import app.logorrr.views.UiNodes
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control._
-import javafx.scene.image.ImageView
 import javafx.scene.layout.{BorderPane, HBox, VBox}
+import javafx.stage.{Stage, WindowEvent}
 
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, ZoneId}
 import java.util.Properties
 
 
-object AboutScreen {
+object AboutDialog {
 
   val logo: ImageCp = ImageCp("/app/logorrr/icon/logorrr-icon-128.png", 128, 128)
 
@@ -53,26 +53,34 @@ class BuildProps {
   lazy val timestamp: String = {
     val PATTERN_FORMAT = "dd.MM.yyyy"
     val formatter = DateTimeFormatter.ofPattern(PATTERN_FORMAT)
-      .withZone(ZoneId.systemDefault());
+      .withZone(ZoneId.systemDefault())
     val i = Instant.ofEpochMilli(buildProps.getProperty("timestamp").toLong)
     formatter.format(i)
   }
 
 }
 
-class AboutScreen extends BorderPane {
+class AboutDialog extends BorderPane {
 
-  private def mkLogo(): ImageView = AboutScreen.logo.imageView()
-
-  private def mkHeader(): Label = AboutScreen.MonoLabel(AppMeta.fullAppNameWithVersion, 50)
+  private val closeButton: Button = {
+    val b = new Button("", AboutDialog.logo.imageView())
+    b.setId(UiNodes.AboutDialogCloseButton.value)
+    b.setOnAction(_ => {
+      val modalStage = getScene.getWindow.asInstanceOf[Stage]
+      modalStage.fireEvent(new WindowEvent(modalStage, WindowEvent.WINDOW_CLOSE_REQUEST))
+    })
+    b
+  }
 
   setPadding(new Insets(10, 10, 10, 10))
-  setTop(mkHeader())
-  setLeft(mkLogo())
-  setRight(new AboutScreen.HLinkView(AboutScreen.links))
+  setTop(AboutDialog.MonoLabel(AppMeta.fullAppNameWithVersion, 50))
+  setLeft(closeButton)
+  setRight(new AboutDialog.HLinkView(AboutDialog.links))
+
   val hBox = new HBox()
   hBox.setAlignment(Pos.CENTER_LEFT)
   hBox.getChildren.add(new Label(BuildProps.Instance.timestamp + " " + BuildProps.Instance.githash))
+
   setBottom(hBox)
 
 }

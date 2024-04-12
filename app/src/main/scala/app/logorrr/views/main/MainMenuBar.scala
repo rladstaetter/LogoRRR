@@ -14,7 +14,7 @@ class MainMenuBar(fileOpenService: LogoRRRFileOpenService
   extends MenuBar
     with CanLog {
 
-  val fileMenu = new FileMenu(fileOpenService, openFile, closeAllLogFiles, closeApplication)
+  val fileMenu = new FileMenu(isUnderTest, fileOpenService, openFile, closeAllLogFiles, closeApplication)
   val helpMenu = new HelpMenu(openFile)
 
   setUseSystemMenuBar(OsUtil.isMac && !isUnderTest)

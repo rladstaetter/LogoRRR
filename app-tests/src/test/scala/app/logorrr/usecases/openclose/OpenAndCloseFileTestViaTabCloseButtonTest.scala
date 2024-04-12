@@ -1,9 +1,9 @@
 package app.logorrr.usecases.openclose
 
 import app.logorrr.TestFiles
+import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.UiNodes
-import javafx.scene.control.TabPane
 import javafx.scene.layout.StackPane
 import org.junit.jupiter.api.Test
 
@@ -12,7 +12,9 @@ import java.nio.file.Path
 /**
  * Checks if a file can be opened and closed via it's closing button
  */
-class OpenAndCloseFileTestViaTabCloseButtonTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
+class OpenAndCloseFileTestViaTabCloseButtonTest
+  extends SingleFileApplicationTest(TestFiles.simpleLog0)
+    with CheckTabPaneActions {
 
   override val path: Path = TestFiles.simpleLog0
 
@@ -31,10 +33,7 @@ class OpenAndCloseFileTestViaTabCloseButtonTest extends SingleFileApplicationTes
 
     clickOn(closeButtonQuery.queryAs[StackPane](classOf[StackPane]))
 
-    waitForPredicate[TabPane](UiNodes.MainTabPane, classOf[TabPane], tabPane => {
-      tabPane.getTabs.isEmpty
-    })
-
+    checkForEmptyTabPane()
   }
 
 }

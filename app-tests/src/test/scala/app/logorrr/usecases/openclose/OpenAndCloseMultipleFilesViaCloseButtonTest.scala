@@ -1,9 +1,9 @@
 package app.logorrr.usecases.openclose
 
-import app.logorrr.views.UiNodes
 import app.logorrr.TestFiles
+import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.MultipleFileApplicationTest
-import javafx.scene.control.TabPane
+import app.logorrr.views.UiNodes
 import javafx.scene.layout.StackPane
 import org.junit.jupiter.api.Test
 import org.testfx.service.query.NodeQuery
@@ -13,7 +13,9 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
 /**
  * Check if multiple files can be opened and then closed again via file menu 'close all'
  */
-class OpenAndCloseMultipleFilesViaCloseButtonTest extends MultipleFileApplicationTest(TestFiles.seq) {
+class OpenAndCloseMultipleFilesViaCloseButtonTest
+  extends MultipleFileApplicationTest(TestFiles.seq)
+    with CheckTabPaneActions {
 
   @Test def openFilesAndCloseOneByOneViaTabCloseButton(): Unit = {
     TestFiles.seq.foreach {
@@ -28,10 +30,7 @@ class OpenAndCloseMultipleFilesViaCloseButtonTest extends MultipleFileApplicatio
       clickOn(nodeQuery.queryAs[StackPane](classOf[StackPane]))
     }
 
-    waitForPredicate[TabPane](UiNodes.MainTabPane, classOf[TabPane], tabPane => {
-      tabPane.getTabs.isEmpty
-    })
-
+    checkForEmptyTabPane()
   }
 
 

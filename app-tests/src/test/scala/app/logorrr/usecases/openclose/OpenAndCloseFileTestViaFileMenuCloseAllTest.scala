@@ -1,10 +1,8 @@
 package app.logorrr.usecases.openclose
 
 import app.logorrr.TestFiles
-import app.logorrr.steps.CanCloseAllFiles
+import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.UiNodes
-import javafx.scene.control.TabPane
 import org.junit.jupiter.api.Test
 
 import java.nio.file.Path
@@ -13,7 +11,7 @@ import java.nio.file.Path
  * Checks if a file can be opened and closed
  */
 class OpenAndCloseFileTestViaFileMenuCloseAllTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
-  with CanCloseAllFiles {
+  with CheckTabPaneActions {
 
   override val path: Path = TestFiles.simpleLog0
 
@@ -28,10 +26,7 @@ class OpenAndCloseFileTestViaFileMenuCloseAllTest extends SingleFileApplicationT
     // click on file menu and then close all button
     closeAllFiles()
 
-    waitForPredicate[TabPane](UiNodes.MainTabPane, classOf[TabPane], tabPane => {
-      tabPane.getTabs.isEmpty
-    })
-
+    checkForEmptyTabPane()
   }
 
 }

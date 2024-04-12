@@ -1,5 +1,6 @@
 package app.logorrr.usecases
 
+import app.logorrr.steps.FileMenuActions
 import app.logorrr.views.UiNode
 import javafx.scene.Node
 import javafx.scene.input.{KeyCode, MouseButton}
@@ -15,13 +16,16 @@ import scala.concurrent.duration.{DurationInt, FiniteDuration}
 /**
  * provides helper methods to work with LogoRRR's UI components
  */
-class TestFxBaseApplicationTest extends ApplicationTest {
+class TestFxBaseApplicationTest
+  extends ApplicationTest
+    with FileMenuActions {
 
   @AfterEach
   @throws[Exception]
   def tearDown(): Unit = {
+    quitApplication()
     // exit application
-    push(KeyCode.COMMAND, KeyCode.Q)
+    //push(KeyCode.COMMAND, KeyCode.Q)
     FxToolkit.hideStage()
     release(Array[KeyCode](): _*)
     release(Array[MouseButton](): _*)

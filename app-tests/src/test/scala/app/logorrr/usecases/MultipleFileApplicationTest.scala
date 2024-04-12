@@ -4,7 +4,7 @@ import app.logorrr.conf.Settings
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.fileservices.OpenMultipleFilesService
 import app.logorrr.services.hostservices.MockHostServices
-import app.logorrr.steps.{CanOpenFile, CanStartApplication, VisibleItemActions}
+import app.logorrr.steps.{CanStartApplication, VisibleItemActions}
 
 import java.nio.file.Path
 
@@ -16,11 +16,10 @@ import java.nio.file.Path
 class MultipleFileApplicationTest(val files: Seq[Path])
   extends TestFxBaseApplicationTest
     with CanStartApplication
-    with VisibleItemActions
-    with CanOpenFile {
+    with VisibleItemActions{
 
   val services: LogoRRRServices = LogoRRRServices(Settings.Default
-    ,new MockHostServices
+    , new MockHostServices
     , new OpenMultipleFilesService(files)
     , isUnderTest = true)
 

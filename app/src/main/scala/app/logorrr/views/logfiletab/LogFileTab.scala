@@ -176,7 +176,7 @@ class LogFileTab(val fileId: FileId
 
 
   private def mkContextMenu(): ContextMenu = {
-    val closeMenuItem = new CloseMenuItem(this)
+    val closeMenuItem = new CloseTabMenuItem(fileId, this)
     val openInFinderMenuItem = new OpenInFinderMenuItem(fileId)
 
     val closeOtherFilesMenuItem = new CloseOtherFilesMenuItem(this)

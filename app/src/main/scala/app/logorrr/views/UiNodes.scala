@@ -30,6 +30,9 @@ object UiNodes {
    */
   val FileMenuCloseAll: UiNode = UiNode("file_menu_close_all")
 
+  /** quit application */
+  val FileMenuQuitApplication: UiNode = UiNode("file_menu_quit_application")
+
   /** help menu */
   val HelpMenu: UiNode = UiNode("help_menu")
 
@@ -59,6 +62,9 @@ object UiNodes {
 
   /** report a bug or a feature request */
   val AboutDialogOpenIssuePage: UiNode = UiNode("about_stage_report_issues")
+
+  /** logo embedded in a close button */
+  val AboutDialogCloseButton: UiNode = UiNode("about_stage_close_button")
 
   /** contains information about log formatter */
   val OpenDateFormatterSite: UiNode = UiNode("date_time_formatter_url")
