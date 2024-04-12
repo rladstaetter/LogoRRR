@@ -22,6 +22,12 @@
             <groupId>app.logorrr.dist.repackaged</groupId>
             <artifactId>dist-repackaged</artifactId>
         </dependency>
+        <!-- adds dependency to force app-tests to be run before proceeding with this module -->
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>app-tests</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
