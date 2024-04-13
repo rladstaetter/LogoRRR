@@ -179,8 +179,8 @@ class LogFileTab(val fileId: FileId
     val closeMenuItem = new CloseTabMenuItem(fileId, this)
     val openInFinderMenuItem = new OpenInFinderMenuItem(fileId)
 
-    val closeOtherFilesMenuItem = new CloseOtherFilesMenuItem(this)
-    val closeAllFilesMenuItem = new CloseAllFilesMenuItem(this)
+    val closeOtherFilesMenuItem = new CloseOtherFilesMenuItem(fileId, this)
+    val closeAllFilesMenuItem = new CloseAllFilesMenuItem(fileId, this)
 
     // close left/right is not always shown. see https://github.com/rladstaetter/LogoRRR/issues/159
     val leftRightCloser =
@@ -188,13 +188,13 @@ class LogFileTab(val fileId: FileId
         Seq()
         // current tab is the first one, show only 'right'
       } else if (getTabPane.getTabs.indexOf(this) == 0) {
-        Seq(new CloseRightFilesMenuItem(this))
+        Seq(new CloseRightFilesMenuItem(fileId, this))
         // we are at the end of the list
       } else if (getTabPane.getTabs.indexOf(this) == getTabPane.getTabs.size - 1) {
-        Seq(new CloseLeftFilesMenuItem(this))
+        Seq(new CloseLeftFilesMenuItem(fileId, this))
         // we are somewhere in between, show both options
       } else {
-        Seq(new CloseLeftFilesMenuItem(this), new CloseRightFilesMenuItem(this))
+        Seq(new CloseLeftFilesMenuItem(fileId, this), new CloseRightFilesMenuItem(fileId, this))
       }
 
 

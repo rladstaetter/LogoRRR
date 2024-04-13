@@ -13,7 +13,8 @@ object CloseOtherFilesMenuItem extends UiNodeAware {
 
 }
 
-class CloseOtherFilesMenuItem(fileTab: => LogFileTab) extends MenuItem("Close Other Files") {
+class CloseOtherFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends MenuItem("Close Other Files") {
+  setId(CloseOtherFilesMenuItem.uiNode(fileId).value)
   private val tabPane = fileTab.getTabPane
   setOnAction(_ => {
     val toBeDeleted: Seq[Tab] = {

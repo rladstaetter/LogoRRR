@@ -14,7 +14,8 @@ object CloseRightFilesMenuItem extends UiNodeAware {
 
 }
 
-class CloseRightFilesMenuItem(fileTab: => LogFileTab) extends MenuItem("Close Files to the Right") {
+class CloseRightFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends MenuItem("Close Files to the Right") {
+  setId(CloseRightFilesMenuItem.uiNode(fileId).value)
   private val tabPane = fileTab.getTabPane
   setOnAction(_ => {
     var deletethem = false

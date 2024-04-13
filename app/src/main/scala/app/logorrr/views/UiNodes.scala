@@ -49,7 +49,7 @@ object UiNodes {
   val MainTabPane: UiNode = UiNode("main_tab_pane")
 
   /** yields all tab 'cards' which are available */
-  val LogFileHeaderTabs = s"${UiNodes.MainTabPane.ref} > .tab-header-area > .headers-region > .tab"
+  val LogFileHeaderTabs: String = s"${UiNodes.MainTabPane.ref} > .tab-header-area > .headers-region > .tab"
 
   /** css rule to target the close button of a LogFileHeaderTab */
   val LogFileHeaderTabCloseButton = ".tab-container > .tab-close-button"
