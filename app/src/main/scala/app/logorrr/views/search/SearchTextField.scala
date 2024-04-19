@@ -2,13 +2,13 @@ package app.logorrr.views.search
 
 import app.logorrr.io.FileId
 import app.logorrr.util.OsUtil
-import app.logorrr.views.{UiNode, UiNodeAware}
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.StringBinding
 import javafx.scene.control.{TextField, Tooltip}
 
 
 
-object SearchTextField extends UiNodeAware {
+object SearchTextField extends UiNodeFileIdAware {
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchTextField])
 

@@ -2,10 +2,10 @@ package app.logorrr.views.logfiletab.actions
 
 import app.logorrr.io.FileId
 import app.logorrr.views.logfiletab.LogFileTab
-import app.logorrr.views.{UiNode, UiNodeAware}
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.MenuItem
 
-object CloseTabMenuItem extends UiNodeAware {
+object CloseTabMenuItem extends UiNodeFileIdAware {
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseTabMenuItem])
 

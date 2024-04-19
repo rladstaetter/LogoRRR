@@ -3,12 +3,12 @@ package app.logorrr.views.search
 
 import app.logorrr.io.FileId
 import app.logorrr.util.ColorUtil
-import app.logorrr.views.{UiNode, UiNodeAware}
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{Button, Tooltip}
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
 import org.kordamp.ikonli.javafx.FontIcon
 
-object SearchButton extends UiNodeAware {
+object SearchButton extends UiNodeFileIdAware {
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchButton])
 

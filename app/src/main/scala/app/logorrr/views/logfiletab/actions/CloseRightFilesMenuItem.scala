@@ -2,13 +2,13 @@ package app.logorrr.views.logfiletab.actions
 
 import app.logorrr.io.FileId
 import app.logorrr.views.logfiletab.LogFileTab
-import app.logorrr.views.{UiNode, UiNodeAware}
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{MenuItem, Tab}
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 
-object CloseRightFilesMenuItem extends UiNodeAware {
+object CloseRightFilesMenuItem extends UiNodeFileIdAware {
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseRightFilesMenuItem])
 

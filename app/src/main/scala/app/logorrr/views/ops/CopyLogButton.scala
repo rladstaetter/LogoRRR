@@ -2,7 +2,7 @@ package app.logorrr.views.ops
 
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
-import app.logorrr.views.{UiNode, UiNodeAware}
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.animation.AnimationTimer
 import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
@@ -12,7 +12,7 @@ import org.kordamp.ikonli.javafx.FontIcon
 
 import scala.collection.mutable.ListBuffer
 
-object CopyLogButton extends UiNodeAware {
+object CopyLogButton extends UiNodeFileIdAware {
 
   def uiNode(id: FileId): UiNode = UiNode(id, classOf[CopyLogButton])
 

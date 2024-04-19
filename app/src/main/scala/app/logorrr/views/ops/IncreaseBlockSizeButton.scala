@@ -3,11 +3,11 @@ package app.logorrr.views.ops
 import app.logorrr.io.FileId
 import app.logorrr.views.block.HasBlockSizeProperty
 import app.logorrr.views.search.OpsToolBar
-import app.logorrr.views.{UiNode, UiNodeAware}
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.paint.Color
 
-object IncreaseBlockSizeButton extends UiNodeAware {
+object IncreaseBlockSizeButton extends UiNodeFileIdAware {
 
   /** size of icon to increase block size */
   val Size = 16

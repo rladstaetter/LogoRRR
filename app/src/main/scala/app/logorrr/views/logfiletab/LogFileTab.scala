@@ -8,7 +8,7 @@ import app.logorrr.util._
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.logfiletab.actions._
 import app.logorrr.views.search.Fltr
-import app.logorrr.views.{LogoRRRAccelerators, UiNode, UiNodeAware}
+import app.logorrr.views.{LogoRRRAccelerators, UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.event.Event
@@ -19,7 +19,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-object LogFileTab extends UiNodeAware {
+object LogFileTab extends UiNodeFileIdAware {
 
   /** background for file log tabs */
   private val BackgroundStyle: String =

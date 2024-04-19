@@ -9,7 +9,7 @@ import org.scalacheck.Gen
 object FilterSpec {
 
   val gen: Gen[Filter] = for {
-    f <- Gen.oneOf(LogFileSettings.DefaultFilter)
+    f <- Gen.oneOf(LogFileSettings.DefaultFilters)
   } yield f
 
 }

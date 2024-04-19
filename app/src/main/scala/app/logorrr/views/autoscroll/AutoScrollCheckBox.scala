@@ -3,10 +3,10 @@ package app.logorrr.views.autoscroll
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
 import app.logorrr.model.HasFileId
-import app.logorrr.views.{UiNode, UiNodeAware}
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{CheckBox, Tooltip}
 
-object AutoScrollCheckBox extends UiNodeAware {
+object AutoScrollCheckBox extends UiNodeFileIdAware {
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[AutoScrollCheckBox])
 

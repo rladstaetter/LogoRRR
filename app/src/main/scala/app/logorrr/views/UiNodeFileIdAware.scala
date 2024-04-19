@@ -2,8 +2,9 @@ package app.logorrr.views
 
 import app.logorrr.io.FileId
 
-trait UiNodeAware {
+trait UiNodeFileIdAware {
 
   def uiNode(id: FileId): UiNode
 
 }
+
