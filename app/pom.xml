@@ -93,7 +93,59 @@
             <plugin>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
+                <configuration>
+                    <argLine>-Djava.library.path=${basedir}/target/native</argLine>
+                </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>OS.osx</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <name>Mac OS X</name>
+                </os>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>app.logorrr.native</groupId>
+                    <artifactId>native-osx</artifactId>
+                    <type>zip</type>
+                    <classifier>dylibs</classifier>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-dependency</id>
+                                <phase>generate-test-resources</phase> <!-- Define the phase where you want to execute unpacking -->
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>app.logorrr.native</groupId>
+                                            <artifactId>native-osx</artifactId>
+                                            <classifier>dylibs</classifier>
+                                            <type>zip</type>
+                                            <version>${project.version}</version>
+                                            <outputDirectory>${project.build.directory}/native</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
