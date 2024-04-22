@@ -70,10 +70,8 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
-
-                    <!-- create application image -->
                     <execution>
-                        <id>create-app-store-pkg</id>
+                        <id>create-deb</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>exec</goal>
