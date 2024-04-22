@@ -1,26 +1,17 @@
---type pkg
---mac-package-identifier app.logorrr
---mac-package-name LogoRRR
---mac-sign
---mac-signing-key-user-name "${mac.signingkey.username}"
---mac-app-store
---mac-entitlements LogoRRR.entitlements.xml
---mac-app-category public.app-category.developer-tools
+--type deb
 --copyright "Copyright 2021-2024 www.logorrr.app"
 --description "LogoRRR is a log file visualisation app, see https://www.logorrr.app/"
---icon icon/logorrr-iconset.icns
+--icon icon/icon_256x256.png
 --name LogoRRR
 --dest app-tmp-image
 --temp app-tmp
 --vendor logorrr.app
 --verbose
 --input libs
---resource-dir res/
 --java-options -Xmx4096m
 --license-file ../../../../LICENSE
 --dest installer
---module-path ../../../../env/target/javafx-jmods-22.0.1
---add-modules javafx.controls,javafx.fxml,jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported
+--add-modules jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported
 --jlink-options "--strip-native-commands --no-header-files --no-man-pages --compress=zip-6 --strip-debug --include-locales=en"
 --app-version ${revision}
 --main-class ${main.launcher.class}
