@@ -45,7 +45,7 @@ object IoManager extends CanLog {
     }
   }
 
-  def fromPathUsingSecurityBookmarks(logFile: Path): Seq[String] = {
+  private def fromPathUsingSecurityBookmarks(logFile: Path): Seq[String] = {
     registerPath(logFile)
     val lines = IoManager.fromPath(logFile)
     if (lines.isEmpty) {

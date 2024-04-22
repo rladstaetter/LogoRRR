@@ -22,12 +22,12 @@ object LogFileSettings {
   private val DefaultLogFormat: Option[LogEntryInstantFormat] = None
   private val DefaultAutoScroll = false
 
-  private val finest: Filter = new Filter("FINEST", Color.GREY, true)
-  private val info: Filter = new Filter("INFO", Color.GREEN, true)
-  private val warning: Filter = new Filter("WARNING", Color.ORANGE, true)
-  private val severe: Filter = new Filter("SEVERE", Color.RED, true)
+  val FinestFilter: Filter = new Filter("FINEST", Color.GREY, true)
+  val InfoFilter: Filter = new Filter("INFO", Color.GREEN, true)
+  val WarningFilter: Filter = new Filter("WARNING", Color.ORANGE, true)
+  val SevereFilter: Filter = new Filter("SEVERE", Color.RED, true)
 
-  val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
+  val DefaultFilters: Seq[Filter] = Seq(FinestFilter, InfoFilter, WarningFilter, SevereFilter)
   private val DefaultFontSize = 12
 
   def apply(fileId: FileId): LogFileSettings =
@@ -36,7 +36,7 @@ object LogFileSettings {
       , Instant.now().toEpochMilli
       , DefaultDividerPosition
       , DefaultFontSize
-      , DefaultFilter
+      , DefaultFilters
       , DefaultBlockSettings
       , DefaultLogFormat
       , DefaultAutoScroll)

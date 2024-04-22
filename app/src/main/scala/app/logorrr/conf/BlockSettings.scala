@@ -9,7 +9,10 @@ object BlockSettings {
   implicit lazy val writer: ConfigWriter[BlockSettings] = deriveWriter[BlockSettings]
 
 }
+
 /**
+ * Represents all settings regarding to blocks
+ *
  * @param size size of blocks
  */
 case class BlockSettings(size: Int)

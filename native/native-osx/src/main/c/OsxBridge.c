@@ -5,7 +5,7 @@
 
 JNIEXPORT void JNICALL Java_app_logorrr_OsxBridge_registerPath(JNIEnv *env, jobject obj, jstring path) {
     const char *pathChars = (*env)->GetStringUTFChars(env, path, NULL);
-     if (pathChars != NULL) {
+    if (pathChars != NULL) {
          // Call the Swift function from C
          registerPath(pathChars);
 
@@ -14,11 +14,19 @@ JNIEXPORT void JNICALL Java_app_logorrr_OsxBridge_registerPath(JNIEnv *env, jobj
      }
 }
 
-
 JNIEXPORT void JNICALL Java_app_logorrr_OsxBridge_releasePath(JNIEnv *env, jobject obj, jstring path) {
     const char *pathChars = (*env)->GetStringUTFChars(env, path, NULL);
-     if (pathChars != NULL) {
+    if (pathChars != NULL) {
          releasePath(pathChars);
          (*env)->ReleaseStringUTFChars(env, path, pathChars);
-     }
+    }
 }
+
+JNIEXPORT void JNICALL Java_app_logorrr_OsxBridge_openUrl(JNIEnv *env, jobject obj, jstring path) {
+    const char *urlChars = (*env)->GetStringUTFChars(env, path, NULL);
+    if (urlChars != NULL) {
+        openUrl(urlChars);
+        (*env)->ReleaseStringUTFChars(env, path, urlChars);
+    }
+}
+

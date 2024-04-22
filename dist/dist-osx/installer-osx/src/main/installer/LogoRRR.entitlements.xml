@@ -23,5 +23,8 @@
         <!-- to be able to access files see https://developer.apple.com/documentation/professional_video_applications/fcpxml_reference/asset/media-rep/bookmark/enabling_security-scoped_bookmark_and_url_access?language=swift -->
         <key>com.apple.security.files.bookmarks.app-scope</key>
         <true/>
+        <!-- to access network (open urls) -->
+        <key>com.apple.security.network.client</key>
+        <true/>
     </dict>
 </plist>

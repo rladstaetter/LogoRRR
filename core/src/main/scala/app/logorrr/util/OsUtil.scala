@@ -5,7 +5,6 @@ package app.logorrr.util
  */
 object OsUtil {
 
-
   sealed trait Os extends Serializable
 
   case object Windows extends Os

@@ -1,18 +1,28 @@
 package app.logorrr.views.text
 
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.text.contextactions.{IgnoreAboveMenuItem, IgnoreBelowMenuItem}
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 
 import scala.jdk.CollectionConverters._
 
+object LogTextView extends UiNodeFileIdAware {
+
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogTextView])
+
+}
+
 class LogTextView(mutLogFileSettings: MutLogFileSettings
                   , filteredList: FilteredList[LogEntry])
   extends ListView[LogEntry]
     with CanLog {
+
+  setId(LogTextView.uiNode(mutLogFileSettings.getFileId).value)
 
   def scrollToItem(item: LogEntry): Unit = {
     getSelectionModel.select(item)

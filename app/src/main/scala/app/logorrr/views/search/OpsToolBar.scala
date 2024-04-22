@@ -18,10 +18,13 @@ import javafx.scene.input.{KeyCode, KeyEvent}
 object OpsToolBar {
 
   /** increment/decrement block size */
-  val blockSizeStep = 2
+  val blockSizeStep: Int = 2
+
+  /** max reachable block size */
+  val MaxBlockSize: Int = 70 * OpsToolBar.blockSizeStep
 
   /** increment / decrement font size */
-  val fontSizeStep = 1
+  val fontSizeStep: Int = 1
 
 }
 
@@ -41,32 +44,32 @@ class OpsToolBar(fileId: FileId
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
   val w = 380
-  val macWidth: Int = w
-  val winWidth: Int = w + 2
-  val linuxWidth: Int = w + 2
+  private val macWidth: Int = w
+  private val winWidth: Int = w + 2
+  private val linuxWidth: Int = w + 2
   val width: Int = OsUtil.osFun(winWidth, macWidth, linuxWidth) // different layouts (may be dependent on font size renderings?)
   setMinWidth(width)
 
   /** control which enables selecting color for a search tag */
-  private val colorPicker = new SearchColorPicker()
+  private val colorPicker = new SearchColorPicker(fileId)
 
   /** toggles search behavior from case sensitive search to a regex search */
-  val regexToggleButton = new SearchActivateRegexToggleButton()
+  val regexToggleButton = new SearchActivateRegexToggleButton(fileId)
 
   /** textfield to enter search queries */
-  val searchTextField = new SearchTextField(regexToggleButton)
+  val searchTextField = new SearchTextField(fileId, regexToggleButton)
 
-  private val searchButton = new SearchButton(searchTextField, regexToggleButton, colorPicker, addFilterFn)
+  private val searchButton = new SearchButton(fileId, searchTextField, regexToggleButton, colorPicker, addFilterFn)
 
-  val autoScrollCheckBox = new AutoScrollCheckBox(fileId)
+  private val autoScrollCheckBox = new AutoScrollCheckBox(fileId)
 
-  val clearLogButton = new ClearLogButton(logEntries)
+  private val clearLogButton = new ClearLogButton(fileId, logEntries)
 
-  val copySelectionButton = new CopyLogButton(filteredList)
+  private val copySelectionButton = new CopyLogButton(fileId, filteredList)
 
-//  val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
+  //  val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
 
-//  val timerButton = new TimerButton(fileId, firstNEntries)
+  //  val timerButton = new TimerButton(fileId, firstNEntries)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {
@@ -81,11 +84,10 @@ class OpsToolBar(fileId: FileId
   val searchItems: Seq[Control] = Seq[Control](searchTextField, regexToggleButton, colorPicker, searchButton)
 
   val sizeItems: Seq[Control] = {
-    val decreaseBlockSizeButton = new DecreaseBlockSizeButton(blockSizeProperty)
-    val increaseBlockSizeButton = new IncreaseBlockSizeButton(blockSizeProperty)
-    val decreaseTextSizeButton = new DecreaseTextSizeButton(fileId)
-    val increaseTextSizeButton = new IncreaseTextSizeButton(fileId)
-    Seq(decreaseBlockSizeButton, increaseBlockSizeButton, decreaseTextSizeButton, increaseTextSizeButton)
+    Seq(new DecreaseBlockSizeButton(fileId, blockSizeProperty)
+      , new IncreaseBlockSizeButton(fileId, blockSizeProperty)
+      , new DecreaseTextSizeButton(fileId)
+      , new IncreaseTextSizeButton(fileId))
   }
 
   val otherItems: Seq[Node] = {

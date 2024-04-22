@@ -2,6 +2,8 @@ package app.logorrr.conf
 
 import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.LogFileSettings
+import javafx.geometry.Rectangle2D
+import javafx.stage.Screen
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
 
@@ -18,8 +20,29 @@ object Settings {
   implicit lazy val reader: ConfigReader[Settings] = deriveReader[Settings]
   implicit lazy val writer: ConfigWriter[Settings] = deriveWriter[Settings]
 
-  val Default: Settings = Settings(
-    StageSettings(100, 100, 800, 600)
+  def calcDefaultScreenPosition() :Rectangle2D = {
+
+    val ps: Rectangle2D = Screen.getPrimary().getVisualBounds()
+
+    val originalX = ps.getMinX
+    val originalY = ps.getMinY
+    val originalWidth = ps.getWidth
+    val originalHeight = ps.getHeight
+
+    // Calculate the dimensions of the new rectangle (80% of original)
+    val newWidth = originalWidth * 0.8
+    val newHeight = originalHeight * 0.8
+
+    // Calculate the new coordinates
+    val newX = originalX + (originalWidth - newWidth) / 2
+    val newY = originalY + (originalHeight - newHeight) / 2
+    new Rectangle2D(newX,newY,newWidth,newHeight)
+  }
+
+
+
+  lazy val Default: Settings = Settings(
+    StageSettings(calcDefaultScreenPosition())
     , Map()
     , None
     , None

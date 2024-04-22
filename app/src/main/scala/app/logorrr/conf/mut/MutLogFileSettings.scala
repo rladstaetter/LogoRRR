@@ -73,6 +73,8 @@ class MutLogFileSettings {
 
   def setBlockSettings(bs: BlockSettings): Unit = blockSizeProperty.set(bs.size)
 
+  def getBlockSize : Int = blockSizeProperty.get()
+  
   def setFileId(path: FileId): Unit = fileIdProperty.set(path)
 
   def getFileId: FileId = fileIdProperty.get()
