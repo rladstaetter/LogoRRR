@@ -2,7 +2,7 @@
   <configuration default="false" name="ScreenCastBackgroundApp" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="app.logorrr.docs.ScreenCastBackgroundApp" />
     <module name="docs" />
-    <option name="VM_PARAMETERS" value="-Xmx4g -Djava.util.logging.config.file=develop-logging.properties -Djava.library.path=$PROJECT_DIR$/native/native-osx/target -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-22/lib --add-modules javafx.controls,javafx.fxml --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED" />
+    <option name="VM_PARAMETERS" value="-Xmx4g -Djava.util.logging.config.file=develop-logging.properties -Djava.library.path=$PROJECT_DIR$/native/native-osx/target -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-22.0.1/lib --add-modules javafx.controls --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="app.logorrr.docs.*" />
