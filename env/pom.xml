@@ -13,7 +13,8 @@
     <packaging>pom</packaging>
     <description>Downloads and provides openjfx sdk (needed for intellij run configurations)</description>
     <properties>
-        <openjfx.sdk.download.url>https://download2.gluonhq.com/openjfx/21.0.1/openjfx-${openjfx.version}_${openjfx.os.prefix}-${os.arch}_bin-sdk.zip</openjfx.sdk.download.url>
+        <openjfx.jmods.download.url>https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-${os.arch}_bin-jmods.zip</openjfx.jmods.download.url>
+        <openjfx.sdk.download.url>https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-${os.arch}_bin-sdk.zip</openjfx.sdk.download.url>
     </properties>
     <build>
         <plugins>
@@ -27,13 +28,25 @@
                         <goals>
                             <goal>wget</goal>
                         </goals>
+                        <configuration>
+                            <url>${openjfx.sdk.download.url}</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.build.directory}/</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>fetch-openjfx-jmods</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>${openjfx.jmods.download.url}</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.build.directory}/</outputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <url>${openjfx.sdk.download.url}</url>
-                    <unpack>true</unpack>
-                    <outputDirectory>${project.build.directory}/</outputDirectory>
-                </configuration>
             </plugin>
         </plugins>
     </build>

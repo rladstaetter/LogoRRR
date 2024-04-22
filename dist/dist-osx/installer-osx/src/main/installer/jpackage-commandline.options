@@ -6,7 +6,7 @@
 --mac-app-store
 --mac-entitlements LogoRRR.entitlements.xml
 --mac-app-category public.app-category.developer-tools
---copyright "Copyright 2021-2024 www.logorrr.app"
+--copyright "Copyright 2021-${currentYear} www.logorrr.app"
 --description "LogoRRR is a log file visualisation app, see https://www.logorrr.app/"
 --icon icon/logorrr-iconset.icns
 --name LogoRRR
@@ -19,7 +19,8 @@
 --java-options -Xmx4096m
 --license-file ../../../../LICENSE
 --dest installer
---add-modules jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported
+--module-path ../../../../env/target/javafx-jmods-${openjfx.version}
+--add-modules javafx.controls,jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported
 --jlink-options "--strip-native-commands --no-header-files --no-man-pages --compress=zip-6 --strip-debug --include-locales=en"
 --app-version ${revision}
 --main-class ${main.launcher.class}

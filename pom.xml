@@ -17,7 +17,7 @@
         <revision>24.3.0</revision>
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.12</scala.version>
-        <openjfx.version>21.0.1</openjfx.version>
+        <openjfx.version>22.0.1</openjfx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <ikonli.version>12.3.1</ikonli.version>
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
@@ -31,6 +31,7 @@
         <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
         <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
         <jmh.version>1.33</jmh.version>
+        <windows.temurin.version>https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_windows_hotspot_22.0.1_8.zip</windows.temurin.version>
     </properties>
     <scm>
         <connection>scm:git:https://github.com/rladstaetter/LogoRRR.git</connection>
@@ -539,6 +540,11 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>properties-maven-plugin</artifactId>
+                    <version>1.2.1</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -549,6 +555,42 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>timestamp-property</id>
+                        <goals>
+                            <goal>timestamp-property</goal>
+                        </goals>
+                        <configuration>
+                            <name>currentYear</name>
+                            <pattern>yyyy</pattern>
+                            <timeZone>GMT</timeZone>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>set-system-properties</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <property>
+                                    <name>currentYear</name>
+                                </property>
+                            </properties>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
