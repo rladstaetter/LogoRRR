@@ -12,6 +12,8 @@ import javafx.scene.control.{Tab, TabPane}
 import javafx.scene.input.{DragEvent, TransferMode}
 
 import java.nio.file.{Files, Path}
+import java.util.stream.Collectors
+import java.{lang, util}
 import scala.collection.mutable
 import scala.jdk.CollectionConverters._
 
@@ -90,7 +92,11 @@ class MainTabPane extends TabPane with CanLog {
   }
 
   private def dropDirectory(path: Path): Unit = {
-    Files.list(path).filter((p: Path) => Files.isRegularFile(p)).forEach((t: Path) => openFile(FileId(t)))
+    val files = Files.list(path).filter((p: Path) => Files.isRegularFile(p))
+    // diff between regular files and zip files, try to open zip files as container
+    val collectorResults: util.Map[lang.Boolean, util.List[Path]] = files.collect(Collectors.partitioningBy((p: Path) => p.getFileName.toString.endsWith(".zip")))
+    collectorResults.get(false).forEach(p => openFile(FileId(p)))
+    collectorResults.get(true).forEach(p => openZipFile(p))
   }
 
   /**
