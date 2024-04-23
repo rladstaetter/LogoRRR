@@ -161,9 +161,11 @@ class MainTabPane extends TabPane with CanLog {
 
   /** Adds a new logfile to display and initializes bindings and listeners */
   def addLogFileTab(tab: LogFileTab): Unit = {
-    tab.init()
-    getTabs.add(tab)
-    tab.initContextMenu()
+    JfxUtils.execOnUiThread({
+      tab.init()
+      getTabs.add(tab)
+      tab.initContextMenu()
+    })
   }
 
 }
