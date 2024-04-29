@@ -24,8 +24,7 @@ object OpenInFinderMenuItem extends UiNodeFileIdAware {
 class OpenInFinderMenuItem(fileId: FileId) extends MenuItem(OpenInFinderMenuItem.menuItemText) {
   setId(OpenInFinderMenuItem.uiNode(fileId).value)
   setOnAction(_ => {
-    val directoryToOpen = fileId.asPath.getParent.toFile
-    new Thread(() => Desktop.getDesktop.open(directoryToOpen)).start()
+    new Thread(() => Desktop.getDesktop.open(fileId.asPath.getParent.toFile)).start()
   })
 
 }

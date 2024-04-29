@@ -201,11 +201,21 @@ class LogFileTab(val fileId: FileId
     val items = {
       // special handling if there is only one tab
       if (getTabPane.getTabs.size() == 1) {
-        Seq(closeMenuItem, openInFinderMenuItem)
+        if (OsUtil.isMac) {
+          Seq(closeMenuItem)
+        } else {
+          Seq(closeMenuItem, openInFinderMenuItem)
+        }
       } else {
         Seq(closeMenuItem
           , closeOtherFilesMenuItem
-          , closeAllFilesMenuItem) ++ leftRightCloser ++ Seq(openInFinderMenuItem)
+          , closeAllFilesMenuItem) ++ leftRightCloser ++ {
+          if (OsUtil.isMac) {
+            Seq()
+          } else {
+            Seq(openInFinderMenuItem)
+          }
+        }
       }
     }
 
