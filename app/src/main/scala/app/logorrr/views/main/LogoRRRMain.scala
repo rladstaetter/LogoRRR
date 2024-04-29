@@ -74,7 +74,7 @@ class LogoRRRMain(closeStage: => Unit
 
       zipFutures ++ fileBasedSettings
     }
-    val logFileTabs = Await.result(futures, Duration.Inf).flatten
+    val logFileTabs: Seq[LogFileTab] = Await.result(futures, Duration.Inf).flatten
     logTrace("Loaded " + logFileTabs.size + " files ... ")
 
     // only after loading all files we initialize the 'add' listener

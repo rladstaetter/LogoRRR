@@ -1,5 +1,7 @@
 package app.logorrr;
 
+import java.nio.file.Path;
+
 /**
  * Provides interface methods for native code
  */
@@ -25,4 +27,15 @@ public class OsxBridge {
      */
     public static native void openUrl(String url);
 
+    public static void registerPath(Path path) {
+        if (path != null) {
+            registerPath(path.toAbsolutePath().toString());
+        }
+    }
+
+    public static void releasePath(Path path) {
+        if (path != null) {
+            releasePath(path.toAbsolutePath().toString());
+        }
+    }
 }
