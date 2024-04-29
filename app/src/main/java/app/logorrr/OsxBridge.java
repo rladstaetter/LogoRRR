@@ -23,7 +23,7 @@ public class OsxBridge {
     /**
      * open an url via the native browser
      *
-     * @param url the url to open, for example https://www.logorrr.app/
+     * @param url the url to open, for example <a href="https://www.logorrr.app/">https://www.logorrr.app/</a>
      */
     public static native void openUrl(String url);
 

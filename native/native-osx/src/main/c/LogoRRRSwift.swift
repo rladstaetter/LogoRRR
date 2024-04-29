@@ -34,7 +34,7 @@ public func registerPath(path: UnsafePointer<Int8>) {
                 // print("Restored access \(url.absoluteString)")
                 // ... Perform other operations with the URL ...
                 // Don't forget to release the security access when done
-               // url.stopAccessingSecurityScopedResource()
+                // url.stopAccessingSecurityScopedResource()
             } else {
                // print("Could not restore access \(url.absoluteString)")
             }
