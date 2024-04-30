@@ -11,14 +11,12 @@
 
     <artifactId>installer-win</artifactId>
     <name>app.logorrr.dist.win.installer</name>
-    <description>Installer project using Advanced Installer technology to install LogoRRR without AppStore.
-    </description>
+    <description>Installer project using Advanced Installer technology to install LogoRRR with its own dedicated jre</description>
 
     <dependencies>
         <dependency>
-            <groupId>app.logorrr.dist</groupId>
-            <artifactId>binary-win</artifactId>
-            <type>exe</type>
+            <groupId>app.logorrr</groupId>
+            <artifactId>app</artifactId>
         </dependency>
         <dependency>
             <groupId>app.logorrr</groupId>
@@ -50,31 +48,44 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-binary</id>
+                        <id>copy-deps</id>
                         <phase>generate-resources</phase>
                         <goals>
-                            <goal>copy</goal>
+                            <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>app.logorrr.dist</groupId>
-                                    <artifactId>binary-win</artifactId>
-                                    <type>exe</type>
-                                </artifactItem>
-                            </artifactItems>
-                            <stripVersion>true</stripVersion>
-                            <outputDirectory>${project.build.directory}/installer/</outputDirectory>
+                            <!-- important not to overwrite jar files because of name clashes (core.jar for example) -->
+                            <prependGroupId>true</prependGroupId>
+                            <outputDirectory>${project.build.directory}/installer/programfiles/</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <executions>
+                    <execution>
+                        <id>fetch-jre</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <url>https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.1%2B12/OpenJDK21U-jre_x64_windows_hotspot_21.0.1_12.zip</url>
+                    <unpack>true</unpack>
+                    <outputDirectory>${project.build.directory}/installer/</outputDirectory>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>create-product-code-logorrr-installer</id>
+                        <id>process-product-code-logorrr-installer</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>java</goal>
@@ -88,11 +99,10 @@
                             <includePluginDependencies>true</includePluginDependencies>
                         </configuration>
                     </execution>
-
                     <!-- Create installer -->
                     <execution>
-                        <id>create-installer</id>
-                        <phase>package</phase>
+                        <id>create-installer-slim</id>
+                        <phase>compile</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>

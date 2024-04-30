@@ -41,14 +41,14 @@ object IconCreatorApp {
 
 class IconCreatorApp extends javafx.application.Application {
 
-  val iconSizes: Seq[Int] = Seq(512, 256, 128, 64, 32, 16)
+  val iconSizes: Seq[Int] = Seq(720)
   val icons: Seq[Area] = iconSizes.map(i => Area(i, i,0,0))
 
   def start(stage: Stage): Unit = {
     val bp = new BorderPane()
     val ics =
       for (a@Area(w, h,_,_) <- icons) yield {
-        val canvas = new Canvas(w, h)
+        val canvas = new Canvas(w, 1080)
         val gc2d = canvas.getGraphicsContext2D
         LogorrrIcon.drawIcon(gc2d, w)
         (a, canvas)

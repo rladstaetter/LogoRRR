@@ -9,14 +9,16 @@
         <version>${revision}${changelist}</version>
     </parent>
 
-    <artifactId>installer-win-jre</artifactId>
-    <name>app.logorrr.dist.win-jre.installer</name>
-    <description>Installer project using Advanced Installer technology to install LogoRRR with its own dedicated jre</description>
+    <artifactId>installer-win-graal</artifactId>
+    <name>app.logorrr.dist.win-graal.installer</name>
+    <description>Installer project using Advanced Installer technology to install LogoRRR without AppStore.
+    </description>
 
     <dependencies>
         <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>app</artifactId>
+            <groupId>app.logorrr.dist</groupId>
+            <artifactId>binary-win</artifactId>
+            <type>exe</type>
         </dependency>
         <dependency>
             <groupId>app.logorrr</groupId>
@@ -48,44 +50,31 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-deps</id>
+                        <id>copy-binary</id>
                         <phase>generate-resources</phase>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>copy</goal>
                         </goals>
                         <configuration>
-                            <!-- important not to overwrite jar files because of name clashes (core.jar for example) -->
-                            <prependGroupId>true</prependGroupId>
-                            <outputDirectory>${project.build.directory}/installer/programfiles/</outputDirectory>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>app.logorrr.dist</groupId>
+                                    <artifactId>binary-win</artifactId>
+                                    <type>exe</type>
+                                </artifactItem>
+                            </artifactItems>
+                            <stripVersion>true</stripVersion>
+                            <outputDirectory>${project.build.directory}/installer/</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.googlecode.maven-download-plugin</groupId>
-                <artifactId>download-maven-plugin</artifactId>
-                <version>1.6.8</version>
-                <executions>
-                    <execution>
-                        <id>fetch-jre</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <url>https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.1%2B12/OpenJDK21U-jre_x64_windows_hotspot_21.0.1_12.zip</url>
-                    <unpack>true</unpack>
-                    <outputDirectory>${project.build.directory}/installer/</outputDirectory>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>process-product-code-logorrr-installer-jre</id>
+                        <id>create-product-code-logorrr-installer</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>java</goal>
@@ -93,16 +82,17 @@
                         <configuration>
                             <mainClass>app.logorrr.build.ProductCodeUpdater</mainClass>
                             <arguments>
-                                <argument>${project.build.directory}/installer/logorrr-installer-jre.aip</argument>
+                                <argument>${project.build.directory}/installer/logorrr-installer.aip</argument>
                                 <argument>${project.artifactId}-${revision}</argument>
                             </arguments>
                             <includePluginDependencies>true</includePluginDependencies>
                         </configuration>
                     </execution>
+
                     <!-- Create installer -->
                     <execution>
-                        <id>create-installer-slim</id>
-                        <phase>compile</phase>
+                        <id>create-installer</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -111,7 +101,7 @@
                             <workingDirectory>${project.build.directory}/installer/</workingDirectory>
                             <arguments>
                                 <argument>/rebuild</argument>
-                                <argument>logorrr-installer-jre.aip</argument>
+                                <argument>logorrr-installer.aip</argument>
                             </arguments>
                         </configuration>
                     </execution>
