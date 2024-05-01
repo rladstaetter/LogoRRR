@@ -18,12 +18,15 @@ object OsUtil {
       Windows
     } else if (System.getProperty("os.name").toLowerCase.contains("mac")) {
       Mac
-    } else {
+    } else if (System.getProperty("os.name").toLowerCase.contains("linux")) {
       Linux
+    } else {
+      Windows
     }
 
   val isMac: Boolean = currentOs == Mac
   val isWin: Boolean = currentOs == Windows
+  val isLinux: Boolean = currentOs == Linux
 
   // for releases / mac installers this value should always be true
   // set this flag only during development to false

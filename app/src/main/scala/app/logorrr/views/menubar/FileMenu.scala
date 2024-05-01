@@ -68,7 +68,7 @@ class FileMenu(isUnderTest : Boolean
     getItems.clear()
     getItems.add(openMenuItem)
     getItems.add(closeAllMenuItem)
-    if (OsUtil.isWin || isUnderTest) {
+    if (OsUtil.isLinux || OsUtil.isWin || isUnderTest) {
       getItems.add(quitMenuItem)
     }
   }
