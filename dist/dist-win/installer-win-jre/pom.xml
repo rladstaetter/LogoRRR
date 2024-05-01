@@ -22,6 +22,11 @@
             <groupId>app.logorrr</groupId>
             <artifactId>build</artifactId>
         </dependency>
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>app-tests</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <resources>

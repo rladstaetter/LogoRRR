@@ -26,7 +26,7 @@
         <dependency>
             <groupId>app.logorrr</groupId>
             <artifactId>app-tests</artifactId>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
