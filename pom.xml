@@ -146,12 +146,17 @@
                 <module>benchmarks</module>
             </modules>
         </profile>
+        <profile>
+            <id>app-tests</id>
+            <modules>
+                <module>app-tests</module>
+            </modules>
+        </profile>
     </profiles>
     <modules>
         <module>core</module>
         <module>build</module>
         <module>app</module>
-        <module>app-tests</module>
         <module>dist</module>
         <module>docs</module>
     </modules>
