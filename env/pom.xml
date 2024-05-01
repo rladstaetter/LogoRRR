@@ -13,8 +13,12 @@
     <packaging>pom</packaging>
     <description>Downloads and provides openjfx sdk (needed for intellij run configurations)</description>
     <properties>
-        <openjfx.jmods.download.url>https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-${os.arch}_bin-jmods.zip</openjfx.jmods.download.url>
-        <openjfx.sdk.download.url>https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-${os.arch}_bin-sdk.zip</openjfx.sdk.download.url>
+        <openjfx.jmods.download.url>
+            https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-${os.arch}_bin-jmods.zip
+        </openjfx.jmods.download.url>
+        <openjfx.sdk.download.url>
+            https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-${os.arch}_bin-sdk.zip
+        </openjfx.sdk.download.url>
     </properties>
     <build>
         <plugins>
@@ -50,5 +54,24 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>OS.windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <openjfx.jmods.download.url>
+                    https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-x64_bin-jmods.zip
+                </openjfx.jmods.download.url>
+                <openjfx.sdk.download.url>
+                    https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-x64_bin-sdk.zip
+                </openjfx.sdk.download.url>
+            </properties>
+        </profile>
+    </profiles>
 </project>
 
