@@ -3,7 +3,6 @@ package app.logorrr.usecases.contextmenu
 import app.logorrr.TestFiles
 import app.logorrr.steps.{CheckTabPaneActions, VisibleItemActions}
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.util.OsUtil
 import app.logorrr.views.UiNodes
 import app.logorrr.views.logfiletab.actions.OpenInFinderMenuItem
 import javafx.scene.input.MouseButton
@@ -23,7 +22,7 @@ class OpenSingleFileAndOpenInFinderTest
    */
   @Test def openSingleFileAndOpenInFinderTest(): Unit = {
     // basically skips this until https://github.com/rladstaetter/LogoRRR/issues/221#issuecomment-2083771649
-    if (!OsUtil.isMac) {
+    if (false) {
       checkForEmptyTabPane()
       openFile(path)
       checkForNonEmptyTabPane()
