@@ -57,6 +57,22 @@
 
     <profiles>
         <profile>
+            <id>OS.linux</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                </os>
+            </activation>
+            <properties>
+                <openjfx.jmods.download.url>
+                    https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-x64_bin-jmods.zip
+                </openjfx.jmods.download.url>
+                <openjfx.sdk.download.url>
+                    https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-x64_bin-sdk.zip
+                </openjfx.sdk.download.url>
+            </properties>
+        </profile>
+        <profile>
             <id>OS.windows</id>
             <activation>
                 <os>
