@@ -5,7 +5,10 @@ fact, when you get an error, you may simply want to see what happened as fast as
 is a tool that does precisely that and provides you with a quick way to filter out critical events or other points of
 interest.
 
-![Screenshot of LogoRRR, version 24.1.0](docs/releases/24.1.0/screenshot-24.1.0.png?raw=true)
+[![Watch a video of LogoRRRs features](https://img.youtube.com/vi/5ogC95PX0Ag/maxresdefault.jpg)](https://youtu.be/5ogC95PX0Ag)
+
+More  [Screenshots](Screenshots.md) are available [here](Screenshots.md).
+
 
 ## Windows and Linux installation
 
@@ -19,19 +22,16 @@ Older releases versions are available on the [releases page](https://github.com/
 
 ## Features
 
-- Supports **Windows, Mac Os X, Linux**
-- `LogoRRR` remembers last opened files and settings upon restart
-- Drag and drop log files
-- Drag and drop a directory to open all contained files
-- Handle multiple files in parallel
-- Filter log files for entries interactively
-- Case sensitive and regex search
-- Unix `tail -f` like functionality to watch ongoing events
-- Keyboard shortcuts for more efficient usage
-
-## Screenshots
-
-If you want to see [LogoRRR in action](Screenshots.md), click [here](Screenshots.md).
+- **Cross-Platform Compatibility**: Easily use on **Windows, macOS, Linux**.
+- **Drag and Drop**: Just drag and drop log files or directories for instant access.
+- **Interactive Filtering**: Effortlessly filter log entries to find exactly what you need.
+- **Multi-File Handling**: Manage and view multiple log files simultaneously.
+- **Zip File Support**: Directly work with zip files - no need to unpack data before analyzing.
+- **Advanced Search Options**: Utilize case-sensitive and regex searches for precise results.
+- **Real-Time Monitoring**: Stay updated with Unix `tail -f` like functionality for ongoing events.
+- **Efficiency at Your Fingertips**: Quick keyboard shortcuts streamline your workflow.
+- **Easy export**: Copy your extracted data to the clipboard - to include it in emails for example.
+- **Remembers settings**: `LogoRRR` smartly recalls your last files and settings on restart.
 
 ## License
 

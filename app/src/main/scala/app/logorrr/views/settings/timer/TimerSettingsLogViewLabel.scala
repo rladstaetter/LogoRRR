@@ -5,6 +5,7 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util.LabelUtil
 import app.logorrr.views.text.LineNumberLabel
 import javafx.beans.property.ObjectProperty
+import javafx.event.EventHandler
 import javafx.scene.control.{Label, Tooltip}
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.{Background, BackgroundFill, HBox}
@@ -36,7 +37,12 @@ case class TimerSettingsLogViewLabel(settings: MutLogFileSettings
     for ((c, i) <- e.value.zipWithIndex) yield {
       val l = new Label(c.toString)
       l.setUserData(i) // save position of label for later
-      l.setOnMouseClicked(applyStyleAtPos(i) _)
+      l.setOnMouseClicked(new EventHandler[MouseEvent] {
+        override def handle(t: MouseEvent): Unit = {
+          applyStyleAtPos(i)
+        }
+      })
+//      l.setOnMouseClicked(applyStyleAtPos(i) _)
       l.setTooltip(new Tooltip(s"column: ${i.toString}"))
       l.setOnMouseEntered(_ => {
         l.setStyle(
@@ -55,7 +61,7 @@ case class TimerSettingsLogViewLabel(settings: MutLogFileSettings
     case _ =>
   }
 
-  private def applyStyleAtPos(pos: Int)(e: MouseEvent): Unit = {
+  private def applyStyleAtPos(pos: Int): Unit = {
     (Option(startColProperty.get), Option(endColProperty.get)) match {
       case (None, None) =>
         startColProperty.set(pos)

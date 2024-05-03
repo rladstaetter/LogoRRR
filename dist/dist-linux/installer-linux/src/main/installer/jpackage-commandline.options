@@ -1,0 +1,21 @@
+--type deb
+--copyright "Copyright 2021-${currentYear} www.logorrr.app"
+--description "LogoRRR is a log file visualisation app, see https://www.logorrr.app/"
+--icon icon/icon_256x256.png
+--name LogoRRR
+--dest app-tmp-image
+--temp app-tmp
+--vendor logorrr.app
+--verbose
+--input libs
+--java-options -Xmx4096m
+--license-file ../../../../LICENSE
+--dest installer
+--module-path ../../../../env/target/javafx-jmods-${openjfx.version}
+--add-modules javafx.controls,jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported
+--jlink-options "--strip-native-commands --no-header-files --no-man-pages --compress=zip-6 --strip-debug --include-locales=en"
+--app-version ${revision}
+--main-class ${main.launcher.class}
+--java-options -Xmx4096m
+--java-options -Djava.library.path=$APPDIR/.
+--main-jar app-${project.version}.jar

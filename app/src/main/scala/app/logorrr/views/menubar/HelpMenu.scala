@@ -1,29 +1,32 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.io.FilePaths
+import app.logorrr.io.{FileId, FilePaths}
 import app.logorrr.meta.AppMeta
-import app.logorrr.views.about.AboutScreen
+import app.logorrr.views.UiNodes
+import app.logorrr.views.about.AboutDialog
 import app.logorrr.views.menubar.HelpMenu.{AboutMenuItem, LogMenuItem}
 import javafx.scene.Scene
 import javafx.scene.control.{Menu, MenuItem}
 import javafx.stage.{Modality, Stage}
 
-import java.nio.file.Path
-
 object HelpMenu {
 
-  class LogMenuItem(openLogFile: Path => Unit) extends MenuItem("Open LogoRRRs log") {
+  class LogMenuItem(openLogFile: FileId => Unit) extends MenuItem("Open LogoRRRs log") {
+    setId(UiNodes.HelpMenuOpenLogorrLog.value)
+
     setOnAction(_ => {
-      openLogFile(FilePaths.logFilePath)
+      openLogFile(FileId(FilePaths.logFilePath))
     })
   }
 
   class AboutMenuItem extends MenuItem("About") {
+    setId(UiNodes.HelpMenuAbout.value)
+
     setOnAction(_ => {
       val stage = new Stage()
       stage.initModality(Modality.APPLICATION_MODAL)
       stage.setTitle(s"About ${AppMeta.fullAppNameWithVersion}")
-      val scene = new Scene(new AboutScreen, 440, 250)
+      val scene = new Scene(new AboutDialog, 440, 250)
       stage.setScene(scene)
       stage.setOnCloseRequest(_ => stage.close())
       stage.showAndWait()
@@ -31,6 +34,7 @@ object HelpMenu {
   }
 }
 
-class HelpMenu(openLogFile: Path => Unit) extends Menu("Help") {
-  getItems.addAll(new LogMenuItem(openLogFile), new AboutMenuItem())
+class HelpMenu(openFile: FileId => Unit) extends Menu("Help") {
+  setId(UiNodes.HelpMenu.value)
+  getItems.addAll(new LogMenuItem(openFile), new AboutMenuItem())
 }

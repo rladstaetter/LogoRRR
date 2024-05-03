@@ -1,7 +1,10 @@
 package app.logorrr.views.menubar
 
- import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.io.FileId
+import app.logorrr.services.fileservices.LogoRRRFileOpenService
 import app.logorrr.util.{CanLog, OsUtil}
+import app.logorrr.views.UiNodes
 import javafx.scene.control.{Menu, MenuItem}
 import javafx.stage.{FileChooser, Window}
 
@@ -20,15 +23,17 @@ class LogoRRRFileChooser(title: String) {
   }
 
 }
+
+
 object FileMenu {
 
-  class OpenMenuItem(getWindow: () => Window
-                     , openLogFile: Path => Unit)
+  class OpenMenuItem(fileOpenService: LogoRRRFileOpenService
+                     , openFile: FileId => Unit)
     extends MenuItem("Open") with CanLog {
-
+    setId(UiNodes.FileMenuOpenFile.value)
     setOnAction(_ => {
-      new LogoRRRFileChooser("Open log file").showAndWait(getWindow()) match {
-        case Some(logFile) => openLogFile(logFile)
+      fileOpenService.openFile match {
+        case Some(logFile) => openFile(FileId(logFile))
         case None => logTrace("Cancelled open file ...")
       }
 
@@ -36,26 +41,35 @@ object FileMenu {
   }
 
   class CloseAllMenuItem(removeAllLogFiles: => Unit) extends MenuItem("Close All") {
+    setId(UiNodes.FileMenuCloseAll.value)
     setOnAction(_ => removeAllLogFiles)
   }
 
   class QuitMenuItem(closeApplication: => Unit) extends MenuItem("Quit") {
+    setId(UiNodes.FileMenuQuitApplication.value)
     setOnAction(_ => closeApplication)
   }
 
 }
 
-class FileMenu(getWindow: () => Window
-               , openLogFile: Path => Unit
+class FileMenu(isUnderTest : Boolean
+                ,fileOpenService: LogoRRRFileOpenService
+               , openFile: FileId => Unit
                , closeAllLogFiles: => Unit
                , closeApplication: => Unit) extends Menu("File") with CanLog {
 
+  setId(UiNodes.FileMenu.value)
+
+  lazy val openMenuItem = new FileMenu.OpenMenuItem(fileOpenService, openFile)
+  lazy val closeAllMenuItem = new FileMenu.CloseAllMenuItem(closeAllLogFiles)
+  lazy val quitMenuItem = new FileMenu.QuitMenuItem(closeApplication)
+
   def init(): Unit = {
     getItems.clear()
-    getItems.add(new FileMenu.OpenMenuItem(getWindow, openLogFile))
-    getItems.add(new FileMenu.CloseAllMenuItem(closeAllLogFiles))
-    if (OsUtil.isWin) {
-      getItems.add(new FileMenu.QuitMenuItem(closeApplication))
+    getItems.add(openMenuItem)
+    getItems.add(closeAllMenuItem)
+    if (OsUtil.isLinux || OsUtil.isWin || isUnderTest) {
+      getItems.add(quitMenuItem)
     }
   }
 

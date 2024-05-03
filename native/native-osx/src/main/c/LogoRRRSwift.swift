@@ -1,4 +1,15 @@
 import Foundation
+import Cocoa
+
+@_cdecl("openUrl")
+public func openUrl(path : UnsafePointer<Int8>) {
+    if let urlString = String(validatingUTF8: path) {
+        if let url = URL(string: urlString) {
+           NSWorkspace.shared.open(url)
+        }
+    }
+}
+
 
 @_cdecl("releasePath")
 public func releasePath(path: UnsafePointer<Int8>) {
@@ -23,7 +34,7 @@ public func registerPath(path: UnsafePointer<Int8>) {
                 // print("Restored access \(url.absoluteString)")
                 // ... Perform other operations with the URL ...
                 // Don't forget to release the security access when done
-               // url.stopAccessingSecurityScopedResource()
+                // url.stopAccessingSecurityScopedResource()
             } else {
                // print("Could not restore access \(url.absoluteString)")
             }

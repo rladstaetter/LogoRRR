@@ -1,11 +1,20 @@
 package app.logorrr.io
 
+import java.io.{ByteArrayInputStream, InputStream}
 import java.nio.file.{Files, Path}
 
 object FEncoding {
 
   def apply(path: Path): FEncoding = {
     val is = Files.newInputStream(path)
+    apply(is)
+  }
+
+  def apply(asBytes: Array[Byte]): FEncoding = {
+    apply(new ByteArrayInputStream(asBytes))
+  }
+
+  private def apply(is: InputStream): FEncoding = {
     try {
       val bom = Array.fill[Byte](3)(0)
       is.read(bom)
@@ -24,7 +33,7 @@ object FEncoding {
   }
 }
 
-class FEncoding(val asString: String)
+abstract class FEncoding(val asString: String) extends Product
 
 case object UTF8 extends FEncoding("UTF-8")
 

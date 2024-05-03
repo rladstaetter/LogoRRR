@@ -1,7 +1,4 @@
-# Project exclude paths
 **/target/**
 logfiles/
 .idea/
-.hydra/
-*.iml
 **/.flattened-pom.xml

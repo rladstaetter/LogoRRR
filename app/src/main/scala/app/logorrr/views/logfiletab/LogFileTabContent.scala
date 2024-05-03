@@ -15,6 +15,9 @@ import javafx.scene.layout.BorderPane
 class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
                         , val entries: ObservableList[LogEntry]) extends BorderPane {
 
+  // make sure we have a white background for our tabs - see https://github.com/rladstaetter/LogoRRR/issues/188
+  setStyle("-fx-background-color: white;")
+
   /** list which holds all entries, default to display all (can be changed via buttons) */
   private val filteredList = new FilteredList[LogEntry](entries)
 
@@ -34,9 +37,9 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   def addTailerListener(): Unit = filteredList.addListener(scrollToEndEventListener)
 
-  def removeTailerListener() = filteredList.removeListener(scrollToEndEventListener)
+  def removeTailerListener(): Unit = filteredList.removeListener(scrollToEndEventListener)
 
-  val opsToolBar = new OpsToolBar(mutLogFileSettings.getPathAsString(), addFilter, entries, filteredList, mutLogFileSettings.blockSizeProperty)
+  val opsToolBar = new OpsToolBar(mutLogFileSettings.getFileId, addFilter, entries, filteredList, mutLogFileSettings.blockSizeProperty)
 
   private val filtersToolBar = {
     val fbtb = new FiltersToolBar(filteredList, removeFilter)
@@ -50,7 +53,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
 
   def init(): Unit = {
-    divider.setPosition(mutLogFileSettings.getDividerPosition())
+    divider.setPosition(mutLogFileSettings.getDividerPosition)
 
     setTop(opsRegion)
     setCenter(pane)

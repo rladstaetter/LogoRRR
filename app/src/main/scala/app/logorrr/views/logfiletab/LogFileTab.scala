@@ -2,12 +2,13 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.Fs
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
-import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.autoscroll.LogTailer
+import app.logorrr.views.logfiletab.actions._
 import app.logorrr.views.search.Fltr
+import app.logorrr.views.{LogoRRRAccelerators, UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.event.Event
@@ -18,24 +19,42 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-object LogFileTab {
+object LogFileTab extends UiNodeFileIdAware {
 
+  /** background for file log tabs */
   private val BackgroundStyle: String =
-    """
-      |-fx-background-color: WHITE;
-      |-fx-border-width: 1px 1px 1px 0px;
-      |-fx-border-color: LIGHTGREY;
-      |""".stripMargin
+    """|-fx-background-color: white;
+       |-fx-border-width: 1px 1px 1px 0px;
+       |-fx-border-color: lightgrey""".stripMargin
 
+  /** background selected for file log tabs */
   private val BackgroundSelectedStyle: String =
-    """
-      |-fx-background-color: floralwhite;
-      |-fx-border-width: 1px 1px 1px 0px;
-      |-fx-border-color: LIGHTGREY;
-      |""".stripMargin
+    """|-fx-background-color: floralwhite;
+       |-fx-border-width: 1px 1px 1px 0px;
+       |-fx-border-color: lightgrey""".stripMargin
+
+  /** background for zipfile log tabs */
+  private val ZipBackgroundStyle: String =
+    """|-fx-background-color: white;
+       |-fx-border-width: 1px 1px 1px 0px;
+       |-fx-border-color: lightgrey""".stripMargin
+
+  /** background selected for file log tabs */
+  private val ZipBackgroundSelectedStyle: String =
+    """|-fx-background-color: floralwhite;
+       |-fx-border-width: 1px 1px 1px 0px;
+       |-fx-border-color: lightgrey""".stripMargin
+
+  def apply(mutLogFileSettings: MutLogFileSettings
+            , entries: ObservableList[LogEntry]): LogFileTab = {
+    new LogFileTab(mutLogFileSettings.getFileId
+      , mutLogFileSettings
+      , entries)
+  }
+
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogFileTab])
 
 }
-
 
 /**
  * Represents a single 'document' UI approach for a log file.
@@ -44,14 +63,23 @@ object LogFileTab {
  *
  * @param entries report instance holding information of log file to be analyzed
  * */
-class LogFileTab(val mutLogFileSettings: MutLogFileSettings
+class LogFileTab(val fileId: FileId
+                 , val mutLogFileSettings: MutLogFileSettings
                  , val entries: ObservableList[LogEntry]) extends Tab
   with TimerCode
   with CanLog {
 
-  val pathAsString: String = mutLogFileSettings.getPathAsString()
+  setId(LogFileTab.uiNode(fileId).value)
 
-  private lazy val logTailer = LogTailer(pathAsString, entries)
+  if (fileId.isZipEntry) {
+    setStyle(LogFileTab.ZipBackgroundStyle)
+  } else {
+    setStyle(LogFileTab.BackgroundStyle)
+  }
+
+  assert(fileId == mutLogFileSettings.getFileId)
+
+  private lazy val logTailer = LogTailer(fileId, entries)
 
   val logFileTabContent = new LogFileTabContent(mutLogFileSettings, entries)
 
@@ -88,24 +116,33 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
 
   private val selectedListener = JfxUtils.onNew[lang.Boolean](b => {
     if (b) {
-      setStyle(LogFileTab.BackgroundSelectedStyle)
+      if (fileId.isZipEntry) {
+        setStyle(LogFileTab.ZipBackgroundSelectedStyle)
+      } else {
+        setStyle(LogFileTab.BackgroundSelectedStyle)
+      }
+
       /* change active text field depending on visible tab */
       LogoRRRAccelerators.setActiveSearchTextField(logFileTabContent.opsToolBar.searchTextField)
       LogoRRRAccelerators.setActiveRegexToggleButton(logFileTabContent.opsToolBar.regexToggleButton)
       recalculateChunkListViewAndScrollToActiveElement()
     } else {
-      setStyle(LogFileTab.BackgroundStyle)
+      if (fileId.isZipEntry) {
+        setStyle(LogFileTab.ZipBackgroundStyle)
+      } else {
+        setStyle(LogFileTab.BackgroundStyle)
+      }
     }
   })
 
 
-  def recalculateChunkListViewAndScrollToActiveElement() :Unit = {
+  def recalculateChunkListViewAndScrollToActiveElement(): Unit = {
     logFileTabContent.recalculateChunkListView()
     logFileTabContent.scrollToActiveElement()
   }
 
   def init(): Unit = timeR({
-    setTooltip(new LogFileTabToolTip(pathAsString, entries))
+    setTooltip(new LogFileTabToolTip(fileId, entries))
 
     initBindings()
 
@@ -114,7 +151,7 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
     logFileTabContent.init()
 
     /** don't monitor file anymore if tab is closed, free listeners */
-    setOnCloseRequest((_: Event) => cleanupBeforeClose())
+    setOnCloseRequest((_: Event) => shutdown())
 
     if (mutLogFileSettings.isAutoScrollActive) {
       startTailer()
@@ -133,14 +170,17 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
       case java.lang.Boolean.FALSE => setContextMenu(null)
     })
 
-  }, s"Init '$pathAsString'")
+  }, s"Init '${fileId.value}'")
+
+  def initContextMenu(): Unit = setContextMenu(mkContextMenu())
 
 
   private def mkContextMenu(): ContextMenu = {
-    val openInFinderMenuItem = new OpenInFinderMenuItem(pathAsString)
-    val closeMenuItem = new CloseMenuItem(this)
-    val closeOtherFilesMenuItem = new CloseOtherFilesMenuItem(this)
-    val closeAllFilesMenuItem = new CloseAllFilesMenuItem(this)
+    val closeMenuItem = new CloseTabMenuItem(fileId, this)
+    val openInFinderMenuItem = new OpenInFinderMenuItem(fileId)
+
+    val closeOtherFilesMenuItem = new CloseOtherFilesMenuItem(fileId, this)
+    val closeAllFilesMenuItem = new CloseAllFilesMenuItem(fileId, this)
 
     // close left/right is not always shown. see https://github.com/rladstaetter/LogoRRR/issues/159
     val leftRightCloser =
@@ -148,27 +188,38 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
         Seq()
         // current tab is the first one, show only 'right'
       } else if (getTabPane.getTabs.indexOf(this) == 0) {
-        Seq(new CloseRightFilesMenuItem(this))
+        Seq(new CloseRightFilesMenuItem(fileId, this))
         // we are at the end of the list
       } else if (getTabPane.getTabs.indexOf(this) == getTabPane.getTabs.size - 1) {
-        Seq(new CloseLeftFilesMenuItem(this))
+        Seq(new CloseLeftFilesMenuItem(fileId, this))
         // we are somewhere in between, show both options
       } else {
-        Seq(new CloseLeftFilesMenuItem(this), new CloseRightFilesMenuItem(this))
+        Seq(new CloseLeftFilesMenuItem(fileId, this), new CloseRightFilesMenuItem(fileId, this))
       }
 
-    val items = Seq(closeMenuItem
-      , closeOtherFilesMenuItem
-      , closeAllFilesMenuItem) ++ leftRightCloser ++ Seq(openInFinderMenuItem)
 
-    val menu = new ContextMenu()
-    menu.getItems.addAll(items: _*)
-    menu
-  }
+    val items = {
+      // special handling if there is only one tab
+      if (getTabPane.getTabs.size() == 1) {
+        if (OsUtil.isMac) {
+          Seq(closeMenuItem)
+        } else {
+          Seq(closeMenuItem, openInFinderMenuItem)
+        }
+      } else {
+        Seq(closeMenuItem
+          , closeOtherFilesMenuItem
+          , closeAllFilesMenuItem) ++ leftRightCloser ++ {
+          if (OsUtil.isMac) {
+            Seq()
+          } else {
+            Seq(openInFinderMenuItem)
+          }
+        }
+      }
+    }
 
-  def cleanupBeforeClose(): Unit = {
-    shutdown()
-    LogoRRRGlobals.removeLogFile(pathAsString)
+    new ContextMenu(items: _*)
   }
 
   private def addListeners(): Unit = {
@@ -179,8 +230,13 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
   }
 
   private def initBindings(): Unit = {
-    textProperty.bind(Bindings.concat(Fs.logFileName(pathAsString)))
+    if (fileId.isZipEntry) {
+      textProperty.bind(Bindings.concat(fileId.zipEntryPath))
+    } else {
+      textProperty.bind(Bindings.concat(fileId.fileName))
+    }
   }
+
 
   private def removeListeners(): Unit = {
     selectedProperty().removeListener(selectedListener)
@@ -195,6 +251,7 @@ class LogFileTab(val mutLogFileSettings: MutLogFileSettings
       stopTailer()
     }
     removeListeners()
+    LogoRRRGlobals.removeLogFile(fileId)
   }
 
 

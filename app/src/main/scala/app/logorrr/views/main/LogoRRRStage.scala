@@ -32,14 +32,14 @@ object LogoRRRStage extends CanLog {
     // to save global filter state
     val activeFilters =
       (for (logFileTab <- logorrrMain.getLogFileTabs) yield {
-        logFileTab.pathAsString -> (logFileTab.logFileTabContent.activeFilters, logFileTab.logFileTabContent.getDividerPosition)
+        logFileTab.fileId -> (logFileTab.logFileTabContent.activeFilters, logFileTab.logFileTabContent.getDividerPosition)
       }).toMap
 
     val updatedSettings =
       for ((p, (fltrs, d)) <- activeFilters) yield {
-        p -> settings.logFileSettings(p).copy(filters = fltrs, dividerPosition = d)
+        p.absolutePathAsString -> settings.fileSettings(p.absolutePathAsString).copy(filters = fltrs, dividerPosition = d)
       }
-    LogoRRRGlobals.persist(settings.copy(logFileSettings = updatedSettings))
+    LogoRRRGlobals.persist(settings.copy(fileSettings = updatedSettings))
   }
 
 
@@ -55,9 +55,13 @@ object LogoRRRStage extends CanLog {
   def show(stage: Stage, logorrrMain: LogoRRRMain): Unit = {
     stage.show()
     LogoRRRGlobals.getSomeActiveLogFile match {
-      case Some(pathAsString) =>
-        val tab = logorrrMain.selectLog(pathAsString)
-        tab.recalculateChunkListViewAndScrollToActiveElement()
+      case Some(fileId) =>
+        if (logorrrMain.contains(fileId)) {
+          val tab = logorrrMain.selectLog(fileId)
+          tab.recalculateChunkListViewAndScrollToActiveElement()
+        } else {
+          logWarn(s"Not found: '${fileId.absolutePathAsString}'")
+        }
       case None =>
         logorrrMain.selectLastLogFile()
     }

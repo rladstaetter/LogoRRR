@@ -11,7 +11,11 @@ import javafx.stage.Window
  */
 object MutStageSettings {
 
-  val windowListener: ChangeListener[Window] = JfxUtils.onNew[Window](window => LogoRRRGlobals.bindWindow(window))
+  val windowListener: ChangeListener[Window] = JfxUtils.onNew[Window](window => {
+    // during tests, window reference is null when the second TestFX test is running, not yet clear why
+    Option(window).foreach(LogoRRRGlobals.bindWindow)
+    // LogoRRRGlobals.bindWindow(window)
+  })
 
 }
 

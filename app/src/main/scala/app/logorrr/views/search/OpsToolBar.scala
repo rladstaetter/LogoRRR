@@ -1,5 +1,6 @@
 package app.logorrr.views.search
 
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util.OsUtil
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
@@ -17,10 +18,13 @@ import javafx.scene.input.{KeyCode, KeyEvent}
 object OpsToolBar {
 
   /** increment/decrement block size */
-  val blockSizeStep = 2
+  val blockSizeStep: Int = 2
+
+  /** max reachable block size */
+  val MaxBlockSize: Int = 70 * OpsToolBar.blockSizeStep
 
   /** increment / decrement font size */
-  val fontSizeStep = 1
+  val fontSizeStep: Int = 1
 
 }
 
@@ -29,7 +33,7 @@ object OpsToolBar {
  *
  * @param addFilterFn filter function which results from user interaction with SearchToolbar
  */
-class OpsToolBar(pathAsString: String
+class OpsToolBar(fileId: FileId
                  , addFilterFn: Filter => Unit
                  , logEntries: ObservableList[LogEntry]
                  , filteredList: FilteredList[LogEntry]
@@ -40,32 +44,32 @@ class OpsToolBar(pathAsString: String
   //setStyle(SearchToolBar.BackgroundSelectedStyle)
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
   val w = 380
-  val macWidth: Int = w
-  val winWidth: Int = w + 2
-  val linuxWidth: Int = w + 2
+  private val macWidth: Int = w
+  private val winWidth: Int = w + 2
+  private val linuxWidth: Int = w + 2
   val width: Int = OsUtil.osFun(winWidth, macWidth, linuxWidth) // different layouts (may be dependent on font size renderings?)
   setMinWidth(width)
 
   /** control which enables selecting color for a search tag */
-  private val colorPicker = new SearchColorPicker()
+  private val colorPicker = new SearchColorPicker(fileId)
 
   /** toggles search behavior from case sensitive search to a regex search */
-  val regexToggleButton = new SearchActivateRegexToggleButton()
+  val regexToggleButton = new SearchActivateRegexToggleButton(fileId)
 
   /** textfield to enter search queries */
-  val searchTextField = new SearchTextField(regexToggleButton)
+  val searchTextField = new SearchTextField(fileId, regexToggleButton)
 
-  private val searchButton = new SearchButton(searchTextField, regexToggleButton, colorPicker, addFilterFn)
+  private val searchButton = new SearchButton(fileId, searchTextField, regexToggleButton, colorPicker, addFilterFn)
 
-  val autoScrollCheckBox = new AutoScrollCheckBox(pathAsString)
+  private val autoScrollCheckBox = new AutoScrollCheckBox(fileId)
 
-  val clearLogButton = new ClearLogButton(logEntries)
+  private val clearLogButton = new ClearLogButton(fileId, logEntries)
 
-  val copySelectionButton = new CopyLogButton(filteredList)
+  private val copySelectionButton = new CopyLogButton(fileId, filteredList)
 
-//  val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
+  //  val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
 
-//  val timerButton = new TimerButton(pathAsString, firstNEntries)
+  //  val timerButton = new TimerButton(fileId, firstNEntries)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {
@@ -80,11 +84,10 @@ class OpsToolBar(pathAsString: String
   val searchItems: Seq[Control] = Seq[Control](searchTextField, regexToggleButton, colorPicker, searchButton)
 
   val sizeItems: Seq[Control] = {
-    val decreaseBlockSizeButton = new DecreaseBlockSizeButton(blockSizeProperty)
-    val increaseBlockSizeButton = new IncreaseBlockSizeButton(blockSizeProperty)
-    val decreaseTextSizeButton = new DecreaseTextSizeButton(pathAsString)
-    val increaseTextSizeButton = new IncreaseTextSizeButton(pathAsString)
-    Seq(decreaseBlockSizeButton, increaseBlockSizeButton, decreaseTextSizeButton, increaseTextSizeButton)
+    Seq(new DecreaseBlockSizeButton(fileId, blockSizeProperty)
+      , new IncreaseBlockSizeButton(fileId, blockSizeProperty)
+      , new DecreaseTextSizeButton(fileId)
+      , new IncreaseTextSizeButton(fileId))
   }
 
   val otherItems: Seq[Node] = {

@@ -3,6 +3,7 @@ package app.logorrr.views.settings.timer
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.{LogEntry, LogEntryInstantFormat}
 import app.logorrr.util.{CanLog, HLink}
+import app.logorrr.views.UiNodes
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
@@ -12,7 +13,8 @@ import javafx.scene.layout.{BorderPane, VBox}
 
 object TimerSettingsBorderPane {
 
-  private val dateTimeFormatterLink: HLink = HLink("https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html", "format description")
+
+  private val dateTimeFormatterLink: HLink = HLink(UiNodes.OpenDateFormatterSite,"https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html", "format description")
 
   def mkTf(name: String
            , somePrompt: Option[String]
