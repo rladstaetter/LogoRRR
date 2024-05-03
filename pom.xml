@@ -14,7 +14,7 @@
             <graalvm.home>/path/to/graalvm</graalvm.home> (mac, linux, windows)
             <osx.jdk.home.aarch64>/path/to/aarch64/jdk</osx.jdk.home.aarch64> (mac)
             -->
-        <revision>24.3.0</revision>
+        <revision>24.4.0</revision>
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.13</scala.version>
         <openjfx.version>22.0.1</openjfx.version>
