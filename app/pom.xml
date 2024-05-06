@@ -46,6 +46,10 @@
         </dependency>
         <dependency>
             <groupId>app.logorrr</groupId>
+            <artifactId>conf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>app.logorrr</groupId>
             <artifactId>build</artifactId>
         </dependency>
         <dependency>

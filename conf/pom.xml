@@ -8,17 +8,15 @@
         <artifactId>logorrr</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
-    <artifactId>core</artifactId>
-    <name>app.logorrr.core</name>
+    <artifactId>conf</artifactId>
+    <name>app.logorrr.conf</name>
+    <description>classes to persist configuration</description>
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala3-library_3</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.pureconfig</groupId>
-            <artifactId>pureconfig_2.13</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_3</artifactId>
@@ -27,29 +25,17 @@
             <groupId>org.scalacheck</groupId>
             <artifactId>scalacheck_3</artifactId>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>com.github.pureconfig</groupId>
-            <artifactId>pureconfig-core_3</artifactId>
-            <version>${pureconfig.version}</version>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>com.github.pureconfig</groupId>
-            <artifactId>pureconfig-core_3</artifactId>
-            <version>${pureconfig.version}</version>
-        </dependency>
-        <!--
         <dependency>
             <groupId>com.github.pureconfig</groupId>
             <artifactId>pureconfig_2.13</artifactId>
-            <version>${pureconfig.version}</version>
         </dependency>
-        -->
+        <dependency>
+            <groupId>com.github.pureconfig</groupId>
+            <artifactId>pureconfig-core_3</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
-
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>

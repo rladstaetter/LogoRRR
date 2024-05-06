@@ -34,6 +34,7 @@
         <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
         <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
         <jmh.version>1.33</jmh.version>
+        <pureconfig.version>0.17.6</pureconfig.version>
         <windows.temurin.version>https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_windows_hotspot_22.0.1_8.zip</windows.temurin.version>
     </properties>
     <scm>
@@ -158,6 +159,7 @@
     </profiles>
     <modules>
         <module>core</module>
+        <module>conf</module>
         <module>build</module>
         <module>app</module>
         <module>dist</module>
@@ -216,7 +218,12 @@
             <dependency>
                 <groupId>com.github.pureconfig</groupId>
                 <artifactId>pureconfig_2.13</artifactId>
-                <version>0.17.4</version>
+                <version>${pureconfig.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.pureconfig</groupId>
+                <artifactId>pureconfig-core_3</artifactId>
+                <version>${pureconfig.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.scalatest</groupId>
@@ -251,6 +258,11 @@
             <dependency>
                 <groupId>app.logorrr</groupId>
                 <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>app.logorrr</groupId>
+                <artifactId>conf</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
