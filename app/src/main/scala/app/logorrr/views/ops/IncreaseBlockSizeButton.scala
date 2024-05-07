@@ -1,8 +1,7 @@
 package app.logorrr.views.ops
 
 import app.logorrr.io.FileId
-import app.logorrr.views.block.HasBlockSizeProperty
-import app.logorrr.views.search.OpsToolBar
+import app.logorrr.views.block.{BlockConstants, HasBlockSizeProperty}
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.paint.Color
@@ -23,8 +22,8 @@ class IncreaseBlockSizeButton(id: FileId, val blockSizeProperty: SimpleIntegerPr
   setId(IncreaseBlockSizeButton.uiNode(id).value)
   setOnAction(_ => {
 
-    if (getBlockSize + OpsToolBar.blockSizeStep < OpsToolBar.MaxBlockSize) {
-      setBlockSize(getBlockSize + OpsToolBar.blockSizeStep)
+    if (getBlockSize + BlockConstants.BlockSizeStep < BlockConstants.MaxBlockSize) {
+      setBlockSize(getBlockSize + BlockConstants.BlockSizeStep)
     }
   })
 

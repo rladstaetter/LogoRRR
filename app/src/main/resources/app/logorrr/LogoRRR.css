@@ -3670,10 +3670,10 @@ Add support for NO_HEADER tweak in tables .table-view.no-header > .column-header
     -fx-padding: 0;
 }
 .scroll-bar:horizontal {
-    -fx-pref-height: 18px;
+    -fx-pref-height: 20px;
 }
 .scroll-bar:vertical {
-    -fx-pref-width: 18px;
+    -fx-pref-width: 20px;
 }
 .scroll-bar:hover, .scroll-bar:pressed, .scroll-bar:focused {
     -fx-opacity: 1;
