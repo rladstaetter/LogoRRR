@@ -1,5 +1,6 @@
 package app.logorrr.views.settings.timer
 
+import app.logorrr.conf.SimpleRange
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.{LogEntry, LogEntryInstantFormat}
 import app.logorrr.util.{CanLog, HLink}
@@ -7,7 +8,7 @@ import app.logorrr.views.UiNodes
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
-import javafx.scene.control._
+import javafx.scene.control.*
 import javafx.scene.layout.{BorderPane, VBox}
 
 

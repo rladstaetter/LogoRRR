@@ -186,6 +186,11 @@
             </dependency>
             <dependency>
                 <groupId>org.openjfx</groupId>
+                <artifactId>javafx-graphics</artifactId>
+                <version>${openjfx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
                 <artifactId>javafx-controls</artifactId>
                 <version>${openjfx.version}</version>
             </dependency>
@@ -227,20 +232,20 @@
             </dependency>
             <dependency>
                 <groupId>org.scalatest</groupId>
-                <artifactId>scalatest_3</artifactId>
-                <version>3.3.0-SNAP4</version>
+                <artifactId>scalatest_2.13</artifactId>
+                <version>3.2.18</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.scalatestplus</groupId>
-                <artifactId>scalacheck-1-17_3</artifactId>
-                <version>3.2.16.0</version>
+                <artifactId>scalacheck-1-18_2.13</artifactId>
+                <version>3.2.18.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.scalacheck</groupId>
-                <artifactId>scalacheck_3</artifactId>
-                <version>1.17.0</version>
+                <artifactId>scalacheck_2.13</artifactId>
+                <version>1.18.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

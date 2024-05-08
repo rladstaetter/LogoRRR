@@ -1,14 +1,24 @@
 package app.logorrr.conf
 
+import com.typesafe.config.ConfigValueFactory
 import pureconfig.*
 import pureconfig.generic.derivation.default.*
-import pureconfig.generic.auto.*
+
+import scala.jdk.CollectionConverters.*
+
 
 object SimpleRange {
 
-  implicit lazy val reader: ConfigReader[SimpleRange] = ConfigReader.derived[SimpleRange]
- // implicit lazy val writer: ConfigWriter[SimpleRange] = deriveWriter[SimpleRange]
+  given reader: ConfigReader[SimpleRange] = ConfigReader.derived[SimpleRange]
 
+  given writer: ConfigWriter[SimpleRange] = ConfigWriter.fromFunction(r => {
+    ConfigValueFactory.fromMap(
+      Map(
+        "start" -> r.start
+        , "end" -> r.end
+      ).asJava
+    )
+  })
 }
 
 case class SimpleRange(start: Int, end: Int) {

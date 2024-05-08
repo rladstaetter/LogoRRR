@@ -16,14 +16,21 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala3-library_3</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_3</artifactId>
+            <artifactId>scalatest_2.13</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scalacheck</groupId>
-            <artifactId>scalacheck_3</artifactId>
+            <artifactId>scalacheck_2.13</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatestplus</groupId>
+            <artifactId>scalacheck-1-18_2.13</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.pureconfig</groupId>
@@ -33,6 +40,14 @@
             <groupId>com.github.pureconfig</groupId>
             <artifactId>pureconfig-core_3</artifactId>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.scalacheck</groupId>
+            <artifactId>scalacheck_2.13</artifactId>
+
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
