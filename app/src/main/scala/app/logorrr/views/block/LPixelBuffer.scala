@@ -18,6 +18,10 @@ object LPixelBuffer extends CanLog {
 
   val defaultBackgroundColor: Int = ColorUtil.toARGB(Color.WHITE)
 
+  def calcColors(color: Color): (Int, Int, Int) = {
+    (ColorUtil.toARGB(color), ColorUtil.toARGB(color.brighter()), ColorUtil.toARGB(color.darker()))
+  }
+
   def drawRect(rawInts: Array[Int]
                , i: Int
                , width: Int
@@ -61,10 +65,10 @@ object LPixelBuffer extends CanLog {
       // Update rawInts directly without array copying
       for (ly <- y until maxHeight - 1) {
         val startPos = ly * canvasWidth + x
-       // val endPos = startPos + length
+        // val endPos = startPos + length
         // if (startPos >= 0 && endPos < rawInts.length) {
-          // Fill the portion of rawInts with lineArray
-          for (i <- 0 to squarewidth) rawInts(startPos + i) = col
+        // Fill the portion of rawInts with lineArray
+        for (i <- 0 to squarewidth) rawInts(startPos + i) = col
         //}
       }
 
@@ -106,12 +110,13 @@ case class LPixelBuffer(blockNumber: Int
   private val name = s"${range.start}_${range.end}"
 
   lazy val background: Array[Int] = Array.fill(shape.area)(LPixelBuffer.defaultBackgroundColor)
+
+  /* hardcoded highlight color */
   private val highlightedColor = Color.YELLOW
-  private lazy val yellow = ColorUtil.toARGB(highlightedColor)
-  private lazy val yellowBright = ColorUtil.toARGB(highlightedColor.brighter())
-  private lazy val yellowDark = ColorUtil.toARGB(highlightedColor.darker)
+  private lazy val (yellow, yellowBright, yellowDark) = LPixelBuffer.calcColors(highlightedColor)
 
   init()
+
 
   def init(): Unit = {
     assert(shape.width != 0, s"For $name, width was ${shape.width}.")
@@ -122,15 +127,16 @@ case class LPixelBuffer(blockNumber: Int
 
   private def cleanBackground(): Unit = System.arraycopy(background, 0, rawInts, 0, background.length)
 
-  def blockSize: Int = blockSizeProperty.get()
+  def getBlockSize: Int = blockSizeProperty.get()
 
   def filters: Seq[Filter] = Option(filtersProperty).map(_.asScala.toSeq).getOrElse(Seq())
 
+  /** function is performance relevant */
   private def paint(): Unit = {
-    if (blockSize != 0 && shape.width > blockSize) {
-      if (blockSize == 1) {
+    if (getBlockSize != 0 && shape.width > getBlockSize) {
+      if (getBlockSize == 1) {
         paintPixels()
-      } else if (blockSize > 1) {
+      } else if (getBlockSize > 1) {
         paintRects()
       }
     }
@@ -156,29 +162,40 @@ case class LPixelBuffer(blockNumber: Int
     })
   }
 
+  def paintBlockAtIndexWithColor(i: Int, lineNumber: Int, color: Color): Unit = {
+    updateBuffer((_: PixelBuffer[IntBuffer]) => {
+      paintBlock(i, lineNumber, color)
+      shape
+    })
+  }
+
   private def paintRects(): Unit = {
     updateBuffer((_: PixelBuffer[IntBuffer]) => {
       cleanBackground()
       var i = 0
       entries.forEach(e => {
-        if (e.lineNumber == selectedLineNumberProperty.getValue) {
-          LPixelBuffer.drawRect(rawInts, i, shape.width, blockSize, yellow, yellowBright, yellowDark)
-        } else {
-          val color = Filter.calcColor(e.value, filters)
-          val colorDark = color.darker()
-          val colorBright = color.brighter()
-          LPixelBuffer.drawRect(rawInts
-            , i
-            , shape.width
-            , blockSize
-            , ColorUtil.toARGB(color)
-            , ColorUtil.toARGB(colorDark)
-            , ColorUtil.toARGB(colorBright)
-          )
-        }
+        val color = Filter.calcColor(e.value, filters)
+        paintBlock(i, e.lineNumber, color)
         i = i + 1
       })
       shape
     })
+  }
+
+  private def paintBlock(i: Int, lineNumber: Int, color: Color): Unit = {
+    if (lineNumber == selectedLineNumberProperty.getValue) {
+      LPixelBuffer.drawRect(rawInts, i, shape.width, getBlockSize, yellow, yellowBright, yellowDark)
+    } else {
+      val colorDark = color.darker()
+      val colorBright = color.brighter()
+      LPixelBuffer.drawRect(rawInts
+        , i
+        , shape.width
+        , getBlockSize
+        , ColorUtil.toARGB(color)
+        , ColorUtil.toARGB(colorDark)
+        , ColorUtil.toARGB(colorBright)
+      )
+    }
   }
 }

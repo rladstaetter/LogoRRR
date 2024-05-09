@@ -4,8 +4,8 @@ import app.logorrr.TestFiles
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
 import app.logorrr.usecases.SingleFileApplicationTest
+import app.logorrr.views.block.BlockConstants
 import app.logorrr.views.ops.{DecreaseBlockSizeButton, IncreaseBlockSizeButton}
-import app.logorrr.views.search.OpsToolBar
 import org.junit.jupiter.api.Test
 
 /**
@@ -21,7 +21,7 @@ class SimpleBlockSizeTest extends SingleFileApplicationTest(TestFiles.simpleLog0
     val count = 10
 
     for (_ <- 1 to count) increaseBlockSize(fileId)
-    assert(size + (OpsToolBar.blockSizeStep * count) == LogoRRRGlobals.getLogFileSettings(fileId).getBlockSize)
+    assert(size + (BlockConstants.BlockSizeStep * count) == LogoRRRGlobals.getLogFileSettings(fileId).getBlockSize)
 
     // decrease again
     for (_ <- 1 to 10) decreaseBlockSize(fileId)
