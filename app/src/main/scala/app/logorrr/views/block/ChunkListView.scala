@@ -56,22 +56,21 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
   private val logEntriesInvalidationListener = JfxUtils.mkInvalidationListener(_ => recalculateAndUpdateItems("invalidation"))
 
   /** if user selects a new active log entry, recalculate and implicitly repaint */
-  val selectedRp = mkRecalculateAndUpdateItemListener("selected")
+  private val selectedRp = mkRecalculateAndUpdateItemListener("selected")
 
   /** if blocksize changes, recalculate */
-  val blockSizeRp = mkRecalculateAndUpdateItemListener("blockSize")
+  private val blockSizeRp = mkRecalculateAndUpdateItemListener("blockSize")
 
   /** if width changes, recalculate */
-  val widthRp = mkRecalculateAndUpdateItemListener("width")
+  private val widthRp = mkRecalculateAndUpdateItemListener("width")
 
   /** if height changes, recalculate */
-  val heightRp = mkRecalculateAndUpdateItemListener("height")
+  private val heightRp = mkRecalculateAndUpdateItemListener("height")
 
-  def mkRecalculateAndUpdateItemListener(ctx: String): ChangeListener[Number] = new ChangeListener[Number] {
-    override def changed(observable: ObservableValue[_ <: Number], oldValue: Number, newValue: Number): Unit = {
-      if (oldValue != newValue && newValue.doubleValue() != 0.0) {
-        recalculateAndUpdateItems(ctx)
-      }
+  // context variable just here for debugging
+  private def mkRecalculateAndUpdateItemListener(ctx: String): ChangeListener[Number] = (_: ObservableValue[_ <: Number], oldValue: Number, newValue: Number) => {
+    if (oldValue != newValue && newValue.doubleValue() != 0.0) {
+      recalculateAndUpdateItems(ctx)
     }
   }
 

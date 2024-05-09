@@ -30,14 +30,19 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   private val chunkListView = ChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem)
 
 
-  val blockSizeSlider = new BlockSizeSlider
-  blockSizeSlider.valueProperty().bindBidirectional(mutLogFileSettings.blockSizeProperty)
-  val vbox = {
-    val vBox = new BorderPane(chunkListView, blockSizeSlider, null, null, null)
+  private val blockSizeSlider = {
+    val bs = new BlockSizeSlider
+    bs.valueProperty().bindBidirectional(mutLogFileSettings.blockSizeProperty)
+    bs
+  }
+
+
+  private val blockPane = {
+    val bBp = new BorderPane(chunkListView, blockSizeSlider, null, null, null)
     // vBox.setStyle("-fx-background-color: #b6ff7a;")
-    VBox.setVgrow(vBox, javafx.scene.layout.Priority.ALWAYS)
-    vBox.setMaxHeight(java.lang.Double.MAX_VALUE)
-    vBox
+    VBox.setVgrow(bBp, javafx.scene.layout.Priority.ALWAYS)
+    bBp.setMaxHeight(java.lang.Double.MAX_VALUE)
+    bBp
   }
 
   // start listener declarations
@@ -63,7 +68,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, filtersToolBar)
 
   private val pane = {
-    val s = new SplitPane(vbox, logTextView)
+    val s = new SplitPane(blockPane, logTextView)
     //s.setStyle("-fx-background-color: #ffa07a;")
     s
   }
