@@ -22,6 +22,8 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
                     , widthProperty: ReadOnlyDoubleProperty
                     , blockSizeProperty: SimpleIntegerProperty
                     , filtersProperty: ObservableList[Filter]
+                    , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
+                    , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
                     , scrollTo: LogEntry => Unit
                    ) extends ListCell[Chunk] with CanLog {
 
@@ -53,8 +55,8 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
             // schedule repaint with original color again some time in the future
             val task: Runnable = () => pb.paintBlockAtIndexWithColor(index, logEntry.lineNumber, col)
 
-            // Create a Timeline that fires once after 500 milliseconds
-            val timeline = new Timeline(new KeyFrame(Duration.millis(500), (_: ActionEvent) => task.run()))
+            // Create a Timeline that fires once after 250 milliseconds
+            val timeline = new Timeline(new KeyFrame(Duration.millis(250), (_: ActionEvent) => task.run()))
             timeline.setCycleCount(1) // Ensure it runs only once
             timeline.play()
           case None =>
@@ -80,7 +82,10 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
         , filtersProperty
         , blockSizeProperty
         , widthProperty
-        , heightProperty = new SimpleIntegerProperty(t.height))
+        , heightProperty = new SimpleIntegerProperty(t.height)
+        , firstVisibleTextCellIndexProperty
+        , lastVisibleTextCellIndexProperty
+        )
       val view = new ImageView(bv)
       setGraphic(view)
     }

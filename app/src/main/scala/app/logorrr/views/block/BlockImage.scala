@@ -8,7 +8,6 @@ import javafx.collections.ObservableList
 import javafx.scene.image.WritableImage
 
 
-
 object BlockImage {
 
   val MaxWidth = 4096
@@ -62,6 +61,8 @@ object BlockImage {
             , blockSizeProperty: SimpleIntegerProperty
             , widthProperty: ReadOnlyDoubleProperty
             , heightProperty: SimpleIntegerProperty
+            , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
+            , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
            ): BlockImage = {
     val pixelBuffer = LPixelBuffer(blockNumber
       , Range(entries.get(0).lineNumber, entries.get(entries.size - 1).lineNumber)
@@ -70,7 +71,10 @@ object BlockImage {
       , entries
       , filtersProperty
       , Array.fill(widthProperty.get().toInt * heightProperty.get())(LPixelBuffer.defaultBackgroundColor)
-      , selectedLineNumberProperty)
+      , selectedLineNumberProperty
+      , firstVisibleTextCellIndexProperty
+      , lastVisibleTextCellIndexProperty
+    )
     new BlockImage(pixelBuffer)
   }
 

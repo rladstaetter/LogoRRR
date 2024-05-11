@@ -27,11 +27,11 @@ object ChunkListTestApp {
 }
 
 class ChunkListTestApp extends Application with CanLog {
-/*
-  private def mkEntries(path: Path): java.util.List[LogEntry] = {
-    util.Arrays.asList((for ((l, i) <- IoManager.fromPathUsingSecurityBookmarks(path).zipWithIndex) yield LogEntry(i, l, None)): _*)
-  }
-*/
+  /*
+    private def mkEntries(path: Path): java.util.List[LogEntry] = {
+      util.Arrays.asList((for ((l, i) <- IoManager.fromPathUsingSecurityBookmarks(path).zipWithIndex) yield LogEntry(i, l, None)): _*)
+    }
+  */
   def start(stage: Stage): Unit = {
 
     val width = 1000
@@ -51,6 +51,8 @@ class ChunkListTestApp extends Application with CanLog {
       , new SimpleIntegerProperty(blockSize)
       , filtersProperty
       , new SimpleDoubleProperty(dividerPosition)
+      , new SimpleIntegerProperty()
+      , new SimpleIntegerProperty()
       , _ => ())
     clv.init()
     val sp = new SplitPane(clv, new BorderPane(new Label("Test")))

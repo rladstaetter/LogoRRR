@@ -29,12 +29,13 @@ object MutLogFileSettings {
 }
 
 
-
 class MutLogFileSettings {
 
   private val fileIdProperty = new SimpleObjectProperty[FileId]()
   private val firstOpenedProperty = new SimpleLongProperty()
   val selectedLineNumberProperty = new SimpleIntegerProperty()
+  val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty()
+  val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
   val dividerPositionProperty = new SimpleDoubleProperty()
   val fontSizeProperty = new SimpleIntegerProperty()
 
@@ -55,6 +56,10 @@ class MutLogFileSettings {
     }
   }
 
+  def setFirstVisibleTextCellIndex(value: Int): Unit = firstVisibleTextCellIndexProperty.set(value)
+
+  def setLastVisibleTextCellIndex(value: Int): Unit = lastVisibleTextCellIndexProperty.set(value)
+
   val fontStyleBinding: StringBinding = new StringBinding {
     bind(fontSizeProperty)
 
@@ -73,8 +78,8 @@ class MutLogFileSettings {
 
   def setBlockSettings(bs: BlockSettings): Unit = blockSizeProperty.set(bs.size)
 
-  def getBlockSize : Int = blockSizeProperty.get()
-  
+  def getBlockSize: Int = blockSizeProperty.get()
+
   def setFileId(path: FileId): Unit = fileIdProperty.set(path)
 
   def getFileId: FileId = fileIdProperty.get()
@@ -99,7 +104,9 @@ class MutLogFileSettings {
         , filtersProperty.get().asScala.toSeq
         , BlockSettings(blockSizeProperty.get())
         , someLogEntrySettingsProperty.get()
-        , autoScrollActiveProperty.get())
+        , autoScrollActiveProperty.get()
+        , firstVisibleTextCellIndexProperty.get()
+        , lastVisibleTextCellIndexProperty.get())
     lfs
   }
 }
