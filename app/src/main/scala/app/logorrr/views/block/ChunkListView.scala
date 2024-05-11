@@ -23,6 +23,8 @@ object ChunkListView {
       , settings.blockSizeProperty
       , settings.filtersProperty
       , settings.dividerPositionProperty
+      , settings.firstVisibleTextCellIndexProperty
+      , settings.lastVisibleTextCellIndexProperty
       , selectInTextView)
   }
 }
@@ -46,6 +48,8 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
                     , val blockSizeProperty: SimpleIntegerProperty
                     , val filtersProperty: ObservableList[Filter]
                     , val dividersProperty: SimpleDoubleProperty
+                    , val firstVisibleTextCellIndexProperty: SimpleIntegerProperty
+                    , val lastVisibleTextCellIndexProperty: SimpleIntegerProperty
                     , selectInTextView: LogEntry => Unit)
   extends ListView[Chunk]
     with CanLog {
@@ -57,6 +61,10 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
 
   /** if user selects a new active log entry, recalculate and implicitly repaint */
   private val selectedRp = mkRecalculateAndUpdateItemListener("selected")
+
+  private val firstVisibleRp = mkRecalculateAndUpdateItemListener("firstVisibleRp")
+
+  private val lastVisibleRp = mkRecalculateAndUpdateItemListener("lastVisibleRp")
 
   /** if blocksize changes, recalculate */
   private val blockSizeRp = mkRecalculateAndUpdateItemListener("blockSize")
@@ -83,6 +91,8 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
         , lv.widthProperty()
         , blockSizeProperty
         , filtersProperty
+        , firstVisibleTextCellIndexProperty
+        , lastVisibleTextCellIndexProperty
         , selectInTextView)
     )
 
@@ -116,6 +126,8 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
   private def addListeners(): Unit = {
     logEntries.addListener(logEntriesInvalidationListener)
     selectedLineNumberProperty.addListener(selectedRp)
+    firstVisibleTextCellIndexProperty.addListener(firstVisibleRp)
+    lastVisibleTextCellIndexProperty.addListener(lastVisibleRp)
     blockSizeProperty.addListener(blockSizeRp)
     widthProperty().addListener(widthRp)
     heightProperty().addListener(heightRp)
@@ -125,6 +137,8 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
     logEntries.removeListener(logEntriesInvalidationListener)
 
     selectedLineNumberProperty.removeListener(selectedRp)
+    firstVisibleTextCellIndexProperty.removeListener(firstVisibleRp)
+    lastVisibleTextCellIndexProperty.removeListener(lastVisibleRp)
     blockSizeProperty.removeListener(blockSizeRp)
     widthProperty().removeListener(widthRp)
     heightProperty().removeListener(heightRp)

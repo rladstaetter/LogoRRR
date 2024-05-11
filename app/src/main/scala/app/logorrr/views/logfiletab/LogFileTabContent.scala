@@ -91,6 +91,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   def getDividerPosition: Double = divider.getPosition
 
   def removeListeners(): Unit = {
+    logTextView.removeListeners()
     chunkListView.removeListeners()
   }
 

@@ -39,7 +39,9 @@ object LogFileSettings {
       , DefaultFilters
       , DefaultBlockSettings
       , DefaultLogFormat
-      , DefaultAutoScroll)
+      , DefaultAutoScroll
+      , -1
+      , -1)
 
 }
 
@@ -61,7 +63,9 @@ case class LogFileSettings(fileId: FileId
                            , filters: Seq[Filter]
                            , blockSettings: BlockSettings
                            , someLogEntryInstantFormat: Option[LogEntryInstantFormat]
-                           , autoScroll: Boolean) extends CanLog {
+                           , autoScroll: Boolean
+                           , firstVisibleTextCellIndex: Int
+                           , lastVisibleTextCellIndex: Int) extends CanLog {
 
   val path: Path = Paths.get(fileId.value).toAbsolutePath
 
