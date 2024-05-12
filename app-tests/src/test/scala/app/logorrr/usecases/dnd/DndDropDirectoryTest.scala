@@ -28,7 +28,6 @@ class DndDropDirectoryTest extends StartEmptyApplicationTest
   @throws[Exception]
   override def start(stage: Stage): Unit = {
     LogoRRRApp.start(stage, services)
-    stage.toFront()
 
     val dndStage = new Stage()
     val dropBox = new ToolBar(Seq(new DragSourceButton(TestFiles.baseDir)): _*)

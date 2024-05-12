@@ -34,13 +34,12 @@ object LogoRRRApp extends CanLog {
     LogoRRRNative.loadNativeLibraries()
     // make sure to set css before anything is initialized otherwise the rules won't apply
     Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
-    logInfo(s"Started ${AppMeta.fullAppNameWithVersion} in '${Paths.get("").toAbsolutePath.toString}'")
 
     LogoRRRGlobals.set(services.settings, services.hostServices)
     val logoRRRMain = new LogoRRRMain(JfxUtils.closeStage(stage), services.fileOpenService, services.isUnderTest)
     LogoRRRStage.init(stage, logoRRRMain)
-    logoRRRMain.initLogFilesFromConfig()
-    LogoRRRStage.show(stage, logoRRRMain)
+
+    logInfo(s"Started ${AppMeta.fullAppNameWithVersion} in '${Paths.get("").toAbsolutePath.toString}'")
     logoRRRMain
   }
 }

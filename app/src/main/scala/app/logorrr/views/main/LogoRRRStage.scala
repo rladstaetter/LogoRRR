@@ -52,8 +52,7 @@ object LogoRRRStage extends CanLog {
   }, "shutdown")
 
 
-  def show(stage: Stage, logorrrMain: LogoRRRMain): Unit = {
-    stage.show()
+  def selectActiveLogFile(logorrrMain: LogoRRRMain): Unit = {
     LogoRRRGlobals.getSomeActiveLogFile match {
       case Some(fileId) =>
         if (logorrrMain.contains(fileId)) {
@@ -83,8 +82,7 @@ object LogoRRRStage extends CanLog {
     stage.setScene(scene)
     stage.setOnCloseRequest((_: WindowEvent) => LogoRRRStage.shutdown(stage, logorrrMain))
 
-    logorrrMain.init()
-
+    logorrrMain.init(stage)
   }
 
 }
