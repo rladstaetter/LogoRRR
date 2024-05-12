@@ -63,6 +63,7 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
   }
 
   def scrollToActiveLogEntry(): Unit = {
+
     if (getHeight != 0) {
       logTrace(s"scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
       val candidates = filteredList.filtered(l => l.lineNumber == mutLogFileSettings.selectedLineNumberProperty.get())
@@ -86,13 +87,15 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
   def init(): Unit = {
     getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
     setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
-    setItems(filteredList)
 
     getSelectionModel.selectedItemProperty().addListener(selectedLineNumberListener)
     mutLogFileSettings.fontSizeProperty.addListener(refreshListener)
 
 
     skinProperty.addListener(skinListener)
+
+    setItems(filteredList)
+
   }
 
 
@@ -102,7 +105,6 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
     mutLogFileSettings.fontSizeProperty.removeListener(refreshListener)
     skinProperty.removeListener(skinListener)
     ListViewHelper.findScrollBar(this).foreach(_.valueProperty.removeListener(scrollBarListener))
-    println("removeListeners")
   }
 
   /** determine width of max elems in this view */
