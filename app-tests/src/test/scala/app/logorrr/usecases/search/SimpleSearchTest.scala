@@ -10,13 +10,11 @@ class SimpleSearchTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
 
   @Test def search(): Unit = {
     openFile(path)
-
     searchFor("1")
     searchFor("2")
     searchFor("3")
     searchFor("4")
     searchFor("0")
-
   }
 
   private def searchFor(needle: String) = {

@@ -35,7 +35,28 @@ class MainTabPane extends TabPane with CanLog {
   setStyle(MainTabPane.BackgroundStyle)
   setId(UiNodes.MainTabPane.value)
 
-  val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew {
+  // setup DnD
+  setOnDragOver((event: DragEvent) => {
+    if (event.getDragboard.hasFiles) {
+      event.acceptTransferModes(TransferMode.ANY: _*)
+    }
+  })
+
+  /** try to interpret dropped element as log file, activate view */
+  setOnDragDropped((event: DragEvent) => {
+    for (f <- event.getDragboard.getFiles.asScala) {
+      val path = f.toPath
+      if (Files.isDirectory(path)) {
+        dropDirectory(path)
+      } else if (IoManager.isZip(path)) {
+        openZipFile(path)
+      } else {
+        openFile(FileId(path))
+      }
+    }
+  })
+
+  private val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew {
     case logFileTab: LogFileTab =>
       logTrace(s"Selected: '${logFileTab.fileId.value}'")
       LogoRRRGlobals.setSomeActiveLogFile(Option(logFileTab.fileId))
@@ -44,30 +65,6 @@ class MainTabPane extends TabPane with CanLog {
     case _ => getSelectionModel.select(null)
   }
 
-  def init(): Unit = {
-    /** needed to activate drag'n drop */
-    setOnDragOver((event: DragEvent) => {
-      if (event.getDragboard.hasFiles) {
-        event.acceptTransferModes(TransferMode.ANY: _*)
-      }
-    })
-
-    /** try to interpret dropped element as log file, activate view */
-    setOnDragDropped((event: DragEvent) => {
-      for (f <- event.getDragboard.getFiles.asScala) {
-        val path = f.toPath
-        if (Files.isDirectory(path)) {
-          dropDirectory(path)
-        } else if (IoManager.isZip(path)) {
-          openZipFile(path)
-        } else {
-          openFile(FileId(path))
-        }
-      }
-    })
-  }
-
-  // by default read all files which are contained in the zip file
 
   /**
    * Unzips given path, interprets contents as log files and adds them to the GUI
@@ -106,7 +103,9 @@ class MainTabPane extends TabPane with CanLog {
     getSelectionModel.selectedItemProperty().addListener(selectedTabListener)
   }
 
-  def contains(p: FileId): Boolean = getLogFileTabs.exists(lr => lr.fileId == p)
+  def contains(p: FileId): Boolean = {
+    getLogFileTabs.exists(lr => lr.fileId == p)
+  }
 
   def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
     _ match {
@@ -125,11 +124,11 @@ class MainTabPane extends TabPane with CanLog {
   def selectFile(fileId: FileId): LogFileTab = {
     getLogFileTabs.find(_.fileId == fileId) match {
       case Some(logFileTab) =>
-        logTrace(s"Activated tab for '$fileId'.")
+        logTrace(s"Activated tab for '${fileId.value}'.")
         getSelectionModel.select(logFileTab)
         logFileTab
       case None =>
-        logWarn(s"Couldn't find '$fileId', selecting last tab ...")
+        logWarn(s"Couldn't find '${fileId.value}', selecting last tab ...")
         selectLastLogFile()
         getTabs.get(getTabs.size() - 1).asInstanceOf[LogFileTab]
     }
@@ -158,7 +157,7 @@ class MainTabPane extends TabPane with CanLog {
     selectFile(fileId)
   }
 
-  def addEntriesFromZip(logFileSettings: LogFileSettings, entries: ObservableList[LogEntry]): LogFileTab = timeR({
+  private def addEntriesFromZip(logFileSettings: LogFileSettings, entries: ObservableList[LogEntry]): LogFileTab = timeR({
     LogoRRRGlobals.registerSettings(logFileSettings)
     val tab = LogFileTab(LogoRRRGlobals.getLogFileSettings(logFileSettings.fileId), entries)
     addLogFileTab(tab)
@@ -167,11 +166,9 @@ class MainTabPane extends TabPane with CanLog {
 
   /** Adds a new logfile to display and initializes bindings and listeners */
   def addLogFileTab(tab: LogFileTab): Unit = {
-    JfxUtils.execOnUiThread({
-      tab.init()
-      getTabs.add(tab)
-      tab.initContextMenu()
-    })
+    tab.init()
+    getTabs.add(tab)
+    tab.initContextMenu()
   }
 
 }

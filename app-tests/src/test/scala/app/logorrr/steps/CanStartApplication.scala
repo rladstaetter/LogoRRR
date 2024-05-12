@@ -16,6 +16,5 @@ trait CanStartApplication {
   @throws[Exception]
   override def start(stage: Stage): Unit = {
     LogoRRRApp.start(stage, services)
-    stage.toFront()
   }
 }
