@@ -31,7 +31,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
 
   private val blockSizeSlider = {
-    val bs = new BlockSizeSlider
+    val bs = new BlockSizeSlider(mutLogFileSettings.getFileId)
     bs.valueProperty().bindBidirectional(mutLogFileSettings.blockSizeProperty)
     bs
   }
