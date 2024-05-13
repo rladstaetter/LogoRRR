@@ -3,6 +3,7 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.{Settings, StageSettings}
 import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
+import app.logorrr.util.OsUtil
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.FXCollections
 import javafx.stage.Window
@@ -16,7 +17,12 @@ object MutSettings {
   /**
    * due to glorious app logic we need this constant to add to our windows height calculation
    **/
-  val WindowHeightHack = 28
+  val WindowHeightHack = {
+    if (OsUtil.isMac) 28
+    else if (OsUtil.isLinux) 37
+    else if (OsUtil.isWin) 20
+    else 28
+  }
 }
 
 class MutSettings {
