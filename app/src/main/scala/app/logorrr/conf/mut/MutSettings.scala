@@ -11,8 +11,16 @@ import java.nio.file.Path
 import java.util
 import scala.jdk.CollectionConverters._
 
+object MutSettings {
+
+  /**
+   * due to glorious app logic we need this constant to add to our windows height calculation
+   **/
+  val WindowHeightHack = 28
+}
 
 class MutSettings {
+
 
   /** remembers last opened directory for the next execution */
   val lastUsedDirectoryProperty = new SimpleObjectProperty[Option[Path]](None)
@@ -72,7 +80,7 @@ class MutSettings {
 
   def bindWindowProperties(window: Window): Unit = {
     mutStageSettings.widthProperty.bind(window.getScene.widthProperty())
-    mutStageSettings.heightProperty.bind(window.getScene.heightProperty())
+    mutStageSettings.heightProperty.bind(window.getScene.heightProperty().add(MutSettings.WindowHeightHack))
     mutStageSettings.xProperty.bind(window.xProperty())
     mutStageSettings.yProperty.bind(window.yProperty())
   }
