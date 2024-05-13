@@ -16,11 +16,13 @@ object MutSettings {
 
   /**
    * due to glorious app logic we need this constant to add to our windows height calculation
+   *
+   * will not work always exactly, depending on user settings/skins - has to be improved ...
    **/
-  val WindowHeightHack = {
+  val WindowHeightHack: Int = {
     if (OsUtil.isMac) 28
     else if (OsUtil.isLinux) 37
-    else if (OsUtil.isWin) 20
+    else if (OsUtil.isWin) 38
     else 28
   }
 }
