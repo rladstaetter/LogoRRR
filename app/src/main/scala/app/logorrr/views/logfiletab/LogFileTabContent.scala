@@ -10,7 +10,9 @@ import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.SplitPane
-import javafx.scene.layout.BorderPane
+import javafx.scene.layout.{BorderPane, VBox}
+
+
 
 class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
                         , val entries: ObservableList[LogEntry]) extends BorderPane {
@@ -26,6 +28,22 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   // graphical display to the left
   private val chunkListView = ChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem)
+
+
+  private val blockSizeSlider = {
+    val bs = new BlockSizeSlider(mutLogFileSettings.getFileId)
+    bs.valueProperty().bindBidirectional(mutLogFileSettings.blockSizeProperty)
+    bs
+  }
+
+
+  private val blockPane = {
+    val bBp = new BorderPane(chunkListView, blockSizeSlider, null, null, null)
+    // vBox.setStyle("-fx-background-color: #b6ff7a;")
+    VBox.setVgrow(bBp, javafx.scene.layout.Priority.ALWAYS)
+    bBp.setMaxHeight(java.lang.Double.MAX_VALUE)
+    bBp
+  }
 
   // start listener declarations
   private lazy val scrollToEndEventListener: InvalidationListener = (_: Observable) => {
@@ -49,7 +67,11 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, filtersToolBar)
 
-  private val pane = new SplitPane(chunkListView, logTextView)
+  private val pane = {
+    val s = new SplitPane(blockPane, logTextView)
+    //s.setStyle("-fx-background-color: #ffa07a;")
+    s
+  }
 
 
   def init(): Unit = {
@@ -69,6 +91,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   def getDividerPosition: Double = divider.getPosition
 
   def removeListeners(): Unit = {
+    logTextView.removeListeners()
     chunkListView.removeListeners()
   }
 

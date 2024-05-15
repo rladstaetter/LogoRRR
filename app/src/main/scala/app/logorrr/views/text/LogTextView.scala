@@ -1,18 +1,58 @@
 package app.logorrr.views.text
 
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.text.contextactions.{IgnoreAboveMenuItem, IgnoreBelowMenuItem}
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 
 import scala.jdk.CollectionConverters._
 
+
+object LogTextView extends UiNodeFileIdAware {
+
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogTextView])
+
+}
+
 class LogTextView(mutLogFileSettings: MutLogFileSettings
                   , filteredList: FilteredList[LogEntry])
   extends ListView[LogEntry]
     with CanLog {
+
+
+  setId(LogTextView.uiNode(mutLogFileSettings.getFileId).value)
+
+  private lazy val selectedLineNumberListener = JfxUtils.onNew[LogEntry](e => {
+    Option(e) match {
+      case Some(value) =>
+        // implicitly sets active element in chunkview via global settings binding
+        mutLogFileSettings.setSelectedLineNumber(value.lineNumber)
+      case None => logTrace("Selected item was null")
+    }
+  })
+
+  // when changing font size, repaint
+  private lazy val refreshListener = JfxUtils.onNew[Number](_ => {
+    refresh() // otherwise listview is not repainted correctly since calculation of the cellheight is broken atm
+  })
+
+ private lazy val scrollBarListener = JfxUtils.onNew[Number](_ => {
+    val (first, last) = ListViewHelper.getVisibleRange(this)
+    mutLogFileSettings.setFirstVisibleTextCellIndex(first)
+    mutLogFileSettings.setLastVisibleTextCellIndex(last)
+  })
+
+  /**
+   * to observe the visible text and mark it in the boxview
+   */
+  private lazy val skinListener = JfxUtils.onNew[Skin[_]](_ => {
+    ListViewHelper.findScrollBar(this).foreach(_.valueProperty.addListener(scrollBarListener))
+  })
+
 
   def scrollToItem(item: LogEntry): Unit = {
     getSelectionModel.select(item)
@@ -42,24 +82,28 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
     }
   }
 
+
   def init(): Unit = {
     getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
     setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
+
+    getSelectionModel.selectedItemProperty().addListener(selectedLineNumberListener)
+    mutLogFileSettings.fontSizeProperty.addListener(refreshListener)
+
+
+    skinProperty.addListener(skinListener)
+
     setItems(filteredList)
 
-    getSelectionModel.selectedItemProperty().addListener(JfxUtils.onNew[LogEntry](e => {
-      Option(e) match {
-        case Some(value) =>
-          // implicitly sets active element in chunkview via global settings binding
-          mutLogFileSettings.setSelectedLineNumber(value.lineNumber)
-        case None => logTrace("Selected item was null")
-      }
-    }))
+  }
 
-    // when changing font size, repaint
-    mutLogFileSettings.fontSizeProperty.addListener(JfxUtils.onNew[Number](n => {
-      refresh() // otherwise listview is not repainted correctly since calculation of the cellheight is broken atm
-    }))
+
+  /** clean up listeners */
+  def removeListeners(): Unit = {
+    getSelectionModel.selectedItemProperty().removeListener(selectedLineNumberListener)
+    mutLogFileSettings.fontSizeProperty.removeListener(refreshListener)
+    skinProperty.removeListener(skinListener)
+    ListViewHelper.findScrollBar(this).foreach(_.valueProperty.removeListener(scrollBarListener))
   }
 
   /** determine width of max elems in this view */

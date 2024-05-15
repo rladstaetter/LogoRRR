@@ -10,8 +10,7 @@ object LineNumberLabel {
 
   def apply(lineNumber: Int, maxLength: Int): LineNumberLabel = {
     val ldl = new LineNumberLabel
-    val string: String = lineNumber.toString.reverse.padTo(maxLength, " ").reverse.mkString
-    ldl.setText(string)
+    ldl.setText(lineNumber.toString.reverse.padTo(maxLength, ' ').reverse)
     ldl
   }
 }

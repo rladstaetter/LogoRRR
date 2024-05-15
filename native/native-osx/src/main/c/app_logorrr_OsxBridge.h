@@ -23,6 +23,14 @@ JNIEXPORT void JNICALL Java_app_logorrr_OsxBridge_registerPath
 JNIEXPORT void JNICALL Java_app_logorrr_OsxBridge_releasePath
   (JNIEnv *, jclass, jstring);
 
+/*
+ * Class:     app_logorrr_OsxBridge
+ * Method:    openUrl
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_app_logorrr_OsxBridge_openUrl
+  (JNIEnv *, jclass, jstring);
+
 #ifdef __cplusplus
 }
 #endif

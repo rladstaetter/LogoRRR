@@ -1,7 +1,6 @@
 package app.logorrr.views.block
 
 import app.logorrr.LogoRRRApp
-import app.logorrr.io.IoManager
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.search.Filter
@@ -13,9 +12,6 @@ import javafx.scene.Scene
 import javafx.scene.control._
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
-
-import java.nio.file.Path
-import java.util
 
 /**
  * App to test block list view
@@ -31,11 +27,11 @@ object ChunkListTestApp {
 }
 
 class ChunkListTestApp extends Application with CanLog {
-
-  private def mkEntries(path: Path): java.util.List[LogEntry] = {
-    util.Arrays.asList((for ((l, i) <- IoManager.fromPathUsingSecurityBookmarks(path).zipWithIndex) yield LogEntry(i, l, None)): _*)
-  }
-
+  /*
+    private def mkEntries(path: Path): java.util.List[LogEntry] = {
+      util.Arrays.asList((for ((l, i) <- IoManager.fromPathUsingSecurityBookmarks(path).zipWithIndex) yield LogEntry(i, l, None)): _*)
+    }
+  */
   def start(stage: Stage): Unit = {
 
     val width = 1000
@@ -45,8 +41,7 @@ class ChunkListTestApp extends Application with CanLog {
     val selectedLineNumber = 0
 
     val entries: java.util.List[LogEntry] = ChunkSpec.mkTestLogEntries(1000)
-    //val entries: java.util.List[LogEntry] = mkEntries(Paths.get("/Users/lad/logfiles/biglog.txt"))
-    val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList(LogFileSettings.DefaultFilter: _*))
+    val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList(LogFileSettings.DefaultFilters: _*))
     val entriesProperty = new SimpleListProperty[LogEntry](FXCollections.observableArrayList(entries))
 
     val bp = new BorderPane()
@@ -56,6 +51,8 @@ class ChunkListTestApp extends Application with CanLog {
       , new SimpleIntegerProperty(blockSize)
       , filtersProperty
       , new SimpleDoubleProperty(dividerPosition)
+      , new SimpleIntegerProperty()
+      , new SimpleIntegerProperty()
       , _ => ())
     clv.init()
     val sp = new SplitPane(clv, new BorderPane(new Label("Test")))

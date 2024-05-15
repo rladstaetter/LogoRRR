@@ -3,40 +3,57 @@ package app.logorrr.views.main
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.LogFileSettings
-import app.logorrr.util.CanLog
+import app.logorrr.services.fileservices.LogoRRRFileOpenService
+import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.layout.BorderPane
+import javafx.stage.Stage
 
-import java.nio.file.Path
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class LogoRRRMain(closeStage: => Unit) extends BorderPane with CanLog {
+class LogoRRRMain(closeStage: => Unit
+                  , logoRRRFileOpenService: LogoRRRFileOpenService
+                  , isUnderTest: Boolean) extends BorderPane with CanLog {
 
-  val mainTabPane = new MainTabPane
+  private val mainTabPane = new MainTabPane
 
-  val bar = new MainMenuBar(() => getScene.getWindow, openFile, closeAllLogFiles(), closeStage)
+  val bar = new MainMenuBar(logoRRRFileOpenService, openFile, closeAllLogFiles(), closeStage, isUnderTest)
 
   def getLogFileTabs: mutable.Seq[LogFileTab] = mainTabPane.getLogFileTabs
 
-  def init(): Unit = {
+  def init(stage: Stage): Unit = {
     setTop(bar)
     setCenter(mainTabPane)
-    mainTabPane.init()
-  }
 
-  def initLogFilesFromConfig(): Unit = {
     val entries = LogoRRRGlobals.getOrderedLogFileSettings
-    if (entries.nonEmpty) {
-      loadLogFiles(LogoRRRGlobals.getOrderedLogFileSettings)
-    } else {
-      logTrace("No log files loaded.")
+    val logFileTabs =
+      if (entries.nonEmpty) {
+        loadLogFiles(LogoRRRGlobals.getOrderedLogFileSettings)
+      } else {
+        logTrace("No log files loaded.")
+        Seq()
+      }
+
+    JfxUtils.execOnUiThread {
+      // important to execute this code on jfx thread
+      // don't change the ordering of following statements ;-)
+      logFileTabs.foreach(t => mainTabPane.addLogFileTab(t))
+      stage.show()
+      stage.toFront()
+
+      // only after loading all files we initialize the 'add' listener
+      // otherwise we would overwrite the active log everytime
+      mainTabPane.initSelectionListener()
+
+      LogoRRRStage.selectActiveLogFile(this)
+
     }
   }
 
-  private def loadLogFiles(settings: Seq[LogFileSettings]): Unit = {
+  private def loadLogFiles(settings: Seq[LogFileSettings]): Seq[LogFileTab] = {
     val (zipSettings, fileSettings) = settings.partition(p => p.fileId.isZipEntry)
     val zipSettingsMap: Map[FileId, LogFileSettings] = zipSettings.map(s => s.fileId -> s).toMap
     // zips is a map which contains fileIds as keys which have to be loaded, and as values their corresponding
@@ -54,7 +71,9 @@ class LogoRRRMain(closeStage: => Unit) extends BorderPane with CanLog {
               case (fileId, entries) =>
                 Future {
                   if (zipSettingsMap.contains(fileId)) {
-                    Option(mainTabPane.addEntriesFromZip(zipSettingsMap(fileId), entries))
+                    val settingz = zipSettingsMap(fileId)
+                    LogoRRRGlobals.registerSettings(settingz)
+                    Option(LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), entries))
                   } else None
                 }
             }
@@ -64,20 +83,16 @@ class LogoRRRMain(closeStage: => Unit) extends BorderPane with CanLog {
       val fileBasedSettings: Seq[Future[Option[LogFileTab]]] = fileSettings.map(lfs => Future {
         timeR({
           val entries = IoManager.readEntries(lfs.path, lfs.someLogEntryInstantFormat)
-          val tab = LogFileTab(LogoRRRGlobals.getLogFileSettings(lfs.fileId), entries)
-          mainTabPane.addLogFileTab(tab)
-          Option(tab)
+          Option(LogFileTab(LogoRRRGlobals.getLogFileSettings(lfs.fileId), entries))
         }, s"Loaded '${lfs.fileId.absolutePathAsString}' from filesystem ...")
       })
 
       zipFutures ++ fileBasedSettings
     }
-    val logFileTabs = Await.result(futures, Duration.Inf).flatten
+    val logFileTabs: Seq[LogFileTab] = Await.result(futures, Duration.Inf).flatten
     logTrace("Loaded " + logFileTabs.size + " files ... ")
+    logFileTabs
 
-    // only after loading all files we initialize the 'add' listener
-    // otherwise we would overwrite the active log everytime
-    mainTabPane.initSelectionListener()
 
   }
 

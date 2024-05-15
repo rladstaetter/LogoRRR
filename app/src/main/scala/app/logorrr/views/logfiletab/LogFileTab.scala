@@ -5,10 +5,10 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
-import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.logfiletab.actions._
 import app.logorrr.views.search.Fltr
+import app.logorrr.views.{LogoRRRAccelerators, UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.event.Event
@@ -19,7 +19,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-object LogFileTab {
+object LogFileTab extends UiNodeFileIdAware {
 
   /** background for file log tabs */
   private val BackgroundStyle: String =
@@ -52,8 +52,9 @@ object LogFileTab {
       , entries)
   }
 
-}
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogFileTab])
 
+}
 
 /**
  * Represents a single 'document' UI approach for a log file.
@@ -67,6 +68,8 @@ class LogFileTab(val fileId: FileId
                  , val entries: ObservableList[LogEntry]) extends Tab
   with TimerCode
   with CanLog {
+
+  setId(LogFileTab.uiNode(fileId).value)
 
   if (fileId.isZipEntry) {
     setStyle(LogFileTab.ZipBackgroundStyle)
@@ -173,11 +176,11 @@ class LogFileTab(val fileId: FileId
 
 
   private def mkContextMenu(): ContextMenu = {
-    val closeMenuItem = new CloseMenuItem(this)
+    val closeMenuItem = new CloseTabMenuItem(fileId, this)
     val openInFinderMenuItem = new OpenInFinderMenuItem(fileId)
 
-    val closeOtherFilesMenuItem = new CloseOtherFilesMenuItem(this)
-    val closeAllFilesMenuItem = new CloseAllFilesMenuItem(this)
+    val closeOtherFilesMenuItem = new CloseOtherFilesMenuItem(fileId, this)
+    val closeAllFilesMenuItem = new CloseAllFilesMenuItem(fileId, this)
 
     // close left/right is not always shown. see https://github.com/rladstaetter/LogoRRR/issues/159
     val leftRightCloser =
@@ -185,24 +188,34 @@ class LogFileTab(val fileId: FileId
         Seq()
         // current tab is the first one, show only 'right'
       } else if (getTabPane.getTabs.indexOf(this) == 0) {
-        Seq(new CloseRightFilesMenuItem(this))
+        Seq(new CloseRightFilesMenuItem(fileId, this))
         // we are at the end of the list
       } else if (getTabPane.getTabs.indexOf(this) == getTabPane.getTabs.size - 1) {
-        Seq(new CloseLeftFilesMenuItem(this))
+        Seq(new CloseLeftFilesMenuItem(fileId, this))
         // we are somewhere in between, show both options
       } else {
-        Seq(new CloseLeftFilesMenuItem(this), new CloseRightFilesMenuItem(this))
+        Seq(new CloseLeftFilesMenuItem(fileId, this), new CloseRightFilesMenuItem(fileId, this))
       }
 
 
     val items = {
       // special handling if there is only one tab
       if (getTabPane.getTabs.size() == 1) {
-        Seq(closeMenuItem, openInFinderMenuItem)
+        if (OsUtil.isMac) {
+          Seq(closeMenuItem)
+        } else {
+          Seq(closeMenuItem, openInFinderMenuItem)
+        }
       } else {
         Seq(closeMenuItem
           , closeOtherFilesMenuItem
-          , closeAllFilesMenuItem) ++ leftRightCloser ++ Seq(openInFinderMenuItem)
+          , closeAllFilesMenuItem) ++ leftRightCloser ++ {
+          if (OsUtil.isMac) {
+            Seq()
+          } else {
+            Seq(openInFinderMenuItem)
+          }
+        }
       }
     }
 

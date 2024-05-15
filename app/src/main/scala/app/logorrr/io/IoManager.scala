@@ -1,11 +1,10 @@
 package app.logorrr.io
 
-import app.logorrr.OsxBridge
 import app.logorrr.model.{LogEntry, LogEntryInstantFormat}
 import app.logorrr.util.{CanLog, OsUtil}
 import javafx.collections.{FXCollections, ObservableList}
 
-import java.io.{BufferedReader, ByteArrayInputStream, FileInputStream, IOException, InputStreamReader}
+import java.io._
 import java.nio.file.{Files, Path}
 import java.util
 import java.util.zip.{ZipEntry, ZipInputStream}
@@ -45,8 +44,8 @@ object IoManager extends CanLog {
     }
   }
 
-  def fromPathUsingSecurityBookmarks(logFile: Path): Seq[String] = {
-    registerPath(logFile)
+  private def fromPathUsingSecurityBookmarks(logFile: Path): Seq[String] = {
+    OsxBridgeHelper.registerPath(logFile)
     val lines = IoManager.fromPath(logFile)
     if (lines.isEmpty) {
       logWarn(s"${logFile.toAbsolutePath.toString} was empty.")
@@ -120,7 +119,7 @@ object IoManager extends CanLog {
    * @return
    */
   def unzip(zipFile: Path, filters: Set[FileId] = Set()): Map[FileId, ObservableList[LogEntry]] = {
-    registerPath(zipFile)
+    OsxBridgeHelper.registerPath(zipFile)
     var resultMap: Map[FileId, ObservableList[LogEntry]] = Map()
     try {
       val zipIn = new ZipInputStream(Files.newInputStream(zipFile))
@@ -143,12 +142,7 @@ object IoManager extends CanLog {
     resultMap
   }
 
-  private def registerPath(zipFile: Path): Unit = {
-    if (OsUtil.enableSecurityBookmarks) {
-      logTrace(s"Registering security bookmark for '${zipFile.toAbsolutePath.toString}'")
-      OsxBridge.registerPath(zipFile.toAbsolutePath.toString)
-    }
-  }
+
 
   def isZip(path : Path) : Boolean = path.getFileName.toString.endsWith(".zip")
 

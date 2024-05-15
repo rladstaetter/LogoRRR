@@ -1,12 +1,11 @@
 package app.logorrr.conf
 
-import app.logorrr.OsxBridge
 import app.logorrr.conf.SettingsIO.renderOptions
 import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
-import app.logorrr.io.{FileId, FilePaths, Fs}
+import app.logorrr.io.{FileId, FilePaths, Fs, OsxBridgeHelper}
 import app.logorrr.model.LogFileSettings
+import app.logorrr.services.hostservices.LogoRRRHostServices
 import app.logorrr.util.{CanLog, OsUtil}
-import javafx.application.HostServices
 import javafx.beans.property.SimpleObjectProperty
 import javafx.stage.Window
 import pureconfig.ConfigWriter
@@ -22,7 +21,7 @@ object LogoRRRGlobals extends CanLog {
 
   private val mutSettings = new MutSettings
 
-  private val hostServicesProperty = new SimpleObjectProperty[HostServices]()
+  private val hostServicesProperty = new SimpleObjectProperty[LogoRRRHostServices]()
 
   def persist(): Unit = {
     persist(LogoRRRGlobals.getSettings)
@@ -55,16 +54,15 @@ object LogoRRRGlobals extends CanLog {
 
   def getStageY: Double = mutSettings.getStageY
 
-  def setHostServices(hostServices: HostServices): Unit = hostServicesProperty.set(hostServices)
+  def setHostServices(hostServices: LogoRRRHostServices): Unit = hostServicesProperty.set(hostServices)
 
-  def getHostServices: HostServices = hostServicesProperty.get()
+  def getHostServices: LogoRRRHostServices = hostServicesProperty.get()
 
-  def set(settings: Settings, hostServices: HostServices): Unit = {
+  def set(settings: Settings, hostServices: LogoRRRHostServices): Unit = {
     mutSettings.setStageSettings(settings.stageSettings)
     mutSettings.setLogFileSettings(settings.fileSettings)
     mutSettings.setSomeActive(settings.someActive)
     mutSettings.setSomeLastUsedDirectory(settings.someLastUsedDirectory)
-
     setHostServices(hostServices)
   }
 
@@ -91,10 +89,12 @@ object LogoRRRGlobals extends CanLog {
         // only release path if no other file is opened anymore for this particular zip file
         val zipInQuestion = fileId.extractZipFileId
         if (!LogoRRRGlobals.getOrderedLogFileSettings.map(_.fileId.extractZipFileId).contains(zipInQuestion)) {
-          OsxBridge.releasePath(fileId.extractZipFileId.absolutePathAsString)
+          val zipPath = fileId.extractZipFileId.asPath
+          OsxBridgeHelper.releasePath(zipPath)
         }
       } else {
-        OsxBridge.releasePath(fileId.absolutePathAsString)
+        val filePath = fileId.asPath
+        OsxBridgeHelper.releasePath(filePath)
       }
     }
 

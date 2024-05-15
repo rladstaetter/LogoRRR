@@ -27,5 +27,7 @@ object LogFileSettingsSpec {
     , filters
     , blockSettings
     , someLogEntryInstantFormat
-    , autoScroll)
+    , autoScroll
+    , 0
+    , 10)
 }

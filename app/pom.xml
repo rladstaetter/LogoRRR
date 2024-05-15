@@ -9,6 +9,8 @@
         <version>${revision}${changelist}</version>
     </parent>
     <artifactId>app</artifactId>
+    <description>Main application code for LogoRRR</description>
+    <inceptionYear>2021</inceptionYear>
     <name>app.logorrr.app</name>
     <dependencies>
         <dependency>
@@ -49,6 +51,15 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
+        </dependency>
+        <!-- needed if you want to use scenic view analyse the scenegraph -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
@@ -93,7 +104,67 @@
             <plugin>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
+                <configuration>
+                    <argLine>-Djava.library.path=${basedir}/target/native</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>9</source>
+                    <target>9</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>OS.osx</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <name>Mac OS X</name>
+                </os>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>app.logorrr.native</groupId>
+                    <artifactId>native-osx</artifactId>
+                    <type>zip</type>
+                    <classifier>dylibs</classifier>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-dependency</id>
+                                <phase>generate-test-resources</phase> <!-- Define the phase where you want to execute unpacking -->
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>app.logorrr.native</groupId>
+                                            <artifactId>native-osx</artifactId>
+                                            <classifier>dylibs</classifier>
+                                            <type>zip</type>
+                                            <version>${project.version}</version>
+                                            <outputDirectory>${project.build.directory}/native</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

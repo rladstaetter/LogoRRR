@@ -1,15 +1,26 @@
 package app.logorrr.views.search
 
 
+import app.logorrr.io.FileId
 import app.logorrr.util.ColorUtil
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{Button, Tooltip}
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
 import org.kordamp.ikonli.javafx.FontIcon
 
-class SearchButton(searchTextField: SearchTextField
+object SearchButton extends UiNodeFileIdAware {
+
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchButton])
+
+}
+
+class SearchButton(fileId: FileId
+                   , searchTextField: SearchTextField
                    , regexToggleButton: SearchActivateRegexToggleButton
                    , colorPicker: SearchColorPicker
                    , addFilterFn: Filter => Unit) extends Button {
+
+  setId(SearchButton.uiNode(fileId).value)
   setGraphic(new FontIcon(FontAwesomeSolid.SEARCH))
   setTooltip(new Tooltip("search"))
   setMaxWidth(40)

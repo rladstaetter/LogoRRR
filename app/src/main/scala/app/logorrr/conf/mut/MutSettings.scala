@@ -3,6 +3,7 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.{Settings, StageSettings}
 import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
+import app.logorrr.util.OsUtil
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.FXCollections
 import javafx.stage.Window
@@ -11,8 +12,23 @@ import java.nio.file.Path
 import java.util
 import scala.jdk.CollectionConverters._
 
+object MutSettings {
+
+  /**
+   * due to glorious app logic we need this constant to add to our windows height calculation
+   *
+   * will not work always exactly, depending on user settings/skins - has to be improved ...
+   **/
+  val WindowHeightHack: Int = {
+    if (OsUtil.isMac) 28
+    else if (OsUtil.isLinux) 37
+    else if (OsUtil.isWin) 38
+    else 28
+  }
+}
 
 class MutSettings {
+
 
   /** remembers last opened directory for the next execution */
   val lastUsedDirectoryProperty = new SimpleObjectProperty[Option[Path]](None)
@@ -72,7 +88,7 @@ class MutSettings {
 
   def bindWindowProperties(window: Window): Unit = {
     mutStageSettings.widthProperty.bind(window.getScene.widthProperty())
-    mutStageSettings.heightProperty.bind(window.getScene.heightProperty())
+    mutStageSettings.heightProperty.bind(window.getScene.heightProperty().add(MutSettings.WindowHeightHack))
     mutStageSettings.xProperty.bind(window.xProperty())
     mutStageSettings.yProperty.bind(window.yProperty())
   }

@@ -21,25 +21,31 @@ object LogFileSettings {
   private val DefaultBlockSettings = BlockSettings(10)
   private val DefaultLogFormat: Option[LogEntryInstantFormat] = None
   private val DefaultAutoScroll = false
+private val DefaultFirstViewIndex = -1
+private val DefaultLastViewIndex = -1
 
-  private val finest: Filter = new Filter("FINEST", Color.GREY, true)
-  private val info: Filter = new Filter("INFO", Color.GREEN, true)
-  private val warning: Filter = new Filter("WARNING", Color.ORANGE, true)
-  private val severe: Filter = new Filter("SEVERE", Color.RED, true)
 
-  val DefaultFilter: Seq[Filter] = Seq(finest, info, warning, severe)
+  val FinestFilter: Filter = new Filter("FINEST", Color.GREY, true)
+  val InfoFilter: Filter = new Filter("INFO", Color.GREEN, true)
+  val WarningFilter: Filter = new Filter("WARNING", Color.ORANGE, true)
+  val SevereFilter: Filter = new Filter("SEVERE", Color.RED, true)
+
+  val DefaultFilters: Seq[Filter] = Seq(FinestFilter, InfoFilter, WarningFilter, SevereFilter)
   private val DefaultFontSize = 12
 
-  def apply(fileId: FileId): LogFileSettings =
+  def apply(fileId: FileId): LogFileSettings = {
     LogFileSettings(fileId
       , DefaultSelectedIndex
       , Instant.now().toEpochMilli
       , DefaultDividerPosition
       , DefaultFontSize
-      , DefaultFilter
+      , DefaultFilters
       , DefaultBlockSettings
       , DefaultLogFormat
-      , DefaultAutoScroll)
+      , DefaultAutoScroll
+      , DefaultFirstViewIndex
+      , DefaultLastViewIndex)
+  }
 
 }
 
@@ -61,7 +67,9 @@ case class LogFileSettings(fileId: FileId
                            , filters: Seq[Filter]
                            , blockSettings: BlockSettings
                            , someLogEntryInstantFormat: Option[LogEntryInstantFormat]
-                           , autoScroll: Boolean) extends CanLog {
+                           , autoScroll: Boolean
+                           , firstVisibleTextCellIndex: Int
+                           , lastVisibleTextCellIndex: Int) extends CanLog {
 
   val path: Path = Paths.get(fileId.value).toAbsolutePath
 

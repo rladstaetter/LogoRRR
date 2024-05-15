@@ -1,17 +1,13 @@
 package app.logorrr.views.search
 
-import app.logorrr.views.ops.RectButton
+import app.logorrr.util.HashUtil
+import app.logorrr.views.{UiNode, UiNodeFilterAware}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.scene.control.{ContentDisplay, ToggleButton, Tooltip}
 
-object FilterButton {
-  class RemoveFilterbutton(filter: Filter, removeFilter: Filter => Unit) extends RectButton(10, 10, filter.color, "remove") {
-    setOnAction(_ => removeFilter(filter))
-    setStyle(
-      """-fx-padding: 1 4 1 4;
-        |-fx-background-radius: 0;
-        |""".stripMargin)
-  }
+object FilterButton extends UiNodeFilterAware {
+
+  override def uiNode(filter: Filter): UiNode = UiNode(classOf[FilterButton].getSimpleName + "-" + HashUtil.md5Sum(filter.pattern))
 
 }
 
@@ -23,11 +19,12 @@ class FilterButton(val filter: Filter
                    , updateActiveFilter: () => Unit
                    , removeFilter: Filter => Unit) extends ToggleButton(filter.pattern) {
 
+  setId(FilterButton.uiNode(filter).value)
   setTooltip(new Tooltip(if (i == 1) "one item found" else s"$i items found"))
 
   if (!isUnclassified) {
     setContentDisplay(ContentDisplay.RIGHT)
-    setGraphic(new FilterButton.RemoveFilterbutton(filter, removeFilter))
+    setGraphic(new RemoveFilterbutton(filter, removeFilter))
   }
   setSelected(filter.active)
 

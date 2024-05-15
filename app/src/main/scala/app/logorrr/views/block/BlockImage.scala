@@ -1,11 +1,12 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, MathUtil}
+import app.logorrr.util.MathUtil
 import app.logorrr.views.search.Filter
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
 import javafx.scene.image.WritableImage
+
 
 object BlockImage {
 
@@ -53,23 +54,31 @@ object BlockImage {
     }
   }
 
+  def apply(blockNumber: Int
+            , entries: java.util.List[LogEntry]
+            , selectedLineNumberProperty: SimpleIntegerProperty
+            , filtersProperty: ObservableList[Filter]
+            , blockSizeProperty: SimpleIntegerProperty
+            , widthProperty: ReadOnlyDoubleProperty
+            , heightProperty: SimpleIntegerProperty
+            , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
+            , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
+           ): BlockImage = {
+    val pixelBuffer = LPixelBuffer(blockNumber
+      , Range(entries.get(0).lineNumber, entries.get(entries.size - 1).lineNumber)
+      , RectangularShape(if (widthProperty.get().toInt - BlockImage.ScrollBarWidth > 0) widthProperty.get().toInt - BlockImage.ScrollBarWidth else widthProperty.get().toInt, heightProperty.get())
+      , blockSizeProperty
+      , entries
+      , filtersProperty
+      , Array.fill(widthProperty.get().toInt * heightProperty.get())(LPixelBuffer.defaultBackgroundColor)
+      , selectedLineNumberProperty
+      , firstVisibleTextCellIndexProperty
+      , lastVisibleTextCellIndexProperty
+    )
+    new BlockImage(pixelBuffer)
+  }
 
 }
 
 
-class BlockImage(blockNumber: Int
-                 , entries: java.util.List[LogEntry]
-                 , selectedLineNumberProperty: SimpleIntegerProperty
-                 , filtersProperty: ObservableList[Filter]
-                 , blockSizeProperty: SimpleIntegerProperty
-                 , widthProperty: ReadOnlyDoubleProperty
-                 , heightProperty: SimpleIntegerProperty
-                )
-  extends WritableImage(LPixelBuffer(blockNumber
-    , Range(entries.get(0).lineNumber, entries.get(entries.size - 1).lineNumber)
-    , RectangularShape(if (widthProperty.get().toInt - BlockImage.ScrollBarWidth > 0) widthProperty.get().toInt - BlockImage.ScrollBarWidth else widthProperty.get().toInt, heightProperty.get())
-    , blockSizeProperty
-    , entries
-    , filtersProperty
-    , Array.fill(widthProperty.get().toInt * heightProperty.get())(LPixelBuffer.defaultBackgroundColor)
-    , selectedLineNumberProperty)) with CanLog
+class BlockImage(val pixelBuffer: LPixelBuffer) extends WritableImage(pixelBuffer)

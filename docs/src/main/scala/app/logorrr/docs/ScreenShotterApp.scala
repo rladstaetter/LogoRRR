@@ -1,9 +1,13 @@
 package app.logorrr.docs
 
 import app.logorrr.conf._
+import app.logorrr.conf.mut.MutSettings
 import app.logorrr.docs.Area._
 import app.logorrr.io.Fs
 import app.logorrr.meta.AppMeta
+import app.logorrr.services.LogoRRRServices
+import app.logorrr.services.fileservices.NativeOpenFileService
+import app.logorrr.services.hostservices.NativeHostServices
 import app.logorrr.util.CanLog
 import app.logorrr.{LogoRRRApp, LogoRRRNative}
 import javafx.application.Application
@@ -35,15 +39,22 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
   def start(stage: Stage): Unit = {
     Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
     val s0 = Seq[Area](R1280x800)
+    /*
     val s1 = Seq[Area](R1440x900)
     val s2 = Seq[Area](R2560x1600)
     val s3 = Seq[Area](R2880x1800)
+    */
     for (Area(w, h, _, _) <- s0) {
       val path = Paths.get(s"docs/src/main/resources/screenshotter-$w-$h.conf")
       val settings: Settings = SettingsIO.fromFile(path)
-      val updatedSettings = settings.copy(stageSettings = settings.stageSettings.copy(width = w, height = h + 28))
+      val updatedSettings = settings.copy(stageSettings = settings.stageSettings.copy(width = w, height = h + MutSettings.WindowHeightHack))
 
-      LogoRRRApp.start(stage, updatedSettings, getHostServices)
+      val services = LogoRRRServices(updatedSettings
+        , new NativeHostServices(getHostServices)
+        , new NativeOpenFileService(() => stage.getScene.getWindow)
+        , isUnderTest = false)
+
+      LogoRRRApp.start(stage, services)
 
       val bPath = Paths.get(s"docs/releases/${AppMeta.appVersion}/")
       Fs.createDirectories(bPath)

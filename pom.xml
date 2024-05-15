@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>app.logorrr</groupId>
     <artifactId>logorrr</artifactId>
@@ -7,28 +7,21 @@
     <name>app.logorrr</name>
     <description>LogoRRR - the log visualisation tool</description>
     <packaging>pom</packaging>
-
     <properties>
-
         <!-- make sure you either set following properties here or in your settings xml (preferred) -->
-
         <!--
-        <jdk.home>/path/to/jdk</jdk.home> (mac, linux, windows)
-        <graalvm.home>/path/to/graalvm</graalvm.home> (mac, linux, windows)
-        <osx.jdk.home.aarch64>/path/to/aarch64/jdk</osx.jdk.home.aarch64> (mac)
-        -->
-
-        <revision>24.2.0</revision>
-
+            <jdk.home>/path/to/jdk</jdk.home> (mac, linux, windows)
+            <graalvm.home>/path/to/graalvm</graalvm.home> (mac, linux, windows)
+            <osx.jdk.home.aarch64>/path/to/aarch64/jdk</osx.jdk.home.aarch64> (mac)
+            -->
+        <revision>24.4.0</revision>
         <scala.major.version>2.13</scala.major.version>
-        <scala.version>${scala.major.version}.12</scala.version>
-
-        <openjfx.version>21.0.2</openjfx.version>
+        <scala.version>${scala.major.version}.13</scala.version>
+        <openjfx.version>22.0.2</openjfx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <ikonli.version>12.3.1</ikonli.version>
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-        <gluonfx.plugin.version>1.0.18</gluonfx.plugin.version>
-
+        <gluonfx.plugin.version>1.0.22</gluonfx.plugin.version>
         <!-- no need to change these -->
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,14 +30,14 @@
         <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
         <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
         <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
+        <jmh.version>1.33</jmh.version>
+        <windows.temurin.version>https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_windows_hotspot_22.0.1_8.zip</windows.temurin.version>
     </properties>
-
     <scm>
         <connection>scm:git:https://github.com/rladstaetter/LogoRRR.git</connection>
         <developerConnection>scm:git:https://github.com/rladstaetter/LogoRRR.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
-
     <profiles>
         <profile>
             <id>OS.windows</id>
@@ -56,8 +49,8 @@
             <properties>
                 <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
                 <!-- graalvm builds disabled until https://github.com/rladstaetter/LogoRRR/issues/91
-                <graalvm.home>C:\Program Files\Java\graalvm-svm-java11-windows-gluon-22.1.0.1-Final</graalvm.home>
-                -->
+                        <graalvm.home>C:\Program Files\Java\graalvm-svm-java11-windows-gluon-22.1.0.1-Final</graalvm.home>
+                        -->
                 <!-- see also dist/dist-win/pom.xml! -->
                 <openjfx.os.prefix>windows</openjfx.os.prefix>
                 <openjfx.os.arch>x64</openjfx.os.arch>
@@ -113,13 +106,13 @@
                                             </message>
                                         </requireProperty>
                                         <!--
-                                        <requireProperty>
-                                            <property>graalvm.home</property>
-                                            <message>You have to set 'graalvm.home' and point to a correct graalvm
-                                                installation.
-                                            </message>
-                                        </requireProperty>
-                                        -->
+                                                            <requireProperty>
+                                                                <property>graalvm.home</property>
+                                                                <message>You have to set 'graalvm.home' and point to a correct graalvm
+                                                                    installation.
+                                                                </message>
+                                                            </requireProperty>
+                                                            -->
                                         <requireProperty>
                                             <property>osx.jdk.home.aarch64</property>
                                             <message>You have to set 'osx.jdk.home.aarch64' and it must point to a
@@ -149,8 +142,19 @@
                 <module>env</module>
             </modules>
         </profile>
+        <profile>
+            <id>benchmarks</id>
+            <modules>
+                <module>benchmarks</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>app-tests</id>
+            <modules>
+                <module>app-tests</module>
+            </modules>
+        </profile>
     </profiles>
-
     <modules>
         <module>core</module>
         <module>build</module>
@@ -158,7 +162,6 @@
         <module>dist</module>
         <module>docs</module>
     </modules>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -167,10 +170,23 @@
                 <version>${scala.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.testfx</groupId>
+                <artifactId>testfx-core</artifactId>
+                <version>4.0.18</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testfx</groupId>
+                <artifactId>openjfx-monocle</artifactId>
+                <version>21.0.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-controls</artifactId>
                 <version>${openjfx.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-swing</artifactId>
@@ -220,6 +236,18 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>5.5.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testfx</groupId>
+                <artifactId>testfx-junit5</artifactId>
+                <version>4.0.18</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>app.logorrr</groupId>
                 <artifactId>core</artifactId>
                 <version>${project.version}</version>
@@ -238,6 +266,11 @@
             </dependency>
             <dependency>
                 <groupId>app.logorrr</groupId>
+                <artifactId>app-tests</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>app.logorrr</groupId>
                 <artifactId>build</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -245,6 +278,17 @@
                 <groupId>app.logorrr.dist.repackaged</groupId>
                 <artifactId>dist-repackaged</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-core</artifactId>
+                <version>${jmh.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-generator-annprocess</artifactId>
+                <version>${jmh.version}</version>
+                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -291,6 +335,7 @@
                     </executions>
                     <configuration>
                         <scalaVersion>${scala.version}</scalaVersion>
+                        <failOnError>true</failOnError>
                         <args>
                             <arg>-deprecation</arg>
                             <arg>-encoding</arg>
@@ -319,9 +364,9 @@
                             <arg>-Xlint:type-parameter-shadow</arg>
                             <arg>-Ywarn-unused</arg>
                             <arg>-Yrangepos</arg>
+                            <arg>-Werror</arg>
                         </args>
                     </configuration>
-
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -464,18 +509,18 @@
                             <configuration>
                                 <rules>
                                     <!-- disable graalvm builds until https://github.com/rladstaetter/LogoRRR/issues/91 is resolved
-                                    <requireProperty>
-                                        <property>graalvm.home</property>
-                                        <message>You have to set 'graalvm.home' and point to a correct graalvm
-                                            installation.
-                                        </message>
-                                    </requireProperty>
-                                    <requireFilesExist>
-                                        <files>
-                                            <file>${graalvm.home}/GRAALVM-README.md</file>
-                                        </files>
-                                    </requireFilesExist>
-                                    -->
+                                                      <requireProperty>
+                                                          <property>graalvm.home</property>
+                                                          <message>You have to set 'graalvm.home' and point to a correct graalvm
+                                                              installation.
+                                                          </message>
+                                                      </requireProperty>
+                                                      <requireFilesExist>
+                                                          <files>
+                                                              <file>${graalvm.home}/GRAALVM-README.md</file>
+                                                          </files>
+                                                      </requireFilesExist>
+                                                      -->
                                     <requireProperty>
                                         <property>jdk.home</property>
                                         <message>You have to set 'jdk.home' and point to a correct jdk
@@ -520,6 +565,24 @@
                     <artifactId>download-maven-plugin</artifactId>
                     <version>1.6.8</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.openjdk.jmh</groupId>
+                    <artifactId>jmh-maven-plugin</artifactId>
+                    <version>${jmh.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>clean</goal>
+                                <goal>test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>properties-maven-plugin</artifactId>
+                    <version>1.2.1</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -530,6 +593,42 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>timestamp-property</id>
+                        <goals>
+                            <goal>timestamp-property</goal>
+                        </goals>
+                        <configuration>
+                            <name>currentYear</name>
+                            <pattern>yyyy</pattern>
+                            <timeZone>GMT</timeZone>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>set-system-properties</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <property>
+                                    <name>currentYear</name>
+                                </property>
+                            </properties>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

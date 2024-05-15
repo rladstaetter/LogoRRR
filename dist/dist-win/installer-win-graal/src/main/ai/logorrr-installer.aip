@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="19.8.1" version="19.8.1" Modules="professional" RootPath="." Language="en" Id="{DD937764-38A3-4EC9-8DA6-7162BB6A6D21}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="19.8.1" version="20.3.2" Modules="professional" RootPath="." Language="en" Id="{CA663507-AF62-42D0-BD28-FBCA1CC6FC3A}">
   <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
     <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;MsiDriverPackagesComponent;UserAccountsComponent;ScheduledTasksComponent;SqlConnectionComponent;AutorunComponent;FirewallExceptionComponent;GameUxComponent;MsiDirectEditorComponent;SharePointSlnComponent;SilverlightSlnComponent;MultipleInstancesComponent;SccmComponent;ActSyncAppComponent;CPLAppletComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
-    <ROW Property="AI_CURRENT_YEAR" Value="2022" ValueLocId="-"/>
+    <ROW Property="AI_CURRENT_YEAR" Value="${currentYear}" ValueLocId="-"/>
     <ROW Property="AI_FINDEXE_TITLE" Value="Select the installation package for [|ProductName]" ValueLocId="AI.Property.FindExeTitle"/>
     <ROW Property="AI_FrameBtns" Value="default" MultiBuildValue="DefaultBuild:powderblue" MsiKey="AI_FrameBtns"/>
-    <ROW Property="AI_PACKAGING_TOOL" Value="Advanced Installer 19.8.1 build ff1d5dfa" ValueLocId="-"/>
+    <ROW Property="AI_PACKAGING_TOOL" Value="Advanced Installer 20.3.2 build 850835f9" ValueLocId="-"/>
     <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_ADMIN_USER"/>
-    <ROW Property="AI_PREREQ_REPAIR_ENABLED" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="ALLUSERS" Value="1" MultiBuildValue="DefaultBuild:2"/>
     <ROW Property="ARPCOMMENTS" Value="Installer for [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPHELPLINK" Value="https://www.logorrr.app/"/>
-    <ROW Property="ARPNOMODIFY" MultiBuildValue="DefaultBuild:1"/>
-    <ROW Property="ARPNOREPAIR" Value="1" MultiBuildValue="DefaultBuild:1"/>
+    <ROW Property="ARPNOREPAIR" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="ARPPRODUCTICON" Value="logorrricon128.exe" Type="8"/>
     <ROW Property="ARPURLINFOABOUT" Value="https://www.logorrr.app/"/>
     <ROW Property="ARPURLUPDATEINFO" Value="https://www.logorrr.app/"/>
+    <ROW Property="CurrentJavaProductName" Value="CurrentJavaProductName"/>
     <ROW Property="Manufacturer" Value="LogoRRR.app"/>
     <ROW Property="ProductCode" Value="1033:{aaaaaaaa-bbbb-cccc-dddd-ffffffffffff} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="LogoRRR"/>
-    <ROW Property="ProductVersion" Value="24.2.0"/>
+    <ROW Property="ProductVersion" Value="${revision}"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
-    <ROW Property="UpgradeCode" Value="{F1B5A00B-1BA8-4E26-883D-04A6429DCAAA}"/>
+    <ROW Property="UpgradeCode" Value="{971D2B24-47DB-4B41-BED1-9348EBC71EAF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
     <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
     <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
@@ -39,22 +38,52 @@
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
     <ROW Directory="DesktopFolder" Directory_Parent="TARGETDIR" DefaultDir="DESKTO~1|DesktopFolder" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="jre64_Dir" Directory_Parent="APPDIR" DefaultDir="jre64"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
-    <ROW Component="AI_ExePath" ComponentId="{F06A7472-118F-4380-9727-281B4E6F6677}" Directory_="APPDIR" Attributes="260" KeyPath="AI_ExePath"/>
-    <ROW Component="AI_INSTALLPERUSER" ComponentId="{D939D4B7-FA6C-42A3-84D9-B45AD069622D}" Directory_="APPDIR" Attributes="260" KeyPath="AI_INSTALLPERUSER" Options="1"/>
-    <ROW Component="APPDIR" ComponentId="{352D20D1-3161-4305-A266-1A9249AA8010}" Directory_="APPDIR" Attributes="0"/>
-    <ROW Component="C4FE6FD5B7C4D07B3A313E754A9A6A8" ComponentId="{6C1DF64E-1264-467E-B58A-51FC2DB3648C}" Directory_="APPDIR" Attributes="260" KeyPath="C4FE6FD5B7C4D07B3A313E754A9A6A8" Options="2"/>
-    <ROW Component="ProductInformation" ComponentId="{1EAF5ADC-688E-4784-83DC-171AE8A84792}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
-    <ROW Component="binarywin.exe" ComponentId="{EBE0F120-5D34-47D7-AA23-B192BB16859E}" Directory_="APPDIR" Attributes="256" KeyPath="binarywin.exe"/>
+    <ROW Component="AI_ExePath" ComponentId="{C91947AB-0D13-41A2-83FA-4726549ECDE6}" Directory_="APPDIR" Attributes="260" KeyPath="AI_ExePath"/>
+    <ROW Component="AI_INSTALLPERUSER" ComponentId="{85BBBFA7-E96F-4FB9-8C42-632CEB9AE05B}" Directory_="APPDIR" Attributes="260" KeyPath="AI_INSTALLPERUSER" Options="1"/>
+    <ROW Component="APPDIR" ComponentId="{99BCDB82-5F09-421C-A976-F47DD72C83E1}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="LogoRRR.exe" ComponentId="{5C3E2C2D-8ABA-4AF6-8D16-21634C619EE5}" Directory_="APPDIR" Attributes="0" KeyPath="LogoRRR.exe"/>
+    <ROW Component="ProductInformation" ComponentId="{C27207B5-935E-4050-A66D-1654F364C41C}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
+    <ROW Component="app.logorrr.app24.1.0SNAPSHOT.jar" ComponentId="{A6188203-4548-421B-AC90-11D613580D8C}" Directory_="APPDIR" Attributes="0" KeyPath="app.logorrr.app24.1.0SNAPSHOT.jar" Type="0"/>
+    <ROW Component="jre64" ComponentId="{3816678E-07F0-40C8-BBD2-D66C4681C0FE}" Directory_="jre64_Dir" Attributes="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
-    <ROW Feature="C4FE6FD5B7C4D07B3A313E754A9A6A8" Title="Visual C++ Redistributable for Visual Studio 2015-2022 x64" Description="Visual C++ Redistributable for Visual Studio 2015-2022 x64" Display="3" Level="1" Attributes="0"/>
     <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ROW Feature="bitJREBundle" Title="64-bit JRE Bundle" Description="This feature contains the 64-bit JRE bundle." Display="3" Level="1" Directory_="APPDIR" Attributes="0" Builds="DefaultBuild"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
-    <ROW File="binarywin.exe" Component_="binarywin.exe" FileName="LogoRRR.exe" Attributes="0" SourcePath="binary-win.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="LogoRRR.exe" Component_="LogoRRR.exe" FileName="LogoRRR.exe" Attributes="0" SourcePath="&lt;AI_STUBS_64&gt;aijclw.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="app.logorrr.app24.1.0SNAPSHOT.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~1.JAR|app.logorrr.app-24.1.0-SNAPSHOT.jar" Attributes="0" SourcePath="programfiles\app.logorrr.app-24.1.0-SNAPSHOT.jar" SelfReg="false"/>
+    <ROW File="app.logorrr.build24.1.0SNAPSHOT.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~2.JAR|app.logorrr.build-24.1.0-SNAPSHOT.jar" Attributes="0" SourcePath="programfiles\app.logorrr.build-24.1.0-SNAPSHOT.jar" SelfReg="false"/>
+    <ROW File="app.logorrr.core24.1.0SNAPSHOT.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~3.JAR|app.logorrr.core-24.1.0-SNAPSHOT.jar" Attributes="0" SourcePath="programfiles\app.logorrr.core-24.1.0-SNAPSHOT.jar" SelfReg="false"/>
+    <ROW File="com.chuusai.shapeless_2.132.3.7.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMCHU~1.JAR|com.chuusai.shapeless_2.13-2.3.7.jar" Attributes="0" SourcePath="programfiles\com.chuusai.shapeless_2.13-2.3.7.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfigcore_2.130.17.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~1.JAR|com.github.pureconfig.pureconfig-core_2.13-0.17.1.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-core_2.13-0.17.1.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfiggenericbase_2.130.17.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~2.JAR|com.github.pureconfig.pureconfig-generic-base_2.13-0.17.1.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-generic-base_2.13-0.17.1.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfiggeneric_2.130.17.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~3.JAR|com.github.pureconfig.pureconfig-generic_2.13-0.17.1.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-generic_2.13-0.17.1.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfig_2.130.17.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~4.JAR|com.github.pureconfig.pureconfig_2.13-0.17.1.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig_2.13-0.17.1.jar" SelfReg="false"/>
+    <ROW File="com.typesafe.config1.4.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMTYP~1.JAR|com.typesafe.config-1.4.1.jar" Attributes="0" SourcePath="programfiles\com.typesafe.config-1.4.1.jar" SelfReg="false"/>
+    <ROW File="commonsio.commonsio2.8.0.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMMON~1.JAR|commons-io.commons-io-2.8.0.jar" Attributes="0" SourcePath="programfiles\commons-io.commons-io-2.8.0.jar" SelfReg="false"/>
+    <ROW File="io.github.mkpaz.atlantafxbase1.0.0.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="IOGITH~1.JAR|io.github.mkpaz.atlantafx-base-1.0.0.jar" Attributes="0" SourcePath="programfiles\io.github.mkpaz.atlantafx-base-1.0.0.jar" SelfReg="false"/>
+    <ROW File="org.kordamp.ikonli.ikonlicore12.3.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGKOR~1.JAR|org.kordamp.ikonli.ikonli-core-12.3.1.jar" Attributes="0" SourcePath="programfiles\org.kordamp.ikonli.ikonli-core-12.3.1.jar" SelfReg="false"/>
+    <ROW File="org.kordamp.ikonli.ikonlifontawesome5pack12.3.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGKOR~2.JAR|org.kordamp.ikonli.ikonli-fontawesome5-pack-12.3.1.jar" Attributes="0" SourcePath="programfiles\org.kordamp.ikonli.ikonli-fontawesome5-pack-12.3.1.jar" SelfReg="false"/>
+    <ROW File="org.kordamp.ikonli.ikonlijavafx12.3.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGKOR~3.JAR|org.kordamp.ikonli.ikonli-javafx-12.3.1.jar" Attributes="0" SourcePath="programfiles\org.kordamp.ikonli.ikonli-javafx-12.3.1.jar" SelfReg="false"/>
+    <ROW File="com.chuusai.shapeless_2.132.3.10.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMCHU~2.JAR|com.chuusai.shapeless_2.13-2.3.10.jar" Attributes="0" SourcePath="programfiles\com.chuusai.shapeless_2.13-2.3.10.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfigcore_2.130.17.4.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~5.JAR|com.github.pureconfig.pureconfig-core_2.13-0.17.4.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-core_2.13-0.17.4.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfiggenericbase_2.130.17.4.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~6.JAR|com.github.pureconfig.pureconfig-generic-base_2.13-0.17.4.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-generic-base_2.13-0.17.4.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfiggeneric_2.130.17.4.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~7.JAR|com.github.pureconfig.pureconfig-generic_2.13-0.17.4.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-generic_2.13-0.17.4.jar" SelfReg="false"/>
+    <ROW File="com.github.pureconfig.pureconfig_2.130.17.4.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~8.JAR|com.github.pureconfig.pureconfig_2.13-0.17.4.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig_2.13-0.17.4.jar" SelfReg="false"/>
+    <ROW File="com.typesafe.config1.4.2.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMTYP~2.JAR|com.typesafe.config-1.4.2.jar" Attributes="0" SourcePath="programfiles\com.typesafe.config-1.4.2.jar" SelfReg="false"/>
+    <ROW File="commonsio.commonsio2.13.0.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMMON~2.JAR|commons-io.commons-io-2.13.0.jar" Attributes="0" SourcePath="programfiles\commons-io.commons-io-2.13.0.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxbase22ea11win.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOPE~7.JAR|org.openjfx.javafx-base-22-ea+11-win.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-base-22-ea+11-win.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxbase22ea11.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOPE~8.JAR|org.openjfx.javafx-base-22-ea+11.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-base-22-ea+11.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxcontrols22ea11win.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOPE~9.JAR|org.openjfx.javafx-controls-22-ea+11-win.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-controls-22-ea+11-win.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxcontrols22ea11.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOP~10.JAR|org.openjfx.javafx-controls-22-ea+11.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-controls-22-ea+11.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxgraphics22ea11win.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOP~11.JAR|org.openjfx.javafx-graphics-22-ea+11-win.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-graphics-22-ea+11-win.jar" SelfReg="false"/>
+    <ROW File="org.openjfx.javafxgraphics22ea11.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGOP~12.JAR|org.openjfx.javafx-graphics-22-ea+11.jar" Attributes="0" SourcePath="programfiles\org.openjfx.javafx-graphics-22-ea+11.jar" SelfReg="false"/>
+    <ROW File="org.scalalang.scalalibrary2.13.12.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="ORGSCA~2.JAR|org.scala-lang.scala-library-2.13.12.jar" Attributes="0" SourcePath="programfiles\org.scala-lang.scala-library-2.13.12.jar" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentPropComponent">
     <ROW Property="AI_INSTALLPERUSER" Registry="AI_INSTALLPERUSER" HklmSearch="AI_INSTALLPERUSER" HkcuSearch="AI_INSTALLPERUSER_1" Hklm64Search="AI_INSTALLPERUSER_2" Hkcu64Search="AI_INSTALLPERUSER_3"/>
@@ -66,11 +95,14 @@
     <ROW Action="AI_DetectSoftware" Sequence="151"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="." Languages="en" InstallationType="2" CabsLocation="1" CompressCabs="false" UseLzma="true" LzmaMethod="2" LzmaCompressionLevel="2" PackageType="1" FilesInsideExe="true" ExeIconPath="logorrr-icon-128.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" Options="8" UseLargeSchema="true" ExeName="LogoRRR-[|ProductVersion]-installer" MsiPackageType="x64"/>
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="." Languages="en" InstallationType="2" CabsLocation="1" CompressCabs="false" UseLzma="true" LzmaMethod="2" LzmaCompressionLevel="2" PackageType="1" FilesInsideExe="true" ExeIconPath="logorrr-icon-128.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" Options="8" UseLargeSchema="true" ExeName="LogoRRR-${revision}-installer" MsiPackageType="x64" JRE64Dir="jre64_Dir"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
     <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
     <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DigCertStoreComponent">
+    <ROW TimeStampUrl="http://time.certum.pl" SignerDescription="[|ProductName]" SignOptions="7" SignTool="0" UseSha256="1" Subject="CN=&quot;Open Source Developer, Robert Ladstätter&quot;, O=Open Source Developer, L=Graz, S=Styria, C=AT"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
     <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
@@ -90,19 +122,14 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiActionTextComponent">
     <ROW Action="AI_DeleteLzma" Description="Deleting files extracted from archive" DescriptionLocId="ActionText.Description.AI_DeleteLzma" TemplateLocId="-"/>
     <ROW Action="AI_DeleteRLzma" Description="Deleting files extracted from archive" DescriptionLocId="ActionText.Description.AI_DeleteLzma" TemplateLocId="-"/>
-    <ROW Action="AI_DownloadPrereq" Description="Downloading prerequisite software" DescriptionLocId="ActionText.Description.AI_DownloadPrereq" Template="Downloading [1]{[2] completed}" TemplateLocId="ActionText.Template.AI_DownloadPrereq"/>
     <ROW Action="AI_ExtractFiles" Description="Extracting files from archive" DescriptionLocId="ActionText.Description.AI_ExtractLzma" TemplateLocId="-"/>
     <ROW Action="AI_ExtractLzma" Description="Extracting files from archive" DescriptionLocId="ActionText.Description.AI_ExtractLzma" TemplateLocId="-"/>
-    <ROW Action="AI_ExtractPrereq" Description="Extracting prerequisite software" DescriptionLocId="ActionText.Description.AI_ExtractPrereq" Template="Extracting [1]{[2] completed}" TemplateLocId="ActionText.Template.AI_ExtractPrereq"/>
-    <ROW Action="AI_InstallPostPrerequisite" Description="Installing prerequisite software" DescriptionLocId="ActionText.Description.AI_InstallPrerequisite" Template="Installing [1]{[2] completed}" TemplateLocId="ActionText.Template.AI_InstallPrerequisite"/>
-    <ROW Action="AI_InstallPrerequisite" Description="Installing prerequisite software" DescriptionLocId="ActionText.Description.AI_InstallPrerequisite" Template="Installing [1]{[2] completed}" TemplateLocId="ActionText.Template.AI_InstallPrerequisite"/>
-    <ROW Action="AI_VerifyPrereq" Description="Verifying prerequisites" DescriptionLocId="ActionText.Description.AI_VerifyPrereq" Template="[1] was not installed correctly." TemplateLocId="ActionText.Template.AI_VerifyPrereq"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiAppSearchComponent">
-    <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER"/>
-    <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER_1"/>
     <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_LM" Builds="DefaultBuild"/>
     <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_CU" Builds="DefaultBuild"/>
+    <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER"/>
+    <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER_1"/>
     <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER_2"/>
     <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER_3"/>
   </COMPONENT>
@@ -111,6 +138,9 @@
     <ROW Name="SoftwareDetector.dll" SourcePath="&lt;AI_CUSTACTS&gt;SoftwareDetector.dll"/>
     <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
     <ROW Name="lzmaextractor.dll" SourcePath="&lt;AI_CUSTACTS&gt;lzmaextractor.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiConditionComponent">
+    <ROW Feature_="bitJREBundle" Level="0" Condition="NOT VersionNT64"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
     <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="InstallTypeDlg" Condition="AI_INSTALL" Ordering="1"/>
@@ -135,18 +165,14 @@
     <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
     <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="205"/>
     <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
-    <ROW Dialog_="ExitDialog" Control_="Finish" Event="DoAction" Argument="AI_CleanPrereq" Condition="1" Ordering="301"/>
-    <ROW Dialog_="FatalError" Control_="Finish" Event="DoAction" Argument="AI_CleanPrereq" Condition="1" Ordering="102"/>
-    <ROW Dialog_="UserExit" Control_="Finish" Event="DoAction" Argument="AI_CleanPrereq" Condition="1" Ordering="101"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
     <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+    <ROW Directory_="jre64_Dir" Component_="jre64" ManualDelete="true"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
-    <ROW Action="AI_AppSearchEx" Type="1" Source="Prereq.dll" Target="DoAppSearchEx"/>
     <ROW Action="AI_AuthorSinglePackage" Type="1" Source="aicustact.dll" Target="AI_AuthorSinglePackage" WithoutSeq="true"/>
     <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH_ORIGINAL" Target="[AI_SETUPEXEPATH]"/>
-    <ROW Action="AI_CleanPrereq" Type="65" Source="Prereq.dll" Target="CleanPrereq" WithoutSeq="true"/>
     <ROW Action="AI_DATA_SETTER" Type="51" Source="CustomActionData" Target="[AI_SETUPEXEPATH]"/>
     <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
     <ROW Action="AI_DeleteCadLzma" Type="51" Source="AI_DeleteLzma" Target="[AI_SETUPEXEPATH]"/>
@@ -154,25 +180,21 @@
     <ROW Action="AI_DeleteRCadLzma" Type="51" Source="AI_DeleteRLzma" Target="[AI_SETUPEXEPATH]"/>
     <ROW Action="AI_DeleteRLzma" Type="1281" Source="lzmaextractor.dll" Target="DeleteLZMAFiles"/>
     <ROW Action="AI_DetectSoftware" Type="257" Source="SoftwareDetector.dll" Target="OnDetectSoftware"/>
-    <ROW Action="AI_DownloadPrereq" Type="1" Source="Prereq.dll" Target="DownloadPrereq"/>
     <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
     <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
     <ROW Action="AI_ExtractCadLzma" Type="51" Source="AI_ExtractLzma" Target="[AI_SETUPEXEPATH]"/>
     <ROW Action="AI_ExtractFiles" Type="1" Source="Prereq.dll" Target="ExtractSourceFiles" AdditionalSeq="AI_DATA_SETTER"/>
     <ROW Action="AI_ExtractLzma" Type="1025" Source="lzmaextractor.dll" Target="ExtractLZMAFiles"/>
-    <ROW Action="AI_ExtractPrereq" Type="65" Source="Prereq.dll" Target="ExtractPrereq"/>
     <ROW Action="AI_FindExeLzma" Type="1" Source="lzmaextractor.dll" Target="FindEXE"/>
     <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
-    <ROW Action="AI_InstallPostPrerequisite" Type="1" Source="Prereq.dll" Target="InstallPostPrereq"/>
-    <ROW Action="AI_InstallPrerequisite" Type="1" Source="Prereq.dll" Target="InstallPrereq"/>
     <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
     <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH" Target="[AI_SETUPEXEPATH_ORIGINAL]"/>
     <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
     <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
     <ROW Action="AI_SETMIXINSTLOCATION" Type="1" Source="aicustact.dll" Target="MixedAllUsersInstallLocation"/>
     <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
-    <ROW Action="AI_VerifyPrereq" Type="1" Source="Prereq.dll" Target="VerifyPrereq"/>
     <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[AI_UserProgramFiles][Manufacturer]\[ProductName]"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
@@ -180,13 +202,23 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
     <ROW Feature_="MainFeature" Component_="APPDIR"/>
     <ROW Feature_="MainFeature" Component_="ProductInformation"/>
-    <ROW Feature_="MainFeature" Component_="binarywin.exe"/>
+    <ROW Feature_="MainFeature" Component_="jre64"/>
+    <ROW Feature_="MainFeature" Component_="app.logorrr.app24.1.0SNAPSHOT.jar"/>
     <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
+    <ROW Feature_="MainFeature" Component_="LogoRRR.exe"/>
     <ROW Feature_="MainFeature" Component_="AI_INSTALLPERUSER"/>
-    <ROW Feature_="C4FE6FD5B7C4D07B3A313E754A9A6A8" Component_="C4FE6FD5B7C4D07B3A313E754A9A6A8"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="logorrricon128.exe" SourcePath="logorrr-icon-128.ico" Index="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiIniFileComponent">
+    <ROW IniFile="ApplicationType" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Application" Key="Application Type" Value="gui" Action="0" Component_="LogoRRR.exe"/>
+    <ROW IniFile="ClassPath" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Class Path" Key="Class Path" Value="[APPDIR]*.jar;" Action="0" Component_="LogoRRR.exe"/>
+    <ROW IniFile="FailureCheck" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Application" Key="Failure Check" Value="yes" Action="0" Component_="LogoRRR.exe"/>
+    <ROW IniFile="MainClass" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Java Runtime Environment" Key="Main Class" Value="app.logorrr.LogoRRRAppLauncher" Action="0" Component_="LogoRRR.exe"/>
+    <ROW IniFile="MaximumVersion" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Java Runtime Environment" Key="Maximum Version" Value="any" Action="0" Component_="LogoRRR.exe"/>
+    <ROW IniFile="MinimumVersion" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Java Runtime Environment" Key="Minimum Version" Value="any" Action="0" Component_="LogoRRR.exe"/>
+    <ROW IniFile="OverrideWorkingDir" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Application" Key="Override WorkingDir" Value="yes" Action="0" Component_="LogoRRR.exe"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
@@ -196,7 +228,7 @@
     <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
     <ROW Action="AI_EnableDebugLog" Sequence="51"/>
     <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99" Builds="DefaultBuild"/>
-    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="103" Builds="DefaultBuild"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="102" Builds="DefaultBuild"/>
     <ROW Action="AI_DeleteCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="199" Builds="DefaultBuild"/>
     <ROW Action="AI_DeleteRCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="198" Builds="DefaultBuild"/>
     <ROW Action="AI_ExtractCadLzma" Condition="SETUPEXEDIR=&quot;&quot; AND Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;) AND (NOT PATCH)" Sequence="197" Builds="DefaultBuild"/>
@@ -207,9 +239,7 @@
     <ROW Action="AI_ExtractFiles" Sequence="1399" Builds="DefaultBuild"/>
     <ROW Action="AI_DATA_SETTER" Sequence="1398"/>
     <ROW Action="AI_SETMIXINSTLOCATION" Sequence="748"/>
-    <ROW Action="AI_DetectSoftware" Sequence="102"/>
-    <ROW Action="AI_VerifyPrereq" Sequence="1101"/>
-    <ROW Action="AI_AppSearchEx" Sequence="101"/>
+    <ROW Action="AI_DetectSoftware" Sequence="101"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
     <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
@@ -217,15 +247,13 @@
     <ROW Action="AI_DpiContentScale" Sequence="52"/>
     <ROW Action="AI_EnableDebugLog" Sequence="51"/>
     <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99"/>
-    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="103"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="102"/>
     <ROW Action="AI_SETMIXINSTLOCATION" Sequence="748"/>
-    <ROW Action="AI_DetectSoftware" Sequence="102"/>
-    <ROW Action="AI_DownloadPrereq" Sequence="1297"/>
-    <ROW Action="AI_ExtractPrereq" Sequence="1298"/>
-    <ROW Action="AI_InstallPrerequisite" Sequence="1299"/>
-    <ROW Action="AI_InstallPostPrerequisite" Sequence="1301"/>
-    <ROW Action="AI_CleanPrereq" Sequence="1302"/>
-    <ROW Action="AI_AppSearchEx" Sequence="101"/>
+    <ROW Action="AI_DetectSoftware" Sequence="101"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiJavaComponent">
+    <ROW Name="LogoRRR.exe" Launcher="LogoRRR.exe" MainClass="MainClass" ClassPath="ClassPath" JREMin="MinimumVersion" JREMax="MaximumVersion" IconPath="logorrr-icon-128.ico" AppType="ApplicationType" PlusList="APPDIR;" MinusList="#LogoRRR.exe;" MacDescription="[|CurrentJavaProductName] [|ProductVersion] © [|Manufacturer], Inc, 2022" MacBundleId="com.[|Manufacturer].[|ProductName].[|CurrentJavaProductName]" FailureCheck="FailureCheck" OverrideWkDir="OverrideWorkingDir" UACExecutionLevel="0" Platform64="true" ExeMetadata="FileDescription:LogoRRR"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
     <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
@@ -246,23 +274,19 @@
     <ROW Registry="AI_ExePath" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="AI_ExePath" Value="[AI_SETUPEXEPATH]" Component_="AI_ExePath"/>
     <ROW Registry="AI_INSTALLPERUSER" Root="-1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="AI_INSTALLPERUSER" Value="[AI_INSTALLPERUSER]" Component_="AI_INSTALLPERUSER"/>
     <ROW Registry="AdvancedInstaller" Root="-1" Key="Software\Caphyon\Advanced Installer" Name="\"/>
-    <ROW Registry="C4FE6FD5B7C4D07B3A313E754A9A6A8" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]\[ProductVersion]" Name="C4FE6FD5B7C4D07B3A313E754A9A6A8" Value="1" Component_="C4FE6FD5B7C4D07B3A313E754A9A6A8"/>
     <ROW Registry="Caphyon" Root="-1" Key="Software\Caphyon" Name="\"/>
     <ROW Registry="LZMA" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA" Name="\"/>
     <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
     <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
-    <ROW Registry="Prereqs" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs" Name="\"/>
     <ROW Registry="ProductCode" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]" Name="\"/>
-    <ROW Registry="ProductCode_1" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]" Name="\"/>
     <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
     <ROW Registry="ProductVersion" Root="-1" Key="Software\Caphyon\Advanced Installer\LZMA\[ProductCode]\[ProductVersion]" Name="\"/>
-    <ROW Registry="ProductVersion_1" Root="-1" Key="Software\Caphyon\Advanced Installer\Prereqs\[ProductCode]\[ProductVersion]" Name="\"/>
     <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
     <ROW Registry="UpgradeCode" Root="-1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="\"/>
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
-    <ROW Shortcut="LogoRRR" Directory_="DesktopFolder" Name="LogoRRR" Component_="binarywin.exe" Target="[#binarywin.exe]" Hotkey="0" Icon_="logorrricon128.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+    <ROW Shortcut="LogoRRR" Directory_="DesktopFolder" Name="LogoRRR" Component_="LogoRRR.exe" Target="[#LogoRRR.exe]" Description="LogoRRR" Hotkey="0" IconIndex="0" ShowCmd="1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="modern"/>
@@ -271,11 +295,8 @@
     <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="[|ProductVersion]" Attributes="257" ActionProperty="OLDPRODUCTS"/>
     <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
   </COMPONENT>
-  <COMPONENT cid="caphyon.advinst.msicomp.PreReqComponent">
-    <ROW PrereqKey="C4FE6FD5B7C4D07B3A313E754A9A6A8" DisplayName="Visual C++ Redistributable for Visual Studio 2015-2022 x64" VersionMin="14.30" SetupFileUrl="Prerequisites\Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.x64.exe" Location="0" ExactSize="0" WinNTVersions="Windows 9x/ME/NT/2000/XP/Vista/Windows 7/Windows 8 x86/Windows 8.1 x86/Windows 10 x86" WinNT64Versions="Windows Vista RTM x64, Windows Vista SP1 x64, Windows Server 2008 RTM x64, Windows 7 RTM x64, Windows Server 2008 R2 RTM x64" Operator="1" NoUiComLine="/q /norestart" Options="xf" TargetName="Visual C++ Redistributable for Visual Studio 2015-2022\VC_redist.x64.exe" Feature="C4FE6FD5B7C4D07B3A313E754A9A6A8"/>
-    <ATTRIBUTE name="PrereqsOrder" value="C4FE6FD5B7C4D07B3A313E754A9A6A8"/>
-  </COMPONENT>
-  <COMPONENT cid="caphyon.advinst.msicomp.PreReqSearchComponent">
-    <ROW SearchKey="C4FE6FD5B7C4D07B3A313E754A9A6A8Vers" Prereq="C4FE6FD5B7C4D07B3A313E754A9A6A8" SearchType="2" SearchString="HKLM\SOFTWARE\Microsoft\DevDiv\VC\Servicing\14.0\RuntimeMinimum\Version" VerMin="14.30.30704" Order="1" Property="PreReqSearch_C4FE6FD5B7C4D07B3A313E"/>
+  <COMPONENT cid="caphyon.advinst.msicomp.SynchronizedFolderComponent">
+    <ROW Directory_="APPDIR" SourcePath="programfiles" Feature="MainFeature" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6"/>
+    <ROW Directory_="jre64_Dir" SourcePath="jdk-22.0.1+8-jre" Feature="MainFeature" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="8"/>
   </COMPONENT>
 </DOCUMENT>
