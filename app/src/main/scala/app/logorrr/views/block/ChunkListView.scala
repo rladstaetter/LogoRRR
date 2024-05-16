@@ -7,7 +7,7 @@ import app.logorrr.views.search.Filter
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.{FXCollections, ObservableList}
-import javafx.scene.control.ListView
+import javafx.scene.control.{ListView, ScrollBar}
 
 import scala.util.{Failure, Success, Try}
 
@@ -75,6 +75,15 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
   /** if height changes, recalculate */
   private val heightRp = mkRecalculateAndUpdateItemListener("height")
 
+  lazy val verticalScrollBarListener = JfxUtils.onNew[java.lang.Boolean](isShown => {
+    if (isShown) {
+      println("scrollbar visible")
+    } else {
+      println("scrollbar invisible")
+    }
+  })
+
+
   // context variable just here for debugging
   private def mkRecalculateAndUpdateItemListener(ctx: String): ChangeListener[Number] = (_: ObservableValue[_ <: Number], oldValue: Number, newValue: Number) => {
     if (oldValue != newValue && newValue.doubleValue() != 0.0) {
@@ -131,6 +140,15 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
     blockSizeProperty.addListener(blockSizeRp)
     widthProperty().addListener(widthRp)
     heightProperty().addListener(heightRp)
+
+    // lookup scrollbar
+    val verticalScrollBar = lookup(".scroll-bar:vertical").asInstanceOf[ScrollBar]
+    Option(verticalScrollBar) match {
+      case Some(sb) => sb.visibleProperty().addListener(verticalScrollBarListener)
+      case None => println("???")
+    }
+
+
   }
 
   def removeListeners(): Unit = {
