@@ -21,10 +21,12 @@ public class LogoRRRBenchmark {
     int[] myArray = new int[blocksize * blocksize * count];
     int c = ColorUtil.toARGB(Color.rgb(255, 200, 0));
 
+    int vantablack = 0;
+
     @Benchmark
     public void benchmarkDrawRect() {
         for (int i = 0; i <= count; i++) {
-            LPixelBuffer$.MODULE$.drawRect(myArray, i, width, blocksize, c);
+            LPixelBuffer$.MODULE$.drawRect(myArray, i, width, blocksize, c, vantablack,vantablack,vantablack,vantablack);
         }
     }
 
