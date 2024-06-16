@@ -1,0 +1,30 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="app unit tests" type="ScalaTestRunConfiguration" factoryName="ScalaTest" folderName="scala module tests" show_console_on_std_err="false" show_console_on_std_out="false">
+    <module name="app" />
+    <option name="VMParameters" value="-Xmx4g -Djava.util.logging.config.file=$PROJECT_DIR$/develop-logging.properties -Djava.library.path=$PROJECT_DIR$/native/native-osx/target -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-22.0.1/lib --add-modules javafx.controls,javafx.fxml --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED" />
+    <option name="allowRunningInParallel" value="false" />
+    <option name="alternativeJrePath" />
+    <option name="alternativeJrePathEnabled" value="false" />
+    <option name="classpathModifications">
+      <list />
+    </option>
+    <option name="envs">
+      <map />
+    </option>
+    <option name="passParentEnvs" value="true" />
+    <option name="programParameters" value="" />
+    <option name="projectPathOnTarget" />
+    <option name="selectedOptions">
+      <list />
+    </option>
+    <option name="testKind" value="All in package" />
+    <option name="workingDirectory" value="$MODULE_DIR$" />
+    <option name="javaOptions" value="-Xmx4g -Djava.util.logging.config.file=$PROJECT_DIR$/develop-logging.properties -Djava.library.path=$PROJECT_DIR$/native/native-osx/target -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-22.0.1/lib --add-modules javafx.controls,javafx.fxml --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED" />
+    <option name="searchTest" value="In single module" />
+    <option name="shortenClasspath" value="NONE" />
+    <option name="workingDirectory" value="$MODULE_DIR$" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
