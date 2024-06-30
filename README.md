@@ -10,15 +10,21 @@ interest.
 More  [Screenshots](Screenshots.md) are available [here](Screenshots.md).
 
 
-## Windows and Linux installation
+## Windows Installation
 
-**You can download the latest [Windows and Linux installers here](https://github.com/rladstaetter/LogoRRR/releases/tag/24.4.0)**
+**The easiest way on Windows to install `LogoRRR` is by [downloading LogoRRR from the Microsoft App Store](https://aka.ms/AAr3sxs).**
+
+Alternatively, you can download the latest [Windows installers](https://github.com/rladstaetter/LogoRRR/releases/tag/24.4.0) from the github release page.
 
 ## MacOsX installation
 
 `LogoRRR` is available on the OsX [App Store](https://apps.apple.com/at/app/logorrr/id1583786769). You can [download](https://apps.apple.com/at/app/logorrr/id1583786769) and install it securely and certified from there.
 
 Older releases versions are available on the [releases page](https://github.com/rladstaetter/LogoRRR/releases).
+
+## Linux installation
+
+Linux installation packages can be downloaded [from the github release page](https://github.com/rladstaetter/LogoRRR/releases/tag/24.4.0).
 
 ## Features
 
