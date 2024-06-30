@@ -10,7 +10,7 @@ interest.
 More  [Screenshots](Screenshots.md) are available [here](Screenshots.md).
 
 
-## Windows Installation
+## Windows installation
 
 **The easiest way on Windows to install `LogoRRR` is by [downloading LogoRRR from the Microsoft App Store](https://aka.ms/AAr3sxs).**
 
