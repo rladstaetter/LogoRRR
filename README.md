@@ -1,9 +1,10 @@
 # `LogoRRR`
 
-While exploring the log files is an essential part of troubleshooting, sometimes you may not want to go so deep. In
-fact, when you get an error, you may simply want to see what happened as fast as possible and in a clear way. `LogoRRR`
-is a tool that does precisely that and provides you with a quick way to filter out critical events or other points of
-interest.
+LogoRRR is a desktop application which makes it easy to analyze text files for recurring patterns.
+
+This simplifies searching for certain events in logfiles for example, but you can analyze arbitrary text files with it.
+
+Visit the [www.logorrr.app](https://www.logorrr.app/) for more information.
 
 [![Watch a video of LogoRRRs features](https://img.youtube.com/vi/5ogC95PX0Ag/maxresdefault.jpg)](https://youtu.be/5ogC95PX0Ag)
 
@@ -12,7 +13,7 @@ More  [Screenshots](Screenshots.md) are available [here](Screenshots.md).
 
 ## Windows installation
 
-**The easiest way on Windows to install `LogoRRR` is by [downloading LogoRRR from the Microsoft App Store](https://aka.ms/AAr3sxs).**
+The easiest way on Windows to install `LogoRRR` is by [downloading LogoRRR from the Microsoft App Store](https://aka.ms/AAr3sxs).
 
 Alternatively, you can download the latest [Windows installers](https://github.com/rladstaetter/LogoRRR/releases/tag/24.4.0) from the github release page.
 
