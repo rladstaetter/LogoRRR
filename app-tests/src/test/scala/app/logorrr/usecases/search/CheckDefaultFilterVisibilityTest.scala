@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test
 class CheckDefaultFilterVisibilityTest extends SingleFileApplicationTest(TestFiles.simpleLog1) {
 
   @Test def checkIfDefaultFiltersAreActive(): Unit = {
-    openFile(path)
+    openFile(fileId)
 
     LogFileSettings.DefaultFilters.foreach {
-      f => waitForVisibility(FilterButton.uiNode(f))
+      f => waitForVisibility(FilterButton.uiNode(fileId, f))
     }
   }
 

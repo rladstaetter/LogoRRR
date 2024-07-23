@@ -3,7 +3,7 @@ package app.logorrr.views.main
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.LogFileSettings
-import app.logorrr.services.fileservices.LogoRRRFileOpenService
+import app.logorrr.services.file.FileService
 import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.layout.BorderPane
@@ -15,7 +15,7 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
 class LogoRRRMain(closeStage: => Unit
-                  , logoRRRFileOpenService: LogoRRRFileOpenService
+                  , logoRRRFileOpenService: FileService
                   , isUnderTest: Boolean) extends BorderPane with CanLog {
 
   private val mainTabPane = new MainTabPane

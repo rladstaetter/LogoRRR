@@ -2,7 +2,7 @@ package app.logorrr.usecases
 
 import app.logorrr.conf.Settings
 import app.logorrr.services.LogoRRRServices
-import app.logorrr.services.fileservices.EmptyFileService
+import app.logorrr.services.file.EmptyFileService
 import app.logorrr.services.hostservices.MockHostServices
 import app.logorrr.steps.CanStartApplication
 

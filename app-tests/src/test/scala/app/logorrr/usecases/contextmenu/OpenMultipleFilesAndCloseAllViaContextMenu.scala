@@ -1,7 +1,6 @@
 package app.logorrr.usecases.contextmenu
 
 import app.logorrr.TestFiles
-import app.logorrr.io.FileId
 import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.MultipleFileApplicationTest
 import app.logorrr.views.UiNodes
@@ -18,7 +17,7 @@ class OpenMultipleFilesAndCloseAllViaContextMenu
 
   @Test def openFilesAndCloseAllViaContextMenuItem(): Unit = {
     TestFiles.seq.foreach {
-      p => openFile(p)
+      fileId => openFile(fileId)
     }
     expectCountOfOpenFiles(TestFiles.seq.size)
     val selectedFile = Random.nextInt(TestFiles.seq.size)
@@ -28,7 +27,7 @@ class OpenMultipleFilesAndCloseAllViaContextMenu
     val lastNodeQuery = looksi.nth(selectedFile)
     clickOn(lastNodeQuery.query[StackPane]())
     clickOn(lastNodeQuery.query[StackPane](), MouseButton.SECONDARY)
-    waitAndClickVisibleItem(CloseAllFilesMenuItem.uiNode(FileId(TestFiles.seq(selectedFile))))
+    waitAndClickVisibleItem(CloseAllFilesMenuItem.uiNode(TestFiles.seq(selectedFile)))
 
     expectCountOfOpenFiles(0)
 

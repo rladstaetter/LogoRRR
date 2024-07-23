@@ -2,7 +2,6 @@ package app.logorrr.usecases.blockview
 
 import app.logorrr.TestFiles
 import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.io.FileId
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.logfiletab.BlockSizeSlider
 import javafx.scene.input.MouseButton
@@ -14,8 +13,7 @@ import org.junit.jupiter.api.Test
 class BlockSizeWithSliderTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
 
   @Test def search(): Unit = {
-    openFile(path)
-    val fileId = FileId(path)
+    openFile(fileId)
     waitForVisibility(BlockSizeSlider.uiNode(fileId))
 
     val slider0 = drag(BlockSizeSlider.uiNode(fileId).ref).moveBy(0,0)

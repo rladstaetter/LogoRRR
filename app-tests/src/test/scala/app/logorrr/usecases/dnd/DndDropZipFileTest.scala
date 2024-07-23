@@ -1,6 +1,5 @@
 package app.logorrr.usecases.dnd
 
-import app.logorrr.io.FileId
 import app.logorrr.steps.{CheckTabPaneActions, VisibleItemActions}
 import app.logorrr.usecases.StartEmptyApplicationTest
 import app.logorrr.views.UiNodes
@@ -39,7 +38,7 @@ class DndDropZipFileTest extends StartEmptyApplicationTest
 
   @Test def testOpeningAZipFileWith10Files(): Unit = {
     checkForEmptyTabPane()
-    drag(DragSourceButton.uiNode(FileId(TestFiles.zipFileContaining10Files)).ref, MouseButton.PRIMARY).dropTo(UiNodes.MainTabPane.ref)
+    drag(DragSourceButton.uiNode(TestFiles.zipFileContaining10Files).ref, MouseButton.PRIMARY).dropTo(UiNodes.MainTabPane.ref)
     expectCountOfOpenFiles(10)
   }
 

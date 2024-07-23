@@ -13,21 +13,21 @@ import org.junit.jupiter.api.Test
 class SelectDefaultFilterTest extends SingleFileApplicationTest(TestFiles.simpleLog2) {
 
   @Test def selectSpecificFilter(): Unit = {
-    openFile(path)
+    openFile(fileId)
 
     LogFileSettings.DefaultFilters.foreach {
       f =>
         LogFileSettings.DefaultFilters.foreach {
-          ff => waitAndClickVisibleItem(FilterButton.uiNode(ff)) // disable all filters
+          ff => waitAndClickVisibleItem(FilterButton.uiNode(fileId, ff)) // disable all filters
         }
-        waitAndClickVisibleItem(FilterButton.uiNode(f)) // enable one specific filer
+        waitAndClickVisibleItem(FilterButton.uiNode(fileId, f)) // enable one specific filer
 
         val res = lookup(LogTextView.uiNode(fileId).ref).query[LogTextView]
         assert(res.getItems.size() == 1)
-        waitAndClickVisibleItem(FilterButton.uiNode(f)) // enable disable specific filer
+        waitAndClickVisibleItem(FilterButton.uiNode(fileId, f)) // enable disable specific filer
 
         LogFileSettings.DefaultFilters.foreach {
-          ff => waitAndClickVisibleItem(FilterButton.uiNode(ff)) // enable all filters
+          ff => waitAndClickVisibleItem(FilterButton.uiNode(fileId, ff)) // enable all filters
         }
     }
   }

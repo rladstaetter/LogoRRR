@@ -1,12 +1,12 @@
 package app.logorrr.views.main
 
 import app.logorrr.io.FileId
-import app.logorrr.services.fileservices.LogoRRRFileOpenService
+import app.logorrr.services.file.FileService
 import app.logorrr.util.{CanLog, OsUtil}
 import app.logorrr.views.menubar.{FileMenu, HelpMenu}
 import javafx.scene.control.MenuBar
 
-class MainMenuBar(fileOpenService: LogoRRRFileOpenService
+class MainMenuBar(fileOpenService: FileService
                   , openFile: FileId => Unit
                   , closeAllLogFiles: => Unit
                   , closeApplication: => Unit

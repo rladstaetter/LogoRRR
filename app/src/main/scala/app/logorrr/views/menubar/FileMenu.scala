@@ -2,24 +2,27 @@ package app.logorrr.views.menubar
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
-import app.logorrr.services.fileservices.LogoRRRFileOpenService
+import app.logorrr.services.file.FileService
 import app.logorrr.util.{CanLog, OsUtil}
 import app.logorrr.views.UiNodes
 import javafx.scene.control.{Menu, MenuItem}
 import javafx.stage.{FileChooser, Window}
 
-import java.nio.file.Path
-
+/**
+ * Helper class to group file open operation and setting LogoRRRGlobals
+ *
+ * @param title title of file dialog (no effect on mac?)
+ */
 class LogoRRRFileChooser(title: String) {
 
-  def showAndWait(window: Window): Option[Path] = {
+  def performShowAndWait(window: Window): Option[FileId] = {
     val fc = new FileChooser
     fc.setTitle(title)
     LogoRRRGlobals.getSomeLastUsedDirectory.foreach(d => fc.setInitialDirectory(d.toFile))
-    val somePath = Option(fc.showOpenDialog(window)).map(_.toPath)
-    LogoRRRGlobals.setSomeLastUsedDirectory(somePath.map(_.getParent))
+    val someFileId: Option[FileId] = Option(fc.showOpenDialog(window)).map(f => FileId(f.toPath))
+    LogoRRRGlobals.setSomeLastUsedDirectory(someFileId.map(fileId => fileId.asPath.getParent))
     LogoRRRGlobals.persist()
-    somePath
+    someFileId
   }
 
 }
@@ -27,14 +30,14 @@ class LogoRRRFileChooser(title: String) {
 
 object FileMenu {
 
-  class OpenMenuItem(fileOpenService: LogoRRRFileOpenService
+  class OpenMenuItem(fileOpenService: FileService
                      , openFile: FileId => Unit)
     extends MenuItem("Open") with CanLog {
     setId(UiNodes.FileMenuOpenFile.value)
     setOnAction(_ => {
       fileOpenService.openFile match {
-        case Some(logFile) => openFile(FileId(logFile))
-        case None => logTrace("Cancelled open file ...")
+        case Some(fileId) => openFile(fileId)
+        case None => logTrace("Cancelled open file operation ...")
       }
 
     })
@@ -53,7 +56,7 @@ object FileMenu {
 }
 
 class FileMenu(isUnderTest : Boolean
-                ,fileOpenService: LogoRRRFileOpenService
+                ,fileOpenService: FileService
                , openFile: FileId => Unit
                , closeAllLogFiles: => Unit
                , closeApplication: => Unit) extends Menu("File") with CanLog {

@@ -24,7 +24,7 @@ class OpenSingleFileAndOpenInFinderTest
     // basically skips this until https://github.com/rladstaetter/LogoRRR/issues/221#issuecomment-2083771649
     if (false) {
       checkForEmptyTabPane()
-      openFile(path)
+      openFile(fileId)
       checkForNonEmptyTabPane()
       clickOn(lookup(UiNodes.LogFileHeaderTabs).query[StackPane](), MouseButton.SECONDARY)
       waitAndClickVisibleItem(OpenInFinderMenuItem.uiNode(fileId))

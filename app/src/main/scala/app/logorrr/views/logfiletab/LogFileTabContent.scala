@@ -1,6 +1,7 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.OpsRegion
@@ -13,8 +14,8 @@ import javafx.scene.control.SplitPane
 import javafx.scene.layout.{BorderPane, VBox}
 
 
-
-class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
+class LogFileTabContent(fileId: FileId
+                        , mutLogFileSettings: MutLogFileSettings
                         , val entries: ObservableList[LogEntry]) extends BorderPane {
 
   // make sure we have a white background for our tabs - see https://github.com/rladstaetter/LogoRRR/issues/188
@@ -60,7 +61,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   val opsToolBar = new OpsToolBar(mutLogFileSettings.getFileId, addFilter, entries, filteredList, mutLogFileSettings.blockSizeProperty)
 
   private val filtersToolBar = {
-    val fbtb = new FiltersToolBar(filteredList, removeFilter)
+    val fbtb = new FiltersToolBar(fileId, filteredList, removeFilter)
     fbtb.filtersProperty.bind(mutLogFileSettings.filtersProperty)
     fbtb
   }

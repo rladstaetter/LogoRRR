@@ -5,7 +5,7 @@ import app.logorrr.conf.{LogoRRRGlobals, SettingsIO}
 import app.logorrr.io.FilePaths
 import app.logorrr.meta.AppMeta
 import app.logorrr.services.LogoRRRServices
-import app.logorrr.services.fileservices.NativeOpenFileService
+import app.logorrr.services.file.DefaultFileService
 import app.logorrr.services.hostservices.{MacNativeHostService, NativeHostServices}
 import app.logorrr.util.{CanLog, JfxUtils, OsUtil}
 import app.logorrr.views.main.{LogoRRRMain, LogoRRRStage}
@@ -58,7 +58,7 @@ class LogoRRRApp extends javafx.application.Application with CanLog {
     val services = logorrr.services.LogoRRRServices(
       SettingsIO.fromFile(FilePaths.settingsFilePath)
       , hostServices
-      , new NativeOpenFileService(() => stage.getScene.getWindow)
+      , new DefaultFileService(() => stage.getScene.getWindow)
       , isUnderTest = false)
 
     LogoRRRApp.start(stage, services)

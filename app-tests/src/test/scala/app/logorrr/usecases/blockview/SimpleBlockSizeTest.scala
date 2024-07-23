@@ -14,8 +14,7 @@ import org.junit.jupiter.api.Test
 class SimpleBlockSizeTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
 
   @Test def search(): Unit = {
-    openFile(path)
-    val fileId = FileId(path)
+    openFile(fileId)
 
     val size = LogoRRRGlobals.getLogFileSettings(fileId).getBlockSize
     val count = 10
