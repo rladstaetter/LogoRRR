@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="app unit tests" type="ScalaTestRunConfiguration" factoryName="ScalaTest" folderName="scala module tests" show_console_on_std_err="false" show_console_on_std_out="false">
     <module name="app" />
-    <option name="VMParameters" value="-Xmx4g -Djava.util.logging.config.file=$PROJECT_DIR$/develop-logging.properties -Djava.library.path=$PROJECT_DIR$/native/native-osx/target -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-22.0.1/lib --add-modules javafx.controls,javafx.fxml --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED" />
+    <option name="VMParameters" value="-Xmx4g -Djava.util.logging.config.file=$PROJECT_DIR$/develop-logging.properties -Djava.library.path=$PROJECT_DIR$/native/native-osx/target -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-22.0.2/lib --add-modules javafx.controls,javafx.fxml --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED" />
     <option name="allowRunningInParallel" value="false" />
     <option name="alternativeJrePath" />
     <option name="alternativeJrePathEnabled" value="false" />
@@ -33,7 +33,7 @@
         <option value="app.logorrr.views.text.FilterCalculatorSpec" />
       </list>
     </option>
-    <option name="javaOptions" value="-Xmx4g -Djava.util.logging.config.file=$PROJECT_DIR$/develop-logging.properties -Djava.library.path=$PROJECT_DIR$/native/native-osx/target -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-22.0.1/lib --add-modules javafx.controls,javafx.fxml --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED" />
+    <option name="javaOptions" value="-Xmx4g -Djava.util.logging.config.file=$PROJECT_DIR$/develop-logging.properties -Djava.library.path=$PROJECT_DIR$/native/native-osx/target -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-22.0.2/lib --add-modules javafx.controls,javafx.fxml --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED" />
     <option name="searchTest" value="In single module" />
     <option name="shortenClasspath" value="NONE" />
     <option name="workingDirectory" value="$MODULE_DIR$" />
