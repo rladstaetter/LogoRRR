@@ -2,13 +2,12 @@ package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
 import app.logorrr.io.FileId
-import app.logorrr.util.CanLog
 import app.logorrr.views.search.Filter
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
 import java.time.Instant
 
 object LogFileSettings {
@@ -21,16 +20,14 @@ object LogFileSettings {
   private val DefaultBlockSettings = BlockSettings(10)
   private val DefaultLogFormat: Option[LogEntryInstantFormat] = None
   private val DefaultAutoScroll = false
-private val DefaultFirstViewIndex = -1
-private val DefaultLastViewIndex = -1
-
-
-  val FinestFilter: Filter = new Filter("FINEST", Color.GREY, true)
-  val InfoFilter: Filter = new Filter("INFO", Color.GREEN, true)
-  val WarningFilter: Filter = new Filter("WARNING", Color.ORANGE, true)
-  val SevereFilter: Filter = new Filter("SEVERE", Color.RED, true)
-
+  private val DefaultFirstViewIndex = -1
+  private val DefaultLastViewIndex = -1
+  private val FinestFilter: Filter = new Filter("FINEST", Color.GREY, true)
+  private val InfoFilter: Filter = new Filter("INFO", Color.GREEN, true)
+  private val WarningFilter: Filter = new Filter("WARNING", Color.ORANGE, true)
+  private val SevereFilter: Filter = new Filter("SEVERE", Color.RED, true)
   val DefaultFilters: Seq[Filter] = Seq(FinestFilter, InfoFilter, WarningFilter, SevereFilter)
+
   private val DefaultFontSize = 12
 
   def apply(fileId: FileId): LogFileSettings = {
@@ -58,6 +55,17 @@ private val DefaultLastViewIndex = -1
  *
  * Filters define which keywords are relevant for this given log file.
  *
+ * @param fileId                    wraps file reference
+ * @param selectedLineNumber        which line number was selected
+ * @param firstOpened               used to sort log files in tabs
+ * @param dividerPosition           position of divider for this view
+ * @param fontSize                  font size to use
+ * @param filters                   filters which should be applied
+ * @param blockSettings             settings for the left view
+ * @param someLogEntryInstantFormat used timestamp format
+ * @param autoScroll                true if 'follow mode' is active
+ * @param firstVisibleTextCellIndex which index is the first visible on the screen (depending on resolution, window size ...)
+ * @param lastVisibleTextCellIndex  which index is the last visible on the screen (depending on resolution, window size ...)
  */
 case class LogFileSettings(fileId: FileId
                            , selectedLineNumber: Int
@@ -69,8 +77,8 @@ case class LogFileSettings(fileId: FileId
                            , someLogEntryInstantFormat: Option[LogEntryInstantFormat]
                            , autoScroll: Boolean
                            , firstVisibleTextCellIndex: Int
-                           , lastVisibleTextCellIndex: Int) extends CanLog {
+                           , lastVisibleTextCellIndex: Int) {
 
-  val path: Path = Paths.get(fileId.value).toAbsolutePath
+  val path: Path = fileId.asPath.toAbsolutePath
 
 }

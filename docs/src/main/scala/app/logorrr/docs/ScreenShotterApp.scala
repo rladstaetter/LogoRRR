@@ -6,7 +6,7 @@ import app.logorrr.docs.Area._
 import app.logorrr.io.Fs
 import app.logorrr.meta.AppMeta
 import app.logorrr.services.LogoRRRServices
-import app.logorrr.services.fileservices.NativeOpenFileService
+import app.logorrr.services.file.DefaultFileIdService
 import app.logorrr.services.hostservices.NativeHostServices
 import app.logorrr.util.CanLog
 import app.logorrr.{LogoRRRApp, LogoRRRNative}
@@ -51,7 +51,7 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
 
       val services = LogoRRRServices(updatedSettings
         , new NativeHostServices(getHostServices)
-        , new NativeOpenFileService(() => stage.getScene.getWindow)
+        , new DefaultFileIdService(() => stage.getScene.getWindow)
         , isUnderTest = false)
 
       LogoRRRApp.start(stage, services)

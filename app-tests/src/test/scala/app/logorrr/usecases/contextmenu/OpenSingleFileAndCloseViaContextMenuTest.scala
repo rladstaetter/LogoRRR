@@ -22,7 +22,7 @@ class OpenSingleFileAndCloseViaContextMenuTest
    */
   @Test def openAndCloseTab(): Unit = {
     checkForEmptyTabPane()
-    openFile(path)
+    openFile(fileId)
     checkForNonEmptyTabPane()
     clickOn(lookup(UiNodes.LogFileHeaderTabs).query[StackPane](), MouseButton.SECONDARY)
     waitAndClickVisibleItem(CloseTabMenuItem.uiNode(fileId))

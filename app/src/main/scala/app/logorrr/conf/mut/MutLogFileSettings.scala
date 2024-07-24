@@ -15,10 +15,10 @@ object MutLogFileSettings {
 
   def apply(logFileSettings: LogFileSettings): MutLogFileSettings = {
     val s = new MutLogFileSettings
+    s.setFileId(logFileSettings.fileId)
     s.setSelectedLineNumber(logFileSettings.selectedLineNumber)
     s.setFontSize(logFileSettings.fontSize)
     s.setBlockSettings(logFileSettings.blockSettings)
-    s.setFileId(logFileSettings.fileId)
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
     s.setDividerPosition(logFileSettings.dividerPosition)
     s.setFilters(logFileSettings.filters)

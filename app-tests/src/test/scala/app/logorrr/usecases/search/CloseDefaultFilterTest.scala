@@ -12,11 +12,11 @@ import java.nio.file.Files
 class CloseDefaultFilterTest extends SingleFileApplicationTest(TestFiles.simpleLog1) {
 
   @Test def closeDefaultFilter(): Unit = {
-    openFile(path)
-    val lines = Files.lines(path).count
+    openFile(fileId)
+    val lines = Files.lines(fileId.asPath).count
 
     LogFileSettings.DefaultFilters.foreach {
-      f => waitAndClickVisibleItem(RemoveFilterbutton.uiNode(f))
+      f => waitAndClickVisibleItem(RemoveFilterbutton.uiNode(fileId, f))
     }
 
     waitForVisibility(LogTextView.uiNode(fileId))

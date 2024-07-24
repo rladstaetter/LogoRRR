@@ -1,6 +1,5 @@
 package app.logorrr.usecases.dnd
 
-import app.logorrr.io.FileId
 import app.logorrr.steps.{CheckTabPaneActions, VisibleItemActions}
 import app.logorrr.usecases.StartEmptyApplicationTest
 import app.logorrr.views.UiNodes
@@ -40,7 +39,7 @@ class DndDropFileTest extends StartEmptyApplicationTest
   @Test def startupEmpty(): Unit = {
     checkForEmptyTabPane()
     TestFiles.seq.foreach {
-      f => drag(DragSourceButton.uiNode(FileId(f)).ref, MouseButton.PRIMARY).dropTo(UiNodes.MainTabPane.ref)
+      fileId => drag(DragSourceButton.uiNode(fileId).ref, MouseButton.PRIMARY).dropTo(UiNodes.MainTabPane.ref)
     }
     expectCountOfOpenFiles(TestFiles.seq.size)
 

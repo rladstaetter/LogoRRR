@@ -31,7 +31,7 @@ object UiNodes {
   val FileMenuCloseAll: UiNode = UiNode("file_menu_close_all")
 
   /** quit application */
-  val FileMenuQuitApplication: UiNode = UiNode("file_menu_quit_application")
+  val FileMenuCloseApplication: UiNode = UiNode("file_menu_close_application")
 
   /** help menu */
   val HelpMenu: UiNode = UiNode("help_menu")

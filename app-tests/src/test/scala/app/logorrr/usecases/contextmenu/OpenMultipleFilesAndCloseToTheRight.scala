@@ -1,7 +1,6 @@
 package app.logorrr.usecases.contextmenu
 
 import app.logorrr.TestFiles
-import app.logorrr.io.FileId
 import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.MultipleFileApplicationTest
 import app.logorrr.views.UiNodes
@@ -22,7 +21,7 @@ class OpenMultipleFilesAndCloseToTheRight
     // activate first tab
     clickOn(lookup(UiNodes.LogFileHeaderTabs).query[StackPane]())
     clickOn(lookup(UiNodes.LogFileHeaderTabs).query[StackPane](), MouseButton.SECONDARY)
-    waitAndClickVisibleItem(CloseRightFilesMenuItem.uiNode(FileId(TestFiles.seq.head)))
+    waitAndClickVisibleItem(CloseRightFilesMenuItem.uiNode(TestFiles.seq.head))
 
     expectCountOfOpenFiles(1)
 

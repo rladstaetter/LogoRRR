@@ -16,12 +16,12 @@
             -->
         <revision>24.5.0</revision>
         <scala.major.version>2.13</scala.major.version>
-        <scala.version>${scala.major.version}.13</scala.version>
-        <openjfx.version>22.0.1</openjfx.version>
+        <scala.version>${scala.major.version}.14</scala.version>
+        <openjfx.version>22.0.2</openjfx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <ikonli.version>12.3.1</ikonli.version>
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-        <gluonfx.plugin.version>1.0.22</gluonfx.plugin.version>
+        <gluonfx.plugin.version>1.0.23</gluonfx.plugin.version>
         <!-- no need to change these -->
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,7 +30,7 @@
         <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
         <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
         <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
-        <jmh.version>1.33</jmh.version>
+        <jmh.version>1.37</jmh.version>
         <windows.temurin.version>https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_windows_hotspot_22.0.1_8.zip</windows.temurin.version>
     </properties>
     <scm>
@@ -208,12 +208,12 @@
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.13.0</version>
+                <version>2.16.1</version>
             </dependency>
             <dependency>
                 <groupId>com.github.pureconfig</groupId>
                 <artifactId>pureconfig_${scala.major.version}</artifactId>
-                <version>0.17.4</version>
+                <version>0.17.7</version>
             </dependency>
             <dependency>
                 <groupId>org.scalatest</groupId>
@@ -236,7 +236,7 @@
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
-                <version>5.5.1</version>
+                <version>5.11.0-M2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -370,6 +370,11 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.17.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

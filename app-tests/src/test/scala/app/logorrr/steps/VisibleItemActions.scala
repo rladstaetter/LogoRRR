@@ -7,9 +7,9 @@ import org.testfx.api.FxRobotInterface
 trait VisibleItemActions {
   self: TestFxBaseApplicationTest =>
 
-  def waitAndClickVisibleItem(menu: UiNode): FxRobotInterface = {
-    waitForVisibility(menu)
-    clickOn(menu)
+  def waitAndClickVisibleItem(node: UiNode): FxRobotInterface = {
+    waitForVisibility(node)
+    clickOn(node)
   }
 
 }

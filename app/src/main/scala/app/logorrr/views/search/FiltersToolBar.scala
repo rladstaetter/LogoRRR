@@ -1,5 +1,6 @@
 package app.logorrr.views.search
 
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
 import javafx.beans.property.SimpleListProperty
@@ -27,7 +28,8 @@ object FiltersToolBar {
  *
  * @param filteredList list of entries which are displayed (can be filtered via buttons)
  */
-class FiltersToolBar(filteredList: FilteredList[LogEntry]
+class FiltersToolBar(fileId: FileId
+                     , filteredList: FilteredList[LogEntry]
                      , removeFilter: Filter => Unit) extends ToolBar {
 
   var filterButtons: Map[Filter, FilterButton] = Map[Filter, FilterButton]()
@@ -47,7 +49,7 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
   }
 
 
-  /** if list is changed in any way, react to this event and either add or remove filter from UI */
+  /** if filter list is changed in any way, react to this event and either add or remove filter from UI */
   private def processFiltersChange(change: ListChangeListener.Change[_ <: Filter]): Unit = {
     while (change.next()) {
       if (change.wasAdded()) {
@@ -65,9 +67,9 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
   }
 
   private def updateUnclassified(): Unit = {
-    val unclassified = new UnclassifiedFilter(filterButtons.keySet)
+    val unclassified = UnclassifiedFilter(filterButtons.keySet)
     updateOccurrences(unclassified)
-    val filterButton = new FilterButton(unclassified, occurrences(unclassified), updateActiveFilter, removeFilter)
+    val filterButton = new FilterButton(fileId, unclassified, occurrences(unclassified), updateActiveFilter, removeFilter)
     someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
     getItems.add(0, filterButton)
     someUnclassifiedFilter = Option((unclassified, filterButton))
@@ -76,15 +78,15 @@ class FiltersToolBar(filteredList: FilteredList[LogEntry]
 
   private def addFilterButton(filter: Filter): Unit = {
     updateOccurrences(filter)
-    val searchTag = new FilterButton(filter, occurrences(filter), updateActiveFilter, removeFilter)
-    filter.bind(searchTag)
-    getItems.add(searchTag)
-    filterButtons = filterButtons.updated(filter, searchTag)
+    val filterButton = new FilterButton(fileId, filter, occurrences(filter), updateActiveFilter, removeFilter)
+    filter.bind(filterButton)
+    getItems.add(filterButton)
+    filterButtons = filterButtons.updated(filter, filterButton)
   }
 
   private def removeFilterButton(filter: Filter): Unit = {
     val button = filterButtons(filter)
-    filter.unbind(button)
+    filter.unbind()
     getItems.remove(button)
     filterButtons = filterButtons.removed(filter)
   }

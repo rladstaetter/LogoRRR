@@ -12,7 +12,7 @@ class OpenSingleFileTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
   /**
    * checks if an open file creates a new logfiletab with an id matching the file opened.
    */
-  @Test def openFileTest(): Unit = openFile(path)
+  @Test def openFileTest(): Unit = openFile(fileId)
 
 }
 

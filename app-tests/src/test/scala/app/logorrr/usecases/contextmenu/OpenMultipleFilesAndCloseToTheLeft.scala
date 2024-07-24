@@ -1,7 +1,6 @@
 package app.logorrr.usecases.contextmenu
 
 import app.logorrr.TestFiles
-import app.logorrr.io.FileId
 import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.MultipleFileApplicationTest
 import app.logorrr.views.UiNodes
@@ -24,7 +23,7 @@ class OpenMultipleFilesAndCloseToTheLeft
     val lastNodeQuery = looksi.nth(TestFiles.seq.size - 1)
     clickOn(lastNodeQuery.query[StackPane]())
     clickOn(lastNodeQuery.query[StackPane](), MouseButton.SECONDARY)
-    waitAndClickVisibleItem(CloseLeftFilesMenuItem.uiNode(FileId(TestFiles.seq.last)))
+    waitAndClickVisibleItem(CloseLeftFilesMenuItem.uiNode(TestFiles.seq.last))
 
     expectCountOfOpenFiles(1)
 

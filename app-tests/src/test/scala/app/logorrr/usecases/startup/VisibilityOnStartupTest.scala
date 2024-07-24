@@ -1,7 +1,6 @@
 package app.logorrr.usecases.startup
 
 import app.logorrr.TestFiles
-import app.logorrr.io.FileId
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.ops.{ClearLogButton, CopyLogButton, DecreaseBlockSizeButton, IncreaseBlockSizeButton}
@@ -17,8 +16,7 @@ import org.testfx.matcher.base.NodeMatchers
 class VisibilityOnStartupTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
 
   @Test def checkIfAllMajorUIElementsAreVisibleWithDefaultSettings(): Unit = {
-    openFile(path)
-    val fileId = FileId(path)
+    openFile(fileId)
     //wait until UI is ready
 
     val elements = Seq(
