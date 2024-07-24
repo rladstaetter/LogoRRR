@@ -2,7 +2,7 @@
 
 [![Watch a video of LogoRRRs features](https://img.youtube.com/vi/5ogC95PX0Ag/maxresdefault.jpg)](https://youtu.be/5ogC95PX0Ag)
 
-LogoRRR is a powerful desktop application designed to simplify the analysis of text files for recurring patterns. Whether you’re searching for specific events in log files or analyzing any other type of text file, LogoRRR makes the process effortless and efficient.
+LogoRRR is a powerful desktop application designed to simplify the analysis of text files for recurring patterns. Whether you’re searching for specific events in log files or analysing any other type of text file, LogoRRR makes the process effortless and efficient.
 
 * **Easy Pattern Recognition**: Quickly identify recurring patterns in your text files.
 * **Versatile Application**: Perfect for log file analysis, but adaptable to any text file.
