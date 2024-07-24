@@ -68,12 +68,7 @@ class LogFileTabContent(fileId: FileId
 
   private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, filtersToolBar)
 
-  private val pane = {
-    val s = new SplitPane(blockPane, logTextView)
-    //s.setStyle("-fx-background-color: #ffa07a;")
-    s
-  }
-
+  private val pane = new SplitPane(blockPane, logTextView)
 
   def init(): Unit = {
     divider.setPosition(mutLogFileSettings.getDividerPosition)

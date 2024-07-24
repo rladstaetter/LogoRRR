@@ -3,7 +3,7 @@ package app.logorrr.usecases
 import app.logorrr.conf.Settings
 import app.logorrr.io.FileId
 import app.logorrr.services.LogoRRRServices
-import app.logorrr.services.file.MockFileService
+import app.logorrr.services.file.MockFileIdService
 import app.logorrr.services.hostservices.MockHostServices
 import app.logorrr.steps.{CanStartApplication, VisibleItemActions}
 
@@ -19,7 +19,7 @@ class MultipleFileApplicationTest(val files: Seq[FileId])
 
   lazy val services: LogoRRRServices = LogoRRRServices(Settings.Default
     , new MockHostServices
-    , new MockFileService(files)
+    , new MockFileIdService(files)
     , isUnderTest = true)
 
 }

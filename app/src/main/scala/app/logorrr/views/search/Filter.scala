@@ -1,6 +1,5 @@
 package app.logorrr.views.search
 
-import app.logorrr.views.search
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
@@ -55,22 +54,17 @@ class Filter(val pattern: String
              , override val color: Color
              , val active: Boolean) extends Fltr(color) {
 
+  /** will be bound to the 'selected' state of the filter button */
+  private val activeProperty: SimpleBooleanProperty = new SimpleBooleanProperty()
 
-  private lazy val activeProperty = new SimpleBooleanProperty(active)
+  private def isActive: Boolean = activeProperty.get()
 
-  def isActive: Boolean = activeProperty.get()
+  def bind(filterButton: FilterButton): Unit = activeProperty.bind(filterButton.selectedProperty())
 
-  def bind(filterButton: FilterButton): Unit = {
-    filterButton.selectedProperty().bindBidirectional(activeProperty)
-  }
-
-  def unbind(button: FilterButton): Unit = {
-    button.selectedProperty().unbindBidirectional(activeProperty)
-  }
+  def unbind(): Unit = activeProperty.unbind()
 
   override def matches(searchTerm: String): Boolean = searchTerm.contains(pattern)
 
-  def withActive(): Filter = {
-    new search.Filter(pattern, color, isActive)
-  }
+  def withActive(): Filter = new Filter(pattern, color, isActive)
+
 }

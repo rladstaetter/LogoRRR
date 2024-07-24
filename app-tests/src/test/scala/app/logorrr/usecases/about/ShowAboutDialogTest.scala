@@ -2,7 +2,7 @@ package app.logorrr.usecases.about
 
 import app.logorrr.conf.Settings
 import app.logorrr.services.LogoRRRServices
-import app.logorrr.services.file.EmptyFileService
+import app.logorrr.services.file.EmptyFileIdService
 import app.logorrr.services.hostservices.MockHostServices
 import app.logorrr.steps.{CanStartApplication, VisibleItemActions}
 import app.logorrr.usecases.TestFxBaseApplicationTest
@@ -21,7 +21,7 @@ class ShowAboutDialogTest extends TestFxBaseApplicationTest
   final def services: LogoRRRServices = {
     LogoRRRServices(Settings.Default
       , mockHostServices
-      , new EmptyFileService
+      , new EmptyFileIdService
       , isUnderTest = true)
   }
 

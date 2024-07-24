@@ -7,4 +7,4 @@ import app.logorrr.io.FileId
  *
  * @param fileId file reference to open
  */
-class SingleFileService(fileId: FileId) extends MockFileService(Seq(fileId))
+class SingleFileIdService(fileId: FileId) extends MockFileIdService(Seq(fileId))

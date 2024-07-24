@@ -27,7 +27,7 @@ trait FileMenuActions extends VisibleItemActions {
 
   def quitApplication(): Unit = {
     waitAndClickVisibleItem(UiNodes.FileMenu)
-    waitAndClickVisibleItem(UiNodes.FileMenuQuitApplication)
+    waitAndClickVisibleItem(UiNodes.FileMenuCloseApplication)
   }
 
 }

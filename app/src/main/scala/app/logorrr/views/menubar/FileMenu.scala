@@ -2,7 +2,7 @@ package app.logorrr.views.menubar
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
-import app.logorrr.services.file.FileService
+import app.logorrr.services.file.FileIdService
 import app.logorrr.util.{CanLog, OsUtil}
 import app.logorrr.views.UiNodes
 import javafx.scene.control.{Menu, MenuItem}
@@ -30,49 +30,55 @@ class LogoRRRFileChooser(title: String) {
 
 object FileMenu {
 
-  class OpenMenuItem(fileOpenService: FileService
-                     , openFile: FileId => Unit)
+  /**
+   * Menu Item to open a new file
+   *
+   * @param fileIdService underlying service to use
+   * @param openFile function to change global state, add new file to UI ...
+   */
+  class OpenFileMenuItem(fileIdService: FileIdService
+                         , openFile: FileId => Unit)
     extends MenuItem("Open") with CanLog {
     setId(UiNodes.FileMenuOpenFile.value)
     setOnAction(_ => {
-      fileOpenService.openFile match {
+      fileIdService.provideFileId match {
         case Some(fileId) => openFile(fileId)
-        case None => logTrace("Cancelled open file operation ...")
+        case None => logTrace("Cancel open file operation ...")
       }
 
     })
   }
 
-  class CloseAllMenuItem(removeAllLogFiles: => Unit) extends MenuItem("Close All") {
+  class CloseAllFilesMenuItem(removeAllLogFiles: => Unit) extends MenuItem("Close All") {
     setId(UiNodes.FileMenuCloseAll.value)
     setOnAction(_ => removeAllLogFiles)
   }
 
-  class QuitMenuItem(closeApplication: => Unit) extends MenuItem("Quit") {
-    setId(UiNodes.FileMenuQuitApplication.value)
+  class CloseApplicationMenuItem(closeApplication: => Unit) extends MenuItem("Quit") {
+    setId(UiNodes.FileMenuCloseApplication.value)
     setOnAction(_ => closeApplication)
   }
 
 }
 
 class FileMenu(isUnderTest : Boolean
-                ,fileOpenService: FileService
+               , fileIdService: FileIdService
                , openFile: FileId => Unit
-               , closeAllLogFiles: => Unit
-               , closeApplication: => Unit) extends Menu("File") with CanLog {
+               , closeAllFiles: => Unit
+               , closeApplication: => Unit) extends Menu("File")  {
 
   setId(UiNodes.FileMenu.value)
 
-  lazy val openMenuItem = new FileMenu.OpenMenuItem(fileOpenService, openFile)
-  lazy val closeAllMenuItem = new FileMenu.CloseAllMenuItem(closeAllLogFiles)
-  lazy val quitMenuItem = new FileMenu.QuitMenuItem(closeApplication)
+  lazy val openMenuItem = new FileMenu.OpenFileMenuItem(fileIdService, openFile)
+  lazy val closeAllMenuItem = new FileMenu.CloseAllFilesMenuItem(closeAllFiles)
+  lazy val closeApplicationMenuItem = new FileMenu.CloseApplicationMenuItem(closeApplication)
 
   def init(): Unit = {
     getItems.clear()
     getItems.add(openMenuItem)
     getItems.add(closeAllMenuItem)
     if (OsUtil.isLinux || OsUtil.isWin || isUnderTest) {
-      getItems.add(quitMenuItem)
+      getItems.add(closeApplicationMenuItem)
     }
   }
 

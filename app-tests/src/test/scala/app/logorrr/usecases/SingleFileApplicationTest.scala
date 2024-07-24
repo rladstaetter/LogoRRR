@@ -3,7 +3,7 @@ package app.logorrr.usecases
 import app.logorrr.conf.Settings
 import app.logorrr.io.FileId
 import app.logorrr.services.LogoRRRServices
-import app.logorrr.services.file.SingleFileService
+import app.logorrr.services.file.SingleFileIdService
 import app.logorrr.services.hostservices.MockHostServices
 import app.logorrr.steps.CanStartApplication
 
@@ -16,7 +16,7 @@ class SingleFileApplicationTest(val fileId: FileId)
 
   final def services: LogoRRRServices = LogoRRRServices(Settings.Default
     , new MockHostServices
-    , new SingleFileService(fileId)
+    , new SingleFileIdService(fileId)
     , isUnderTest = true)
 
 

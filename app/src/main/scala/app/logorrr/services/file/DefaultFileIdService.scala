@@ -9,9 +9,9 @@ import javafx.stage.Window
  *
  * @param getWindow function to determine current window
  */
-class DefaultFileService(getWindow: () => Window) extends FileService {
+class DefaultFileIdService(getWindow: () => Window) extends FileIdService {
 
-  override def openFile: Option[FileId] = {
+  override def provideFileId: Option[FileId] = {
     new LogoRRRFileChooser("Open log file").performShowAndWait(getWindow())
   }
 
