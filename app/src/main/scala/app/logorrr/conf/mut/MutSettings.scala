@@ -67,11 +67,11 @@ class MutSettings {
     mutLogFileSettingsMapProperty.putAll(m.asJava)
   }
 
-  def petrify(): Settings = {
+  def mkImmutable(): Settings = {
     val logFileSettings: Map[String, LogFileSettings] = (for ((k, v) <- mutLogFileSettingsMapProperty.get.asScala) yield {
-      k.absolutePathAsString -> v.petrify()
+      k.absolutePathAsString -> v.mkImmutable()
     }).toMap
-    Settings(mutStageSettings.petrify(), logFileSettings, getSomeActiveLogFile, getSomeLastUsedDirectory)
+    Settings(mutStageSettings.mkImmutable(), logFileSettings, getSomeActiveLogFile, getSomeLastUsedDirectory)
   }
 
   def setStageSettings(stageSettings: StageSettings): Unit = {
@@ -110,7 +110,7 @@ class MutSettings {
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = {
     val seq = mutLogFileSettingsMapProperty.get().values.asScala.toSeq
-    seq.sortWith((lt, gt) => lt.getFirstOpened < gt.getFirstOpened).map(_.petrify())
+    seq.sortWith((lt, gt) => lt.getFirstOpened < gt.getFirstOpened).map(_.mkImmutable())
   }
 
 

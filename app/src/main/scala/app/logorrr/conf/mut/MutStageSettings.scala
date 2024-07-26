@@ -40,7 +40,7 @@ class MutStageSettings {
 
   def setHeight(height: Int): Unit = heightProperty.set(height)
 
-  def petrify(): StageSettings =
+  def mkImmutable(): StageSettings =
     StageSettings(xProperty.get()
       , yProperty.get()
       , widthProperty.get()

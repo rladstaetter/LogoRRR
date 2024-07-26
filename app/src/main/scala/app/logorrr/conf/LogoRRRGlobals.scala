@@ -67,7 +67,7 @@ object LogoRRRGlobals extends CanLog {
   }
 
   /** a case class representing current setting state */
-  def getSettings: Settings = mutSettings.petrify()
+  def getSettings: Settings = mutSettings.mkImmutable()
 
   def setSomeActiveLogFile(sActive: Option[FileId]): Unit = mutSettings.setSomeActive(sActive)
 
