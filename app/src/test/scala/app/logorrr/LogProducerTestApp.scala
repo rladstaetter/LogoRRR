@@ -27,7 +27,7 @@ case class SimpleWriter(path: Path) extends Runnable {
 
 }
 
-object LogProducer {
+object LogProducerTestApp {
 
   def main(args: Array[String]): Unit = {
     if (args.nonEmpty) {

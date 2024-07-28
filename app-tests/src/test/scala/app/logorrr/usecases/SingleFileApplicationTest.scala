@@ -14,10 +14,14 @@ class SingleFileApplicationTest(val fileId: FileId)
   extends TestFxBaseApplicationTest
     with CanStartApplication {
 
-  final def services: LogoRRRServices = LogoRRRServices(Settings.Default
-    , new MockHostServices
-    , new SingleFileIdService(fileId)
-    , isUnderTest = true)
+  protected lazy val settings = Settings.Default
+
+  final def services: LogoRRRServices = {
+    LogoRRRServices(settings
+      , new MockHostServices
+      , new SingleFileIdService(fileId)
+      , isUnderTest = true)
+  }
 
 
 }

@@ -20,7 +20,7 @@ object Settings {
   implicit lazy val reader: ConfigReader[Settings] = deriveReader[Settings]
   implicit lazy val writer: ConfigWriter[Settings] = deriveWriter[Settings]
 
-  def calcDefaultScreenPosition() :Rectangle2D = {
+  def calcDefaultScreenPosition(): Rectangle2D = {
 
     val ps: Rectangle2D = Screen.getPrimary().getVisualBounds()
 
@@ -36,10 +36,8 @@ object Settings {
     // Calculate the new coordinates
     val newX = originalX + (originalWidth - newWidth) / 2
     val newY = originalY + (originalHeight - newHeight) / 2
-    new Rectangle2D(newX,newY,newWidth,newHeight)
+    new Rectangle2D(newX, newY, newWidth, newHeight)
   }
-
-
 
   lazy val Default: Settings = Settings(
     StageSettings(calcDefaultScreenPosition())
@@ -51,7 +49,9 @@ object Settings {
 }
 
 case class Settings(stageSettings: StageSettings
-                    , fileSettings: Map[String, LogFileSettings] // has to stay Map[String,LogFileSettings] because of Reader/Writer derivation
+                    // fileSettings has to stay Map[String,LogFileSettings] because of Reader/Writer derivation
+                    // key is FileId.value
+                    , fileSettings: Map[String, LogFileSettings]
                     , someActive: Option[FileId]
                     , someLastUsedDirectory: Option[Path]) {
 
