@@ -8,7 +8,10 @@ import javafx.collections.ObservableList
 import javafx.scene.image.WritableImage
 
 
-object BlockImage {
+/**
+ * Displays a Chunk, backed by a Pixelbuffer.
+ */
+object ChunkImage {
 
   val MaxWidth = 4096
 
@@ -16,9 +19,6 @@ object BlockImage {
 
   // width of Scrollbars
   val ScrollBarWidth = 18
-
-  /** defines how many table cells should be rendered per list height */
-  val DefaultBlocksPerPage = 4
 
   // assuming we have a grid of rectangles, and x and y give the coordinate of a mouse click
   // this function should return the correct index for the surrounding rectangle
@@ -54,6 +54,26 @@ object BlockImage {
     }
   }
 
+  def apply(chunk: Chunk
+            , filtersProperty: ObservableList[Filter]
+            , selectedLineNumberProperty: SimpleIntegerProperty
+            , widthProperty: ReadOnlyDoubleProperty
+            , blockSizeProperty: SimpleIntegerProperty
+            , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
+            , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
+           ): ChunkImage = {
+
+    apply(chunk.number
+      , entries = chunk.entries
+      , selectedLineNumberProperty
+      , filtersProperty
+      , blockSizeProperty
+      , widthProperty
+      , heightProperty = new SimpleIntegerProperty(chunk.height)
+      , firstVisibleTextCellIndexProperty
+      , lastVisibleTextCellIndexProperty)
+  }
+
   def apply(blockNumber: Int
             , entries: java.util.List[LogEntry]
             , selectedLineNumberProperty: SimpleIntegerProperty
@@ -63,22 +83,30 @@ object BlockImage {
             , heightProperty: SimpleIntegerProperty
             , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
             , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
-           ): BlockImage = {
+           ): ChunkImage = {
+    val width = ChunkListView.calcListViewWidth(widthProperty.get())
+    val height = heightProperty.get()
+    val shape = RectangularShape(width, height)
+    val rawInts = Array.fill(shape.size)(LPixelBuffer.defaultBackgroundColor)
     val pixelBuffer = LPixelBuffer(blockNumber
-      , Range(entries.get(0).lineNumber, entries.get(entries.size - 1).lineNumber)
-      , RectangularShape(if (widthProperty.get().toInt - BlockImage.ScrollBarWidth > 0) widthProperty.get().toInt - BlockImage.ScrollBarWidth else widthProperty.get().toInt, heightProperty.get())
+      , shape
       , blockSizeProperty
       , entries
       , filtersProperty
-      , Array.fill(widthProperty.get().toInt * heightProperty.get())(LPixelBuffer.defaultBackgroundColor)
+      , rawInts
       , selectedLineNumberProperty
       , firstVisibleTextCellIndexProperty
       , lastVisibleTextCellIndexProperty
     )
-    new BlockImage(pixelBuffer)
+    new ChunkImage(pixelBuffer)
   }
 
 }
 
 
-class BlockImage(val pixelBuffer: LPixelBuffer) extends WritableImage(pixelBuffer)
+/**
+ * Paints BlockView (filled with chunks and various other parameters
+ *
+ * @param pixelBuffer buffer to use for raw painting
+ */
+class ChunkImage(val pixelBuffer: LPixelBuffer) extends WritableImage(pixelBuffer)

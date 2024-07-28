@@ -1,6 +1,7 @@
 package app.logorrr;
 
 import app.logorrr.util.ColorUtil;
+import app.logorrr.views.block.BlockColor;
 import app.logorrr.views.block.LPixelBuffer$;
 import javafx.scene.paint.Color;
 import org.openjdk.jmh.annotations.*;
@@ -26,7 +27,8 @@ public class LogoRRRBenchmark {
     @Benchmark
     public void benchmarkDrawRect() {
         for (int i = 0; i <= count; i++) {
-            LPixelBuffer$.MODULE$.drawRect(myArray, i, width, blocksize, c, vantablack,vantablack,vantablack,vantablack);
+            BlockColor blockColor = new BlockColor(c, vantablack, vantablack, vantablack, vantablack);
+            LPixelBuffer$.MODULE$.drawRectangle(myArray, i, width, blocksize, blockColor);
         }
     }
 

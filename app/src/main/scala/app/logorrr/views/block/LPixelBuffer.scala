@@ -11,6 +11,7 @@ import javafx.scene.paint.Color
 import java.nio.IntBuffer
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
+
 /**
  * Paint directly into a byte array for performant image manipulations.
  */
@@ -18,51 +19,46 @@ object LPixelBuffer extends CanLog {
 
   val defaultBackgroundColor: Int = ColorUtil.toARGB(Color.WHITE)
 
-  def calcColors(color: Color): (Int, Int, Int) = {
+  private def calcColors(color: Color): (Int, Int, Int) = {
     (ColorUtil.toARGB(color), ColorUtil.toARGB(color.brighter()), ColorUtil.toARGB(color.darker()))
   }
 
-  def drawRect(rawInts: Array[Int]
-               , i: Int
-               , width: Int
-               , blockSize: Int
-               , color: Int
-               , upperBorderCol: Int
-               , leftBorderCol: Int
-               , bottomBorderCol: Int
-               , rightBorderCol: Int
-              ): Unit = {
-    val nrOfBlocksInX = width / blockSize
-    val xPos = (i % nrOfBlocksInX) * blockSize
-    val yPos = (i / nrOfBlocksInX) * blockSize
-    drawSquare(rawInts
-      , color
-      , bottomBorderCol
-      , rightBorderCol
-      , upperBorderCol
-      , leftBorderCol
+  /**
+   *
+   * @param rawInts underlying array to manipulate
+   * @param index   index (where) should be painted
+   * @param width   width of 'canvas' to paint on
+   *
+   */
+  def drawRectangle(rawInts: Array[Int]
+                    , index: Int
+                    , width: Double
+                    , blockSize: Int
+                    , blockColor: BlockColor
+                   ): Unit = {
+    val nrOfBlocksInX = (width / blockSize).toInt
+    val xPos = (index % nrOfBlocksInX) * blockSize
+    val yPos = (index / nrOfBlocksInX) * blockSize
+    drawRectangle(rawInts
+      , blockColor
       , xPos
       , yPos
       , blockSize
       , blockSize
-      , width
+      , width.toInt
     )
   }
 
-  private def drawSquare(rawInts: Array[Int]
-                         , col: Int
-                         , bottomBorderCol: Int
-                         , rightBorderCol: Int
-                         , upperBorderCol: Int
-                         , leftBorderCol: Int
-                         , x: Int
-                         , y: Int
-                         , width: Int
-                         , height: Int
-                         , canvasWidth: Int): Unit = {
-    val maxHeight = y + height
+  private def drawRectangle(rawInts: Array[Int]
+                            , blockColor: BlockColor
+                            , x: Int
+                            , y: Int
+                            , width: Int
+                            , height: Int
+                            , canvasWidth: Int): Unit = {
+    val maxHeight = y + height - 1
     val length = width - 1
-    val squarewidth = length - 1
+    val squareWidth = length - 1
     // Calculate start and end indices for updating rawInts
     val startIdx = y * canvasWidth + x
     val endIdx = maxHeight * canvasWidth + x + length
@@ -72,38 +68,35 @@ object LPixelBuffer extends CanLog {
       // Update rawInts directly without array copying
       for (ly <- y until maxHeight - 1) {
         val startPos = ly * canvasWidth + x
-        // val endPos = startPos + length
-        // if (startPos >= 0 && endPos < rawInts.length) {
         // Fill the portion of rawInts with lineArray
-        for (i <- 0 to squarewidth) rawInts(startPos + i) = col
-        //}
+        for (i <- 0 to squareWidth) rawInts(startPos + i) = blockColor.color
       }
 
       // paint highlights & shadows if square is big enough
       if ((width >= 2) && (height >= 2)) {
-        // first highlight: upper left corner to upper right corner
-        for (i <- 0 to squarewidth) rawInts(y * canvasWidth + x + i) = upperBorderCol
-        // first highlight: lower left corner to lower right corner
-        for (i <- 0 to squarewidth) rawInts((maxHeight - 1) * canvasWidth + x + i) = bottomBorderCol
+        // upper left corner to upper right corner
+        for (i <- 0 to squareWidth) rawInts(y * canvasWidth + x + i) = blockColor.upperBorderCol
+        // lower left corner to lower right corner
+        for (i <- 0 to squareWidth) rawInts((maxHeight - 1) * canvasWidth + x + i) = blockColor.bottomBorderCol
 
         // calculate x positions : starting from (y * canvasWidth + x) being the upper left corner,
         // with a step size of canvasWidth we get the coordinates of the left border
         for (ly <- y until maxHeight - 1) {
           // left border
-          rawInts(ly * canvasWidth + x) = leftBorderCol
+          rawInts(ly * canvasWidth + x) = blockColor.leftBorderCol
           // the same for the right border, but with another offset
-          rawInts(ly * canvasWidth + x + length) = rightBorderCol
+          rawInts(ly * canvasWidth + x + length) = blockColor.rightBorderCol
         }
 
       }
-
+    } else {
+//      logWarn(s"tried to paint outside of allowed index. [endIdx = maxHeight * canvasWidth + x + length] ($endIdx = $maxHeight * $canvasWidth + $x + $length) ")
     }
   }
 }
 
 
 case class LPixelBuffer(blockNumber: Int
-                        , range: Range
                         , shape: RectangularShape
                         , blockSizeProperty: SimpleIntegerProperty
                         , entries: java.util.List[LogEntry]
@@ -113,14 +106,12 @@ case class LPixelBuffer(blockNumber: Int
                         , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
                         , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
                        ) extends
-  PixelBuffer[IntBuffer](shape.width
-    , shape.height
+  PixelBuffer[IntBuffer](shape.width.toInt
+    , shape.height.toInt
     , IntBuffer.wrap(rawInts)
     , PixelFormat.getIntArgbPreInstance) with CanLog {
 
-  private val name = s"${range.start}_${range.end}"
-
-  lazy val background: Array[Int] = Array.fill(shape.area)(LPixelBuffer.defaultBackgroundColor)
+  lazy val background: Array[Int] = Array.fill(shape.size)(LPixelBuffer.defaultBackgroundColor)
 
   /* hardcoded highlight color */
   private val highlightedColor = Color.YELLOW
@@ -129,11 +120,7 @@ case class LPixelBuffer(blockNumber: Int
 
   init()
 
-
   def init(): Unit = {
-    assert(shape.width != 0, s"For $name, width was ${shape.width}.")
-    assert(shape.height != 0, s"For $name, height was ${shape.height}.")
-    assert(shape.height * shape.width > 0)
     paint()
   }
 
@@ -145,7 +132,7 @@ case class LPixelBuffer(blockNumber: Int
     Seq()
   })
 
-  /** function is performance relevant */
+  /** function is performance relevant, see corresponding jmh tests in the benchmarks module */
   private def paint(): Unit = {
     if (getBlockSize != 0 && shape.width > getBlockSize) {
       if (getBlockSize == 1) {
@@ -156,11 +143,12 @@ case class LPixelBuffer(blockNumber: Int
     }
   }
 
+  // helper functions to determine visibility and status of each entry
   private def isSelected(lineNumber: Int): Boolean = lineNumber == selectedLineNumberProperty.getValue
 
-  private def isFirstVisible(lineNumber: Int): Boolean = firstVisibleTextCellIndexProperty.get() == lineNumber
+  private def isFirstVisible(lineNumber: Int): Boolean = lineNumber == firstVisibleTextCellIndexProperty.get()
 
-  private def isLastVisible(lineNumber: Int): Boolean = lastVisibleTextCellIndexProperty.get() == lineNumber
+  private def isLastVisible(lineNumber: Int): Boolean = lineNumber == lastVisibleTextCellIndexProperty.get()
 
   private def isVisibleInTextView(lineNumber: Int): Boolean = {
     firstVisibleTextCellIndexProperty.get() < lineNumber && lineNumber < lastVisibleTextCellIndexProperty.get()
@@ -169,7 +157,9 @@ case class LPixelBuffer(blockNumber: Int
   def isVisible(lineNumber: Int): Boolean = isFirstVisible(lineNumber) || isLastVisible(lineNumber) || isVisibleInTextView(lineNumber)
 
   /**
-   * if blocksize is only equal to 1, set it pixel by pixel
+   * special handling for blocksize == 1.
+   *
+   * Some operations are not necessary for this case, compare this with  paintRects(..)
    */
   private def paintPixels(): Unit = {
     updateBuffer((_: PixelBuffer[IntBuffer]) => {
@@ -192,11 +182,15 @@ case class LPixelBuffer(blockNumber: Int
     })
   }
 
+  // TODO shape is much too large - could be reduced to the exact position
+  // of highlighted block by calculating position
   def paintBlockAtIndexWithColor(i: Int, lineNumber: Int, color: Color): Unit = {
     updateBuffer((_: PixelBuffer[IntBuffer]) => {
       paintBlock(i, lineNumber, color)
+      // logInfo(s"Painting index ${i} lineNumber ${lineNumber} color ${color}")
       shape
     })
+
   }
 
 
@@ -214,43 +208,32 @@ case class LPixelBuffer(blockNumber: Int
   }
 
 
-  private def paintBlock(i: Int, lineNumber: Int, color: Color): Unit = {
-    val (col, d, b) = (ColorUtil.toARGB(color), ColorUtil.toARGB(color.darker()), ColorUtil.toARGB(color.brighter()))
-    val (vcol, vd, vb) = (ColorUtil.toARGB(color.brighter()), ColorUtil.toARGB(color.brighter().darker()), ColorUtil.toARGB(color.brighter().brighter()))
+  private def paintBlock(index: Int, lineNumber: Int, color: Color): Unit = {
+    val brighterColor = color.brighter()
+    val (col, d, b) = (ColorUtil.toARGB(color), ColorUtil.toARGB(color.darker()), ColorUtil.toARGB(brighterColor))
+    val (vcol, vd, vb) = (ColorUtil.toARGB(brighterColor), ColorUtil.toARGB(brighterColor.darker()), ColorUtil.toARGB(brighterColor.brighter()))
 
-    val (mycol, bottomBorderCol, rightBorderCol, leftBorderCol, upperBorderCol) =
+    // mystical color setting routine for setting border colors of viewport and blocks correctly
+    val blockColor =
       (isSelected(lineNumber), isFirstVisible(lineNumber), isLastVisible(lineNumber), isVisibleInTextView(lineNumber)) match {
-        case (false, false, false, false) => (col, d, d, b, b)
-        case (false, false, false, true) => (vcol, yellow, vd, vb, yellow)
-        case (false, false, true, false) => (vcol, yellow, yellow, vb, yellow)
-        case (false, true, false, false) => (vcol, yellow, vd, yellow, yellow)
-        case (false, true, true, false) => (col, d, d, b, b)
-        case (true, false, false, false) => (yellow, yellowDark, yellowDark, yellowBright, yellowBright)
-        case (true, false, false, true) => (yellowVisible, yellow, yellowDarkVisible, yellowBrightVisible, yellow)
-        case (true, false, true, false) => (yellowVisible, yellow, yellow, yellowBrightVisible, yellow)
-        case (true, true, false, false) => (yellowVisible, yellow, yellowDarkVisible, yellow, yellow)
-        case (true, true, true, false) => (yellowVisible, yellow, yellow, yellow, yellow)
-        case (_, _, _, _) => (yellowVisible, yellow, yellow, yellow, yellow)
+        case (false, false, false, false) => BlockColor(col, d, d, b, b)
+        case (false, false, false, true) => BlockColor(vcol, yellow, vd, vb, yellow)
+        case (false, false, true, false) => BlockColor(vcol, yellow, yellow, vb, yellow)
+        case (false, true, false, false) => BlockColor(vcol, yellow, vd, yellow, yellow)
+        case (false, true, true, false) => BlockColor(col, d, d, b, b)
+        case (true, false, false, false) => BlockColor(yellow, yellowDark, yellowDark, yellowBright, yellowBright)
+        case (true, false, false, true) => BlockColor(yellowVisible, yellow, yellowDarkVisible, yellowBrightVisible, yellow)
+        case (true, false, true, false) => BlockColor(yellowVisible, yellow, yellow, yellowBrightVisible, yellow)
+        case (true, true, false, false) => BlockColor(yellowVisible, yellow, yellowDarkVisible, yellow, yellow)
+        case (true, true, true, false) => BlockColor(yellowVisible, yellow, yellow, yellow, yellow)
+        case (_, _, _, _) => BlockColor(yellowVisible, yellow, yellow, yellow, yellow)
       }
 
-    /*
-        val (col, bottomBorderCol, rightBorderCol, leftBorderCol, upperBorderCol) = {
-          if (isVisibleInTextView(lineNumber)) {
-            if (lineNumber == selectedLineNumberProperty.getValue) {
-              (yellow, yellowBrightVisible, yellowBrightVisible, yellowDarkVisible, yellowDarkVisible)
-            } else {
-              //  (ColorUtil.toARGB(color.brighter()), ColorUtil.toARGB(color.brighter().brighter()), ColorUtil.toARGB(color.brighter().darker()))
-              (ColorUtil.toARGB(color.brighter()), yellow, ColorUtil.toARGB(color.brighter().darker()), ColorUtil.toARGB(color.brighter().brighter()), yellow)
-            }
-          } else {
-            if (lineNumber == selectedLineNumberProperty.getValue) {
-              (yellow, yellowBright, yellowBright, yellowDark, yellowDark)
-            } else {
-              (ColorUtil.toARGB(color), ColorUtil.toARGB(color.brighter()), ColorUtil.toARGB(color.brighter()), ColorUtil.toARGB(color.darker()), ColorUtil.toARGB(color.darker()))
-            }
-          }
-        }
-        */
-    LPixelBuffer.drawRect(rawInts, i, shape.width, getBlockSize, mycol, upperBorderCol, leftBorderCol, bottomBorderCol, rightBorderCol)
+    LPixelBuffer.drawRectangle(rawInts
+      , index
+      , shape.width
+      , getBlockSize
+      , blockColor
+    )
   }
 }

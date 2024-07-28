@@ -94,7 +94,7 @@ class MutLogFileSettings {
 
   def getFirstOpened: Long = firstOpenedProperty.get()
 
-  def petrify(): LogFileSettings = {
+  def mkImmutable(): LogFileSettings = {
     val lfs =
       LogFileSettings(fileIdProperty.get()
         , selectedLineNumberProperty.get()

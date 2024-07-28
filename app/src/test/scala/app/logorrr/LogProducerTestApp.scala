@@ -8,7 +8,7 @@ import java.util.Scanner
 
 case class SimpleWriter(path: Path) extends Runnable {
   var running = true
-  val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss A");
+  val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss A")
 
   def stop(): Unit = running = false
 
@@ -18,7 +18,7 @@ case class SimpleWriter(path: Path) extends Runnable {
     Thread.sleep(20000)
     while (running) {
       Thread.sleep(50)
-      val now = LocalDateTime.now();
+      val now = LocalDateTime.now()
       val str = s"${dtf.format(now)} $linenumber testlog "
       linenumber += 1
       Files.write(path, util.Arrays.asList(str), StandardOpenOption.CREATE, StandardOpenOption.APPEND)
@@ -27,7 +27,7 @@ case class SimpleWriter(path: Path) extends Runnable {
 
 }
 
-object LogProducer {
+object LogProducerTestApp {
 
   def main(args: Array[String]): Unit = {
     if (args.nonEmpty) {

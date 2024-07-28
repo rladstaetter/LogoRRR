@@ -14,6 +14,10 @@ import scala.util.{Failure, Success, Try}
 
 object ChunkListView {
 
+  def calcListViewWidth(listViewWidth: Double): Double = {
+    if (listViewWidth - ChunkImage.ScrollBarWidth >= 0) listViewWidth - ChunkImage.ScrollBarWidth else listViewWidth
+  }
+
   def apply(entries: ObservableList[LogEntry]
             , settings: MutLogFileSettings
             , selectInTextView: LogEntry => Unit
@@ -151,7 +155,8 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
     if (widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0) {
       logTrace(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
       Try {
-        val chunks = Chunk.mkChunks(logEntries, widthProperty, blockSizeProperty, heightProperty)
+        val width = ChunkListView.calcListViewWidth(widthProperty.get())
+        val chunks = Chunk.mkChunks(logEntries, blockSizeProperty.get(), width, heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
         setItems(FXCollections.observableArrayList(chunks: _*))
       } match {
         case Success(_) => ()

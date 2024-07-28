@@ -2,20 +2,22 @@ package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
 import app.logorrr.util.MathUtil
-import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
-import javafx.collections.ObservableList
 
+import java.util
 import scala.collection.mutable.ListBuffer
 
 object Chunk {
 
-  def calcDimensions(widthProperty: ReadOnlyDoubleProperty
-                     , blockSizeProperty: SimpleIntegerProperty
-                     , listViewHeightProperty: ReadOnlyDoubleProperty): (Int, Int) = {
-    val w = if (widthProperty.get() - BlockImage.ScrollBarWidth >= 0) widthProperty.get() - BlockImage.ScrollBarWidth else widthProperty.get()
+  /** defines how many list cells should be rendered per visible ListView space */
+  val ChunksPerVisibleViewPort = 6
+
+  def calcDimensions(blockSize: Int
+                     , listViewWidth: Double
+                     , listViewHeight: Double
+                     , chunksPerPage: Int): (Int, Int) = {
 
     // to not get into division by zero territory
-    val cols: Int = if (w < blockSizeProperty.get()) 1 else MathUtil.roundUp(w / blockSizeProperty.get())
+    val cols: Int = if (listViewWidth < blockSize) 1 else MathUtil.roundDown(listViewWidth / blockSize)
 
     // per default, use 4 cells per visible page, align height with blocksize such that
     // we don't get artifacts. Further, make sure that the calculated height does not exceed
@@ -23,28 +25,43 @@ object Chunk {
 
     // DO NOT REMOVE since the first division throws away the remainder and the multiplication
     // yields the best approximation of MaxHeight.
-    val maxHeight = (BlockImage.MaxHeight / blockSizeProperty.get()) * blockSizeProperty.get()
-    val heightCandidate = MathUtil.roundDown((listViewHeightProperty.get() / BlockImage.DefaultBlocksPerPage) / blockSizeProperty.get()) * blockSizeProperty.get()
+    val maxHeight = (ChunkImage.MaxHeight / blockSize) * blockSize
+    val heightCandidate = MathUtil.roundDown((listViewHeight / chunksPerPage) / blockSize) * blockSize
     // height is constrained by MaxHeight (which is 4096 currently in my experience) and BlockImage.DefaultBlocksPerPage x blocksize
     // as a lower bound, otherwise we'll get later problems
-    val h2 = Math.max(heightCandidate, BlockImage.DefaultBlocksPerPage * blockSizeProperty.get())
+    val h2 = Math.max(heightCandidate, chunksPerPage * blockSize)
     val height = Math.min(h2, maxHeight)
     (cols, height)
   }
 
+  /**
+   * Depending on the visible area of a listview, partitions the entries list to one or several Chunks and fills them
+   * with the appropriate number of elements.
+   *
+   * @param entries        entries which should be shown
+   * @param blockSize      width/height of a block
+   * @param listViewWidth  width of listview
+   * @param listViewHeight height of listview
+   * @return a sequence of Chunks, filled with the given entries
+   */
+  def mkChunks(entries: util.List[LogEntry]
+               , blockSize: Int
+               , listViewWidth: Double
+               , listViewHeight: Double
+               , nrChunksPerPage: Int): Seq[Chunk] = {
 
-  def mkChunks(entriesProperty: ObservableList[LogEntry]
-               , widthProperty: ReadOnlyDoubleProperty
-               , blockSizeProperty: SimpleIntegerProperty
-               , listViewHeightProperty: ReadOnlyDoubleProperty): Seq[Chunk] = {
-    if (widthProperty.get() != 0 && blockSizeProperty.get() != 0) {
-      // nr of chunks is calculated as follows:
+    if (
+      entries.isEmpty ||
+        listViewWidth == 0 ||
+        listViewHeight == 0 ||
+        blockSize == 0) {
+      Seq()
+    } else {
       // how many entries fit into a chunk?
-      // given their size and the width and height of a chunk it is easy to calculate.
-      val (cols, height) = calcDimensions(widthProperty, blockSizeProperty, listViewHeightProperty)
-      val nrElements = height / blockSizeProperty.get() * cols
+      val (cols, height) = calcDimensions(blockSize, listViewWidth, listViewHeight, nrChunksPerPage)
+      val nrElements = height / blockSize * cols
 
-      val entriesSize = entriesProperty.size()
+      val entriesSize = entries.size()
       var curIndex = 0
       val lb = new ListBuffer[Chunk]
 
@@ -54,22 +71,31 @@ object Chunk {
         } else {
           entriesSize
         }
-        val blockViewEntries = entriesProperty.subList(curIndex, end)
+        val blockViewEntries = entries.subList(curIndex, end)
         if (blockViewEntries.size() > 0) {
-          lb.addOne(new Chunk(lb.size, blockViewEntries, height))
+          lb.addOne(new Chunk(lb.size, blockViewEntries, cols, height))
         }
         curIndex = curIndex + nrElements
       }
       lb.toSeq
-    } else {
-      Seq()
     }
 
   }
 }
 
+/**
+ * Container for entries in order to fill ListView[Chunk]
+ *
+ * Will be painted by [[ChunkImage]]
+ *
+ * @param number  index in the ListView
+ * @param entries entries contained in this Chunk
+ * @param cols    number of columns in this Chunk (needed for mouse over/mouse press events)
+ * @param height  height of Chunk
+ */
 class Chunk(val number: Int
             , val entries: java.util.List[LogEntry]
+            , val cols: Int
             , val height: Int) {
   require(!entries.isEmpty, "entries was empty")
 }
