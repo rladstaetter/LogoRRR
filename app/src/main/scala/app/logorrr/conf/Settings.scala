@@ -22,7 +22,7 @@ object Settings {
 
   def calcDefaultScreenPosition(): Rectangle2D = {
 
-    val ps: Rectangle2D = Screen.getPrimary().getVisualBounds()
+    val ps: Rectangle2D = Screen.getPrimary.getVisualBounds
 
     val originalX = ps.getMinX
     val originalY = ps.getMinY

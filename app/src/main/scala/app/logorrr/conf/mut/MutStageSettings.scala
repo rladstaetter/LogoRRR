@@ -36,7 +36,7 @@ class MutStageSettings {
 
   def setWidth(width: Int): Unit = widthProperty.set(width)
 
-  def getWidth(): Int = widthProperty.get()
+  def getWidth: Int = widthProperty.get()
 
   def setHeight(height: Int): Unit = heightProperty.set(height)
 

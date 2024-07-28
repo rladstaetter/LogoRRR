@@ -14,7 +14,7 @@ class SingleFileApplicationTest(val fileId: FileId)
   extends TestFxBaseApplicationTest
     with CanStartApplication {
 
-  protected lazy val settings = Settings.Default
+  protected lazy val settings: Settings = Settings.Default
 
   final def services: LogoRRRServices = {
     LogoRRRServices(settings

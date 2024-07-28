@@ -19,10 +19,10 @@ case class RectangularShape(width: Double, height: Double) extends Rectangle2D(0
   // assert(width > 0)
   // assert(height > 0)
 
-  val widthAsInt = width.toInt
-  val heightAsInt = height.toInt
+  val widthAsInt: Int = width.toInt
+  val heightAsInt: Int = height.toInt
 
-  lazy val size: Int = (widthAsInt * heightAsInt)
+  lazy val size: Int = widthAsInt * heightAsInt
 
   val asString = s"(w/wInt) (h/hInt) area: ($width/$widthAsInt) ($height/$heightAsInt) $size"
 

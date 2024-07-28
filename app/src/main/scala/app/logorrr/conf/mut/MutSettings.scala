@@ -106,7 +106,7 @@ class MutSettings {
 
   def getStageHeight: Int = mutStageSettings.heightProperty.get()
 
-  def getStageWidth: Int = mutStageSettings.getWidth()
+  def getStageWidth: Int = mutStageSettings.getWidth
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = {
     val seq = mutLogFileSettingsMapProperty.get().values.asScala.toSeq

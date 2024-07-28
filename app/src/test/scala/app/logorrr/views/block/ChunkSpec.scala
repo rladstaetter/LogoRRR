@@ -39,14 +39,14 @@ class ChunkSpec extends AnyWordSpec {
     "200 entries bagger" in {
       val chunks = mkTestChunks(200, 100, 1, 1000)
       assert(chunks.size == 1)
-      val entriesOfFirstChunk = chunks(0).entries
+      val entriesOfFirstChunk = chunks.head.entries
       assert(entriesOfFirstChunk.get(entriesOfFirstChunk.size() - 1).lineNumber == 199)
     }
     // default chunk size is 4
     "test default chunk size" in {
       val chunks: Seq[Chunk] = mkTestChunks(1000, 100 + ChunkImage.ScrollBarWidth, 10, 1000)
       assert(chunks.size == Chunk.ChunksPerVisibleViewPort)
-      assert(chunks(0).entries.size == 176)
+      assert(chunks.head.entries.size == 176)
       assert(chunks(1).entries.size == 176)
       assert(chunks(2).entries.size == 176)
       assert(chunks(3).entries.size == 176)
