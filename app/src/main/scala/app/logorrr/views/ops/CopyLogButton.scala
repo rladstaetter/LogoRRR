@@ -2,15 +2,13 @@ package app.logorrr.views.ops
 
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
+import app.logorrr.util.ClipBoardUtils
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.animation.AnimationTimer
 import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
-import javafx.scene.input.{Clipboard, ClipboardContent}
 import org.kordamp.ikonli.fontawesome5.{FontAwesomeRegular, FontAwesomeSolid}
 import org.kordamp.ikonli.javafx.FontIcon
-
-import scala.collection.mutable.ListBuffer
 
 object CopyLogButton extends UiNodeFileIdAware {
 
@@ -40,10 +38,8 @@ class CopyLogButton(id: FileId, logEntries: ObservableList[LogEntry]) extends Bu
     setTooltip(defaultToolTip)
 
     setOnAction(_ => {
-      val lb = new ListBuffer[String]
-      logEntries.forEach(e => lb.addOne(e.value))
-      copyToClipboard(lb.mkString("\n"))
-      defaultToolTip.setText(s"Copied ${lb.size} entries to clipboard")
+      val size = ClipBoardUtils.copyToClipboard(logEntries)
+      defaultToolTip.setText(s"Copied ${size} entries to clipboard")
       val bounds = localToScreen(getBoundsInLocal)
       val x = bounds.getMinX
       val y = bounds.getMaxY
@@ -85,10 +81,6 @@ class CopyLogButton(id: FileId, logEntries: ObservableList[LogEntry]) extends Bu
     }
   }
 
-  def copyToClipboard(text: String): Unit = {
-    val clipboard = Clipboard.getSystemClipboard
-    val content = new ClipboardContent()
-    content.putString(text)
-    clipboard.setContent(content)
-  }
 }
+
+
