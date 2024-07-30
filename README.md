@@ -1,6 +1,6 @@
 # `LogoRRR`
 
-[![Watch a video of LogoRRRs features](https://img.youtube.com/vi/5ogC95PX0Ag/maxresdefault.jpg)](https://youtu.be/5ogC95PX0Ag)
+[![Watch a video of LogoRRRs features](docs/releases/24.4.0/24.4.0-linux.png)](https://youtu.be/5ogC95PX0Ag)
 
 LogoRRR is a powerful desktop application designed to simplify the analysis of text files for recurring patterns. Whether you’re searching for specific events in log files or analysing any other type of text file, LogoRRR makes the process effortless and efficient.
 
