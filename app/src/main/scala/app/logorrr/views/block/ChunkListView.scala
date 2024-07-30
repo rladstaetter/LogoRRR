@@ -7,15 +7,32 @@ import app.logorrr.views.search.Filter
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.{FXCollections, ObservableList}
-import javafx.scene.control.ListView
+import javafx.geometry.Orientation
+import javafx.scene.control.skin.VirtualFlow
+import javafx.scene.control.{ListView, ScrollBar, Skin, SkinBase}
 
+import java.lang
+import scala.jdk.CollectionConverters.CollectionHasAsScala
 import scala.util.{Failure, Success, Try}
 
 
 object ChunkListView {
 
+  def lookupVirtualFlow(skin: Skin[_]): Option[VirtualFlow[ChunkListCell]] = {
+    Option(skin match {
+      case skinBase: SkinBase[_] =>
+        skinBase.getChildren.asScala.find(_.getStyleClass.contains("virtual-flow")).orNull.asInstanceOf[VirtualFlow[ChunkListCell]]
+      case _ =>
+        null
+    })
+  }
+
+  def lookupScrollBar(flow: VirtualFlow[ChunkListCell], orientation: Orientation): Option[ScrollBar] = {
+    Option(flow.getChildrenUnmodifiable.toArray.collectFirst { case sb: ScrollBar if sb.getOrientation == orientation => sb }.orNull)
+  }
+
   def calcListViewWidth(listViewWidth: Double): Double = {
-    if (listViewWidth - ChunkImage.ScrollBarWidth >= 0) listViewWidth - ChunkImage.ScrollBarWidth else listViewWidth
+    if (listViewWidth - ChunkImage.getScrollBarWidth >= 0) listViewWidth - ChunkImage.getScrollBarWidth else listViewWidth
   }
 
   def apply(entries: ObservableList[LogEntry]
@@ -59,6 +76,34 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
     with CanLog {
 
   /**
+   * What should happen if the scrollbar appears/vanishes
+   */
+  private val scrollBarVisibilityListener = new ChangeListener[lang.Boolean] {
+    override def changed(observableValue: ObservableValue[_ <: lang.Boolean], t: lang.Boolean, isVisible: lang.Boolean): Unit = {
+      if (isVisible) {
+        ChunkImage.setScrollBarWidth(ChunkImage.DefaultScrollBarWidth)
+        recalculateAndUpdateItems("scrollbar visible")
+      } else {
+        ChunkImage.setScrollBarWidth(0)
+        recalculateAndUpdateItems("scrollbar invisible")
+      }
+    }
+  }
+
+  // needed to get access to the scrollbar
+  private val chunkListViewSkinListener: ChangeListener[Skin[_]] = new ChangeListener[Skin[_]] {
+    override def changed(observableValue: ObservableValue[_ <: Skin[_]], t: Skin[_], currentSkin: Skin[_]): Unit = {
+      for {skin <- Option(currentSkin)
+           flow <- ChunkListView.lookupVirtualFlow(skin)
+           horizontalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.HORIZONTAL)
+           verticalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.VERTICAL)} {
+        horizontalScrollbar.setVisible(false)
+        verticalScrollbar.visibleProperty().addListener(scrollBarVisibilityListener)
+      }
+    }
+  }
+
+  /**
    * If the observable list changes in any way, recalculate the items in the listview.
    */
   private val logEntriesInvalidationListener = JfxUtils.mkInvalidationListener(_ => recalculateAndUpdateItems("invalidation"))
@@ -78,6 +123,8 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
 
   /** if height changes, recalculate */
   private val heightRp = mkRecalculateAndUpdateItemListener("height")
+
+  //  private val changingScrollbarVisibilityRp = mkRecalculateAndUpdateItemListener("scrollbar")
 
   // context variable just here for debugging
   private def mkRecalculateAndUpdateItemListener(ctx: String): ChangeListener[Number] = (_: ObservableValue[_ <: Number], oldValue: Number, newValue: Number) => {
@@ -135,7 +182,11 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
     blockSizeProperty.addListener(blockSizeRp)
     widthProperty().addListener(widthRp)
     heightProperty().addListener(heightRp)
+    skinProperty().addListener(chunkListViewSkinListener)
+
+
   }
+
 
   def removeListeners(): Unit = {
     logEntries.removeListener(logEntriesInvalidationListener)
@@ -146,7 +197,17 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
     blockSizeProperty.removeListener(blockSizeRp)
     widthProperty().removeListener(widthRp)
     heightProperty().removeListener(heightRp)
+
+
+    for {skin <- Option(getSkin)
+         flow <- ChunkListView.lookupVirtualFlow(skin)
+         verticalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.VERTICAL)} {
+      verticalScrollbar.visibleProperty().removeListener(scrollBarVisibilityListener)
+    }
+
+    skinProperty().removeListener(chunkListViewSkinListener)
   }
+
 
   /**
    * Recalculates elements of listview depending on width, height and blocksize.

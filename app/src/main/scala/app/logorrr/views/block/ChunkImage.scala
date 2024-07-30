@@ -1,7 +1,6 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.MathUtil
 import app.logorrr.views.search.Filter
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
@@ -17,8 +16,11 @@ object ChunkImage {
 
   val MaxHeight = 4096
 
+  val DefaultScrollBarWidth = 18
   // width of Scrollbars
-  val ScrollBarWidth = 18
+  val scrollBarWidthProperty = new SimpleIntegerProperty(DefaultScrollBarWidth)
+  def setScrollBarWidth(width : Int): Unit = scrollBarWidthProperty.set(width)
+  def getScrollBarWidth: Int = scrollBarWidthProperty.get()
 
   // assuming we have a grid of rectangles, and x and y give the coordinate of a mouse click
   // this function should return the correct index for the surrounding rectangle
@@ -26,33 +28,6 @@ object ChunkImage {
     y / blockWidth * (blockViewWidth / blockWidth) + x / blockWidth
   }
 
-  /**
-   * Calculates overall height of virtual canvas
-   *
-   * @param blockWidth  width of a block
-   * @param blockHeight height of a block
-   * @param width       width of canvas
-   * @param nrEntries   number of elements
-   * @return
-   */
-  def calcVirtualHeight(blockWidth: Int
-                        , blockHeight: Int
-                        , width: Int
-                        , nrEntries: Int): Int = {
-    if (blockHeight == 0 || nrEntries == 0) {
-      0
-    } else {
-      if (width > blockWidth) {
-        val elemsPerRow = width.toDouble / blockWidth
-        val nrRows = nrEntries.toDouble / elemsPerRow
-        val decimal1: BigDecimal = MathUtil.roundUp(nrRows)
-        val res = decimal1.intValue * blockHeight
-        res
-      } else {
-        0
-      }
-    }
-  }
 
   def apply(chunk: Chunk
             , filtersProperty: ObservableList[Filter]

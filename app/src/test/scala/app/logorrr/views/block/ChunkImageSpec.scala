@@ -13,10 +13,4 @@ class ChunkImageSpec extends AnyWordSpec {
     ".e" in assert(ChunkImage.indexOf(99, 99, 10, 100) == 99)
   }
 
-  "ChunkImage.calcVirtualHeight" should {
-    "sc0" in assert(ChunkImage.calcVirtualHeight(1, 7, 10, 0) == 0)
-    "sc1" in assert(ChunkImage.calcVirtualHeight(1, 7, 10, 1) == 7)
-    "sc10" in assert(ChunkImage.calcVirtualHeight(1, 7, 10, 10) == 7)
-    "sc11" in assert(ChunkImage.calcVirtualHeight(1, 7, 10, 11) == 14)
-  }
 }

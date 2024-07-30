@@ -49,6 +49,12 @@ object LPixelBuffer extends CanLog {
     )
   }
 
+  // performance sensitive function
+  // using while loops for more performance
+  // use benchmark module to perform statistics
+  // here are the current results (macbook pro m1)
+  // LogoRRRBenchmark.benchmarkDrawRect  thrpt   50  782011,597 ± 605,345  ops/s
+  // LogoRRRBenchmark.benchmarkDrawRect  thrpt   50  781747,451 ± 795,479  ops/s
   private def drawRectangle(rawInts: Array[Int]
                             , blockColor: BlockColor
                             , x: Int
@@ -59,40 +65,53 @@ object LPixelBuffer extends CanLog {
     val maxHeight = y + height - 1
     val length = width - 1
     val squareWidth = length - 1
-    // Calculate start and end indices for updating rawInts
     val startIdx = y * canvasWidth + x
     val endIdx = maxHeight * canvasWidth + x + length
 
     // Check if start and end indices are within bounds
     if (startIdx >= 0 && endIdx < rawInts.length) {
+      val color = blockColor.color
+      val upperBorderCol = blockColor.upperBorderCol
+      val bottomBorderCol = blockColor.bottomBorderCol
+      val leftBorderCol = blockColor.leftBorderCol
+      val rightBorderCol = blockColor.rightBorderCol
+
       // Update rawInts directly without array copying
-      for (ly <- y until maxHeight - 1) {
+      var ly = y
+      while (ly < maxHeight) {
         val startPos = ly * canvasWidth + x
-        // Fill the portion of rawInts with lineArray
-        for (i <- 0 to squareWidth) rawInts(startPos + i) = blockColor.color
+        var i = 0
+        while (i <= squareWidth) {
+          rawInts(startPos + i) = color
+          i += 1
+        }
+        ly += 1
       }
 
-      // paint highlights & shadows if square is big enough
-      if ((width >= 2) && (height >= 2)) {
-        // upper left corner to upper right corner
-        for (i <- 0 to squareWidth) rawInts(y * canvasWidth + x + i) = blockColor.upperBorderCol
-        // lower left corner to lower right corner
-        for (i <- 0 to squareWidth) rawInts((maxHeight - 1) * canvasWidth + x + i) = blockColor.bottomBorderCol
-
-        // calculate x positions : starting from (y * canvasWidth + x) being the upper left corner,
-        // with a step size of canvasWidth we get the coordinates of the left border
-        for (ly <- y until maxHeight - 1) {
-          // left border
-          rawInts(ly * canvasWidth + x) = blockColor.leftBorderCol
-          // the same for the right border, but with another offset
-          rawInts(ly * canvasWidth + x + length) = blockColor.rightBorderCol
+      // Paint highlights & shadows if square is big enough
+      if (width >= 2 && height >= 2) {
+        // Paint upper border from upper left corner to upper right corner
+        var i = 0
+        while (i <= squareWidth) {
+          rawInts(y * canvasWidth + x + i) = upperBorderCol
+          rawInts(maxHeight * canvasWidth + x + i) = bottomBorderCol
+          i += 1
         }
 
+        // Calculate x positions for left and right borders
+        ly = y
+        while (ly < maxHeight) {
+          val idx = ly * canvasWidth + x
+          rawInts(idx) = leftBorderCol
+          rawInts(idx + length) = rightBorderCol
+          ly += 1
+        }
       }
     } else {
-//      logWarn(s"tried to paint outside of allowed index. [endIdx = maxHeight * canvasWidth + x + length] ($endIdx = $maxHeight * $canvasWidth + $x + $length) ")
+      //      logWarn(s"tried to paint outside of allowed index. [endIdx = maxHeight * canvasWidth + x + length] ($endIdx = $maxHeight * $canvasWidth + $x + $length) ")
     }
   }
+
 }
 
 
@@ -111,8 +130,6 @@ case class LPixelBuffer(blockNumber: Int
     , IntBuffer.wrap(rawInts)
     , PixelFormat.getIntArgbPreInstance) with CanLog {
 
-  lazy val background: Array[Int] = Array.fill(shape.size)(LPixelBuffer.defaultBackgroundColor)
-
   /* hardcoded highlight color */
   private val highlightedColor = Color.YELLOW
   private lazy val (yellow, yellowBright, yellowDark) = LPixelBuffer.calcColors(highlightedColor)
@@ -124,7 +141,7 @@ case class LPixelBuffer(blockNumber: Int
     paint()
   }
 
-  private def cleanBackground(): Unit = System.arraycopy(background, 0, rawInts, 0, background.length)
+  private def cleanBackground(): Unit = java.util.Arrays.fill(rawInts, LPixelBuffer.defaultBackgroundColor)
 
   def getBlockSize: Int = blockSizeProperty.get()
 
@@ -174,7 +191,9 @@ case class LPixelBuffer(blockNumber: Int
             case (true, true) => yellowVisible
           }
 
-        rawInts(i) = col
+        if (i < rawInts.length) {
+          rawInts(i) = col
+        }
 
         i = i + 1
       })
