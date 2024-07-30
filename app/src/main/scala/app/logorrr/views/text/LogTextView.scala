@@ -4,7 +4,7 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, JfxUtils}
-import app.logorrr.views.text.contextactions.{IgnoreAboveMenuItem, IgnoreBelowMenuItem}
+import app.logorrr.views.text.contextactions.{CopyEntriesMenuItem, IgnoreAboveMenuItem, IgnoreBelowMenuItem}
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
@@ -23,8 +23,8 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
   extends ListView[LogEntry]
     with CanLog {
 
-
   setId(LogTextView.uiNode(mutLogFileSettings.getFileId).value)
+  getSelectionModel.setSelectionMode(SelectionMode.MULTIPLE)
 
   private lazy val selectedLineNumberListener = JfxUtils.onNew[LogEntry](e => {
     Option(e) match {
@@ -40,7 +40,7 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
     refresh() // otherwise listview is not repainted correctly since calculation of the cellheight is broken atm
   })
 
- private lazy val scrollBarListener = JfxUtils.onNew[Number](_ => {
+  private lazy val scrollBarListener = JfxUtils.onNew[Number](_ => {
     val (first, last) = ListViewHelper.getVisibleRange(this)
     mutLogFileSettings.setFirstVisibleTextCellIndex(first)
     mutLogFileSettings.setLastVisibleTextCellIndex(last)
@@ -133,13 +133,15 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
 
       setGraphic(entry)
 
+      val copySelectionMenuItem = new CopyEntriesMenuItem(getSelectionModel)
+
       val ignoreAboveMenuItem = new IgnoreAboveMenuItem(mutLogFileSettings
         , e
         , filteredList
         , scrollToActiveLogEntry)
       val ignoreBelowMenuItem = new IgnoreBelowMenuItem(e, filteredList)
 
-      setContextMenu(new ContextMenu(ignoreAboveMenuItem, ignoreBelowMenuItem))
+      setContextMenu(new ContextMenu(copySelectionMenuItem, ignoreAboveMenuItem, ignoreBelowMenuItem))
     }
   }
 }
