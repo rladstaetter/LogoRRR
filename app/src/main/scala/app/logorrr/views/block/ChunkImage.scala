@@ -1,6 +1,7 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
+import app.logorrr.views.LColors
 import app.logorrr.views.search.Filter
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
@@ -62,7 +63,7 @@ object ChunkImage {
     val width = ChunkListView.calcListViewWidth(widthProperty.get())
     val height = heightProperty.get()
     val shape = RectangularShape(width, height)
-    val rawInts = Array.fill(shape.size)(LPixelBuffer.defaultBackgroundColor)
+    val rawInts = Array.fill(shape.size)(LColors.defaultBackgroundColor)
     val pixelBuffer = LPixelBuffer(blockNumber
       , shape
       , blockSizeProperty

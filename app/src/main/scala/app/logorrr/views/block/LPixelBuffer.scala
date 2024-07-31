@@ -2,6 +2,7 @@ package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
 import app.logorrr.util.{CanLog, ColorUtil}
+import app.logorrr.views.LColors
 import app.logorrr.views.search.Filter
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
@@ -17,11 +18,6 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
  */
 object LPixelBuffer extends CanLog {
 
-  val defaultBackgroundColor: Int = ColorUtil.toARGB(Color.WHITE)
-
-  private def calcColors(color: Color): (Int, Int, Int) = {
-    (ColorUtil.toARGB(color), ColorUtil.toARGB(color.brighter()), ColorUtil.toARGB(color.darker()))
-  }
 
   /**
    *
@@ -130,10 +126,6 @@ case class LPixelBuffer(blockNumber: Int
     , IntBuffer.wrap(rawInts)
     , PixelFormat.getIntArgbPreInstance) with CanLog {
 
-  /* hardcoded highlight color */
-  private val highlightedColor = Color.YELLOW
-  private lazy val (yellow, yellowBright, yellowDark) = LPixelBuffer.calcColors(highlightedColor)
-  private lazy val (yellowVisible, yellowBrightVisible, yellowDarkVisible) = LPixelBuffer.calcColors(highlightedColor.brighter())
 
   init()
 
@@ -141,7 +133,7 @@ case class LPixelBuffer(blockNumber: Int
     paint()
   }
 
-  private def cleanBackground(): Unit = java.util.Arrays.fill(rawInts, LPixelBuffer.defaultBackgroundColor)
+  private def cleanBackground(): Unit = java.util.Arrays.fill(rawInts, LColors.defaultBackgroundColor)
 
   def getBlockSize: Int = blockSizeProperty.get()
 
@@ -161,12 +153,17 @@ case class LPixelBuffer(blockNumber: Int
   }
 
   // helper functions to determine visibility and status of each entry
+
+  /** returns true if entry is active (= selected) - typically this entry is highlighted in some form */
   private def isSelected(lineNumber: Int): Boolean = lineNumber == selectedLineNumberProperty.getValue
 
+  /** element is the first visible element in the text view (the start of the visible elements) */
   private def isFirstVisible(lineNumber: Int): Boolean = lineNumber == firstVisibleTextCellIndexProperty.get()
 
+  /** element is the last visible element in the text view (the end of the visisible elements) */
   private def isLastVisible(lineNumber: Int): Boolean = lineNumber == lastVisibleTextCellIndexProperty.get()
 
+  /** element is visible in the text view */
   private def isVisibleInTextView(lineNumber: Int): Boolean = {
     firstVisibleTextCellIndexProperty.get() < lineNumber && lineNumber < lastVisibleTextCellIndexProperty.get()
   }
@@ -187,8 +184,8 @@ case class LPixelBuffer(blockNumber: Int
           (isSelected(e.lineNumber), isVisible(e.lineNumber)) match {
             case (false, false) => ColorUtil.toARGB(Filter.calcColor(e.value, filters))
             case (false, true) => ColorUtil.toARGB(Filter.calcColor(e.value, filters).brighter())
-            case (true, false) => yellow
-            case (true, true) => yellowVisible
+            case (true, false) => LColors.y
+            case (true, true) => LColors.yb
           }
 
         if (i < rawInts.length) {
@@ -212,7 +209,6 @@ case class LPixelBuffer(blockNumber: Int
 
   }
 
-
   private def paintRects(): Unit = {
     updateBuffer((_: PixelBuffer[IntBuffer]) => {
       cleanBackground()
@@ -228,25 +224,25 @@ case class LPixelBuffer(blockNumber: Int
 
 
   private def paintBlock(index: Int, lineNumber: Int, color: Color): Unit = {
-    val brighterColor = color.brighter()
-    val (col, d, b) = (ColorUtil.toARGB(color), ColorUtil.toARGB(color.darker()), ColorUtil.toARGB(brighterColor))
-    val (vcol, vd, vb) = (ColorUtil.toARGB(brighterColor), ColorUtil.toARGB(brighterColor.darker()), ColorUtil.toARGB(brighterColor.brighter()))
+    val colbrighter = color.brighter()
+    val (c, cd, cb, cbb) = (ColorUtil.toARGB(color), ColorUtil.toARGB(color.darker()), ColorUtil.toARGB(colbrighter), ColorUtil.toARGB(colbrighter.brighter()))
+
+    import LColors._
 
     // mystical color setting routine for setting border colors of viewport and blocks correctly
-    val blockColor =
+    val blockColor = {
       (isSelected(lineNumber), isFirstVisible(lineNumber), isLastVisible(lineNumber), isVisibleInTextView(lineNumber)) match {
-        case (false, false, false, false) => BlockColor(col, d, d, b, b)
-        case (false, false, false, true) => BlockColor(vcol, yellow, vd, vb, yellow)
-        case (false, false, true, false) => BlockColor(vcol, yellow, yellow, vb, yellow)
-        case (false, true, false, false) => BlockColor(vcol, yellow, vd, yellow, yellow)
-        case (false, true, true, false) => BlockColor(col, d, d, b, b)
-        case (true, false, false, false) => BlockColor(yellow, yellowDark, yellowDark, yellowBright, yellowBright)
-        case (true, false, false, true) => BlockColor(yellowVisible, yellow, yellowDarkVisible, yellowBrightVisible, yellow)
-        case (true, false, true, false) => BlockColor(yellowVisible, yellow, yellow, yellowBrightVisible, yellow)
-        case (true, true, false, false) => BlockColor(yellowVisible, yellow, yellowDarkVisible, yellow, yellow)
-        case (true, true, true, false) => BlockColor(yellowVisible, yellow, yellow, yellow, yellow)
-        case (_, _, _, _) => BlockColor(yellowVisible, yellow, yellow, yellow, yellow)
+        case (false, false, false, false) => BlockColor(c, cb, cb, cd, cd)
+        case (true, false, false, false) => BlockColor(y, yb, yb, yd, yd)
+        case (false, true, false, false) => BlockColor(cb, yb, yb, y, cd)
+        case (false, false, false, true) => BlockColor(cb, yb, cbb, y, cd)
+        case (true, false, false, true) => BlockColor(yb, ybb, ybb, yb, y)
+        case (false, false, true, false) => BlockColor(cb, yb, cbb, y, y)
+        case (true, true, false, false) => BlockColor(yb, ybb, ybb, y, y)
+        case (true, false, true, false) => BlockColor(yb, ybb, ybb, y, y)
+        case _ => BlockColor(c, cb, cb, cd, cd) // should never happen (?)
       }
+    }
 
     LPixelBuffer.drawRectangle(rawInts
       , index
