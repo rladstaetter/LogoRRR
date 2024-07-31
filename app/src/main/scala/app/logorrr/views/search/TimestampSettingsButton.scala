@@ -2,6 +2,7 @@ package app.logorrr.views.search
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
+import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
 import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
@@ -16,11 +17,12 @@ import org.kordamp.ikonli.javafx.FontIcon
  * Given a time stamp format (for example: YYYY-MM-dd HH:mm:ss.SSS), LogoRRR is able to parse the timestamp
  * and thus has new possibilities to analyse the log file.
  *
- * @param settings            settings for specific log file
- * @param logEntriesToDisplay the list of log entries to display in order to configure a time format
+ * @param settings   settings for specific log file
+ * @param logEntries the list of log entries to display in order to configure a time format
  */
 class TimestampSettingsButton(settings: MutLogFileSettings
-                              , logEntriesToDisplay: ObservableList[LogEntry]) extends StackPane {
+                              , chunkListView: ChunkListView
+                              , logEntries: ObservableList[LogEntry]) extends StackPane {
 
   // since timerbutton is a stackpane, this css commands are necessary to have the same effect as
   // defined in primer-light.css
@@ -34,7 +36,7 @@ class TimestampSettingsButton(settings: MutLogFileSettings
         |""".stripMargin)
     btn.setGraphic(new FontIcon(FontAwesomeRegular.CLOCK))
     btn.setTooltip(new Tooltip("configure time format"))
-    btn.setOnAction(_ => new TimestampSettingStage(settings, logEntriesToDisplay).showAndWait())
+    btn.setOnAction(_ => new TimestampSettingStage(settings, chunkListView, logEntries).showAndWait())
     btn
   }
 
@@ -43,6 +45,7 @@ class TimestampSettingsButton(settings: MutLogFileSettings
     icon.setStyle("-fx-icon-code:fas-exclamation-circle;-fx-icon-color:rgba(255, 0, 0, 1);-fx-icon-size:8;")
     icon.setTranslateX(10)
     icon.setTranslateY(-10)
+
     /** red exclamation mark is only visible if there is no timestamp setting for a given log file */
     icon.visibleProperty().bind(settings.hasLogEntrySettingBinding.not())
     icon

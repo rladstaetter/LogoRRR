@@ -5,6 +5,7 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.{LogEntry, LogEntryInstantFormat}
 import app.logorrr.util.{CanLog, HLink}
 import app.logorrr.views.UiNodes
+import app.logorrr.views.block.ChunkListView
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
@@ -14,7 +15,7 @@ import javafx.scene.layout.{BorderPane, VBox}
 
 object TimestampSettingsBorderPane {
 
-  private val dateTimeFormatterLink: HLink = HLink(UiNodes.OpenDateFormatterSite,"https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/time/format/DateTimeFormatter.html", "format description")
+  private val dateTimeFormatterLink: HLink = HLink(UiNodes.OpenDateFormatterSite, "https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/time/format/DateTimeFormatter.html", "format description")
 
   def mkTf(name: String
            , somePrompt: Option[String]
@@ -30,10 +31,10 @@ object TimestampSettingsBorderPane {
 }
 
 class TimestampSettingsBorderPane(settings: MutLogFileSettings
-                                  , logEntriesToDisplay: ObservableList[LogEntry]
+                                  , logEntries: ObservableList[LogEntry]
+                                  , chunkListView: ChunkListView
                                   , closeStage: => Unit)
   extends BorderPane with CanLog {
-
   /*
    * those properties exist since it is easier to use from the call sites.
    **/
@@ -62,7 +63,7 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
   private val (timeFormatLabel, timeFormatTf) = TimestampSettingsBorderPane.mkTf("time format", Option("<enter time format>"), Option(LogEntryInstantFormat.DefaultPattern), 30)
 
   private val timerSettingsLogTextView = {
-    val tslv = new TimerSettingsLogView(settings, logEntriesToDisplay)
+    val tslv = new TimerSettingsLogView(settings, logEntries)
     startColProperty.bind(tslv.startColProperty)
     endColProperty.bind(tslv.endColProperty)
     tslv
@@ -75,21 +76,24 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
   private val okButton = {
     val b = new Button("set new format")
     b.setOnAction(_ => {
-      val leif = LogEntryInstantFormat(SimpleRange(getStartCol, getEndCol), timeFormatTf.getText.trim)
+      val leif: LogEntryInstantFormat = LogEntryInstantFormat(SimpleRange(getStartCol, getEndCol), timeFormatTf.getText.trim)
       settings.setLogEntryInstantFormat(leif)
       LogoRRRGlobals.persist()
+      // we have to deactivate this listener otherwise
+      chunkListView.removeInvalidationListener()
+      for (i <- 0 until logEntries.size()) {
+        val e = logEntries.get(i)
+        val someInstant = LogEntryInstantFormat.parseInstant(e.value, leif)
+        logEntries.set(i, e.copy(someInstant = someInstant))
+      }
+      // activate listener again
+      chunkListView.addInvalidationListener()
+
       closeStage
     })
     b
   }
-/*
-  private val stringBinding = new StringBinding {
-    bind(startColProperty, endColProperty)
 
-    override def computeValue(): String = {
-      ""
-    }
-  }*/
 
   private val hyperlink: Hyperlink = TimestampSettingsBorderPane.dateTimeFormatterLink.mkHyperLink()
   private val selectedBar = new ToolBar(selectedRangeLabel)

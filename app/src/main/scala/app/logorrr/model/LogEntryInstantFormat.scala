@@ -43,4 +43,6 @@ case class LogEntryInstantFormat(range: SimpleRange
   val startCol: Int = range.start
   val endCol: Int = range.end
   val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(dateTimePattern).withZone(ZoneId.of(zoneOffset))
+
+
 }
