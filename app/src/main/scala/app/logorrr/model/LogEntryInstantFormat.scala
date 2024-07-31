@@ -1,7 +1,7 @@
 package app.logorrr.model
 
 import app.logorrr.util.CanLog
-import app.logorrr.views.settings.timer.SimpleRange
+import app.logorrr.views.settings.timestamp.SimpleRange
 import pureconfig.{ConfigReader, ConfigWriter}
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 

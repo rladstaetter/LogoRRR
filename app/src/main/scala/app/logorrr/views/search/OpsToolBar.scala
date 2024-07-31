@@ -1,11 +1,13 @@
 package app.logorrr.views.search
 
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util.OsUtil
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.block.HasBlockSizeProperty
 import app.logorrr.views.ops.{ClearLogButton, CopyLogButton, DecreaseBlockSizeButton, IncreaseBlockSizeButton}
+import app.logorrr.views.settings.timestamp.TimerSettingsLogView
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
@@ -16,7 +18,6 @@ import javafx.scene.input.{KeyCode, KeyEvent}
 
 
 object OpsToolBar {
-
 
 
   /** increment / decrement font size */
@@ -63,9 +64,12 @@ class OpsToolBar(fileId: FileId
 
   private val copySelectionButton = new CopyLogButton(fileId, filteredList)
 
-  //  val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
+  val logEntriesToShowInTimerSettingsStage: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
 
-  //  val timerButton = new TimerButton(fileId, firstNEntries)
+  /**
+   * To configure the logformat of the timestamp used in a logfile
+   */
+  val timestampSettingsButton = new TimestampSettingsButton( LogoRRRGlobals.getLogFileSettings(fileId), logEntriesToShowInTimerSettingsStage)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {
@@ -87,7 +91,7 @@ class OpsToolBar(fileId: FileId
   }
 
   val otherItems: Seq[Node] = {
-    Seq(autoScrollCheckBox, clearLogButton, copySelectionButton)
+    Seq(autoScrollCheckBox, clearLogButton, copySelectionButton, timestampSettingsButton)
   }
 
   getItems.addAll(searchItems ++ sizeItems ++ otherItems: _*)

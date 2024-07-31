@@ -1,5 +1,6 @@
-package app.logorrr.views.settings.timer
+package app.logorrr.views.settings.timestamp
 
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.{LogEntry, LogEntryInstantFormat}
 import app.logorrr.util.{CanLog, HLink}
@@ -11,10 +12,9 @@ import javafx.scene.control._
 import javafx.scene.layout.{BorderPane, VBox}
 
 
-object TimerSettingsBorderPane {
+object TimestampSettingsBorderPane {
 
-
-  private val dateTimeFormatterLink: HLink = HLink(UiNodes.OpenDateFormatterSite,"https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html", "format description")
+  private val dateTimeFormatterLink: HLink = HLink(UiNodes.OpenDateFormatterSite,"https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/time/format/DateTimeFormatter.html", "format description")
 
   def mkTf(name: String
            , somePrompt: Option[String]
@@ -29,10 +29,9 @@ object TimerSettingsBorderPane {
   }
 }
 
-class TimerSettingsBorderPane(settings: MutLogFileSettings
-                              , logEntriesToDisplay: ObservableList[LogEntry]
-                              , updateLogEntrySetting: LogEntryInstantFormat => Unit
-                              , closeStage: => Unit)
+class TimestampSettingsBorderPane(settings: MutLogFileSettings
+                                  , logEntriesToDisplay: ObservableList[LogEntry]
+                                  , closeStage: => Unit)
   extends BorderPane with CanLog {
 
   /*
@@ -60,7 +59,7 @@ class TimerSettingsBorderPane(settings: MutLogFileSettings
   }
 
   private val selectedRangeLabel = new Label("Selected: ")
-  private val (timeFormatLabel, timeFormatTf) = TimerSettingsBorderPane.mkTf("time format", Option("<enter time format>"), Option(LogEntryInstantFormat.DefaultPattern), 30)
+  private val (timeFormatLabel, timeFormatTf) = TimestampSettingsBorderPane.mkTf("time format", Option("<enter time format>"), Option(LogEntryInstantFormat.DefaultPattern), 30)
 
   private val timerSettingsLogTextView = {
     val tslv = new TimerSettingsLogView(settings, logEntriesToDisplay)
@@ -76,7 +75,9 @@ class TimerSettingsBorderPane(settings: MutLogFileSettings
   private val okButton = {
     val b = new Button("set new format")
     b.setOnAction(_ => {
-      updateLogEntrySetting(LogEntryInstantFormat(SimpleRange(getStartCol, getEndCol), timeFormatTf.getText.trim))
+      val leif = LogEntryInstantFormat(SimpleRange(getStartCol, getEndCol), timeFormatTf.getText.trim)
+      settings.setLogEntryInstantFormat(leif)
+      LogoRRRGlobals.persist()
       closeStage
     })
     b
@@ -90,7 +91,7 @@ class TimerSettingsBorderPane(settings: MutLogFileSettings
     }
   }*/
 
-  private val hyperlink: Hyperlink = TimerSettingsBorderPane.dateTimeFormatterLink.mkHyperLink()
+  private val hyperlink: Hyperlink = TimestampSettingsBorderPane.dateTimeFormatterLink.mkHyperLink()
   private val selectedBar = new ToolBar(selectedRangeLabel)
   private val timeFormatBar = new ToolBar(timeFormatLabel, timeFormatTf, hyperlink)
   private val bar = new ToolBar(rangeColLabel, okButton)

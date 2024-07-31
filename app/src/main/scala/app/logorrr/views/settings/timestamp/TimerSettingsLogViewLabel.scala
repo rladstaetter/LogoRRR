@@ -1,4 +1,4 @@
-package app.logorrr.views.settings.timer
+package app.logorrr.views.settings.timestamp
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
