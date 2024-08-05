@@ -21,7 +21,7 @@ object FilterCalculatorSpec {
 class FilterCalculatorSpec extends LogoRRRSpec {
 
   def applySingleFilter(logEntry: String, pattern: String): Seq[Seq[LinePart]] = {
-    FilterCalculator(LogEntry(0,logEntry, None), Seq(new Filter(pattern, Color.RED, true))).filteredParts
+    FilterCalculator(LogEntry(0, logEntry, None, None), Seq(new Filter(pattern, Color.RED, true))).filteredParts
   }
 
   "calcParts" should {
@@ -85,7 +85,7 @@ class FilterCalculatorSpec extends LogoRRRSpec {
       , new Filter("b", Color.BLUE, true)
       , new Filter("t", Color.YELLOW, true)
     )
-    val entry = LogEntry(0, "test a b c", None)
+    val entry = LogEntry(0, "test a b c", None, None)
     val calculator = FilterCalculator(entry, filters)
 
     "produce correct amount of matches" in {

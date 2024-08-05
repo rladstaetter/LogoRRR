@@ -12,6 +12,8 @@ import javafx.collections.ObservableList
 import javafx.scene.control._
 import javafx.scene.layout.{BorderPane, VBox}
 
+import java.time.{Duration, Instant}
+
 
 object TimestampSettingsBorderPane {
 
@@ -81,10 +83,20 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
       LogoRRRGlobals.persist()
       // we have to deactivate this listener otherwise
       chunkListView.removeInvalidationListener()
+      var someFirstEntryTimestamp : Option[Instant] = None
       for (i <- 0 until logEntries.size()) {
         val e = logEntries.get(i)
         val someInstant = LogEntryInstantFormat.parseInstant(e.value, leif)
-        logEntries.set(i, e.copy(someInstant = someInstant))
+        if (someFirstEntryTimestamp.isEmpty) {
+          someFirstEntryTimestamp = someInstant
+        }
+
+        val diffFromStart: Option[Duration] = for {
+          firstEntry <- someFirstEntryTimestamp
+          instant <- someInstant
+        } yield Duration.between(firstEntry, instant)
+
+        logEntries.set(i, e.copy(someInstant = someInstant, someDurationSinceFirstInstant = diffFromStart))
       }
       // activate listener again
       chunkListView.addInvalidationListener()

@@ -21,7 +21,7 @@ class LogEntryListener(ol: ObservableList[LogEntry])
 
   override def handle(l: String): Unit = {
     currentCnt = currentCnt + 1
-    val e = LogEntry(currentCnt, l, None)
+    val e = LogEntry(currentCnt, l, None, None)
     JfxUtils.execOnUiThread(ol.add(e))
   }
 

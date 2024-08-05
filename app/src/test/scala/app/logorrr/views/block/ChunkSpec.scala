@@ -9,7 +9,7 @@ object ChunkSpec {
   def mkTestLogEntries(size: Int): java.util.List[LogEntry] = {
     val entries = {
       (0 until size).foldLeft(new java.util.ArrayList[LogEntry]())((acc, e) => {
-        acc.add(LogEntry(e, "", None))
+        acc.add(LogEntry(e, "", None, None))
         acc
       })
     }
