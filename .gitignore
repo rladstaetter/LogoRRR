@@ -3,3 +3,4 @@ logfiles/
 .idea/
 **/.flattened-pom.xml
 /develop-logging.properties
+/target/
