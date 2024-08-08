@@ -40,3 +40,10 @@ class CloseLeftFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends Men
   })
 
 }
+
+
+
+
+
+
+

@@ -7,6 +7,7 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util._
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.logfiletab.actions._
+import app.logorrr.views.main.MainTabPane
 import app.logorrr.views.search.Fltr
 import app.logorrr.views.{LogoRRRAccelerators, UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
@@ -197,8 +198,9 @@ class LogFileTab(val fileId: FileId
         Seq(new CloseLeftFilesMenuItem(fileId, this), new CloseRightFilesMenuItem(fileId, this))
       }
 
+    val mergeTimedMenuItem = new MergeTimedMenuItem(fileId, this.getTabPane.asInstanceOf[MainTabPane])
 
-    val items = {
+    val items: Seq[MenuItem] = {
       // special handling if there is only one tab
       if (getTabPane.getTabs.size() == 1) {
         if (OsUtil.isMac) {
@@ -210,11 +212,11 @@ class LogFileTab(val fileId: FileId
         Seq(closeMenuItem
           , closeOtherFilesMenuItem
           , closeAllFilesMenuItem) ++ leftRightCloser ++ {
-          if (OsUtil.isMac) {
+          (if (OsUtil.isMac) {
             Seq()
           } else {
             Seq(openInFinderMenuItem)
-          }
+          }) ++ Seq(mergeTimedMenuItem)
         }
       }
     }
