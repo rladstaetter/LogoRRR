@@ -2,11 +2,11 @@ package app.logorrr.model
 
 import app.logorrr.util.CanLog
 import app.logorrr.views.settings.timestamp.SimpleRange
-import pureconfig.{ConfigReader, ConfigWriter}
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
+import pureconfig.{ConfigReader, ConfigWriter}
 
+import java.time._
 import java.time.format.DateTimeFormatter
-import java.time.{Instant, LocalDateTime, ZoneId, ZoneOffset}
 import scala.util.{Failure, Success, Try}
 
 object LogEntryInstantFormat extends CanLog {
@@ -21,14 +21,22 @@ object LogEntryInstantFormat extends CanLog {
   def parseInstant(line: String, entrySetting: LogEntryInstantFormat): Option[Instant] =
     if (line.length >= entrySetting.endCol) {
       val dateTimeAsString = line.substring(entrySetting.startCol, entrySetting.endCol)
+      val dtf: DateTimeFormatter = entrySetting.dateTimeFormatter
       Try {
-        val dtf: DateTimeFormatter = entrySetting.dateTimeFormatter
         LocalDateTime.parse(dateTimeAsString, dtf).toInstant(ZoneOffset.of(entrySetting.zoneOffset))
       } match {
         case Success(value) => Option(value)
         case Failure(_) =>
-          logTrace(s"Could not parse '$dateTimeAsString' at pos (${entrySetting.startCol}/${entrySetting.endCol}) with pattern '$${entrySetting.dateTimePattern}'")
-          None
+          // retrying with localtime as fallback for entries which don't have any
+          // date information (for example: '08:34:33' representing today morning)
+          Try {
+            LocalDateTime.of(LocalDate.now(), LocalTime.parse(dateTimeAsString, dtf)).toInstant(ZoneOffset.of(entrySetting.zoneOffset))
+          } match {
+            case Success(value) => Option(value)
+            case Failure(exception) =>
+              logTrace(s"Could not parse '$dateTimeAsString' at pos (${entrySetting.startCol}/${entrySetting.endCol}) with pattern '${entrySetting.dateTimePattern}': ${exception.getMessage}")
+              None
+          }
       }
     } else {
       None

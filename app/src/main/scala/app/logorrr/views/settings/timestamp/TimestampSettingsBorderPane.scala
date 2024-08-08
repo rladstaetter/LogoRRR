@@ -9,8 +9,9 @@ import app.logorrr.views.block.ChunkListView
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
+import javafx.css.PseudoClass
 import javafx.scene.control._
-import javafx.scene.layout.{BorderPane, VBox}
+import javafx.scene.layout.BorderPane
 
 import java.time.{Duration, Instant}
 
@@ -45,45 +46,20 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
     case None => (new SimpleObjectProperty[java.lang.Integer](), new SimpleObjectProperty[java.lang.Integer]())
   }
 
-  private val rangeTextBinding = Bindings.createStringBinding(() => {
-    (Option(getStartCol), Option(getEndCol)) match {
-      case (Some(start), Some(end)) => s"Range: (${start.toString}/${end.toString})"
-      case (Some(start), None) => s"Range: (${start.toString}/not set)"
-      case (None, Some(end)) => s"select start col: (not set/${end.toString})"
-      case (None, None) => "Select range."
-    }
-
-  }, startColProperty, endColProperty)
-
-  private val rangeColLabel = {
-    val l = new Label()
-    l.textProperty().bind(rangeTextBinding)
-    l
-  }
-
-  private val selectedRangeLabel = new Label("Selected: ")
-  private val (timeFormatLabel, timeFormatTf) = TimestampSettingsBorderPane.mkTf("time format", Option("<enter time format>"), Option(LogEntryInstantFormat.DefaultPattern), 30)
-
-  private val timerSettingsLogTextView = {
-    val tslv = new TimerSettingsLogView(settings, logEntries)
-    startColProperty.bind(tslv.startColProperty)
-    endColProperty.bind(tslv.endColProperty)
-    tslv
-  }
-
   /**
    * if ok button is clicked, log definition will be written, settings stage will be closed, associated logfile
    * definition will be updated
    * */
   private val okButton = {
     val b = new Button("set new format")
+
     b.setOnAction(_ => {
       val leif: LogEntryInstantFormat = LogEntryInstantFormat(SimpleRange(getStartCol, getEndCol), timeFormatTf.getText.trim)
       settings.setLogEntryInstantFormat(leif)
       LogoRRRGlobals.persist()
       // we have to deactivate this listener otherwise
       chunkListView.removeInvalidationListener()
-      var someFirstEntryTimestamp : Option[Instant] = None
+      var someFirstEntryTimestamp: Option[Instant] = None
       for (i <- 0 until logEntries.size()) {
         val e = logEntries.get(i)
         val someInstant = LogEntryInstantFormat.parseInstant(e.value, leif)
@@ -106,12 +82,40 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
     b
   }
 
+  private val rangeTextBinding = Bindings.createStringBinding(() => {
+    (Option(getStartCol), Option(getEndCol)) match {
+      case (Some(start), Some(end)) =>
+        okButton.pseudoClassStateChanged(PseudoClass.getPseudoClass("hover"), true)
+        okButton.requestFocus()
+        s"Range: (${start.toString}/${end.toString})"
+      case (Some(start), None) => s"Range: (${start.toString}/not set)"
+      case (None, Some(end)) => s"select start col: (not set/${end.toString})"
+      case (None, None) => "Select range."
+    }
+
+  }, startColProperty, endColProperty)
+
+  private val rangeColLabel = {
+    val l = new Label()
+    l.setPrefWidth(200)
+    l.textProperty().bind(rangeTextBinding)
+    l
+  }
+
+  private val (timeFormatLabel, timeFormatTf) = TimestampSettingsBorderPane.mkTf("time format", Option("<enter time format>"), Option(LogEntryInstantFormat.DefaultPattern), 30)
+
+  private val timerSettingsLogTextView = {
+    val tslv = new TimerSettingsLogView(settings, logEntries)
+    startColProperty.bind(tslv.startColProperty)
+    endColProperty.bind(tslv.endColProperty)
+    tslv
+  }
+
+
+
 
   private val hyperlink: Hyperlink = TimestampSettingsBorderPane.dateTimeFormatterLink.mkHyperLink()
-  private val selectedBar = new ToolBar(selectedRangeLabel)
-  private val timeFormatBar = new ToolBar(timeFormatLabel, timeFormatTf, hyperlink)
-  private val bar = new ToolBar(rangeColLabel, okButton)
-  private val vbox = new VBox(selectedBar, timeFormatBar, bar)
+  private val timeFormatBar = new ToolBar(rangeColLabel, timeFormatLabel, timeFormatTf, hyperlink, okButton)
 
   init()
 
@@ -133,7 +137,7 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
     }
 
     setCenter(timerSettingsLogTextView)
-    setBottom(vbox)
+    setBottom(timeFormatBar)
 
   }
 }
