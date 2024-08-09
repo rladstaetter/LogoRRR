@@ -23,14 +23,14 @@ object LogEntryInstantFormat extends CanLog {
       val dateTimeAsString = line.substring(entrySetting.startCol, entrySetting.endCol)
       val dtf: DateTimeFormatter = entrySetting.dateTimeFormatter
       Try {
-        LocalDateTime.parse(dateTimeAsString, dtf).toInstant(ZoneOffset.of(entrySetting.zoneOffset))
+        LocalDateTime.parse(dateTimeAsString, dtf).atZone(ZoneId.systemDefault).toInstant
       } match {
         case Success(value) => Option(value)
         case Failure(_) =>
           // retrying with localtime as fallback for entries which don't have any
           // date information (for example: '08:34:33' representing today morning)
           Try {
-            LocalDateTime.of(LocalDate.now(), LocalTime.parse(dateTimeAsString, dtf)).toInstant(ZoneOffset.of(entrySetting.zoneOffset))
+            LocalDateTime.of(LocalDate.now(), LocalTime.parse(dateTimeAsString, dtf)).atZone(ZoneId.systemDefault()).toInstant
           } match {
             case Success(value) => Option(value)
             case Failure(exception) =>
@@ -45,12 +45,8 @@ object LogEntryInstantFormat extends CanLog {
 
 }
 
-case class LogEntryInstantFormat(range: SimpleRange
-                                 , dateTimePattern: String
-                                 , zoneOffset: String = "+1") {
+case class LogEntryInstantFormat(range: SimpleRange, dateTimePattern: String) {
   val startCol: Int = range.start
   val endCol: Int = range.end
-  val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(dateTimePattern).withZone(ZoneId.of(zoneOffset))
-
-
+  val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(dateTimePattern).withZone(ZoneId.systemDefault)
 }

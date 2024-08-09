@@ -1,4 +1,4 @@
-package app.logorrr.views.search
+package app.logorrr.views.ops.time
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry

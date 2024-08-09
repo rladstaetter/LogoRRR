@@ -5,6 +5,7 @@ import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.OpsRegion
+import app.logorrr.views.ops.time.TimeOpsToolBar
 import app.logorrr.views.search.{Filter, FiltersToolBar, OpsToolBar}
 import app.logorrr.views.text.LogTextView
 import javafx.beans.{InvalidationListener, Observable}
@@ -30,13 +31,11 @@ class LogFileTabContent(fileId: FileId
   // graphical display to the left
   private val chunkListView = ChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem)
 
-
   private val blockSizeSlider = {
     val bs = new BlockSizeSlider(mutLogFileSettings.getFileId)
     bs.valueProperty().bindBidirectional(mutLogFileSettings.blockSizeProperty)
     bs
   }
-
 
   private val blockPane = {
     val bBp = new BorderPane(chunkListView, blockSizeSlider, null, null, null)
@@ -62,16 +61,18 @@ class LogFileTabContent(fileId: FileId
     , addFilter
     , entries
     , filteredList
-    , mutLogFileSettings.blockSizeProperty
-    , chunkListView)
+    , mutLogFileSettings.blockSizeProperty)
 
   private val filtersToolBar = {
     val fbtb = new FiltersToolBar(fileId, filteredList, removeFilter)
     fbtb.filtersProperty.bind(mutLogFileSettings.filtersProperty)
     fbtb
   }
-
-  private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, filtersToolBar)
+  val timeOpsToolBar = new TimeOpsToolBar(mutLogFileSettings
+    , chunkListView
+    , entries // we write on this list potentially
+    , filteredList)
+  private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, filtersToolBar, timeOpsToolBar)
 
   private val pane = new SplitPane(blockPane, logTextView)
 
