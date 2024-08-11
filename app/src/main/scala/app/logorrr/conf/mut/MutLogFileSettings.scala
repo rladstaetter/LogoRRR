@@ -66,8 +66,8 @@ class MutLogFileSettings {
     override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
   }
 
-  def setLogEntryInstantFormat(lef: LogEntryInstantFormat): Unit = {
-    someLogEntrySettingsProperty.set(Option(lef))
+  def setLogEntryInstantFormat(someLef: Option[LogEntryInstantFormat]): Unit = {
+    someLogEntrySettingsProperty.set(someLef)
   }
 
   def setAutoScroll(autoScroll: Boolean): Unit = autoScrollActiveProperty.set(autoScroll)

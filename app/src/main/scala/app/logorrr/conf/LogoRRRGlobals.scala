@@ -23,9 +23,7 @@ object LogoRRRGlobals extends CanLog {
 
   private val hostServicesProperty = new SimpleObjectProperty[LogoRRRHostServices]()
 
-  def persist(): Unit = {
-    persist(LogoRRRGlobals.getSettings)
-  }
+  def persist(): Unit = persist(LogoRRRGlobals.getSettings)
 
   def persist(settings: Settings): Unit = {
     Fs.write(FilePaths.settingsFilePath, ConfigWriter[Settings].to(settings).render(renderOptions))

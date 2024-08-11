@@ -14,6 +14,7 @@ import javafx.scene.control._
 import javafx.scene.layout.BorderPane
 
 import java.time.{Duration, Instant}
+import java.util
 
 
 object TimestampSettingsBorderPane {
@@ -46,20 +47,41 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
     case None => (new SimpleObjectProperty[java.lang.Integer](), new SimpleObjectProperty[java.lang.Integer]())
   }
 
+  private val resetButton = {
+    val b = new Button("reset")
+    b.setOnAction(_ => {
+      settings.setLogEntryInstantFormat(None)
+      LogoRRRGlobals.persist()
+      // we have to deactivate this listener otherwise
+      chunkListView.removeInvalidationListener()
+      val tempList = new util.ArrayList[LogEntry]()
+      logEntries.forEach(e => {
+        tempList.add(e.withOutTimestamp())
+      })
+      logEntries.setAll(tempList)
+      // activate listener again
+      chunkListView.addInvalidationListener()
+      closeStage
+    })
+    b
+  }
+
   /**
    * if ok button is clicked, log definition will be written, settings stage will be closed, associated logfile
    * definition will be updated
    * */
   private val okButton = {
-    val b = new Button("set new format")
+    val b = new Button("set format")
 
     b.setOnAction(_ => {
       val leif: LogEntryInstantFormat = LogEntryInstantFormat(SimpleRange(getStartCol, getEndCol), timeFormatTf.getText.trim)
-      settings.setLogEntryInstantFormat(leif)
+      settings.setLogEntryInstantFormat(Option(leif))
       LogoRRRGlobals.persist()
       // we have to deactivate this listener otherwise
       chunkListView.removeInvalidationListener()
       var someFirstEntryTimestamp: Option[Instant] = None
+
+      val tempList = new util.ArrayList[LogEntry]()
       for (i <- 0 until logEntries.size()) {
         val e = logEntries.get(i)
         val someInstant = LogEntryInstantFormat.parseInstant(e.value, leif)
@@ -72,15 +94,19 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
           instant <- someInstant
         } yield Duration.between(firstEntry, instant)
 
-        logEntries.set(i, e.copy(someInstant = someInstant, someDurationSinceFirstInstant = diffFromStart))
+        tempList.add(e.copy(someInstant = someInstant, someDurationSinceFirstInstant = diffFromStart))
+ //       logEntries.set(i, e.copy(someInstant = someInstant, someDurationSinceFirstInstant = diffFromStart))
       }
+      logEntries.setAll(tempList)
       // activate listener again
       chunkListView.addInvalidationListener()
+      // update slider boundaries
 
       closeStage
     })
     b
   }
+
 
   private val rangeTextBinding = Bindings.createStringBinding(() => {
     (Option(getStartCol), Option(getEndCol)) match {
@@ -111,11 +137,8 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
     tslv
   }
 
-
-
-
   private val hyperlink: Hyperlink = TimestampSettingsBorderPane.dateTimeFormatterLink.mkHyperLink()
-  private val timeFormatBar = new ToolBar(rangeColLabel, timeFormatLabel, timeFormatTf, hyperlink, okButton)
+  private val timeFormatBar = new ToolBar(rangeColLabel, timeFormatLabel, timeFormatTf, hyperlink, okButton, resetButton)
 
   init()
 

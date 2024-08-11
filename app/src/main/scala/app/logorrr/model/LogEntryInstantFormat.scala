@@ -18,10 +18,18 @@ object LogEntryInstantFormat extends CanLog {
   implicit lazy val reader: ConfigReader[LogEntryInstantFormat] = deriveReader[LogEntryInstantFormat]
   implicit lazy val writer: ConfigWriter[LogEntryInstantFormat] = deriveWriter[LogEntryInstantFormat]
 
-  def parseInstant(line: String, entrySetting: LogEntryInstantFormat): Option[Instant] =
-    if (line.length >= entrySetting.endCol) {
-      val dateTimeAsString = line.substring(entrySetting.startCol, entrySetting.endCol)
-      val dtf: DateTimeFormatter = entrySetting.dateTimeFormatter
+  /**
+   * Assumes that line contains a timestamp which encodes year/month/day hour/minute/second ... which hits
+   * most of the usecases. However, for example if the log file uses relative timestamps this approach won't fit.
+   *
+   * @param line the string to parse
+   * @param leif settings where to parse the timestamp, and in which format
+   * @return
+   */
+  def parseInstant(line: String, leif: LogEntryInstantFormat): Option[Instant] =
+    if (line.length >= leif.endCol) {
+      val dateTimeAsString = line.substring(leif.startCol, leif.endCol)
+      val dtf: DateTimeFormatter = leif.dateTimeFormatter
       Try {
         LocalDateTime.parse(dateTimeAsString, dtf).atZone(ZoneId.systemDefault).toInstant
       } match {
@@ -34,7 +42,7 @@ object LogEntryInstantFormat extends CanLog {
           } match {
             case Success(value) => Option(value)
             case Failure(exception) =>
-              logTrace(s"Could not parse '$dateTimeAsString' at pos (${entrySetting.startCol}/${entrySetting.endCol}) with pattern '${entrySetting.dateTimePattern}': ${exception.getMessage}")
+              logTrace(s"Could not be parsed: '$dateTimeAsString' at pos (${leif.startCol}/${leif.endCol}) using pattern '${leif.dateTimePattern}': ${exception.getMessage}")
               None
           }
       }

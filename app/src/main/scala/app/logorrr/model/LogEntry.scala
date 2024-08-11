@@ -15,4 +15,7 @@ case class LogEntry(lineNumber: Int
                     , someInstant: Option[Instant]
                     , someDurationSinceFirstInstant: Option[Duration]) {
 
+  /** returns a copy of this log entry without timestamp information */
+  def withOutTimestamp(): LogEntry = copy(someInstant = None, someDurationSinceFirstInstant = None)
+
 }
