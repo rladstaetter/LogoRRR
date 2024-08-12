@@ -22,7 +22,8 @@ import org.kordamp.ikonli.javafx.FontIcon
  */
 class TimestampSettingsButton(settings: MutLogFileSettings
                               , chunkListView: ChunkListView
-                              , logEntries: ObservableList[LogEntry]) extends StackPane {
+                              , logEntries: ObservableList[LogEntry]
+                              , timeOpsToolBar: TimeOpsToolBar) extends StackPane {
 
   // since timerbutton is a stackpane, this css commands are necessary to have the same effect as
   // defined in primer-light.css
@@ -36,7 +37,7 @@ class TimestampSettingsButton(settings: MutLogFileSettings
         |""".stripMargin)
     btn.setGraphic(new FontIcon(FontAwesomeRegular.CLOCK))
     btn.setTooltip(new Tooltip("configure time format"))
-    btn.setOnAction(_ => new TimestampSettingStage(settings, chunkListView, logEntries).showAndWait())
+    btn.setOnAction(_ => new TimestampSettingStage(settings, chunkListView, logEntries, timeOpsToolBar).showAndWait())
     btn
   }
 

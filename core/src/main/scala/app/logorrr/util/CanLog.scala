@@ -16,7 +16,7 @@ object CanLog {
   val RN = s"$R$N"
 
   /* before deploying make sure this is set to Level.INFO */
-  val LogLevel = Level.INFO
+  val LogLevel: Level = Level.INFO
 
   /** if set to true, the LogoRRRs log file grows without boundaries */
   val appendLogs = false
@@ -37,7 +37,7 @@ object CanLog {
     h
   }
 
-  def throwToString(t: Throwable): String = {
+  private def throwToString(t: Throwable): String = {
     val sw = new StringWriter
     val pw = new PrintWriter(sw)
     try {

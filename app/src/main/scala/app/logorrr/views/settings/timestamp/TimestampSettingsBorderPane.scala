@@ -6,6 +6,7 @@ import app.logorrr.model.{LogEntry, TimestampSettings}
 import app.logorrr.util.{CanLog, HLink}
 import app.logorrr.views.UiNodes
 import app.logorrr.views.block.ChunkListView
+import app.logorrr.views.ops.time.TimeOpsToolBar
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
@@ -37,13 +38,14 @@ object TimestampSettingsBorderPane {
 class TimestampSettingsBorderPane(settings: MutLogFileSettings
                                   , logEntries: ObservableList[LogEntry]
                                   , chunkListView: ChunkListView
+                                 , timeOpsToolBar: TimeOpsToolBar
                                   , closeStage: => Unit)
   extends BorderPane with CanLog {
 
   /*
    * those properties exist since it is easier to use from the call sites.
    **/
-  private val (startColProperty, endColProperty) = settings.getSomeTimestampSettings() match {
+  private val (startColProperty, endColProperty) = settings.getSomeTimestampSettings match {
     case Some(value) => (new SimpleObjectProperty[java.lang.Integer](value.startCol), new SimpleObjectProperty[java.lang.Integer](value.endCol))
     case None => (new SimpleObjectProperty[java.lang.Integer](), new SimpleObjectProperty[java.lang.Integer]())
   }
@@ -62,6 +64,7 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
       logEntries.setAll(tempList)
       // activate listener again
       chunkListView.addInvalidationListener()
+      timeOpsToolBar.updateSliderBoundaries()
       closeStage
     })
     b
@@ -101,7 +104,7 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
       // activate listener again
       chunkListView.addInvalidationListener()
       // update slider boundaries
-
+      timeOpsToolBar.updateSliderBoundaries()
       closeStage
     })
     b
@@ -144,7 +147,7 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
 
 
   def init(): Unit = {
-    settings.getSomeTimestampSettings() match {
+    settings.getSomeTimestampSettings match {
       case Some(s) => timeFormatTf.setText(s.dateTimePattern)
       case None => logTrace("No time setting found ... ")
     }

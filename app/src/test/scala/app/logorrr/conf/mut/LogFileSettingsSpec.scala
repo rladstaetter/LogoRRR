@@ -29,5 +29,7 @@ object LogFileSettingsSpec {
     , someLogEntryInstantFormat
     , autoScroll
     , 0
-    , 10)
+    , 10
+    , LogFileSettings.DefaultLowerTimestamp
+    , LogFileSettings.DefaultUpperTimestamp)
 }

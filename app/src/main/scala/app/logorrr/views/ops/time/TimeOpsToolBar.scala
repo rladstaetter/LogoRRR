@@ -7,22 +7,6 @@ import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.ToolBar
 
-object TimeOpsToolBar {
-  private def updateFilteredList(mutLogFileSettings: MutLogFileSettings, filteredList: FilteredList[LogEntry], lower: Long, higher: Long): Unit = {
-    //mutLogFileSettings.filtersProperty
-    // use filters and also this filter
-    mutLogFileSettings == mutLogFileSettings
-    filteredList.setPredicate((t: LogEntry) => {
-      t.someInstant match {
-        case Some(value) =>
-          val asMilli = value.toEpochMilli
-          lower <= asMilli && asMilli <= higher
-        case None => false
-      }
-    })
-  }
-}
-
 
 class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
                      , chunkListView: ChunkListView
@@ -40,26 +24,35 @@ class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
   /**
    * To configure the logformat of the timestamp used in a logfile
    */
-  private val timestampSettingsButton = new TimestampSettingsButton(mutLogFileSettings, chunkListView, logEntries)
+  private val timestampSettingsButton = new TimestampSettingsButton(mutLogFileSettings, chunkListView, logEntries, this)
 
   lowSlider.setValue(lowSlider.getMin)
   highSlider.setValue(highSlider.getMax)
 
   lowSlider.valueProperty.addListener((_, _, newValue) => {
     if (newValue.doubleValue > highSlider.getValue) lowSlider.setValue(highSlider.getValue)
-    TimeOpsToolBar.updateFilteredList(mutLogFileSettings, filteredList, newValue.longValue(), highSlider.getValue.longValue)
+    val lowValue = newValue.longValue()
+    val highValue = highSlider.getValue.longValue
+    mutLogFileSettings.setLowerTimestamp(lowValue)
+    mutLogFileSettings.setUpperTimestamp(highValue)
+    mutLogFileSettings.updateActiveFilter(filteredList)
+    //    TimeOpsToolBar.updateFilteredList(mutLogFileSettings, filteredList, lowValue, highValue)
   })
 
   highSlider.valueProperty.addListener((_, _, newValue) => {
     if (newValue.doubleValue < lowSlider.getValue) highSlider.setValue(lowSlider.getValue)
-    TimeOpsToolBar.updateFilteredList(mutLogFileSettings, filteredList, lowSlider.getValue.longValue, newValue.longValue())
+    val lowValue = lowSlider.getValue.longValue
+    val highValue = newValue.longValue()
+    mutLogFileSettings.setLowerTimestamp(lowValue)
+    mutLogFileSettings.setUpperTimestamp(highValue)
+    mutLogFileSettings.updateActiveFilter(filteredList)
   })
 
   getItems.addAll(Seq(timestampSettingsButton, leftLabel, lowSlider, highSlider, rightLabel): _*)
 
   updateSliderBoundaries()
 
-  private def updateSliderBoundaries(): Unit = {
+  def updateSliderBoundaries(): Unit = {
     TimerSlider.calculateBoundaries(filteredList) match {
       case Some((minInstant, maxInstant)) =>
         lowSlider.setMin(minInstant.toEpochMilli.doubleValue())
@@ -68,7 +61,7 @@ class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
         highSlider.setMax(maxInstant.toEpochMilli.doubleValue())
         lowSlider.setValue(lowSlider.getMin)
         highSlider.setValue(highSlider.getMax)
-        //println("set" + minInstant + "/" + maxInstant)
+        println("set" + minInstant + "/" + maxInstant)
       case None => //println("none")
     }
   }

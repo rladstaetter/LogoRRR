@@ -22,6 +22,8 @@ object LogFileSettings {
   private val DefaultAutoScroll = false
   private val DefaultFirstViewIndex = -1
   private val DefaultLastViewIndex = -1
+  val DefaultLowerTimestamp: Int = 0
+  val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
   private val FinestFilter: Filter = new Filter("FINEST", Color.GREY, true)
   private val InfoFilter: Filter = new Filter("INFO", Color.GREEN, true)
   private val WarningFilter: Filter = new Filter("WARNING", Color.ORANGE, true)
@@ -41,7 +43,9 @@ object LogFileSettings {
       , DefaultLogFormat
       , DefaultAutoScroll
       , DefaultFirstViewIndex
-      , DefaultLastViewIndex)
+      , DefaultLastViewIndex
+      , DefaultLowerTimestamp
+      , Instant.now().toEpochMilli)
   }
 
 }
@@ -62,7 +66,7 @@ object LogFileSettings {
  * @param fontSize                  font size to use
  * @param filters                   filters which should be applied
  * @param blockSettings             settings for the left view
- * @param someTimestampSettings used timestamp format
+ * @param someTimestampSettings     used timestamp format
  * @param autoScroll                true if 'follow mode' is active
  * @param firstVisibleTextCellIndex which index is the first visible on the screen (depending on resolution, window size ...)
  * @param lastVisibleTextCellIndex  which index is the last visible on the screen (depending on resolution, window size ...)
@@ -77,7 +81,9 @@ case class LogFileSettings(fileId: FileId
                            , someTimestampSettings: Option[TimestampSettings]
                            , autoScroll: Boolean
                            , firstVisibleTextCellIndex: Int
-                           , lastVisibleTextCellIndex: Int) {
+                           , lastVisibleTextCellIndex: Int
+                           , lowerTimestamp: Long
+                           , upperTimestamp: Long) {
 
   val path: Path = fileId.asPath.toAbsolutePath
 

@@ -82,7 +82,7 @@ class LogFileTab(val fileId: FileId
 
   private lazy val logTailer = LogTailer(fileId, entries)
 
-  val logFileTabContent = new LogFileTabContent(fileId, mutLogFileSettings, entries)
+  val logFileTabContent = new LogFileTabContent(mutLogFileSettings, entries)
 
   private def startTailer(): Unit = {
     logFileTabContent.addTailerListener()

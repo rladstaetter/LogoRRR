@@ -11,7 +11,7 @@ import scala.util.{Failure, Success, Try}
 
 object TimestampSettings extends CanLog {
 
-  val DefaultPattern = "yyyy-MM-dd HH:mm:ss.nnnnnnnnn"
+  val DefaultPattern = "yyyy-MM-dd HH:mm:ss.SSS"
   /** just my preferred time format */
   val Default: TimestampSettings = TimestampSettings(SimpleRange(1, 24), DefaultPattern)
 

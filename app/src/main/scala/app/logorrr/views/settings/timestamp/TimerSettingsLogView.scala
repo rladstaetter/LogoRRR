@@ -24,7 +24,7 @@ class TimerSettingsLogView(mutLogFileSettings: MutLogFileSettings
   val startColProperty: ObjectProperty[java.lang.Integer] = new SimpleObjectProperty[java.lang.Integer](null)
   val endColProperty: ObjectProperty[java.lang.Integer] = new SimpleObjectProperty[java.lang.Integer](null)
 
-  mutLogFileSettings.getSomeTimestampSettings() match {
+  mutLogFileSettings.getSomeTimestampSettings match {
     case Some(s) =>
       setStartCol(s.startCol)
       setEndCol(s.endCol)

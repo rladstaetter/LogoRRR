@@ -18,7 +18,7 @@ object FilterButton extends UiNodeFilterAware {
 class FilterButton(val fileId: FileId
                    , val filter: Filter
                    , i: Int
-                   , updateActiveFilter: () => Unit
+                   , updateActiveFilter: => Unit
                    , removeFilter: Filter => Unit) extends ToggleButton(filter.pattern) with CanLog {
 
   setId(FilterButton.uiNode(fileId, filter).value)
@@ -33,9 +33,8 @@ class FilterButton(val fileId: FileId
   selectedProperty().addListener(new InvalidationListener {
     // if any of the buttons changes its selected value, reevaluate predicate
     // and thus change contents of all views which display filtered List
-    override def invalidated(observable: Observable): Unit = {
-      updateActiveFilter()
-    }
+    override def invalidated(observable: Observable): Unit = updateActiveFilter
+
   })
 
   def isUnclassified: Boolean = filter.isInstanceOf[UnclassifiedFilter]
