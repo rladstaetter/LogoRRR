@@ -154,7 +154,7 @@ class MainTabPane extends TabPane with CanLog {
   def addFile(fileId: FileId): Unit = {
     val logFileSettings = LogFileSettings(fileId)
     LogoRRRGlobals.registerSettings(logFileSettings)
-    val entries = IoManager.readEntries(logFileSettings.path, logFileSettings.someLogEntryInstantFormat)
+    val entries = IoManager.readEntries(logFileSettings.path, logFileSettings.someTimestampSettings)
     addLogFileTab(LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), entries))
     selectFile(fileId)
   }

@@ -36,16 +36,16 @@ object ChunkListView {
   }
 
   def apply(entries: ObservableList[LogEntry]
-            , settings: MutLogFileSettings
+            , mutLogFileSettings: MutLogFileSettings
             , selectInTextView: LogEntry => Unit
            ): ChunkListView = {
     new ChunkListView(entries
-      , settings.selectedLineNumberProperty
-      , settings.blockSizeProperty
-      , settings.filtersProperty
-      , settings.dividerPositionProperty
-      , settings.firstVisibleTextCellIndexProperty
-      , settings.lastVisibleTextCellIndexProperty
+      , mutLogFileSettings.selectedLineNumberProperty
+      , mutLogFileSettings.blockSizeProperty
+      , mutLogFileSettings.filtersProperty
+      , mutLogFileSettings.dividerPositionProperty
+      , mutLogFileSettings.firstVisibleTextCellIndexProperty
+      , mutLogFileSettings.lastVisibleTextCellIndexProperty
       , selectInTextView)
   }
 }

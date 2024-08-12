@@ -1,6 +1,6 @@
 package app.logorrr.io
 
-import app.logorrr.model.{LogEntry, LogEntryInstantFormat}
+import app.logorrr.model.{LogEntry, TimestampSettings}
 import app.logorrr.util.{CanLog, OsUtil}
 import javafx.collections.{FXCollections, ObservableList}
 
@@ -75,13 +75,13 @@ object IoManager extends CanLog {
     FXCollections.observableList(arraylist)
   }
 
-  def from(logFile: Path, logEntryTimeFormat: LogEntryInstantFormat): ObservableList[LogEntry] = {
+  def from(logFile: Path, logEntryTimeFormat: TimestampSettings): ObservableList[LogEntry] = {
     var lineNumber: Int = 0
     var someFirstEntryTimestamp: Option[Instant] = None
     val arraylist = new util.ArrayList[LogEntry]()
     fromPathUsingSecurityBookmarks(logFile).map(l => {
       lineNumber = lineNumber + 1
-      val someInstant: Option[Instant] = LogEntryInstantFormat.parseInstant(l, logEntryTimeFormat)
+      val someInstant: Option[Instant] = TimestampSettings.parseInstant(l, logEntryTimeFormat)
       if (someFirstEntryTimestamp.isEmpty) {
         someFirstEntryTimestamp = someInstant
       }
@@ -97,7 +97,7 @@ object IoManager extends CanLog {
     FXCollections.observableList(arraylist)
   }
 
-  def readEntries(path: Path, someLogEntryInstantFormat: Option[LogEntryInstantFormat]): ObservableList[LogEntry] = {
+  def readEntries(path: Path, someLogEntryInstantFormat: Option[TimestampSettings]): ObservableList[LogEntry] = {
     if (isPathValid(path)) {
       Try(someLogEntryInstantFormat match {
         case None => IoManager.from(path)

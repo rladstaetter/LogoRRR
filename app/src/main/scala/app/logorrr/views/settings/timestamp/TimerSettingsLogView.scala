@@ -18,13 +18,13 @@ object TimerSettingsLogView {
 
 }
 
-class TimerSettingsLogView(settings: MutLogFileSettings
+class TimerSettingsLogView(mutLogFileSettings: MutLogFileSettings
                            , logEntries: ObservableList[LogEntry]) extends BorderPane {
 
   val startColProperty: ObjectProperty[java.lang.Integer] = new SimpleObjectProperty[java.lang.Integer](null)
   val endColProperty: ObjectProperty[java.lang.Integer] = new SimpleObjectProperty[java.lang.Integer](null)
 
-  settings.someLogEntrySettingsProperty.get() match {
+  mutLogFileSettings.getSomeTimestampSettings() match {
     case Some(s) =>
       setStartCol(s.startCol)
       setEndCol(s.endCol)
@@ -50,7 +50,7 @@ class TimerSettingsLogView(settings: MutLogFileSettings
   def setEndCol(i: Int): Unit = endColProperty.set(i)
 
   class LogEntryListCell extends ListCell[LogEntry] {
-    styleProperty().bind(settings.fontStyleBinding)
+    styleProperty().bind(mutLogFileSettings.fontStyleBinding)
     setGraphic(null)
 
     override def updateItem(t: LogEntry, b: Boolean): Unit = {
@@ -58,7 +58,7 @@ class TimerSettingsLogView(settings: MutLogFileSettings
       Option(t) match {
         case Some(e) =>
           setText(null)
-          setGraphic(TimerSettingsLogViewLabel(settings
+          setGraphic(TimerSettingsLogViewLabel(mutLogFileSettings
             , e
             , maxLength
             , startColProperty

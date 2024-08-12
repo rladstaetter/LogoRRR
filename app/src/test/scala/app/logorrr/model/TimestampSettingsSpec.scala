@@ -1,16 +1,26 @@
 package app.logorrr.model
 
+import app.logorrr.conf.mut.SimpleRangeSpec
 import app.logorrr.views.settings.timestamp.SimpleRange
+import org.scalacheck.Gen
 import org.scalatest.wordspec.AnyWordSpec
 
 import java.time.Instant
 import scala.util.Try
 
-class LogEntryInstantFormatSpec extends AnyWordSpec {
+object TimestampSettingsSpec {
+  val gen: Gen[TimestampSettings] = for {
+    sr <- SimpleRangeSpec.gen
+    dtp <- Gen.const(TimestampSettings.DefaultPattern)
+  } yield TimestampSettings(sr, dtp)
+}
+
+
+class TimestampSettingsSpec extends AnyWordSpec {
 
   "Log Format Tests" should {
     "parse valid timestamp" in {
-      val t: Option[Instant] = LogEntryInstantFormat.parseInstant("2024-08-11 12:38:00", LogEntryInstantFormat(SimpleRange(0, 19), "yyyy-MM-dd HH:mm:ss"))
+      val t: Option[Instant] = TimestampSettings.parseInstant("2024-08-11 12:38:00", TimestampSettings(SimpleRange(0, 19), "yyyy-MM-dd HH:mm:ss"))
       assert(t.isDefined)
       t.foreach(x => println(x.toEpochMilli))
       assert(t.exists(_.toEpochMilli == 1723372680000L))

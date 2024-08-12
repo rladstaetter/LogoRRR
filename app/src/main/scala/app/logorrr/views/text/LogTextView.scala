@@ -36,9 +36,8 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
   })
 
   // when changing font size, repaint
-  private lazy val refreshListener = JfxUtils.onNew[Number](_ => {
-    refresh() // otherwise listview is not repainted correctly since calculation of the cellheight is broken atm
-  })
+  // otherwise listview is not repainted correctly since calculation of the cellheight is broken atm
+  private lazy val refreshListener = JfxUtils.onNew[Number](_ => refresh())
 
   private lazy val scrollBarListener = JfxUtils.onNew[Number](_ => {
     val (first, last) = ListViewHelper.getVisibleRange(this)
@@ -89,7 +88,6 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
 
     getSelectionModel.selectedItemProperty().addListener(selectedLineNumberListener)
     mutLogFileSettings.fontSizeProperty.addListener(refreshListener)
-
 
     skinProperty.addListener(skinListener)
 

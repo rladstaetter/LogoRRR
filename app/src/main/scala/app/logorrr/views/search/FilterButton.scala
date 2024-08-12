@@ -29,7 +29,6 @@ class FilterButton(val fileId: FileId
     setGraphic(new RemoveFilterbutton(fileId, filter, removeFilter))
   }
   setSelected(filter.active)
-//  logTrace(s"Fb: ${fileId.fileName} / ${filter.pattern}: setting selected to ${filter.active}")
 
   selectedProperty().addListener(new InvalidationListener {
     // if any of the buttons changes its selected value, reevaluate predicate
@@ -38,14 +37,7 @@ class FilterButton(val fileId: FileId
       updateActiveFilter()
     }
   })
-/*
-  selectedProperty().addListener(new ChangeListener[lang.Boolean] {
-    override def changed(observableValue: ObservableValue[_ <: lang.Boolean], t: lang.Boolean, t1: lang.Boolean): Unit = {
-      val msg = s"Fb: ${fileId.fileName} / ${filter.pattern} Change from ${t} to ${t1}"
-      logTrace(msg)
-    }
-  })
-*/
+
   def isUnclassified: Boolean = filter.isInstanceOf[UnclassifiedFilter]
 
 }

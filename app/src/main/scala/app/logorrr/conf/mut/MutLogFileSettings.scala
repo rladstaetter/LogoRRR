@@ -2,13 +2,14 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.BlockSettings
 import app.logorrr.io.FileId
-import app.logorrr.model.{LogEntryInstantFormat, LogFileSettings}
+import app.logorrr.model.{LogFileSettings, TimestampSettings}
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.search.Filter
 import javafx.beans.binding.{BooleanBinding, StringBinding}
 import javafx.beans.property._
-import javafx.collections.FXCollections
+import javafx.collections.{FXCollections, ObservableList}
 
+import java.time.format.DateTimeFormatter
 import scala.jdk.CollectionConverters._
 
 object MutLogFileSettings {
@@ -22,7 +23,11 @@ object MutLogFileSettings {
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
     s.setDividerPosition(logFileSettings.dividerPosition)
     s.setFilters(logFileSettings.filters)
-    s.someLogEntrySettingsProperty.set(logFileSettings.someLogEntryInstantFormat)
+    s.someTimestampSettings.set(logFileSettings.someTimestampSettings)
+    logFileSettings.someTimestampSettings match {
+      case Some(sts) => s.setDateTimeFormatter(sts.dateTimeFormatter)
+      case None =>
+    }
     s.setAutoScroll(logFileSettings.autoScroll)
     s
   }
@@ -33,26 +38,36 @@ class MutLogFileSettings {
 
   private val fileIdProperty = new SimpleObjectProperty[FileId]()
   private val firstOpenedProperty = new SimpleLongProperty()
+  private val someTimestampSettings = new SimpleObjectProperty[Option[TimestampSettings]](None)
+  private val dateTimeFormatterProperty = new SimpleObjectProperty[DateTimeFormatter](TimestampSettings.Default.dateTimeFormatter)
+
+  val fontSizeProperty = new SimpleIntegerProperty()
+  val blockSizeProperty = new SimpleIntegerProperty()
   val selectedLineNumberProperty = new SimpleIntegerProperty()
   val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty()
   val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
   val dividerPositionProperty = new SimpleDoubleProperty()
-  val fontSizeProperty = new SimpleIntegerProperty()
-
   val autoScrollActiveProperty = new SimpleBooleanProperty()
   val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList())
-  val someLogEntrySettingsProperty = new SimpleObjectProperty[Option[LogEntryInstantFormat]](None)
-  val blockSizeProperty = new SimpleIntegerProperty()
+
+  def getSomeTimestampSettings(): Option[TimestampSettings] = someTimestampSettings.get()
+
+  def getDateTimeFormatter(): DateTimeFormatter = dateTimeFormatterProperty.get()
+
+  def setDateTimeFormatter(dateTimeFormatter: DateTimeFormatter): Unit = dateTimeFormatterProperty.set(dateTimeFormatter)
 
   def setFilters(filters: Seq[Filter]): Unit = {
     filtersProperty.setAll(filters.asJava)
   }
 
+  def getFilters(): ObservableList[Filter] = filtersProperty.get()
+
+
   val hasLogEntrySettingBinding: BooleanBinding = new BooleanBinding {
-    bind(someLogEntrySettingsProperty)
+    bind(someTimestampSettings)
 
     override def computeValue(): Boolean = {
-      Option(someLogEntrySettingsProperty.get()).exists(_.isDefined)
+      Option(someTimestampSettings.get()).exists(_.isDefined)
     }
   }
 
@@ -66,8 +81,12 @@ class MutLogFileSettings {
     override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
   }
 
-  def setLogEntryInstantFormat(someLef: Option[LogEntryInstantFormat]): Unit = {
-    someLogEntrySettingsProperty.set(someLef)
+  def setSomeLogEntryInstantFormat(someLef: Option[TimestampSettings]): Unit = {
+    someTimestampSettings.set(someLef)
+    someLef match {
+      case Some(value) => setDateTimeFormatter(value.dateTimeFormatter)
+      case None => setDateTimeFormatter(null)
+    }
   }
 
   def setAutoScroll(autoScroll: Boolean): Unit = autoScrollActiveProperty.set(autoScroll)
@@ -101,9 +120,9 @@ class MutLogFileSettings {
         , firstOpenedProperty.get()
         , dividerPositionProperty.get()
         , fontSizeProperty.get()
-        , filtersProperty.get().asScala.toSeq
+        , getFilters().asScala.toSeq
         , BlockSettings(blockSizeProperty.get())
-        , someLogEntrySettingsProperty.get()
+        , someTimestampSettings.get()
         , autoScrollActiveProperty.get()
         , firstVisibleTextCellIndexProperty.get()
         , lastVisibleTextCellIndexProperty.get())

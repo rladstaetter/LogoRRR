@@ -9,14 +9,14 @@ import java.time._
 import java.time.format.DateTimeFormatter
 import scala.util.{Failure, Success, Try}
 
-object LogEntryInstantFormat extends CanLog {
+object TimestampSettings extends CanLog {
 
   val DefaultPattern = "yyyy-MM-dd HH:mm:ss.nnnnnnnnn"
   /** just my preferred time format */
-  val Default: LogEntryInstantFormat = LogEntryInstantFormat(SimpleRange(1, 24), DefaultPattern)
+  val Default: TimestampSettings = TimestampSettings(SimpleRange(1, 24), DefaultPattern)
 
-  implicit lazy val reader: ConfigReader[LogEntryInstantFormat] = deriveReader[LogEntryInstantFormat]
-  implicit lazy val writer: ConfigWriter[LogEntryInstantFormat] = deriveWriter[LogEntryInstantFormat]
+  implicit lazy val reader: ConfigReader[TimestampSettings] = deriveReader[TimestampSettings]
+  implicit lazy val writer: ConfigWriter[TimestampSettings] = deriveWriter[TimestampSettings]
 
   /**
    * Assumes that line contains a timestamp which encodes year/month/day hour/minute/second ... which hits
@@ -26,7 +26,7 @@ object LogEntryInstantFormat extends CanLog {
    * @param leif settings where to parse the timestamp, and in which format
    * @return
    */
-  def parseInstant(line: String, leif: LogEntryInstantFormat): Option[Instant] =
+  def parseInstant(line: String, leif: TimestampSettings): Option[Instant] =
     if (line.length >= leif.endCol) {
       val dateTimeAsString = line.substring(leif.startCol, leif.endCol)
       val dtf: DateTimeFormatter = leif.dateTimeFormatter
@@ -53,7 +53,7 @@ object LogEntryInstantFormat extends CanLog {
 
 }
 
-case class LogEntryInstantFormat(range: SimpleRange, dateTimePattern: String) {
+case class TimestampSettings(range: SimpleRange, dateTimePattern: String) {
   val startCol: Int = range.start
   val endCol: Int = range.end
   val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(dateTimePattern).withZone(ZoneId.systemDefault)

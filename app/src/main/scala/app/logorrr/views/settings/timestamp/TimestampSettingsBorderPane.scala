@@ -2,7 +2,7 @@ package app.logorrr.views.settings.timestamp
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.model.{LogEntry, LogEntryInstantFormat}
+import app.logorrr.model.{LogEntry, TimestampSettings}
 import app.logorrr.util.{CanLog, HLink}
 import app.logorrr.views.UiNodes
 import app.logorrr.views.block.ChunkListView
@@ -39,10 +39,11 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
                                   , chunkListView: ChunkListView
                                   , closeStage: => Unit)
   extends BorderPane with CanLog {
+
   /*
    * those properties exist since it is easier to use from the call sites.
    **/
-  private val (startColProperty, endColProperty) = settings.someLogEntrySettingsProperty.get() match {
+  private val (startColProperty, endColProperty) = settings.getSomeTimestampSettings() match {
     case Some(value) => (new SimpleObjectProperty[java.lang.Integer](value.startCol), new SimpleObjectProperty[java.lang.Integer](value.endCol))
     case None => (new SimpleObjectProperty[java.lang.Integer](), new SimpleObjectProperty[java.lang.Integer]())
   }
@@ -50,7 +51,7 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
   private val resetButton = {
     val b = new Button("reset")
     b.setOnAction(_ => {
-      settings.setLogEntryInstantFormat(None)
+      settings.setSomeLogEntryInstantFormat(None)
       LogoRRRGlobals.persist()
       // we have to deactivate this listener otherwise
       chunkListView.removeInvalidationListener()
@@ -74,8 +75,8 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
     val b = new Button("set format")
 
     b.setOnAction(_ => {
-      val leif: LogEntryInstantFormat = LogEntryInstantFormat(SimpleRange(getStartCol, getEndCol), timeFormatTf.getText.trim)
-      settings.setLogEntryInstantFormat(Option(leif))
+      val leif: TimestampSettings = TimestampSettings(SimpleRange(getStartCol, getEndCol), timeFormatTf.getText.trim)
+      settings.setSomeLogEntryInstantFormat(Option(leif))
       LogoRRRGlobals.persist()
       // we have to deactivate this listener otherwise
       chunkListView.removeInvalidationListener()
@@ -84,7 +85,7 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
       val tempList = new util.ArrayList[LogEntry]()
       for (i <- 0 until logEntries.size()) {
         val e = logEntries.get(i)
-        val someInstant = LogEntryInstantFormat.parseInstant(e.value, leif)
+        val someInstant = TimestampSettings.parseInstant(e.value, leif)
         if (someFirstEntryTimestamp.isEmpty) {
           someFirstEntryTimestamp = someInstant
         }
@@ -95,7 +96,6 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
         } yield Duration.between(firstEntry, instant)
 
         tempList.add(e.copy(someInstant = someInstant, someDurationSinceFirstInstant = diffFromStart))
- //       logEntries.set(i, e.copy(someInstant = someInstant, someDurationSinceFirstInstant = diffFromStart))
       }
       logEntries.setAll(tempList)
       // activate listener again
@@ -128,7 +128,7 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
     l
   }
 
-  private val (timeFormatLabel, timeFormatTf) = TimestampSettingsBorderPane.mkTf("time format", Option("<enter time format>"), Option(LogEntryInstantFormat.DefaultPattern), 30)
+  private val (timeFormatLabel, timeFormatTf) = TimestampSettingsBorderPane.mkTf("time format", Option("<enter time format>"), Option(TimestampSettings.DefaultPattern), 30)
 
   private val timerSettingsLogTextView = {
     val tslv = new TimerSettingsLogView(settings, logEntries)
@@ -142,6 +142,18 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
 
   init()
 
+
+  def init(): Unit = {
+    settings.getSomeTimestampSettings() match {
+      case Some(s) => timeFormatTf.setText(s.dateTimePattern)
+      case None => logTrace("No time setting found ... ")
+    }
+
+    setCenter(timerSettingsLogTextView)
+    setBottom(timeFormatBar)
+
+  }
+
   def setStartCol(startCol: Int): Unit = startColProperty.set(startCol)
 
   def setEndCol(endCol: Int): Unit = endColProperty.set(endCol)
@@ -150,17 +162,4 @@ class TimestampSettingsBorderPane(settings: MutLogFileSettings
 
   def getEndCol: java.lang.Integer = endColProperty.get()
 
-
-  def init(): Unit = {
-    settings.someLogEntrySettingsProperty.get() match {
-      case Some(s) =>
-        timeFormatTf.setText(s.dateTimePattern)
-      case None =>
-        logTrace("No time setting found ... ")
-    }
-
-    setCenter(timerSettingsLogTextView)
-    setBottom(timeFormatBar)
-
-  }
 }
