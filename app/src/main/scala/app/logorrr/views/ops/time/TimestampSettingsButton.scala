@@ -37,7 +37,7 @@ class TimestampSettingsButton(settings: MutLogFileSettings
         |""".stripMargin)
     btn.setGraphic(new FontIcon(FontAwesomeRegular.CLOCK))
     btn.setTooltip(new Tooltip("configure time format"))
-    btn.setOnAction(_ => new TimestampSettingStage(settings, chunkListView, logEntries, timeOpsToolBar).showAndWait())
+    btn.setOnAction(_ => new TimestampSettingStage(getScene.getWindow, settings, chunkListView, logEntries, timeOpsToolBar).showAndWait())
     btn
   }
 

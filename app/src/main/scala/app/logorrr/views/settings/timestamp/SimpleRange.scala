@@ -11,5 +11,5 @@ object SimpleRange {
 }
 
 case class SimpleRange(start: Int, end: Int) {
-  require(start <= end)
+  require(start <= end, s"Expected start <= end, but was $start <= $end")
 }

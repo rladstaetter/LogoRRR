@@ -12,7 +12,9 @@ import scala.util.{Failure, Success, Try}
 object TimestampSettings extends CanLog {
 
   val DefaultPattern = "yyyy-MM-dd HH:mm:ss.SSS"
-  /** just my preferred time format */
+
+  val DefaultFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(DefaultPattern)
+
   val Default: TimestampSettings = TimestampSettings(SimpleRange(1, 24), DefaultPattern)
 
   implicit lazy val reader: ConfigReader[TimestampSettings] = deriveReader[TimestampSettings]
@@ -56,5 +58,8 @@ object TimestampSettings extends CanLog {
 case class TimestampSettings(range: SimpleRange, dateTimePattern: String) {
   val startCol: Int = range.start
   val endCol: Int = range.end
-  val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(dateTimePattern).withZone(ZoneId.systemDefault)
+  val dateTimeFormatter: DateTimeFormatter = {
+    // if we can't parse the provided pattern, fallback to default - even if we can't parse timestamps then
+    Try(DateTimeFormatter.ofPattern(dateTimePattern).withZone(ZoneId.systemDefault)).toOption.getOrElse(TimestampSettings.DefaultFormatter)
+  }
 }

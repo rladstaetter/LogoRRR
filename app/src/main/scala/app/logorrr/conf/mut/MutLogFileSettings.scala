@@ -73,7 +73,7 @@ class MutLogFileSettings {
   private val fileIdProperty = new SimpleObjectProperty[FileId]()
   private val firstOpenedProperty = new SimpleLongProperty()
   private val someTimestampSettings = new SimpleObjectProperty[Option[TimestampSettings]](None)
-  private val dateTimeFormatterProperty = new SimpleObjectProperty[DateTimeFormatter](TimestampSettings.Default.dateTimeFormatter)
+  private val dateTimeFormatterProperty = new SimpleObjectProperty[DateTimeFormatter](TimestampSettings.DefaultFormatter)
 
   val fontSizeProperty = new SimpleIntegerProperty()
   val blockSizeProperty = new SimpleIntegerProperty()
