@@ -2,7 +2,7 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.CoreGen
 import app.logorrr.io.FileId
-import app.logorrr.model.LogFileSettings
+import app.logorrr.model.{LogFileSettings, TimestampSettingsSpec}
 import org.scalacheck.Gen
 
 
@@ -14,7 +14,7 @@ object LogFileSettingsSpec {
     firstOpened <- Gen.posNum[Long]
     dPos <- Gen.posNum[Double]
     filters <- Gen.listOf(FilterSpec.gen)
-    leif <- LogEntryInstantFormatSpec.gen
+    leif <- TimestampSettingsSpec.gen
     someLogEntryInstantFormat <- Gen.oneOf(None, Option(leif))
     blockSettings <- BlockSettingsSpec.gen
     fontSize <- Gen.posNum[Int]
@@ -29,5 +29,7 @@ object LogFileSettingsSpec {
     , someLogEntryInstantFormat
     , autoScroll
     , 0
-    , 10)
+    , 10
+    , LogFileSettings.DefaultLowerTimestamp
+    , LogFileSettings.DefaultUpperTimestamp)
 }

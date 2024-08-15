@@ -213,11 +213,13 @@ case class LPixelBuffer(blockNumber: Int
     updateBuffer((_: PixelBuffer[IntBuffer]) => {
       cleanBackground()
       var i = 0
-      entries.forEach(e => {
-        val color = Filter.calcColor(e.value, filters)
-        paintBlock(i, e.lineNumber, color)
-        i = i + 1
-      })
+      if (!entries.isEmpty) {
+        entries.forEach(e => {
+          val color = Filter.calcColor(e.value, filters)
+          paintBlock(i, e.lineNumber, color)
+          i = i + 1
+        })
+      }
       shape
     })
   }

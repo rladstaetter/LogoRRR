@@ -17,8 +17,6 @@ import javafx.scene.input.{KeyCode, KeyEvent}
 
 object OpsToolBar {
 
-
-
   /** increment / decrement font size */
   val fontSizeStep: Int = 1
 
@@ -63,9 +61,6 @@ class OpsToolBar(fileId: FileId
 
   private val copySelectionButton = new CopyLogButton(fileId, filteredList)
 
-  //  val firstNEntries: ObservableList[LogEntry] = TimerSettingsLogView.mkEntriesToShow(logEntries)
-
-  //  val timerButton = new TimerButton(fileId, firstNEntries)
 
   def execSearchOnHitEnter(event: KeyEvent): Unit = {
     if (event.getCode == KeyCode.ENTER) {

@@ -1,10 +1,10 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.OpsRegion
+import app.logorrr.views.ops.time.TimeOpsToolBar
 import app.logorrr.views.search.{Filter, FiltersToolBar, OpsToolBar}
 import app.logorrr.views.text.LogTextView
 import javafx.beans.{InvalidationListener, Observable}
@@ -14,8 +14,7 @@ import javafx.scene.control.SplitPane
 import javafx.scene.layout.{BorderPane, VBox}
 
 
-class LogFileTabContent(fileId: FileId
-                        , mutLogFileSettings: MutLogFileSettings
+class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
                         , val entries: ObservableList[LogEntry]) extends BorderPane {
 
   // make sure we have a white background for our tabs - see https://github.com/rladstaetter/LogoRRR/issues/188
@@ -30,13 +29,11 @@ class LogFileTabContent(fileId: FileId
   // graphical display to the left
   private val chunkListView = ChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem)
 
-
   private val blockSizeSlider = {
     val bs = new BlockSizeSlider(mutLogFileSettings.getFileId)
     bs.valueProperty().bindBidirectional(mutLogFileSettings.blockSizeProperty)
     bs
   }
-
 
   private val blockPane = {
     val bBp = new BorderPane(chunkListView, blockSizeSlider, null, null, null)
@@ -58,15 +55,22 @@ class LogFileTabContent(fileId: FileId
 
   def removeTailerListener(): Unit = filteredList.removeListener(scrollToEndEventListener)
 
-  val opsToolBar = new OpsToolBar(mutLogFileSettings.getFileId, addFilter, entries, filteredList, mutLogFileSettings.blockSizeProperty)
+  val opsToolBar = new OpsToolBar(mutLogFileSettings.getFileId
+    , addFilter
+    , entries
+    , filteredList
+    , mutLogFileSettings.blockSizeProperty)
 
   private val filtersToolBar = {
-    val fbtb = new FiltersToolBar(fileId, filteredList, removeFilter)
+    val fbtb = new FiltersToolBar(mutLogFileSettings, filteredList, removeFilter)
     fbtb.filtersProperty.bind(mutLogFileSettings.filtersProperty)
     fbtb
   }
-
-  private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, filtersToolBar)
+  val timeOpsToolBar = new TimeOpsToolBar(mutLogFileSettings
+    , chunkListView
+    , entries // we write on this list potentially
+    , filteredList)
+  private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, filtersToolBar, timeOpsToolBar)
 
   private val pane = new SplitPane(blockPane, logTextView)
 

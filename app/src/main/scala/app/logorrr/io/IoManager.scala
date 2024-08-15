@@ -1,11 +1,12 @@
 package app.logorrr.io
 
-import app.logorrr.model.{LogEntry, LogEntryInstantFormat}
+import app.logorrr.model.{LogEntry, TimestampSettings}
 import app.logorrr.util.{CanLog, OsUtil}
 import javafx.collections.{FXCollections, ObservableList}
 
 import java.io._
 import java.nio.file.{Files, Path}
+import java.time.{Duration, Instant}
 import java.util
 import java.util.zip.{ZipEntry, ZipInputStream}
 import scala.util.{Failure, Success, Try}
@@ -58,7 +59,7 @@ object IoManager extends CanLog {
     val arraylist = new java.util.ArrayList[LogEntry]()
     toSeq(mkReader(asBytes)).map(l => {
       lineNumber = lineNumber + 1
-      arraylist.add(LogEntry(lineNumber, l, None))
+      arraylist.add(LogEntry(lineNumber, l, None, None))
     })
     FXCollections.observableList(arraylist)
 
@@ -69,22 +70,34 @@ object IoManager extends CanLog {
     val arraylist = new java.util.ArrayList[LogEntry]()
     fromPathUsingSecurityBookmarks(logFile).map(l => {
       lineNumber = lineNumber + 1
-      arraylist.add(LogEntry(lineNumber, l, None))
+      arraylist.add(LogEntry(lineNumber, l, None, None))
     })
     FXCollections.observableList(arraylist)
   }
 
-  def from(logFile: Path, logEntryTimeFormat: LogEntryInstantFormat): ObservableList[LogEntry] = {
+  def from(logFile: Path, logEntryTimeFormat: TimestampSettings): ObservableList[LogEntry] = {
     var lineNumber: Int = 0
+    var someFirstEntryTimestamp: Option[Instant] = None
     val arraylist = new util.ArrayList[LogEntry]()
     fromPathUsingSecurityBookmarks(logFile).map(l => {
       lineNumber = lineNumber + 1
-      arraylist.add(LogEntry(lineNumber, l, LogEntryInstantFormat.parseInstant(l, logEntryTimeFormat)))
+      val someInstant: Option[Instant] = TimestampSettings.parseInstant(l, logEntryTimeFormat)
+      if (someFirstEntryTimestamp.isEmpty) {
+        someFirstEntryTimestamp = someInstant
+      }
+
+      val diffFromStart: Option[Duration] = for {
+        firstEntry <- someFirstEntryTimestamp
+        instant <- someInstant
+      } yield Duration.between(firstEntry, instant)
+
+      // first entry
+      arraylist.add(LogEntry(lineNumber, l, someInstant, diffFromStart))
     })
     FXCollections.observableList(arraylist)
   }
 
-  def readEntries(path : Path, someLogEntryInstantFormat: Option[LogEntryInstantFormat]): ObservableList[LogEntry] = {
+  def readEntries(path: Path, someLogEntryInstantFormat: Option[TimestampSettings]): ObservableList[LogEntry] = {
     if (isPathValid(path)) {
       Try(someLogEntryInstantFormat match {
         case None => IoManager.from(path)
@@ -102,7 +115,7 @@ object IoManager extends CanLog {
     }
   }
 
-  def isPathValid(path : Path): Boolean =
+  def isPathValid(path: Path): Boolean =
     if (OsUtil.isMac) {
       Files.exists(path)
     } else {
@@ -143,7 +156,6 @@ object IoManager extends CanLog {
   }
 
 
-
-  def isZip(path : Path) : Boolean = path.getFileName.toString.endsWith(".zip")
+  def isZip(path: Path): Boolean = path.getFileName.toString.endsWith(".zip")
 
 }

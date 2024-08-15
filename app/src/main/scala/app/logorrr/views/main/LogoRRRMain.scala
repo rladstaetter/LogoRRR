@@ -82,7 +82,7 @@ class LogoRRRMain(closeStage: => Unit
 
       val fileBasedSettings: Seq[Future[Option[LogFileTab]]] = fileSettings.map(lfs => Future {
         timeR({
-          val entries = IoManager.readEntries(lfs.path, lfs.someLogEntryInstantFormat)
+          val entries = IoManager.readEntries(lfs.path, lfs.someTimestampSettings)
           Option(LogFileTab(LogoRRRGlobals.getLogFileSettings(lfs.fileId), entries))
         }, s"Loaded '${lfs.fileId.absolutePathAsString}' from filesystem ...")
       })

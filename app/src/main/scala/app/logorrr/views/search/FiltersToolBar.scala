@@ -1,6 +1,6 @@
 package app.logorrr.views.search
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
 import javafx.beans.property.SimpleListProperty
@@ -28,13 +28,9 @@ object FiltersToolBar {
  *
  * @param filteredList list of entries which are displayed (can be filtered via buttons)
  */
-class FiltersToolBar(fileId: FileId
+class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
                      , filteredList: FilteredList[LogEntry]
                      , removeFilter: Filter => Unit) extends ToolBar {
-
-  var filterButtons: Map[Filter, FilterButton] = Map[Filter, FilterButton]()
-
-  var someUnclassifiedFilter: Option[(Filter, FilterButton)] = None
 
   var occurrences: Map[Filter, Int] = Map().withDefaultValue(0)
 
@@ -67,28 +63,28 @@ class FiltersToolBar(fileId: FileId
   }
 
   private def updateUnclassified(): Unit = {
-    val unclassified = UnclassifiedFilter(filterButtons.keySet)
+    val unclassified = UnclassifiedFilter(mutLogFileSettings.filterButtons.keySet)
     updateOccurrences(unclassified)
-    val filterButton = new FilterButton(fileId, unclassified, occurrences(unclassified), updateActiveFilter, removeFilter)
-    someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
+    val filterButton = new FilterButton(mutLogFileSettings.getFileId, unclassified, occurrences(unclassified), mutLogFileSettings.updateActiveFilter(filteredList), removeFilter)
+    mutLogFileSettings.someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
     getItems.add(0, filterButton)
-    someUnclassifiedFilter = Option((unclassified, filterButton))
-    updateActiveFilter()
+    mutLogFileSettings.someUnclassifiedFilter = Option((unclassified, filterButton))
+    mutLogFileSettings.updateActiveFilter(filteredList)
   }
 
   private def addFilterButton(filter: Filter): Unit = {
     updateOccurrences(filter)
-    val filterButton = new FilterButton(fileId, filter, occurrences(filter), updateActiveFilter, removeFilter)
+    val filterButton = new FilterButton(mutLogFileSettings.getFileId, filter, occurrences(filter), mutLogFileSettings.updateActiveFilter(filteredList), removeFilter)
     filter.bind(filterButton)
     getItems.add(filterButton)
-    filterButtons = filterButtons.updated(filter, filterButton)
+    mutLogFileSettings.filterButtons = mutLogFileSettings.filterButtons.updated(filter, filterButton)
   }
 
   private def removeFilterButton(filter: Filter): Unit = {
-    val button = filterButtons(filter)
+    val button = mutLogFileSettings.filterButtons(filter)
     filter.unbind()
     getItems.remove(button)
-    filterButtons = filterButtons.removed(filter)
+    mutLogFileSettings.filterButtons = mutLogFileSettings.filterButtons.removed(filter)
   }
 
   def activeFilters(): Seq[Filter] = {
@@ -100,22 +96,6 @@ class FiltersToolBar(fileId: FileId
         Option(st.filter.withActive())
       }
     }).flatten.toSeq
-  }
-
-  /**
-   * Filters are only active if selected.
-   *
-   * UnclassifiedFilter gets an extra handling since it depends on other filters
-   *
-   * @return
-   */
-  def computeCurrentFilter(): Fltr = {
-    new AnyFilter(someUnclassifiedFilter.map(fst => if (fst._2.isSelected) Set(fst._1) else Set()).getOrElse(Set()) ++
-      filterButtons.filter(fst => fst._2.isSelected).keySet)
-  }
-
-  def updateActiveFilter(): Unit = {
-    filteredList.setPredicate((entry: LogEntry) => computeCurrentFilter().matches(entry.value))
   }
 
 

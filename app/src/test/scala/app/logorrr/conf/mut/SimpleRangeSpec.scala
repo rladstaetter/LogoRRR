@@ -1,6 +1,6 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.views.settings.timer.SimpleRange
+import app.logorrr.views.settings.timestamp.SimpleRange
 import org.scalacheck.Gen
 
 import scala.util.Random

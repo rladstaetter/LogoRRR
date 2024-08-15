@@ -107,6 +107,8 @@ class MainTabPane extends TabPane with CanLog {
     getLogFileTabs.exists(lr => lr.fileId == p)
   }
 
+  def getByFileId(fileId: FileId): Option[LogFileTab] = getLogFileTabs.find(_.fileId == fileId)
+
   def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
     _ match {
       case l: LogFileTab => Option(l)
@@ -152,7 +154,7 @@ class MainTabPane extends TabPane with CanLog {
   def addFile(fileId: FileId): Unit = {
     val logFileSettings = LogFileSettings(fileId)
     LogoRRRGlobals.registerSettings(logFileSettings)
-    val entries = IoManager.readEntries(logFileSettings.path, logFileSettings.someLogEntryInstantFormat)
+    val entries = IoManager.readEntries(logFileSettings.path, logFileSettings.someTimestampSettings)
     addLogFileTab(LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), entries))
     selectFile(fileId)
   }

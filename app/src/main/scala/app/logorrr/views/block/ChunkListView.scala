@@ -36,16 +36,16 @@ object ChunkListView {
   }
 
   def apply(entries: ObservableList[LogEntry]
-            , settings: MutLogFileSettings
+            , mutLogFileSettings: MutLogFileSettings
             , selectInTextView: LogEntry => Unit
            ): ChunkListView = {
     new ChunkListView(entries
-      , settings.selectedLineNumberProperty
-      , settings.blockSizeProperty
-      , settings.filtersProperty
-      , settings.dividerPositionProperty
-      , settings.firstVisibleTextCellIndexProperty
-      , settings.lastVisibleTextCellIndexProperty
+      , mutLogFileSettings.selectedLineNumberProperty
+      , mutLogFileSettings.blockSizeProperty
+      , mutLogFileSettings.filtersProperty
+      , mutLogFileSettings.dividerPositionProperty
+      , mutLogFileSettings.firstVisibleTextCellIndexProperty
+      , mutLogFileSettings.lastVisibleTextCellIndexProperty
       , selectInTextView)
   }
 }
@@ -174,8 +174,13 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
     }
   }
 
+  /** invalidation listener has to be disabled when manipulating log entries (needed for setting the timestamp for example) */
+  def addInvalidationListener(): Unit = logEntries.addListener(logEntriesInvalidationListener)
+
+  def removeInvalidationListener(): Unit = logEntries.removeListener(logEntriesInvalidationListener)
+
   private def addListeners(): Unit = {
-    logEntries.addListener(logEntriesInvalidationListener)
+    addInvalidationListener()
     selectedLineNumberProperty.addListener(selectedRp)
     firstVisibleTextCellIndexProperty.addListener(firstVisibleRp)
     lastVisibleTextCellIndexProperty.addListener(lastVisibleRp)
@@ -183,14 +188,11 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
     widthProperty().addListener(widthRp)
     heightProperty().addListener(heightRp)
     skinProperty().addListener(chunkListViewSkinListener)
-
-
   }
 
 
   def removeListeners(): Unit = {
-    logEntries.removeListener(logEntriesInvalidationListener)
-
+    removeInvalidationListener()
     selectedLineNumberProperty.removeListener(selectedRp)
     firstVisibleTextCellIndexProperty.removeListener(firstVisibleRp)
     lastVisibleTextCellIndexProperty.removeListener(lastVisibleRp)
