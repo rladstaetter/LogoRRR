@@ -25,6 +25,7 @@ class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
    * To configure the logformat of the timestamp used in a logfile
    */
   private val timestampSettingsButton = new TimestampSettingsButton(mutLogFileSettings, chunkListView, logEntries, this)
+//   private val replayButton = new ReplayButton(lowSlider, highSlider)
 
   lowSlider.setValue(lowSlider.getMin)
   highSlider.setValue(highSlider.getMax)
