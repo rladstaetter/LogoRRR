@@ -1,59 +1,55 @@
 package app.logorrr.views.ops.time
 
+import app.logorrr.model.LogEntry
 import javafx.animation.{Animation, KeyFrame, Timeline}
+import javafx.collections.ObservableList
 import javafx.event.ActionEvent
 import javafx.scene.control.{Button, Tooltip}
-import javafx.scene.layout.StackPane
-import javafx.util.Duration
 import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
+import scala.collection.mutable.ListBuffer
 
-class ReplayButton(lowerSlider: TimerSlider
-                   , upperSlider: TimerSlider) extends StackPane {
 
-lowerSlider == lowerSlider
-  private def kf(increment:Double)  = new KeyFrame(Duration.seconds(1), (_: ActionEvent) => {
-    if (upperSlider.getValue() < upperSlider.getMax()) {
-      val value: Double = upperSlider.getValue() + increment
-      println(value)
-      upperSlider.setValue(value);
-    }
-  })
+class ReplayButton(filteredList: ObservableList[LogEntry]
+                   , lowerSlider: TimerSlider
+                   , upperSlider: TimerSlider) extends Button {
+
+  var timeline: Timeline = _
 
   // since timerbutton is a stackpane, this css commands are necessary to have the same effect as
   // defined in primer-light.css
-  val button: Button = {
-    val btn = new Button()
-    btn.setBackground(null)
-    btn.setStyle(
-      """
-        |-color-button-bg: -color-bg-subtle;
-        |-fx-background-insets: 0;
-        |""".stripMargin)
-    btn.setGraphic(new FontIcon(FontAwesomeRegular.PLAY_CIRCLE))
-    btn.setTooltip(new Tooltip("replay log"))
-    btn.setOnAction(_ => {
-      // lowerSlider.setValue(lowerSlider.getMin)
-      // upperSlider.setValue(upperSlider.getMin)
-      val increment = (upperSlider.getMax - upperSlider.getMin) / 60
-      val timeline = new Timeline(kf(increment));
-      timeline.setCycleCount(Animation.INDEFINITE)
-      timeline.play()
+  setGraphic(new FontIcon(FontAwesomeRegular.PLAY_CIRCLE))
+  setTooltip(new Tooltip("replay log"))
+  setOnAction(_ => {
+    lowerSlider.setValue(lowerSlider.getMin)
+    upperSlider.setValue(upperSlider.getMin)
+    Option(timeline) match {
+      case Some(tl) => tl.stop()
+      case None =>
+    }
+    val frames = mkFrames()
+    timeline = new Timeline(frames.toList: _*)
+    timeline.setCycleCount(Animation.INDEFINITE)
+    timeline.play()
+  })
+
+  def stopTimer(): Unit = Option(timeline).foreach(_.stop())
+  def mkFrames(): ListBuffer[KeyFrame] = {
+    val keyFrames = new ListBuffer[KeyFrame]
+    filteredList.forEach((t: LogEntry) => {
+      t.someJfxDuration match {
+        case Some(duration) =>
+          val kf = new KeyFrame(duration, (_: ActionEvent) => {
+            if (upperSlider.getValue < upperSlider.getMax) {
+              upperSlider.setValue(upperSlider.getMin + duration.toMillis)
+            }
+          })
+          keyFrames.addOne(kf)
+        case None =>
+      }
     })
-    btn
+    keyFrames
   }
-
-  private val fontIcon = {
-    val icon = new FontIcon()
-    icon.setStyle("-fx-icon-code:fas-exclamation-circle;-fx-icon-color:rgba(255, 0, 0, 1);-fx-icon-size:8;")
-    icon.setTranslateX(10)
-    icon.setTranslateY(-10)
-
-    /** red exclamation mark is only visible if there is no timestamp setting for a given log file */
-    icon
-  }
-
-  getChildren.addAll(button, fontIcon)
-
 }
+

@@ -52,6 +52,6 @@ class TimerSlider(hasLogEntrySettingsBinding: BooleanBinding, tooltipText: Strin
   visibleProperty().bind(hasLogEntrySettingsBinding)
   disableProperty().bind(hasLogEntrySettingsBinding.not)
   setTooltip(new Tooltip(tooltipText))
-  setPrefWidth(500)
+  setPrefWidth(400)
 
 }
