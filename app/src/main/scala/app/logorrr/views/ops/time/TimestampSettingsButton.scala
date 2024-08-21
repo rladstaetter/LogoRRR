@@ -48,7 +48,7 @@ class TimestampSettingsButton(settings: MutLogFileSettings
     icon.setTranslateY(-10)
 
     /** red exclamation mark is only visible if there is no timestamp setting for a given log file */
-    icon.visibleProperty().bind(settings.hasLogEntrySettingBinding.not())
+    icon.visibleProperty().bind(settings.hasTimestampSetting.not())
     icon
   }
 

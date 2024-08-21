@@ -8,6 +8,8 @@ import javafx.scene.control.{Slider, Tooltip}
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId}
 
+
+
 object TimerSlider {
 
   def format(epochMilli: Long, formatter: DateTimeFormatter): String = {
@@ -22,7 +24,7 @@ object TimerSlider {
    * @param logEntries list of log entries
    * @return min and max Instant of all log entries
    */
-  def calculateBoundaries(logEntries: ObservableList[LogEntry]): Option[(Instant, Instant)] = {
+  def calcTimeInfo(logEntries: ObservableList[LogEntry]): Option[TimeInfo] = {
     if (!logEntries.isEmpty) {
       var minInstant = Instant.MAX
       var maxInstant = Instant.MIN
@@ -42,16 +44,24 @@ object TimerSlider {
         None
       } else if (maxInstant == Instant.MIN || maxInstant == Instant.MAX) {
         None
-      } else Option((minInstant, maxInstant))
+      } else Option(TimeInfo(minInstant, maxInstant))
     } else None
   }
 
 }
 
 class TimerSlider(hasLogEntrySettingsBinding: BooleanBinding, tooltipText: String) extends Slider {
+
   visibleProperty().bind(hasLogEntrySettingsBinding)
   disableProperty().bind(hasLogEntrySettingsBinding.not)
   setTooltip(new Tooltip(tooltipText))
-  setPrefWidth(400)
+  setPrefWidth(350)
 
+  def setBoundsAndValue(minInstant: Instant
+                        , maxInstant: Instant
+                        , value: Double): Unit = {
+    setMin(minInstant.toEpochMilli.doubleValue())
+    setMax(maxInstant.toEpochMilli.doubleValue())
+    setValue(value)
+  }
 }

@@ -6,9 +6,10 @@ import javafx.scene.control.{Label, Slider}
 
 class TimestampSliderLabel(mutLogFileSettings: MutLogFileSettings
                            , slider: Slider) extends Label {
-  setPrefWidth(200)
+
   textProperty().bind(Bindings.createStringBinding(() => {
     TimerSlider.format(slider.getValue.longValue(), mutLogFileSettings.getDateTimeFormatter)
   }, slider.valueProperty))
-  visibleProperty().bind(mutLogFileSettings.hasLogEntrySettingBinding)
+  visibleProperty().bind(mutLogFileSettings.hasTimestampSetting)
+
 }

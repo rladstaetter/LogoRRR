@@ -5,6 +5,7 @@ import app.logorrr.model.LogEntry
 import app.logorrr.views.block.ChunkListView
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
+import javafx.geometry.Pos
 import javafx.scene.control.ToolBar
 
 
@@ -13,58 +14,43 @@ class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
                      , logEntries: ObservableList[LogEntry]
                      , filteredList: FilteredList[LogEntry]) extends ToolBar {
 
-  //val fileId: FileId = mutLogFileSettings.getFileId
-  // val formatter: DateTimeFormatter = Option(mutLogFileSettings.getDateTimeFormatter()).getOrElse(TimestampSettings.Default.dateTimeFormatter)
-
-  private val lowSlider = new TimerSlider(mutLogFileSettings.hasLogEntrySettingBinding, "Configure earliest timestamp to be displayed")
-  private val highSlider = new TimerSlider(mutLogFileSettings.hasLogEntrySettingBinding, "Configure latest timestamp to be displayed")
-  private val leftLabel = new TimestampSliderLabel(mutLogFileSettings, lowSlider)
-  private val rightLabel = new TimestampSliderLabel(mutLogFileSettings, highSlider)
-
   /**
    * To configure the logformat of the timestamp used in a logfile
    */
   private val timestampSettingsButton = new TimestampSettingsButton(mutLogFileSettings, chunkListView, logEntries, this)
-  private val replayButton = new ReplayButton(logEntries, lowSlider, highSlider)
-  private val stopTimeAnimationButton = new StopTimeAnimationButton(replayButton)
 
-  lowSlider.setValue(lowSlider.getMin)
-  highSlider.setValue(highSlider.getMax)
+  val lowerSliderVBox = new SliderVBox(mutLogFileSettings, "Configure earliest timestamp to be displayed", Pos.CENTER_LEFT)
+  val upperSliderVBox = new SliderVBox(mutLogFileSettings, "Configure latest timestamp to be displayed", Pos.CENTER_RIGHT)
 
-  lowSlider.valueProperty.addListener((_, _, newValue) => {
-    if (newValue.doubleValue > highSlider.getValue) lowSlider.setValue(highSlider.getValue)
-    val lowValue = newValue.longValue()
-    val highValue = highSlider.getValue.longValue
-    mutLogFileSettings.setLowerTimestamp(lowValue)
-    mutLogFileSettings.setUpperTimestamp(highValue)
-    mutLogFileSettings.updateActiveFilter(filteredList)
-    //    TimeOpsToolBar.updateFilteredList(mutLogFileSettings, filteredList, lowValue, highValue)
-  })
+  private val lowerSlider = lowerSliderVBox.slider
+  private val upperSlider = upperSliderVBox.slider
 
-  highSlider.valueProperty.addListener((_, _, newValue) => {
-    if (newValue.doubleValue < lowSlider.getValue) highSlider.setValue(lowSlider.getValue)
-    val lowValue = lowSlider.getValue.longValue
-    val highValue = newValue.longValue()
-    mutLogFileSettings.setLowerTimestamp(lowValue)
-    mutLogFileSettings.setUpperTimestamp(highValue)
+  private val replayButton = new ReplayButton(mutLogFileSettings, logEntries, lowerSlider, upperSlider)
+
+  private val stopTimeAnimationButton = new StopTimeAnimationButton(mutLogFileSettings, replayButton)
+
+  lowerSlider.valueProperty.addListener((_, _, newValue) => {
+    if (newValue.doubleValue > upperSlider.getValue) lowerSlider.setValue(upperSlider.getValue)
+    mutLogFileSettings.setLowerTimestamp(newValue.longValue())
     mutLogFileSettings.updateActiveFilter(filteredList)
   })
 
-  getItems.addAll(Seq(timestampSettingsButton, replayButton, stopTimeAnimationButton, leftLabel, lowSlider, highSlider, rightLabel): _*)
+  upperSlider.valueProperty.addListener((_, _, newValue) => {
+    if (newValue.doubleValue < lowerSlider.getValue) upperSlider.setValue(lowerSlider.getValue)
+    mutLogFileSettings.setUpperTimestamp(newValue.longValue())
+    mutLogFileSettings.updateActiveFilter(filteredList)
+  })
+
+  getItems.addAll(Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox, replayButton, stopTimeAnimationButton): _*)
 
   updateSliderBoundaries()
 
   def updateSliderBoundaries(): Unit = {
-    TimerSlider.calculateBoundaries(filteredList) match {
-      case Some((minInstant, maxInstant)) =>
-        lowSlider.setMin(minInstant.toEpochMilli.doubleValue())
-        highSlider.setMin(minInstant.toEpochMilli.doubleValue())
-        lowSlider.setMax(maxInstant.toEpochMilli.doubleValue())
-        highSlider.setMax(maxInstant.toEpochMilli.doubleValue())
-        lowSlider.setValue(lowSlider.getMin)
-        highSlider.setValue(highSlider.getMax)
-        println("set" + minInstant + "/" + maxInstant)
-      case None => //println("none")
+    TimerSlider.calcTimeInfo(filteredList) match {
+      case Some(TimeInfo(minInstant, maxInstant)) =>
+        lowerSlider.setBoundsAndValue(minInstant, maxInstant, minInstant.toEpochMilli.doubleValue)
+        upperSlider.setBoundsAndValue(minInstant, maxInstant, maxInstant.toEpochMilli.doubleValue)
+      case None =>
     }
   }
 

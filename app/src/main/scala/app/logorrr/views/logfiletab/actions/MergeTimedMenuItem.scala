@@ -52,7 +52,7 @@ class MergeTimedMenuItem(thisFileId: FileId, tabPane: MainTabPane) extends Menu(
 
   for (t <- tabPane.getTabs.asScala) {
     val otherFileTab = t.asInstanceOf[LogFileTab]
-    if (otherFileTab.fileId != thisFileId && otherFileTab.mutLogFileSettings.hasLogEntrySettingBinding.get) {
+    if (otherFileTab.fileId != thisFileId && otherFileTab.mutLogFileSettings.hasTimestampSetting.get) {
       getItems.add(new CombineFileMenuItem(thisFileId, otherFileTab.fileId, tabPane))
     }
   }

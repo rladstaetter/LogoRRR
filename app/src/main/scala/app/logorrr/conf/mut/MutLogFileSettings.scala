@@ -108,7 +108,7 @@ class MutLogFileSettings {
   def getFilters: ObservableList[Filter] = filtersProperty.get()
 
 
-  val hasLogEntrySettingBinding: BooleanBinding = new BooleanBinding {
+  val hasTimestampSetting: BooleanBinding = new BooleanBinding {
     bind(someTimestampSettings)
 
     override def computeValue(): Boolean = {

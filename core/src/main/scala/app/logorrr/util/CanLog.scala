@@ -16,8 +16,8 @@ object CanLog {
   val RN = s"$R$N"
 
   /* before deploying make sure this is set to Level.INFO */
-//  val LogLevel: Level = Level.INFO
-  val LogLevel: Level = Level.FINEST
+  val LogLevel: Level = Level.INFO
+//  val LogLevel: Level = Level.FINEST
 
   /** if set to true, the LogoRRRs log file grows without boundaries */
   val appendLogs = false
