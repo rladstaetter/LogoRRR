@@ -27,8 +27,8 @@ class ShowAboutDialogTest extends TestFxBaseApplicationTest
 
 
   @Test def showAboutDialog(): Unit = {
-    waitAndClickVisibleItem(UiNodes.HelpMenu)
-    waitAndClickVisibleItem(UiNodes.HelpMenuAbout)
+    waitAndClickVisibleItem(UiNodes.HelpMenu.Self)
+    waitAndClickVisibleItem(UiNodes.HelpMenu.About)
 
     waitAndClickVisibleItem(UiNodes.AboutDialogOpenLogorrrMainSite)
     waitAndClickVisibleItem(UiNodes.AboutDialogOpenDevelopmentBlog)

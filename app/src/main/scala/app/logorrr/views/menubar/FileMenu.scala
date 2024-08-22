@@ -39,7 +39,7 @@ object FileMenu {
   class OpenFileMenuItem(fileIdService: FileIdService
                          , openFile: FileId => Unit)
     extends MenuItem("Open") with CanLog {
-    setId(UiNodes.FileMenuOpenFile.value)
+    setId(UiNodes.FileMenu.OpenFile.value)
     setOnAction(_ => {
       fileIdService.provideFileId match {
         case Some(fileId) => openFile(fileId)
@@ -50,12 +50,12 @@ object FileMenu {
   }
 
   class CloseAllFilesMenuItem(removeAllLogFiles: => Unit) extends MenuItem("Close All") {
-    setId(UiNodes.FileMenuCloseAll.value)
+    setId(UiNodes.FileMenu.CloseAll.value)
     setOnAction(_ => removeAllLogFiles)
   }
 
   class CloseApplicationMenuItem(closeApplication: => Unit) extends MenuItem("Quit") {
-    setId(UiNodes.FileMenuCloseApplication.value)
+    setId(UiNodes.FileMenu.CloseApplication.value)
     setOnAction(_ => closeApplication)
   }
 
@@ -67,7 +67,7 @@ class FileMenu(isUnderTest : Boolean
                , closeAllFiles: => Unit
                , closeApplication: => Unit) extends Menu("File")  {
 
-  setId(UiNodes.FileMenu.value)
+  setId(UiNodes.FileMenu.Self.value)
 
   lazy val openMenuItem = new FileMenu.OpenFileMenuItem(fileIdService, openFile)
   lazy val closeAllMenuItem = new FileMenu.CloseAllFilesMenuItem(closeAllFiles)

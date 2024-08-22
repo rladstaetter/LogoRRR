@@ -13,21 +13,21 @@ trait FileMenuActions extends VisibleItemActions {
   self: TestFxBaseApplicationTest =>
 
   protected def openFile(fileId: FileId): Unit = {
-    waitAndClickVisibleItem(UiNodes.FileMenu)
-    waitAndClickVisibleItem(UiNodes.FileMenuOpenFile)
+    waitAndClickVisibleItem(UiNodes.FileMenu.Self)
+    waitAndClickVisibleItem(UiNodes.FileMenu.OpenFile)
     waitForVisibility(LogFileTab.uiNode(fileId))
   }
 
   protected def closeAllFiles(): FxRobotInterface = {
-    clickOn(UiNodes.FileMenu)
-    waitForVisibility(UiNodes.FileMenuCloseAll)
-    clickOn(UiNodes.FileMenuCloseAll)
+    clickOn(UiNodes.FileMenu.Self)
+    waitForVisibility(UiNodes.FileMenu.CloseAll)
+    clickOn(UiNodes.FileMenu.CloseAll)
   }
 
 
   def quitApplication(): Unit = {
-    waitAndClickVisibleItem(UiNodes.FileMenu)
-    waitAndClickVisibleItem(UiNodes.FileMenuCloseApplication)
+    waitAndClickVisibleItem(UiNodes.FileMenu.Self)
+    waitAndClickVisibleItem(UiNodes.FileMenu.CloseApplication)
   }
 
 }

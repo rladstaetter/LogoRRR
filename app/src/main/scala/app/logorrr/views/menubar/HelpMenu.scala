@@ -12,7 +12,7 @@ import javafx.stage.{Modality, Stage}
 object HelpMenu {
 
   class LogMenuItem(openLogFile: FileId => Unit) extends MenuItem("Open LogoRRRs log") {
-    setId(UiNodes.HelpMenuOpenLogorrLog.value)
+    setId(UiNodes.HelpMenu.OpenLogorrLog.value)
 
     setOnAction(_ => {
       openLogFile(FileId(FilePaths.logFilePath))
@@ -20,7 +20,7 @@ object HelpMenu {
   }
 
   class AboutMenuItem extends MenuItem("About") {
-    setId(UiNodes.HelpMenuAbout.value)
+    setId(UiNodes.HelpMenu.About.value)
 
     setOnAction(_ => {
       val stage = new Stage()
@@ -35,6 +35,6 @@ object HelpMenu {
 }
 
 class HelpMenu(openFile: FileId => Unit) extends Menu("Help") {
-  setId(UiNodes.HelpMenu.value)
+  setId(UiNodes.HelpMenu.Self.value)
   getItems.addAll(new LogMenuItem(openFile), new AboutMenuItem())
 }

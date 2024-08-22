@@ -18,10 +18,10 @@ class OpenAndCloseMultipleFilesViaMenuTest
       p => openFile(p)
     }
     // now close them all again
-    clickOn(UiNodes.FileMenu)
+    clickOn(UiNodes.FileMenu.Self)
 
-    waitForVisibility(UiNodes.FileMenuCloseAll)
-    clickOn(UiNodes.FileMenuCloseAll)
+    waitForVisibility(UiNodes.FileMenu.CloseAll)
+    clickOn(UiNodes.FileMenu.CloseAll)
 
     checkForEmptyTabPane()
 

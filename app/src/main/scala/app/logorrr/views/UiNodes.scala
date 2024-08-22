@@ -19,29 +19,37 @@ case class UiNode(value: String) {
 
 object UiNodes {
 
-  /** id for the file menu */
-  val FileMenu: UiNode = UiNode("file_menu")
+  object FileMenu {
 
-  /** ID of menu item which opens a file */
-  val FileMenuOpenFile: UiNode = UiNode("file_menu_open_file")
+    /** id for the file menu */
+    val Self: UiNode = UiNode("file_menu")
 
-  /**
-   * close all files
-   */
-  val FileMenuCloseAll: UiNode = UiNode("file_menu_close_all")
+    /** ID of menu item which opens a file */
+    val OpenFile: UiNode = UiNode("file_menu_open_file")
 
-  /** quit application */
-  val FileMenuCloseApplication: UiNode = UiNode("file_menu_close_application")
+    /**
+     * close all files
+     */
+    val CloseAll: UiNode = UiNode("file_menu_close_all")
 
-  /** help menu */
-  val HelpMenu: UiNode = UiNode("help_menu")
+    /** quit application */
+    val CloseApplication: UiNode = UiNode("file_menu_close_application")
 
+  }
 
-  /** help menu - about */
-  val HelpMenuAbout: UiNode = UiNode("help_menu_about")
+  object HelpMenu {
 
-  /** help menu - open log */
-  val HelpMenuOpenLogorrLog: UiNode = UiNode("help_menu_open_log")
+    /** help menu */
+    val Self: UiNode = UiNode("help_menu")
+
+    /** help menu - about */
+    val About: UiNode = UiNode("help_menu_about")
+
+    /** help menu - open log */
+    val OpenLogorrLog: UiNode = UiNode("help_menu_open_log")
+
+  }
+
 
   /**
    * ID of main tab pane where all log files are placed
