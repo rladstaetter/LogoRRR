@@ -2,8 +2,13 @@ package app.logorrr.views
 
 import app.logorrr.io.FileId
 import app.logorrr.util.HashUtil
+import javafx.geometry.Pos
 
 object UiNode {
+
+  def apply(fileId: FileId, pos : Pos, clazz : Class[_]) : UiNode = {
+    UiNode(s"${clazz.getSimpleName}-${pos.toString}-${HashUtil.md5Sum(fileId)}")
+  }
 
   def apply(fileId: FileId, clazz: Class[_]): UiNode = {
     UiNode(clazz.getSimpleName + "-" + HashUtil.md5Sum(fileId))

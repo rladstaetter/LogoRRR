@@ -32,10 +32,9 @@ class OpsToolBar(fileId: FileId
                  , logEntries: ObservableList[LogEntry]
                  , filteredList: FilteredList[LogEntry]
                  , val blockSizeProperty: SimpleIntegerProperty)
-  extends ToolBar
-    with HasBlockSizeProperty {
+  extends ToolBar with HasBlockSizeProperty {
 
-  //setStyle(SearchToolBar.BackgroundSelectedStyle)
+  // TODO fix this; not really elegant
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
   val w = 380
   private val macWidth: Int = w

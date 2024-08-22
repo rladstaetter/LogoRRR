@@ -1,9 +1,8 @@
 package app.logorrr.views.settings.timestamp
 
-import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.model.{LogEntry, TimestampSettings}
-import app.logorrr.util.{CanLog, HLink, JfxUtils}
+import app.logorrr.model.LogEntry
+import app.logorrr.util.{CanLog, HLink}
 import app.logorrr.views.UiNodes
 import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.time.TimeOpsToolBar
@@ -12,16 +11,14 @@ import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control._
-import javafx.scene.layout.{BorderPane, HBox, Region, VBox}
-
-import java.time.{Duration, Instant}
-import java.util
+import javafx.scene.layout.{BorderPane, HBox, VBox}
 
 
 object TimestampSettingsBorderPane {
 
 
 }
+
 
 class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
                                   , logEntries: ObservableList[LogEntry]
@@ -30,24 +27,13 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
                                   , closeStage: => Unit)
   extends BorderPane with CanLog {
 
-  val labelWidth = 100
-  val textFieldWidth = 60
+  private val fromTextField = new FromTextField(mutLogFileSettings.getFileId)
+  private val toTextField = new ToTextField(mutLogFileSettings.getFileId)
 
-  private val fromTextField = {
-    val tf = JfxUtils.mkTextField(textFieldWidth)
-    tf.setEditable(false)
-    tf
-  }
+  private val fromLabel = new FromLabel(mutLogFileSettings.getFileId)
+  private val toLabel = new ToLabel(mutLogFileSettings.getFileId)
 
-  private val toTextField = {
-    val tf = JfxUtils.mkTextField(textFieldWidth)
-    tf.setEditable(false)
-    tf
-  }
-
-  private val fromLabel = JfxUtils.mkL("from column:", labelWidth)
-  private val toLabel = JfxUtils.mkL("to column:", labelWidth)
-
+  def getRange: SimpleRange = SimpleRange(getStartCol, getEndCol)
 
   /*
    * those properties exist since it is easier to use from the call sites.
@@ -71,69 +57,9 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
     }
   }, endColProperty))
 
-
-  private val resetButton = {
-    val b = new Button("reset")
-    b.setAlignment(Pos.CENTER_RIGHT)
-    b.setPrefWidth(180)
-    b.setOnAction(_ => {
-      mutLogFileSettings.setSomeLogEntryInstantFormat(None)
-      LogoRRRGlobals.persist()
-      // we have to deactivate this listener otherwise
-      chunkListView.removeInvalidationListener()
-      val tempList = new util.ArrayList[LogEntry]()
-      logEntries.forEach(e => {
-        tempList.add(e.withOutTimestamp())
-      })
-      logEntries.setAll(tempList)
-      // activate listener again
-      chunkListView.addInvalidationListener()
-      timeOpsToolBar.updateSliderBoundaries()
-      closeStage
-    })
-    b
-  }
-
-  /**
-   * if ok button is clicked, log definition will be written, settings stage will be closed, associated logfile
-   * definition will be updated
-   * */
-  private val okButton = {
-    val b = new Button("set format")
-    b.setPrefWidth(400)
-    b.setAlignment(Pos.CENTER)
-    b.setOnAction(_ => {
-      val leif: TimestampSettings = TimestampSettings(SimpleRange(getStartCol, getEndCol), timeFormatTf.getText.trim)
-      mutLogFileSettings.setSomeLogEntryInstantFormat(Option(leif))
-      LogoRRRGlobals.persist()
-      // we have to deactivate this listener otherwise
-      chunkListView.removeInvalidationListener()
-      var someFirstEntryTimestamp: Option[Instant] = None
-
-      val tempList = new util.ArrayList[LogEntry]()
-      for (i <- 0 until logEntries.size()) {
-        val e = logEntries.get(i)
-        val someInstant = TimestampSettings.parseInstant(e.value, leif)
-        if (someFirstEntryTimestamp.isEmpty) {
-          someFirstEntryTimestamp = someInstant
-        }
-
-        val diffFromStart: Option[Duration] = for {
-          firstEntry <- someFirstEntryTimestamp
-          instant <- someInstant
-        } yield Duration.between(firstEntry, instant)
-
-        tempList.add(e.copy(someInstant = someInstant, someDurationSinceFirstInstant = diffFromStart))
-      }
-      logEntries.setAll(tempList)
-      // activate listener again
-      chunkListView.addInvalidationListener()
-      // update slider boundaries
-      timeOpsToolBar.updateSliderBoundaries()
-      closeStage
-    })
-    b
-  }
+  private val timeFormatTf = new TimeFormatTextField(mutLogFileSettings.getFileId)
+  private val setTimestampFormatButton = new TimestampFormatSetButton(mutLogFileSettings, getRange, timeFormatTf, chunkListView, logEntries, timeOpsToolBar, closeStage)
+  private val resetTimestampFormatButton = new TimestampFormatResetButton(mutLogFileSettings, chunkListView, logEntries, timeOpsToolBar, closeStage)
 
   // has to be assigned to a val otherwise this won't get intepreted
   val binding: ObjectBinding[String] =
@@ -151,27 +77,18 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
     hl
   }
 
-  private val timeFormatTf = {
-    val tf = new TextField()
-    tf.setPromptText("<enter time format>")
-    tf.setText(TimestampSettings.DefaultPattern)
-    tf.setPrefColumnCount(30)
-    tf
-  }
 
   private val timerSettingsLogTextView = {
-    val tslv = new TimerSettingsLogView(mutLogFileSettings, logEntries)
+    val tslv = new TimestampPositionSelectionBorderPane(mutLogFileSettings, logEntries)
     startColProperty.bind(tslv.startColProperty)
     endColProperty.bind(tslv.endColProperty)
     tslv
   }
 
-  private val spacer = {
-    val s = new Region()
-    HBox.setHgrow(s, javafx.scene.layout.Priority.ALWAYS)
-    s
-  }
-  private val timeFormatBar = new ToolBar(hyperlink, timeFormatTf, okButton, spacer, resetButton)
+
+  private val spacer = new AlwaysGrowHorizontalRegion
+
+  private val timeFormatBar = new ToolBar(hyperlink, timeFormatTf, setTimestampFormatButton, spacer, resetTimestampFormatButton)
 
   init()
 
@@ -218,3 +135,6 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
   def getEndCol: java.lang.Integer = endColProperty.get()
 
 }
+
+
+

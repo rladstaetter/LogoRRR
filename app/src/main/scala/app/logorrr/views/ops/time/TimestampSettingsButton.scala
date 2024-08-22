@@ -1,14 +1,22 @@
 package app.logorrr.views.ops.time
 
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.layout.StackPane
 import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
+
+object TimestampSettingsButton extends UiNodeFileIdAware {
+
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[TimestampSettingsButton])
+
+}
 
 /**
  * Displays a clock in the ops tool bar, with a red exclamation mark if there is no setting for the
@@ -24,6 +32,8 @@ class TimestampSettingsButton(settings: MutLogFileSettings
                               , chunkListView: ChunkListView
                               , logEntries: ObservableList[LogEntry]
                               , timeOpsToolBar: TimeOpsToolBar) extends StackPane {
+
+  setId(TimestampSettingsButton.uiNode(settings.getFileId).value)
 
   // since timerbutton is a stackpane, this css commands are necessary to have the same effect as
   // defined in primer-light.css

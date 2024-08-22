@@ -26,16 +26,6 @@ class TimestampSettingStage(owner: Window
   initModality(Modality.APPLICATION_MODAL)
   setTitle(s"Specify the timestamp range (from - to columns) and the time pattern for ${settings.getFileId.fileName}")
 
-  // center relative to owner window
-  /*
-  setOnShowing(_ => {
-    val x = owner.getX + (owner.getWidth - getWidth) / 2
-    val y = owner.getY + (owner.getHeight - getHeight) / 2
-    setX(x)
-    setY(y)
-  })
-  */
-
   val scene = new Scene(
     new TimestampSettingsBorderPane(settings
       , logEntries

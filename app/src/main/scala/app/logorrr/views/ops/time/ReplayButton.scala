@@ -1,7 +1,9 @@
 package app.logorrr.views.ops.time
 
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.animation.{Animation, KeyFrame, Timeline}
 import javafx.collections.ObservableList
 import javafx.event.ActionEvent
@@ -11,12 +13,17 @@ import org.kordamp.ikonli.javafx.FontIcon
 
 import scala.collection.mutable.ListBuffer
 
+object ReplayButton extends UiNodeFileIdAware {
+
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[ReplayButton])
+}
 
 class ReplayButton(mutLogFileSettings: MutLogFileSettings
                    , filteredList: ObservableList[LogEntry]
                    , lowerSlider: TimerSlider
                    , upperSlider: TimerSlider) extends Button {
 
+  setId(ReplayButton.uiNode(mutLogFileSettings.getFileId).value)
 
   var timeline: Timeline = _
 

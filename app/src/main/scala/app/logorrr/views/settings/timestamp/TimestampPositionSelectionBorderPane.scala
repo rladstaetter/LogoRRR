@@ -1,25 +1,24 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
+import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.beans.property.{ObjectProperty, SimpleObjectProperty}
-import javafx.collections.{FXCollections, ObservableList}
+import javafx.collections.ObservableList
 import javafx.scene.control.{ListCell, ListView}
 import javafx.scene.layout.BorderPane
 
-object TimerSettingsLogView {
+object TimestampPositionSelectionBorderPane extends UiNodeFileIdAware {
 
-  val entriesToShow = 13
-
-  def mkEntriesToShow(logEntries: ObservableList[LogEntry]): ObservableList[LogEntry] = {
-    val subList = logEntries.subList(0, if (logEntries.size() >= TimerSettingsLogView.entriesToShow) TimerSettingsLogView.entriesToShow else logEntries.size())
-    FXCollections.observableArrayList(subList)
-  }
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[TimestampPositionSelectionBorderPane])
 
 }
 
-class TimerSettingsLogView(mutLogFileSettings: MutLogFileSettings
-                           , logEntries: ObservableList[LogEntry]) extends BorderPane {
+class TimestampPositionSelectionBorderPane(mutLogFileSettings: MutLogFileSettings
+                                           , logEntries: ObservableList[LogEntry]) extends BorderPane {
+
+  setId(TimestampPositionSelectionBorderPane.uiNode(mutLogFileSettings.getFileId).value)
 
   val startColProperty: ObjectProperty[java.lang.Integer] = new SimpleObjectProperty[java.lang.Integer](null)
   val endColProperty: ObjectProperty[java.lang.Integer] = new SimpleObjectProperty[java.lang.Integer](null)

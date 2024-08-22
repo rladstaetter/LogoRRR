@@ -5,8 +5,6 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util.LabelUtil
 import app.logorrr.views.text.LineNumberLabel
 import javafx.beans.property.ObjectProperty
-import javafx.scene.control.{Label, Tooltip}
-import javafx.scene.input.MouseEvent
 import javafx.scene.layout.{Background, BackgroundFill, HBox}
 import javafx.scene.paint.Color
 
@@ -14,6 +12,10 @@ object TimerSettingsLogViewLabel {
 
 }
 
+
+/**
+ * "Creative" solution for not having a decent RichTextArea ..
+ */
 case class TimerSettingsLogViewLabel(settings: MutLogFileSettings
                                      , e: LogEntry
                                      , maxLength: Int
@@ -23,21 +25,8 @@ case class TimerSettingsLogViewLabel(settings: MutLogFileSettings
 
   val lineNumberLabel: LineNumberLabel = LineNumberLabel(e.lineNumber, maxLength)
   lineNumberLabel.styleProperty().bind(settings.fontStyleBinding)
-  val chars: IndexedSeq[Label] =
-    for ((c, i) <- e.value.zipWithIndex) yield {
-      val l = new Label(c.toString)
-      l.setUserData(i) // save position of label for later
-      l.setOnMouseClicked((_: MouseEvent) => applyStyleAtPos(i))
-      l.setTooltip(new Tooltip(s"column: ${i.toString}"))
-      l.setOnMouseEntered(_ => {
-        l.setStyle(
-          """-fx-border-color: RED;
-            |-fx-border-width: 0 0 0 3px;
-            |""".stripMargin)
-      })
-      l.setOnMouseExited(_ => l.setStyle(""))
-      l
-    }
+  val chars: IndexedSeq[LogViewLabel] =
+    for ((c, i) <- e.value.zipWithIndex) yield new LogViewLabel(settings.getFileId, e.lineNumber, i, c.toString, applyStyleAtPos)
 
   (Option(startColProperty.get()), Option(endColProperty.get())) match {
     case (Some(startCol), Some(endCol)) => paint(startCol, endCol)
