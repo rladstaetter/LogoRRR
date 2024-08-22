@@ -21,15 +21,16 @@
     <option name="workingDirectory" value="$MODULE_DIR$" />
     <option name="classBuf">
       <list>
-        <option value="app.logorrr.LogEntrySpec" />
         <option value="app.logorrr.LogEntryFileReaderSpec" />
         <option value="app.logorrr.Issue139Spec" />
-        <option value="app.logorrr.util.MathUtilSpec" />
+        <option value="app.logorrr.LogEntrySpec" />
+        <option value="app.logorrr.model.TimestampSettingsSpec" />
         <option value="app.logorrr.io.IoManagerSpec" />
         <option value="app.logorrr.conf.mut.FilterSpec" />
         <option value="app.logorrr.conf.mut.MutSettingsSpec" />
         <option value="app.logorrr.views.block.ChunkSpec" />
-        <option value="app.logorrr.views.block.BlockImageSpec" />
+        <option value="app.logorrr.views.block.ChunkImageSpec" />
+        <option value="app.logorrr.views.ops.time.TimerSliderSpec" />
         <option value="app.logorrr.views.text.FilterCalculatorSpec" />
       </list>
     </option>
