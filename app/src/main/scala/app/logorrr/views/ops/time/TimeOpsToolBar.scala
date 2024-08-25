@@ -27,9 +27,9 @@ class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
   private val lowerSlider = lowerSliderVBox.slider
   private val upperSlider = upperSliderVBox.slider
 
-  private val replayStackPane = new ReplayStackPane(mutLogFileSettings, logEntries, lowerSlider, upperSlider, logTextView)
-
-  private val stopTimeAnimationButton = new StopTimeAnimationButton(mutLogFileSettings, replayStackPane)
+ //  private val replayStackPane = new ReplayStackPane(mutLogFileSettings, logEntries, lowerSlider, upperSlider, logTextView)
+  logTextView == logTextView
+//  private val stopTimeAnimationButton = new StopTimeAnimationButton(mutLogFileSettings, replayStackPane)
 
   lowerSlider.valueProperty.addListener((_, _, newValue) => {
     if (newValue.doubleValue > upperSlider.getValue) lowerSlider.setValue(upperSlider.getValue)
@@ -43,7 +43,9 @@ class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
     mutLogFileSettings.updateActiveFilter(filteredList)
   })
 
-  getItems.addAll(Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox, replayStackPane, stopTimeAnimationButton): _*)
+  getItems.addAll(Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox): _*)
+
+//  getItems.addAll(Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox, replayStackPane, stopTimeAnimationButton): _*)
 
   updateSliderBoundaries()
 
