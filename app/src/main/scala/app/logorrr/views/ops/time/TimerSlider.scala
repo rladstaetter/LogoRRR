@@ -1,16 +1,20 @@
 package app.logorrr.views.ops.time
 
+import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
-import javafx.beans.binding.BooleanBinding
+import app.logorrr.views.{UiNode, UiNodeFileIdAndPosAware}
 import javafx.collections.ObservableList
+import javafx.geometry.Pos
 import javafx.scene.control.{Slider, Tooltip}
 
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId}
 
 
+object TimerSlider extends UiNodeFileIdAndPosAware {
 
-object TimerSlider {
+  val Width = 350
 
   def format(epochMilli: Long, formatter: DateTimeFormatter): String = {
     val instant = Instant.ofEpochMilli(epochMilli)
@@ -48,14 +52,19 @@ object TimerSlider {
     } else None
   }
 
+  override def uiNode(id: FileId, pos: Pos): UiNode = UiNode(id, pos, classOf[TimerSlider])
 }
 
-class TimerSlider(hasLogEntrySettingsBinding: BooleanBinding, tooltipText: String) extends Slider {
+class TimerSlider(mutLogFileSettings: MutLogFileSettings
+                  , pos: Pos
+                  , tooltipText: String) extends Slider {
 
-  visibleProperty().bind(hasLogEntrySettingsBinding)
-  disableProperty().bind(hasLogEntrySettingsBinding.not)
+  setId(TimerSlider.uiNode(mutLogFileSettings.getFileId, pos).value)
+
+  visibleProperty().bind(mutLogFileSettings.hasTimestampSetting)
+  disableProperty().bind(mutLogFileSettings.hasTimestampSetting.not)
   setTooltip(new Tooltip(tooltipText))
-  setPrefWidth(350)
+  setPrefWidth(TimerSlider.Width)
 
   def setBoundsAndValue(minInstant: Instant
                         , maxInstant: Instant

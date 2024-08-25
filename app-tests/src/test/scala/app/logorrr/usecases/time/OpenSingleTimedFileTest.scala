@@ -4,9 +4,10 @@ import app.logorrr.TestFiles
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.ops.time.{SliderVBox, TimestampSettingsButton}
+import app.logorrr.views.ops.time.{SliderVBox, TimerSlider, TimestampSettingsButton}
 import app.logorrr.views.settings.timestamp.{LogViewLabel, TimeFormatTextField, TimestampFormatResetButton, TimestampFormatSetButton}
 import javafx.geometry.Pos
+import javafx.scene.input.MouseButton
 import org.junit.jupiter.api.Test
 
 /**
@@ -16,9 +17,8 @@ import org.junit.jupiter.api.Test
  *
  * - clicks on timersettings button to open timer settings stage and clicks reset
  * - clicks on timersettings button and click on 'set format'
- * - clicks on timersettings button
+ * - clicks on timersettings button and configure the position of the timestamp and set the timestamp format
  *
- * -
  */
 class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedLog) {
 
@@ -62,9 +62,24 @@ class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedL
 
     assert(LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.get())
 
+    val earilestTimestamp = "2023-08-02 21:16:33,193"
+    val latestTimestamp = "2023-08-02 21:16:38,656"
+
     // expect lowest and highest timestamp
-    expectLabelText(fileId, Pos.CENTER_LEFT, "2023-08-02 21:16:33,193")
-    expectLabelText(fileId, Pos.CENTER_RIGHT, "2023-08-02 21:16:38,656")
+    expectLabelText(fileId, Pos.CENTER_LEFT, earilestTimestamp)
+    expectLabelText(fileId, Pos.CENTER_RIGHT, latestTimestamp)
+
+    // now, change the right slider (starting with the middle of the slider)
+    drag(SliderVBox.uiNode(fileId, Pos.CENTER_RIGHT).ref).moveBy(-TimerSlider.Width / 2, 0).release(MouseButton.PRIMARY)
+    expectLabelText(fileId, Pos.CENTER_RIGHT, earilestTimestamp)
+
+    // put right slider back, also move lower slider
+    drag(SliderVBox.uiNode(fileId, Pos.CENTER_RIGHT).ref).moveBy(TimerSlider.Width, 0).release(MouseButton.PRIMARY)
+    expectLabelText(fileId, Pos.CENTER_RIGHT, latestTimestamp)
+
+    // drag lower slider to highest point
+    drag(SliderVBox.uiNode(fileId, Pos.CENTER_LEFT).ref).moveBy(TimerSlider.Width/2, 0).release(MouseButton.PRIMARY)
+    expectLabelText(fileId, Pos.CENTER_LEFT, latestTimestamp)
 
   }
 

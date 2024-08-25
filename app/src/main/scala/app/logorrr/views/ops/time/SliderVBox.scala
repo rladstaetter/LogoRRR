@@ -16,8 +16,8 @@ class SliderVBox(mutLogFileSettings: MutLogFileSettings
                  , tooltipText: String
                  , pos: Pos) extends VBox {
 
-  setId(SliderVBox.uiNode(mutLogFileSettings.getFileId,pos).value)
-  val slider = new TimerSlider(mutLogFileSettings.hasTimestampSetting, tooltipText)
+  setId(SliderVBox.uiNode(mutLogFileSettings.getFileId, pos).value)
+  val slider = new TimerSlider(mutLogFileSettings, pos, tooltipText)
   val label = new TimestampSliderLabel(mutLogFileSettings, slider)
 
   setAlignment(pos)
