@@ -31,13 +31,13 @@ class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
 
   lowerSlider.valueProperty.addListener((_, _, newValue) => {
     if (newValue.doubleValue > upperSlider.getValue) lowerSlider.setValue(upperSlider.getValue)
-    mutLogFileSettings.setLowerTimestamp(newValue.longValue())
+    mutLogFileSettings.setLowerTimestampValue(newValue.longValue())
     mutLogFileSettings.updateActiveFilter(filteredList)
   })
 
   upperSlider.valueProperty.addListener((_, _, newValue) => {
     if (newValue.doubleValue < lowerSlider.getValue) upperSlider.setValue(lowerSlider.getValue)
-    mutLogFileSettings.setUpperTimestamp(newValue.longValue())
+    mutLogFileSettings.setUpperTimestampValue(newValue.longValue())
     mutLogFileSettings.updateActiveFilter(filteredList)
   })
 

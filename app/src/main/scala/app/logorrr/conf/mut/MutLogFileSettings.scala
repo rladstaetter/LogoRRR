@@ -30,8 +30,10 @@ object MutLogFileSettings {
       case None =>
     }
     s.setAutoScroll(logFileSettings.autoScroll)
-    s.setLowerTimestamp(logFileSettings.lowerTimestamp)
-    s.setUpperTimestamp(logFileSettings.upperTimestamp)
+    // TODO: set values and boundaries correctly for sliders
+    // https://github.com/rladstaetter/LogoRRR/issues/261
+    //s.setLowerTimestampValue(logFileSettings.lowerTimestamp)
+    //s.setUpperTimestampValue(logFileSettings.upperTimestamp)
     s
   }
 }
@@ -65,7 +67,7 @@ class MutLogFileSettings {
         case None => true // if instant is not set, return true
         case Some(value) =>
           val asMilli = value.toEpochMilli
-          getLowTimestampBoundary <= asMilli && asMilli <= getHighTimestampBoundary
+          getLowerTimestampValue <= asMilli && asMilli <= getHigherTimestampValue
       }) && computeCurrentFilter().matches(entry.value))
   }
 
@@ -80,16 +82,16 @@ class MutLogFileSettings {
   val selectedLineNumberProperty = new SimpleIntegerProperty()
   val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty()
   val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
-  private val lowerTimestampProperty = new SimpleLongProperty(LogFileSettings.DefaultLowerTimestamp)
-  private val upperTimestampProperty = new SimpleLongProperty(LogFileSettings.DefaultUpperTimestamp)
+  private val lowerTimestampValueProperty = new SimpleLongProperty(LogFileSettings.DefaultLowerTimestamp)
+  private val upperTimestampValueProperty = new SimpleLongProperty(LogFileSettings.DefaultUpperTimestamp)
 
-  def setLowerTimestamp(lowerValue: Long): Unit = lowerTimestampProperty.set(lowerValue)
+  def setLowerTimestampValue(lowerValue: Long): Unit = lowerTimestampValueProperty.set(lowerValue)
 
-  def getLowTimestampBoundary: Long = lowerTimestampProperty.get()
+  def getLowerTimestampValue: Long = lowerTimestampValueProperty.get()
 
-  def setUpperTimestamp(upperValue: Long): Unit = upperTimestampProperty.set(upperValue)
+  def setUpperTimestampValue(upperValue: Long): Unit = upperTimestampValueProperty.set(upperValue)
 
-  def getHighTimestampBoundary: Long = upperTimestampProperty.get()
+  def getHigherTimestampValue: Long = upperTimestampValueProperty.get()
 
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
@@ -171,8 +173,8 @@ class MutLogFileSettings {
         , autoScrollActiveProperty.get()
         , firstVisibleTextCellIndexProperty.get()
         , lastVisibleTextCellIndexProperty.get()
-        , lowerTimestampProperty.get()
-        , upperTimestampProperty.get())
+        , lowerTimestampValueProperty.get()
+        , upperTimestampValueProperty.get())
     lfs
   }
 }
