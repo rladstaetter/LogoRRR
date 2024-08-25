@@ -4,18 +4,18 @@ import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util.ClipBoardUtils
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
-import javafx.animation.AnimationTimer
 import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
 import org.kordamp.ikonli.fontawesome5.{FontAwesomeRegular, FontAwesomeSolid}
 import org.kordamp.ikonli.javafx.FontIcon
+
+import java.time.Duration
 
 object CopyLogButton extends UiNodeFileIdAware {
 
   def uiNode(id: FileId): UiNode = UiNode(id, classOf[CopyLogButton])
 
 }
-
 
 /**
  * Copy current contents to clipboard.
@@ -39,7 +39,7 @@ class CopyLogButton(id: FileId, logEntries: ObservableList[LogEntry]) extends Bu
 
     setOnAction(_ => {
       val size = ClipBoardUtils.copyToClipboard(logEntries)
-      defaultToolTip.setText(s"Copied ${size} entries to clipboard")
+      defaultToolTip.setText(s"Copied $size entries to clipboard")
       val bounds = localToScreen(getBoundsInLocal)
       val x = bounds.getMinX
       val y = bounds.getMaxY
@@ -49,37 +49,7 @@ class CopyLogButton(id: FileId, logEntries: ObservableList[LogEntry]) extends Bu
     })
   }
 
-  def mkTimer(): AnimationTimer = new AnimationTimer() {
-    private var startTime: Long = -1
-
-    def handle(now: Long): Unit = {
-      if (startTime < 0) {
-        setGraphic(iconLight)
-        startTime = now
-      }
-
-      val elapsedSeconds = (now - startTime) / 1_000_000_000.0
-
-      // Stop the animation after 1 second
-      if (elapsedSeconds > 1) {
-        getGraphic.setOpacity(1) // Ensure it ends at full opacity
-        setGraphic(icon)
-        defaultToolTip.hide()
-        defaultToolTip.setText(TooltipText)
-        this.stop()
-        return
-      }
-      val alpha = elapsedSeconds / 1 // From 0 to 1 in one second
-
-      if (alpha <= 0.5) {
-        // Fade out for the first half
-        getGraphic.setOpacity(1 - 2 * alpha)
-      } else {
-        // Fade in for the second half
-        getGraphic.setOpacity(2 * alpha - 1)
-      }
-    }
-  }
+  def mkTimer() = new PulsatingAnimationTimer(this, iconLight, icon, defaultToolTip, TooltipText, Duration.ofSeconds(1))
 
 }
 

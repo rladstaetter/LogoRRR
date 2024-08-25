@@ -3,6 +3,7 @@ package app.logorrr.views.ops.time
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.views.block.ChunkListView
+import app.logorrr.views.text.LogTextView
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
 import javafx.geometry.Pos
@@ -11,6 +12,7 @@ import javafx.scene.control.ToolBar
 
 class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
                      , chunkListView: ChunkListView
+                     , logTextView: LogTextView
                      , logEntries: ObservableList[LogEntry]
                      , filteredList: FilteredList[LogEntry]) extends ToolBar {
 
@@ -25,9 +27,9 @@ class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
   private val lowerSlider = lowerSliderVBox.slider
   private val upperSlider = upperSliderVBox.slider
 
-  private val replayButton = new ReplayButton(mutLogFileSettings, logEntries, lowerSlider, upperSlider)
+  private val replayStackPane = new ReplayStackPane(mutLogFileSettings, logEntries, lowerSlider, upperSlider, logTextView)
 
-  private val stopTimeAnimationButton = new StopTimeAnimationButton(mutLogFileSettings, replayButton)
+  private val stopTimeAnimationButton = new StopTimeAnimationButton(mutLogFileSettings, replayStackPane)
 
   lowerSlider.valueProperty.addListener((_, _, newValue) => {
     if (newValue.doubleValue > upperSlider.getValue) lowerSlider.setValue(upperSlider.getValue)
@@ -41,12 +43,12 @@ class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
     mutLogFileSettings.updateActiveFilter(filteredList)
   })
 
-  getItems.addAll(Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox, replayButton, stopTimeAnimationButton): _*)
+  getItems.addAll(Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox, replayStackPane, stopTimeAnimationButton): _*)
 
   updateSliderBoundaries()
 
   def updateSliderBoundaries(): Unit = {
-    TimerSlider.calcTimeInfo(filteredList) match {
+    TimeUtil.calcTimeInfo(filteredList) match {
       case Some(TimeInfo(minInstant, maxInstant)) =>
         lowerSlider.setBoundsAndValue(minInstant, maxInstant, minInstant.toEpochMilli.doubleValue)
         upperSlider.setBoundsAndValue(minInstant, maxInstant, maxInstant.toEpochMilli.doubleValue)

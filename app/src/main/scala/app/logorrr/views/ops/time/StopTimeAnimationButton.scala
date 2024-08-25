@@ -14,7 +14,7 @@ object StopTimeAnimationButton extends UiNodeFileIdAware {
 }
 
 class StopTimeAnimationButton(mutLogFileSettings: MutLogFileSettings
-                              , replayButton: ReplayButton) extends Button {
+                              , replayStackPane: ReplayStackPane) extends Button {
 
   setId(StopTimeAnimationButton.uiNode(mutLogFileSettings.getFileId).value)
 
@@ -24,6 +24,6 @@ class StopTimeAnimationButton(mutLogFileSettings: MutLogFileSettings
   setGraphic(new FontIcon(FontAwesomeRegular.STOP_CIRCLE))
   setTooltip(new Tooltip("stop animation"))
   setOnAction(_ => {
-    replayButton.stopTimer()
+    replayStackPane.reset()
   })
 }

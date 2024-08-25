@@ -12,16 +12,7 @@ import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId}
 
 
-object TimerSlider extends UiNodeFileIdAndPosAware {
-
-  val Width = 350
-
-  def format(epochMilli: Long, formatter: DateTimeFormatter): String = {
-    val instant = Instant.ofEpochMilli(epochMilli)
-    val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault)
-    dateTime.format(formatter)
-  }
-
+object TimeUtil {
   /**
    * Given an observable list of log entries, calculate the min and max instant. LogEntries doesn't have to be ordered.
    *
@@ -51,6 +42,18 @@ object TimerSlider extends UiNodeFileIdAndPosAware {
       } else Option(TimeInfo(minInstant, maxInstant))
     } else None
   }
+}
+
+object TimerSlider extends UiNodeFileIdAndPosAware {
+
+  val Width = 350
+
+  def format(epochMilli: Long, formatter: DateTimeFormatter): String = {
+    val instant = Instant.ofEpochMilli(epochMilli)
+    val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault)
+    dateTime.format(formatter)
+  }
+
 
   override def uiNode(id: FileId, pos: Pos): UiNode = UiNode(id, pos, classOf[TimerSlider])
 }
