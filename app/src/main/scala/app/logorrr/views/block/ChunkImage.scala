@@ -9,7 +9,7 @@ import javafx.scene.image.WritableImage
 
 
 /**
- * Displays a Chunk, backed by a Pixelbuffer.
+ * Displays a Chunk, backed by a PixelBuffer.
  */
 object ChunkImage {
 

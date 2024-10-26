@@ -104,7 +104,7 @@ object LPixelBuffer extends CanLog {
         }
       }
     } else {
-      //      logWarn(s"tried to paint outside of allowed index. [endIdx = maxHeight * canvasWidth + x + length] ($endIdx = $maxHeight * $canvasWidth + $x + $length) ")
+      //      logWarn(s"tried to paint outside allowed index. [endIdx = maxHeight * canvasWidth + x + length] ($endIdx = $maxHeight * $canvasWidth + $x + $length) ")
     }
   }
 
