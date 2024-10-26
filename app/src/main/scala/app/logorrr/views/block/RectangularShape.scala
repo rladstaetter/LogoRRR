@@ -14,10 +14,10 @@ import javafx.geometry.Rectangle2D
  */
 case class RectangularShape(width: Double, height: Double) extends Rectangle2D(0.0, 0.0, width, height) {
   // checks in order not to overshoot the boundaries of underlying restrictions of the hardware accelerated api
-  // assert(width <= ChunkImage.MaxWidth, s"width was $width which exceeds ${ChunkImage.MaxWidth}.")
-  // assert(height <= ChunkImage.MaxHeight, s"height was $height which exceeds ${ChunkImage.MaxHeight}.")
-  // assert(width > 0)
-  // assert(height > 0)
+  assert(width <= ChunkImage.MaxWidth, s"width was $width which exceeds ${ChunkImage.MaxWidth}.")
+  assert(height <= ChunkImage.MaxHeight, s"height was $height which exceeds ${ChunkImage.MaxHeight}.")
+  assert(width > 0)
+  assert(height > 0)
 
   val widthAsInt: Int = width.toInt
   val heightAsInt: Int = height.toInt
