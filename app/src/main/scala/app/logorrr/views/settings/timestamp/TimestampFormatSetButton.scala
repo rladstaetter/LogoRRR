@@ -30,7 +30,7 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
                                , timeOpsToolBar: TimeOpsToolBar
                                , closeStage: => Unit) extends Button("set format") {
   setId(TimestampFormatSetButton.uiNode(mutLogFileSettings.getFileId).value)
-  setPrefWidth(400)
+  setPrefWidth(350)
   setAlignment(Pos.CENTER)
   setOnAction(_ => {
     val leif: TimestampSettings = TimestampSettings(getRange, timeFormatTf.getText.trim)
