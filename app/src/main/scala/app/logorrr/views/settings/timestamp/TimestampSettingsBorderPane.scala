@@ -8,16 +8,10 @@ import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property.SimpleObjectProperty
-import javafx.collections.ObservableList
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control._
 import javafx.scene.layout.{BorderPane, HBox, VBox}
-
-
-object TimestampSettingsBorderPane {
-
-
-}
 
 
 class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
@@ -61,7 +55,7 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
   private val setTimestampFormatButton = new TimestampFormatSetButton(mutLogFileSettings, getRange, timeFormatTf, chunkListView, logEntries, timeOpsToolBar, closeStage)
   private val resetTimestampFormatButton = new TimestampFormatResetButton(mutLogFileSettings, chunkListView, logEntries, timeOpsToolBar, closeStage)
 
-  // has to be assigned to a val otherwise this won't get intepreted
+  // has to be assigned to a val otherwise this won't get executed
   val binding: ObjectBinding[String] =
     Bindings.createObjectBinding(() => s"$getStartCol $getEndCol", startColProperty, endColProperty)
 
@@ -77,9 +71,12 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
     hl
   }
 
+  private val firstVisible = mutLogFileSettings.firstVisibleTextCellIndexProperty.get()
+  private val lastVisible = mutLogFileSettings.lastVisibleTextCellIndexProperty.get()
+  private val l = FXCollections.observableArrayList((for (i <- firstVisible to lastVisible) yield logEntries.get(i)): _*)
 
   private val timerSettingsLogTextView = {
-    val tslv = new TimestampPositionSelectionBorderPane(mutLogFileSettings, logEntries)
+    val tslv = new TimestampPositionSelectionBorderPane(mutLogFileSettings, l)
     startColProperty.bind(tslv.startColProperty)
     endColProperty.bind(tslv.endColProperty)
     tslv

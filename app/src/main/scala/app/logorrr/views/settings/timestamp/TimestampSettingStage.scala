@@ -24,7 +24,7 @@ class TimestampSettingStage(owner: Window
 
   initOwner(owner)
   initModality(Modality.APPLICATION_MODAL)
-  setTitle(s"Specify the timestamp range (from - to columns) and the time pattern for ${settings.getFileId.fileName}")
+  setTitle(s"Specify timestamp range (from - to columns) and time pattern for ${settings.getFileId.fileName}")
 
   val scene = new Scene(
     new TimestampSettingsBorderPane(settings
@@ -34,6 +34,7 @@ class TimestampSettingStage(owner: Window
       , JfxUtils.closeStage(this))
     , TimestampSettingStage.width
     , TimestampSettingStage.height)
+
   setScene(scene)
   setOnCloseRequest(_ => this.close())
 }
