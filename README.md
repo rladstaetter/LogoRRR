@@ -1,6 +1,6 @@
 # `LogoRRR`
 
-[![Watch a video of LogoRRRs features](docs/releases/24.4.0/24.4.0-linux.png)](https://youtu.be/5ogC95PX0Ag)
+[![Watch a video of LogoRRRs features](docs/releases/24.5.1/24.5.1-mac.png)](https://youtu.be/5ogC95PX0Ag)
 
 LogoRRR is a powerful desktop application designed to simplify the analysis of text files for recurring patterns. Whether you’re searching for specific events in log files or analysing any other type of text file, LogoRRR makes the process effortless and efficient.
 
@@ -15,7 +15,7 @@ Visit the [www.logorrr.app](https://www.logorrr.app/) for more information.
 
 The easiest way on Windows to install `LogoRRR` is by [downloading LogoRRR from the Microsoft App Store](https://aka.ms/AAr3sxs).
 
-Alternatively, you can download the latest [Windows installers](https://github.com/rladstaetter/LogoRRR/releases/tag/24.4.0) from the github release page.
+Alternatively, you can download the latest [Windows installers](https://github.com/rladstaetter/LogoRRR/releases/tag/24.5.1) from the github release page.
 
 ## MacOsX installation
 
@@ -25,7 +25,7 @@ Older releases versions are available on the [releases page](https://github.com/
 
 ## Linux installation
 
-Linux installation packages can be downloaded [from the github release page](https://github.com/rladstaetter/LogoRRR/releases/tag/24.4.0).
+Linux installation packages can be downloaded [from the github release page](https://github.com/rladstaetter/LogoRRR/releases/tag/24.5.1).
 
 ## Features
 
