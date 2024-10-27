@@ -135,12 +135,6 @@
             </build>
         </profile>
         <profile>
-            <id>env.intellij</id>
-            <modules>
-                <module>env</module>
-            </modules>
-        </profile>
-        <profile>
             <id>benchmarks</id>
             <modules>
                 <module>benchmarks</module>
@@ -156,6 +150,7 @@
     <modules>
         <module>core</module>
         <module>build</module>
+        <module>env</module>
         <module>app</module>
         <module>dist</module>
         <module>docs</module>
@@ -249,6 +244,12 @@
                 <groupId>app.logorrr</groupId>
                 <artifactId>core</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>app.logorrr</groupId>
+                <artifactId>env</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>app.logorrr</groupId>
@@ -537,9 +538,9 @@
                                         </message>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
-                                        <version>19</version>
-                                        <message>JDK 19 is necessary to execute build, download here:
-                                            https://www.azul.com/downloads/zulu-community/?version=java-19-sts&amp;package=jdk
+                                        <version>23</version>
+                                        <message>JDK 23 is recommended to build LogoRRR, use SDKman.io or download from a JDK provider like this one:
+                                            https://www.azul.com/downloads/?version=java-23&amp;package=jdk#zulu
                                         </message>
                                     </requireJavaVersion>
                                 </rules>

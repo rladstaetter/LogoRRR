@@ -23,6 +23,12 @@
             <artifactId>atlantafx-base</artifactId>
         </dependency>
         -->
+        <!-- make sure env is initialised before building the app -->
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>env</artifactId>
+            <type>pom</type>
+        </dependency>
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>
