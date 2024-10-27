@@ -77,9 +77,9 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
   private val lastVisible = Option(mutLogFileSettings.lastVisibleTextCellIndexProperty.get()).getOrElse(logEntries.size())
   private val l = {
     if (firstVisible == lastVisible && lastVisible == 0) { // if first/last visible was not yet set
-      FXCollections.observableArrayList((for (i <- firstVisible to showThisManyRows) yield logEntries.get(i)): _*)
+      FXCollections.observableArrayList((for (i <- firstVisible until showThisManyRows) yield logEntries.get(i)): _*)
     } else {
-      FXCollections.observableArrayList((for (i <- firstVisible to lastVisible) yield logEntries.get(i)): _*)
+      FXCollections.observableArrayList((for (i <- firstVisible until lastVisible) yield logEntries.get(i)): _*)
     }
   }
 
