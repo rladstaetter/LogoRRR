@@ -1,7 +1,7 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, JfxUtils, OsUtil}
+import app.logorrr.util.{CanLog, JfxUtils}
 import app.logorrr.views.search.Filter
 import javafx.animation.{KeyFrame, Timeline}
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
@@ -88,8 +88,8 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
     }
   }
 
-  // see #262 - until this is fixed don't activate the mousemoved handler on windows
-  if (OsUtil.isMac) {
+  // see #262 - until this is fixed don't activate the mousemoved handler
+  if (false) {
     setOnMouseMoved(mouseMovedHandler)
   }
   setOnMouseClicked(mouseClickedHandler)
