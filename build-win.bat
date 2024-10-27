@@ -2,4 +2,4 @@
 ECHO Building LogoRRR
 cmd /C mvn clean package -q -T1C
 ECHO Installing LogoRRR
-cmd /C .\dist\dist-win\installer-win-jre\target\installer\LogoRRR-24.5.0-installer.exe
+cmd /C .\dist\dist-win\installer-win-jre\target\installer\LogoRRR-24.5.1-installer.exe
