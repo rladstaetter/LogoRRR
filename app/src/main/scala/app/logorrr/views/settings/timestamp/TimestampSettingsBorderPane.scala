@@ -71,9 +71,17 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
     hl
   }
 
-  private val firstVisible = mutLogFileSettings.firstVisibleTextCellIndexProperty.get()
-  private val lastVisible = mutLogFileSettings.lastVisibleTextCellIndexProperty.get()
-  private val l = FXCollections.observableArrayList((for (i <- firstVisible to lastVisible) yield logEntries.get(i)): _*)
+  private val ShowMax = 100 // how many rows should be shown in the TimeStamp Settings Dialog at max
+  private lazy val showThisManyRows = if (logEntries.size() > ShowMax) ShowMax else logEntries.size()
+  private val firstVisible = Option(mutLogFileSettings.firstVisibleTextCellIndexProperty.get()).getOrElse(0)
+  private val lastVisible = Option(mutLogFileSettings.lastVisibleTextCellIndexProperty.get()).getOrElse(logEntries.size())
+  private val l = {
+    if (firstVisible == lastVisible && lastVisible == 0) { // if first/last visible was not yet set
+      FXCollections.observableArrayList((for (i <- firstVisible to showThisManyRows) yield logEntries.get(i)): _*)
+    } else {
+      FXCollections.observableArrayList((for (i <- firstVisible to lastVisible) yield logEntries.get(i)): _*)
+    }
+  }
 
   private val timerSettingsLogTextView = {
     val tslv = new TimestampPositionSelectionBorderPane(mutLogFileSettings, l)
