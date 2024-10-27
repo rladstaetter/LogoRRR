@@ -38,12 +38,12 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
 
   def start(stage: Stage): Unit = {
     Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
-    val s0 = Seq[Area](R1280x800)
     /*
-    val s1 = Seq[Area](R1440x900)
-    val s2 = Seq[Area](R2560x1600)
-    val s3 = Seq[Area](R2880x1800)
+    val s0 = Seq[Area](R1280x800)
+    val s0 = Seq[Area](R1440x900)
+    val s0 = Seq[Area](R2560x1600)
     */
+    val s0 = Seq[Area](R2880x1800)
     for (Area(w, h, _, _) <- s0) {
       val path = Paths.get(s"docs/src/main/resources/screenshotter-$w-$h.conf")
       val settings: Settings = SettingsIO.fromFile(path)
