@@ -13,45 +13,41 @@
     <packaging>pom</packaging>
     <description>Downloads and provides openjfx sdk (needed for intellij run configurations)</description>
     <properties>
+        <jfxdownload.os.arch/>
         <openjfx.jmods.download.url>
-            https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-${os.arch}_bin-jmods.zip
+            https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-${jfxdownload.os.arch}_bin-jmods.zip
         </openjfx.jmods.download.url>
         <openjfx.sdk.download.url>
-            https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-${os.arch}_bin-sdk.zip
+            https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-${jfxdownload.os.arch}_bin-sdk.zip
         </openjfx.sdk.download.url>
     </properties>
 
     <profiles>
+        <!-- Profile for x64 (amd64) architecture -->
         <profile>
-            <id>OS.linux</id>
+            <id>x64-architecture</id>
             <activation>
-                <os>
-                    <family>linux</family>
-                </os>
+                <property>
+                    <name>os.arch</name>
+                    <value>amd64</value>
+                </property>
             </activation>
             <properties>
-                <openjfx.jmods.download.url>
-                    https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-aarch64_bin-jmods.zip
-                </openjfx.jmods.download.url>
-                <openjfx.sdk.download.url>
-                    https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-aarch64_bin-sdk.zip
-                </openjfx.sdk.download.url>
+                <jfxdownload.os.arch>x64</jfxdownload.os.arch>
             </properties>
         </profile>
+
+        <!-- Profile for aarch64 architecture -->
         <profile>
-            <id>OS.windows</id>
+            <id>aarch64-architecture</id>
             <activation>
-                <os>
-                    <family>windows</family>
-                </os>
+                <property>
+                    <name>os.arch</name>
+                    <value>aarch64</value>
+                </property>
             </activation>
             <properties>
-                <openjfx.jmods.download.url>
-                    https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-x64_bin-jmods.zip
-                </openjfx.jmods.download.url>
-                <openjfx.sdk.download.url>
-                    https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-x64_bin-sdk.zip
-                </openjfx.sdk.download.url>
+                <jfxdownload.os.arch>aarch64</jfxdownload.os.arch>
             </properties>
         </profile>
     </profiles>
