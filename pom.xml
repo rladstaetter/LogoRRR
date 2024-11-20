@@ -21,7 +21,7 @@
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <ikonli.version>12.3.1</ikonli.version>
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-        <gluonfx.plugin.version>1.0.23</gluonfx.plugin.version>
+        <gluonfx.plugin.version>1.0.24</gluonfx.plugin.version>
         <!-- no need to change these -->
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
