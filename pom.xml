@@ -426,7 +426,7 @@
                         <nativeImageArgs>
                             <arg>--no-fallback</arg>
                             <arg>-H:-UseServiceLoaderFeature</arg>
-                            <arg>--report-unsupported-elements-at-runtime</arg>
+                            <arg>-H:+UnlockExperimentalVMOptions</arg>
                             <arg>-Dgraal.LogFile=${graalvm.log}</arg>
                         </nativeImageArgs>
                     </configuration>
