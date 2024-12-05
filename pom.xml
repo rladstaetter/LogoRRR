@@ -17,11 +17,11 @@
         <revision>25.1.0</revision>
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.15</scala.version>
-        <openjfx.version>23.0.1</openjfx.version>
+        <openjfx.version>21.0.5</openjfx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <ikonli.version>12.3.1</ikonli.version>
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-        <gluonfx.plugin.version>1.0.24</gluonfx.plugin.version>
+        <gluonfx.plugin.version>1.0.23</gluonfx.plugin.version>
         <!-- no need to change these -->
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,7 +31,7 @@
         <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
         <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
         <jmh.version>1.37</jmh.version>
-        <windows.temurin.version>https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.5%2B11/OpenJDK21U-jre_x64_windows_hotspot_21.0.5_11.zip</windows.temurin.version>
+        <windows.temurin.version>https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_windows_hotspot_22.0.1_8.zip</windows.temurin.version>
     </properties>
     <scm>
         <connection>scm:git:https://github.com/rladstaetter/LogoRRR.git</connection>
