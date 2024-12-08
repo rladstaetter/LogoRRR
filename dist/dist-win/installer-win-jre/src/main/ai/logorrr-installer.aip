@@ -213,7 +213,6 @@
     <ROW IniFile="MainClass" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Java Runtime Environment" Key="Main Class" Value="app.logorrr.LogoRRRAppLauncher" Action="0" Component_="LogoRRR.exe"/>
     <ROW IniFile="MaximumVersion" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Java Runtime Environment" Key="Maximum Version" Value="any" Action="0" Component_="LogoRRR.exe"/>
     <ROW IniFile="MinimumVersion" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Java Runtime Environment" Key="Minimum Version" Value="any" Action="0" Component_="LogoRRR.exe"/>
-    <ROW IniFile="OverrideWorkingDir" FileName="LogoRRR.ini" DirProperty="APPDIR" Section="Application" Key="Override WorkingDir" Value="yes" Action="0" Component_="LogoRRR.exe"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
@@ -248,7 +247,7 @@
     <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiJavaComponent">
-    <ROW Name="LogoRRR.exe" Launcher="LogoRRR.exe" MainClass="MainClass" ClassPath="ClassPath" JREMin="MinimumVersion" JREMax="MaximumVersion" IconPath="logorrr-icon-128.ico" AppType="ApplicationType" PlusList="APPDIR;" MinusList="#LogoRRR.exe;" MacDescription="[|CurrentJavaProductName] [|ProductVersion] © [|Manufacturer], Inc, 2022" MacBundleId="com.[|Manufacturer].[|ProductName].[|CurrentJavaProductName]" FailureCheck="FailureCheck" OverrideWkDir="OverrideWorkingDir" UACExecutionLevel="0" Platform64="true" ExeMetadata="FileDescription:LogoRRR"/>
+    <ROW Name="LogoRRR.exe" Launcher="LogoRRR.exe" MainClass="MainClass" ClassPath="ClassPath" JREMin="MinimumVersion" JREMax="MaximumVersion" IconPath="logorrr-icon-128.ico" AppType="ApplicationType" PlusList="APPDIR;" MinusList="#LogoRRR.exe;" MacDescription="[|CurrentJavaProductName] [|ProductVersion] © [|Manufacturer], Inc, 2022" MacBundleId="com.[|Manufacturer].[|ProductName].[|CurrentJavaProductName]" FailureCheck="FailureCheck" UACExecutionLevel="0" Platform64="true" ExeMetadata="FileDescription:LogoRRR"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
     <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild;ExeInstaller_1"/>
