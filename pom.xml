@@ -31,7 +31,7 @@
         <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
         <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
         <jmh.version>1.37</jmh.version>
-        <windows.temurin.version>https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_windows_hotspot_22.0.1_8.zip</windows.temurin.version>
+        <windows.temurin.version>https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.5%2B11/OpenJDK21U-jre_x64_windows_hotspot_21.0.5_11.zip</windows.temurin.version>
     </properties>
     <scm>
         <connection>scm:git:https://github.com/rladstaetter/LogoRRR.git</connection>
@@ -535,9 +535,9 @@
                                         </message>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
-                                        <version>23</version>
-                                        <message>JDK 23 is recommended to build LogoRRR, use SDKman.io or download from a JDK provider like this one:
-                                            https://www.azul.com/downloads/?version=java-23&amp;package=jdk#zulu
+                                        <version>21</version>
+                                        <message>JDK 21 LTS is recommended to build LogoRRR, use SDKman.io or download from a JDK provider like this one:
+                                            https://github.com/adoptium/temurin21-binaries/releases/tag/jdk-21.0.5%2B11
                                         </message>
                                     </requireJavaVersion>
                                 </rules>
