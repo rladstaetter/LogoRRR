@@ -13,7 +13,6 @@
         <!--
             <jdk.home>/path/to/jdk</jdk.home> (mac, linux, windows)
             <graalvm.home>/path/to/graalvm</graalvm.home> (mac, linux, windows)
-            <osx.jdk.home.aarch64>/path/to/aarch64/jdk</osx.jdk.home.aarch64> (mac)
             -->
         <revision>25.1.0</revision>
         <scala.major.version>2.13</scala.major.version>
@@ -32,7 +31,7 @@
         <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
         <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
         <jmh.version>1.37</jmh.version>
-        <windows.temurin.version>https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_windows_hotspot_22.0.1_8.zip</windows.temurin.version>
+        <windows.temurin.version>https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.5%2B11/OpenJDK21U-jre_x64_windows_hotspot_21.0.5_11.zip</windows.temurin.version>
     </properties>
     <scm>
         <connection>scm:git:https://github.com/rladstaetter/LogoRRR.git</connection>
@@ -76,7 +75,6 @@
                 </os>
             </activation>
             <properties>
-                <jdk.home>${osx.jdk.home.aarch64}</jdk.home>
                 <jdk.javac>${jdk.home}/bin/javac</jdk.javac>
                 <jdk.javah>${jdk.home}/bin/javah</jdk.javah>
                 <openjfx.os.prefix>osx</openjfx.os.prefix>
@@ -113,10 +111,8 @@
                                                             </requireProperty>
                                                             -->
                                         <requireProperty>
-                                            <property>osx.jdk.home.aarch64</property>
-                                            <message>You have to set 'osx.jdk.home.aarch64' and it must point to a
-                                                aarch64 jdk.
-                                            </message>
+                                            <property>jdk.home</property>
+                                            <message>You have to set 'jdk.home' and it must point to a valid jdk installation (Tip: use SDKMan.io to install)</message>
                                         </requireProperty>
                                         <requireProperty>
                                             <property>osx.swiftc</property>
@@ -539,9 +535,9 @@
                                         </message>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
-                                        <version>23</version>
-                                        <message>JDK 23 is recommended to build LogoRRR, use SDKman.io or download from a JDK provider like this one:
-                                            https://www.azul.com/downloads/?version=java-23&amp;package=jdk#zulu
+                                        <version>21</version>
+                                        <message>JDK 21 LTS is recommended to build LogoRRR, use SDKman.io or download from a JDK provider like this one:
+                                            https://github.com/adoptium/temurin21-binaries/releases/tag/jdk-21.0.5%2B11
                                         </message>
                                     </requireJavaVersion>
                                 </rules>
