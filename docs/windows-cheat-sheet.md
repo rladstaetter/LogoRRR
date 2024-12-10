@@ -4,6 +4,8 @@
 
 ### Deployment to Windows App Store
 
+#### Windows Smart Screen
+
 * Make sure your installer is properly signed!
 * Before submitting, make sure you registered the binary as 'safe' for Windows Defender
 
@@ -12,6 +14,11 @@
 3. Fill out and submit the form. You will receive an email confirming receipt of your report.
 4. 24 hours after sending the report confirm that the file no longer displays a Smartscreen warning before resubmitting the product for certification.
 
+#### File Submission
+
+https://www.microsoft.com/en-us/wdsi/filesubmission
+
+Use this website to submit the installer to Microsoft which in turn validates the application and increases the application reputation.
 
 ## Command line commands
 
