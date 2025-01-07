@@ -30,6 +30,7 @@
         <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
         <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
         <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
+        <flatpak.binary>/usr/bin/flatpak-builder</flatpak.binary>
         <jmh.version>1.37</jmh.version>
         <windows.temurin.version>https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_windows_hotspot_22.0.1_8.zip</windows.temurin.version>
     </properties>
@@ -275,6 +276,12 @@
                 <artifactId>dist-repackaged</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>app.logorrr.dist.linux</groupId>
+                <artifactId>app-image</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.openjdk.jmh</groupId>
                 <artifactId>jmh-core</artifactId>
