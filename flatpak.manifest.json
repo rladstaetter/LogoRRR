@@ -1,0 +1,26 @@
+{
+    "app-id": "app.logorrr.LogoRRR",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "23.08",
+    "sdk": "org.freedesktop.Sdk",
+    "command": "logorrr",
+    "finish-args": [
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--filesystem=home"
+    ],
+    "modules": [
+        {
+            "name": "logorrr",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/rladstaetter/LogoRRR.git",
+                    "branch": "main"
+                }
+            ]
+        }
+    ]
+}
