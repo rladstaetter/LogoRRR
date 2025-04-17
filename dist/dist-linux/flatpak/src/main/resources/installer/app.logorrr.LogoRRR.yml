@@ -1,0 +1,39 @@
+app-id: app.logorrr.LogoRRR
+version: ${project.version}
+runtime: org.freedesktop.Platform
+runtime-version: "23.08"
+sdk: org.freedesktop.Sdk
+command: /app/LogoRRR/bin/LogoRRR
+modules:
+  - name: LogoRRR
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/LogoRRR/
+      - cp -r LogoRRR/* /app/LogoRRR/
+      - install -Dm644 logorrr-icon-64.png /app/share/icons/hicolor/64x64/apps/app.logorrr.LogoRRR.png
+      - install -Dm644 logorrr-icon-128.png /app/share/icons/hicolor/128x128/apps/app.logorrr.LogoRRR.png
+      - install -Dm644 logorrr-icon-256.png /app/share/icons/hicolor/256x256/apps/app.logorrr.LogoRRR.png
+      - install -Dm644 logorrr-icon-512.png /app/share/icons/hicolor/512x512/apps/app.logorrr.LogoRRR.png
+      - install -Dm644 app.logorrr.LogoRRR.metainfo.xml /app/share/metainfo/app.logorrr.LogoRRR.metainfo.xml
+      - install -Dm644 app.logorrr.LogoRRR.desktop -t /app/share/applications
+    sources:
+      - type: dir
+        path: app-image/
+      - type: file
+        path: app.logorrr.LogoRRR.desktop
+      - type: file
+        path: app.logorrr.LogoRRR.metainfo.xml
+      - type: file
+        path: logorrr-icon-64.png
+      - type: file
+        path: logorrr-icon-128.png
+      - type: file
+        path: logorrr-icon-256.png
+      - type: file
+        path: logorrr-icon-512.png
+finish-args:
+  - --socket=x11
+  - --socket=wayland
+  - --share=ipc
+  - --device=dri
+  - --filesystem=home

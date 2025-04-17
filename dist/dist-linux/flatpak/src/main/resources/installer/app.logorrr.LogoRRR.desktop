@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=LogoRRR
+Comment=A simple log viewer
+Exec=/app/LogoRRR/bin/LogoRRR
+Icon=app.logorrr.LogoRRR
+Terminal=false
+StartupNotify=true
+Categories=Utility;
