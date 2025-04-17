@@ -16,12 +16,11 @@
             -->
         <revision>25.1.0</revision>
         <scala.major.version>2.13</scala.major.version>
-        <scala.version>${scala.major.version}.15</scala.version>
-        <openjfx.version>23.0.1</openjfx.version>
-        <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
+        <scala.version>${scala.major.version}.16</scala.version>
+        <openjfx.version>24.0.1</openjfx.version>
         <ikonli.version>12.3.1</ikonli.version>
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-        <gluonfx.plugin.version>1.0.23</gluonfx.plugin.version>
+        <gluonfx.plugin.version>1.0.26</gluonfx.plugin.version>
         <!-- no need to change these -->
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -401,14 +400,16 @@
                 <!-- to activate a tracing agent via client:runagent -->
                 <!-- see https://docs.oracle.com/en/graalvm/enterprise/19/guide/reference/native-image/tracing-agent.html -->
                 <!-- and https://docs.gluonhq.com/#_clientrunagent -->
+                <!--
                 <plugin>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-maven-plugin</artifactId>
-                    <version>${javafx.maven.plugin.version}</version>
+                    <version>0.0.8</version>
                     <configuration>
                         <mainClass>${main.class}</mainClass>
                     </configuration>
                 </plugin>
+                -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
