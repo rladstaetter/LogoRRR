@@ -536,9 +536,9 @@
                                         </message>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
-                                        <version>21</version>
-                                        <message>JDK 21 LTS is recommended to build LogoRRR, use SDKman.io or download from a JDK provider like this one:
-                                            https://github.com/adoptium/temurin21-binaries/releases/tag/jdk-21.0.5%2B11
+                                        <version>24</version>
+                                        <message>JDK 24 or newer is recommended to build LogoRRR, use SDKman.io or download from a JDK provider like this one:
+                                            https://github.com/adoptium/temurin24-binaries/releases/download/jdk-24.0.1%2B9/OpenJDK24U-jdk_x64_windows_hotspot_24.0.1_9.zip
                                         </message>
                                     </requireJavaVersion>
                                 </rules>
