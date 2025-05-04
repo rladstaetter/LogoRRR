@@ -1,5 +1,4 @@
 app-id: app.logorrr.LogoRRR
-version: ${project.version}
 runtime: org.freedesktop.Platform
 runtime-version: "23.08"
 sdk: org.freedesktop.Sdk
@@ -10,8 +9,8 @@ modules:
     build-commands:
       - mkdir -p /app/LogoRRR/
       - cp -r LogoRRR/* /app/LogoRRR/
-      - install -Dm644 logorrr-icon-64.png /app/share/icons/hicolor/16x16/apps/app.logorrr.LogoRRR.png
-      - install -Dm644 logorrr-icon-64.png /app/share/icons/hicolor/32x32/apps/app.logorrr.LogoRRR.png
+      - install -Dm644 logorrr-icon-16.png /app/share/icons/hicolor/16x16/apps/app.logorrr.LogoRRR.png
+      - install -Dm644 logorrr-icon-32.png /app/share/icons/hicolor/32x32/apps/app.logorrr.LogoRRR.png
       - install -Dm644 logorrr-icon-64.png /app/share/icons/hicolor/64x64/apps/app.logorrr.LogoRRR.png
       - install -Dm644 logorrr-icon-128.png /app/share/icons/hicolor/128x128/apps/app.logorrr.LogoRRR.png
       - install -Dm644 logorrr-icon-256.png /app/share/icons/hicolor/256x256/apps/app.logorrr.LogoRRR.png
@@ -25,6 +24,10 @@ modules:
         path: app.logorrr.LogoRRR.desktop
       - type: file
         path: app.logorrr.LogoRRR.metainfo.xml
+      - type: file
+        path: logorrr-icon-16.png
+      - type: file
+        path: logorrr-icon-32.png
       - type: file
         path: logorrr-icon-64.png
       - type: file
