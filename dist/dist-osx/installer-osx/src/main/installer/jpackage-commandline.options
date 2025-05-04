@@ -6,7 +6,7 @@
 --mac-app-store
 --mac-entitlements LogoRRR.entitlements.xml
 --mac-app-category public.app-category.developer-tools
---copyright "Copyright 2021-${currentYear} www.logorrr.app"
+--copyright "Copyright 2021-${currentYear} Robert Ladstaetter"
 --description "LogoRRR is a log file visualisation app, see https://www.logorrr.app/"
 --icon icon/logorrr-iconset.icns
 --name LogoRRR

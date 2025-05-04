@@ -1,5 +1,5 @@
 --type deb
---copyright "Copyright 2021-${currentYear} www.logorrr.app"
+--copyright "Copyright 2021-${currentYear} Robert Ladstaetter"
 --description "LogoRRR is a log file visualisation app, see https://www.logorrr.app/"
 --icon icon/icon_256x256.png
 --name LogoRRR
