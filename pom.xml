@@ -608,14 +608,25 @@
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>timestamp-property</id>
+                        <id>timestamp-currentYear</id>
                         <goals>
                             <goal>timestamp-property</goal>
                         </goals>
                         <configuration>
                             <name>currentYear</name>
                             <pattern>yyyy</pattern>
-                            <timeZone>GMT</timeZone>
+                            <timeZone>Europe/Vienna</timeZone>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>timestamp-currentDate</id>
+                        <goals>
+                            <goal>timestamp-property</goal>
+                        </goals>
+                        <configuration>
+                            <name>currentDate</name>
+                            <pattern>yyyy-MM-dd</pattern>
+                            <timeZone>Europe/Vienna</timeZone>
                         </configuration>
                     </execution>
                 </executions>
