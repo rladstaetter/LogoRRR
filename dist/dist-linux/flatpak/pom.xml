@@ -2,101 +2,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>app.logorrr.dist.linux</groupId>
         <artifactId>dist-linux</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
+    <groupId>app.logorrr.dist.linux.flatpak</groupId>
+    <artifactId>flatpak</artifactId>
+
+    <name>app.logorrr.dist.linux.flatpak</name>
+    <packaging>pom</packaging>
+    <description>Flatpak build for linux</description>
     <properties>
         <flatpak.binary>/usr/bin/flatpak-builder</flatpak.binary>
     </properties>
 
-    <artifactId>flatpak</artifactId>
-    <name>app.logorrr.dist.linux.flatpak</name>
-
-    <dependencies>
-        <dependency>
-            <groupId>app.logorrr.dist.linux</groupId>
-            <artifactId>app-image</artifactId>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources/icon</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <filtering>false</filtering>
-                <targetPath>${project.build.directory}</targetPath>
-            </resource>
-            <resource>
-                <directory>src/main/resources/installer</directory>
-                <includes>
-                    <include>*.*</include>
-                </includes>
-                <filtering>true</filtering>
-                <targetPath>${project.build.directory}</targetPath>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>app.logorrr.dist.linux</groupId>
-                                    <artifactId>app-image</artifactId>
-                                    <version>${project.version}</version>
-                                    <outputDirectory>${project.build.directory}/app-image</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>create-flatpak</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${flatpak.binary}</executable>
-                            <workingDirectory>${project.build.directory}</workingDirectory>
-                            <arguments>
-                                <argument>--force-clean</argument>
-                                <argument>--user</argument>
-                                <argument>--install-deps-from=flathub</argument>
-                                <!--
-                                <argument>- -repo=repo</argument>
-                                -->
-                                <argument>--install</argument>
-                                <argument>flatpak-app</argument>
-                                <argument>app.logorrr.LogoRRR.yml</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <modules>
+        <module>flatpak-archive</module>
+        <module>flatpak-flathub</module>
+        <module>flatpak-local</module>
+    </modules>
 
 </project>

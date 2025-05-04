@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>app.logorrr.dist.linux.flatpak</groupId>
+        <artifactId>flatpak</artifactId>
+        <version>${revision}${changelist}</version>
+    </parent>
+
+    <artifactId>flatpak-archive</artifactId>
+    <name>app.logorrr.dist.linux.flatpak.flatpak-archive</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>app.logorrr.dist.linux</groupId>
+            <artifactId>app-image</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/icons</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <filtering>false</filtering>
+                <targetPath>${project.build.directory}/flat/icons</targetPath>
+            </resource>
+            <resource>
+                <directory>src/main/resources/flat</directory>
+                <includes>
+                    <include>*.*</include>
+                </includes>
+                <filtering>true</filtering>
+                <targetPath>${project.build.directory}/flat</targetPath>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>app.logorrr.dist.linux</groupId>
+                                    <artifactId>app-image</artifactId>
+                                    <version>${project.version}</version>
+                                    <outputDirectory>${project.build.directory}/flat/binaries</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>archive.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-tar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-sha256</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <checksum fileext=".sha256" algorithm="SHA-256">
+                                    <fileset dir="${project.build.directory}" includes="*archive.tar.gz"/>
+                                </checksum>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
