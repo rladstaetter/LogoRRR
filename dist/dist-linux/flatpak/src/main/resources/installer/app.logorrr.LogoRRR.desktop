@@ -6,5 +6,4 @@ Exec=/app/LogoRRR/bin/LogoRRR
 Icon=app.logorrr.LogoRRR
 Terminal=false
 StartupNotify=true
-Categories=Utility
-X-AppVersion=${project.version}
+Categories=Utility;

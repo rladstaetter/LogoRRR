@@ -25,5 +25,8 @@ MAVEN_OPTS="--enable-native-access=ALL-UNNAMED" mvn clean install -T1C
 DEB_PATH="./dist/dist-linux/deb/target/installer/logorrr_25.1.0_${DEB_ARCH}.deb"
 sudo apt install "$DEB_PATH"
 
-# Run the app
+# Run the app (installed via .deb)
 /opt/logorrr/bin/LogoRRR
+
+# run the app (installed via flatpak)
+flatpak run app.logorrr.LogoRRR

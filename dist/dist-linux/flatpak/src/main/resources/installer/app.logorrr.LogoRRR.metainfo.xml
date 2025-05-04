@@ -5,12 +5,16 @@
     <name>LogoRRR</name>
     <summary>A log viewer which is simple to use</summary>
 
-    <metadata_license>FSFAP</metadata_license>
+    <metadata_license>CC-BY-4.0</metadata_license>
     <project_license>Apache-2.0</project_license>
     <url type="homepage">https://www.logorrr.app/</url>
+    <update_contact>support@logorrr.app</update_contact>
     <developer id="app.logorrr">
         <name>Robert Ladstätter</name>
     </developer>
+    <provides>
+        <binary>LogoRRR</binary>
+    </provides>
     <description>
         <p>
             LogoRRR is a powerful desktop application designed to simplify the analysis of text files for recurring
