@@ -19,7 +19,7 @@ case "$ARCH" in
 esac
 
 # Maven build
-mvn clean install -T1C
+MAVEN_OPTS="--enable-native-access=ALL-UNNAMED" mvn clean install -T1C
 
 # Install the appropriate .deb
 DEB_PATH="./dist/dist-linux/deb/target/installer/logorrr_25.1.0_${DEB_ARCH}.deb"
