@@ -2,7 +2,7 @@
 
 You can quite easily just hit the 'star' button here on github.
 
-You can drop me a line at twitter: [@logorrr](https://www.twitter.com/logorrr/).
+You can drop me a line at bluesky: [@logorrr.bsky.social](https://bsky.app/profile/logorrr.bsky.social).
 
 ## Sponsors 
 

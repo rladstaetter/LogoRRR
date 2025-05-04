@@ -1,5 +1,5 @@
 --type deb
---copyright "Copyright 2021-${currentYear} Robert Ladstätter"
+--copyright "Copyright 2021-${currentYear} Robert Ladstaetter"
 --description "LogoRRR is a log file visualisation app, see https://www.logorrr.app/"
 --icon icon/icon_256x256.png
 --name LogoRRR
@@ -16,4 +16,5 @@
 --main-class ${main.launcher.class}
 --java-options -Xmx4096m
 --java-options -Djava.library.path=$APPDIR/.
+--java-options --enable-native-access=javafx.graphics,ALL-UNNAMED
 --main-jar app-${project.version}.jar
