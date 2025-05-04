@@ -28,7 +28,7 @@
   <key>CFBundleVersion</key>
   <string>${revision}</string>
   <key>NSHumanReadableCopyright</key>
-  <string>Copyright 2021-2023 www.logorrr.app</string>
+  <string>Copyright 2021-2025 Robert Ladstaetter</string>
   <key>NSHighResolutionCapable</key>
   <string>true</string>
  </dict>

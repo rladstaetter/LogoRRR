@@ -11,10 +11,9 @@ only have to provide the path to your GraalVM installation in the main pom.xml f
 
 For the brave, there are build scripts in the main directory for each OS:
 
-    build-linux-aarch64.sh
-    build-linux-amd64.sh
-    build-mac.sh
-    build-win.bat
+    linux.sh
+    mac.sh
+    win.bat
 
 After configuring the project once properly, you can use those build scripts (which are trivial but handy) to
 build `LogoRRR`.
