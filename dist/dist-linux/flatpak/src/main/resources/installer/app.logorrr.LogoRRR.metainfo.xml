@@ -42,7 +42,7 @@
     </branding>
     <content_rating type="oars-1.1" />
     <releases>
-        <release version="${project.version}" date="2024-10-27">
+        <release version="${project.version}" date="${currentDate}">
             <description>
                 <p>Initial release for flatpak.</p>
             </description>
