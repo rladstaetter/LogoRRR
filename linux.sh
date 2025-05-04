@@ -22,7 +22,7 @@ esac
 mvn clean install -T1C
 
 # Install the appropriate .deb
-DEB_PATH="./dist/dist-linux/installer-linux/target/installer/logorrr_25.1.0_${DEB_ARCH}.deb"
+DEB_PATH="./dist/dist-linux/deb/target/installer/logorrr_25.1.0_${DEB_ARCH}.deb"
 sudo apt install "$DEB_PATH"
 
 # Run the app
