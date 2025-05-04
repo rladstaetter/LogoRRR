@@ -8,7 +8,6 @@
 --vendor logorrr.app
 --verbose
 --input libs
---java-options -Xmx4096m
 --license-file ../../../../LICENSE
 --dest installer
 --module-path ../../../../env/target/javafx-jmods-${openjfx.version}
@@ -18,4 +17,5 @@
 --main-class ${main.launcher.class}
 --java-options -Xmx4096m
 --java-options -Djava.library.path=$APPDIR/.
+--java-options --enable-native-access=javafx.graphics,ALL-UNNAMED
 --main-jar app-${project.version}.jar
