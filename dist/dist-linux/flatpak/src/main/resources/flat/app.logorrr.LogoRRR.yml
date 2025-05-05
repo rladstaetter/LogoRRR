@@ -5,6 +5,7 @@ sdk: org.freedesktop.Sdk
 command: LogoRRR
 modules:
   - name: LogoRRR
+    only-arches: [aarch64]
     buildsystem: simple
     build-commands:
       - mkdir -p /app/lib/LogoRRR/
@@ -24,11 +25,11 @@ modules:
         path: app.logorrr.LogoRRR.desktop
       - type: file
         path: app.logorrr.LogoRRR.metainfo.xml
-      - type: dir
-        path: flat/
+      - ${flatpak.archive.type}
+        ${flatpak.archive.uri}
+        ${flatpak.archive.sha256}
 finish-args:
   - --socket=x11
-  - --socket=wayland
   - --share=ipc
   - --device=dri
   - --filesystem=home
