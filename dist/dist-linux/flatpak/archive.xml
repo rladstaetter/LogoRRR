@@ -11,6 +11,8 @@
             <directory>${project.build.directory}/flatpak.local/</directory>
             <outputDirectory/>
             <includes>
+                <include>app.logorrr.LogoRRR.desktop</include>
+                <include>app.logorrr.LogoRRR.metainfo.xml</include>
                 <include>flat/**/*</include>
             </includes>
         </fileSet>
