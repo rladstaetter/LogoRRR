@@ -3,6 +3,12 @@ runtime: org.freedesktop.Platform
 runtime-version: "23.08"
 sdk: org.freedesktop.Sdk
 command: LogoRRR
+finish-args:
+  - --socket=x11
+  - --socket=wayland
+  - --share=ipc
+  - --device=dri
+  - --filesystem=home
 modules:
   - name: LogoRRR
     only-arches: [aarch64]
@@ -28,8 +34,3 @@ modules:
       - ${flatpak.archive.type}
         ${flatpak.archive.uri}
         ${flatpak.archive.sha256}
-finish-args:
-  - --socket=x11
-  - --share=ipc
-  - --device=dri
-  - --filesystem=home
