@@ -2,7 +2,7 @@
 Name=LogoRRR
 Type=Application
 Comment=A simple log viewer
-Exec=/app/bin/LogoRRR
+Exec=LogoRRR
 Icon=app.logorrr.LogoRRR
 Terminal=false
 StartupNotify=true
