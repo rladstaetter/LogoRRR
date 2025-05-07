@@ -109,6 +109,14 @@
                                     <filtering>false</filtering>
                                     <targetPath>${project.build.directory}/flatpak.local/flat/icons</targetPath>
                                 </resource>
+                                <resource>
+                                    <directory>src/main/resources/meta</directory>
+                                    <includes>
+                                        <include>**</include>
+                                    </includes>
+                                    <filtering>false</filtering>
+                                    <targetPath>${project.build.directory}/flatpak.local/flat/meta</targetPath>
+                                </resource>
                             </resources>
                             <filters>
                                 <filter>local-filter.properties</filter>
@@ -122,14 +130,14 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>create-flatpak-archive</id>
+                        <id>create-flatpak-local</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
                             <executable>${flatpak.binary}</executable>
-                            <workingDirectory>${project.build.directory}/flatpak.archive</workingDirectory>
+                            <workingDirectory>${project.build.directory}/flatpak.local</workingDirectory>
                             <arguments>
                                 <argument>--verbose</argument>
                                 <argument>--force-clean</argument>
@@ -142,14 +150,14 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>create-flatpak-local</id>
+                        <id>create-flatpak-archive</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
                             <executable>${flatpak.binary}</executable>
-                            <workingDirectory>${project.build.directory}/flatpak.local</workingDirectory>
+                            <workingDirectory>${project.build.directory}/flatpak.archive</workingDirectory>
                             <arguments>
                                 <argument>--verbose</argument>
                                 <argument>--force-clean</argument>
