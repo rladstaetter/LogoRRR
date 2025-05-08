@@ -18,6 +18,9 @@ case "$ARCH" in
     ;;
 esac
 
+# delete flatpak installation
+flatpak uninstall --user app.logorrr.LogoRRR
+
 # Maven build
 MAVEN_OPTS="--enable-native-access=ALL-UNNAMED" mvn clean install -T1C
 
