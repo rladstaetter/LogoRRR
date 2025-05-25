@@ -77,13 +77,47 @@ doesn't start - this is a possible reason for that.
 
 ### Linux
 
-Setup on Linux is quite similar to Mac. You'll need at least `maven`, a `JDK` and a `GraalVM` installation.
+Setup on Linux is quite similar to Mac. You'll need `maven`, a `JDK` a installation and `flatpak` for the full package.
 
 My preferred way to get those tools is `apt` and `sdkman`, but this may vary on personal preferences. Use whatever fits
 you best.
 
-After installing all tools and configuring some paths in the `pom.xml` files a simple `mvn clean package` should do the
-trick.
+Following commands have to be executed:
+
+    # install sdkman
+    curl -s "https://get.sdkman.io" | bash
+
+    # via sdkman, install maven
+    sdk install maven 3.9.9
+
+    # install graal
+    sdk install java 23.0.2-graalce
+
+    # install flatpak
+    sudo apt install flatpak
+
+    # install flatpak builder
+    sudo apt install flatpak-builder
+
+    # configure flathub as remote for the user
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+
+
+
+
+After installing all tools you have to open the `pom.xml` in the main directory of this project and adapt some paths to
+fit your installation.
+
+To compile the project, call the appropriate build script:
+
+    linux.sh
+    win.bat
+    mac.sh
+
+The build should generate all binaries and start the application. On Mac, User Interface Tests are run.
+
+The build itself checks several prerequisites and validates the developer environment.
 
 ## Running from IntelliJ
 
