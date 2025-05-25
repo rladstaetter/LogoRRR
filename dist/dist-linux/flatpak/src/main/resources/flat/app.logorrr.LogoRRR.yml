@@ -10,9 +10,10 @@ finish-args:
   - --filesystem=home
 modules:
   - name: LogoRRR
-    only-arches: [aarch64]
     buildsystem: simple
     build-commands:
+      - chmod +x ./build.sh
+      - ./build.sh
       - mkdir -p /app/lib/LogoRRR/
       - mkdir -p /app/bin
       - cp -ar binaries/LogoRRR/* /app/lib/LogoRRR/
@@ -26,6 +27,8 @@ modules:
       - install -Dm644 meta/app.logorrr.LogoRRR.metainfo.xml /app/share/metainfo/app.logorrr.LogoRRR.metainfo.xml
       - install -Dm644 meta/app.logorrr.LogoRRR.desktop -t /app/share/applications
     sources:
+      - type: file
+        path: ./build.sh
       - ${flatpak.archive.type}
         ${flatpak.archive.uri}
         ${flatpak.archive.sha256}

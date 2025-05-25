@@ -46,6 +46,7 @@
                                     <version>${project.version}</version>
                                     <outputDirectory>${project.build.directory}/flatpak.local/flat/binaries
                                     </outputDirectory>
+                                    <excludes>**/META-INF/**</excludes>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -56,7 +57,7 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <!-- Generate flatpak.archive version -->
-                    <!-- this version nees a hosted version of the archive.xml tgz file with appropriate sha256 checksum -->
+                    <!-- this version needs a hosted version of the archive.xml tgz file with appropriate sha256 checksum -->
                     <execution>
                         <id>copy-flatpak-archive</id>
                         <phase>process-resources</phase>
@@ -69,6 +70,7 @@
                                 <resource>
                                     <directory>src/main/resources/flat</directory>
                                     <includes>
+                                        <include>build.sh</include>
                                         <include>app.logorrr.LogoRRR.yml</include>
                                         <include>app.logorrr.LogoRRR.desktop</include>
                                         <include>app.logorrr.LogoRRR.metainfo.xml</include>
@@ -95,6 +97,7 @@
                                 <resource>
                                     <directory>src/main/resources/flat</directory>
                                     <includes>
+                                        <include>build.sh</include>
                                         <include>app.logorrr.LogoRRR.yml</include>
                                         <include>app.logorrr.LogoRRR.desktop</include>
                                         <include>app.logorrr.LogoRRR.metainfo.xml</include>
