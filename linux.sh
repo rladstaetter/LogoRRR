@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e  # Exit on error
+set -e  # Exit on error, except where overridden
 
 # Detect platform
 ARCH=$(uname -m)
@@ -18,14 +18,24 @@ case "$ARCH" in
     ;;
 esac
 
-# delete flatpak installation
-flatpak uninstall --user app.logorrr.LogoRRR
+# Attempt to uninstall Flatpak version, ignore error if not installed
+if ! flatpak uninstall --user -y app.logorrr.LogoRRR 2>/dev/null; then
+  echo "Warning: Flatpak app 'app.logorrr.LogoRRR' not found or already uninstalled."
+fi
 
 # Maven build
+echo "Building project with Maven..."
 MAVEN_OPTS="--enable-native-access=ALL-UNNAMED" mvn clean install -T1C
 
 # Install the appropriate .deb
 DEB_PATH="./dist/dist-linux/deb/target/installer/logorrr_25.1.0_${DEB_ARCH}.deb"
+
+if [[ ! -f "$DEB_PATH" ]]; then
+  echo "Error: .deb file not found at $DEB_PATH"
+  exit 1
+fi
+
+echo "Installing .deb package..."
 sudo apt install "$DEB_PATH"
 
 # Run the app (installed via .deb)
