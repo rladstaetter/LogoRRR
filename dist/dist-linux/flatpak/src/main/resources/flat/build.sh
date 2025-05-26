@@ -1,11 +1,25 @@
 #!/bin/bash
 
 # Detect the architecture
-ARCH=$(uname -m)
+
+ARCH_RAW=$(uname -m)
+
+case "$ARCH_RAW" in
+    x86_64)
+        ARCH="amd64"
+        ;;
+    aarch64)
+        ARCH="aarch64"
+        ;;
+    *)
+        ARCH="$ARCH_RAW"
+        ;;
+esac
+
 
 mkdir -p /app/lib/LogoRRR/
 
-if [ "$ARCH" == "x86_64" ]; then
+if [ "$ARCH" == "amd64" ]; then
     echo "Building for x86_64 architecture"
     cp -ar $ARCH/binaries/LogoRRR/* /app/lib/LogoRRR/
 elif [ "$ARCH" == "aarch64" ]; then
