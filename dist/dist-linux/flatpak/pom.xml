@@ -44,7 +44,7 @@
                                     <groupId>app.logorrr.dist.linux</groupId>
                                     <artifactId>app-image</artifactId>
                                     <version>${project.version}</version>
-                                    <outputDirectory>${project.build.directory}/flatpak.local/flat/binaries
+                                    <outputDirectory>${project.build.directory}/flatpak.local/flat/${os.arch}/binaries
                                     </outputDirectory>
                                     <excludes>**/META-INF/**</excludes>
                                 </artifactItem>
@@ -110,7 +110,7 @@
                                         <include>**</include>
                                     </includes>
                                     <filtering>false</filtering>
-                                    <targetPath>${project.build.directory}/flatpak.local/flat/icons</targetPath>
+                                    <targetPath>${project.build.directory}/flatpak.local/flat/${os.arch}/icons</targetPath>
                                 </resource>
                                 <resource>
                                     <directory>src/main/resources/meta</directory>
@@ -118,7 +118,7 @@
                                         <include>**</include>
                                     </includes>
                                     <filtering>false</filtering>
-                                    <targetPath>${project.build.directory}/flatpak.local/flat/meta</targetPath>
+                                    <targetPath>${project.build.directory}/flatpak.local/flat/${os.arch}/meta</targetPath>
                                 </resource>
                             </resources>
                             <filters>
@@ -202,7 +202,7 @@
                         <configuration>
                             <target>
                                 <checksum fileext=".sha256" algorithm="SHA-256">
-                                    <fileset dir="${project.build.directory}" includes="*archive.tar.gz"/>
+                                    <fileset dir="${project.build.directory}" includes="*${os.arch}.tar.gz"/>
                                 </checksum>
                             </target>
                         </configuration>
