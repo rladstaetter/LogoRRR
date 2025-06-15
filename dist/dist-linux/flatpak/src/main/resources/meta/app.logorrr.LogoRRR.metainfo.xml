@@ -8,6 +8,11 @@
     <metadata_license>CC-BY-4.0</metadata_license>
     <project_license>Apache-2.0</project_license>
     <url type="homepage">https://www.logorrr.app/</url>
+    <url type="bugtracker">https://github.com/rladstaetter/LogoRRR/issues</url>
+    <url type="donation">https://buymeacoffee.com/rladstaetter</url>
+    <url type="contact">https://bsky.app/profile/logorrr.bsky.social</url>
+    <url type="contribute">https://github.com/rladstaetter/</url>
+    <url type="vcs-browser">https://github.com/rladstaetter/LogoRRR</url>
     <update_contact>support@logorrr.app</update_contact>
     <developer id="app.logorrr">
         <name>Robert Ladstätter</name>
@@ -50,7 +55,7 @@
         <!--
         <release version="${project.version}" date="${currentDate}"></release>
         -->
-        <release version="25.1.0" date="2025-05-04">
+        <release version="25.1.0" date="2025-06-15">
             <description>
                 <p>Initial release for flatpak.</p>
             </description>
