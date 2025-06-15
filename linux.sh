@@ -19,7 +19,7 @@ case "$ARCH" in
 esac
 
 # Attempt to uninstall Flatpak version, ignore error if not installed
-if ! flatpak uninstall --user -y app.logorrr.LogoRRR 2>/dev/null; then
+if ! flatpak uninstall  --delete-data --user -y app.logorrr.LogoRRR 2>/dev/null; then
   echo "Warning: Flatpak app 'app.logorrr.LogoRRR' not found or already uninstalled."
 fi
 
@@ -40,6 +40,8 @@ sudo apt install "$DEB_PATH"
 
 # Run the app (installed via .deb)
 /opt/logorrr/bin/LogoRRR
+
+echo "Starting LogoRRR in flatpak container ... "
 
 # run the app (installed via flatpak)
 flatpak run app.logorrr.LogoRRR

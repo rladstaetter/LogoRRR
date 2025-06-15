@@ -31,7 +31,15 @@ object CanLog {
         case Failure(_) => new ConsoleHandler()
       }
     } else {
-      new FileHandler(FilePaths.logFilePath.toAbsolutePath.toString, appendLogs)
+      Try {
+        new FileHandler(FilePaths.logFilePath.toAbsolutePath.toString, appendLogs)
+      } match {
+        case Success(h) => h
+        case Failure(e) =>
+          e.printStackTrace()
+          new ConsoleHandler()
+      }
+
     }
     h.setLevel(LogLevel)
     h.setFormatter(new SimpleFormatter)

@@ -34,11 +34,11 @@ object FilePaths {
     Map(Windows -> Paths.get("C:/ProgramData/LogoRRR/")
       , Mac -> Paths.get(System.getProperty("user.home")).resolve("Library/Application Support/app.logorrr/")
       , Linux -> Paths.get(System.getProperty("user.home")).resolve(".logorrr/")
-      , LinuxFlatPak -> Option(System.getProperty("XDG_CONFIG_HOME")).map(p => Paths.get(p)).orNull
+      , LinuxFlatPak -> Option(System.getenv("XDG_CONFIG_HOME")).map(p => Paths.get(p)).orNull
     )
 
   val logPathMap: Map[Os, Path] =
-    confPathMap ++ Map(LinuxFlatPak -> Option(System.getProperty("XDG_DATA_HOME")).map(p => Paths.get(p)).orNull)
+    confPathMap ++ Map(LinuxFlatPak -> Option(System.getenv("XDG_DATA_HOME")).map(p => Paths.get(p)).orNull)
 
   val settingsFilePath: Path = confPathMap(OsUtil.currentOs).resolve(settingsFileName)
 
