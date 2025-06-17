@@ -25,7 +25,9 @@ Older releases versions are available on the [releases page](https://github.com/
 
 ## Linux installation
 
-Linux installation packages can be downloaded [from the github release page](https://github.com/rladstaetter/LogoRRR/releases/tag/24.5.1).
+[![Get it on Flathub](https://flathub.org/api/badge?locale=en)](https://flathub.org/apps/app.logorrr.LogoRRR)
+
+Alternatively, linux installation packages (.deb) can be downloaded [from the github release page](https://github.com/rladstaetter/LogoRRR/releases/tag/24.5.1).
 
 ## Features
 
