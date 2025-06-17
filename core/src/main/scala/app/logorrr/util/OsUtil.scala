@@ -13,13 +13,22 @@ object OsUtil {
 
   case object Linux extends Os
 
+  /** running on linux, but virtualized on flatpak */
+  case object LinuxFlatPak extends Os
+
+  val runningInFlatPak : Boolean = Option(System.getenv("FLATPAK_ID")).isDefined
+
   val currentOs: Os =
     if (System.getProperty("os.name").toLowerCase.contains("windows")) {
       Windows
     } else if (System.getProperty("os.name").toLowerCase.contains("mac")) {
       Mac
     } else if (System.getProperty("os.name").toLowerCase.contains("linux")) {
-      Linux
+      if (runningInFlatPak) {
+        LinuxFlatPak
+      } else {
+        Linux
+      }
     } else {
       Windows
     }

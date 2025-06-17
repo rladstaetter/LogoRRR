@@ -53,7 +53,8 @@ class IconCreatorApp extends javafx.application.Application {
         LogorrrIcon.drawIcon(gc2d, w)
         (a, canvas)
       }
-    IconCreatorApp.writeIcons(ics, Paths.get("app/src/main/resources/app/logorrr/icon/"))
+    IconCreatorApp.writeIcons(ics, Paths.get("../app/src/main/resources/app/logorrr/icon/"))
+    IconCreatorApp.writeIcons(ics, Paths.get("../dist/dist-linux/flatpak/src/main/resources/icons/"))
     val box = new VBox(10, ics.map(_._2): _*)
     box.setAlignment(Pos.CENTER)
     bp.setCenter(box)

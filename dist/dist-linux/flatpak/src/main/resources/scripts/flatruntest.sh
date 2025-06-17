@@ -1,0 +1,1 @@
+flatpak run app.logorrr.LogoRRR

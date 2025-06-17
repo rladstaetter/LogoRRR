@@ -2,6 +2,9 @@
   "resources": {
     "includes": [
       {
+        "pattern": "META-INF/services.*"
+      },
+      {
         "pattern": "\\Qapp/logorrr/drop-files-here.png\\E"
       },
       {

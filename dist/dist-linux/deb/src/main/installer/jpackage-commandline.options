@@ -4,7 +4,6 @@
 --icon icon/icon_256x256.png
 --name LogoRRR
 --dest app-tmp-image
---temp app-tmp
 --vendor logorrr.app
 --verbose
 --input libs

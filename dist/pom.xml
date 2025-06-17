@@ -13,6 +13,10 @@
     <name>app.logorrr.dist</name>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>dist-repackaged</module>
+    </modules>
+
     <profiles>
         <profile>
             <id>OS.windows</id>
@@ -22,7 +26,6 @@
                 </os>
             </activation>
             <modules>
-                <module>dist-repackaged</module>
                 <module>dist-win</module>
             </modules>
         </profile>
@@ -35,7 +38,6 @@
                 </os>
             </activation>
             <modules>
-                <module>dist-repackaged</module>
                 <module>dist-osx</module>
             </modules>
         </profile>
@@ -48,7 +50,6 @@
                 </os>
             </activation>
             <modules>
-                <module>dist-repackaged</module>
                 <module>dist-linux</module>
             </modules>
         </profile>

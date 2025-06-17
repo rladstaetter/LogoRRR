@@ -10,8 +10,8 @@
         <version>${revision}${changelist}</version>
     </parent>
 
-    <artifactId>installer-linux</artifactId>
-    <name>app.logorrr.dist.linux.installer</name>
+    <artifactId>deb</artifactId>
+    <name>app.logorrr.dist.linux.deb</name>
 
     <dependencies>
         <dependency>
