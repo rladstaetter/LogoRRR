@@ -9,14 +9,15 @@
         <version>${revision}${changelist}</version>
     </parent>
 
-    <artifactId>binary-osx</artifactId>
-    <name>app.logorrr.dist.osx.binary</name>
+    <artifactId>graal-osx</artifactId>
+    <name>app.logorrr.dist.osx.graal</name>
 
     <dependencies>
         <dependency>
             <groupId>app.logorrr</groupId>
             <artifactId>app</artifactId>
         </dependency>
+        <!-- 3rd party packages and dependencies -->
         <dependency>
             <groupId>app.logorrr.dist.repackaged</groupId>
             <artifactId>dist-repackaged</artifactId>
@@ -29,10 +30,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>com.gluonhq</groupId>

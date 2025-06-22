@@ -439,11 +439,13 @@
                         <mainClass>${main.class}</mainClass>
                         <verbose>true</verbose>
                         <graalvmHome>${graalvm.home}</graalvmHome>
+                        <verbose>true</verbose>
                         <nativeImageArgs>
                             <arg>--no-fallback</arg>
                             <arg>-H:-UseServiceLoaderFeature</arg>
                             <arg>-H:+UnlockExperimentalVMOptions</arg>
-                            <arg>-Dgraal.LogFile=${graalvm.log}</arg>
+                            <arg>-Djdk.graal.LogFile=${graalvm.log}</arg>
+                            <arg>--enable-native-access=ALL-UNNAMED</arg>
                         </nativeImageArgs>
                     </configuration>
                     <executions>
