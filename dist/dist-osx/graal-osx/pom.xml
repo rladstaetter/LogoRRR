@@ -11,6 +11,11 @@
 
     <artifactId>graal-osx</artifactId>
     <name>app.logorrr.dist.osx.graal</name>
+    <packaging>pom</packaging>
+
+    <properties>
+        <native.output.dir>${project.build.directory}/native/</native.output.dir>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -30,10 +35,68 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-javafx-libs-for-native-image</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${native.output.dir}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>../../../env/target/javafx-sdk-24.0.1/lib/</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
-                <groupId>com.gluonhq</groupId>
-                <artifactId>gluonfx-maven-plugin</artifactId>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>0.10.6</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>build-native</id>
+                        <goals>
+                            <goal>compile-no-fork</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <imageName>logorrr</imageName>
+                    <verbose>true</verbose>
+                    <outputDirectory>${native.output.dir}</outputDirectory>
+                    <mainClass>${main.class}</mainClass>
+                    <buildArgs>
+                        <buildArg>-H:ConfigurationFileDirectories=src/main/resources/</buildArg>
+                        <buildArg>--enable-url-protocols=https</buildArg>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-binaries-zip</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/binaries.xml</descriptor>
+                            </descriptors>
+                            <classifier>binaries</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
