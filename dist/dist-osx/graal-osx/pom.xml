@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>app.logorrr.dist.osx</groupId>
+        <artifactId>dist-osx</artifactId>
+        <version>${revision}${changelist}</version>
+    </parent>
+
+    <artifactId>graal-osx</artifactId>
+    <name>app.logorrr.dist.osx.graal</name>
+    <packaging>pom</packaging>
+
+    <properties>
+        <native.output.dir>${project.build.directory}/native/</native.output.dir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>app</artifactId>
+        </dependency>
+        <!-- 3rd party packages and dependencies -->
+        <dependency>
+            <groupId>app.logorrr.dist.repackaged</groupId>
+            <artifactId>dist-repackaged</artifactId>
+        </dependency>
+        <!-- native libs needed on macosx -->
+        <dependency>
+            <groupId>app.logorrr.native</groupId>
+            <artifactId>native-osx</artifactId>
+            <type>zip</type>
+            <classifier>dylibs</classifier>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- has to be defined to copy meta inf json files for native-image to proper place (see plugin management) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-native</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>native-osx</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/native/</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- at the moment, this works only if you call mvn package directly in this directory -->
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>0.10.6</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>build-native</id>
+                        <goals>
+                            <goal>compile-no-fork</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <imageName>logorrr</imageName>
+                    <verbose>true</verbose>
+                    <outputDirectory>${native.output.dir}</outputDirectory>
+                    <mainClass>${main.class}</mainClass>
+                    <buildArgs>
+                        <buildArg>-H:ConfigurationFileDirectories=src/main/resources/</buildArg>
+                        <buildArg>--enable-url-protocols=https</buildArg>
+                        <buildArg>--strict-image-heap</buildArg>
+                        <buildArg>-march=native</buildArg>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-binaries-zip</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/binaries.xml</descriptor>
+                            </descriptors>
+                            <classifier>binaries</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

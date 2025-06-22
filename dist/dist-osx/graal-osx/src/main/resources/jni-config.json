@@ -1,0 +1,164 @@
+[
+{
+  "name":"[Lcom.sun.glass.ui.Screen;"
+},
+{
+  "name":"[Ljava.lang.String;"
+},
+{
+  "name":"[[Ljava.lang.String;"
+},
+{
+  "name":"com.sun.glass.ui.Application",
+  "methods":[{"name":"createPixels","parameterTypes":["int","int","int[]","float","float"] }, {"name":"enterNestedEventLoop","parameterTypes":[] }, {"name":"getScaleFactor","parameterTypes":["int","int","int","int"] }, {"name":"leaveNestedEventLoop","parameterTypes":["java.lang.Object"] }, {"name":"notifyDidBecomeActive","parameterTypes":[] }, {"name":"notifyDidFinishLaunching","parameterTypes":[] }, {"name":"notifyDidResignActive","parameterTypes":[] }, {"name":"notifyOpenFiles","parameterTypes":["java.lang.String[]"] }, {"name":"notifyWillBecomeActive","parameterTypes":[] }, {"name":"notifyWillFinishLaunching","parameterTypes":[] }, {"name":"notifyWillResignActive","parameterTypes":[] }, {"name":"reportException","parameterTypes":["java.lang.Throwable"] }]
+},
+{
+  "name":"com.sun.glass.ui.CommonDialogs$ExtensionFilter",
+  "methods":[{"name":"extensionsToArray","parameterTypes":[] }, {"name":"getDescription","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.glass.ui.CommonDialogs$FileChooserResult",
+  "methods":[{"name":"<init>","parameterTypes":["java.util.List","com.sun.glass.ui.CommonDialogs$ExtensionFilter"] }]
+},
+{
+  "name":"com.sun.glass.ui.EventLoop",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"enter","parameterTypes":[] }, {"name":"leave","parameterTypes":["java.lang.Object"] }]
+},
+{
+  "name":"com.sun.glass.ui.Menu",
+  "methods":[{"name":"notifyMenuClosed","parameterTypes":[] }, {"name":"notifyMenuOpening","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.glass.ui.MenuItem$Callback",
+  "methods":[{"name":"action","parameterTypes":[] }, {"name":"validate","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.glass.ui.Pixels",
+  "fields":[{"name":"height"}, {"name":"scalex"}, {"name":"scaley"}, {"name":"width"}],
+  "methods":[{"name":"attachData","parameterTypes":["long"] }]
+},
+{
+  "name":"com.sun.glass.ui.Screen",
+  "methods":[{"name":"<init>","parameterTypes":["long","int","int","int","int","int","int","int","int","int","int","int","int","int","int","int","float","float","float","float"] }]
+},
+{
+  "name":"com.sun.glass.ui.Size",
+  "methods":[{"name":"<init>","parameterTypes":["int","int"] }]
+},
+{
+  "name":"com.sun.glass.ui.View",
+  "fields":[{"name":"ptr"}],
+  "methods":[{"name":"getAccessible","parameterTypes":[] }, {"name":"notifyDragDrop","parameterTypes":["int","int","int","int","int"] }, {"name":"notifyDragEnd","parameterTypes":["int"] }, {"name":"notifyDragEnter","parameterTypes":["int","int","int","int","int"] }, {"name":"notifyDragLeave","parameterTypes":[] }, {"name":"notifyDragOver","parameterTypes":["int","int","int","int","int"] }, {"name":"notifyInputMethod","parameterTypes":["java.lang.String","int[]","int[]","byte[]","int","int","int"] }, {"name":"notifyInputMethodCandidatePosRequest","parameterTypes":["int"] }, {"name":"notifyKey","parameterTypes":["int","int","char[]","int"] }, {"name":"notifyMenu","parameterTypes":["int","int","int","int","boolean"] }, {"name":"notifyMouse","parameterTypes":["int","int","int","int","int","int","int","boolean","boolean"] }, {"name":"notifyRepaint","parameterTypes":["int","int","int","int"] }, {"name":"notifyResize","parameterTypes":["int","int"] }, {"name":"notifyView","parameterTypes":["int"] }]
+},
+{
+  "name":"com.sun.glass.ui.Window",
+  "methods":[{"name":"notifyClose","parameterTypes":[] }, {"name":"notifyDelegatePtr","parameterTypes":["long"] }, {"name":"notifyDestroy","parameterTypes":[] }, {"name":"notifyFocus","parameterTypes":["int"] }, {"name":"notifyFocusDisabled","parameterTypes":[] }, {"name":"notifyFocusUngrab","parameterTypes":[] }, {"name":"notifyMoveToAnotherScreen","parameterTypes":["com.sun.glass.ui.Screen"] }, {"name":"notifyScaleChanged","parameterTypes":["float","float","float","float"] }]
+},
+{
+  "name":"com.sun.glass.ui.mac.MacApplication",
+  "methods":[{"name":"notifyApplicationDidTerminate","parameterTypes":[] }, {"name":"setEventThread","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.glass.ui.mac.MacCommonDialogs",
+  "methods":[{"name":"isFileNSURLEnabled","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.glass.ui.mac.MacGestureSupport",
+  "methods":[{"name":"gestureFinished","parameterTypes":["com.sun.glass.ui.View","int","int","int","int","int"] }, {"name":"magnifyGesturePerformed","parameterTypes":["com.sun.glass.ui.View","int","int","int","int","int","float"] }, {"name":"notifyBeginTouchEvent","parameterTypes":["com.sun.glass.ui.View","int","int"] }, {"name":"notifyEndTouchEvent","parameterTypes":["com.sun.glass.ui.View"] }, {"name":"notifyNextTouchEvent","parameterTypes":["com.sun.glass.ui.View","int","long","float","float"] }, {"name":"rotateGesturePerformed","parameterTypes":["com.sun.glass.ui.View","int","int","int","int","int","float"] }, {"name":"scrollGesturePerformed","parameterTypes":["com.sun.glass.ui.View","int","int","int","int","int","int","float","float"] }, {"name":"swipeGesturePerformed","parameterTypes":["com.sun.glass.ui.View","int","int","int","int","int","int"] }]
+},
+{
+  "name":"com.sun.glass.ui.mac.MacMenuDelegate",
+  "fields":[{"name":"menu"}]
+},
+{
+  "name":"com.sun.glass.ui.mac.MacPixels"
+},
+{
+  "name":"com.sun.glass.ui.mac.MacView",
+  "methods":[{"name":"notifyInputMethodMac","parameterTypes":["java.lang.String","int","int","int","int","int"] }]
+},
+{
+  "name":"com.sun.glass.ui.mac.MacWindow",
+  "methods":[{"name":"notifyMove","parameterTypes":["int","int","boolean"] }, {"name":"notifyResize","parameterTypes":["int","int","int"] }]
+},
+{
+  "name":"com.sun.javafx.font.coretext.CGAffineTransform",
+  "fields":[{"name":"a"}, {"name":"b"}, {"name":"c"}, {"name":"d"}, {"name":"tx"}, {"name":"ty"}],
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.javafx.font.coretext.CGPoint",
+  "fields":[{"name":"x"}, {"name":"y"}],
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.javafx.font.coretext.CGRect",
+  "fields":[{"name":"origin"}, {"name":"size"}],
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.javafx.font.coretext.CGSize",
+  "fields":[{"name":"height"}, {"name":"width"}],
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.javafx.geom.Path2D",
+  "methods":[{"name":"<init>","parameterTypes":["int","byte[]","int","float[]","int"] }]
+},
+{
+  "name":"java.io.File",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Boolean",
+  "methods":[{"name":"booleanValue","parameterTypes":[] }, {"name":"getBoolean","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Class",
+  "methods":[{"name":"forName","parameterTypes":["java.lang.String","boolean","java.lang.ClassLoader"] }]
+},
+{
+  "name":"java.lang.Integer",
+  "methods":[{"name":"<init>","parameterTypes":["int"] }, {"name":"intValue","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.InternalError",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Long",
+  "methods":[{"name":"longValue","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.Runnable",
+  "methods":[{"name":"run","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.String",
+  "methods":[{"name":"<init>","parameterTypes":["byte[]","java.lang.String"] }, {"name":"lastIndexOf","parameterTypes":["int"] }, {"name":"substring","parameterTypes":["int"] }]
+},
+{
+  "name":"java.lang.System",
+  "methods":[{"name":"getProperty","parameterTypes":["java.lang.String"] }, {"name":"setProperty","parameterTypes":["java.lang.String","java.lang.String"] }]
+},
+{
+  "name":"java.util.ArrayList",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"java.util.List",
+  "methods":[{"name":"add","parameterTypes":["java.lang.Object"] }]
+},
+{
+  "name":"java.util.Map",
+  "methods":[{"name":"get","parameterTypes":["java.lang.Object"] }]
+},
+{
+  "name":"sun.instrument.InstrumentationImpl",
+  "methods":[{"name":"<init>","parameterTypes":["long","boolean","boolean","boolean"] }, {"name":"loadClassAndCallAgentmain","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"loadClassAndCallPremain","parameterTypes":["java.lang.String","java.lang.String"] }, {"name":"transform","parameterTypes":["java.lang.Module","java.lang.ClassLoader","java.lang.String","java.lang.Class","java.security.ProtectionDomain","byte[]","boolean"] }]
+},
+{
+  "name":"sun.launcher.LauncherHelper$FXHelper",
+  "methods":[{"name":"main","parameterTypes":["java.lang.String[]"] }]
+}
+]

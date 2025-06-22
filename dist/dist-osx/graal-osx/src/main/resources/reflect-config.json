@@ -1,6 +1,50 @@
 [
 {
+  "name":"[Lapp.logorrr.model.LogEntry;"
+},
+{
+  "name":"[Lapp.logorrr.views.block.Chunk;"
+},
+{
+  "name":"[Lapp.logorrr.views.settings.timestamp.LogViewLabel;"
+},
+{
+  "name":"[Ljava.lang.String;"
+},
+{
+  "name":"[Ljavafx.scene.Node;"
+},
+{
+  "name":"[Ljavafx.scene.control.Label;"
+},
+{
+  "name":"[Ljavafx.scene.control.MenuItem;"
+},
+{
+  "name":"[Ljavafx.scene.control.Tab;"
+},
+{
+  "name":"[Ljavafx.scene.layout.Pane;"
+},
+{
+  "name":"app.logorrr.LogoRRRApp",
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"main","parameterTypes":["java.lang.String[]"] }]
+},
+{
+  "name":"com.intellij.rt.execution.application.AppMainV2$Agent",
+  "methods":[{"name":"premain","parameterTypes":["java.lang.String","java.lang.instrument.Instrumentation"] }]
+},
+{
   "name":"com.sun.glass.ui.Application"
+},
+{
+  "name":"com.sun.glass.ui.CommonDialogs$ExtensionFilter"
+},
+{
+  "name":"com.sun.glass.ui.CommonDialogs$FileChooserResult"
+},
+{
+  "name":"com.sun.glass.ui.EventLoop"
 },
 {
   "name":"com.sun.glass.ui.Menu"
@@ -15,6 +59,28 @@
   "name":"com.sun.glass.ui.View"
 },
 {
+  "name":"com.sun.glass.ui.mac.MacApplication"
+},
+{
+  "name":"com.sun.glass.ui.mac.MacCommonDialogs"
+},
+{
+  "name":"com.sun.glass.ui.mac.MacGestureSupport"
+},
+{
+  "name":"com.sun.glass.ui.mac.MacMenuBarDelegate"
+},
+{
+  "name":"com.sun.glass.ui.mac.MacPixels"
+},
+{
+  "name":"com.sun.glass.ui.mac.MacPlatformFactory",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.glass.ui.mac.MacView"
+},
+{
   "name":"com.sun.javafx.font.coretext.CTFactory",
   "methods":[{"name":"getFactory","parameterTypes":[] }]
 },
@@ -27,26 +93,23 @@
   "methods":[{"name":"createInstance","parameterTypes":[] }]
 },
 {
-  "name":"com.sun.javafx.scene.control.skin.Utils",
-  "methods":[{"name":"getResource","parameterTypes":["java.lang.String"] }]
-},
-{
   "name":"com.sun.javafx.tk.quantum.QuantumToolkit",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.sun.prism.GraphicsPipeline",
-  "methods":[
-    {"name":"getFontFactory","parameterTypes":[] }, 
-    {"name":"getPipeline","parameterTypes":[] }
-  ]
+  "methods":[{"name":"getFontFactory","parameterTypes":[] }, {"name":"getPipeline","parameterTypes":[] }]
 },
 {
   "name":"com.sun.prism.es2.ES2Pipeline",
   "methods":[{"name":"getInstance","parameterTypes":[] }]
 },
 {
-  "name":"com.sun.prism.shader.DrawRoundRect_Color_Loader",
+  "name":"com.sun.prism.es2.MacGLFactory",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.prism.shader.DrawPgram_Color_Loader",
   "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
 },
 {
@@ -54,15 +117,11 @@
   "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
 },
 {
-  "name":"com.sun.prism.shader.FillPgram_LinearGradient_PAD_Loader",
-  "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
-},
-{
   "name":"com.sun.prism.shader.FillRoundRect_Color_Loader",
   "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
 },
 {
-  "name":"com.sun.prism.shader.Solid_TextureFirstPassLCD_Loader",
+  "name":"com.sun.prism.shader.Solid_Color_Loader",
   "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
 },
 {
@@ -70,15 +129,7 @@
   "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
 },
 {
-  "name":"com.sun.prism.shader.Solid_TextureSecondPassLCD_Loader",
-  "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
-},
-{
   "name":"com.sun.prism.shader.Texture_Color_Loader",
-  "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
-},
-{
-  "name":"com.sun.prism.shader.Texture_LinearGradient_PAD_Loader",
   "methods":[{"name":"loadShader","parameterTypes":["com.sun.prism.ps.ShaderFactory","java.io.InputStream"] }]
 },
 {
@@ -102,6 +153,9 @@
   "methods":[{"name":"isIdeographic","parameterTypes":["int"] }]
 },
 {
+  "name":"java.lang.ClassValue"
+},
+{
   "name":"java.lang.Runnable"
 },
 {
@@ -120,10 +174,12 @@
   "methods":[{"name":"nativeOrder","parameterTypes":[] }]
 },
 {
-  "name":"java.security.MessageDigestSpi"
+  "name":"java.util.concurrent.atomic.AtomicBoolean",
+  "fields":[{"name":"value"}]
 },
 {
-  "name":"java.security.SecureRandomParameters"
+  "name":"java.util.concurrent.atomic.AtomicReference",
+  "fields":[{"name":"value"}]
 },
 {
   "name":"javafx.animation.KeyValue"
@@ -171,6 +227,18 @@
   "name":"javafx.scene.layout.Region"
 },
 {
+  "name":"javafx.scene.shape.LineTo"
+},
+{
+  "name":"javafx.scene.shape.MoveTo"
+},
+{
+  "name":"javafx.scene.shape.Path"
+},
+{
+  "name":"javafx.scene.shape.PathElement"
+},
+{
   "name":"javafx.scene.shape.Rectangle"
 },
 {
@@ -198,11 +266,8 @@
   "name":"javafx.stage.Window"
 },
 {
-  "name":"app.logorrr.LogoRRRApp",
-  "methods":[
-    {"name":"<init>","parameterTypes":[] }, 
-    {"name":"main","parameterTypes":["java.lang.String[]"] }
-  ]
+  "name":"scala.Symbol",
+  "methods":[{"name":"apply","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"sun.misc.Unsafe",
@@ -214,7 +279,7 @@
 },
 {
   "name":"sun.security.provider.NativePRNG",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "methods":[{"name":"<init>","parameterTypes":["java.security.SecureRandomParameters"] }]
 },
 {
   "name":"sun.security.provider.SHA",
