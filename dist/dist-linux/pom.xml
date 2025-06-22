@@ -18,9 +18,11 @@
 
     <modules>
         <module>graal-linux</module>
+        <!--
         <module>flatpak</module>
         <module>app-image</module>
         <module>deb</module>
+-->
     </modules>
 
 
