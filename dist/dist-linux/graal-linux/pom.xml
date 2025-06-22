@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>app.logorrr.dist.linux</groupId>
+        <artifactId>dist-linux</artifactId>
+        <version>${revision}${changelist}</version>
+    </parent>
+
+    <artifactId>graal-linux</artifactId>
+    <name>app.logorrr.dist.linux.graal</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>app</artifactId>
+        </dependency>
+        <!-- 3rd party packages and dependencies -->
+        <dependency>
+            <groupId>app.logorrr.dist.repackaged</groupId>
+            <artifactId>dist-repackaged</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- has to be defined to copy meta inf json files for native-image to proper place (see plugin management) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.gluonhq</groupId>
+                <artifactId>gluonfx-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
