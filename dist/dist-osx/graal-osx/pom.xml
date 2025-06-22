@@ -27,6 +27,13 @@
             <groupId>app.logorrr.dist.repackaged</groupId>
             <artifactId>dist-repackaged</artifactId>
         </dependency>
+        <!-- native libs needed on macosx -->
+        <dependency>
+            <groupId>app.logorrr.native</groupId>
+            <artifactId>native-osx</artifactId>
+            <type>zip</type>
+            <classifier>dylibs</classifier>
+        </dependency>
     </dependencies>
 
     <build>
@@ -34,26 +41,25 @@
             <!-- has to be defined to copy meta inf json files for native-image to proper place (see plugin management) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
+                <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-javafx-libs-for-native-image</id>
-                        <phase>prepare-package</phase>
+                        <id>unpack-native</id>
+                        <phase>generate-resources</phase>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${native.output.dir}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>../../../env/target/javafx-sdk-24.0.1/lib/</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
+                            <includeArtifactIds>native-osx</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/native/</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <!-- at the moment, this works only if you call mvn package directly in this directory -->
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
@@ -65,7 +71,7 @@
                         <goals>
                             <goal>compile-no-fork</goal>
                         </goals>
-                        <phase>package</phase>
+                        <phase>compile</phase>
                     </execution>
                 </executions>
                 <configuration>
@@ -76,6 +82,8 @@
                     <buildArgs>
                         <buildArg>-H:ConfigurationFileDirectories=src/main/resources/</buildArg>
                         <buildArg>--enable-url-protocols=https</buildArg>
+                        <buildArg>--strict-image-heap</buildArg>
+                        <buildArg>-march=native</buildArg>
                     </buildArgs>
                 </configuration>
             </plugin>

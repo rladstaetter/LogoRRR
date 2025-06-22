@@ -18,7 +18,6 @@
         <revision>25.1.0</revision>
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.16</scala.version>
-        <openjfx.version>24.0.1</openjfx.version>
         <ikonli.version>12.3.1</ikonli.version>
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
         <gluonfx.plugin.version>1.0.26</gluonfx.plugin.version>
@@ -151,7 +150,6 @@
     <modules>
         <module>core</module>
         <module>build</module>
-        <module>env</module>
         <module>app</module>
         <module>dist</module>
         <module>docs</module>
@@ -174,16 +172,6 @@
                 <artifactId>openjfx-monocle</artifactId>
                 <version>21.0.2</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-controls</artifactId>
-                <version>${openjfx.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-swing</artifactId>
-                <version>${openjfx.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.mkpaz</groupId>
@@ -553,11 +541,8 @@
                                         </message>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
-                                        <version>24</version>
-                                        <message>JDK 24 or newer is recommended to build LogoRRR, use SDKman.io or
-                                            download from a JDK provider like this one:
-                                            https://github.com/adoptium/temurin24-binaries/releases/download/jdk-24.0.1%2B9/OpenJDK24U-jdk_x64_windows_hotspot_24.0.1_9.zip
-                                        </message>
+                                        <version>21</version>
+                                        <message>JDK 21 or newer is recommended to build LogoRRR</message>
                                     </requireJavaVersion>
                                 </rules>
                                 <fail>true</fail>

@@ -55,15 +55,6 @@
             <artifactId>build</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-        </dependency>
-        <!-- needed if you want to use scenic view analyse the scenegraph -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-swing</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-core</artifactId>
         </dependency>
@@ -118,8 +109,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>9</source>
-                    <target>9</target>
+                    <source>21</source>
+                    <target>21</target>
                 </configuration>
             </plugin>
         </plugins>
