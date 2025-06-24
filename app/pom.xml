@@ -141,7 +141,7 @@
                         <executions>
                             <execution>
                                 <id>unpack-dependency</id>
-                                <phase>generate-test-resources</phase> <!-- Define the phase where you want to execute unpacking -->
+                                <phase>generate-test-resources</phase>
                                 <goals>
                                     <goal>unpack</goal>
                                 </goals>
