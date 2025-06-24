@@ -12,7 +12,7 @@ object BlockSizeSlider extends UiNodeFileIdAware {
 
 class BlockSizeSlider(fileId: FileId) extends Slider {
   setId(BlockSizeSlider.uiNode(fileId).value)
-  getStylesheets.add(getClass.getResource("/app/logorrr/Slider.css").toExternalForm)
+//  getStylesheets.add(getClass.getResource("/app/logorrr/Slider.css").toExternalForm)
   setMin(BlockConstants.MinBlockSize)
   setMax(BlockConstants.MaxBlockSize)
   setShowTickLabels(false)
