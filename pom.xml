@@ -386,7 +386,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.7.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -411,50 +411,10 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!-- to start application from command line and also to support gluonfx-maven-plugin's ability -->
-                <!-- to activate a tracing agent via client:runagent -->
-                <!-- see https://docs.oracle.com/en/graalvm/enterprise/19/guide/reference/native-image/tracing-agent.html -->
-                <!-- and https://docs.gluonhq.com/#_clientrunagent -->
-                <!--
-                <plugin>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>javafx-maven-plugin</artifactId>
-                    <version>0.0.8</version>
-                    <configuration>
-                        <mainClass>${main.class}</mainClass>
-                    </configuration>
-                </plugin>
-                -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>3.1.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>com.gluonhq</groupId>
-                    <artifactId>gluonfx-maven-plugin</artifactId>
-                    <version>${gluonfx.plugin.version}</version>
-                    <configuration>
-                        <target>host</target>
-                        <mainClass>${main.class}</mainClass>
-                        <verbose>true</verbose>
-                        <graalvmHome>${graalvm.home}</graalvmHome>
-                        <nativeImageArgs>
-                            <arg>--no-fallback</arg>
-                            <arg>-H:-UseServiceLoaderFeature</arg>
-                            <arg>-H:+UnlockExperimentalVMOptions</arg>
-                            <arg>-Dgraal.LogFile=${graalvm.log}</arg>
-                        </nativeImageArgs>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>execute-compile-and-link</id>
-                            <phase>prepare-package</phase>
-                            <goals>
-                                <goal>build</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>

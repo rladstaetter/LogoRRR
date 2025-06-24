@@ -17,6 +17,7 @@
     <description>Distribution bundle for Linux</description>
 
     <modules>
+        <module>graal-linux</module>
         <module>flatpak</module>
         <module>app-image</module>
         <module>deb</module>

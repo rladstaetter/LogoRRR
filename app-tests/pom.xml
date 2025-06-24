@@ -61,7 +61,7 @@
                     <skipTests>false</skipTests>
                     <!-- see https://github.com/TestFX/TestFX?tab=readme-ov-file for testfx parameters-->
                     <!--  -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.verbose=true -->
-                    <argLine>-Djava.library.path=${basedir}/target/native</argLine>
+                    <argLine>--enable-native-access=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED -Djava.library.path=${basedir}/target/native</argLine>
                 </configuration>
             </plugin>
         </plugins>
@@ -92,7 +92,7 @@
                         <executions>
                             <execution>
                                 <id>unpack-dependency</id>
-                                <phase>generate-test-resources</phase> <!-- Define the phase where you want to execute unpacking -->
+                                <phase>generate-test-resources</phase>
                                 <goals>
                                     <goal>unpack</goal>
                                 </goals>

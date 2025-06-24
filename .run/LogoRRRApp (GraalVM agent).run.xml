@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="LogoRRRApp (GraalVM agent)" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="graalvm-ce-24" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="MAIN_CLASS_NAME" value="app.logorrr.LogoRRRApp" />
+    <module name="app" />
+    <option name="VM_PARAMETERS" value="-Xmx4g -Dprism.verbose=true -Djava.util.logging.config.file=develop-logging.properties -Djava.library.path=$PROJECT_DIR$/env/target/javafx-sdk-24.0.1/lib:$PROJECT_DIR$/native/native-osx/target -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-24.0.1/lib --add-modules javafx.controls,javafx.fxml --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED -Dprism.verbose=true -agentlib:native-image-agent=dist-linux/graal-linux/src/main/resources" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="app.logorrr.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

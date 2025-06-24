@@ -12,8 +12,8 @@
     <artifactId>dist-repackaged</artifactId>
     <name>app.logorrr.dist.repackaged</name>
     <!-- see https://github.com/makingthematrix/scalaonandroid/wiki/ for a description -->
-    <!-- click on link 'Java 9  JPMS problem' -->
-    <description>Workaround to include scala dependencies for graalvm - scala libs don't like JPMS</description>
+    <!-- click on link 'Java 9 JPMS problem' -->
+    <description>Package LogoRRRs third party dependencies</description>
 
     <dependencies>
         <dependency>

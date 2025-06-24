@@ -11,12 +11,10 @@
     <groupId>app.logorrr.dist.osx</groupId>
     <artifactId>dist-osx</artifactId>
     <name>app.logorrr.dist.osx</name>
-    <description>Distribution bundle for OsX</description>
+    <description>Distribution bundle for MacOsX</description>
     <packaging>pom</packaging>
 
     <modules>
-        <!-- atm there is no graalvm build active on macosx-->
-        <!--  <module>binary-osx</module> -->
         <module>installer-osx</module>
     </modules>
 

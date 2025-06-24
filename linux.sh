@@ -45,3 +45,9 @@ echo "Starting LogoRRR in flatpak container ... "
 
 # run the app (installed via flatpak)
 flatpak run app.logorrr.LogoRRR
+
+# run graalvm build
+echo "Starting LogoRRR as GraalVM binary ... "
+./dist/dist-linux/graal-linux/target/native/logorrr
+
+
