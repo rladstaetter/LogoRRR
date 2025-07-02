@@ -10,11 +10,6 @@
     <description>LogoRRR - the log visualisation tool</description>
     <packaging>pom</packaging>
     <properties>
-        <!-- make sure you either set following properties here or in your settings xml (preferred) -->
-        <!--
-            <jdk.home>/path/to/jdk</jdk.home> (mac, linux, windows)
-            <graalvm.home>/path/to/graalvm</graalvm.home> (mac, linux, windows)
-            -->
         <revision>25.1.0</revision>
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.16</scala.version>
@@ -28,8 +23,8 @@
         <main.class>app.logorrr.LogoRRRApp</main.class>
         <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>
         <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
-        <jdk.jlink.binary>${jdk.home}/bin/jlink</jdk.jlink.binary>
-        <jdk.jpackage.binary>${jdk.home}/bin/jpackage</jdk.jpackage.binary>
+        <jdk.jlink.binary>${env.JAVA_HOME}/bin/jlink</jdk.jlink.binary>
+        <jdk.jpackage.binary>${env.JAVA_HOME}/bin/jpackage</jdk.jpackage.binary>
         <jmh.version>1.37</jmh.version>
         <windows.temurin.version>
             https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_windows_hotspot_22.0.1_8.zip
@@ -49,11 +44,6 @@
                 </os>
             </activation>
             <properties>
-                <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-                <!-- graalvm builds disabled until https://github.com/rladstaetter/LogoRRR/issues/91
-                        <graalvm.home>C:\Program Files\Java\graalvm-svm-java11-windows-gluon-22.1.0.1-Final</graalvm.home>
-                        -->
-                <!-- see also dist/dist-win/pom.xml! -->
                 <openjfx.os.prefix>windows</openjfx.os.prefix>
             </properties>
         </profile>
@@ -77,8 +67,8 @@
                 </os>
             </activation>
             <properties>
-                <jdk.javac>${jdk.home}/bin/javac</jdk.javac>
-                <jdk.javah>${jdk.home}/bin/javah</jdk.javah>
+                <jdk.javac>${env.JAVA_HOME}/bin/javac</jdk.javac>
+                <jdk.javah>${env.JAVA_HOME}/bin/javah</jdk.javah>
                 <openjfx.os.prefix>osx</openjfx.os.prefix>
             </properties>
             <modules>
@@ -102,20 +92,6 @@
                                             <message>You must set property 'mac.signingkey.username' to create
                                                 a signed pkg file. A valid entry has to have the following form: 'John
                                                 Doe (ABCDEFGHIJ)'
-                                            </message>
-                                        </requireProperty>
-                                        <!--
-                                                            <requireProperty>
-                                                                <property>graalvm.home</property>
-                                                                <message>You have to set 'graalvm.home' and point to a correct graalvm
-                                                                    installation.
-                                                                </message>
-                                                            </requireProperty>
-                                                            -->
-                                        <requireProperty>
-                                            <property>jdk.home</property>
-                                            <message>You have to set 'jdk.home' and it must point to a valid jdk
-                                                installation (Tip: use SDKMan.io to install)
                                             </message>
                                         </requireProperty>
                                         <requireProperty>
@@ -149,7 +125,6 @@
         </profile>
     </profiles>
     <modules>
-        <module>core</module>
         <module>build</module>
         <module>env</module>
         <module>app</module>
@@ -162,6 +137,11 @@
                 <groupId>org.scala-lang</groupId>
                 <artifactId>scala-library</artifactId>
                 <version>${scala.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.ladstatt.core</groupId>
+                <artifactId>core</artifactId>
+                <version>0.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.testfx</groupId>
@@ -239,11 +219,6 @@
                 <artifactId>testfx-junit5</artifactId>
                 <version>4.0.18</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>app.logorrr</groupId>
-                <artifactId>core</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>app.logorrr</groupId>
@@ -485,25 +460,6 @@
                             <phase>initialize</phase>
                             <configuration>
                                 <rules>
-                                    <!-- disable graalvm builds until https://github.com/rladstaetter/LogoRRR/issues/91 is resolved
-                                                      <requireProperty>
-                                                          <property>graalvm.home</property>
-                                                          <message>You have to set 'graalvm.home' and point to a correct graalvm
-                                                              installation.
-                                                          </message>
-                                                      </requireProperty>
-                                                      <requireFilesExist>
-                                                          <files>
-                                                              <file>${graalvm.home}/GRAALVM-README.md</file>
-                                                          </files>
-                                                      </requireFilesExist>
-                                                      -->
-                                    <requireProperty>
-                                        <property>jdk.home</property>
-                                        <message>You have to set 'jdk.home' and point to a correct jdk
-                                            installation.
-                                        </message>
-                                    </requireProperty>
                                     <requireMavenVersion>
                                         <version>[3.9.9,)</version>
                                         <message>Check for Maven version &gt;=3.9.9 failed. Upgrade your Maven

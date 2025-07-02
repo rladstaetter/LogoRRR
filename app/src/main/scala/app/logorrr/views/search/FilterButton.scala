@@ -1,10 +1,11 @@
 package app.logorrr.views.search
 
 import app.logorrr.io.FileId
-import app.logorrr.util.{CanLog, HashUtil}
+import app.logorrr.util.HashUtil
 import app.logorrr.views.{UiNode, UiNodeFilterAware}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.scene.control.{ContentDisplay, ToggleButton, Tooltip}
+import net.ladstatt.util.log.CanLog
 
 object FilterButton extends UiNodeFilterAware {
 

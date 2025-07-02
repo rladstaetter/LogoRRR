@@ -1,13 +1,13 @@
 package app.logorrr.build
 
-import app.logorrr.io.Fs
-import app.logorrr.util.CanLog
+import net.ladstatt.util.io.Fs
+import net.ladstatt.util.log.CanLog
 
 import java.nio.file.{Files, Paths}
 import java.util.UUID
 import scala.jdk.CollectionConverters._
 
-object ProductCodeUpdater extends CanLog {
+object ProductCodeUpdater extends CanLog with Fs {
 
   val needle = """<ROW Property="ProductCode" Value="1033:{aaaaaaaa-bbbb-cccc-dddd-ffffffffffff} " Type="16"/>"""
 
@@ -28,7 +28,7 @@ object ProductCodeUpdater extends CanLog {
               l.replace(needle, s"""<ROW Property="ProductCode" Value="1033:{$uuid} " Type="16"/>""")
             } else l
           }).mkString("\r\n")
-        Fs.write(p, content)
+        write(p, content)
       } else {
         logError(s"${p.toAbsolutePath} does not exist. Aborting ...")
       }

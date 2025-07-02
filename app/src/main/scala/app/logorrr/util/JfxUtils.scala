@@ -6,6 +6,7 @@ import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.ListChangeListener
 import javafx.scene.control.ListView
 import javafx.stage.{Stage, WindowEvent}
+import net.ladstatt.util.log.CanLog
 
 object JfxUtils extends CanLog {
 

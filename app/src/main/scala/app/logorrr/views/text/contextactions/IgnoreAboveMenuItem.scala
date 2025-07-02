@@ -2,7 +2,7 @@ package app.logorrr.views.text.contextactions
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.util.CanLog
+import net.ladstatt.util.log.CanLog
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.MenuItem
 

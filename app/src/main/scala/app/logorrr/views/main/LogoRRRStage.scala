@@ -2,13 +2,14 @@ package app.logorrr.views.main
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutStageSettings
-import app.logorrr.meta.AppMeta
-import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.meta.AppInfo
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.LogoRRRAccelerators
 import javafx.beans.value.ChangeListener
 import javafx.scene.Scene
 import javafx.scene.image.Image
 import javafx.stage.{Stage, WindowEvent}
+import net.ladstatt.util.log.CanLog
 
 
 object LogoRRRStage extends CanLog {
@@ -48,7 +49,7 @@ object LogoRRRStage extends CanLog {
     logorrrMain.shutdown()
     LogoRRRGlobals.unbindWindow()
     stage.sceneProperty.removeListener(LogoRRRStage.sceneListener)
-    logInfo(s"Stopped ${AppMeta.fullAppNameWithVersion}")
+    logInfo(s"Stopped ${AppInfo.fullAppNameWithVersion}")
   }, "shutdown")
 
 
@@ -77,7 +78,7 @@ object LogoRRRStage extends CanLog {
     // bind stage properties (they are initially set and constantly overwritten during execution)
     scene.windowProperty().addListener(MutStageSettings.windowListener)
     stage.sceneProperty().addListener(LogoRRRStage.sceneListener)
-    stage.setTitle(AppMeta.fullAppName)
+    stage.setTitle(AppInfo.fullAppName)
     stage.getIcons.add(LogoRRRStage.icon)
     stage.setScene(scene)
     stage.setOnCloseRequest((_: WindowEvent) => LogoRRRStage.shutdown(stage, logorrrMain))

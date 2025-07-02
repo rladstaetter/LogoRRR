@@ -1,6 +1,6 @@
 package app.logorrr.conf
 
-import app.logorrr.util.CanLog
+import net.ladstatt.util.log.CanLog
 import com.typesafe.config.ConfigRenderOptions
 import pureconfig.ConfigSource
 

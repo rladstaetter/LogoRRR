@@ -2,7 +2,7 @@ package app.logorrr.views.search
 
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
-import app.logorrr.util.OsUtil
+import net.ladstatt.util.os.OsUtil
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.block.HasBlockSizeProperty
 import app.logorrr.views.ops.{ClearLogButton, CopyLogButton, DecreaseBlockSizeButton, IncreaseBlockSizeButton}

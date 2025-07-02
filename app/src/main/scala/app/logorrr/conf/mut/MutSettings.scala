@@ -3,10 +3,10 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.{Settings, StageSettings}
 import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
-import app.logorrr.util.OsUtil
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.FXCollections
 import javafx.stage.Window
+import net.ladstatt.util.os.OsUtil
 
 import java.nio.file.Path
 import java.util

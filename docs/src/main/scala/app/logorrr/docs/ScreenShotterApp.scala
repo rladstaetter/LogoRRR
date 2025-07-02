@@ -2,17 +2,18 @@ package app.logorrr.docs
 
 import app.logorrr.conf._
 import app.logorrr.conf.mut.MutSettings
-import app.logorrr.io.Fs
-import app.logorrr.meta.AppMeta
+import app.logorrr.meta.AppInfo
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
 import app.logorrr.services.hostservices.NativeHostServices
-import app.logorrr.util.CanLog
 import app.logorrr.{LogoRRRApp, LogoRRRNative}
 import javafx.application.Application
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Node
 import javafx.stage.Stage
+import net.ladstatt.app.{AppId, AppMeta}
+import net.ladstatt.util.io.Fs
+import net.ladstatt.util.log.CanLog
 
 import java.nio.file.{Path, Paths}
 import javax.imageio.ImageIO
@@ -29,12 +30,16 @@ object ScreenShotterApp {
   }
 
   def main(args: Array[String]): Unit = {
+    val appMeta = net.ladstatt.app.AppMeta(AppId("ScreenShotterApp", "screenshotterapp", "screenshotter.app"), AppMeta.LogFormat)
+    net.ladstatt.app.AppMeta.initApp(appMeta)
     LogoRRRNative.loadNativeLibraries()
     javafx.application.Application.launch(classOf[ScreenShotterApp], args: _*)
   }
 }
 
-class ScreenShotterApp extends javafx.application.Application with CanLog {
+class ScreenShotterApp extends javafx.application.Application
+  with Fs
+  with CanLog {
 
   def start(stage: Stage): Unit = {
 
@@ -62,8 +67,8 @@ class ScreenShotterApp extends javafx.application.Application with CanLog {
 
           LogoRRRApp.start(stage, services)
 
-          val bPath = Paths.get(s"releases/${AppMeta.appVersion}/")
-          Fs.createDirectories(bPath)
+          val bPath = Paths.get(s"releases/${AppInfo.appVersion}/")
+          createDirectories(bPath)
 
           val f = bPath.resolve(s"${w}x$h.png")
           ScreenShotterApp.persistNodeState(stage.getScene.getRoot, f)

@@ -3,10 +3,11 @@ package app.logorrr.views.menubar
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
 import app.logorrr.services.file.FileIdService
-import app.logorrr.util.{CanLog, OsUtil}
 import app.logorrr.views.UiNodes
 import javafx.scene.control.{Menu, MenuItem}
 import javafx.stage.{FileChooser, Window}
+import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.os.OsUtil
 
 /**
  * Helper class to group file open operation and setting LogoRRRGlobals
@@ -34,7 +35,7 @@ object FileMenu {
    * Menu Item to open a new file
    *
    * @param fileIdService underlying service to use
-   * @param openFile function to change global state, add new file to UI ...
+   * @param openFile      function to change global state, add new file to UI ...
    */
   class OpenFileMenuItem(fileIdService: FileIdService
                          , openFile: FileId => Unit)
@@ -61,11 +62,11 @@ object FileMenu {
 
 }
 
-class FileMenu(isUnderTest : Boolean
+class FileMenu(isUnderTest: Boolean
                , fileIdService: FileIdService
                , openFile: FileId => Unit
                , closeAllFiles: => Unit
-               , closeApplication: => Unit) extends Menu("File")  {
+               , closeApplication: => Unit) extends Menu("File") {
 
   setId(UiNodes.FileMenu.Self.value)
 

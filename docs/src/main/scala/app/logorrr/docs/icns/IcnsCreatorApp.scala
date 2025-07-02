@@ -2,9 +2,11 @@ package app.logorrr.docs.icns
 
 import app.logorrr.build.Commander
 import app.logorrr.docs.{Area, IconCreatorApp, LogorrrIcon}
-import app.logorrr.io.Fs
 import javafx.scene.canvas.Canvas
 import javafx.stage.Stage
+import net.ladstatt.app.{AppId, AppMeta}
+import net.ladstatt.util.io.Fs
+import net.ladstatt.util.log.CanLog
 
 import java.nio.file.{Files, Path, Paths}
 
@@ -24,6 +26,8 @@ object IcnsCreatorApp {
   }
 
   def main(args: Array[String]): Unit = {
+    val appMeta = net.ladstatt.app.AppMeta(AppId("icnscreatorapp", "icnscreatorapp", "icnscreator.app"), AppMeta.LogFormat)
+    net.ladstatt.app.AppMeta.initApp(appMeta)
     if (checkPrerequisites()) {
       javafx.application.Application.launch(classOf[IcnsCreatorApp], args: _*)
     } else {
@@ -42,7 +46,9 @@ object IcnsCreatorApp {
  * see https://stackoverflow.com/questions/12306223/how-to-manually-create-icns-files-using-iconutil on how to generate icns files
  *
  */
-class IcnsCreatorApp extends javafx.application.Application {
+class IcnsCreatorApp extends javafx.application.Application
+  with Fs
+  with CanLog {
 
   def perform(): Unit = {
     // generate sudirectory with images
@@ -61,7 +67,7 @@ class IcnsCreatorApp extends javafx.application.Application {
   }
 
   def generateIcons(targetPath: Path): Unit = {
-    Fs.createDirectories(targetPath)
+    createDirectories(targetPath)
     for (IconDef(Area(w, h, _, _), name) <- IconDef.seq) {
       val canvas = new Canvas(w, h)
       val gc2d = canvas.getGraphicsContext2D

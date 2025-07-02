@@ -1,7 +1,7 @@
 package app.logorrr.views.logfiletab.actions
 
 import app.logorrr.io.FileId
-import app.logorrr.util.OsUtil
+import net.ladstatt.util.os.OsUtil
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.MenuItem
 

@@ -1,8 +1,9 @@
 package app.logorrr.io
 
 import app.logorrr.model.{LogEntry, TimestampSettings}
-import app.logorrr.util.{CanLog, OsUtil}
 import javafx.collections.{FXCollections, ObservableList}
+import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.os.OsUtil
 
 import java.io._
 import java.nio.file.{Files, Path}

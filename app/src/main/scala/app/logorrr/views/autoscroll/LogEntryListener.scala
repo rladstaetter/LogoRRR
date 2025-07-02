@@ -1,8 +1,9 @@
 package app.logorrr.views.autoscroll
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.util.JfxUtils
 import javafx.collections.ObservableList
+import net.ladstatt.util.log.CanLog
 import org.apache.commons.io.input.{Tailer, TailerListener}
 
 /**

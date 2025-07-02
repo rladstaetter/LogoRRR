@@ -3,13 +3,13 @@ package app.logorrr.meta
 import pureconfig.{ConfigReader, ConfigSource}
 import pureconfig.generic.semiauto.deriveReader
 
-object AppMeta {
+object AppInfo {
 
-  implicit lazy val reader: ConfigReader[AppMeta] = deriveReader[AppMeta]
+  implicit lazy val reader: ConfigReader[AppInfo] = deriveReader[AppInfo]
 
-  private def meta: AppMeta = ConfigSource.resources("meta.conf").load[AppMeta] match {
+  private def meta: AppInfo = ConfigSource.resources("meta.conf").load[AppInfo] match {
     case Right(value) => value
-    case Left(_) => AppMeta("LogoRRR", "LATEST")
+    case Left(_) => AppInfo("LogoRRR", "LATEST")
   }
 
   val fullAppName = s"${meta.appName}"
@@ -18,4 +18,4 @@ object AppMeta {
 
 }
 
-case class AppMeta(appName: String, appVersion: String)
+case class AppInfo(appName: String, appVersion: String)

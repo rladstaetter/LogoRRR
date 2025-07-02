@@ -13,6 +13,8 @@ import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.event.Event
 import javafx.scene.control._
+import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.os.OsUtil
 
 import java.lang
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -211,11 +213,11 @@ class LogFileTab(val fileId: FileId
         Seq(closeMenuItem
           , closeOtherFilesMenuItem
           , closeAllFilesMenuItem) ++ leftRightCloser ++ {
-          (if (OsUtil.isMac) {
+          if (OsUtil.isMac) {
             Seq()
           } else {
             Seq(openInFinderMenuItem)
-          }) // ++ Seq(mergeTimedMenuItem)
+          } // ++ Seq(mergeTimedMenuItem)
         }
       }
     }

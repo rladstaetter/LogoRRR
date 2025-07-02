@@ -2,12 +2,14 @@ package app.logorrr.conf
 
 import app.logorrr.conf.SettingsIO.renderOptions
 import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
-import app.logorrr.io.{FileId, FilePaths, Fs, OsxBridgeHelper}
+import app.logorrr.io.{FileId, OsxBridgeHelper}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.services.hostservices.LogoRRRHostServices
-import app.logorrr.util.{CanLog, OsUtil}
 import javafx.beans.property.SimpleObjectProperty
 import javafx.stage.Window
+import net.ladstatt.util.io.Fs
+import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.os.OsUtil
 import pureconfig.ConfigWriter
 
 import java.nio.file.Path
@@ -17,7 +19,7 @@ import java.nio.file.Path
  *
  * The user can change certain values via interacting or explicitly setting values in the preferences dialog.
  */
-object LogoRRRGlobals extends CanLog {
+object LogoRRRGlobals extends CanLog with Fs {
 
   private val mutSettings = new MutSettings
 
@@ -26,7 +28,7 @@ object LogoRRRGlobals extends CanLog {
   def persist(): Unit = persist(LogoRRRGlobals.getSettings)
 
   def persist(settings: Settings): Unit = {
-    Fs.write(FilePaths.settingsFilePath, ConfigWriter[Settings].to(settings).render(renderOptions))
+    write(settingsFilePath, ConfigWriter[Settings].to(settings).render(renderOptions))
   }
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings
