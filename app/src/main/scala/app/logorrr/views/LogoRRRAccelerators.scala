@@ -1,6 +1,6 @@
 package app.logorrr.views
 
-import app.logorrr.util.CanLog
+import net.ladstatt.util.log.CanLog
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Scene
 import javafx.scene.control.{TextField, ToggleButton}

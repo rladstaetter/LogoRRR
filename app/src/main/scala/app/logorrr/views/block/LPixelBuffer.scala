@@ -1,13 +1,14 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, ColorUtil}
+import app.logorrr.util.ColorUtil
 import app.logorrr.views.LColors
 import app.logorrr.views.search.Filter
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
 import javafx.scene.image.{PixelBuffer, PixelFormat}
 import javafx.scene.paint.Color
+import net.ladstatt.util.log.CanLog
 
 import java.nio.IntBuffer
 import scala.jdk.CollectionConverters.CollectionHasAsScala

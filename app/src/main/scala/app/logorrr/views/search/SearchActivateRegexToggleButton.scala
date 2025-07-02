@@ -1,10 +1,11 @@
 package app.logorrr.views.search
 
 import app.logorrr.io.FileId
-import app.logorrr.util.{LogoRRRFonts, OsUtil}
+import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{Label, ToggleButton, Tooltip}
 import javafx.scene.paint.Color
+import net.ladstatt.util.os.OsUtil
 
 object SearchActivateRegexToggleButton extends UiNodeFileIdAware {
 

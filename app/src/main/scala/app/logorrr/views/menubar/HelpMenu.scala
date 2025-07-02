@@ -1,21 +1,22 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.io.{FileId, FilePaths}
-import app.logorrr.meta.AppMeta
+import app.logorrr.io.FileId
+import app.logorrr.meta.AppInfo
 import app.logorrr.views.UiNodes
 import app.logorrr.views.about.AboutDialog
 import app.logorrr.views.menubar.HelpMenu.{AboutMenuItem, LogMenuItem}
 import javafx.scene.Scene
 import javafx.scene.control.{Menu, MenuItem}
 import javafx.stage.{Modality, Stage}
+import net.ladstatt.util.log.CanLog
 
-object HelpMenu {
+object HelpMenu extends CanLog {
 
   class LogMenuItem(openLogFile: FileId => Unit) extends MenuItem("Open LogoRRRs log") {
     setId(UiNodes.HelpMenu.OpenLogorrLog.value)
 
     setOnAction(_ => {
-      openLogFile(FileId(FilePaths.logFilePath))
+      openLogFile(FileId(logFilePath))
     })
   }
 
@@ -25,7 +26,7 @@ object HelpMenu {
     setOnAction(_ => {
       val stage = new Stage()
       stage.initModality(Modality.APPLICATION_MODAL)
-      stage.setTitle(s"About ${AppMeta.fullAppNameWithVersion}")
+      stage.setTitle(s"About ${AppInfo.fullAppNameWithVersion}")
       val scene = new Scene(new AboutDialog, 440, 250)
       stage.setScene(scene)
       stage.setOnCloseRequest(_ => stage.close())

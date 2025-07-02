@@ -2,9 +2,10 @@ package app.logorrr.views.main
 
 import app.logorrr.io.FileId
 import app.logorrr.services.file.FileIdService
-import app.logorrr.util.{CanLog, OsUtil}
 import app.logorrr.views.menubar.{FileMenu, HelpMenu}
 import javafx.scene.control.MenuBar
+import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.os.OsUtil
 
 class MainMenuBar(fileIdService: FileIdService
                   , openFile: FileId => Unit

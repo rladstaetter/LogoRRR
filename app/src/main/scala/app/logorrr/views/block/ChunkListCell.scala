@@ -1,7 +1,7 @@
 package app.logorrr.views.block
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.search.Filter
 import javafx.animation.{KeyFrame, Timeline}
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
@@ -11,6 +11,7 @@ import javafx.scene.control.ListCell
 import javafx.scene.image.ImageView
 import javafx.scene.input.{MouseButton, MouseEvent}
 import javafx.util.Duration
+import net.ladstatt.util.log.CanLog
 
 import scala.util.Try
 

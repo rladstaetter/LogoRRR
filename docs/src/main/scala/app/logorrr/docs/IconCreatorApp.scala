@@ -1,6 +1,5 @@
 package app.logorrr.docs
 
-import app.logorrr.io.Fs
 import javafx.embed.swing.SwingFXUtils
 import javafx.geometry.Pos
 import javafx.scene.canvas.Canvas
@@ -9,14 +8,17 @@ import javafx.scene.layout.{BorderPane, VBox}
 import javafx.scene.paint.Color
 import javafx.scene.{Scene, SnapshotParameters}
 import javafx.stage.Stage
+import net.ladstatt.app.{AppId, AppMeta}
+import net.ladstatt.util.io.Fs
+import net.ladstatt.util.log.CanLog
 
 import java.nio.file.{Path, Paths}
 import javax.imageio.ImageIO
 
-object IconCreatorApp {
+object IconCreatorApp extends Fs with CanLog  {
 
   def writeIcons(canvases: Seq[(Area, Canvas)], path: Path): Unit = {
-    Fs.createDirectories(path)
+    createDirectories(path)
     for ((Area(s, _, _, _), c) <- canvases) {
       val file = path.resolve(s"logorrr-icon-$s.png")
       writeIcon(c, file)
@@ -34,6 +36,8 @@ object IconCreatorApp {
   }
 
   def main(args: Array[String]): Unit = {
+    val appMeta = net.ladstatt.app.AppMeta(AppId("IconCreatorApp", "iconcreatorapp", "iconcreator.app"), AppMeta.LogFormat)
+    net.ladstatt.app.AppMeta.initApp(appMeta)
     javafx.application.Application.launch(classOf[IconCreatorApp], args: _*)
   }
 }
@@ -42,12 +46,12 @@ object IconCreatorApp {
 class IconCreatorApp extends javafx.application.Application {
 
   val iconSizes: Seq[Int] = Seq(512, 256, 128, 64, 32, 16)
-  val icons: Seq[Area] = iconSizes.map(i => Area(i, i,0,0))
+  val icons: Seq[Area] = iconSizes.map(i => Area(i, i, 0, 0))
 
   def start(stage: Stage): Unit = {
     val bp = new BorderPane()
     val ics =
-      for (a@Area(w, h,_,_) <- icons) yield {
+      for (a@Area(w, h, _, _) <- icons) yield {
         val canvas = new Canvas(w, h)
         val gc2d = canvas.getGraphicsContext2D
         LogorrrIcon.drawIcon(gc2d, w)

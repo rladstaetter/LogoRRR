@@ -2,7 +2,7 @@ package app.logorrr.views.block
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.search.Filter
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
@@ -10,6 +10,7 @@ import javafx.collections.{FXCollections, ObservableList}
 import javafx.geometry.Orientation
 import javafx.scene.control.skin.VirtualFlow
 import javafx.scene.control.{ListView, ScrollBar, Skin, SkinBase}
+import net.ladstatt.util.log.CanLog
 
 import java.lang
 import scala.jdk.CollectionConverters.CollectionHasAsScala

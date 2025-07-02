@@ -1,6 +1,6 @@
 package app.logorrr.services.hostservices
 
-import app.logorrr.util.CanLog
+import net.ladstatt.util.log.CanLog
 import app.logorrr.views.UiNode
 import javafx.collections.{FXCollections, ObservableList}
 

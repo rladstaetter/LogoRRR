@@ -2,7 +2,7 @@ package app.logorrr.views.autoscroll
 
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
-import app.logorrr.util.CanLog
+import net.ladstatt.util.log.CanLog
 import javafx.collections.ObservableList
 import org.apache.commons.io.input.Tailer
 

@@ -1,7 +1,7 @@
 package app.logorrr
 
 import app.logorrr.io.IoManager
-import app.logorrr.util.OsUtil
+import net.ladstatt.util.os.OsUtil
 import org.scalatest.wordspec.AnyWordSpec
 
 import java.nio.file.{Files, Paths}

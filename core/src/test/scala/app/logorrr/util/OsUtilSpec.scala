@@ -1,5 +1,6 @@
 package app.logorrr.util
 
+import net.ladstatt.util.os.OsUtil
 import org.scalatest.wordspec.AnyWordSpec
 
 class OsUtilSpec extends AnyWordSpec {

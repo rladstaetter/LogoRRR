@@ -3,11 +3,12 @@ package app.logorrr.views.text
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.text.contextactions.{CopyEntriesMenuItem, IgnoreAboveMenuItem, IgnoreBelowMenuItem}
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
+import net.ladstatt.util.log.CanLog
 
 import scala.jdk.CollectionConverters._
 

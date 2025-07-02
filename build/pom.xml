@@ -16,6 +16,10 @@
             <artifactId>scala-library</artifactId>
         </dependency>
         <dependency>
+            <groupId>net.ladstatt.core</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>app.logorrr</groupId>
             <artifactId>core</artifactId>
         </dependency>

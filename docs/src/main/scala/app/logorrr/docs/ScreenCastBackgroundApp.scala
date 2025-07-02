@@ -1,7 +1,7 @@
 package app.logorrr.docs
 
 import app.logorrr.docs.Area._
-import app.logorrr.util.CanLog
+import net.ladstatt.util.log.CanLog
 import javafx.application.Application
 import javafx.geometry.Insets
 import javafx.scene.Scene
@@ -9,6 +9,7 @@ import javafx.scene.layout.{Background, BackgroundFill, BorderPane}
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.stage.Stage
+import net.ladstatt.app.{AppId, AppMeta}
 
 /**
  * White background for screencasts
@@ -16,6 +17,8 @@ import javafx.stage.Stage
 object ScreenCastBackgroundApp {
 
   def main(args: Array[String]): Unit = {
+    val appMeta = net.ladstatt.app.AppMeta(AppId("ScreenCastBackgroundApp", "screencastbackgroundapp", "screencastbackground.app"), AppMeta.LogFormat)
+    net.ladstatt.app.AppMeta.initApp(appMeta)
     javafx.application.Application.launch(classOf[ScreenCastBackgroundApp], args: _*)
   }
 }

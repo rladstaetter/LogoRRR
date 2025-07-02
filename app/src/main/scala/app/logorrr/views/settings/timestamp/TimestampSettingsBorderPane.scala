@@ -2,7 +2,7 @@ package app.logorrr.views.settings.timestamp
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{CanLog, HLink}
+import app.logorrr.util.HLink
 import app.logorrr.views.UiNodes
 import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.time.TimeOpsToolBar
@@ -12,6 +12,7 @@ import javafx.collections.{FXCollections, ObservableList}
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control._
 import javafx.scene.layout.{BorderPane, HBox, VBox}
+import net.ladstatt.util.log.CanLog
 
 
 class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings

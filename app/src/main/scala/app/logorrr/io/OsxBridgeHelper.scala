@@ -1,7 +1,8 @@
 package app.logorrr.io
 
 import app.logorrr.OsxBridge
-import app.logorrr.util.{CanLog, OsUtil}
+import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.os.OsUtil
 
 import java.nio.file.Path
 

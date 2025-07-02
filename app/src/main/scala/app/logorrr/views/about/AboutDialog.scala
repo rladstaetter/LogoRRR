@@ -1,6 +1,6 @@
 package app.logorrr.views.about
 
-import app.logorrr.meta.AppMeta
+import app.logorrr.meta.AppInfo
 import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts, PropsCp}
 import app.logorrr.views.UiNodes
 import javafx.geometry.{Insets, Pos}
@@ -73,7 +73,7 @@ class AboutDialog extends BorderPane {
   }
 
   setPadding(new Insets(10, 10, 10, 10))
-  setTop(AboutDialog.MonoLabel(AppMeta.fullAppNameWithVersion, 50))
+  setTop(AboutDialog.MonoLabel(AppInfo.fullAppNameWithVersion, 50))
   setLeft(closeButton)
   setRight(new AboutDialog.HLinkView(AboutDialog.links))
 

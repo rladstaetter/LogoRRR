@@ -1,6 +1,6 @@
 package app.logorrr.model
 
-import app.logorrr.util.CanLog
+import net.ladstatt.util.log.CanLog
 import app.logorrr.views.settings.timestamp.SimpleRange
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}

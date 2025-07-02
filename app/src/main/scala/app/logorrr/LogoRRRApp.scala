@@ -2,15 +2,16 @@ package app.logorrr
 
 import app.logorrr
 import app.logorrr.conf.{LogoRRRGlobals, SettingsIO}
-import app.logorrr.io.FilePaths
-import app.logorrr.meta.AppMeta
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
 import app.logorrr.services.hostservices.{MacNativeHostService, NativeHostServices}
-import app.logorrr.util.{CanLog, JfxUtils, OsUtil}
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.main.{LogoRRRMain, LogoRRRStage}
 import javafx.application.Application
 import javafx.stage.Stage
+import net.ladstatt.app.{AppId, AppMeta}
+import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.os.OsUtil
 
 import java.nio.file.Paths
 
@@ -20,9 +21,6 @@ import java.nio.file.Paths
 // have fun and thanks for reading the code!
 object LogoRRRApp extends CanLog {
 
-  /** LogoRRRs own log formatting string */
-  val LogFormat = """[%1$tF %1$tT.%1$tN] %3$-40s %4$-13s %5$s %6$s %n"""
-
   def main(args: Array[String]): Unit = {
     javafx.application.Application.launch(classOf[LogoRRRApp], args: _*)
   }
@@ -30,7 +28,8 @@ object LogoRRRApp extends CanLog {
   def start(stage: Stage
             , services: LogoRRRServices): LogoRRRMain = {
     System.setProperty("user.language", "en")
-    System.setProperty("java.util.logging.SimpleFormatter.format", LogFormat)
+    val appMeta = net.ladstatt.app.AppMeta(AppId("LogoRRR", "logorrr", "logorrr.app"), AppMeta.LogFormat)
+    net.ladstatt.app.AppMeta.initApp(appMeta)
     LogoRRRNative.loadNativeLibraries()
     // make sure to set css before anything is initialized otherwise the rules won't apply
     Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
@@ -39,7 +38,7 @@ object LogoRRRApp extends CanLog {
     val logoRRRMain = new LogoRRRMain(JfxUtils.closeStage(stage), services.fileIdService, services.isUnderTest)
     LogoRRRStage.init(stage, logoRRRMain)
 
-    logInfo(s"Started ${AppMeta.fullAppNameWithVersion} in '${Paths.get("").toAbsolutePath.toString}'")
+    logInfo(s"Started ${app.logorrr.meta.AppInfo.fullAppNameWithVersion} in '${Paths.get("").toAbsolutePath.toString}'")
     logoRRRMain
   }
 }
@@ -54,9 +53,8 @@ class LogoRRRApp extends javafx.application.Application with CanLog {
       } else new NativeHostServices(getHostServices)
     }
 
-
     val services = logorrr.services.LogoRRRServices(
-      SettingsIO.fromFile(FilePaths.settingsFilePath)
+      SettingsIO.fromFile(settingsFilePath)
       , hostServices
       , new DefaultFileIdService(() => stage.getScene.getWindow)
       , isUnderTest = false)

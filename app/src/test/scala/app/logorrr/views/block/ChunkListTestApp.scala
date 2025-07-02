@@ -1,8 +1,7 @@
 package app.logorrr.views.block
 
-import app.logorrr.LogoRRRApp
 import app.logorrr.model.{LogEntry, LogFileSettings}
-import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.search.Filter
 import javafx.application.Application
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty}
@@ -12,6 +11,8 @@ import javafx.scene.Scene
 import javafx.scene.control._
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
+import net.ladstatt.app.{AppId, AppMeta}
+import net.ladstatt.util.log.CanLog
 
 /**
  * App to test block list view
@@ -19,8 +20,10 @@ import javafx.stage.Stage
 object ChunkListTestApp {
 
   def main(args: Array[String]): Unit = {
+    val appMeta = net.ladstatt.app.AppMeta(AppId("ChunkListTestApp", "chunklisttestapp", "chunklisttest.app"), AppMeta.LogFormat)
+    net.ladstatt.app.AppMeta.initApp(appMeta)
+
     System.setProperty("user.language", "en")
-    System.setProperty("java.util.logging.SimpleFormatter.format", LogoRRRApp.LogFormat)
     javafx.application.Application.launch(classOf[ChunkListTestApp], args: _*)
   }
 

@@ -140,6 +140,11 @@
                 <version>${scala.version}</version>
             </dependency>
             <dependency>
+                <groupId>net.ladstatt.core</groupId>
+                <artifactId>core</artifactId>
+                <version>0.0.1</version>
+            </dependency>
+            <dependency>
                 <groupId>org.testfx</groupId>
                 <artifactId>testfx-core</artifactId>
                 <version>4.0.18</version>

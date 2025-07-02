@@ -4,10 +4,11 @@ import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.services.file.FileIdService
-import app.logorrr.util.{CanLog, JfxUtils}
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
+import net.ladstatt.util.log.CanLog
 
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global
