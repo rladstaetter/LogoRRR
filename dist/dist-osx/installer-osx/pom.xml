@@ -113,7 +113,7 @@
                             <executable>${jdk.jpackage.binary}</executable>
                             <workingDirectory>${project.build.directory}</workingDirectory>
                             <environmentVariables>
-                                <JAVA_HOME>${jdk.home}</JAVA_HOME>
+                                <JAVA_HOME>${env.JAVA_HOME}</JAVA_HOME>
                             </environmentVariables>
                             <arguments>
                                 <argument>@jpackage-commandline.options</argument>

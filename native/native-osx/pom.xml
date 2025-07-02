@@ -70,8 +70,8 @@
                             <executable>${osx.gcc}</executable>
                             <workingDirectory>target</workingDirectory>
                             <arguments>
-                                <argument>-I${jdk.home}/include</argument>
-                                <argument>-I${jdk.home}/include/darwin/</argument>
+                                <argument>-I${env.JAVA_HOME}/include</argument>
+                                <argument>-I${env.JAVA_HOME}/include/darwin/</argument>
                                 <argument>-o</argument>
                                 <argument>${project.build.directory}/libLogoRRR.dylib</argument>
                                 <argument>-dynamiclib</argument>
