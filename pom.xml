@@ -125,7 +125,6 @@
         </profile>
     </profiles>
     <modules>
-        <module>core</module>
         <module>build</module>
         <module>env</module>
         <module>app</module>
@@ -220,11 +219,6 @@
                 <artifactId>testfx-junit5</artifactId>
                 <version>4.0.18</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>app.logorrr</groupId>
-                <artifactId>core</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>app.logorrr</groupId>

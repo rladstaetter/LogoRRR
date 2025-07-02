@@ -31,11 +31,6 @@
             <artifactId>testfx-junit5</artifactId>
         </dependency>
         <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-core</artifactId>
         </dependency>

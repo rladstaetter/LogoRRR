@@ -48,10 +48,6 @@
         </dependency>
         <dependency>
             <groupId>app.logorrr</groupId>
-            <artifactId>core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>app.logorrr</groupId>
             <artifactId>build</artifactId>
         </dependency>
         <dependency>
