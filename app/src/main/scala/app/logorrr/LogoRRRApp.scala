@@ -21,14 +21,16 @@ import java.nio.file.Paths
 // have fun and thanks for reading the code!
 object LogoRRRApp extends CanLog {
 
+  val appMeta = net.ladstatt.app.AppMeta(AppId("LogoRRR", "logorrr", "logorrr.app"), AppMeta.LogFormat)
+
   def main(args: Array[String]): Unit = {
+    net.ladstatt.app.AppMeta.initApp(appMeta)
     javafx.application.Application.launch(classOf[LogoRRRApp], args: _*)
   }
 
   def start(stage: Stage
             , services: LogoRRRServices): LogoRRRMain = {
     System.setProperty("user.language", "en")
-    val appMeta = net.ladstatt.app.AppMeta(AppId("LogoRRR", "logorrr", "logorrr.app"), AppMeta.LogFormat)
     net.ladstatt.app.AppMeta.initApp(appMeta)
     LogoRRRNative.loadNativeLibraries()
     // make sure to set css before anything is initialized otherwise the rules won't apply
