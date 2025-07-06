@@ -1,8 +1,6 @@
-package app.logorrr.views.block
+package app.logorrr.jfxbfr
 
 import app.logorrr.model.LogEntry
-import app.logorrr.views.LColors
-import app.logorrr.views.search.Filter
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
 import javafx.scene.image.WritableImage
@@ -13,6 +11,7 @@ import javafx.scene.image.WritableImage
  */
 object ChunkImage {
 
+  var nr = 0
   val MaxWidth = 4096
 
   val MaxHeight = 4096
@@ -31,7 +30,7 @@ object ChunkImage {
 
 
   def apply(chunk: Chunk
-            , filtersProperty: ObservableList[Filter]
+            , filtersProperty: ObservableList[_ <: Fltr]
             , selectedLineNumberProperty: SimpleIntegerProperty
             , widthProperty: ReadOnlyDoubleProperty
             , blockSizeProperty: SimpleIntegerProperty
@@ -53,7 +52,7 @@ object ChunkImage {
   def apply(blockNumber: Int
             , entries: java.util.List[LogEntry]
             , selectedLineNumberProperty: SimpleIntegerProperty
-            , filtersProperty: ObservableList[Filter]
+            , filtersProperty: ObservableList[_ <: Fltr]
             , blockSizeProperty: SimpleIntegerProperty
             , widthProperty: ReadOnlyDoubleProperty
             , heightProperty: SimpleIntegerProperty
@@ -64,6 +63,7 @@ object ChunkImage {
     val height = heightProperty.get()
     val shape = RectangularShape(width, height)
     val rawInts = Array.fill(shape.size)(LColors.defaultBackgroundColor)
+
     val pixelBuffer = LPixelBuffer(blockNumber
       , shape
       , blockSizeProperty

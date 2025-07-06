@@ -1,8 +1,7 @@
 package app.logorrr.views.text
 
-import app.logorrr.conf.mut.FilterSpec
+import app.logorrr.jfxbfr.{FilterSpec, Fltr}
 import app.logorrr.model.LogEntry
-import app.logorrr.views.search.Filter
 import app.logorrr.{LogEntrySpec, LogoRRRSpec}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.paint.Color
@@ -21,7 +20,7 @@ object FilterCalculatorSpec {
 class FilterCalculatorSpec extends LogoRRRSpec {
 
   def applySingleFilter(logEntry: String, pattern: String): Seq[Seq[LinePart]] = {
-    FilterCalculator(LogEntry(0, logEntry, None, None), Seq(new Filter(pattern, Color.RED, true))).filteredParts
+    FilterCalculator(LogEntry(0, logEntry, None, None), Seq(Fltr(pattern, Color.RED, active = true))).filteredParts
   }
 
   "calcParts" should {
@@ -35,7 +34,7 @@ class FilterCalculatorSpec extends LogoRRRSpec {
     "return empty List for empty logentry string" in {
       check(Prop.forAll(FilterSpec.gen) {
         filter =>
-          val filteredParts = applySingleFilter("", filter.pattern)
+          val filteredParts = applySingleFilter("", filter.getPattern)
           filteredParts.length == 1 && filteredParts.head.isEmpty
       })
     }
@@ -81,9 +80,9 @@ class FilterCalculatorSpec extends LogoRRRSpec {
 
   "filteredParts" should {
     val filters = Seq(
-      new Filter("a", Color.RED, true)
-      , new Filter("b", Color.BLUE, true)
-      , new Filter("t", Color.YELLOW, true)
+      Fltr("a", Color.RED, active = true)
+      , Fltr("b", Color.BLUE, active = true)
+      , Fltr("t", Color.YELLOW, active = true)
     )
     val entry = LogEntry(0, "test a b c", None, None)
     val calculator = FilterCalculator(entry, filters)

@@ -1,16 +1,17 @@
 package app.logorrr.views.search
 
 import app.logorrr.io.FileId
+import app.logorrr.jfxbfr.Fltr
 import app.logorrr.util.HashUtil
 import app.logorrr.views.ops.RectButton
 import app.logorrr.views.{UiNode, UiNodeFilterAware}
 
 object RemoveFilterbutton extends UiNodeFilterAware {
 
-  override def uiNode(fileId: FileId, filter: Filter): UiNode = UiNode(classOf[RemoveFilterbutton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + filter.pattern))
+  override def uiNode(fileId: FileId, filter: Fltr): UiNode = UiNode(classOf[RemoveFilterbutton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + filter.getPattern))
 }
 
-class RemoveFilterbutton(fileId: FileId, filter: Filter, removeFilter: Filter => Unit) extends RectButton(10, 10, filter.color, "remove") {
+class RemoveFilterbutton(fileId: FileId, filter: Fltr, removeFilter: Fltr => Unit) extends RectButton(10, 10, filter.getColor, "remove") {
   setId(RemoveFilterbutton.uiNode(fileId, filter).value)
   setOnAction(_ => removeFilter(filter))
   setStyle(

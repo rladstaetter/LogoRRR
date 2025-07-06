@@ -1,4 +1,4 @@
-package app.logorrr.util
+package app.logorrr.jfxbfr
 
 import scala.math.BigDecimal.RoundingMode
 

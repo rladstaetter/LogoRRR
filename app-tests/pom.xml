@@ -23,6 +23,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>jfxbfr</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
         </dependency>

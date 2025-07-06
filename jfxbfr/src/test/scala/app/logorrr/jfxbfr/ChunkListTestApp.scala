@@ -1,8 +1,6 @@
-package app.logorrr.views.block
+package app.logorrr.jfxbfr
 
-import app.logorrr.model.{LogEntry, LogFileSettings}
-import app.logorrr.util.JfxUtils
-import app.logorrr.views.search.Filter
+import app.logorrr.model.LogEntry
 import javafx.application.Application
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty}
 import javafx.collections.FXCollections
@@ -44,7 +42,7 @@ class ChunkListTestApp extends Application with CanLog {
     val selectedLineNumber = 0
 
     val entries: java.util.List[LogEntry] = ChunkSpec.mkTestLogEntries(1000)
-    val filtersProperty = new SimpleListProperty[Filter](FXCollections.observableArrayList(LogFileSettings.DefaultFilters: _*))
+    val filtersProperty = new SimpleListProperty[Fltr](FXCollections.observableArrayList(Fltr.DefaultFilters: _*))
     val entriesProperty = new SimpleListProperty[LogEntry](FXCollections.observableArrayList(entries))
 
     val bp = new BorderPane()

@@ -1,9 +1,6 @@
-package app.logorrr.views.block
+package app.logorrr.jfxbfr
 
-import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.util.JfxUtils
-import app.logorrr.views.search.Filter
 import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.{FXCollections, ObservableList}
@@ -36,19 +33,6 @@ object ChunkListView {
     if (listViewWidth - ChunkImage.getScrollBarWidth >= 0) listViewWidth - ChunkImage.getScrollBarWidth else listViewWidth
   }
 
-  def apply(entries: ObservableList[LogEntry]
-            , mutLogFileSettings: MutLogFileSettings
-            , selectInTextView: LogEntry => Unit
-           ): ChunkListView = {
-    new ChunkListView(entries
-      , mutLogFileSettings.selectedLineNumberProperty
-      , mutLogFileSettings.blockSizeProperty
-      , mutLogFileSettings.filtersProperty
-      , mutLogFileSettings.dividerPositionProperty
-      , mutLogFileSettings.firstVisibleTextCellIndexProperty
-      , mutLogFileSettings.lastVisibleTextCellIndexProperty
-      , selectInTextView)
-  }
 }
 
 
@@ -68,7 +52,7 @@ object ChunkListView {
 class ChunkListView(val logEntries: ObservableList[LogEntry]
                     , val selectedLineNumberProperty: SimpleIntegerProperty
                     , val blockSizeProperty: SimpleIntegerProperty
-                    , val filtersProperty: ObservableList[Filter]
+                    , val filtersProperty: ObservableList[_ <: Fltr]
                     , val dividersProperty: SimpleDoubleProperty
                     , val firstVisibleTextCellIndexProperty: SimpleIntegerProperty
                     , val lastVisibleTextCellIndexProperty: SimpleIntegerProperty

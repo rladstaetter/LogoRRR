@@ -1,7 +1,6 @@
-package app.logorrr.views.block
+package app.logorrr.jfxbfr
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.MathUtil
 
 import java.util
 import scala.collection.mutable.ListBuffer

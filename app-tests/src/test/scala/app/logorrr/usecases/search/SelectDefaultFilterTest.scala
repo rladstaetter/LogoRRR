@@ -1,9 +1,9 @@
 package app.logorrr.usecases.search
 
 import app.logorrr.TestFiles
-import app.logorrr.model.LogFileSettings
+import app.logorrr.jfxbfr.Fltr
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.search.{Filter, FilterButton, UnclassifiedFilter}
+import app.logorrr.views.search.{FilterButton, UnclassifiedFilter}
 import app.logorrr.views.text.LogTextView
 import org.junit.jupiter.api.Test
 
@@ -18,10 +18,10 @@ class SelectDefaultFilterTest extends SingleFileApplicationTest(TestFiles.simple
     // and a 'unclassified' line
     openFile(fileId)
 
-    LogFileSettings.DefaultFilters.foreach {
+    Fltr.DefaultFilters.foreach {
       f =>
         // deselect all filters except unclassified
-        clickFilters(LogFileSettings.DefaultFilters)
+        clickFilters(Fltr.DefaultFilters)
 
         // now, only 'unclassified' filter is active. since there are no unclassified
         // entries available, the number of displayed log entries is one
@@ -33,16 +33,16 @@ class SelectDefaultFilterTest extends SingleFileApplicationTest(TestFiles.simple
 
         // deselect filter again
         waitAndClickVisibleItem(FilterButton.uiNode(fileId, f))
-        clickFilters(LogFileSettings.DefaultFilters)
+        clickFilters(Fltr.DefaultFilters)
     }
 
     // finally, deselect all filters
-    clickFilters(LogFileSettings.DefaultFilters)
+    clickFilters(Fltr.DefaultFilters)
     // one entry is shown (unclassified)
     checkNumberOfShownElements(1)
 
     // deselect unclassified filter works as well
-    clickFilters(Seq(UnclassifiedFilter(LogFileSettings.DefaultFilters.toSet)))
+    clickFilters(Seq(UnclassifiedFilter(Fltr.DefaultFilters.toSet)))
     checkNumberOfShownElements(0)
   }
 
@@ -50,7 +50,7 @@ class SelectDefaultFilterTest extends SingleFileApplicationTest(TestFiles.simple
     assert(lookup(LogTextView.uiNode(fileId).ref).query[LogTextView].getItems.size() == expectedElements)
   }
 
-  def clickFilters(filters: Seq[Filter]): Unit = {
+  def clickFilters(filters: Seq[Fltr]): Unit = {
     filters.foreach {
       ff => waitAndClickVisibleItem(FilterButton.uiNode(fileId, ff)) // enable all filters
     }

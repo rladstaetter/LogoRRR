@@ -1,19 +1,20 @@
 package app.logorrr.views.search
 
+import app.logorrr.jfxbfr.Fltr
 import javafx.scene.paint.Color
 
-class AnyFilter(filters: Set[Filter]) extends Fltr(Color.WHITE) {
+class AnyFilter(filters: Set[Fltr]) extends Fltr {
+  init("any", Color.WHITE, active = true)
 
-  override val color: Color = {
+  override val getColor: Color = {
     if (filters.isEmpty) {
       Color.WHITE
     } else if (filters.size == 1) {
-      filters.head.color
+      filters.head.getColor
     } else {
-      filters.tail.foldLeft(filters.head.color)((acc, sf) => acc.interpolate(sf.color, 0.5))
+      filters.tail.foldLeft(filters.head.getColor)((acc, sf) => acc.interpolate(sf.getColor, 0.5))
     }
   }
-
 
   override def matches(searchTerm: String): Boolean = filters.exists(_.matches(searchTerm))
 }

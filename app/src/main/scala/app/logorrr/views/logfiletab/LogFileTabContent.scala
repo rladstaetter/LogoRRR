@@ -1,11 +1,11 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.jfxbfr.{ChunkListView, Filter, Fltr}
 import app.logorrr.model.LogEntry
-import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.ops.time.TimeOpsToolBar
-import app.logorrr.views.search.{Filter, FiltersToolBar, OpsToolBar}
+import app.logorrr.views.search.{FiltersToolBar, OpsToolBar}
 import app.logorrr.views.text.LogTextView
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.ObservableList
@@ -27,7 +27,8 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   private val logTextView = new LogTextView(mutLogFileSettings, filteredList)
 
   // graphical display to the left
-  private val chunkListView = ChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem)
+  private val chunkListView = mkChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem)
+
 
   private val blockSizeSlider = {
     val bs = new BlockSizeSlider(mutLogFileSettings.getFileId)
@@ -96,9 +97,9 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     chunkListView.removeListeners()
   }
 
-  def addFilter(filter: Filter): Unit = mutLogFileSettings.filtersProperty.add(filter)
+  def addFilter(filter: Fltr): Unit = mutLogFileSettings.filtersProperty.add(filter)
 
-  def removeFilter(filter: Filter): Unit = mutLogFileSettings.filtersProperty.remove(filter)
+  def removeFilter(filter: Fltr): Unit = mutLogFileSettings.filtersProperty.remove(filter)
 
   /**
    * Called if a tab is selected
@@ -108,6 +109,20 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   def scrollToActiveElement(): Unit = {
     chunkListView.scrollToActiveChunk()
     logTextView.scrollToActiveLogEntry()
+  }
+
+  def mkChunkListView(entries: ObservableList[LogEntry]
+                      , mutLogFileSettings: MutLogFileSettings
+                      , selectInTextView: LogEntry => Unit
+                     ): ChunkListView = {
+    new ChunkListView(entries
+      , mutLogFileSettings.selectedLineNumberProperty
+      , mutLogFileSettings.blockSizeProperty
+      , mutLogFileSettings.filtersProperty
+      , mutLogFileSettings.dividerPositionProperty
+      , mutLogFileSettings.firstVisibleTextCellIndexProperty
+      , mutLogFileSettings.lastVisibleTextCellIndexProperty
+      , selectInTextView)
   }
 
 }

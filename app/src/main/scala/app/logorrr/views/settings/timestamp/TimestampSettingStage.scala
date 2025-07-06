@@ -1,9 +1,9 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.jfxbfr.ChunkListView
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import javafx.collections.ObservableList
 import javafx.scene.Scene

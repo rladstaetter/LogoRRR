@@ -1,9 +1,6 @@
-package app.logorrr.views.block
+package app.logorrr.jfxbfr
 
 import app.logorrr.model.LogEntry
-import app.logorrr.util.ColorUtil
-import app.logorrr.views.LColors
-import app.logorrr.views.search.Filter
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
 import javafx.scene.image.{PixelBuffer, PixelFormat}
@@ -116,7 +113,7 @@ case class LPixelBuffer(blockNumber: Int
                         , shape: RectangularShape
                         , blockSizeProperty: SimpleIntegerProperty
                         , entries: java.util.List[LogEntry]
-                        , filtersProperty: ObservableList[Filter]
+                        , filtersProperty: ObservableList[_ <: Fltr]
                         , rawInts: Array[Int]
                         , selectedLineNumberProperty: SimpleIntegerProperty
                         , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
@@ -138,7 +135,7 @@ case class LPixelBuffer(blockNumber: Int
 
   def getBlockSize: Int = blockSizeProperty.get()
 
-  def filters: Seq[Filter] = Option(filtersProperty).map(_.asScala.toSeq).getOrElse({
+  def filters: Seq[Fltr] = Option(filtersProperty).map(_.asScala.toSeq).getOrElse({
     Seq()
   })
 
@@ -183,8 +180,8 @@ case class LPixelBuffer(blockNumber: Int
       entries.forEach(e => {
         val col =
           (isSelected(e.lineNumber), isVisible(e.lineNumber)) match {
-            case (false, false) => ColorUtil.toARGB(Filter.calcColor(e.value, filters))
-            case (false, true) => ColorUtil.toARGB(Filter.calcColor(e.value, filters).brighter())
+            case (false, false) => ColorUtil.toARGB(ColorUtil.calcColor(e.value, filters))
+            case (false, true) => ColorUtil.toARGB(ColorUtil.calcColor(e.value, filters).brighter())
             case (true, false) => LColors.y
             case (true, true) => LColors.yb
           }
@@ -216,7 +213,7 @@ case class LPixelBuffer(blockNumber: Int
       var i = 0
       if (!entries.isEmpty) {
         entries.forEach(e => {
-          val color = Filter.calcColor(e.value, filters)
+          val color = ColorUtil.calcColor(e.value, filters)
           paintBlock(i, e.lineNumber, color)
           i = i + 1
         })
@@ -229,9 +226,7 @@ case class LPixelBuffer(blockNumber: Int
   private def paintBlock(index: Int, lineNumber: Int, color: Color): Unit = {
     val colbrighter = color.brighter()
     val (c, cd, cb, cbb) = (ColorUtil.toARGB(color), ColorUtil.toARGB(color.darker()), ColorUtil.toARGB(colbrighter), ColorUtil.toARGB(colbrighter.brighter()))
-
     import LColors._
-
     // mystical color setting routine for setting border colors of viewport and blocks correctly
     val blockColor = {
       (isSelected(lineNumber), isFirstVisible(lineNumber), isLastVisible(lineNumber), isVisibleInTextView(lineNumber)) match {

@@ -1,8 +1,8 @@
 package app.logorrr;
 
-import app.logorrr.util.ColorUtil;
-import app.logorrr.views.block.BlockColor;
-import app.logorrr.views.block.LPixelBuffer$;
+import app.logorrr.jfxbfr.BlockColor;
+import app.logorrr.jfxbfr.ColorUtil;
+import app.logorrr.jfxbfr.LPixelBuffer$;
 import javafx.scene.paint.Color;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;

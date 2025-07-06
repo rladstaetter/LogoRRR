@@ -1,8 +1,7 @@
-package app.logorrr.views.block
+package app.logorrr.jfxbfr
 
+import app.logorrr.jfxbfr
 import app.logorrr.model.LogEntry
-import app.logorrr.util.JfxUtils
-import app.logorrr.views.search.Filter
 import javafx.animation.{KeyFrame, Timeline}
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
@@ -24,7 +23,7 @@ import scala.util.Try
 class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
                     , widthProperty: ReadOnlyDoubleProperty
                     , blockSizeProperty: SimpleIntegerProperty
-                    , filtersProperty: ObservableList[Filter]
+                    , filtersProperty: ObservableList[_ <: Fltr]
                     , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
                     , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
                     , scrollTo: LogEntry => Unit
@@ -72,7 +71,7 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
           case Some(logEntry) =>
             Option(getGraphic).map(_.asInstanceOf[ImageView].getImage.asInstanceOf[ChunkImage].pixelBuffer) match {
               case Some(pb) =>
-                val col = Filter.calcColor(logEntry.value, pb.filters)
+                val col = ColorUtil.calcColor(logEntry.value, pb.filters)
                 pb.paintBlockAtIndexWithColor(index, logEntry.lineNumber, col.darker())
                 // schedule repaint with original color again some time in the future
                 val task: Runnable = () => pb.paintBlockAtIndexWithColor(index, logEntry.lineNumber, col)
@@ -95,14 +94,13 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
   }
   setOnMouseClicked(mouseClickedHandler)
 
-
   override def updateItem(chunk: Chunk, empty: Boolean): Unit = JfxUtils.execOnUiThread {
     super.updateItem(chunk, empty)
 
     if (empty || Option(chunk).isEmpty || blockSizeProperty.get() <= 0 || widthProperty.get() <= 0) {
       setGraphic(null)
     } else {
-      val bv = ChunkImage(chunk
+      val bv = jfxbfr.ChunkImage(chunk
         , filtersProperty
         , selectedLineNumberProperty
         , widthProperty
@@ -110,6 +108,7 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
         , firstVisibleTextCellIndexProperty
         , lastVisibleTextCellIndexProperty)
       val view = new ImageView(bv)
+      view.setImage(bv)
       setGraphic(view)
     }
   }

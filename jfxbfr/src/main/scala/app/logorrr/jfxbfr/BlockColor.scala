@@ -1,4 +1,4 @@
-package app.logorrr.views.block
+package app.logorrr.jfxbfr
 
 /**
  * Groups colors of boxes/rectangles together

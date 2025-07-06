@@ -1,7 +1,8 @@
 package app.logorrr.views.text
 
+import app.logorrr.jfxbfr.Fltr
 import app.logorrr.model.LogEntry
-import app.logorrr.views.search.Filter
+import app.logorrr.views.search.UnclassifiedFilter
 import javafx.scene.paint.Color
 
 import scala.collection.mutable.ListBuffer
@@ -13,12 +14,12 @@ import scala.collection.mutable.ListBuffer
  * @param filters filter containing color and search string
  */
 case class FilterCalculator(logEntry: LogEntry
-                            , filters: Seq[Filter]) {
+                            , filters: Seq[_ <: Fltr]) {
 
   private val logLine = logEntry.value
 
   lazy val filteredParts: Seq[Seq[LinePart]] = for (f <- filters) yield {
-    calcParts(f.pattern, f.color)
+    calcParts(f.getPattern, f.getColor)
   }
 
   /**
@@ -71,7 +72,7 @@ case class FilterCalculator(logEntry: LogEntry
     val value = logEntry.value
     // if there are no filters, it is easy - just return the whole string with special color
     if (filteredParts.isEmpty) {
-      Seq((value, Filter.unClassifiedFilterColor))
+      Seq((value, UnclassifiedFilter.unClassifiedFilterColor))
     } else {
       // brute force:
       // for all filters, calculate if there is a hit or not.
@@ -115,7 +116,7 @@ case class FilterCalculator(logEntry: LogEntry
           val curColor =
             someCol match {
               case Some(value) => value
-              case None => Filter.unClassifiedFilterColor
+              case None => UnclassifiedFilter.unClassifiedFilterColor
             }
           // handle special case for first element
           if (acc.isEmpty) {

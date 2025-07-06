@@ -2,6 +2,7 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.CoreGen
 import app.logorrr.io.FileId
+import app.logorrr.jfxbfr.{Filter, FilterSpec}
 import app.logorrr.model.{LogFileSettings, TimestampSettingsSpec}
 import org.scalacheck.Gen
 
@@ -13,7 +14,7 @@ object LogFileSettingsSpec {
     selectedIndex <- Gen.posNum[Int]
     firstOpened <- Gen.posNum[Long]
     dPos <- Gen.posNum[Double]
-    filters <- Gen.listOf(FilterSpec.gen)
+    filters <- Gen.listOf(FilterSpec.gen.map(f => Filter(f.getPattern, f.getColor, f.isActive)))
     leif <- TimestampSettingsSpec.gen
     someLogEntryInstantFormat <- Gen.oneOf(None, Option(leif))
     blockSettings <- BlockSettingsSpec.gen

@@ -2,6 +2,8 @@ package app.logorrr.views.main
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutStageSettings
+import app.logorrr.io.FileId
+import app.logorrr.jfxbfr.Filter
 import app.logorrr.meta.AppInfo
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.LogoRRRAccelerators
@@ -31,7 +33,7 @@ object LogoRRRStage extends CanLog {
     val settings = LogoRRRGlobals.getSettings
 
     // to save global filter state
-    val activeFilters =
+    val activeFilters: Map[FileId, (Seq[Filter], Double)] =
       (for (logFileTab <- logorrrMain.getLogFileTabs) yield {
         logFileTab.fileId -> (logFileTab.logFileTabContent.activeFilters, logFileTab.logFileTabContent.getDividerPosition)
       }).toMap

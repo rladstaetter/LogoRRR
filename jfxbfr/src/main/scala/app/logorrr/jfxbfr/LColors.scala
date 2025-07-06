@@ -1,6 +1,5 @@
-package app.logorrr.views
+package app.logorrr.jfxbfr
 
-import app.logorrr.util.ColorUtil
 import javafx.scene.paint.Color
 
 object LColors {

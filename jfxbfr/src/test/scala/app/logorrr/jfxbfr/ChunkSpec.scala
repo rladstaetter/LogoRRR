@@ -1,4 +1,4 @@
-package app.logorrr.views.block
+package app.logorrr.jfxbfr
 
 import app.logorrr.model.LogEntry
 import org.scalatest.wordspec.AnyWordSpec

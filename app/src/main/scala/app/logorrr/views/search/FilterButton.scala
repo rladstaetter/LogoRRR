@@ -1,6 +1,7 @@
 package app.logorrr.views.search
 
 import app.logorrr.io.FileId
+import app.logorrr.jfxbfr.Fltr
 import app.logorrr.util.HashUtil
 import app.logorrr.views.{UiNode, UiNodeFilterAware}
 import javafx.beans.{InvalidationListener, Observable}
@@ -9,7 +10,7 @@ import net.ladstatt.util.log.CanLog
 
 object FilterButton extends UiNodeFilterAware {
 
-  override def uiNode(fileId: FileId, filter: Filter): UiNode = UiNode(classOf[FilterButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + filter.pattern))
+  override def uiNode(fileId: FileId, filter: Fltr): UiNode = UiNode(classOf[FilterButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + filter.getPattern))
 
 }
 
@@ -17,10 +18,10 @@ object FilterButton extends UiNodeFilterAware {
  * Displays a search term and triggers displaying the results.
  */
 class FilterButton(val fileId: FileId
-                   , val filter: Filter
+                   , val filter: Fltr
                    , i: Int
                    , updateActiveFilter: => Unit
-                   , removeFilter: Filter => Unit) extends ToggleButton(filter.pattern) with CanLog {
+                   , removeFilter: Fltr => Unit) extends ToggleButton(filter.getPattern) with CanLog {
 
   setId(FilterButton.uiNode(fileId, filter).value)
   setTooltip(new Tooltip(if (i == 1) "one item found" else s"$i items found"))
@@ -29,7 +30,7 @@ class FilterButton(val fileId: FileId
     setContentDisplay(ContentDisplay.RIGHT)
     setGraphic(new RemoveFilterbutton(fileId, filter, removeFilter))
   }
-  setSelected(filter.active)
+  setSelected(filter.isActive)
 
   selectedProperty().addListener(new InvalidationListener {
     // if any of the buttons changes its selected value, reevaluate predicate
