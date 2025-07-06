@@ -1,9 +1,11 @@
 package app.logorrr.views.search
 
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.jfxbfr.{Filter, Fltr}
+import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
+import app.logorrr.views.Filter
+import app.logorrr.views.search.filter.UnclassifiedFilter
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
@@ -31,23 +33,23 @@ object FiltersToolBar {
  */
 class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
                      , filteredList: FilteredList[LogEntry]
-                     , removeFilter: Fltr[_] => Unit) extends ToolBar {
+                     , removeFilter: MutFilter[_] => Unit) extends ToolBar {
 
-  var occurrences: Map[Fltr[_], Int] = Map().withDefaultValue(0)
+  var occurrences: Map[MutFilter[_], Int] = Map().withDefaultValue(0)
 
   /** will be bound to the current active filter list */
-  val filtersProperty = new SimpleListProperty[Fltr[_]]()
+  val filtersProperty = new SimpleListProperty[MutFilter[_]]()
 
   init()
 
   private def init(): Unit = {
-    filtersProperty.addListener(JfxUtils.mkListChangeListener[Fltr[_]](processFiltersChange))
+    filtersProperty.addListener(JfxUtils.mkListChangeListener[MutFilter[_]](processFiltersChange))
     updateUnclassified()
   }
 
 
   /** if filter list is changed in any way, react to this event and either add or remove filter from UI */
-  private def processFiltersChange(change: ListChangeListener.Change[_ <: Fltr[_]]): Unit = {
+  private def processFiltersChange(change: ListChangeListener.Change[_ <: MutFilter[_]]): Unit = {
     while (change.next()) {
       if (change.wasAdded()) {
         change.getAddedSubList.asScala.foreach(addFilterButton)
@@ -59,7 +61,7 @@ class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
     }
   }
 
-  private def updateOccurrences(sf: Fltr[_]): Unit = {
+  private def updateOccurrences(sf: MutFilter[_]): Unit = {
     occurrences = occurrences + (sf -> filteredList.getSource.asScala.count(e => sf.matches(e.value)))
   }
 
@@ -73,7 +75,7 @@ class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
     mutLogFileSettings.updateActiveFilter(filteredList)
   }
 
-  private def addFilterButton(filter: Fltr[_]): Unit = {
+  private def addFilterButton(filter: MutFilter[_]): Unit = {
     updateOccurrences(filter)
     val filterButton =
       new FilterButton(
@@ -89,7 +91,7 @@ class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
     mutLogFileSettings.filterButtons = mutLogFileSettings.filterButtons.updated(filter, filterButton)
   }
 
-  private def removeFilterButton(filter: Fltr[_]): Unit = {
+  private def removeFilterButton(filter: MutFilter[_]): Unit = {
     val button = mutLogFileSettings.filterButtons(filter)
     filter.unbind()
     getItems.remove(button)
@@ -102,7 +104,7 @@ class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
       if (st.isUnclassified) {
         None
       } else {
-        Option(new Filter(st.filter.getPattern, st.filter.getColor, st.filter.isActive))
+        Option(new Filter(st.filter.getPredicate.description, st.filter.getColor, st.filter.isActive))
       }
     }).flatten.toSeq
   }

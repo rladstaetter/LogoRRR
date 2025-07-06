@@ -1,7 +1,7 @@
 package app.logorrr.views.search
 
 import app.logorrr.io.FileId
-import app.logorrr.jfxbfr.Fltr
+import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.LogEntry
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.block.HasBlockSizeProperty
@@ -29,7 +29,7 @@ object OpsToolBar {
  * @param addFilterFn filter function which results from user interaction with SearchToolbar
  */
 class OpsToolBar(fileId: FileId
-                 , addFilterFn: Fltr[_] => Unit
+                 , addFilterFn: MutFilter[_] => Unit
                  , logEntries: ObservableList[LogEntry]
                  , filteredList: FilteredList[LogEntry]
                  , val blockSizeProperty: SimpleIntegerProperty)

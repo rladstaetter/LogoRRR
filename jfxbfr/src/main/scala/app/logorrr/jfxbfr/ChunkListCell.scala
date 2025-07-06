@@ -23,7 +23,7 @@ import scala.util.Try
 class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
                     , widthProperty: ReadOnlyDoubleProperty
                     , blockSizeProperty: SimpleIntegerProperty
-                    , filtersProperty: ObservableList[_ <: Fltr[_]]
+                    , filtersProperty: ObservableList[_ <: MutFilter[_]]
                     , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
                     , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
                     , scrollTo: LogEntry => Unit

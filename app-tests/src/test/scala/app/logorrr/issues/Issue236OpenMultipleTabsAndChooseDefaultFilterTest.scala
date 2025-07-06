@@ -1,7 +1,7 @@
 package app.logorrr.issues
 
 import app.logorrr.TestFiles
-import app.logorrr.jfxbfr.Fltr
+import app.logorrr.model.FilterUtil
 import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.MultipleFileApplicationTest
 import app.logorrr.views.search.FilterButton
@@ -21,12 +21,12 @@ class Issue236OpenMultipleTabsAndChooseDefaultFilterTest
   extends MultipleFileApplicationTest(TestFiles.seq)
     with CheckTabPaneActions {
 
-   @Test def testIssue236(): Unit = {
+  @Test def testIssue236(): Unit = {
     // open first file
     openFile(TestFiles.simpleLog0)
 
     // change filters to a non default configuration
-    val firstFilterTab1 = FilterButton.uiNode(TestFiles.simpleLog0, Fltr.DefaultFilters.head)
+    val firstFilterTab1 = FilterButton.uiNode(TestFiles.simpleLog0, FilterUtil.DefaultFilters.head)
     waitAndClickVisibleItem(firstFilterTab1)
 
     // check that the toggle button is deselected
@@ -38,7 +38,7 @@ class Issue236OpenMultipleTabsAndChooseDefaultFilterTest
     openFile(TestFiles.simpleLog1)
 
     // test that second file has the default filter configuration
-    val firstFilterTab2 = FilterButton.uiNode(TestFiles.simpleLog1, Fltr.DefaultFilters.head)
+    val firstFilterTab2 = FilterButton.uiNode(TestFiles.simpleLog1, FilterUtil.DefaultFilters.head)
     FxAssert.verifyThat(lookup(firstFilterTab2.ref), new Predicate[ToggleButton] {
       override def test(t: ToggleButton): Boolean = t.isSelected
     })

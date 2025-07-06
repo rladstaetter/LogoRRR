@@ -1,6 +1,6 @@
 package app.logorrr.views.text
 
-import app.logorrr.jfxbfr.Fltr
+import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.LogEntry
 import javafx.beans.binding.StringBinding
 import javafx.beans.property.IntegerProperty
@@ -16,7 +16,7 @@ import javafx.scene.paint.Color
  */
 case class LogTextViewLabel(e: LogEntry
                             , maxLength: Int
-                            , filters: Seq[_ <: Fltr[_]]
+                            , filters: Seq[_ <: MutFilter[_]]
                             , fontStyleBinding: StringBinding
                             , fontSizeProperty: IntegerProperty
                            ) extends HBox {

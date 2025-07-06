@@ -1,4 +1,4 @@
-package app.logorrr.jfxbfr
+package app.logorrr.views
 
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}

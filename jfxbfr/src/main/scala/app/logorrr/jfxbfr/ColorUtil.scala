@@ -28,7 +28,7 @@ object ColorUtil {
    * - given color if only one hit
    * - a melange of all colors from all hits in all other cases
    * */
-  def calcColor(value: String, filters: Seq[Fltr[_]]): Color = {
+  def calcColor(value: String, filters: Seq[MutFilter[_]]): Color = {
     val hits = filters.filter(sf => sf.matches(value))
     val color = {
       if (hits.isEmpty) {

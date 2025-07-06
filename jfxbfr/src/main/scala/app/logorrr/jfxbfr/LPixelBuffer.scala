@@ -113,7 +113,7 @@ case class LPixelBuffer(blockNumber: Int
                         , shape: RectangularShape
                         , blockSizeProperty: SimpleIntegerProperty
                         , entries: java.util.List[LogEntry]
-                        , filtersProperty: ObservableList[_ <: Fltr[_]]
+                        , filtersProperty: ObservableList[_ <: MutFilter[_]]
                         , rawInts: Array[Int]
                         , selectedLineNumberProperty: SimpleIntegerProperty
                         , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
@@ -135,7 +135,7 @@ case class LPixelBuffer(blockNumber: Int
 
   def getBlockSize: Int = blockSizeProperty.get()
 
-  def filters: Seq[Fltr[_]] = Option(filtersProperty).map(_.asScala.toSeq).getOrElse({
+  def filters: Seq[MutFilter[_]] = Option(filtersProperty).map(_.asScala.toSeq).getOrElse({
     Seq()
   })
 

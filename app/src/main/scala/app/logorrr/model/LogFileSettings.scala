@@ -2,7 +2,7 @@ package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
 import app.logorrr.io.FileId
-import app.logorrr.jfxbfr.{Filter, Fltr}
+import app.logorrr.views.Filter
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
 
@@ -32,7 +32,7 @@ object LogFileSettings {
       , Instant.now().toEpochMilli
       , DefaultDividerPosition
       , DefaultFontSize
-      , Fltr.DefaultFilters.map(f => Filter(f.getPattern, f.getColor, f.isActive))
+      , FilterUtil.DefaultFilters.map(f => Filter(f.getPredicate.description, f.getColor, f.isActive))
       , DefaultBlockSettings
       , DefaultLogFormat
       , DefaultAutoScroll

@@ -2,8 +2,10 @@ package app.logorrr.views.search
 
 
 import app.logorrr.io.FileId
-import app.logorrr.jfxbfr.{Ep, Fltr}
+import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.util.JfxUtils
+import app.logorrr.views.search.filter.RegexFilter
+import app.logorrr.views.search.predicates.ContainsPredicate
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{Button, Tooltip}
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
@@ -19,7 +21,7 @@ class SearchButton(fileId: FileId
                    , searchTextField: SearchTextField
                    , regexToggleButton: SearchActivateRegexToggleButton
                    , colorPicker: SearchColorPicker
-                   , addFilterFn: Fltr[_] => Unit) extends Button {
+                   , addFilterFn: MutFilter[_] => Unit) extends Button {
 
   setId(SearchButton.uiNode(fileId).value)
   setGraphic(new FontIcon(FontAwesomeSolid.SEARCH))
@@ -28,11 +30,11 @@ class SearchButton(fileId: FileId
 
   setOnAction(_ => {
     if (searchTextField.getText.nonEmpty) {
-      val filter: Fltr[_] =
+      val filter: MutFilter[_] =
         if (regexToggleButton.isSelected) {
           RegexFilter(searchTextField.getText, colorPicker.getValue, active = true)
         } else {
-          Fltr(Ep(searchTextField.getText), searchTextField.getText, colorPicker.getValue, active = true)
+          MutFilter(ContainsPredicate(searchTextField.getText), colorPicker.getValue, active = true)
         }
       colorPicker.setValue(JfxUtils.randColor)
       searchTextField.clear()

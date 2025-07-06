@@ -3,7 +3,7 @@ package app.logorrr.views.logfiletab
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
-import app.logorrr.jfxbfr.Fltr
+import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
 import app.logorrr.views.autoscroll.LogTailer
@@ -104,9 +104,9 @@ class LogFileTab(val fileId: FileId
       }
   }
 
-  private val filterChangeListener: ListChangeListener[Fltr[_]] = {
+  private val filterChangeListener: ListChangeListener[MutFilter[_]] = {
 
-    def handleFilterChange(change: ListChangeListener.Change[_ <: Fltr[_]]): Unit = {
+    def handleFilterChange(change: ListChangeListener.Change[_ <: MutFilter[_]]): Unit = {
       while (change.next()) {
         Future {
           LogoRRRGlobals.persist()
@@ -114,7 +114,7 @@ class LogFileTab(val fileId: FileId
       }
     }
 
-    JfxUtils.mkListChangeListener[Fltr[_]](handleFilterChange)
+    JfxUtils.mkListChangeListener[MutFilter[_]](handleFilterChange)
   }
 
   private val selectedListener = JfxUtils.onNew[lang.Boolean](b => {

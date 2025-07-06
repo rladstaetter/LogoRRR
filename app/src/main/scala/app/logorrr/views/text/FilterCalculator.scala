@@ -1,8 +1,8 @@
 package app.logorrr.views.text
 
-import app.logorrr.jfxbfr.Fltr
+import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.LogEntry
-import app.logorrr.views.search.UnclassifiedFilter
+import app.logorrr.views.search.filter.UnclassifiedFilter
 import javafx.scene.paint.Color
 
 import scala.collection.mutable.ListBuffer
@@ -11,15 +11,15 @@ import scala.collection.mutable.ListBuffer
  * For each log entry, calculate correct colors for each char displayed and also the mean color for this entry
  *
  * @param logEntry a log entry containing a log line
- * @param filters filter containing color and search string
+ * @param filters  filter containing color and search string
  */
 case class FilterCalculator(logEntry: LogEntry
-                            , filters: Seq[_ <: Fltr[_]]) {
+                            , filters: Seq[_ <: MutFilter[_]]) {
 
   private val logLine = logEntry.value
 
   lazy val filteredParts: Seq[Seq[LinePart]] = for (f <- filters) yield {
-    calcParts(f.getPattern, f.getColor)
+    calcParts(f.getPredicate.description, f.getColor)
   }
 
   /**
@@ -37,8 +37,7 @@ case class FilterCalculator(logEntry: LogEntry
    * greater than [[logEntry]] length then return the empty list.
    *
    * @param searchPattern a pattern
-   * @param color color to apply
-   *
+   * @param color         color to apply
    * @return
    */
   private def calcParts(searchPattern: String
@@ -72,37 +71,37 @@ case class FilterCalculator(logEntry: LogEntry
     val value = logEntry.value
     // if there are no filters, it is easy - just return the whole string with special color
     if (filteredParts.isEmpty) {
-      Seq((value, UnclassifiedFilter.unClassifiedFilterColor))
+      Seq((value, UnclassifiedFilter.color))
     } else {
       // brute force:
       // for all filters, calculate if there is a hit or not.
       // if yes, provide the color for this filter, if not just None
       val jou: Seq[IndexedSeq[Option[Color]]] =
-      for (pts <- filteredParts) yield {
-        for (i <- 0 to value.length) yield {
-          pts.find(p => p.hit(i)) match {
-            case Some(value) => Option(value.color)
-            case None => None
+        for (pts <- filteredParts) yield {
+          for (i <- 0 to value.length) yield {
+            pts.find(p => p.hit(i)) match {
+              case Some(value) => Option(value.color)
+              case None => None
+            }
           }
         }
-      }
 
       // reduce all colors:
       // we have a Seq[Seq[Option[Color]]] and want a Seq[Color] in the end.
       // as intermediate step, calculate a Seq[Option[Color]] by interpolating
       // all colors for each filter.
       val cols: Seq[Option[Color]] =
-      for {i <- 0 to value.length} yield {
-        val colors: Seq[Option[Color]] = for (j <- jou) yield j(i)
-        colors.tail.foldLeft(colors.head)((acc, c) => {
-          (acc, c) match {
-            case (None, None) => None
-            case (None, Some(v)) => Option(v)
-            case (Some(c), None) => Option(c)
-            case (Some(aC), Some(c)) => Option(aC.interpolate(c, 0.5))
-          }
-        })
-      }
+        for {i <- 0 to value.length} yield {
+          val colors: Seq[Option[Color]] = for (j <- jou) yield j(i)
+          colors.tail.foldLeft(colors.head)((acc, c) => {
+            (acc, c) match {
+              case (None, None) => None
+              case (None, Some(v)) => Option(v)
+              case (Some(c), None) => Option(c)
+              case (Some(aC), Some(c)) => Option(aC.interpolate(c, 0.5))
+            }
+          })
+        }
 
       // almost there, now we have already a Seq[(String,Color)]
       // but the caveat is that we produce many single labels in the end which
@@ -116,7 +115,7 @@ case class FilterCalculator(logEntry: LogEntry
           val curColor =
             someCol match {
               case Some(value) => value
-              case None => UnclassifiedFilter.unClassifiedFilterColor
+              case None => UnclassifiedFilter.color
             }
           // handle special case for first element
           if (acc.isEmpty) {

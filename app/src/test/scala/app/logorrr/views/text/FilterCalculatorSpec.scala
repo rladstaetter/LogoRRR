@@ -1,8 +1,9 @@
 package app.logorrr.views.text
 
-import app.logorrr.jfxbfr.{Ep, FilterSpec, Fltr}
+import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.LogEntry
-import app.logorrr.{LogEntrySpec, LogoRRRSpec}
+import app.logorrr.views.search.predicates.ContainsPredicate
+import app.logorrr.{LogEntrySpec, LogoRRRSpec, TestUtil}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.paint.Color
 import org.scalacheck.{Gen, Prop}
@@ -13,14 +14,14 @@ object FilterCalculatorSpec {
     for {
       e <- LogEntrySpec.gen
       maxLength <- Gen.posNum[Int]
-      filters <- Gen.listOf(FilterSpec.gen)
+      filters <- Gen.listOf(TestUtil.filterGen)
     } yield LogTextViewLabel(e, maxLength, filters, () => "", new SimpleIntegerProperty())
 }
 
 class FilterCalculatorSpec extends LogoRRRSpec {
 
   def applySingleFilter(logEntry: String, pattern: String): Seq[Seq[LinePart]] = {
-    FilterCalculator(LogEntry(0, logEntry, None, None), Seq(Fltr(Ep(pattern), pattern, Color.RED, active = true))).filteredParts
+    FilterCalculator(LogEntry(0, logEntry, None, None), Seq(MutFilter(ContainsPredicate(pattern), Color.RED, active = true))).filteredParts
   }
 
   "calcParts" should {
@@ -31,10 +32,10 @@ class FilterCalculatorSpec extends LogoRRRSpec {
           filteredParts.length == 1 && filteredParts.head.isEmpty
       })
     }
-    "return empty List for empty logentry string" in {
-      check(Prop.forAll(FilterSpec.gen) {
+    "return empty List for empty LogEntry string" in {
+      check(Prop.forAll(TestUtil.filterGen) {
         filter =>
-          val filteredParts = applySingleFilter("", filter.getPattern)
+          val filteredParts = applySingleFilter("", filter.getPredicate.description)
           filteredParts.length == 1 && filteredParts.head.isEmpty
       })
     }
@@ -80,9 +81,9 @@ class FilterCalculatorSpec extends LogoRRRSpec {
 
   "filteredParts" should {
     val filters = Seq(
-      Fltr(Ep("a"),"a", Color.RED, active = true)
-      , Fltr(Ep("b"),"b", Color.BLUE, active = true)
-      , Fltr(Ep("t"),"t", Color.YELLOW, active = true)
+      MutFilter(ContainsPredicate("a"), Color.RED, active = true)
+      , MutFilter(ContainsPredicate("b"), Color.BLUE, active = true)
+      , MutFilter(ContainsPredicate("t"), Color.YELLOW, active = true)
     )
     val entry = LogEntry(0, "test a b c", None, None)
     val calculator = FilterCalculator(entry, filters)

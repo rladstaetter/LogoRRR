@@ -30,7 +30,7 @@ object ChunkImage {
 
 
   def apply(chunk: Chunk
-            , filtersProperty: ObservableList[_ <: Fltr[_]]
+            , filtersProperty: ObservableList[_ <: MutFilter[_]]
             , selectedLineNumberProperty: SimpleIntegerProperty
             , widthProperty: ReadOnlyDoubleProperty
             , blockSizeProperty: SimpleIntegerProperty
@@ -52,7 +52,7 @@ object ChunkImage {
   def apply(blockNumber: Int
             , entries: java.util.List[LogEntry]
             , selectedLineNumberProperty: SimpleIntegerProperty
-            , filtersProperty: ObservableList[_ <: Fltr[_]]
+            , filtersProperty: ObservableList[_ <: MutFilter[_]]
             , blockSizeProperty: SimpleIntegerProperty
             , widthProperty: ReadOnlyDoubleProperty
             , heightProperty: SimpleIntegerProperty

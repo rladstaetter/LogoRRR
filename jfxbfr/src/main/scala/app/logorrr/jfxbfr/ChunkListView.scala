@@ -52,7 +52,7 @@ object ChunkListView {
 class ChunkListView(val logEntries: ObservableList[LogEntry]
                     , val selectedLineNumberProperty: SimpleIntegerProperty
                     , val blockSizeProperty: SimpleIntegerProperty
-                    , val filtersProperty: ObservableList[_ <: Fltr[_]]
+                    , val filtersProperty: ObservableList[_ <: MutFilter[_]]
                     , val dividersProperty: SimpleDoubleProperty
                     , val firstVisibleTextCellIndexProperty: SimpleIntegerProperty
                     , val lastVisibleTextCellIndexProperty: SimpleIntegerProperty

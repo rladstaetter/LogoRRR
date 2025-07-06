@@ -2,10 +2,13 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.BlockSettings
 import app.logorrr.io.FileId
-import app.logorrr.jfxbfr.{Ep, Filter, Fltr}
+import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.{LogEntry, LogFileSettings, TimestampSettings}
 import app.logorrr.util.LogoRRRFonts
-import app.logorrr.views.search.{AnyFilter, FilterButton}
+import app.logorrr.views.Filter
+import app.logorrr.views.search.FilterButton
+import app.logorrr.views.search.filter.AnyFilter
+import app.logorrr.views.search.predicates.ContainsPredicate
 import javafx.beans.binding.{BooleanBinding, StringBinding}
 import javafx.beans.property._
 import javafx.collections.transformation.FilteredList
@@ -24,7 +27,7 @@ object MutLogFileSettings {
     s.setBlockSettings(logFileSettings.blockSettings)
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
     s.setDividerPosition(logFileSettings.dividerPosition)
-    s.setFilters(logFileSettings.filters.map(f => Fltr[String](Ep(f.pattern),f.pattern, f.color, f.active)))
+    s.setFilters(logFileSettings.filters.map(f => MutFilter[String](ContainsPredicate(f.pattern), f.color, f.active)))
     s.someTimestampSettings.set(logFileSettings.someTimestampSettings)
     logFileSettings.someTimestampSettings match {
       case Some(sts) => s.setDateTimeFormatter(sts.dateTimeFormatter)
@@ -42,8 +45,8 @@ object MutLogFileSettings {
 
 class MutLogFileSettings {
 
-  var someUnclassifiedFilter: Option[(Fltr[_], FilterButton)] = None
-  var filterButtons: Map[Fltr[_], FilterButton] = Map[Fltr[_], FilterButton]()
+  var someUnclassifiedFilter: Option[(MutFilter[_], FilterButton)] = None
+  var filterButtons: Map[MutFilter[_], FilterButton] = Map[MutFilter[_], FilterButton]()
 
   /**
    * Filters are only active if selected.
@@ -52,7 +55,7 @@ class MutLogFileSettings {
    *
    * @return
    */
-  def computeCurrentFilter(): Fltr[_] = {
+  def computeCurrentFilter(): MutFilter[_] = {
     new AnyFilter(someUnclassifiedFilter.map(fst => if (fst._2.isSelected) Set(fst._1) else Set()).getOrElse(Set()) ++
       filterButtons.filter(fst => fst._2.isSelected).keySet)
   }
@@ -96,7 +99,7 @@ class MutLogFileSettings {
 
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
-  val filtersProperty: SimpleListProperty[Fltr[_]] = new SimpleListProperty[Fltr[_]](FXCollections.observableArrayList())
+  val filtersProperty: SimpleListProperty[MutFilter[_]] = new SimpleListProperty[MutFilter[_]](FXCollections.observableArrayList())
 
   def getSomeTimestampSettings: Option[TimestampSettings] = someTimestampSettings.get()
 
@@ -104,11 +107,11 @@ class MutLogFileSettings {
 
   def setDateTimeFormatter(dateTimeFormatter: DateTimeFormatter): Unit = dateTimeFormatterProperty.set(dateTimeFormatter)
 
-  def setFilters(filters: Seq[Fltr[_]]): Unit = {
+  def setFilters(filters: Seq[MutFilter[_]]): Unit = {
     filtersProperty.setAll(filters.asJava)
   }
 
-  def getFilters: ObservableList[Fltr[_]] = filtersProperty.get()
+  def getFilters: ObservableList[MutFilter[_]] = filtersProperty.get()
 
 
   val hasTimestampSetting: BooleanBinding = new BooleanBinding {
@@ -168,7 +171,7 @@ class MutLogFileSettings {
         , firstOpenedProperty.get()
         , dividerPositionProperty.get()
         , fontSizeProperty.get()
-        , getFilters.asScala.toSeq.map(f => Filter(f.getPattern, f.getColor, f.isActive))
+        , getFilters.asScala.toSeq.map(f => Filter(f.getPredicate.description, f.getColor, f.isActive))
         , BlockSettings(blockSizeProperty.get())
         , someTimestampSettings.get()
         , autoScrollActiveProperty.get()

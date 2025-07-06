@@ -1,8 +1,9 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.jfxbfr.{ChunkListView, Filter, Fltr}
+import app.logorrr.jfxbfr.{ChunkListView, MutFilter}
 import app.logorrr.model.LogEntry
+import app.logorrr.views.Filter
 import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import app.logorrr.views.search.{FiltersToolBar, OpsToolBar}
@@ -97,9 +98,9 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     chunkListView.removeListeners()
   }
 
-  def addFilter(filter: Fltr[_]): Unit = mutLogFileSettings.filtersProperty.add(filter)
+  def addFilter(filter: MutFilter[_]): Unit = mutLogFileSettings.filtersProperty.add(filter)
 
-  def removeFilter(filter: Fltr[_]): Unit = mutLogFileSettings.filtersProperty.remove(filter)
+  def removeFilter(filter: MutFilter[_]): Unit = mutLogFileSettings.filtersProperty.remove(filter)
 
   /**
    * Called if a tab is selected
