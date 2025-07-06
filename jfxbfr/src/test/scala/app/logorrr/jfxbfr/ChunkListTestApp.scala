@@ -42,7 +42,7 @@ class ChunkListTestApp extends Application with CanLog {
     val selectedLineNumber = 0
 
     val entries: java.util.List[LogEntry] = ChunkSpec.mkTestLogEntries(1000)
-    val filtersProperty = new SimpleListProperty[Fltr](FXCollections.observableArrayList(Fltr.DefaultFilters: _*))
+    val filtersProperty = new SimpleListProperty[Fltr[_]](FXCollections.observableArrayList(Fltr.DefaultFilters: _*))
     val entriesProperty = new SimpleListProperty[LogEntry](FXCollections.observableArrayList(entries))
 
     val bp = new BorderPane()

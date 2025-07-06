@@ -8,10 +8,10 @@ import app.logorrr.views.{UiNode, UiNodeFilterAware}
 
 object RemoveFilterbutton extends UiNodeFilterAware {
 
-  override def uiNode(fileId: FileId, filter: Fltr): UiNode = UiNode(classOf[RemoveFilterbutton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + filter.getPattern))
+  override def uiNode(fileId: FileId, filter: Fltr[_]): UiNode = UiNode(classOf[RemoveFilterbutton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + filter.getPattern))
 }
 
-class RemoveFilterbutton(fileId: FileId, filter: Fltr, removeFilter: Fltr => Unit) extends RectButton(10, 10, filter.getColor, "remove") {
+class RemoveFilterbutton(fileId: FileId, filter: Fltr[_], removeFilter: Fltr[_] => Unit) extends RectButton(10, 10, filter.getColor, "remove") {
   setId(RemoveFilterbutton.uiNode(fileId, filter).value)
   setOnAction(_ => removeFilter(filter))
   setStyle(

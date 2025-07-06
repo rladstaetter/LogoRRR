@@ -2,7 +2,7 @@ package app.logorrr.views.search
 
 
 import app.logorrr.io.FileId
-import app.logorrr.jfxbfr.Fltr
+import app.logorrr.jfxbfr.{Ep, Fltr}
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{Button, Tooltip}
@@ -19,7 +19,7 @@ class SearchButton(fileId: FileId
                    , searchTextField: SearchTextField
                    , regexToggleButton: SearchActivateRegexToggleButton
                    , colorPicker: SearchColorPicker
-                   , addFilterFn: Fltr => Unit) extends Button {
+                   , addFilterFn: Fltr[_] => Unit) extends Button {
 
   setId(SearchButton.uiNode(fileId).value)
   setGraphic(new FontIcon(FontAwesomeSolid.SEARCH))
@@ -28,11 +28,11 @@ class SearchButton(fileId: FileId
 
   setOnAction(_ => {
     if (searchTextField.getText.nonEmpty) {
-      val filter: Fltr =
+      val filter: Fltr[_] =
         if (regexToggleButton.isSelected) {
           RegexFilter(searchTextField.getText, colorPicker.getValue, active = true)
         } else {
-          Fltr(searchTextField.getText, colorPicker.getValue, active = true)
+          Fltr(Ep(searchTextField.getText), searchTextField.getText, colorPicker.getValue, active = true)
         }
       colorPicker.setValue(JfxUtils.randColor)
       searchTextField.clear()

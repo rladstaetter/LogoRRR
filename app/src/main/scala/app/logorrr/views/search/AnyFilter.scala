@@ -3,8 +3,12 @@ package app.logorrr.views.search
 import app.logorrr.jfxbfr.Fltr
 import javafx.scene.paint.Color
 
-class AnyFilter(filters: Set[Fltr]) extends Fltr {
-  init("any", Color.WHITE, active = true)
+case class AnyMatch(filters: Set[Fltr[_]]) extends Function1[String, Boolean] {
+  override def apply(searchTerm: String): Boolean = filters.exists(_.matches(searchTerm))
+}
+
+class AnyFilter(filters: Set[Fltr[_]]) extends Fltr {
+  init(AnyMatch(filters), "any", Color.WHITE, active = true)
 
   override val getColor: Color = {
     if (filters.isEmpty) {

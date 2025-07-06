@@ -14,7 +14,7 @@ import scala.collection.mutable.ListBuffer
  * @param filters filter containing color and search string
  */
 case class FilterCalculator(logEntry: LogEntry
-                            , filters: Seq[_ <: Fltr]) {
+                            , filters: Seq[_ <: Fltr[_]]) {
 
   private val logLine = logEntry.value
 

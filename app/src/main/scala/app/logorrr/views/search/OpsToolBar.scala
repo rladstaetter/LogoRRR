@@ -29,7 +29,7 @@ object OpsToolBar {
  * @param addFilterFn filter function which results from user interaction with SearchToolbar
  */
 class OpsToolBar(fileId: FileId
-                 , addFilterFn: Fltr => Unit
+                 , addFilterFn: Fltr[_] => Unit
                  , logEntries: ObservableList[LogEntry]
                  , filteredList: FilteredList[LogEntry]
                  , val blockSizeProperty: SimpleIntegerProperty)

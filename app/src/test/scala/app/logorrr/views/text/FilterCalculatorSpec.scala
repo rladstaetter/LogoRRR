@@ -1,6 +1,6 @@
 package app.logorrr.views.text
 
-import app.logorrr.jfxbfr.{FilterSpec, Fltr}
+import app.logorrr.jfxbfr.{Ep, FilterSpec, Fltr}
 import app.logorrr.model.LogEntry
 import app.logorrr.{LogEntrySpec, LogoRRRSpec}
 import javafx.beans.property.SimpleIntegerProperty
@@ -20,7 +20,7 @@ object FilterCalculatorSpec {
 class FilterCalculatorSpec extends LogoRRRSpec {
 
   def applySingleFilter(logEntry: String, pattern: String): Seq[Seq[LinePart]] = {
-    FilterCalculator(LogEntry(0, logEntry, None, None), Seq(Fltr(pattern, Color.RED, active = true))).filteredParts
+    FilterCalculator(LogEntry(0, logEntry, None, None), Seq(Fltr(Ep(pattern), pattern, Color.RED, active = true))).filteredParts
   }
 
   "calcParts" should {
@@ -80,9 +80,9 @@ class FilterCalculatorSpec extends LogoRRRSpec {
 
   "filteredParts" should {
     val filters = Seq(
-      Fltr("a", Color.RED, active = true)
-      , Fltr("b", Color.BLUE, active = true)
-      , Fltr("t", Color.YELLOW, active = true)
+      Fltr(Ep("a"),"a", Color.RED, active = true)
+      , Fltr(Ep("b"),"b", Color.BLUE, active = true)
+      , Fltr(Ep("t"),"t", Color.YELLOW, active = true)
     )
     val entry = LogEntry(0, "test a b c", None, None)
     val calculator = FilterCalculator(entry, filters)

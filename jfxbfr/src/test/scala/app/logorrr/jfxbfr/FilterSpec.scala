@@ -6,7 +6,7 @@ import org.scalatest.wordspec.AnyWordSpec
 
 object FilterSpec {
 
-  val gen: Gen[Fltr] = for {
+  val gen: Gen[Fltr[_]] = for {
     f <- Gen.oneOf(Fltr.DefaultFilters)
   } yield f
 

@@ -8,6 +8,6 @@ import app.logorrr.jfxbfr.Fltr
  */
 trait UiNodeFilterAware {
 
-  def uiNode(fileId: FileId, filter: Fltr): UiNode
+  def uiNode(fileId: FileId, filter: Fltr[_]): UiNode
 
 }

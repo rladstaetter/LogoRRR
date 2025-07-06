@@ -31,23 +31,23 @@ object FiltersToolBar {
  */
 class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
                      , filteredList: FilteredList[LogEntry]
-                     , removeFilter: Fltr => Unit) extends ToolBar {
+                     , removeFilter: Fltr[_] => Unit) extends ToolBar {
 
-  var occurrences: Map[Fltr, Int] = Map().withDefaultValue(0)
+  var occurrences: Map[Fltr[_], Int] = Map().withDefaultValue(0)
 
   /** will be bound to the current active filter list */
-  val filtersProperty = new SimpleListProperty[Fltr]()
+  val filtersProperty = new SimpleListProperty[Fltr[_]]()
 
   init()
 
   private def init(): Unit = {
-    filtersProperty.addListener(JfxUtils.mkListChangeListener[Fltr](processFiltersChange))
+    filtersProperty.addListener(JfxUtils.mkListChangeListener[Fltr[_]](processFiltersChange))
     updateUnclassified()
   }
 
 
   /** if filter list is changed in any way, react to this event and either add or remove filter from UI */
-  private def processFiltersChange(change: ListChangeListener.Change[_ <: Fltr]): Unit = {
+  private def processFiltersChange(change: ListChangeListener.Change[_ <: Fltr[_]]): Unit = {
     while (change.next()) {
       if (change.wasAdded()) {
         change.getAddedSubList.asScala.foreach(addFilterButton)
@@ -59,7 +59,7 @@ class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
     }
   }
 
-  private def updateOccurrences(sf: Fltr): Unit = {
+  private def updateOccurrences(sf: Fltr[_]): Unit = {
     occurrences = occurrences + (sf -> filteredList.getSource.asScala.count(e => sf.matches(e.value)))
   }
 
@@ -73,7 +73,7 @@ class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
     mutLogFileSettings.updateActiveFilter(filteredList)
   }
 
-  private def addFilterButton(filter: Fltr): Unit = {
+  private def addFilterButton(filter: Fltr[_]): Unit = {
     updateOccurrences(filter)
     val filterButton =
       new FilterButton(
@@ -89,7 +89,7 @@ class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
     mutLogFileSettings.filterButtons = mutLogFileSettings.filterButtons.updated(filter, filterButton)
   }
 
-  private def removeFilterButton(filter: Fltr): Unit = {
+  private def removeFilterButton(filter: Fltr[_]): Unit = {
     val button = mutLogFileSettings.filterButtons(filter)
     filter.unbind()
     getItems.remove(button)

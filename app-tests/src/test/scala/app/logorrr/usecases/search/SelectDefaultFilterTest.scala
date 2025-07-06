@@ -50,7 +50,7 @@ class SelectDefaultFilterTest extends SingleFileApplicationTest(TestFiles.simple
     assert(lookup(LogTextView.uiNode(fileId).ref).query[LogTextView].getItems.size() == expectedElements)
   }
 
-  def clickFilters(filters: Seq[Fltr]): Unit = {
+  def clickFilters(filters: Seq[Fltr[_]]): Unit = {
     filters.foreach {
       ff => waitAndClickVisibleItem(FilterButton.uiNode(fileId, ff)) // enable all filters
     }

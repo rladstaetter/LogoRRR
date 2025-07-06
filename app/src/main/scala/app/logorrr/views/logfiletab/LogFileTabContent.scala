@@ -97,9 +97,9 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     chunkListView.removeListeners()
   }
 
-  def addFilter(filter: Fltr): Unit = mutLogFileSettings.filtersProperty.add(filter)
+  def addFilter(filter: Fltr[_]): Unit = mutLogFileSettings.filtersProperty.add(filter)
 
-  def removeFilter(filter: Fltr): Unit = mutLogFileSettings.filtersProperty.remove(filter)
+  def removeFilter(filter: Fltr[_]): Unit = mutLogFileSettings.filtersProperty.remove(filter)
 
   /**
    * Called if a tab is selected
