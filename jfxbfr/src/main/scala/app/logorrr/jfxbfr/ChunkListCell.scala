@@ -2,14 +2,12 @@ package app.logorrr.jfxbfr
 
 import app.logorrr.jfxbfr
 import app.logorrr.model.LogEntry
-import javafx.animation.{KeyFrame, Timeline}
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
-import javafx.event.{ActionEvent, EventHandler}
+import javafx.event.EventHandler
 import javafx.scene.control.ListCell
 import javafx.scene.image.ImageView
 import javafx.scene.input.{MouseButton, MouseEvent}
-import javafx.util.Duration
 import net.ladstatt.util.log.CanLog
 
 import scala.util.Try
@@ -62,8 +60,10 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
     }
   }
 
+  /*
+  // see #262 - until this is fixed don't activate the mousemoved handler
 
-  private val mouseMovedHandler: EventHandler[MouseEvent] = (me: MouseEvent) => {
+  private lazy val mouseMovedHandler: EventHandler[MouseEvent] = (me: MouseEvent) => {
     Option(getItem).map(_.cols) match {
       case Some(cols) =>
         val index = calcIndex(cols * blockSizeProperty.get(), me)
@@ -88,10 +88,11 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
     }
   }
 
-  // see #262 - until this is fixed don't activate the mousemoved handler
   if (false) {
     setOnMouseMoved(mouseMovedHandler)
   }
+
+   */
   setOnMouseClicked(mouseClickedHandler)
 
   override def updateItem(chunk: Chunk, empty: Boolean): Unit = JfxUtils.execOnUiThread {
