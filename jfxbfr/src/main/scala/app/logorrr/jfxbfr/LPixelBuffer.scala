@@ -124,14 +124,12 @@ case class LPixelBuffer(blockNumber: Int
     , IntBuffer.wrap(rawInts)
     , PixelFormat.getIntArgbPreInstance) with CanLog {
 
-
   init()
 
   def init(): Unit = {
     paint()
   }
 
-  private def cleanBackground(): Unit = java.util.Arrays.fill(rawInts, LColors.defaultBackgroundColor)
 
   def getBlockSize: Int = blockSizeProperty.get()
 
@@ -175,7 +173,6 @@ case class LPixelBuffer(blockNumber: Int
    */
   private def paintPixels(): Unit = {
     updateBuffer((_: PixelBuffer[IntBuffer]) => {
-      cleanBackground()
       var i = 0
       entries.forEach(e => {
         val col =
@@ -201,7 +198,6 @@ case class LPixelBuffer(blockNumber: Int
   def paintBlockAtIndexWithColor(i: Int, lineNumber: Int, color: Color): Unit = {
     updateBuffer((_: PixelBuffer[IntBuffer]) => {
       paintBlock(i, lineNumber, color)
-      // logInfo(s"Painting index ${i} lineNumber ${lineNumber} color ${color}")
       shape
     })
 
@@ -209,7 +205,6 @@ case class LPixelBuffer(blockNumber: Int
 
   private def paintRects(): Unit = {
     updateBuffer((_: PixelBuffer[IntBuffer]) => {
-      cleanBackground()
       var i = 0
       if (!entries.isEmpty) {
         entries.forEach(e => {
