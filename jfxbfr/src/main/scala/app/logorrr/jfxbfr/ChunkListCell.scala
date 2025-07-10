@@ -1,15 +1,15 @@
 package app.logorrr.jfxbfr
 
-import app.logorrr.jfxbfr
 import app.logorrr.model.LogEntry
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
 import javafx.event.EventHandler
 import javafx.scene.control.ListCell
-import javafx.scene.image.ImageView
+import javafx.scene.image.{ImageView, WritableImage}
 import javafx.scene.input.{MouseButton, MouseEvent}
 import net.ladstatt.util.log.CanLog
 
+import java.nio.IntBuffer
 import scala.util.Try
 
 
@@ -60,39 +60,39 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
     }
   }
 
-  /*
+
   // see #262 - until this is fixed don't activate the mousemoved handler
+  /*
+   private lazy val mouseMovedHandler: EventHandler[MouseEvent] = (me: MouseEvent) => {
+     Option(getItem).map(_.cols) match {
+       case Some(cols) =>
+         val index = calcIndex(cols * blockSizeProperty.get(), me)
+         getEntryAt(getItem, index) match {
+           case Some(logEntry) =>
+             Option(getGraphic).map(_.asInstanceOf[ImageView].getImage.asInstanceOf[WritableImage].pixelBuffer) match {
+               case Some(pb) =>
+                 val col = ColorUtil.calcColor(logEntry.value, pb.filters)
+                 pb.paintBlockAtIndexWithColor(index, logEntry.lineNumber, col.darker())
+                 // schedule repaint with original color again some time in the future
+                 val task: Runnable = () => pb.paintBlockAtIndexWithColor(index, logEntry.lineNumber, col)
 
-  private lazy val mouseMovedHandler: EventHandler[MouseEvent] = (me: MouseEvent) => {
-    Option(getItem).map(_.cols) match {
-      case Some(cols) =>
-        val index = calcIndex(cols * blockSizeProperty.get(), me)
-        getEntryAt(getItem, index) match {
-          case Some(logEntry) =>
-            Option(getGraphic).map(_.asInstanceOf[ImageView].getImage.asInstanceOf[ChunkImage].pixelBuffer) match {
-              case Some(pb) =>
-                val col = ColorUtil.calcColor(logEntry.value, pb.filters)
-                pb.paintBlockAtIndexWithColor(index, logEntry.lineNumber, col.darker())
-                // schedule repaint with original color again some time in the future
-                val task: Runnable = () => pb.paintBlockAtIndexWithColor(index, logEntry.lineNumber, col)
+                 // Create a Timeline that fires once after 250 milliseconds
+                 val timeline = new Timeline(new KeyFrame(Duration.millis(250), (_: ActionEvent) => task.run()))
+                 timeline.setCycleCount(1) // Ensure it runs only once
+                 timeline.play()
+               case None =>
+             }
+           case None => // if no valid item found, ignore
+         }
+       case None => // if outside of a chunk, just ignore
+     }
+   }
 
-                // Create a Timeline that fires once after 250 milliseconds
-                val timeline = new Timeline(new KeyFrame(Duration.millis(250), (_: ActionEvent) => task.run()))
-                timeline.setCycleCount(1) // Ensure it runs only once
-                timeline.play()
-              case None =>
-            }
-          case None => // if no valid item found, ignore
-        }
-      case None => // if outside of a chunk, just ignore
-    }
-  }
+   if (false) {
+     setOnMouseMoved(mouseMovedHandler)
+   }
 
-  if (false) {
-    setOnMouseMoved(mouseMovedHandler)
-  }
-
-   */
+    */
   setOnMouseClicked(mouseClickedHandler)
 
   override def updateItem(chunk: Chunk, empty: Boolean): Unit = JfxUtils.execOnUiThread {
@@ -101,18 +101,26 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
     if (empty || Option(chunk).isEmpty || blockSizeProperty.get() <= 0 || widthProperty.get() <= 0) {
       setGraphic(null)
     } else {
-      val bv = jfxbfr.ChunkImage(chunk
-        , filtersProperty
-        , selectedLineNumberProperty
-        , widthProperty
+      val width = ChunkListView.calcListViewWidth(widthProperty.get())
+      val height = new SimpleIntegerProperty(chunk.height).get()
+      val shape = RectangularShape(width, height)
+      val pixelBuffer = LPixelBuffer(chunk.number
+        , shape
         , blockSizeProperty
+        , chunk.entries
+        , filtersProperty
+        , IntBuffer.wrap(Array.fill(shape.size)(LColors.defaultBackgroundColor))
+        , selectedLineNumberProperty
         , firstVisibleTextCellIndexProperty
-        , lastVisibleTextCellIndexProperty)
+        , lastVisibleTextCellIndexProperty
+      )
+      val bv = new WritableImage(pixelBuffer)
       val view = new ImageView(bv)
       view.setImage(bv)
       setGraphic(view)
     }
   }
+
 
   private def getEntryAt(chunk: Chunk, index: Int): Option[LogEntry] = Try(chunk.entries.get(index)).toOption
 

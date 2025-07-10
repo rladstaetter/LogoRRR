@@ -3,12 +3,16 @@ package app.logorrr;
 import app.logorrr.jfxbfr.BlockColor;
 import app.logorrr.jfxbfr.ColorUtil;
 import app.logorrr.jfxbfr.LPixelBuffer$;
+import javafx.scene.image.PixelBuffer;
+import javafx.scene.image.PixelFormat;
 import javafx.scene.paint.Color;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+
+import java.nio.IntBuffer;
 
 @State(Scope.Thread)
 @Warmup(iterations = 10, time = 1)
@@ -19,7 +23,9 @@ public class LogoRRRBenchmark {
     int count = 10 * 10;
     int width = 100;
     int blocksize = 5;
-    int[] myArray = new int[blocksize * blocksize * count];
+    int all = blocksize * blocksize * count;
+    int height = all / blocksize;
+    IntBuffer myArray = IntBuffer.wrap(new int[all]);
     int c = ColorUtil.toARGB(Color.rgb(255, 200, 0));
 
     int vantablack = 0;
@@ -28,7 +34,7 @@ public class LogoRRRBenchmark {
     public void benchmarkDrawRect() {
         for (int i = 0; i <= count; i++) {
             BlockColor blockColor = new BlockColor(c, vantablack, vantablack, vantablack, vantablack);
-            LPixelBuffer$.MODULE$.drawRectangle(myArray, i, width, blocksize, blockColor);
+            LPixelBuffer$.MODULE$.drawRectangle(new PixelBuffer(width, height, myArray, PixelFormat.getIntArgbPreInstance()), blockColor, i, blocksize, width);
         }
     }
 
