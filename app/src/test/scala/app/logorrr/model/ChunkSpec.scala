@@ -1,6 +1,6 @@
-package app.logorrr.jfxbfr
+package app.logorrr.model
 
-import app.logorrr.model.LogEntry
+import app.logorrr.jfxbfr.{Chunk, ChunkImage}
 import org.scalatest.wordspec.AnyWordSpec
 
 object ChunkSpec {

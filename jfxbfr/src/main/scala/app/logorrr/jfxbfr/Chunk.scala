@@ -1,7 +1,5 @@
 package app.logorrr.jfxbfr
 
-import app.logorrr.model.LogEntry
-
 import java.util
 import scala.collection.mutable.ListBuffer
 
@@ -43,11 +41,11 @@ object Chunk {
    * @param listViewHeight height of listview
    * @return a sequence of Chunks, filled with the given entries
    */
-  def mkChunks(entries: util.List[LogEntry]
-               , blockSize: Int
-               , listViewWidth: Double
-               , listViewHeight: Double
-               , nrChunksPerPage: Int): Seq[Chunk[LogEntry]] = {
+  def mkChunks[A](entries: util.List[A]
+                  , blockSize: Int
+                  , listViewWidth: Double
+                  , listViewHeight: Double
+                  , nrChunksPerPage: Int): Seq[Chunk[A]] = {
 
     if (
       entries.isEmpty ||
@@ -62,7 +60,7 @@ object Chunk {
 
       val entriesSize = entries.size()
       var curIndex = 0
-      val lb = new ListBuffer[Chunk[LogEntry]]
+      val lb = new ListBuffer[Chunk[A]]
 
       while (curIndex < entriesSize) {
         val end = if (curIndex + nrElements < entriesSize) {
@@ -93,8 +91,8 @@ object Chunk {
  * @param height  height of Chunk
  */
 class Chunk[E](val number: Int
-            , val entries: java.util.List[E]
-            , val cols: Int
-            , val height: Int) {
+               , val entries: java.util.List[E]
+               , val cols: Int
+               , val height: Int) {
   require(!entries.isEmpty, "entries was empty")
 }

@@ -25,7 +25,7 @@ object TimestampFormatSetButton extends UiNodeFileIdAware {
 class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
                                , getRange: => SimpleRange
                                , timeFormatTf: TextField
-                               , chunkListView: ChunkListView
+                               , chunkListView: ChunkListView[LogEntry]
                                , logEntries: ObservableList[LogEntry]
                                , timeOpsToolBar: TimeOpsToolBar
                                , closeStage: => Unit) extends Button("set format") {

@@ -1,6 +1,6 @@
-package app.logorrr.jfxbfr
+package app.logorrr.model
 
-import app.logorrr.model.LogEntry
+import app.logorrr.jfxbfr.ElementSelector
 import javafx.beans.property.SimpleIntegerProperty
 
 case class LogEntrySelector(selectedLineNumberProperty: SimpleIntegerProperty) extends ElementSelector[LogEntry] {

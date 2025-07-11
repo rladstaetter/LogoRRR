@@ -18,7 +18,7 @@ object TimestampSettingStage {
 
 class TimestampSettingStage(owner: Window
                             , settings: MutLogFileSettings
-                            , chunkListView: ChunkListView
+                            , chunkListView: ChunkListView[LogEntry]
                             , logEntries: ObservableList[LogEntry]
                             , timeOpsToolBar: TimeOpsToolBar) extends Stage {
 

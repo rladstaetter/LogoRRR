@@ -19,7 +19,7 @@ object TimestampFormatResetButton extends UiNodeFileIdAware {
 
 /** reset log timestamp settings to default values */
 class TimestampFormatResetButton(mutLogFileSettings: MutLogFileSettings
-                                 , chunkListView: ChunkListView
+                                 , chunkListView: ChunkListView[LogEntry]
                                  , logEntries: ObservableList[LogEntry]
                                  , timeOpsToolBar: TimeOpsToolBar
                                  , closeStage: => Unit) extends Button("reset") {

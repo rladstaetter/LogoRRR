@@ -17,7 +17,7 @@ import net.ladstatt.util.log.CanLog
 
 class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
                                   , logEntries: ObservableList[LogEntry]
-                                  , chunkListView: ChunkListView
+                                  , chunkListView: ChunkListView[LogEntry]
                                   , timeOpsToolBar: TimeOpsToolBar
                                   , closeStage: => Unit)
   extends BorderPane with CanLog {

@@ -11,7 +11,7 @@ import javafx.scene.control.ToolBar
 
 
 class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
-                     , chunkListView: ChunkListView
+                     , chunkListView: ChunkListView[LogEntry]
                      , logTextView: LogTextView
                      , logEntries: ObservableList[LogEntry]
                      , filteredList: FilteredList[LogEntry]) extends ToolBar {

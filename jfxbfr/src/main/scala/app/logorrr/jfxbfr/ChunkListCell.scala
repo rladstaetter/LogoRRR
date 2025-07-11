@@ -1,6 +1,5 @@
 package app.logorrr.jfxbfr
 
-import app.logorrr.model.LogEntry
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.event.EventHandler
 import javafx.geometry.Rectangle2D
@@ -149,28 +148,18 @@ object ChunkListCell extends CanLog {
 
 
 
-
-
-
-
-
-
-
-
-
-
 /**
  * A listcell which can contain one or more log entries.
  *
  * To see how those cells are populated, see [[Chunk.mkChunks]]. [[ChunkImage]] is responsible to draw all Chunks
  */
-class ChunkListCell(widthProperty: ReadOnlyDoubleProperty
+class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
                     , blockSizeProperty: SimpleIntegerProperty
-                    , scrollTo: LogEntry => Unit
-                    , logEntryVizor: Vizor[LogEntry]
-                    , logEntryChozzer: ColorChozzer[LogEntry]
-                    , elementSelector: ElementSelector[LogEntry]
-                   ) extends ListCell[Chunk[LogEntry]] with CanLog {
+                    , scrollTo: A => Unit
+                    , logEntryVizor: Vizor[A]
+                    , logEntryChozzer: ColorChozzer[A]
+                    , elementSelector: ElementSelector[A]
+                   ) extends ListCell[Chunk[A]] with CanLog {
 
   val view = new ImageView()
 
@@ -242,7 +231,7 @@ class ChunkListCell(widthProperty: ReadOnlyDoubleProperty
     */
   setOnMouseClicked(mouseClickedHandler)
 
-  override def updateItem(chunk: Chunk[LogEntry], empty: Boolean): Unit = JfxUtils.execOnUiThread {
+  override def updateItem(chunk: Chunk[A], empty: Boolean): Unit = JfxUtils.execOnUiThread {
     super.updateItem(chunk, empty)
 
     if (empty || Option(chunk).isEmpty || blockSizeProperty.get() <= 0 || widthProperty.get() <= 0) {
@@ -264,7 +253,7 @@ class ChunkListCell(widthProperty: ReadOnlyDoubleProperty
 
   def update(pixelBuffer: PixelBuffer[IntBuffer]
              , shape: RectangularShape
-             , entries: java.util.List[LogEntry]
+             , entries: java.util.List[A]
              , blockSize: Int
             ): Unit = {
     if (blockSize != 0 && shape.width > blockSize) {
@@ -277,13 +266,13 @@ class ChunkListCell(widthProperty: ReadOnlyDoubleProperty
   }
 
 
-  private def getEntryAt(chunk: Chunk[LogEntry], index: Int): Option[LogEntry] = Try(chunk.entries.get(index)).toOption
+  private def getEntryAt(chunk: Chunk[A], index: Int): Option[A] = Try(chunk.entries.get(index)).toOption
 
-  private def paintPixels(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[LogEntry], shape: RectangularShape): Unit = pixelBuffer.updateBuffer(updatePixels(entries, shape))
+  private def paintPixels(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: RectangularShape): Unit = pixelBuffer.updateBuffer(updatePixels(entries, shape))
 
-  private def paintRects(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[LogEntry], shape: RectangularShape, blockSize: Int): Unit = pixelBuffer.updateBuffer(updateRects(entries, shape, blockSize))
+  private def paintRects(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: RectangularShape, blockSize: Int): Unit = pixelBuffer.updateBuffer(updateRects(entries, shape, blockSize))
 
-  def updateRects(entries: java.util.List[LogEntry], shape: RectangularShape, blockSize: Int)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
+  def updateRects(entries: java.util.List[A], shape: RectangularShape, blockSize: Int)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
     var i = 0
     if (!entries.isEmpty) {
       entries.forEach(e => {
@@ -294,7 +283,7 @@ class ChunkListCell(widthProperty: ReadOnlyDoubleProperty
     shape
   }
 
-  def updatePixels(entries: java.util.List[LogEntry], shape: Rectangle2D)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
+  def updatePixels(entries: java.util.List[A], shape: Rectangle2D)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
     val rawInts = pb.getBuffer.array()
     var i = 0
     entries.forEach(e => {

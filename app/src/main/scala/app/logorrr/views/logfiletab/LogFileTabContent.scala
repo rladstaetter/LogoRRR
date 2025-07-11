@@ -2,12 +2,12 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.jfxbfr.ChunkListView
-import app.logorrr.model.LogEntry
-import app.logorrr.views.{Filter, MutFilter}
+import app.logorrr.model.{LogEntry, LogEntryChozzer, LogEntrySelector, LogEntryVizor}
 import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import app.logorrr.views.search.{FiltersToolBar, OpsToolBar}
 import app.logorrr.views.text.LogTextView
+import app.logorrr.views.{Filter, MutFilter}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
@@ -115,15 +115,24 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   def mkChunkListView(entries: ObservableList[LogEntry]
                       , mutLogFileSettings: MutLogFileSettings
                       , selectInTextView: LogEntry => Unit
-                     ): ChunkListView = {
+                     ): ChunkListView[LogEntry] = {
+
+    val logEntryVizor = LogEntryVizor(mutLogFileSettings.selectedLineNumberProperty,
+      widthProperty,
+      mutLogFileSettings.blockSizeProperty
+      , mutLogFileSettings.firstVisibleTextCellIndexProperty
+      , mutLogFileSettings.lastVisibleTextCellIndexProperty)
+    val logEntryChozzer = LogEntryChozzer(mutLogFileSettings.filtersProperty)
+    val logEntrySelector = LogEntrySelector(mutLogFileSettings.selectedLineNumberProperty)
+
+
     new ChunkListView(entries
       , mutLogFileSettings.selectedLineNumberProperty
       , mutLogFileSettings.blockSizeProperty
-      , mutLogFileSettings.filtersProperty
-      , mutLogFileSettings.dividerPositionProperty
       , mutLogFileSettings.firstVisibleTextCellIndexProperty
       , mutLogFileSettings.lastVisibleTextCellIndexProperty
-      , selectInTextView)
+      , selectInTextView
+      , logEntryVizor, logEntryChozzer, logEntrySelector)
   }
 
 }

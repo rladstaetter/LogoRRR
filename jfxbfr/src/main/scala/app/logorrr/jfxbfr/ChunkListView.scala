@@ -1,7 +1,6 @@
 package app.logorrr.jfxbfr
 
-import app.logorrr.model.LogEntry
-import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.geometry.Orientation
@@ -16,16 +15,16 @@ import scala.util.{Failure, Success, Try}
 
 object ChunkListView {
 
-  def lookupVirtualFlow(skin: Skin[_]): Option[VirtualFlow[ChunkListCell]] = {
+  def lookupVirtualFlow(skin: Skin[_]): Option[VirtualFlow[ChunkListCell[_]]] = {
     Option(skin match {
       case skinBase: SkinBase[_] =>
-        skinBase.getChildren.asScala.find(_.getStyleClass.contains("virtual-flow")).orNull.asInstanceOf[VirtualFlow[ChunkListCell]]
+        skinBase.getChildren.asScala.find(_.getStyleClass.contains("virtual-flow")).orNull.asInstanceOf[VirtualFlow[ChunkListCell[_]]]
       case _ =>
         null
     })
   }
 
-  def lookupScrollBar(flow: VirtualFlow[ChunkListCell], orientation: Orientation): Option[ScrollBar] = {
+  def lookupScrollBar(flow: VirtualFlow[ChunkListCell[_]], orientation: Orientation): Option[ScrollBar] = {
     Option(flow.getChildrenUnmodifiable.toArray.collectFirst { case sb: ScrollBar if sb.getOrientation == orientation => sb }.orNull)
   }
 
@@ -46,18 +45,17 @@ object ChunkListView {
  * @param logEntries                 log entries to display
  * @param selectedLineNumberProperty which line is selected by the user
  * @param blockSizeProperty          size of blocks to display
- * @param filtersProperty            which filters are active
- * @param dividersProperty           position of divider of splitpane
  */
-class ChunkListView(val logEntries: ObservableList[LogEntry]
-                    , val selectedLineNumberProperty: SimpleIntegerProperty
-                    , val blockSizeProperty: SimpleIntegerProperty
-                    , val filtersProperty: ObservableList[_ <: ColorMatcher]
-                    , val dividersProperty: SimpleDoubleProperty
-                    , val firstVisibleTextCellIndexProperty: SimpleIntegerProperty
-                    , val lastVisibleTextCellIndexProperty: SimpleIntegerProperty
-                    , selectInTextView: LogEntry => Unit)
-  extends ListView[Chunk[LogEntry]]
+class ChunkListView[A](val logEntries: ObservableList[A]
+                       , val selectedLineNumberProperty: SimpleIntegerProperty
+                       , val blockSizeProperty: SimpleIntegerProperty
+                       , val firstVisibleTextCellIndexProperty: SimpleIntegerProperty
+                       , val lastVisibleTextCellIndexProperty: SimpleIntegerProperty
+                       , selectInTextView: A => Unit
+                       , logEntryVizor: Vizor[A]
+                       , logEntryChozzer: ColorChozzer[A]
+                       , logEntrySelector: ElementSelector[A])
+  extends ListView[Chunk[A]]
     with CanLog {
 
   /**
@@ -122,12 +120,7 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
   def init(): Unit = {
     getStylesheets.add(getClass.getResource("/app/logorrr/ChunkListView.css").toExternalForm)
 
-    setCellFactory((lv: ListView[Chunk[LogEntry]]) => {
-
-      val logEntryVizor = LogEntryVizor(selectedLineNumberProperty, widthProperty, blockSizeProperty, firstVisibleTextCellIndexProperty, lastVisibleTextCellIndexProperty)
-      val logEntryChozzer = LogEntryChozzer(filtersProperty)
-      val logEntrySelector = LogEntrySelector(selectedLineNumberProperty)
-
+    setCellFactory((lv: ListView[Chunk[A]]) => {
       new ChunkListCell(
         lv.widthProperty()
         , blockSizeProperty
@@ -147,7 +140,7 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
       val filteredChunks = getItems.filtered(c => {
         var found = false
         c.entries.forEach(e => if (found) found else {
-          found = e.lineNumber == selectedLineNumberProperty.get()
+          found = logEntryVizor.isSelected(e)
         })
         found
       })
@@ -157,7 +150,7 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
             getSelectionModel.select(chunk)
             val relativeIndex = getItems.indexOf(chunk)
             getSelectionModel.select(relativeIndex)
-            JfxUtils.scrollTo[Chunk[LogEntry]](this, chunk.height, relativeIndex)
+            JfxUtils.scrollTo[Chunk[A]](this, chunk.height, relativeIndex)
           case None =>
         }
       }

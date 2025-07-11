@@ -29,7 +29,7 @@ object TimestampSettingsButton extends UiNodeFileIdAware {
  * @param logEntries the list of log entries to display in order to configure a time format
  */
 class TimestampSettingsButton(settings: MutLogFileSettings
-                              , chunkListView: ChunkListView
+                              , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
                               , timeOpsToolBar: TimeOpsToolBar) extends StackPane {
 
