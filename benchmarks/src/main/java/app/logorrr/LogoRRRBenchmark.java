@@ -2,7 +2,7 @@ package app.logorrr;
 
 import app.logorrr.jfxbfr.BlockColor;
 import app.logorrr.jfxbfr.ColorUtil;
-import app.logorrr.jfxbfr.LPixelBuffer$;
+import app.logorrr.jfxbfr.ChunkListCell$;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.paint.Color;
@@ -34,7 +34,7 @@ public class LogoRRRBenchmark {
     public void benchmarkDrawRect() {
         for (int i = 0; i <= count; i++) {
             BlockColor blockColor = new BlockColor(c, vantablack, vantablack, vantablack, vantablack);
-            LPixelBuffer$.MODULE$.drawRectangle(new PixelBuffer(width, height, myArray, PixelFormat.getIntArgbPreInstance()), blockColor, i, blocksize, width);
+            ChunkListCell$.MODULE$.drawRectangle(new PixelBuffer(width, height, myArray, PixelFormat.getIntArgbPreInstance()), i, blockColor, blocksize, width);
         }
     }
 

@@ -2,11 +2,12 @@ package app.logorrr.jfxbfr
 
 import app.logorrr.model.LogEntry
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
-import javafx.collections.ObservableList
 import javafx.event.EventHandler
+import javafx.geometry.Rectangle2D
 import javafx.scene.control.ListCell
-import javafx.scene.image.{ImageView, WritableImage}
+import javafx.scene.image.{ImageView, PixelBuffer, PixelFormat, WritableImage}
 import javafx.scene.input.{MouseButton, MouseEvent}
+import javafx.scene.paint.Color
 import net.ladstatt.util.log.CanLog
 
 import java.nio.IntBuffer
@@ -14,18 +15,164 @@ import scala.util.Try
 
 
 /**
+ * Paint directly into a byte array for performant image manipulations.
+ */
+object ChunkListCell extends CanLog {
+
+  def paintBlock(pixelBuffer: PixelBuffer[IntBuffer]
+                 , index: Int
+                 , color: Color
+                 , blockSize: Int
+                 , width: Double
+                 , isSelected: Boolean
+                 , isFirstVisible: Boolean
+                 , isLastVisible: Boolean
+                 , isVisibleInTextView: Boolean): Unit = {
+    val blockColor: BlockColor = ChunkListCell.calcBlockColor(color, isSelected, isFirstVisible, isLastVisible, isVisibleInTextView)
+    ChunkListCell.drawRectangle(pixelBuffer, index, blockColor, blockSize, width)
+  }
+
+  def calcBlockColor(color: Color
+                     , isSelected: Boolean
+                     , isFirstVisible: Boolean
+                     , isLastVisible: Boolean
+                     , isVisibleInTextView: Boolean): BlockColor = {
+    val colbrighter = color.brighter()
+    val (c, cd, cb, cbb) = (ColorUtil.toARGB(color), ColorUtil.toARGB(color.darker()), ColorUtil.toARGB(colbrighter), ColorUtil.toARGB(colbrighter.brighter()))
+    // mystical color setting routine for setting border colors of viewport and blocks correctly
+    val blockColor = {
+      (isSelected, isFirstVisible, isLastVisible, isVisibleInTextView) match {
+        case (false, false, false, false) => BlockColor(c, cb, cb, cd, cd)
+        case (true, false, false, false) => LColors.color0
+        case (false, true, false, false) => BlockColor(cb, LColors.yb, LColors.yb, LColors.y, cd)
+        case (false, false, false, true) => BlockColor(cb, LColors.yb, cbb, LColors.y, cd)
+        case (true, false, false, true) => LColors.color1
+        case (false, false, true, false) => BlockColor(cb, LColors.yb, cbb, LColors.y, LColors.y)
+        case (true, true, false, false) => LColors.color2
+        case (true, false, true, false) => LColors.color2
+        case _ => BlockColor(c, cb, cb, cd, cd) // should never happen (?)
+      }
+    }
+    blockColor
+  }
+
+  /**
+   *
+   * @param pixelBuffer IntBuffer containing image information
+   * @param index       index (where) should be painted
+   * @param width       width of 'canvas' to paint on
+   *
+   */
+  def drawRectangle(pixelBuffer: PixelBuffer[IntBuffer]
+                    , index: Int
+                    , blockColor: BlockColor
+                    , blockSize: Int
+                    , width: Double): Unit = {
+    val nrOfBlocksInX = (width / blockSize).toInt
+    val xPos = (index % nrOfBlocksInX) * blockSize
+    val yPos = (index / nrOfBlocksInX) * blockSize
+    drawRectangle(pixelBuffer
+      , blockColor
+      , xPos
+      , yPos
+      , blockSize
+      , blockSize
+      , width.toInt
+    )
+  }
+
+  // performance sensitive function
+  // using while loops for more performance
+  // use benchmark module to perform statistics
+  // here are the current results (macbook pro m1)
+  // LogoRRRBenchmark.benchmarkDrawRect  thrpt   50  782011,597 ± 605,345  ops/s
+  // LogoRRRBenchmark.benchmarkDrawRect  thrpt   50  781747,451 ± 795,479  ops/s
+  private def drawRectangle(pixelBuffer: PixelBuffer[IntBuffer]
+                            , blockColor: BlockColor
+                            , x: Int
+                            , y: Int
+                            , width: Int
+                            , height: Int
+                            , canvasWidth: Int): Unit = {
+    val rawInts = pixelBuffer.getBuffer.array()
+    val maxHeight = y + height - 1
+    val length = width - 1
+    val squareWidth = length - 1
+    val startIdx = y * canvasWidth + x
+    val endIdx = maxHeight * canvasWidth + x + length
+
+    // Check if start and end indices are within bounds
+    if (startIdx >= 0 && endIdx < rawInts.length) {
+      val color = blockColor.color
+      val upperBorderCol = blockColor.upperBorderCol
+      val bottomBorderCol = blockColor.bottomBorderCol
+      val leftBorderCol = blockColor.leftBorderCol
+      val rightBorderCol = blockColor.rightBorderCol
+
+      // Update rawInts directly without array copying
+      var ly = y
+      while (ly < maxHeight) {
+        val startPos = ly * canvasWidth + x
+        var i = 0
+        while (i <= squareWidth) {
+          rawInts(startPos + i) = color
+          i += 1
+        }
+        ly += 1
+      }
+
+      // Paint highlights & shadows if square is big enough
+      if (width >= 2 && height >= 2) {
+        // Paint upper border from upper left corner to upper right corner
+        var i = 0
+        while (i <= squareWidth) {
+          rawInts(y * canvasWidth + x + i) = upperBorderCol
+          rawInts(maxHeight * canvasWidth + x + i) = bottomBorderCol
+          i += 1
+        }
+
+        // Calculate x positions for left and right borders
+        ly = y
+        while (ly < maxHeight) {
+          val idx = ly * canvasWidth + x
+          rawInts(idx) = leftBorderCol
+          rawInts(idx + length) = rightBorderCol
+          ly += 1
+        }
+      }
+    } else {
+      //      logWarn(s"tried to paint outside allowed index. [endIdx = maxHeight * canvasWidth + x + length] ($endIdx = $maxHeight * $canvasWidth + $x + $length) ")
+    }
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
  * A listcell which can contain one or more log entries.
  *
  * To see how those cells are populated, see [[Chunk.mkChunks]]. [[ChunkImage]] is responsible to draw all Chunks
  */
-class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
-                    , widthProperty: ReadOnlyDoubleProperty
+class ChunkListCell(widthProperty: ReadOnlyDoubleProperty
                     , blockSizeProperty: SimpleIntegerProperty
-                    , filtersProperty: ObservableList[_ <: MutFilter[_]]
-                    , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
-                    , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
                     , scrollTo: LogEntry => Unit
-                   ) extends ListCell[Chunk] with CanLog {
+                    , logEntryVizor: Vizor[LogEntry]
+                    , logEntryChozzer: ColorChozzer[LogEntry]
+                    , elementSelector: ElementSelector[LogEntry]
+                   ) extends ListCell[Chunk[LogEntry]] with CanLog {
+
+  val view = new ImageView()
 
   /**
    * @param maxOccupiedWidth max space in x direction where blocks will be shown
@@ -49,7 +196,7 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
             val index = calcIndex(cols * blockSizeProperty.get(), me)
             getEntryAt(getItem, index) match {
               case Some(value) =>
-                selectedLineNumberProperty.set(value.lineNumber)
+                elementSelector.select(value)
                 // we have to select also the entry in the LogTextView, couldn't get it to work with bindings / listeners
                 scrollTo(value)
               case None =>
@@ -95,33 +242,75 @@ class ChunkListCell(selectedLineNumberProperty: SimpleIntegerProperty
     */
   setOnMouseClicked(mouseClickedHandler)
 
-  override def updateItem(chunk: Chunk, empty: Boolean): Unit = JfxUtils.execOnUiThread {
+  override def updateItem(chunk: Chunk[LogEntry], empty: Boolean): Unit = JfxUtils.execOnUiThread {
     super.updateItem(chunk, empty)
 
     if (empty || Option(chunk).isEmpty || blockSizeProperty.get() <= 0 || widthProperty.get() <= 0) {
       setGraphic(null)
     } else {
       val width = ChunkListView.calcListViewWidth(widthProperty.get())
-      val height = new SimpleIntegerProperty(chunk.height).get()
-      val shape = RectangularShape(width, height)
-      val pixelBuffer = LPixelBuffer(chunk.number
-        , shape
-        , blockSizeProperty
-        , chunk.entries
-        , filtersProperty
+      val shape = RectangularShape(width, chunk.height)
+
+      val pbf = new PixelBuffer[IntBuffer](width.toInt
+        , chunk.height
         , IntBuffer.wrap(Array.fill(shape.size)(LColors.defaultBackgroundColor))
-        , selectedLineNumberProperty
-        , firstVisibleTextCellIndexProperty
-        , lastVisibleTextCellIndexProperty
-      )
-      val bv = new WritableImage(pixelBuffer)
-      val view = new ImageView(bv)
-      view.setImage(bv)
+        , PixelFormat.getIntArgbPreInstance)
+
+      update(pbf, shape, chunk.entries, blockSizeProperty.get())
+      view.setImage(new WritableImage(pbf))
       setGraphic(view)
     }
   }
 
+  def update(pixelBuffer: PixelBuffer[IntBuffer]
+             , shape: RectangularShape
+             , entries: java.util.List[LogEntry]
+             , blockSize: Int
+            ): Unit = {
+    if (blockSize != 0 && shape.width > blockSize) {
+      if (blockSize > 1) {
+        paintRects(pixelBuffer, entries, shape, blockSize)
+      } else {
+        paintPixels(pixelBuffer, entries, shape)
+      }
+    }
+  }
 
-  private def getEntryAt(chunk: Chunk, index: Int): Option[LogEntry] = Try(chunk.entries.get(index)).toOption
+
+  private def getEntryAt(chunk: Chunk[LogEntry], index: Int): Option[LogEntry] = Try(chunk.entries.get(index)).toOption
+
+  private def paintPixels(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[LogEntry], shape: RectangularShape): Unit = pixelBuffer.updateBuffer(updatePixels(entries, shape))
+
+  private def paintRects(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[LogEntry], shape: RectangularShape, blockSize: Int): Unit = pixelBuffer.updateBuffer(updateRects(entries, shape, blockSize))
+
+  def updateRects(entries: java.util.List[LogEntry], shape: RectangularShape, blockSize: Int)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
+    var i = 0
+    if (!entries.isEmpty) {
+      entries.forEach(e => {
+        ChunkListCell.paintBlock(pb, i, logEntryChozzer.calc(e), blockSize, shape.width, logEntryVizor.isSelected(e), logEntryVizor.isFirstVisible(e), logEntryVizor.isLastVisible(e), logEntryVizor.isVisibleInTextView(e))
+        i = i + 1
+      })
+    }
+    shape
+  }
+
+  def updatePixels(entries: java.util.List[LogEntry], shape: Rectangle2D)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
+    val rawInts = pb.getBuffer.array()
+    var i = 0
+    entries.forEach(e => {
+      val col =
+        (logEntryVizor.isSelected(e), logEntryVizor.isVisible(e)) match {
+          case (false, false) => ColorUtil.toARGB(logEntryChozzer.calc(e))
+          case (false, true) => ColorUtil.toARGB(logEntryChozzer.calc(e).brighter())
+          case (true, false) => LColors.y
+          case (true, true) => LColors.yb
+        }
+      if (i < rawInts.length) {
+        rawInts(i) = col
+      }
+      i = i + 1
+    })
+    shape
+  }
 
 }

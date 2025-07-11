@@ -1,10 +1,9 @@
 package app.logorrr.views.search
 
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.Filter
+import app.logorrr.views.{Filter, MutFilter}
 import app.logorrr.views.search.filter.UnclassifiedFilter
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener

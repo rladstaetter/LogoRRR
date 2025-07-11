@@ -1,9 +1,9 @@
 package app.logorrr.usecases.search
 
 import app.logorrr.TestFiles
-import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.FilterUtil
 import app.logorrr.usecases.SingleFileApplicationTest
+import app.logorrr.views.MutFilter
 import app.logorrr.views.search.FilterButton
 import app.logorrr.views.search.filter.UnclassifiedFilter
 import app.logorrr.views.text.LogTextView

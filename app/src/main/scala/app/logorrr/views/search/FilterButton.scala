@@ -1,10 +1,9 @@
 package app.logorrr.views.search
 
 import app.logorrr.io.FileId
-import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.util.HashUtil
 import app.logorrr.views.search.filter.UnclassifiedFilter
-import app.logorrr.views.{UiNode, UiNodeFilterAware}
+import app.logorrr.views.{MutFilter, UiNode, UiNodeFilterAware}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.scene.control.{ContentDisplay, ToggleButton, Tooltip}
 import net.ladstatt.util.log.CanLog

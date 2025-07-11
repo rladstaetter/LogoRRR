@@ -1,9 +1,8 @@
 package app.logorrr.views.text
 
-import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.LogEntry
 import app.logorrr.views.search.predicates.ContainsPredicate
-import app.logorrr.{LogEntrySpec, LogoRRRSpec, TestUtil}
+import app.logorrr.{LogEntrySpec, LogoRRRSpec, TestUtil, views}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.paint.Color
 import org.scalacheck.{Gen, Prop}
@@ -21,7 +20,7 @@ object FilterCalculatorSpec {
 class FilterCalculatorSpec extends LogoRRRSpec {
 
   def applySingleFilter(logEntry: String, pattern: String): Seq[Seq[LinePart]] = {
-    FilterCalculator(LogEntry(0, logEntry, None, None), Seq(MutFilter(ContainsPredicate(pattern), Color.RED, active = true))).filteredParts
+    FilterCalculator(LogEntry(0, logEntry, None, None), Seq(views.MutFilter(ContainsPredicate(pattern), Color.RED, active = true))).filteredParts
   }
 
   "calcParts" should {
@@ -81,9 +80,9 @@ class FilterCalculatorSpec extends LogoRRRSpec {
 
   "filteredParts" should {
     val filters = Seq(
-      MutFilter(ContainsPredicate("a"), Color.RED, active = true)
-      , MutFilter(ContainsPredicate("b"), Color.BLUE, active = true)
-      , MutFilter(ContainsPredicate("t"), Color.YELLOW, active = true)
+      views.MutFilter(ContainsPredicate("a"), Color.RED, active = true)
+      , views.MutFilter(ContainsPredicate("b"), Color.BLUE, active = true)
+      , views.MutFilter(ContainsPredicate("t"), Color.YELLOW, active = true)
     )
     val entry = LogEntry(0, "test a b c", None, None)
     val calculator = FilterCalculator(entry, filters)

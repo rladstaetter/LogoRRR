@@ -1,7 +1,7 @@
 package app.logorrr
 
-import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.FilterUtil
+import app.logorrr.views.MutFilter
 import org.scalacheck.Gen
 
 object TestUtil {

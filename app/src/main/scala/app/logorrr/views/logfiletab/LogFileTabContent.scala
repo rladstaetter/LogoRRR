@@ -1,9 +1,9 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.jfxbfr.{ChunkListView, MutFilter}
+import app.logorrr.jfxbfr.ChunkListView
 import app.logorrr.model.LogEntry
-import app.logorrr.views.Filter
+import app.logorrr.views.{Filter, MutFilter}
 import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import app.logorrr.views.search.{FiltersToolBar, OpsToolBar}

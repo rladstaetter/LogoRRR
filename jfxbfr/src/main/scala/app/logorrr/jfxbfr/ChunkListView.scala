@@ -52,12 +52,12 @@ object ChunkListView {
 class ChunkListView(val logEntries: ObservableList[LogEntry]
                     , val selectedLineNumberProperty: SimpleIntegerProperty
                     , val blockSizeProperty: SimpleIntegerProperty
-                    , val filtersProperty: ObservableList[_ <: MutFilter[_]]
+                    , val filtersProperty: ObservableList[_ <: ColorMatcher]
                     , val dividersProperty: SimpleDoubleProperty
                     , val firstVisibleTextCellIndexProperty: SimpleIntegerProperty
                     , val lastVisibleTextCellIndexProperty: SimpleIntegerProperty
                     , selectInTextView: LogEntry => Unit)
-  extends ListView[Chunk]
+  extends ListView[Chunk[LogEntry]]
     with CanLog {
 
   /**
@@ -122,14 +122,21 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
   def init(): Unit = {
     getStylesheets.add(getClass.getResource("/app/logorrr/ChunkListView.css").toExternalForm)
 
-    setCellFactory((lv: ListView[Chunk]) =>
-      new ChunkListCell(selectedLineNumberProperty
-        , lv.widthProperty()
+    setCellFactory((lv: ListView[Chunk[LogEntry]]) => {
+
+      val logEntryVizor = LogEntryVizor(selectedLineNumberProperty, widthProperty, blockSizeProperty, firstVisibleTextCellIndexProperty, lastVisibleTextCellIndexProperty)
+      val logEntryChozzer = LogEntryChozzer(filtersProperty)
+      val logEntrySelector = LogEntrySelector(selectedLineNumberProperty)
+
+      new ChunkListCell(
+        lv.widthProperty()
         , blockSizeProperty
-        , filtersProperty
-        , firstVisibleTextCellIndexProperty
-        , lastVisibleTextCellIndexProperty
-        , selectInTextView)
+        , selectInTextView
+        , logEntryVizor
+        , logEntryChozzer
+        , logEntrySelector)
+    }
+
     )
 
     addListeners()
@@ -150,7 +157,7 @@ class ChunkListView(val logEntries: ObservableList[LogEntry]
             getSelectionModel.select(chunk)
             val relativeIndex = getItems.indexOf(chunk)
             getSelectionModel.select(relativeIndex)
-            JfxUtils.scrollTo[Chunk](this, chunk.height, relativeIndex)
+            JfxUtils.scrollTo[Chunk[LogEntry]](this, chunk.height, relativeIndex)
           case None =>
         }
       }

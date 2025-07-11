@@ -3,12 +3,11 @@ package app.logorrr.views.logfiletab
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
-import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.logfiletab.actions._
-import app.logorrr.views.{LogoRRRAccelerators, UiNode, UiNodeFileIdAware}
+import app.logorrr.views.{LogoRRRAccelerators, MutFilter, UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.event.Event

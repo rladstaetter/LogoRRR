@@ -1,8 +1,8 @@
 package app.logorrr.views.search
 
 import app.logorrr.io.FileId
-import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.LogEntry
+import app.logorrr.views.MutFilter
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.block.HasBlockSizeProperty
 import app.logorrr.views.ops.{ClearLogButton, CopyLogButton, DecreaseBlockSizeButton, IncreaseBlockSizeButton}

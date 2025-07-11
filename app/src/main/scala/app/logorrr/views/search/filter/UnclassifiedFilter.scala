@@ -1,6 +1,6 @@
 package app.logorrr.views.search.filter
 
-import app.logorrr.jfxbfr.MutFilter
+import app.logorrr.views.MutFilter
 import app.logorrr.views.search.predicates.NoMatchPredicate
 import javafx.scene.paint.Color
 

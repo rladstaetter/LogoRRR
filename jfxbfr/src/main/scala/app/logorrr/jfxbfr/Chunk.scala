@@ -47,7 +47,7 @@ object Chunk {
                , blockSize: Int
                , listViewWidth: Double
                , listViewHeight: Double
-               , nrChunksPerPage: Int): Seq[Chunk] = {
+               , nrChunksPerPage: Int): Seq[Chunk[LogEntry]] = {
 
     if (
       entries.isEmpty ||
@@ -62,7 +62,7 @@ object Chunk {
 
       val entriesSize = entries.size()
       var curIndex = 0
-      val lb = new ListBuffer[Chunk]
+      val lb = new ListBuffer[Chunk[LogEntry]]
 
       while (curIndex < entriesSize) {
         val end = if (curIndex + nrElements < entriesSize) {
@@ -92,8 +92,8 @@ object Chunk {
  * @param cols    number of columns in this Chunk (needed for mouse over/mouse press events)
  * @param height  height of Chunk
  */
-class Chunk(val number: Int
-            , val entries: java.util.List[LogEntry]
+class Chunk[E](val number: Int
+            , val entries: java.util.List[E]
             , val cols: Int
             , val height: Int) {
   require(!entries.isEmpty, "entries was empty")

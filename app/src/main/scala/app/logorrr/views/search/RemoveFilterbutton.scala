@@ -1,10 +1,9 @@
 package app.logorrr.views.search
 
 import app.logorrr.io.FileId
-import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.util.HashUtil
 import app.logorrr.views.ops.RectButton
-import app.logorrr.views.{UiNode, UiNodeFilterAware}
+import app.logorrr.views.{MutFilter, UiNode, UiNodeFilterAware}
 
 object RemoveFilterbutton extends UiNodeFilterAware {
 

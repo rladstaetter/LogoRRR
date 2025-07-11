@@ -1,5 +1,6 @@
-package app.logorrr.jfxbfr
+package app.logorrr.views
 
+import app.logorrr.jfxbfr.{ColorMatcher, DescriptivePredicate}
 import javafx.beans.property.{BooleanProperty, SimpleBooleanProperty, SimpleObjectProperty}
 import javafx.scene.paint.Color
 
@@ -15,7 +16,9 @@ object MutFilter {
 
 }
 
-class MutFilter[A] {
+
+
+class MutFilter[A] extends ColorMatcher {
 
   def init(predicate: DescriptivePredicate
            , color: Color

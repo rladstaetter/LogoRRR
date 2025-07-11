@@ -2,10 +2,10 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.BlockSettings
 import app.logorrr.io.FileId
-import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.{LogEntry, LogFileSettings, TimestampSettings}
 import app.logorrr.util.LogoRRRFonts
-import app.logorrr.views.Filter
+import app.logorrr.views
+import app.logorrr.views.{Filter, MutFilter}
 import app.logorrr.views.search.FilterButton
 import app.logorrr.views.search.filter.AnyFilter
 import app.logorrr.views.search.predicates.ContainsPredicate
@@ -27,7 +27,7 @@ object MutLogFileSettings {
     s.setBlockSettings(logFileSettings.blockSettings)
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
     s.setDividerPosition(logFileSettings.dividerPosition)
-    s.setFilters(logFileSettings.filters.map(f => MutFilter[String](ContainsPredicate(f.pattern), f.color, f.active)))
+    s.setFilters(logFileSettings.filters.map(f => views.MutFilter[String](ContainsPredicate(f.pattern), f.color, f.active)))
     s.someTimestampSettings.set(logFileSettings.someTimestampSettings)
     logFileSettings.someTimestampSettings match {
       case Some(sts) => s.setDateTimeFormatter(sts.dateTimeFormatter)

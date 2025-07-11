@@ -1,7 +1,7 @@
 package app.logorrr.views.text
 
-import app.logorrr.jfxbfr.MutFilter
 import app.logorrr.model.LogEntry
+import app.logorrr.views.MutFilter
 import javafx.beans.binding.StringBinding
 import javafx.beans.property.IntegerProperty
 import javafx.geometry.Pos

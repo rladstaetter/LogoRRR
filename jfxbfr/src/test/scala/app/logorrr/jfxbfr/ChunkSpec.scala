@@ -23,7 +23,7 @@ class ChunkSpec extends AnyWordSpec {
   def mkTestChunks(nrEntries: Int
                    , width: Double
                    , blocksize: Int
-                   , listViewHeight: Double): Seq[Chunk] = {
+                   , listViewHeight: Double): Seq[Chunk[LogEntry]] = {
     Chunk.mkChunks(ChunkSpec.mkTestLogEntries(nrEntries), blocksize, width, listViewHeight, Chunk.ChunksPerVisibleViewPort)
   }
 
@@ -44,7 +44,7 @@ class ChunkSpec extends AnyWordSpec {
     }
     // default chunk size is 4
     "test default chunk size" in {
-      val chunks: Seq[Chunk] = mkTestChunks(1000, 100 + ChunkImage.getScrollBarWidth, 10, 1000)
+      val chunks: Seq[Chunk[LogEntry]] = mkTestChunks(1000, 100 + ChunkImage.getScrollBarWidth, 10, 1000)
       assert(chunks.size == Chunk.ChunksPerVisibleViewPort)
       assert(chunks.head.entries.size == 176)
       assert(chunks(1).entries.size == 176)

@@ -1,6 +1,7 @@
 package app.logorrr.model
 
-import app.logorrr.jfxbfr.MutFilter
+import app.logorrr.views
+import app.logorrr.views.MutFilter
 import app.logorrr.views.search.predicates.ContainsPredicate
 import javafx.scene.paint.Color
 
@@ -13,7 +14,7 @@ object FilterUtil {
     , "WARNING" -> Color.ORANGE
     , "SEVERE" -> Color.RED
   ).map {
-    case (pattern, color) => MutFilter[String](ContainsPredicate(pattern), color, active = true)
+    case (pattern, color) => views.MutFilter[String](ContainsPredicate(pattern), color, active = true)
   }.toSeq
 
 }
