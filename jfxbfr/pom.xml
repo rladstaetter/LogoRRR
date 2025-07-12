@@ -10,7 +10,7 @@
     </parent>
     <artifactId>jfxbfr</artifactId>
     <name>app.logorrr.jfxbfr</name>
-    <description>Library to for a fast painting mechanism</description>
+    <description>Module for visualising elements in a listview</description>
     <inceptionYear>2025</inceptionYear>
 
     <dependencies>
