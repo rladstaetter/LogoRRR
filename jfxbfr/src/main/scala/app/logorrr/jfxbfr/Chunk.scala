@@ -2,19 +2,27 @@ package app.logorrr.jfxbfr
 
 import java.util
 import scala.collection.mutable.ListBuffer
+import scala.math.BigDecimal.RoundingMode
 
 object Chunk {
 
+  val MaxHeight = 4096
+
   /** defines how many list cells should be rendered per visible ListView space */
   val ChunksPerVisibleViewPort = 6
+
+  private def roundDown(doubleNumber: Double): Int = {
+    BigDecimal.double2bigDecimal(doubleNumber).setScale(0, RoundingMode.DOWN).intValue
+  }
 
   def calcDimensions(blockSize: Int
                      , listViewWidth: Double
                      , listViewHeight: Double
                      , chunksPerPage: Int): (Int, Int) = {
 
+
     // to not get into division by zero territory
-    val cols: Int = if (listViewWidth < blockSize) 1 else MathUtil.roundDown(listViewWidth / blockSize)
+    val cols: Int = if (listViewWidth < blockSize) 1 else roundDown(listViewWidth / blockSize)
 
     // per default, use 4 cells per visible page, align height with blocksize such that
     // we don't get artifacts. Further, make sure that the calculated height does not exceed
@@ -22,8 +30,8 @@ object Chunk {
 
     // DO NOT REMOVE since the first division throws away the remainder and the multiplication
     // yields the best approximation of MaxHeight.
-    val maxHeight = (ChunkImage.MaxHeight / blockSize) * blockSize
-    val heightCandidate = MathUtil.roundDown((listViewHeight / chunksPerPage) / blockSize) * blockSize
+    val maxHeight = (MaxHeight / blockSize) * blockSize
+    val heightCandidate = roundDown((listViewHeight / chunksPerPage) / blockSize) * blockSize
     // height is constrained by MaxHeight (which is 4096 currently in my experience) and BlockImage.DefaultBlocksPerPage x blocksize
     // as a lower bound, otherwise we'll get later problems
     val h2 = Math.max(heightCandidate, chunksPerPage * blockSize)

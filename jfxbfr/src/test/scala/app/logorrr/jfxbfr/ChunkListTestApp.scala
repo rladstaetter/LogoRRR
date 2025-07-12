@@ -1,7 +1,8 @@
 package app.logorrr.jfxbfr
 
+import app.logorrr.jfxbfr.color.ColorChozzer
 import javafx.application.Application
-import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty, SimpleListProperty}
+import javafx.beans.property.{SimpleIntegerProperty, SimpleListProperty}
 import javafx.collections.FXCollections
 import javafx.geometry.Orientation
 import javafx.scene.Scene
@@ -33,21 +34,15 @@ object ChunkListTestApp {
 class CLTElem
 
 class ChunkListTestApp extends Application with CanLog {
-  /*
-    private def mkEntries(path: Path): java.util.List[LogEntry] = {
-      util.Arrays.asList((for ((l, i) <- IoManager.fromPathUsingSecurityBookmarks(path).zipWithIndex) yield LogEntry(i, l, None)): _*)
-    }
-  */
+
   def start(stage: Stage): Unit = {
 
     val width = 1000
     val height = 1000
     val blockSize = 10
-    val dividerPosition = 0.5
     val selectedLineNumber = 0
 
     val entries = ChunkListTestApp.mkCLTElems(1000)
-    val filtersProperty = new SimpleListProperty[ColorMatcher](FXCollections.observableArrayList())
     val entriesProperty = new SimpleListProperty[CLTElem](FXCollections.observableArrayList(entries: _*))
 
     val bp = new BorderPane()
@@ -74,12 +69,12 @@ class ChunkListTestApp extends Application with CanLog {
     val clv = new ChunkListView[CLTElem](entriesProperty
       , new SimpleIntegerProperty(selectedLineNumber)
       , new SimpleIntegerProperty(blockSize)
-      , filtersProperty
-      , new SimpleDoubleProperty(dividerPosition)
       , new SimpleIntegerProperty()
       , new SimpleIntegerProperty()
       , _ => ()
-      , vizor, colorChozzer, elemSelector)
+      , vizor
+      , colorChozzer
+      , elemSelector)
     clv.init()
     val sp = new SplitPane(clv, new BorderPane(new Label("Test")))
 
@@ -99,7 +94,7 @@ class ChunkListTestApp extends Application with CanLog {
     nrElemsChoiceBox.setItems(elems)
     nrElemsChoiceBox.getSelectionModel.selectedIndexProperty().addListener(JfxUtils.onNew[Number](n => {
       val nrElems = elems.get(n.intValue())
-      clv.logEntries.setAll(ChunkListTestApp.mkCLTElems(nrElems) : _*)
+      clv.logEntries.setAll(ChunkListTestApp.mkCLTElems(nrElems): _*)
     }))
 
     bp.setTop(new ToolBar(nrBlocksLabel, nrElemsChoiceBox, slider))

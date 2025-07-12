@@ -1,7 +1,5 @@
 package app.logorrr.views.search.predicates
 
-import app.logorrr.jfxbfr.DescriptivePredicate
-
 import java.util.regex.Pattern
 
 case class RegexPredicate(pattern: String) extends DescriptivePredicate(pattern) {

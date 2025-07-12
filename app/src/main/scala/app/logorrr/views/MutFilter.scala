@@ -1,6 +1,7 @@
 package app.logorrr.views
 
-import app.logorrr.jfxbfr.{ColorMatcher, DescriptivePredicate}
+import app.logorrr.jfxbfr.color.ColorMatcher
+import app.logorrr.views.search.predicates.DescriptivePredicate
 import javafx.beans.property.{BooleanProperty, SimpleBooleanProperty, SimpleObjectProperty}
 import javafx.scene.paint.Color
 

@@ -1,6 +1,6 @@
 package app.logorrr.model
 
-import app.logorrr.jfxbfr.{ColorChozzer, ColorMatcher, ColorUtil}
+import app.logorrr.jfxbfr.color.{ColorChozzer, ColorMatcher, ColorUtil}
 import javafx.collections.ObservableList
 import javafx.scene.paint.Color
 

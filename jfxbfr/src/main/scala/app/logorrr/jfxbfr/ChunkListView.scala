@@ -1,6 +1,7 @@
 package app.logorrr.jfxbfr
 
-import javafx.beans.property.SimpleIntegerProperty
+import app.logorrr.jfxbfr.color.ColorChozzer
+import javafx.beans.property.{ReadOnlyDoubleProperty, ReadOnlyIntegerProperty, SimpleIntegerProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.geometry.Orientation
@@ -15,6 +16,13 @@ import scala.util.{Failure, Success, Try}
 
 object ChunkListView {
 
+  val DefaultScrollBarWidth = 18
+
+  def calcListViewWidth(widthProperty: ReadOnlyDoubleProperty, scrollbarWidthProperty: ReadOnlyIntegerProperty): Double = {
+    if (widthProperty.get() - scrollbarWidthProperty.get() >= 0) widthProperty.get() - scrollbarWidthProperty.get() else widthProperty.get()
+  }
+
+
   def lookupVirtualFlow(skin: Skin[_]): Option[VirtualFlow[ChunkListCell[_]]] = {
     Option(skin match {
       case skinBase: SkinBase[_] =>
@@ -28,9 +36,6 @@ object ChunkListView {
     Option(flow.getChildrenUnmodifiable.toArray.collectFirst { case sb: ScrollBar if sb.getOrientation == orientation => sb }.orNull)
   }
 
-  def calcListViewWidth(listViewWidth: Double): Double = {
-    if (listViewWidth - ChunkImage.getScrollBarWidth >= 0) listViewWidth - ChunkImage.getScrollBarWidth else listViewWidth
-  }
 
 }
 
@@ -58,16 +63,23 @@ class ChunkListView[A](val logEntries: ObservableList[A]
   extends ListView[Chunk[A]]
     with CanLog {
 
+  // width of Scrollbars
+  val scrollBarWidthProperty = new SimpleIntegerProperty(ChunkListView.DefaultScrollBarWidth)
+
+  def setScrollBarWidth(width: Int): Unit = scrollBarWidthProperty.set(width)
+
+
+
   /**
    * What should happen if the scrollbar appears/vanishes
    */
   private val scrollBarVisibilityListener = new ChangeListener[lang.Boolean] {
     override def changed(observableValue: ObservableValue[_ <: lang.Boolean], t: lang.Boolean, isVisible: lang.Boolean): Unit = {
       if (isVisible) {
-        ChunkImage.setScrollBarWidth(ChunkImage.DefaultScrollBarWidth)
+        setScrollBarWidth(ChunkListView.DefaultScrollBarWidth)
         recalculateAndUpdateItems("scrollbar visible")
       } else {
-        ChunkImage.setScrollBarWidth(0)
+        setScrollBarWidth(0)
         recalculateAndUpdateItems("scrollbar invisible")
       }
     }
@@ -118,11 +130,12 @@ class ChunkListView[A](val logEntries: ObservableList[A]
 
 
   def init(): Unit = {
-    getStylesheets.add(getClass.getResource("/app/logorrr/ChunkListView.css").toExternalForm)
+    getStylesheets.add(getClass.getResource("/app/logorrr/jfxbfr/ChunkListView.css").toExternalForm)
 
     setCellFactory((lv: ListView[Chunk[A]]) => {
       new ChunkListCell(
         lv.widthProperty()
+        , scrollBarWidthProperty
         , blockSizeProperty
         , selectInTextView
         , logEntryVizor
@@ -203,7 +216,7 @@ class ChunkListView[A](val logEntries: ObservableList[A]
     if (widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0) {
       logTrace(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
       Try {
-        val width = ChunkListView.calcListViewWidth(widthProperty.get())
+        val width = ChunkListView.calcListViewWidth(widthProperty, scrollBarWidthProperty)
         val chunks = Chunk.mkChunks(logEntries, blockSizeProperty.get(), width, heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
         setItems(FXCollections.observableArrayList(chunks: _*))
       } match {

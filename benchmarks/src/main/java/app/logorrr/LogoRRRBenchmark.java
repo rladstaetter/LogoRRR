@@ -1,8 +1,8 @@
 package app.logorrr;
 
-import app.logorrr.jfxbfr.BlockColor;
-import app.logorrr.jfxbfr.ColorUtil;
+import app.logorrr.jfxbfr.color.BlockColor;
 import app.logorrr.jfxbfr.ChunkListCell$;
+import app.logorrr.jfxbfr.color.ColorUtil;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.paint.Color;

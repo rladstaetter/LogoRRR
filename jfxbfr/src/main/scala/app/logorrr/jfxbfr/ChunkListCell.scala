@@ -1,5 +1,6 @@
 package app.logorrr.jfxbfr
 
+import app.logorrr.jfxbfr.color.{BlockColor, ColorChozzer, ColorUtil, LColors}
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.event.EventHandler
 import javafx.geometry.Rectangle2D
@@ -17,6 +18,12 @@ import scala.util.Try
  * Paint directly into a byte array for performant image manipulations.
  */
 object ChunkListCell extends CanLog {
+
+  // assuming we have a grid of rectangles, and x and y give the coordinate of a mouse click
+  // this function should return the correct index for the surrounding rectangle
+  def indexOf(x: Int, y: Int, blockWidth: Int, blockViewWidth: Int): Int = {
+    y / blockWidth * (blockViewWidth / blockWidth) + x / blockWidth
+  }
 
   def paintBlock(pixelBuffer: PixelBuffer[IntBuffer]
                  , index: Int
@@ -147,21 +154,22 @@ object ChunkListCell extends CanLog {
 }
 
 
-
 /**
  * A listcell which can contain one or more log entries.
  *
  * To see how those cells are populated, see [[Chunk.mkChunks]]. [[ChunkImage]] is responsible to draw all Chunks
  */
 class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
-                    , blockSizeProperty: SimpleIntegerProperty
-                    , scrollTo: A => Unit
-                    , logEntryVizor: Vizor[A]
-                    , logEntryChozzer: ColorChozzer[A]
-                    , elementSelector: ElementSelector[A]
-                   ) extends ListCell[Chunk[A]] with CanLog {
+                       , scrollbarWidthProperty: SimpleIntegerProperty
+                       , blockSizeProperty: SimpleIntegerProperty
+                       , scrollTo: A => Unit
+                       , logEntryVizor: Vizor[A]
+                       , logEntryChozzer: ColorChozzer[A]
+                       , elementSelector: ElementSelector[A]
+                      ) extends ListCell[Chunk[A]] with CanLog {
 
   val view = new ImageView()
+
 
   /**
    * @param maxOccupiedWidth max space in x direction where blocks will be shown
@@ -170,7 +178,7 @@ class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
    */
   private def calcIndex(maxOccupiedWidth: Double, me: MouseEvent): Int = {
     if (me.getX <= maxOccupiedWidth) {
-      ChunkImage.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, ChunkListView.calcListViewWidth(widthProperty.get()).toInt)
+      ChunkListCell.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, ChunkListView.calcListViewWidth(widthProperty, scrollbarWidthProperty).toInt)
     } else -1
   }
 
@@ -237,8 +245,8 @@ class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
     if (empty || Option(chunk).isEmpty || blockSizeProperty.get() <= 0 || widthProperty.get() <= 0) {
       setGraphic(null)
     } else {
-      val width = ChunkListView.calcListViewWidth(widthProperty.get())
-      val shape = RectangularShape(width, chunk.height)
+      val width = ChunkListView.calcListViewWidth(widthProperty, scrollbarWidthProperty)
+      val shape = ChunkShape(width, chunk.height)
 
       val pbf = new PixelBuffer[IntBuffer](width.toInt
         , chunk.height
@@ -252,7 +260,7 @@ class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
   }
 
   def update(pixelBuffer: PixelBuffer[IntBuffer]
-             , shape: RectangularShape
+             , shape: ChunkShape
              , entries: java.util.List[A]
              , blockSize: Int
             ): Unit = {
@@ -268,11 +276,11 @@ class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
 
   private def getEntryAt(chunk: Chunk[A], index: Int): Option[A] = Try(chunk.entries.get(index)).toOption
 
-  private def paintPixels(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: RectangularShape): Unit = pixelBuffer.updateBuffer(updatePixels(entries, shape))
+  private def paintPixels(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: ChunkShape): Unit = pixelBuffer.updateBuffer(updatePixels(entries, shape))
 
-  private def paintRects(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: RectangularShape, blockSize: Int): Unit = pixelBuffer.updateBuffer(updateRects(entries, shape, blockSize))
+  private def paintRects(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: ChunkShape, blockSize: Int): Unit = pixelBuffer.updateBuffer(updateRects(entries, shape, blockSize))
 
-  def updateRects(entries: java.util.List[A], shape: RectangularShape, blockSize: Int)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
+  def updateRects(entries: java.util.List[A], shape: ChunkShape, blockSize: Int)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
     var i = 0
     if (!entries.isEmpty) {
       entries.forEach(e => {

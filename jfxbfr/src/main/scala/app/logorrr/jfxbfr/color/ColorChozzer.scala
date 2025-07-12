@@ -1,4 +1,4 @@
-package app.logorrr.jfxbfr
+package app.logorrr.jfxbfr.color
 
 import javafx.scene.paint.Color
 

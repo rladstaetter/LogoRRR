@@ -1,6 +1,6 @@
 package app.logorrr.model
 
-import app.logorrr.jfxbfr.{Chunk, ChunkImage}
+import app.logorrr.jfxbfr.{Chunk, ChunkListView}
 import org.scalatest.wordspec.AnyWordSpec
 
 object ChunkSpec {
@@ -44,7 +44,7 @@ class ChunkSpec extends AnyWordSpec {
     }
     // default chunk size is 4
     "test default chunk size" in {
-      val chunks: Seq[Chunk[LogEntry]] = mkTestChunks(1000, 100 + ChunkImage.getScrollBarWidth, 10, 1000)
+      val chunks: Seq[Chunk[LogEntry]] = mkTestChunks(1000, 100 + ChunkListView.DefaultScrollBarWidth, 10, 1000)
       assert(chunks.size == Chunk.ChunksPerVisibleViewPort)
       assert(chunks.head.entries.size == 176)
       assert(chunks(1).entries.size == 176)
