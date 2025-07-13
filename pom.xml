@@ -127,7 +127,8 @@
     <modules>
         <module>build</module>
         <module>env</module>
-        <module>jfxbfr</module>
+        <module>clv</module>
+        <module>clv-app</module>
         <module>app</module>
         <module>dist</module>
         <module>docs</module>
@@ -234,16 +235,13 @@
             </dependency>
             <dependency>
                 <groupId>app.logorrr</groupId>
-                <artifactId>jfxbfr</artifactId>
+                <artifactId>clv</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>app.logorrr</groupId>
-                <artifactId>jfxbfr</artifactId>
+                <artifactId>clv-app</artifactId>
                 <version>${project.version}</version>
-                <classifier>tests</classifier>
-                <scope>test</scope>
-                <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>app.logorrr.native</groupId>

@@ -1,6 +1,6 @@
 package app.logorrr.model
 
-import app.logorrr.jfxbfr.{Chunk, ChunkListView}
+import app.logorrr.clv.{Chunk, ChunkListView}
 import org.scalatest.wordspec.AnyWordSpec
 
 object ChunkSpec {

@@ -3,7 +3,7 @@ package app.logorrr.views.settings.timestamp
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
-import app.logorrr.jfxbfr.ChunkListView
+import app.logorrr.clv.ChunkListView
 import app.logorrr.model.LogEntry
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}

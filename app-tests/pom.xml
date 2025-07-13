@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>app.logorrr</groupId>
-            <artifactId>jfxbfr</artifactId>
+            <artifactId>clv</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

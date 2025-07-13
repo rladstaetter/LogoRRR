@@ -1,7 +1,7 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.jfxbfr.ChunkListView
+import app.logorrr.clv.ChunkListView
 import app.logorrr.model.{LogEntry, LogEntryChozzer, LogEntrySelector, LogEntryVizor}
 import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.ops.time.TimeOpsToolBar

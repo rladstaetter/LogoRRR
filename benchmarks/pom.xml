@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>app.logorrr</groupId>
-            <artifactId>jfxbfr</artifactId>
+            <artifactId>clv</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openjdk.jmh</groupId>

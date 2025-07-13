@@ -1,6 +1,6 @@
 package app.logorrr.model
 
-import app.logorrr.jfxbfr.Vizor
+import app.logorrr.clv.Vizor
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 
 case class LogEntryVizor(selectedLineNumberProperty: SimpleIntegerProperty

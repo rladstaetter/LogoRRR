@@ -63,17 +63,11 @@
         -->
         <dependency>
             <groupId>app.logorrr</groupId>
-            <artifactId>jfxbfr</artifactId>
+            <artifactId>clv</artifactId>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>jfxbfr</artifactId>
-            <classifier>tests</classifier>
-            <type>test-jar</type>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
