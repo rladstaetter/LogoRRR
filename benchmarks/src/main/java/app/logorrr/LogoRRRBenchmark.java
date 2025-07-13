@@ -20,12 +20,11 @@ import java.nio.IntBuffer;
 //@Fork(1)
 public class LogoRRRBenchmark {
 
-    int count = 10 * 10;
-    int width = 100;
-    int blocksize = 5;
-    int all = blocksize * blocksize * count;
-    int height = all / blocksize;
-    IntBuffer myArray = IntBuffer.wrap(new int[all]);
+    int count = 100;
+    int width = 1000;
+    int height = 1000;
+    int blocksize = 10;
+    IntBuffer myArray = IntBuffer.wrap(new int[width*height]);
     int c = ColorUtil.toARGB(Color.rgb(255, 200, 0));
 
     int vantablack = 0;
