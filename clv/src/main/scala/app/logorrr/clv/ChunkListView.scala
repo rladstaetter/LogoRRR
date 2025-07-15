@@ -2,6 +2,7 @@ package app.logorrr.clv
 
 import app.logorrr.clv.color.ColorChozzer
 import javafx.application.Platform
+import javafx.beans.binding.{Bindings, BooleanBinding}
 import javafx.beans.property.{ReadOnlyDoubleProperty, ReadOnlyIntegerProperty, SimpleIntegerProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.{FXCollections, ObservableList}
@@ -21,7 +22,6 @@ object ChunkListView {
   def calcListViewWidth(widthProperty: ReadOnlyDoubleProperty, scrollbarWidthProperty: ReadOnlyIntegerProperty): Double = {
     if (widthProperty.get() - scrollbarWidthProperty.get() >= 0) widthProperty.get() - scrollbarWidthProperty.get() else widthProperty.get()
   }
-
 
   def lookupVirtualFlow(skin: Skin[_]): Option[VirtualFlow[ChunkListCell[_]]] = {
     Option(skin match {
@@ -103,32 +103,15 @@ class ChunkListView[A](val elements: ObservableList[A]
   private val elementInvalidationListener = JfxUtils.mkInvalidationListener(_ => recalculateAndUpdateItems("invalidation"))
 
   /** if user selects a new active element, recalculate and implicitly repaint */
-  private val selectedRp = mkRecalculateAndUpdateItemListener("selected")
+  //private val selectedRp = mkRecalculateAndUpdateItemListener("selected")
+  private val anyRp: ChangeListener[java.lang.Boolean] = mkAnyUpdateListener("any")
 
-  private val firstVisibleRp = mkRecalculateAndUpdateItemListener("firstVisibleRp")
-
-  private val lastVisibleRp = mkRecalculateAndUpdateItemListener("lastVisibleRp")
-
-  /** if blocksize changes, recalculate */
-  private val blockSizeRp = mkRecalculateAndUpdateItemListener("blockSize")
-
-  /** if width changes, recalculate */
-  private val widthRp = mkRecalculateAndUpdateItemListener("width")
-
-  /** if height changes, recalculate */
-  private val heightRp = mkRecalculateAndUpdateItemListener("height")
-
-  //  private val changingScrollbarVisibilityRp = mkRecalculateAndUpdateItemListener("scrollbar")
-
+  /** performance optimisation to debounce calls to the recalculation / repainting operation */
   var recalculateScheduled = false
 
-  // context variable just here for debugging
-  private def mkRecalculateAndUpdateItemListener(ctx: String): ChangeListener[Number] = (_: ObservableValue[_ <: Number], oldValue: Number, newValue: Number) => {
-    if (oldValue != newValue && newValue.doubleValue() != 0.0) {
-      recalculateAndUpdateItems(ctx)
-    }
+  private def mkAnyUpdateListener(ctx: String): ChangeListener[java.lang.Boolean] = (_: ObservableValue[_ <: java.lang.Boolean], _: java.lang.Boolean, _: java.lang.Boolean) => {
+    recalculateAndUpdateItems(ctx)
   }
-
 
   def init(): Unit = {
     getStylesheets.add(getClass.getResource("/app/logorrr/clv/ChunkListView.css").toExternalForm)
@@ -178,31 +161,31 @@ class ChunkListView[A](val elements: ObservableList[A]
 
   def removeInvalidationListener(): Unit = elements.removeListener(elementInvalidationListener)
 
-  // val anyPropProperty: DoubleBinding = Bindings.createDoubleBinding(() => 0.0,
-  //  selectedLineNumberProperty, firstVisibleTextCellIndexProperty, lastVisibleTextCellIndexProperty, blockSizeProperty, widthProperty, heightProperty())
+  /** toggle needed such that change listener fires */
+  var toggle = false
+
+  // if any of the given properties change, recalculate this binding
+  val anyPropProperty: BooleanBinding = Bindings.createBooleanBinding(() => {
+    toggle = !toggle
+    toggle
+  },
+    selectedLineNumberProperty
+    , firstVisibleTextCellIndexProperty
+    , lastVisibleTextCellIndexProperty
+    , blockSizeProperty
+    , widthProperty
+    , heightProperty)
 
   private def addListeners(): Unit = {
     addInvalidationListener()
-    //    anyPropProperty.addListener(selectedRp)
-    selectedLineNumberProperty.addListener(selectedRp)
-    firstVisibleTextCellIndexProperty.addListener(firstVisibleRp)
-    lastVisibleTextCellIndexProperty.addListener(lastVisibleRp)
-    widthProperty().addListener(widthRp)
-    heightProperty().addListener(heightRp)
-    blockSizeProperty.addListener(blockSizeRp)
+    anyPropProperty.addListener(anyRp)
     skinProperty().addListener(chunkListViewSkinListener)
   }
 
 
   def removeListeners(): Unit = {
     removeInvalidationListener()
-    // anyPropProperty.removeListener(selectedRp)
-    selectedLineNumberProperty.removeListener(selectedRp)
-    firstVisibleTextCellIndexProperty.removeListener(firstVisibleRp)
-    lastVisibleTextCellIndexProperty.removeListener(lastVisibleRp)
-    widthProperty().removeListener(widthRp)
-    heightProperty().removeListener(heightRp)
-    blockSizeProperty.removeListener(blockSizeRp)
+    anyPropProperty.removeListener(anyRp)
 
     for {skin <- Option(getSkin)
          flow <- ChunkListView.lookupVirtualFlow(skin)
@@ -221,14 +204,14 @@ class ChunkListView[A](val elements: ObservableList[A]
     if (!recalculateScheduled && widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0) {
       recalculateScheduled = true
       Platform.runLater(() => {
-        logTrace(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
+//        println(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
         val width = ChunkListView.calcListViewWidth(widthProperty, scrollBarWidthProperty)
         val chunks = Chunk.mkChunks(elements, blockSizeProperty.get(), width, heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
         setItems(FXCollections.observableArrayList(chunks: _*))
         recalculateScheduled = false
       })
     } else {
-     logTrace(s"NOT recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
+//       println(s"NOT recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
     }
   }
 }
