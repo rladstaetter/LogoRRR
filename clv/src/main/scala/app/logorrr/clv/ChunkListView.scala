@@ -204,14 +204,15 @@ class ChunkListView[A](val elements: ObservableList[A]
     if (!recalculateScheduled && widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0) {
       recalculateScheduled = true
       Platform.runLater(() => {
-//        println(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
+        println(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
+//        println(s"elems.size: ${elements.size()}")
         val width = ChunkListView.calcListViewWidth(widthProperty, scrollBarWidthProperty)
         val chunks = Chunk.mkChunks(elements, blockSizeProperty.get(), width, heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
         setItems(FXCollections.observableArrayList(chunks: _*))
         recalculateScheduled = false
       })
     } else {
-//       println(s"NOT recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
+      println(s"NOT recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
     }
   }
 }
