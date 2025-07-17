@@ -14,8 +14,7 @@ import javafx.stage.Stage
 import net.ladstatt.app.{AppId, AppMeta}
 import net.ladstatt.util.log.CanLog
 
-import scala.jdk.CollectionConverters.CollectionHasAsScala
-
+import scala.jdk.CollectionConverters._
 
 
 /**
@@ -23,7 +22,7 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
  */
 object ClvApp {
 
-  def mkCLTElems(nr: Int): List[ClvElem] = List.fill(nr)(new ClvElem)
+  def mkCLTElems(nr: Int): java.util.List[ClvElem] = List.fill(nr)(new ClvElem).asJava
 
   def main(args: Array[String]): Unit = {
     val appMeta = net.ladstatt.app.AppMeta(AppId("ChunkListTestApp", "chunklisttestapp", "chunklisttest.app"), AppMeta.LogFormat)
@@ -39,8 +38,9 @@ class ClvElem
 
 class ClvApp extends Application with CanLog {
 
-  val elems = FXCollections.observableArrayList(1, 10, 100, 1000, 10000, 100000, 1000000, 10000000)
+  val elems = FXCollections.observableArrayList(0,1, 10, 100, 1000, 10000, 100000, 1000000, 10000000)
   val DefaultElemCount = elems.asScala.last
+  val elements = FXCollections.observableArrayList(ClvApp.mkCLTElems(DefaultElemCount))
 
   def start(stage: Stage): Unit = {
 
@@ -49,8 +49,6 @@ class ClvApp extends Application with CanLog {
     val blockSize = 10
     val selectedLineNumber = 0
 
-    val entries = ClvApp.mkCLTElems(DefaultElemCount)
-    val entriesProperty = FXCollections.observableArrayList(entries: _*)
 
     val bp = new BorderPane()
 
@@ -73,7 +71,7 @@ class ClvApp extends Application with CanLog {
     val colorChozzer = new ColorChozzer[ClvElem] {
       override def calc(a: ClvElem): Color = Color.GREY
     }
-    val clv = new ChunkListView[ClvElem](entriesProperty
+    val clv = new ChunkListView[ClvElem](elements
       , new SimpleIntegerProperty(selectedLineNumber)
       , new SimpleIntegerProperty(blockSize)
       , new SimpleIntegerProperty()
@@ -101,8 +99,7 @@ class ClvApp extends Application with CanLog {
     nrElemsChoiceBox.setValue(DefaultElemCount)
     nrElemsChoiceBox.getSelectionModel.selectedIndexProperty().addListener(JfxUtils.onNew[Number](n => {
       val nrElems = elems.get(n.intValue())
-      clv.elements.clear()
-      clv.elements.setAll(ClvApp.mkCLTElems(nrElems): _*)
+      clv.elements.setAll(ClvApp.mkCLTElems(nrElems))
     }))
 
     bp.setTop(new ToolBar(nrBlocksLabel, nrElemsChoiceBox, slider))

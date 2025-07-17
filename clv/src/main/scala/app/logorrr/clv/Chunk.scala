@@ -1,7 +1,8 @@
 package app.logorrr.clv
 
+import javafx.collections.ObservableList
+
 import java.util
-import scala.collection.mutable.ListBuffer
 import scala.math.BigDecimal.RoundingMode
 
 object Chunk {
@@ -19,7 +20,6 @@ object Chunk {
                      , listViewWidth: Double
                      , listViewHeight: Double
                      , chunksPerPage: Int): (Int, Int) = {
-
 
     // to not get into division by zero territory
     val cols: Int = if (listViewWidth < blockSize) 1 else roundDown(listViewWidth / blockSize)
@@ -43,31 +43,32 @@ object Chunk {
    * Depending on the visible area of a listview, partitions the entries list to one or several Chunks and fills them
    * with the appropriate number of elements.
    *
-   * @param entries        entries which should be shown
+   * @param elements       elements to display
    * @param blockSize      width/height of a block
    * @param listViewWidth  width of listview
    * @param listViewHeight height of listview
    * @return a sequence of Chunks, filled with the given entries
    */
-  def mkChunks[A](entries: util.List[A]
-                  , blockSize: Int
-                  , listViewWidth: Double
-                  , listViewHeight: Double
-                  , nrChunksPerPage: Int): Seq[Chunk[A]] = {
+  def updateChunks[A](observableList: ObservableList[Chunk[A]]
+                      , elements: util.List[A]
+                      , blockSize: Int
+                      , listViewWidth: Double
+                      , listViewHeight: Double
+                      , nrChunksPerPage: Int): ObservableList[Chunk[A]] = {
+    observableList.clear()
     if (
-      entries.isEmpty ||
+      elements.isEmpty ||
         listViewWidth == 0 ||
         listViewHeight == 0 ||
         blockSize == 0) {
-      Seq()
+      observableList
     } else {
       // how many entries fit into a chunk?
       val (cols, height) = calcDimensions(blockSize, listViewWidth, listViewHeight, nrChunksPerPage)
       val nrElements = height / blockSize * cols
 
-      val entriesSize = entries.size()
+      val entriesSize = elements.size()
       var curIndex = 0
-      val lb = new ListBuffer[Chunk[A]]
 
       while (curIndex < entriesSize) {
         val end = if (curIndex + nrElements < entriesSize) {
@@ -75,13 +76,13 @@ object Chunk {
         } else {
           entriesSize
         }
-        val blockViewEntries = entries.subList(curIndex, end)
+        val blockViewEntries = elements.subList(curIndex, end)
         if (blockViewEntries.size() > 0) {
-          lb.addOne(new Chunk(lb.size, blockViewEntries, cols, height))
+          observableList.add(new Chunk(observableList.size, blockViewEntries, cols, height))
         }
         curIndex = curIndex + nrElements
       }
-      lb.toSeq
+      observableList
     }
 
   }

@@ -5,7 +5,7 @@ import javafx.application.Platform
 import javafx.beans.binding.{Bindings, BooleanBinding}
 import javafx.beans.property.{ReadOnlyDoubleProperty, ReadOnlyIntegerProperty, SimpleIntegerProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
-import javafx.collections.{FXCollections, ObservableList}
+import javafx.collections.ObservableList
 import javafx.geometry.Orientation
 import javafx.scene.control.skin.VirtualFlow
 import javafx.scene.control.{ListView, ScrollBar, Skin, SkinBase}
@@ -54,8 +54,8 @@ object ChunkListView {
 class ChunkListView[A](val elements: ObservableList[A]
                        , val selectedLineNumberProperty: SimpleIntegerProperty
                        , val blockSizeProperty: SimpleIntegerProperty
-                       , val firstVisibleTextCellIndexProperty: SimpleIntegerProperty
-                       , val lastVisibleTextCellIndexProperty: SimpleIntegerProperty
+                       , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
+                       , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
                        , selectInTextView: A => Unit
                        , logEntryVizor: Vizor[A]
                        , logEntryChozzer: ColorChozzer[A]
@@ -205,10 +205,10 @@ class ChunkListView[A](val elements: ObservableList[A]
       recalculateScheduled = true
       Platform.runLater(() => {
         println(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
-//        println(s"elems.size: ${elements.size()}")
+        //        println(s"elems.size: ${elements.size()}")
         val width = ChunkListView.calcListViewWidth(widthProperty, scrollBarWidthProperty)
-        val chunks = Chunk.mkChunks(elements, blockSizeProperty.get(), width, heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
-        setItems(FXCollections.observableArrayList(chunks: _*))
+        Chunk.updateChunks[A](getItems, elements, blockSizeProperty.get(), width, heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
+        //setItems(chunks)
         recalculateScheduled = false
       })
     } else {

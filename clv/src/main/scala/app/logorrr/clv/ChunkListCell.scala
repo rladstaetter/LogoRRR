@@ -157,7 +157,7 @@ object ChunkListCell extends CanLog {
 /**
  * A listcell which can contain one or more log entries.
  *
- * To see how those cells are populated, see [[Chunk.mkChunks]]. [[ChunkImage]] is responsible to draw all Chunks
+ * To see how those cells are populated, see [[Chunk.updateChunks]]. [[ChunkImage]] is responsible to draw all Chunks
  */
 class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
                        , scrollbarWidthProperty: SimpleIntegerProperty
@@ -238,7 +238,7 @@ class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
     */
   setOnMouseClicked(mouseClickedHandler)
 
-  override def updateItem(chunk: Chunk[A], empty: Boolean): Unit = JfxUtils.execOnUiThread {
+   override def updateItem(chunk: Chunk[A], empty: Boolean): Unit = {
     super.updateItem(chunk, empty)
 
     if (empty || Option(chunk).isEmpty || blockSizeProperty.get() <= 0 || widthProperty.get() <= 0) {
@@ -281,10 +281,17 @@ class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
   def updateRects(entries: java.util.List[A], shape: ChunkShape, blockSize: Int)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
     var i = 0
     if (!entries.isEmpty) {
-      entries.forEach(e => {
-        ChunkListCell.paintBlock(pb, i, logEntryChozzer.calc(e), blockSize, shape.width, logEntryVizor.isSelected(e), logEntryVizor.isFirstVisible(e), logEntryVizor.isLastVisible(e), logEntryVizor.isVisibleInTextView(e))
-        i = i + 1
-      })
+      for (o <- 0 to entries.size()) {
+        // entries can get changed by other threads so we
+        // have to defensively query those entries otherwise
+        // we bailout with an exception.
+        Try(entries.get(o)).toOption match {
+          case Some(e) =>
+            ChunkListCell.paintBlock(pb, i, logEntryChozzer.calc(e), blockSize, shape.width, logEntryVizor.isSelected(e), logEntryVizor.isFirstVisible(e), logEntryVizor.isLastVisible(e), logEntryVizor.isVisibleInTextView(e))
+            i = i + 1
+          case None => // logWarn("Concurrent change of entries detected")
+        }
+      }
     }
     shape
   }

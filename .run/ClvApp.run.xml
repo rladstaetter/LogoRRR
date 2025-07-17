@@ -4,7 +4,7 @@
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="app.logorrr.jfxbfr.ClvApp" />
     <module name="clv-app" />
-    <option name="VM_PARAMETERS" value="-Xmx1g -Djava.util.logging.config.file=develop-logging.properties -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-24.0.2/lib --add-modules javafx.controls --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED" />
+    <option name="VM_PARAMETERS" value="-Xmx1g -Djava.util.logging.config.file=develop-logging.properties -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-24.0.2/lib --add-modules javafx.controls --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED -XX:+UseSerialGC" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/clv-app" />
     <extension name="coverage">
       <pattern>
