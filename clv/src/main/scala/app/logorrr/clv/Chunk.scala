@@ -91,8 +91,6 @@ object Chunk {
 /**
  * Container for entries in order to fill ListView[Chunk]
  *
- * Will be painted by [[ChunkImage]]
- *
  * @param number  index in the ListView
  * @param entries entries contained in this Chunk
  * @param cols    number of columns in this Chunk (needed for mouse over/mouse press events)

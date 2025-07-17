@@ -104,14 +104,12 @@ class ChunkListView[A](val elements: ObservableList[A]
 
   /** if user selects a new active element, recalculate and implicitly repaint */
   //private val selectedRp = mkRecalculateAndUpdateItemListener("selected")
-  private val anyRp: ChangeListener[java.lang.Boolean] = mkAnyUpdateListener("any")
+  private val anyRp: ChangeListener[java.lang.Boolean] =  (_: ObservableValue[_ <: java.lang.Boolean], _: java.lang.Boolean, _: java.lang.Boolean) => {
+    recalculateAndUpdateItems("any")
+  }
 
   /** performance optimisation to debounce calls to the recalculation / repainting operation */
   var recalculateScheduled = false
-
-  private def mkAnyUpdateListener(ctx: String): ChangeListener[java.lang.Boolean] = (_: ObservableValue[_ <: java.lang.Boolean], _: java.lang.Boolean, _: java.lang.Boolean) => {
-    recalculateAndUpdateItems(ctx)
-  }
 
   def init(): Unit = {
     getStylesheets.add(getClass.getResource("/app/logorrr/clv/ChunkListView.css").toExternalForm)

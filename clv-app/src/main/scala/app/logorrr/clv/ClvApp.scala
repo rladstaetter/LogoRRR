@@ -1,4 +1,4 @@
-package app.logorrr.jfxbfr
+package app.logorrr.clv
 
 import app.logorrr.clv.color.ColorChozzer
 import app.logorrr.clv.{ChunkListView, ElementSelector, JfxUtils, Vizor}
@@ -38,9 +38,9 @@ class ClvElem
 
 class ClvApp extends Application with CanLog {
 
-  val elems = FXCollections.observableArrayList(0,1, 10, 100, 1000, 10000, 100000, 1000000, 10000000)
-  val DefaultElemCount = elems.asScala.last
-  val elements = FXCollections.observableArrayList(ClvApp.mkCLTElems(DefaultElemCount))
+  private val elems = FXCollections.observableArrayList(0,1, 10, 100, 1000, 10000, 100000, 1000000, 10000000)
+  private val DefaultElemCount = elems.asScala.last
+  private val elements = FXCollections.observableArrayList(ClvApp.mkCLTElems(DefaultElemCount))
 
   def start(stage: Stage): Unit = {
 

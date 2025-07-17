@@ -157,7 +157,7 @@ object ChunkListCell extends CanLog {
 /**
  * A listcell which can contain one or more log entries.
  *
- * To see how those cells are populated, see [[Chunk.updateChunks]]. [[ChunkImage]] is responsible to draw all Chunks
+ * To see how those cells are populated, see [[Chunk.updateChunks]].
  */
 class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
                        , scrollbarWidthProperty: SimpleIntegerProperty
@@ -238,7 +238,7 @@ class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
     */
   setOnMouseClicked(mouseClickedHandler)
 
-   override def updateItem(chunk: Chunk[A], empty: Boolean): Unit = {
+  override def updateItem(chunk: Chunk[A], empty: Boolean): Unit = {
     super.updateItem(chunk, empty)
 
     if (empty || Option(chunk).isEmpty || blockSizeProperty.get() <= 0 || widthProperty.get() <= 0) {
@@ -274,9 +274,9 @@ class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
 
   private def getEntryAt(chunk: Chunk[A], index: Int): Option[A] = Try(chunk.entries.get(index)).toOption
 
-  private def paintPixels(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: ChunkShape): Unit = pixelBuffer.updateBuffer(updatePixels(entries, shape))
+  private def paintPixels(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: ChunkShape): Unit = pixelBuffer.updateBuffer(updatePixels(entries, shape) _)
 
-  private def paintRects(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: ChunkShape, blockSize: Int): Unit = pixelBuffer.updateBuffer(updateRects(entries, shape, blockSize))
+  private def paintRects(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: ChunkShape, blockSize: Int): Unit = pixelBuffer.updateBuffer(updateRects(entries, shape, blockSize) _)
 
   def updateRects(entries: java.util.List[A], shape: ChunkShape, blockSize: Int)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
     var i = 0
