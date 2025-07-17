@@ -76,36 +76,34 @@ class ChunkListView[A](val elements: ObservableList[A]
     override def changed(observableValue: ObservableValue[_ <: lang.Boolean], t: lang.Boolean, isVisible: lang.Boolean): Unit = {
       if (isVisible) {
         setScrollBarWidth(ChunkListView.DefaultScrollBarWidth)
-        recalculateAndUpdateItems("scrollbar visible")
+        recalculateAndUpdateItems()
       } else {
         setScrollBarWidth(0)
-        recalculateAndUpdateItems("scrollbar invisible")
+        recalculateAndUpdateItems()
       }
     }
   }
 
   // needed to get access to the scrollbar
-  private val chunkListViewSkinListener: ChangeListener[Skin[_]] = new ChangeListener[Skin[_]] {
-    override def changed(observableValue: ObservableValue[_ <: Skin[_]], t: Skin[_], currentSkin: Skin[_]): Unit = {
-      for {skin <- Option(currentSkin)
-           flow <- ChunkListView.lookupVirtualFlow(skin)
-           horizontalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.HORIZONTAL)
-           verticalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.VERTICAL)} {
-        horizontalScrollbar.setVisible(false)
-        verticalScrollbar.visibleProperty().addListener(scrollBarVisibilityListener)
-      }
+  private val chunkListViewSkinListener: ChangeListener[Skin[_]] = (_: ObservableValue[_ <: Skin[_]], _: Skin[_], currentSkin: Skin[_]) => {
+    for {skin <- Option(currentSkin)
+         flow <- ChunkListView.lookupVirtualFlow(skin)
+         horizontalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.HORIZONTAL)
+         verticalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.VERTICAL)} {
+      horizontalScrollbar.setVisible(false)
+      verticalScrollbar.visibleProperty().addListener(scrollBarVisibilityListener)
     }
   }
 
   /**
    * If the observable list changes in any way, recalculate the items in the listview.
    */
-  private val elementInvalidationListener = JfxUtils.mkInvalidationListener(_ => recalculateAndUpdateItems("invalidation"))
+  private val elementInvalidationListener = JfxUtils.mkInvalidationListener(_ => recalculateAndUpdateItems())
 
   /** if user selects a new active element, recalculate and implicitly repaint */
   //private val selectedRp = mkRecalculateAndUpdateItemListener("selected")
   private val anyRp: ChangeListener[java.lang.Boolean] =  (_: ObservableValue[_ <: java.lang.Boolean], _: java.lang.Boolean, _: java.lang.Boolean) => {
-    recalculateAndUpdateItems("any")
+    recalculateAndUpdateItems()
   }
 
   /** performance optimisation to debounce calls to the recalculation / repainting operation */
@@ -198,11 +196,11 @@ class ChunkListView[A](val elements: ObservableList[A]
   /**
    * Recalculates elements of listview depending on width, height and blocksize.
    */
-  def recalculateAndUpdateItems(ctx: String): Unit = { // TODO remove context information
+  def recalculateAndUpdateItems(): Unit = {
     if (!recalculateScheduled && widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0) {
       recalculateScheduled = true
       Platform.runLater(() => {
-        println(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
+       // println(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
         //        println(s"elems.size: ${elements.size()}")
         val width = ChunkListView.calcListViewWidth(widthProperty, scrollBarWidthProperty)
         Chunk.updateChunks[A](getItems, elements, blockSizeProperty.get(), width, heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
@@ -210,7 +208,7 @@ class ChunkListView[A](val elements: ObservableList[A]
         recalculateScheduled = false
       })
     } else {
-      println(s"NOT recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
+      // println(s"NOT recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
     }
   }
 }

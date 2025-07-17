@@ -107,7 +107,7 @@ class ClvApp extends Application with CanLog {
 
     val refreshListener = JfxUtils.onNew[Number](n => {
       if (n.doubleValue() > 0.1) {
-        clv.recalculateAndUpdateItems("ClvTestApp")
+        clv.recalculateAndUpdateItems()
       }
     })
 
@@ -118,7 +118,7 @@ class ClvApp extends Application with CanLog {
 
     stage.showingProperty().addListener((_, _, isNowShowing) => {
       if (isNowShowing) {
-        clv.recalculateAndUpdateItems("testapp")
+        clv.recalculateAndUpdateItems()
         logTrace("Scene is loaded and displayed!")
       }
     })

@@ -105,7 +105,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   /**
    * Called if a tab is selected
    */
-  def recalculateChunkListView(): Unit = chunkListView.recalculateAndUpdateItems("recalculateChunkListView")
+  def recalculateChunkListView(): Unit = chunkListView.recalculateAndUpdateItems()
 
   def scrollToActiveElement(): Unit = {
     chunkListView.scrollToActiveChunk()
