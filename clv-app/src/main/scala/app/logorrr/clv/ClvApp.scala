@@ -1,7 +1,6 @@
 package app.logorrr.clv
 
 import app.logorrr.clv.color.ColorChozzer
-import app.logorrr.clv.{ChunkListView, ElementSelector, JfxUtils, Vizor}
 import javafx.application.Application
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.FXCollections
