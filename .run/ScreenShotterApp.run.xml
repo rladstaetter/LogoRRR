@@ -5,7 +5,7 @@
     <option name="MAIN_CLASS_NAME" value="app.logorrr.docs.ScreenShotterApp" />
     <module name="docs" />
     <option name="PROGRAM_PARAMETERS" value="0" />
-    <option name="VM_PARAMETERS" value="-Xmx4g -Djava.util.logging.config.file=develop-logging.properties -Djava.library.path=$PROJECT_DIR$/native/native-osx/target -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-24.0.2/lib --add-modules javafx.controls --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED" />
+    <option name="VM_PARAMETERS" value="-Xmx4g -Djava.util.logging.config.file=develop-logging.properties -Djava.library.path=$PROJECT_DIR$/native/native-osx/target -Duser.language=en --enable-native-access=javafx.graphics --module-path $PROJECT_DIR$/env/target/javafx-sdk-24.0.2/lib --add-modules javafx.controls --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/docs" />
     <extension name="coverage">
       <pattern>
