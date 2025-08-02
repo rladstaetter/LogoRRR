@@ -3,8 +3,8 @@ package app.logorrr.views.settings.timestamp
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
+import app.logorrr.clv.ChunkListView
 import app.logorrr.model.LogEntry
-import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.ObservableList
@@ -19,7 +19,7 @@ object TimestampFormatResetButton extends UiNodeFileIdAware {
 
 /** reset log timestamp settings to default values */
 class TimestampFormatResetButton(mutLogFileSettings: MutLogFileSettings
-                                 , chunkListView: ChunkListView
+                                 , chunkListView: ChunkListView[LogEntry]
                                  , logEntries: ObservableList[LogEntry]
                                  , timeOpsToolBar: TimeOpsToolBar
                                  , closeStage: => Unit) extends Button("reset") {

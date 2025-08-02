@@ -2,14 +2,15 @@ package app.logorrr.views.search
 
 import app.logorrr.io.FileId
 import app.logorrr.util.HashUtil
-import app.logorrr.views.{UiNode, UiNodeFilterAware}
+import app.logorrr.views.search.filter.UnclassifiedFilter
+import app.logorrr.views.{MutFilter, UiNode, UiNodeFilterAware}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.scene.control.{ContentDisplay, ToggleButton, Tooltip}
 import net.ladstatt.util.log.CanLog
 
 object FilterButton extends UiNodeFilterAware {
 
-  override def uiNode(fileId: FileId, filter: Filter): UiNode = UiNode(classOf[FilterButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + filter.pattern))
+  override def uiNode(fileId: FileId, filter: MutFilter[_]): UiNode = UiNode(classOf[FilterButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + filter.getPredicate.description))
 
 }
 
@@ -17,10 +18,10 @@ object FilterButton extends UiNodeFilterAware {
  * Displays a search term and triggers displaying the results.
  */
 class FilterButton(val fileId: FileId
-                   , val filter: Filter
+                   , val filter: MutFilter[_]
                    , i: Int
                    , updateActiveFilter: => Unit
-                   , removeFilter: Filter => Unit) extends ToggleButton(filter.pattern) with CanLog {
+                   , removeFilter: MutFilter[_] => Unit) extends ToggleButton(filter.getPredicate.description) with CanLog {
 
   setId(FilterButton.uiNode(fileId, filter).value)
   setTooltip(new Tooltip(if (i == 1) "one item found" else s"$i items found"))
@@ -29,7 +30,7 @@ class FilterButton(val fileId: FileId
     setContentDisplay(ContentDisplay.RIGHT)
     setGraphic(new RemoveFilterbutton(fileId, filter, removeFilter))
   }
-  setSelected(filter.active)
+  setSelected(filter.isActive)
 
   selectedProperty().addListener(new InvalidationListener {
     // if any of the buttons changes its selected value, reevaluate predicate

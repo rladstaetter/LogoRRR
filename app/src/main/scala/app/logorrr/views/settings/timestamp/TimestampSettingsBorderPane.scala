@@ -1,10 +1,10 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.clv.ChunkListView
 import app.logorrr.model.LogEntry
 import app.logorrr.util.HLink
 import app.logorrr.views.UiNodes
-import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property.SimpleObjectProperty
@@ -17,7 +17,7 @@ import net.ladstatt.util.log.CanLog
 
 class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
                                   , logEntries: ObservableList[LogEntry]
-                                  , chunkListView: ChunkListView
+                                  , chunkListView: ChunkListView[LogEntry]
                                   , timeOpsToolBar: TimeOpsToolBar
                                   , closeStage: => Unit)
   extends BorderPane with CanLog {

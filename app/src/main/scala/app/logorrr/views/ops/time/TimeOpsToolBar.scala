@@ -1,8 +1,8 @@
 package app.logorrr.views.ops.time
 
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.clv.ChunkListView
 import app.logorrr.model.LogEntry
-import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.text.LogTextView
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
@@ -11,7 +11,7 @@ import javafx.scene.control.ToolBar
 
 
 class TimeOpsToolBar(mutLogFileSettings: MutLogFileSettings
-                     , chunkListView: ChunkListView
+                     , chunkListView: ChunkListView[LogEntry]
                      , logTextView: LogTextView
                      , logEntries: ObservableList[LogEntry]
                      , filteredList: FilteredList[LogEntry]) extends ToolBar {

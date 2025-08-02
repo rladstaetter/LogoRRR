@@ -1,7 +1,7 @@
 package app.logorrr.usecases.search
 
 import app.logorrr.TestFiles
-import app.logorrr.model.LogFileSettings
+import app.logorrr.model.FilterUtil
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.RemoveFilterbutton
 import app.logorrr.views.text.LogTextView
@@ -15,7 +15,7 @@ class CloseDefaultFilterTest extends SingleFileApplicationTest(TestFiles.simpleL
     openFile(fileId)
     val lines = Files.lines(fileId.asPath).count
 
-    LogFileSettings.DefaultFilters.foreach {
+    FilterUtil.DefaultFilters.foreach {
       f => waitAndClickVisibleItem(RemoveFilterbutton.uiNode(fileId, f))
     }
 

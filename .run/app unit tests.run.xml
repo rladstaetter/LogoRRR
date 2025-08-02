@@ -29,7 +29,7 @@
         <option value="app.logorrr.conf.mut.FilterSpec" />
         <option value="app.logorrr.conf.mut.MutSettingsSpec" />
         <option value="app.logorrr.views.block.ChunkSpec" />
-        <option value="app.logorrr.views.block.ChunkImageSpec" />
+        <option value="app.logorrr.clv.ChunkImageSpec" />
         <option value="app.logorrr.views.ops.time.TimerSliderSpec" />
         <option value="app.logorrr.views.text.FilterCalculatorSpec" />
       </list>

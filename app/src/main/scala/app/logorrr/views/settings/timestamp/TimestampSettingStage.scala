@@ -1,9 +1,9 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.clv.ChunkListView
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import javafx.collections.ObservableList
 import javafx.scene.Scene
@@ -18,7 +18,7 @@ object TimestampSettingStage {
 
 class TimestampSettingStage(owner: Window
                             , settings: MutLogFileSettings
-                            , chunkListView: ChunkListView
+                            , chunkListView: ChunkListView[LogEntry]
                             , logEntries: ObservableList[LogEntry]
                             , timeOpsToolBar: TimeOpsToolBar) extends Stage {
 

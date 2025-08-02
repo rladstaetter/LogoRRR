@@ -1,12 +1,13 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.model.LogEntry
-import app.logorrr.views.block.ChunkListView
+import app.logorrr.clv.ChunkListView
+import app.logorrr.model.{LogEntry, LogEntryChozzer, LogEntrySelector, LogEntryVizor}
 import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.ops.time.TimeOpsToolBar
-import app.logorrr.views.search.{Filter, FiltersToolBar, OpsToolBar}
+import app.logorrr.views.search.{FiltersToolBar, OpsToolBar}
 import app.logorrr.views.text.LogTextView
+import app.logorrr.views.{Filter, MutFilter}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
@@ -27,7 +28,8 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   private val logTextView = new LogTextView(mutLogFileSettings, filteredList)
 
   // graphical display to the left
-  private val chunkListView = ChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem)
+  private val chunkListView = mkChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem)
+
 
   private val blockSizeSlider = {
     val bs = new BlockSizeSlider(mutLogFileSettings.getFileId)
@@ -96,18 +98,41 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     chunkListView.removeListeners()
   }
 
-  def addFilter(filter: Filter): Unit = mutLogFileSettings.filtersProperty.add(filter)
+  def addFilter(filter: MutFilter[_]): Unit = mutLogFileSettings.filtersProperty.add(filter)
 
-  def removeFilter(filter: Filter): Unit = mutLogFileSettings.filtersProperty.remove(filter)
+  def removeFilter(filter: MutFilter[_]): Unit = mutLogFileSettings.filtersProperty.remove(filter)
 
   /**
    * Called if a tab is selected
    */
-  def recalculateChunkListView(): Unit = chunkListView.recalculateAndUpdateItems("recalculateChunkListView")
+  def recalculateChunkListView(): Unit = chunkListView.recalculateAndUpdateItems()
 
   def scrollToActiveElement(): Unit = {
     chunkListView.scrollToActiveChunk()
     logTextView.scrollToActiveLogEntry()
+  }
+
+  def mkChunkListView(entries: ObservableList[LogEntry]
+                      , mutLogFileSettings: MutLogFileSettings
+                      , selectInTextView: LogEntry => Unit
+                     ): ChunkListView[LogEntry] = {
+
+    val logEntryVizor = LogEntryVizor(mutLogFileSettings.selectedLineNumberProperty,
+      widthProperty,
+      mutLogFileSettings.blockSizeProperty
+      , mutLogFileSettings.firstVisibleTextCellIndexProperty
+      , mutLogFileSettings.lastVisibleTextCellIndexProperty)
+    val logEntryChozzer = LogEntryChozzer(mutLogFileSettings.filtersProperty)
+    val logEntrySelector = LogEntrySelector(mutLogFileSettings.selectedLineNumberProperty)
+
+
+    new ChunkListView(entries
+      , mutLogFileSettings.selectedLineNumberProperty
+      , mutLogFileSettings.blockSizeProperty
+      , mutLogFileSettings.firstVisibleTextCellIndexProperty
+      , mutLogFileSettings.lastVisibleTextCellIndexProperty
+      , selectInTextView
+      , logEntryVizor, logEntryChozzer, logEntrySelector)
   }
 
 }

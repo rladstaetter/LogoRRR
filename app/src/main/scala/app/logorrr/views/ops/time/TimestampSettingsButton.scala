@@ -2,8 +2,8 @@ package app.logorrr.views.ops.time
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
+import app.logorrr.clv.ChunkListView
 import app.logorrr.model.LogEntry
-import app.logorrr.views.block.ChunkListView
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.ObservableList
@@ -29,7 +29,7 @@ object TimestampSettingsButton extends UiNodeFileIdAware {
  * @param logEntries the list of log entries to display in order to configure a time format
  */
 class TimestampSettingsButton(settings: MutLogFileSettings
-                              , chunkListView: ChunkListView
+                              , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
                               , timeOpsToolBar: TimeOpsToolBar) extends StackPane {
 

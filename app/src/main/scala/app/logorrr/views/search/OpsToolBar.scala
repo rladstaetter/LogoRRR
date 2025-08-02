@@ -2,7 +2,7 @@ package app.logorrr.views.search
 
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
-import net.ladstatt.util.os.OsUtil
+import app.logorrr.views.MutFilter
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.block.HasBlockSizeProperty
 import app.logorrr.views.ops.{ClearLogButton, CopyLogButton, DecreaseBlockSizeButton, IncreaseBlockSizeButton}
@@ -13,6 +13,7 @@ import javafx.collections.transformation.FilteredList
 import javafx.scene.Node
 import javafx.scene.control._
 import javafx.scene.input.{KeyCode, KeyEvent}
+import net.ladstatt.util.os.OsUtil
 
 
 object OpsToolBar {
@@ -28,7 +29,7 @@ object OpsToolBar {
  * @param addFilterFn filter function which results from user interaction with SearchToolbar
  */
 class OpsToolBar(fileId: FileId
-                 , addFilterFn: Filter => Unit
+                 , addFilterFn: MutFilter[_] => Unit
                  , logEntries: ObservableList[LogEntry]
                  , filteredList: FilteredList[LogEntry]
                  , val blockSizeProperty: SimpleIntegerProperty)

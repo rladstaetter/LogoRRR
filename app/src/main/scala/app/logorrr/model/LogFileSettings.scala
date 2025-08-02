@@ -2,8 +2,7 @@ package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
 import app.logorrr.io.FileId
-import app.logorrr.views.search.Filter
-import javafx.scene.paint.Color
+import app.logorrr.views.Filter
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
 
@@ -24,11 +23,6 @@ object LogFileSettings {
   private val DefaultLastViewIndex = -1
   val DefaultLowerTimestamp: Int = 0
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
-  private val FinestFilter: Filter = new Filter("FINEST", Color.GREY, true)
-  private val InfoFilter: Filter = new Filter("INFO", Color.GREEN, true)
-  private val WarningFilter: Filter = new Filter("WARNING", Color.ORANGE, true)
-  private val SevereFilter: Filter = new Filter("SEVERE", Color.RED, true)
-  val DefaultFilters: Seq[Filter] = Seq(FinestFilter, InfoFilter, WarningFilter, SevereFilter)
 
   private val DefaultFontSize = 12
 
@@ -38,7 +32,7 @@ object LogFileSettings {
       , Instant.now().toEpochMilli
       , DefaultDividerPosition
       , DefaultFontSize
-      , DefaultFilters
+      , FilterUtil.DefaultFilters.map(f => Filter(f.getPredicate.description, f.getColor, f.isActive))
       , DefaultBlockSettings
       , DefaultLogFormat
       , DefaultAutoScroll
