@@ -49,19 +49,20 @@ object Chunk {
    * @param listViewHeight height of listview
    * @return a sequence of Chunks, filled with the given entries
    */
-  def updateChunks[A](observableList: ObservableList[Chunk[A]]
+  def updateChunks[A](chunkList: ObservableList[Chunk[A]]
                       , elements: util.List[A]
                       , blockSize: Int
                       , listViewWidth: Int
                       , listViewHeight: Double
                       , nrChunksPerPage: Int): ObservableList[Chunk[A]] = {
-    observableList.clear()
+    clearChunks(chunkList)
+
     if (
       elements.isEmpty ||
         listViewWidth == 0 ||
         listViewHeight == 0 ||
         blockSize == 0) {
-      observableList
+      chunkList
     } else {
       // how many entries fit into a chunk?
       val (cols, height) = calcDimensions(blockSize, listViewWidth, listViewHeight, nrChunksPerPage)
@@ -76,16 +77,22 @@ object Chunk {
         } else {
           entriesSize
         }
-        val blockViewEntries = elements.subList(curIndex, end)
+        val blockViewEntries: util.List[A] = elements.subList(curIndex, end)
         if (blockViewEntries.size() > 0) {
-          observableList.add(new Chunk(observableList.size, blockViewEntries, cols, height))
+          chunkList.add(new Chunk(chunkList.size, blockViewEntries, cols, height))
         }
         curIndex = curIndex + nrElements
       }
-      observableList
+      chunkList
     }
 
   }
+
+  def clearChunks[A](observableList: ObservableList[Chunk[A]]): Unit = {
+       observableList.clear()
+  }
+
+
 }
 
 /**

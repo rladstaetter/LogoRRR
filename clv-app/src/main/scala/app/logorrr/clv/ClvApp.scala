@@ -13,6 +13,7 @@ import javafx.stage.Stage
 import net.ladstatt.app.{AppId, AppMeta}
 import net.ladstatt.util.log.CanLog
 
+import java.util
 import scala.jdk.CollectionConverters._
 
 
@@ -37,9 +38,11 @@ class ClvElem
 
 class ClvApp extends Application with CanLog {
 
-  private val elems = FXCollections.observableArrayList(0,1, 10, 100, 1000, 10000, 100000, 1000000, 10000000)
-  private val DefaultElemCount = elems.asScala.last
-  private val elements = FXCollections.observableArrayList(ClvApp.mkCLTElems(DefaultElemCount))
+  private val elems = FXCollections.observableArrayList(0, 1, 10, 100, 1000 * 1000, 1000 * 1000 * 10)
+
+  private val DefaultElemCount = elems.asScala.head
+  // private val elements = FXCollections.observableArrayList(ClvApp.mkCLTElems(DefaultElemCount))
+  private val elements = FXCollections.observableArrayList(new util.ArrayList[ClvElem]())
 
   def start(stage: Stage): Unit = {
 
@@ -47,7 +50,6 @@ class ClvApp extends Application with CanLog {
     val height = 1000
     val blockSize = 10
     val selectedLineNumber = 0
-
 
     val bp = new BorderPane()
 
@@ -95,11 +97,14 @@ class ClvApp extends Application with CanLog {
 
     val nrElemsChoiceBox = new ChoiceBox[Int]()
     nrElemsChoiceBox.setItems(elems)
-    nrElemsChoiceBox.setValue(DefaultElemCount)
     nrElemsChoiceBox.getSelectionModel.selectedIndexProperty().addListener(JfxUtils.onNew[Number](n => {
       val nrElems = elems.get(n.intValue())
-      clv.elements.setAll(ClvApp.mkCLTElems(nrElems))
+      for (_ <- 1 to 500) {
+        clv.elements.clear()
+        clv.elements.setAll(ClvApp.mkCLTElems(nrElems))
+      }
     }))
+    nrElemsChoiceBox.setValue(DefaultElemCount)
 
     bp.setTop(new ToolBar(nrBlocksLabel, nrElemsChoiceBox, slider))
     bp.setCenter(sp)

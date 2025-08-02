@@ -56,8 +56,7 @@ class ChunkListView[A](val elements: ObservableList[A]
                        , logEntryVizor: Vizor[A]
                        , logEntryChozzer: ColorChozzer[A]
                        , logEntrySelector: ElementSelector[A])
-  extends ListView[Chunk[A]]
-    with CanLog {
+  extends ListView[Chunk[A]] with CanLog {
 
   // width of Scrollbars
   val scrollBarWidthProperty = new SimpleIntegerProperty(ChunkListView.DefaultScrollBarWidth)
@@ -67,7 +66,11 @@ class ChunkListView[A](val elements: ObservableList[A]
   // returns width - scrollbarwidth if it is > 0, else width
   val chunkListWidthProperty: IntegerBinding = Bindings.createIntegerBinding(
     () =>
-      (if (widthProperty.get() - scrollBarWidthProperty.get() >= 0) widthProperty.get() - scrollBarWidthProperty.get() else widthProperty.get()).toInt
+      (if (widthProperty.get() - scrollBarWidthProperty.get() >= 0)
+        widthProperty.get() - scrollBarWidthProperty.get()
+      else
+        widthProperty.get()
+        ).toInt
     ,
     widthProperty, scrollBarWidthProperty)
 
@@ -104,7 +107,7 @@ class ChunkListView[A](val elements: ObservableList[A]
 
   /** if user selects a new active element, recalculate and implicitly repaint */
   //private val selectedRp = mkRecalculateAndUpdateItemListener("selected")
-  private val anyRp: ChangeListener[java.lang.Boolean] =  (_: ObservableValue[_ <: java.lang.Boolean], _: java.lang.Boolean, _: java.lang.Boolean) => {
+  private val anyRp: ChangeListener[java.lang.Boolean] = (_: ObservableValue[_ <: java.lang.Boolean], _: java.lang.Boolean, _: java.lang.Boolean) => {
     recalculateAndUpdateItems()
   }
 
@@ -120,10 +123,9 @@ class ChunkListView[A](val elements: ObservableList[A]
         , selectInTextView
         , logEntryVizor
         , logEntryChozzer
-        , logEntrySelector)
-    }
-
-    )
+        , logEntrySelector
+        , chunkListWidthProperty)
+    })
 
     addListeners()
   }
@@ -200,10 +202,9 @@ class ChunkListView[A](val elements: ObservableList[A]
     if (!recalculateScheduled && widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0) {
       recalculateScheduled = true
       Platform.runLater(() => {
-       // println(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
+        // println(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
         //        println(s"elems.size: ${elements.size()}")
-        val width = ChunkListView.calcListViewWidth(widthProperty, scrollBarWidthProperty)
-        Chunk.updateChunks[A](getItems, elements, blockSizeProperty.get(), width, heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
+        Chunk.updateChunks[A](getItems, elements, blockSizeProperty.get(), chunkListWidthProperty.get(), heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
         //setItems(chunks)
         recalculateScheduled = false
       })
