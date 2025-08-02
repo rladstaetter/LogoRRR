@@ -52,7 +52,7 @@ object Chunk {
   def updateChunks[A](observableList: ObservableList[Chunk[A]]
                       , elements: util.List[A]
                       , blockSize: Int
-                      , listViewWidth: Double
+                      , listViewWidth: Int
                       , listViewHeight: Double
                       , nrChunksPerPage: Int): ObservableList[Chunk[A]] = {
     observableList.clear()

@@ -18,18 +18,13 @@ object ChunkShape {
  * @param width  width of given shape
  * @param height height of given shape.
  */
-case class ChunkShape(width: Double, height: Double) extends Rectangle2D(0.0, 0.0, width, height) {
+case class ChunkShape(width: Int, height: Int) extends Rectangle2D(0.0, 0.0, width, height) {
   // checks in order not to overshoot the boundaries of underlying restrictions of the hardware accelerated api
   assert(width <= ChunkShape.MaxWidth, s"width was $width which exceeds ${ChunkShape.MaxWidth}.")
   assert(height <= ChunkShape.MaxHeight, s"height was $height which exceeds ${ChunkShape.MaxHeight}.")
   assert(width > 0)
   assert(height > 0)
 
-  val widthAsInt: Int = width.toInt
-  val heightAsInt: Int = height.toInt
-
-  lazy val size: Int = widthAsInt * heightAsInt
-
-  val asString = s"(w/wInt) (h/hInt) area: ($width/$widthAsInt) ($height/$heightAsInt) $size"
+  lazy val size: Int = width * height
 
 }

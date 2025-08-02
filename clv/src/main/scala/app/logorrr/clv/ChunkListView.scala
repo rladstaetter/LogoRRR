@@ -2,8 +2,8 @@ package app.logorrr.clv
 
 import app.logorrr.clv.color.ColorChozzer
 import javafx.application.Platform
-import javafx.beans.binding.{Bindings, BooleanBinding}
-import javafx.beans.property.{ReadOnlyDoubleProperty, ReadOnlyIntegerProperty, SimpleIntegerProperty}
+import javafx.beans.binding.{Bindings, BooleanBinding, IntegerBinding}
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.ObservableList
 import javafx.geometry.Orientation
@@ -18,10 +18,6 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
 object ChunkListView {
 
   val DefaultScrollBarWidth = 18
-
-  def calcListViewWidth(widthProperty: ReadOnlyDoubleProperty, scrollbarWidthProperty: ReadOnlyIntegerProperty): Double = {
-    if (widthProperty.get() - scrollbarWidthProperty.get() >= 0) widthProperty.get() - scrollbarWidthProperty.get() else widthProperty.get()
-  }
 
   def lookupVirtualFlow(skin: Skin[_]): Option[VirtualFlow[ChunkListCell[_]]] = {
     Option(skin match {
@@ -68,6 +64,12 @@ class ChunkListView[A](val elements: ObservableList[A]
 
   def setScrollBarWidth(width: Int): Unit = scrollBarWidthProperty.set(width)
 
+  // returns width - scrollbarwidth if it is > 0, else width
+  val chunkListWidthProperty: IntegerBinding = Bindings.createIntegerBinding(
+    () =>
+      (if (widthProperty.get() - scrollBarWidthProperty.get() >= 0) widthProperty.get() - scrollBarWidthProperty.get() else widthProperty.get()).toInt
+    ,
+    widthProperty, scrollBarWidthProperty)
 
   /**
    * What should happen if the scrollbar appears/vanishes
@@ -112,11 +114,9 @@ class ChunkListView[A](val elements: ObservableList[A]
   def init(): Unit = {
     getStylesheets.add(getClass.getResource("/app/logorrr/clv/ChunkListView.css").toExternalForm)
 
-    setCellFactory((lv: ListView[Chunk[A]]) => {
+    setCellFactory((_: ListView[Chunk[A]]) => {
       new ChunkListCell(
-        lv.widthProperty()
-        , scrollBarWidthProperty
-        , blockSizeProperty
+        blockSizeProperty
         , selectInTextView
         , logEntryVizor
         , logEntryChozzer

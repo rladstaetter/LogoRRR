@@ -24,7 +24,7 @@ object ChunkSpec {
 class ChunkSpec extends AnyWordSpec {
 
   def mkTestChunks(nrEntries: Int
-                   , width: Double
+                   , width: Int
                    , blocksize: Int
                    , listViewHeight: Double): ObservableList[Chunk[LogEntry]] = {
     val l = FXCollections.observableArrayList[Chunk[LogEntry]]()

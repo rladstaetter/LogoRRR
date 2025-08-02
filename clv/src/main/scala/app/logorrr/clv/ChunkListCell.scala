@@ -1,7 +1,8 @@
 package app.logorrr.clv
 
 import app.logorrr.clv.color.{BlockColor, ColorChozzer, ColorUtil, LColors}
-import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
+import javafx.beans.binding.IntegerBinding
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.event.EventHandler
 import javafx.geometry.Rectangle2D
 import javafx.scene.control.ListCell
@@ -159,13 +160,12 @@ object ChunkListCell extends CanLog {
  *
  * To see how those cells are populated, see [[Chunk.updateChunks]].
  */
-class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
-                       , scrollbarWidthProperty: SimpleIntegerProperty
-                       , blockSizeProperty: SimpleIntegerProperty
+class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
                        , scrollTo: A => Unit
                        , logEntryVizor: Vizor[A]
                        , logEntryChozzer: ColorChozzer[A]
                        , elementSelector: ElementSelector[A]
+                       , chunkListViewWidthBinding: IntegerBinding
                       ) extends ListCell[Chunk[A]] with CanLog {
 
   val view = new ImageView()
@@ -177,7 +177,7 @@ class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
    */
   private def calcIndex(maxOccupiedWidth: Double, me: MouseEvent): Int = {
     if (me.getX <= maxOccupiedWidth) {
-      ChunkListCell.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, ChunkListView.calcListViewWidth(widthProperty, scrollbarWidthProperty).toInt)
+      ChunkListCell.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, chunkListViewWidthBinding.get())
     } else -1
   }
 
@@ -240,14 +240,14 @@ class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
 
   override def updateItem(chunk: Chunk[A], empty: Boolean): Unit = {
     super.updateItem(chunk, empty)
+    val chunkListViewWidth = chunkListViewWidthBinding.get()
 
-    if (empty || Option(chunk).isEmpty || blockSizeProperty.get() <= 0 || widthProperty.get() <= 0) {
+    if (empty || Option(chunk).isEmpty || blockSizeProperty.get() <= 0 || chunkListViewWidth <= 0) {
       setGraphic(null)
     } else {
-      val width = ChunkListView.calcListViewWidth(widthProperty, scrollbarWidthProperty)
-      val shape = ChunkShape(width, chunk.height)
+      val shape = ChunkShape(chunkListViewWidth, chunk.height)
 
-      val pbf = new PixelBuffer[IntBuffer](width.toInt
+      val pbf = new PixelBuffer[IntBuffer](chunkListViewWidth
         , chunk.height
         , IntBuffer.wrap(Array.fill(shape.size)(LColors.defaultBackgroundColor))
         , PixelFormat.getIntArgbPreInstance)
@@ -262,7 +262,7 @@ class ChunkListCell[A](widthProperty: ReadOnlyDoubleProperty
              , entries: java.util.List[A]
              , blockSize: Int
             ): Unit = {
-    if (blockSize != 0 && shape.width > blockSize) {
+    if (shape.width > blockSize) {
       if (blockSize > 1) {
         paintRects(pixelBuffer, entries, shape, blockSize)
       } else {
