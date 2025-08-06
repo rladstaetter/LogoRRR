@@ -55,9 +55,8 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
 
 
   def scrollToItem(item: LogEntry): Unit = {
-    getSelectionModel.select(item)
     val relativeIndex = getItems.indexOf(item)
-    getSelectionModel.select(relativeIndex)
+    getSelectionModel.clearAndSelect(relativeIndex)
     val cellHeight = mutLogFileSettings.getFontSize
     JfxUtils.scrollTo[LogEntry](this, cellHeight, relativeIndex)
   }

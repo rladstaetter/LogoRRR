@@ -1,8 +1,7 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.clv.ChunkListView
-import app.logorrr.model.{LogEntry, LogEntryChozzer, LogEntrySelector, LogEntryVizor}
+import app.logorrr.model.LogEntry
 import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import app.logorrr.views.search.{FiltersToolBar, OpsToolBar}
@@ -28,7 +27,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   private val logTextView = new LogTextView(mutLogFileSettings, filteredList)
 
   // graphical display to the left
-  private val chunkListView = mkChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem)
+  private val chunkListView = LogoRRRChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem, widthProperty)
 
 
   private val blockSizeSlider = {
@@ -112,27 +111,8 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     logTextView.scrollToActiveLogEntry()
   }
 
-  def mkChunkListView(entries: ObservableList[LogEntry]
-                      , mutLogFileSettings: MutLogFileSettings
-                      , selectInTextView: LogEntry => Unit
-                     ): ChunkListView[LogEntry] = {
-
-    val logEntryVizor = LogEntryVizor(mutLogFileSettings.selectedLineNumberProperty,
-      widthProperty,
-      mutLogFileSettings.blockSizeProperty
-      , mutLogFileSettings.firstVisibleTextCellIndexProperty
-      , mutLogFileSettings.lastVisibleTextCellIndexProperty)
-    val logEntryChozzer = LogEntryChozzer(mutLogFileSettings.filtersProperty)
-    val logEntrySelector = LogEntrySelector(mutLogFileSettings.selectedLineNumberProperty)
-
-
-    new ChunkListView(entries
-      , mutLogFileSettings.selectedLineNumberProperty
-      , mutLogFileSettings.blockSizeProperty
-      , mutLogFileSettings.firstVisibleTextCellIndexProperty
-      , mutLogFileSettings.lastVisibleTextCellIndexProperty
-      , selectInTextView
-      , logEntryVizor, logEntryChozzer, logEntrySelector)
-  }
-
 }
+
+
+
+
