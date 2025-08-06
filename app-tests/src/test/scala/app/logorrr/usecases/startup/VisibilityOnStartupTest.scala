@@ -3,8 +3,10 @@ package app.logorrr.usecases.startup
 import app.logorrr.TestFiles
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
+import app.logorrr.views.logfiletab.LogoRRRChunkListView
 import app.logorrr.views.ops.{ClearLogButton, CopyLogButton, DecreaseBlockSizeButton, IncreaseBlockSizeButton}
 import app.logorrr.views.search.{SearchButton, SearchTextField}
+import app.logorrr.views.text.LogTextView
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import org.junit.jupiter.api.Test
 import org.testfx.api.FxAssert
@@ -20,7 +22,7 @@ class VisibilityOnStartupTest extends SingleFileApplicationTest(TestFiles.simple
     //wait until UI is ready
 
     val elements = Seq(
-      SearchTextField.uiNode(fileId)
+       SearchTextField.uiNode(fileId)
       , SearchButton.uiNode(fileId)
       , DecreaseBlockSizeButton.uiNode(fileId)
       , IncreaseBlockSizeButton.uiNode(fileId)
@@ -29,6 +31,8 @@ class VisibilityOnStartupTest extends SingleFileApplicationTest(TestFiles.simple
       , AutoScrollCheckBox.uiNode(fileId)
       , ClearLogButton.uiNode(fileId)
       , CopyLogButton.uiNode(fileId)
+      , LogoRRRChunkListView.uiNode(fileId)
+      , LogTextView.uiNode(fileId)
     )
 
     // check all elements
