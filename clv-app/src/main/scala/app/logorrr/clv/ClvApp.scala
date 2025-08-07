@@ -1,6 +1,6 @@
 package app.logorrr.clv
 
-import app.logorrr.clv.color.ColorChozzer
+import app.logorrr.clv.color.ColorPicker
 import javafx.application.Application
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.FXCollections
@@ -69,7 +69,7 @@ class ClvApp extends Application with CanLog {
       /** element is visible in the text view */
       override def isVisibleInTextView(a: ClvElem): Boolean = true
     }
-    val colorChozzer = new ColorChozzer[ClvElem] {
+    val colorPicker = new ColorPicker[ClvElem] {
       override def calc(a: ClvElem): Color = Color.GREY
     }
     val clv = new ChunkListView[ClvElem](elements
@@ -79,7 +79,7 @@ class ClvApp extends Application with CanLog {
       , new SimpleIntegerProperty()
       , _ => ()
       , vizor
-      , colorChozzer
+      , colorPicker
       , elemSelector)
     clv.init()
     val sp = new SplitPane(clv, new BorderPane(new Label("Test")))
