@@ -48,6 +48,24 @@ class MutLogFileSettings {
   var someUnclassifiedFilter: Option[(MutFilter[_], FilterButton)] = None
   var filterButtons: Map[MutFilter[_], FilterButton] = Map[MutFilter[_], FilterButton]()
 
+  private val fileIdProperty = new SimpleObjectProperty[FileId]()
+  private val firstOpenedProperty = new SimpleLongProperty()
+  private val someTimestampSettings = new SimpleObjectProperty[Option[TimestampSettings]](None)
+  private val dateTimeFormatterProperty = new SimpleObjectProperty[DateTimeFormatter](TimestampSettings.DefaultFormatter)
+
+  val fontSizeProperty = new SimpleIntegerProperty()
+  val blockSizeProperty = new SimpleIntegerProperty()
+  val selectedLineNumberProperty = new SimpleIntegerProperty()
+  val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty()
+  val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
+  private val lowerTimestampValueProperty = new SimpleLongProperty(LogFileSettings.DefaultLowerTimestamp)
+  private val upperTimestampValueProperty = new SimpleLongProperty(LogFileSettings.DefaultUpperTimestamp)
+
+  val dividerPositionProperty = new SimpleDoubleProperty()
+  val autoScrollActiveProperty = new SimpleBooleanProperty()
+  val filtersProperty: SimpleListProperty[MutFilter[_]] = new SimpleListProperty[MutFilter[_]](FXCollections.observableArrayList())
+
+
   /**
    * Filters are only active if selected.
    *
@@ -67,27 +85,21 @@ class MutLogFileSettings {
    */
   def updateActiveFilter(filteredList: FilteredList[LogEntry]): Unit = {
     filteredList.setPredicate((entry: LogEntry) =>
-      (entry.someInstant match {
-        case None => true // if instant is not set, return true
-        case Some(value) =>
-          val asMilli = value.toEpochMilli
-          getLowerTimestampValue <= asMilli && asMilli <= getHigherTimestampValue
-      }) && computeCurrentFilter().matches(entry.value))
+      matchTimeRange(entry) && matchFilter(entry))
   }
 
+  private def matchFilter(entry: LogEntry): Boolean = {
+    computeCurrentFilter().matches(entry.value)
+  }
 
-  private val fileIdProperty = new SimpleObjectProperty[FileId]()
-  private val firstOpenedProperty = new SimpleLongProperty()
-  private val someTimestampSettings = new SimpleObjectProperty[Option[TimestampSettings]](None)
-  private val dateTimeFormatterProperty = new SimpleObjectProperty[DateTimeFormatter](TimestampSettings.DefaultFormatter)
-
-  val fontSizeProperty = new SimpleIntegerProperty()
-  val blockSizeProperty = new SimpleIntegerProperty()
-  val selectedLineNumberProperty = new SimpleIntegerProperty()
-  val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty()
-  val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
-  private val lowerTimestampValueProperty = new SimpleLongProperty(LogFileSettings.DefaultLowerTimestamp)
-  private val upperTimestampValueProperty = new SimpleLongProperty(LogFileSettings.DefaultUpperTimestamp)
+  private def matchTimeRange(entry: LogEntry): Boolean = {
+    entry.someInstant match {
+      case None => true // if instant is not set, return true
+      case Some(value) =>
+        val asMilli = value.toEpochMilli
+        getLowerTimestampValue <= asMilli && asMilli <= getHigherTimestampValue
+    }
+  }
 
   def setLowerTimestampValue(lowerValue: Long): Unit = lowerTimestampValueProperty.set(lowerValue)
 
@@ -97,9 +109,6 @@ class MutLogFileSettings {
 
   def getHigherTimestampValue: Long = upperTimestampValueProperty.get()
 
-  val dividerPositionProperty = new SimpleDoubleProperty()
-  val autoScrollActiveProperty = new SimpleBooleanProperty()
-  val filtersProperty: SimpleListProperty[MutFilter[_]] = new SimpleListProperty[MutFilter[_]](FXCollections.observableArrayList())
 
   def getSomeTimestampSettings: Option[TimestampSettings] = someTimestampSettings.get()
 

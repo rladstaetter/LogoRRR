@@ -66,30 +66,27 @@ class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
 
   private def updateUnclassified(): Unit = {
     val unclassified = UnclassifiedFilter(mutLogFileSettings.filterButtons.keySet)
-    updateOccurrences(unclassified)
-    val filterButton = new FilterButton(mutLogFileSettings.getFileId, unclassified, occurrences(unclassified), mutLogFileSettings.updateActiveFilter(filteredList), removeFilter)
+    val filterButton: FilterButton = updateOccurrencesAndFilter(unclassified)
     mutLogFileSettings.someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
     getItems.add(0, filterButton)
     mutLogFileSettings.someUnclassifiedFilter = Option((unclassified, filterButton))
     mutLogFileSettings.updateActiveFilter(filteredList)
   }
 
-  private def addFilterButton(filter: MutFilter[_]): Unit = {
-    updateOccurrences(filter)
-    val filterButton =
-      new FilterButton(
-        mutLogFileSettings.getFileId
-        , filter
-        , occurrences(filter)
-        , mutLogFileSettings.updateActiveFilter(filteredList)
-        , removeFilter)
 
+
+  private def addFilterButton(filter: MutFilter[_]): Unit = {
+    val filterButton = updateOccurrencesAndFilter(filter)
     filter.bind(filterButton.selectedProperty())
     filter.activeProperty.bind(filterButton.selectedProperty())
     getItems.add(filterButton)
     mutLogFileSettings.filterButtons = mutLogFileSettings.filterButtons.updated(filter, filterButton)
   }
 
+  private def updateOccurrencesAndFilter(unclassified: MutFilter[_]): FilterButton = {
+    updateOccurrences(unclassified)
+    new FilterButton(mutLogFileSettings.getFileId, unclassified, occurrences(unclassified), mutLogFileSettings.updateActiveFilter(filteredList), removeFilter)
+  }
   private def removeFilterButton(filter: MutFilter[_]): Unit = {
     val button = mutLogFileSettings.filterButtons(filter)
     filter.unbind()
