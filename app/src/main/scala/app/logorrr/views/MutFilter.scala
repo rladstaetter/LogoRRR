@@ -21,6 +21,10 @@ object MutFilter {
 
 class MutFilter[A] extends ColorMatcher {
 
+  val predicateProperty: SimpleObjectProperty[DescriptivePredicate] = new SimpleObjectProperty[DescriptivePredicate]()
+  val colorProperty: SimpleObjectProperty[Color] = new SimpleObjectProperty[Color]()
+  val activeProperty: SimpleBooleanProperty = new SimpleBooleanProperty()
+
   def init(predicate: DescriptivePredicate
            , color: Color
            , active: Boolean): Unit = {
@@ -29,30 +33,20 @@ class MutFilter[A] extends ColorMatcher {
     setActive(active)
   }
 
-  val predicateProperty: SimpleObjectProperty[DescriptivePredicate] = new SimpleObjectProperty[DescriptivePredicate]()
-  val colorProperty: SimpleObjectProperty[Color] = new SimpleObjectProperty[Color]()
-  val activeProperty: SimpleBooleanProperty = new SimpleBooleanProperty()
-
   def matches(searchTerm: String): Boolean = Option(predicateProperty.get()).exists(p => p.apply(searchTerm))
-
-  def getColor: Color = colorProperty.get()
-
-  def getPredicate: DescriptivePredicate = predicateProperty.get()
-
-  def isActive: Boolean = activeProperty.get()
 
   def unbind(): Unit = activeProperty.unbind()
 
-  def bind(activeProperty: BooleanProperty): Unit = {
-    this.activeProperty.bind(activeProperty)
-  }
+  def bind(activeProperty: BooleanProperty): Unit = this.activeProperty.bind(activeProperty)
 
+  def getPredicate: DescriptivePredicate = predicateProperty.get()
   def setPredicate(predicate: DescriptivePredicate): Unit = predicateProperty.set(predicate)
 
-
+  def getColor: Color = colorProperty.get()
   def setColor(color: Color): Unit = colorProperty.set(color)
 
   def setActive(active: Boolean): Unit = activeProperty.set(active)
+  def isActive: Boolean = activeProperty.get()
 
 }
 

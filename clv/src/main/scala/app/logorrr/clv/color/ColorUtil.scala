@@ -28,8 +28,8 @@ object ColorUtil {
    * - given color if only one hit
    * - a melange of all colors from all hits in all other cases
    * */
-  def calcColor(value: String, filters: Seq[ColorMatcher]): Color = {
-    val hits = filters.filter(_.matches(value))
+  def calcColor(value: String, colorMatcher: Seq[ColorMatcher]): Color = {
+    val hits = colorMatcher.filter(_.matches(value))
     val color = {
       if (hits.isEmpty) {
         Color.LIGHTGREY

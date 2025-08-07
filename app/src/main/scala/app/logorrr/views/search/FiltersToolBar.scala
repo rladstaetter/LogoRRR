@@ -14,14 +14,7 @@ import scala.jdk.CollectionConverters._
 
 /** A toolbar with buttons which filter log events */
 object FiltersToolBar {
-  /*
-    private val BackgroundSelectedStyle: String =
-      """
-        |-fx-background-color: GREEN;
-        |-fx-border-width: 1px 1px 1px 1px;
-        |-fx-border-color: RED;
-        |""".stripMargin
-  */
+
 }
 
 
@@ -73,8 +66,6 @@ class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
     mutLogFileSettings.updateActiveFilter(filteredList)
   }
 
-
-
   private def addFilterButton(filter: MutFilter[_]): Unit = {
     val filterButton = updateOccurrencesAndFilter(filter)
     filter.bind(filterButton.selectedProperty())
@@ -87,6 +78,7 @@ class FiltersToolBar(mutLogFileSettings: MutLogFileSettings
     updateOccurrences(unclassified)
     new FilterButton(mutLogFileSettings.getFileId, unclassified, occurrences(unclassified), mutLogFileSettings.updateActiveFilter(filteredList), removeFilter)
   }
+
   private def removeFilterButton(filter: MutFilter[_]): Unit = {
     val button = mutLogFileSettings.filterButtons(filter)
     filter.unbind()
