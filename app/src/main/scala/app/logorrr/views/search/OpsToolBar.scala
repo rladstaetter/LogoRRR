@@ -47,13 +47,11 @@ class OpsToolBar(fileId: FileId
   /** control which enables selecting color for a search tag */
   private val colorPicker = new SearchColorPicker(fileId)
 
-  /** toggles search behavior from case sensitive search to a regex search */
-  val regexToggleButton = new SearchActivateRegexToggleButton(fileId)
 
   /** textfield to enter search queries */
-  val searchTextField = new SearchTextField(fileId, regexToggleButton)
+  val searchTextField = new SearchTextField(fileId)
 
-  private val searchButton = new SearchButton(fileId, searchTextField, regexToggleButton, colorPicker, addFilterFn)
+  private val searchButton = new SearchButton(fileId, searchTextField, colorPicker, addFilterFn)
 
   private val autoScrollCheckBox = new AutoScrollCheckBox(fileId)
 
@@ -69,10 +67,9 @@ class OpsToolBar(fileId: FileId
   }
 
   searchTextField.setOnKeyPressed(execSearchOnHitEnter)
-  regexToggleButton.setOnKeyPressed(execSearchOnHitEnter)
   colorPicker.setOnKeyPressed(execSearchOnHitEnter)
 
-  val searchItems: Seq[Control] = Seq[Control](searchTextField, regexToggleButton, colorPicker, searchButton)
+  val searchItems: Seq[Control] = Seq[Control](searchTextField, colorPicker, searchButton)
 
   val sizeItems: Seq[Control] = {
     Seq(new DecreaseBlockSizeButton(fileId, blockSizeProperty)

@@ -126,7 +126,6 @@ class LogFileTab(val fileId: FileId
 
       /* change active text field depending on visible tab */
       LogoRRRAccelerators.setActiveSearchTextField(logFileTabContent.opsToolBar.searchTextField)
-      LogoRRRAccelerators.setActiveRegexToggleButton(logFileTabContent.opsToolBar.regexToggleButton)
       recalculateChunkListViewAndScrollToActiveElement()
     } else {
       if (fileId.isZipEntry) {

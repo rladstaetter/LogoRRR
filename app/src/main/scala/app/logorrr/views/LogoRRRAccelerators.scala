@@ -1,10 +1,10 @@
 package app.logorrr.views
 
-import net.ladstatt.util.log.CanLog
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Scene
-import javafx.scene.control.{TextField, ToggleButton}
+import javafx.scene.control.TextField
 import javafx.scene.input.{KeyCode, KeyCodeCombination, KeyCombination}
+import net.ladstatt.util.log.CanLog
 
 /**
  * LogoRRR supports some keyboard shortcuts to make life easier for the user.
@@ -18,14 +18,11 @@ import javafx.scene.input.{KeyCode, KeyCodeCombination, KeyCombination}
 object LogoRRRAccelerators extends CanLog {
 
   val activeSearchTextField = new SimpleObjectProperty[TextField]()
-  val activeRegexToggleButton = new SimpleObjectProperty[ToggleButton]()
 
   def getActiveSearchTextField: TextField = activeSearchTextField.get()
-  def getActiveRegexToggleButton: ToggleButton = activeRegexToggleButton.get()
 
   def setActiveSearchTextField(textField: TextField): Unit = activeSearchTextField.set(textField)
 
-  def setActiveRegexToggleButton(toggleButton: ToggleButton): Unit = activeRegexToggleButton.set(toggleButton)
 
 
   /**
@@ -34,8 +31,6 @@ object LogoRRRAccelerators extends CanLog {
    * sets focus to search textfield
    * */
   val shortCutF = new KeyCodeCombination(KeyCode.F, KeyCombination.SHORTCUT_DOWN)
-
-  val shortCutR = new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN)
 
   /**
    * Installs accelerators to the scene.
@@ -50,17 +45,6 @@ object LogoRRRAccelerators extends CanLog {
       Option(getActiveSearchTextField) match {
         case Some(tf) => tf.requestFocus()
         case None => logTrace("no textfield active")
-      }
-    })
-    scene.getAccelerators.put(shortCutR, () => {
-      Option(getActiveRegexToggleButton) match {
-        case Some(regexToggleButton) =>
-          if (regexToggleButton.isSelected) {
-            regexToggleButton.setSelected(false)
-          } else {
-            regexToggleButton.setSelected(true)
-          }
-        case None => logTrace("no regex togglebutton active")
       }
     })
 

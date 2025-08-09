@@ -4,7 +4,6 @@ package app.logorrr.views.search
 import app.logorrr.io.FileId
 import app.logorrr.util.JfxUtils
 import app.logorrr.views
-import app.logorrr.views.search.filter.RegexFilter
 import app.logorrr.views.search.predicates.ContainsPredicate
 import app.logorrr.views.{MutFilter, UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{Button, Tooltip}
@@ -19,7 +18,6 @@ object SearchButton extends UiNodeFileIdAware {
 
 class SearchButton(fileId: FileId
                    , searchTextField: SearchTextField
-                   , regexToggleButton: SearchActivateRegexToggleButton
                    , colorPicker: SearchColorPicker
                    , addFilterFn: MutFilter[_] => Unit) extends Button {
 
@@ -31,11 +29,7 @@ class SearchButton(fileId: FileId
   setOnAction(_ => {
     if (searchTextField.getText.nonEmpty) {
       val filter: MutFilter[_] =
-        if (regexToggleButton.isSelected) {
-          RegexFilter(searchTextField.getText, colorPicker.getValue, active = true)
-        } else {
           views.MutFilter(ContainsPredicate(searchTextField.getText), colorPicker.getValue, active = true)
-        }
       colorPicker.setValue(JfxUtils.randColor)
       searchTextField.clear()
       addFilterFn(filter)
