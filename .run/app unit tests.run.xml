@@ -22,7 +22,7 @@
     <option name="classBuf">
       <list>
         <option value="app.logorrr.LogEntryFileReaderSpec" />
-        <option value="app.logorrr.Issue139Spec" />
+        <option value="app.logorrr.issues.Issue139Spec" />
         <option value="app.logorrr.LogEntrySpec" />
         <option value="app.logorrr.model.TimestampSettingsSpec" />
         <option value="app.logorrr.io.IoManagerSpec" />
