@@ -1,11 +1,12 @@
 package app.logorrr.views.search.filter
 
+import app.logorrr.clv.color.ColorMatcher
 import app.logorrr.views.MutFilter
 import app.logorrr.views.search.predicates.AnyMatchPredicate
 import javafx.scene.paint.Color
 
 
-class AnyFilter(filters: Set[MutFilter[_]]) extends MutFilter {
+class AnyFilter(filters: Set[ColorMatcher]) extends MutFilter {
 
   init(AnyMatchPredicate(filters), Color.WHITE, active = true)
 
