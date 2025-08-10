@@ -7,10 +7,10 @@ import app.logorrr.views.{MutFilter, UiNode, UiNodeFilterAware}
 
 object RemoveFilterbutton extends UiNodeFilterAware {
 
-  override def uiNode(fileId: FileId, filter: MutFilter[_]): UiNode = UiNode(classOf[RemoveFilterbutton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + filter.getPredicate.description))
+  override def uiNode(fileId: FileId, filter: MutFilter): UiNode = UiNode(classOf[RemoveFilterbutton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + filter.getPredicate.description))
 }
 
-class RemoveFilterbutton(fileId: FileId, filter: MutFilter[_], removeFilter: MutFilter[_] => Unit) extends RectButton(10, 10, filter.getColor, "remove") {
+class RemoveFilterbutton(fileId: FileId, filter: MutFilter, removeFilter: MutFilter => Unit) extends RectButton(10, 10, filter.getColor, "remove") {
   setId(RemoveFilterbutton.uiNode(fileId, filter).value)
   setOnAction(_ => removeFilter(filter))
   setStyle(

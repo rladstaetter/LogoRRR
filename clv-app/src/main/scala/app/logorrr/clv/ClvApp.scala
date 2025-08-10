@@ -71,6 +71,8 @@ class ClvApp extends Application with CanLog {
     }
     val colorPicker = new ColorPicker[ClvElem] {
       override def calc(a: ClvElem): Color = Color.GREY
+
+      override def init(): Unit = ()
     }
     val clv = new ChunkListView[ClvElem](elements
       , new SimpleIntegerProperty(selectedLineNumber)

@@ -1,13 +1,14 @@
 package app.logorrr
 
-import app.logorrr.model.FilterUtil
-import app.logorrr.views.MutFilter
+import app.logorrr.views.{MutFilter, SearchTerm}
 import org.scalacheck.Gen
 
 object TestUtil {
 
-  val filterGen: Gen[MutFilter[_]] = for {
-    f <- Gen.oneOf(FilterUtil.DefaultFilters)
+  val searchTermGen: Gen[SearchTerm] = for {f <- Gen.oneOf(SearchTerm.DefaultFilters)} yield f
+
+  val mutFilterGen: Gen[MutFilter] = for {
+    f <- Gen.oneOf(MutFilter.DefaultFilters)
   } yield f
 
 }

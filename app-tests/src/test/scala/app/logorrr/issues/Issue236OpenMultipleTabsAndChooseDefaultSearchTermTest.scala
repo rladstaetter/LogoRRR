@@ -1,9 +1,9 @@
 package app.logorrr.issues
 
 import app.logorrr.TestFiles
-import app.logorrr.model.FilterUtil
 import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.MultipleFileApplicationTest
+import app.logorrr.views.MutFilter
 import app.logorrr.views.search.FilterButton
 import javafx.scene.control.ToggleButton
 import org.junit.jupiter.api.Test
@@ -17,7 +17,7 @@ import java.util.function.Predicate
  * Shows that the default filters are used for a file after the first file was opened and the filter selection
  * was changed.
  * */
-class Issue236OpenMultipleTabsAndChooseDefaultFilterTest
+class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
   extends MultipleFileApplicationTest(TestFiles.seq)
     with CheckTabPaneActions {
 
@@ -26,7 +26,7 @@ class Issue236OpenMultipleTabsAndChooseDefaultFilterTest
     openFile(TestFiles.simpleLog0)
 
     // change filters to a non default configuration
-    val firstFilterTab1 = FilterButton.uiNode(TestFiles.simpleLog0, FilterUtil.DefaultFilters.head)
+    val firstFilterTab1 = FilterButton.uiNode(TestFiles.simpleLog0, MutFilter.DefaultFilters.head)
     waitAndClickVisibleItem(firstFilterTab1)
 
     // check that the toggle button is deselected
@@ -38,7 +38,7 @@ class Issue236OpenMultipleTabsAndChooseDefaultFilterTest
     openFile(TestFiles.simpleLog1)
 
     // test that second file has the default filter configuration
-    val firstFilterTab2 = FilterButton.uiNode(TestFiles.simpleLog1, FilterUtil.DefaultFilters.head)
+    val firstFilterTab2 = FilterButton.uiNode(TestFiles.simpleLog1, MutFilter.DefaultFilters.head)
     FxAssert.verifyThat(lookup(firstFilterTab2.ref), new Predicate[ToggleButton] {
       override def test(t: ToggleButton): Boolean = t.isSelected
     })

@@ -23,7 +23,6 @@ object LogoRRRChunkListView extends UiNodeFileIdAware {
       , mutLogFileSettings.blockSizeProperty
       , mutLogFileSettings.firstVisibleTextCellIndexProperty
       , mutLogFileSettings.lastVisibleTextCellIndexProperty)
-    val logEntryPicker = LogEntryPicker(mutLogFileSettings.filtersProperty)
     val logEntrySelector = LogEntrySelector(mutLogFileSettings.selectedLineNumberProperty)
 
     new LogoRRRChunkListView(entries
@@ -33,7 +32,7 @@ object LogoRRRChunkListView extends UiNodeFileIdAware {
       , mutLogFileSettings.lastVisibleTextCellIndexProperty
       , selectInTextView
       , logEntryVizor
-      , logEntryPicker
+      , new LogEntryPicker(mutLogFileSettings)
       , logEntrySelector
       , mutLogFileSettings.getFileId)
   }

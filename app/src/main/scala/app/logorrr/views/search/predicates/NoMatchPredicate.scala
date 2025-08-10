@@ -1,7 +1,7 @@
 package app.logorrr.views.search.predicates
 
-import app.logorrr.views.MutFilter
+import app.logorrr.clv.color.ColorMatcher
 
-case class NoMatchPredicate(filters: Set[MutFilter[_]]) extends DescriptivePredicate("Unclassified") {
-  def apply(searchTerm: String): Boolean = !filters.exists(_.matches(searchTerm))
+case class NoMatchPredicate(filters: Set[ColorMatcher]) extends LabelledFunction("Unclassified") {
+  def apply(searchTerm: String): Boolean = !AnyMatchPredicate(filters)(searchTerm)
 }

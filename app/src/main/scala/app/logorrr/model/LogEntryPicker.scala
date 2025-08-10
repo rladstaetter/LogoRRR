@@ -1,14 +1,17 @@
 package app.logorrr.model
 
-import app.logorrr.clv.color.{ColorPicker, ColorMatcher, ColorUtil}
-import javafx.collections.ObservableList
+import app.logorrr.clv.color.ColorPicker
+import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.views.SearchTerm
 import javafx.scene.paint.Color
 
-import scala.jdk.CollectionConverters.CollectionHasAsScala
+class LogEntryPicker(settings: MutLogFileSettings) extends ColorPicker[LogEntry] {
 
-case class LogEntryPicker(colorMatcherProperty: ObservableList[_ <: ColorMatcher]) extends ColorPicker[LogEntry] {
+  var searchTerms: Set[SearchTerm] = settings.getSearchTerms.toSet
 
-  val colorMatcher: Seq[ColorMatcher] = colorMatcherProperty.asScala.toSeq
+  override def calc(e: LogEntry): Color = SearchTerm.calc(e.value, searchTerms)
 
-  override def calc(e: LogEntry): Color = ColorUtil.calcColor(e.value, colorMatcher)
+  override def init(): Unit = {
+    searchTerms = settings.getSearchTerms.toSet
+  }
 }

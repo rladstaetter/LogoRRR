@@ -1,21 +1,21 @@
 package app.logorrr.usecases.search
 
 import app.logorrr.TestFiles
-import app.logorrr.model.FilterUtil
 import app.logorrr.usecases.SingleFileApplicationTest
+import app.logorrr.views.MutFilter
 import app.logorrr.views.search.RemoveFilterbutton
 import app.logorrr.views.text.LogTextView
 import org.junit.jupiter.api.Test
 
 import java.nio.file.Files
 
-class CloseDefaultFilterTest extends SingleFileApplicationTest(TestFiles.simpleLog1) {
+class CloseDefaultSearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog1) {
 
   @Test def closeDefaultFilter(): Unit = {
     openFile(fileId)
     val lines = Files.lines(fileId.asPath).count
 
-    FilterUtil.DefaultFilters.foreach {
+    MutFilter.DefaultFilters.foreach {
       f => waitAndClickVisibleItem(RemoveFilterbutton.uiNode(fileId, f))
     }
 

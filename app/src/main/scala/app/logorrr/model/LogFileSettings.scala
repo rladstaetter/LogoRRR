@@ -2,7 +2,7 @@ package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
 import app.logorrr.io.FileId
-import app.logorrr.views.Filter
+import app.logorrr.views.SearchTerm
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
 
@@ -32,7 +32,7 @@ object LogFileSettings {
       , Instant.now().toEpochMilli
       , DefaultDividerPosition
       , DefaultFontSize
-      , FilterUtil.DefaultFilters.map(f => Filter(f.getPredicate.description, f.getColor, f.isActive))
+      , SearchTerm.DefaultFilters
       , DefaultBlockSettings
       , DefaultLogFormat
       , DefaultAutoScroll
@@ -58,7 +58,7 @@ object LogFileSettings {
  * @param firstOpened               used to sort log files in tabs
  * @param dividerPosition           position of divider for this view
  * @param fontSize                  font size to use
- * @param filters                   filters which should be applied
+ * @param searchTerms               elements to be searched for, with their coloring and activation
  * @param blockSettings             settings for the left view
  * @param someTimestampSettings     used timestamp format
  * @param autoScroll                true if 'follow mode' is active
@@ -70,7 +70,7 @@ case class LogFileSettings(fileId: FileId
                            , firstOpened: Long
                            , dividerPosition: Double
                            , fontSize: Int
-                           , filters: Seq[Filter]
+                           , searchTerms: Seq[SearchTerm]
                            , blockSettings: BlockSettings
                            , someTimestampSettings: Option[TimestampSettings]
                            , autoScroll: Boolean

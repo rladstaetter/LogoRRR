@@ -1,7 +1,6 @@
 package app.logorrr.usecases.search
 
 import app.logorrr.TestFiles
-import app.logorrr.model.FilterUtil
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.MutFilter
 import app.logorrr.views.search.FilterButton
@@ -12,7 +11,7 @@ import org.junit.jupiter.api.Test
 /**
  * enables/disables specific filters
  * */
-class SelectDefaultFilterTest extends SingleFileApplicationTest(TestFiles.simpleLog2) {
+class SelectDefaultSearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2) {
 
   @Test def selectSpecificFilter(): Unit = {
     // file has 5 entries - each line consisting of one entry corresponding to
@@ -20,10 +19,10 @@ class SelectDefaultFilterTest extends SingleFileApplicationTest(TestFiles.simple
     // and a 'unclassified' line
     openFile(fileId)
 
-    FilterUtil.DefaultFilters.foreach {
+    MutFilter.DefaultFilters.foreach {
       f =>
         // deselect all filters except unclassified
-        clickFilters(FilterUtil.DefaultFilters)
+        clickFilters(MutFilter.DefaultFilters)
 
         // now, only 'unclassified' filter is active. since there are no unclassified
         // entries available, the number of displayed log entries is one
@@ -35,16 +34,16 @@ class SelectDefaultFilterTest extends SingleFileApplicationTest(TestFiles.simple
 
         // deselect filter again
         waitAndClickVisibleItem(FilterButton.uiNode(fileId, f))
-        clickFilters(FilterUtil.DefaultFilters)
+        clickFilters(MutFilter.DefaultFilters)
     }
 
     // finally, deselect all filters
-    clickFilters(FilterUtil.DefaultFilters)
+    clickFilters(MutFilter.DefaultFilters)
     // one entry is shown (unclassified)
     checkNumberOfShownElements(1)
 
     // deselect unclassified filter works as well
-    clickFilters(Seq(UnclassifiedFilter(FilterUtil.DefaultFilters.toSet)))
+    clickFilters(Seq(UnclassifiedFilter(MutFilter.DefaultFilters.toSet)))
     checkNumberOfShownElements(0)
   }
 
@@ -52,7 +51,7 @@ class SelectDefaultFilterTest extends SingleFileApplicationTest(TestFiles.simple
     assert(lookup(LogTextView.uiNode(fileId).ref).query[LogTextView].getItems.size() == expectedElements)
   }
 
-  def clickFilters(filters: Seq[MutFilter[_]]): Unit = {
+  def clickFilters(filters: Seq[MutFilter]): Unit = {
     filters.foreach {
       ff => waitAndClickVisibleItem(FilterButton.uiNode(fileId, ff)) // enable all filters
     }

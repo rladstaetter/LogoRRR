@@ -11,7 +11,7 @@ object BlockConstants {
   val BlockSizeStep: Int = 2
 
   /** max reachable block size */
-  val MaxBlockSize: Int = 70 * BlockSizeStep
+  val MaxBlockSize: Int = 100
 
 
 }

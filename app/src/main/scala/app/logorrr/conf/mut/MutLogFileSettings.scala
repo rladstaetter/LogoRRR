@@ -1,14 +1,12 @@
 package app.logorrr.conf.mut
 
+import app.logorrr.clv.color.ColorMatcher
 import app.logorrr.conf.BlockSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.{LogEntry, LogFileSettings, TimestampSettings}
 import app.logorrr.util.LogoRRRFonts
-import app.logorrr.views
-import app.logorrr.views.{Filter, MutFilter}
 import app.logorrr.views.search.FilterButton
-import app.logorrr.views.search.filter.AnyFilter
-import app.logorrr.views.search.predicates.ContainsPredicate
+import app.logorrr.views.{MutFilter, SearchTerm}
 import javafx.beans.binding.{BooleanBinding, StringBinding}
 import javafx.beans.property._
 import javafx.collections.transformation.FilteredList
@@ -27,7 +25,7 @@ object MutLogFileSettings {
     s.setBlockSettings(logFileSettings.blockSettings)
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
     s.setDividerPosition(logFileSettings.dividerPosition)
-    s.setFilters(logFileSettings.filters.map(f => views.MutFilter[String](ContainsPredicate(f.pattern), f.color, f.active)))
+    s.setFilters(logFileSettings.searchTerms.map(f => MutFilter(f)))
     s.someTimestampSettings.set(logFileSettings.someTimestampSettings)
     logFileSettings.someTimestampSettings match {
       case Some(sts) => s.setDateTimeFormatter(sts.dateTimeFormatter)
@@ -45,8 +43,8 @@ object MutLogFileSettings {
 
 class MutLogFileSettings {
 
-  var someUnclassifiedFilter: Option[(MutFilter[_], FilterButton)] = None
-  var filterButtons: Map[MutFilter[_], FilterButton] = Map[MutFilter[_], FilterButton]()
+  var someUnclassifiedFilter: Option[(MutFilter, FilterButton)] = None
+  var filterButtons: Map[ColorMatcher, FilterButton] = Map[ColorMatcher, FilterButton]()
 
   private val fileIdProperty = new SimpleObjectProperty[FileId]()
   private val firstOpenedProperty = new SimpleLongProperty()
@@ -63,20 +61,25 @@ class MutLogFileSettings {
 
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
-  val filtersProperty: SimpleListProperty[MutFilter[_]] = new SimpleListProperty[MutFilter[_]](FXCollections.observableArrayList())
+  val filtersProperty: SimpleListProperty[MutFilter] = new SimpleListProperty[MutFilter](FXCollections.observableArrayList())
 
 
-  /**
-   * Filters are only active if selected.
-   *
-   * UnclassifiedFilter gets an extra handling since it depends on other filters
-   *
-   * @return
-   */
-  def computeCurrentFilter(): MutFilter[_] = {
-    new AnyFilter(someUnclassifiedFilter.map(fst => if (fst._2.isSelected) Set(fst._1) else Set()).getOrElse(Set()) ++
-      filterButtons.filter(fst => fst._2.isSelected).keySet)
+  private def matchFilter(entry: LogEntry): Boolean = {
+    val matchedFilter = SearchTerm.matches(entry.value, getSearchTerms.toSet)
+    someUnclassifiedFilter match {
+      case Some((_, b)) =>
+        val dontMatch = SearchTerm.dontMatch(entry.value, getSearchTerms.toSet)
+        if (b.isSelected) {
+          val res = dontMatch || matchedFilter
+          res
+        } else {
+         matchedFilter
+        }
+      case _ =>
+        matchedFilter
+    }
   }
+
 
   /**
    * Reduce current displayed log entries by applying text filters and consider also the time stamp range.
@@ -88,9 +91,6 @@ class MutLogFileSettings {
       matchTimeRange(entry) && matchFilter(entry))
   }
 
-  private def matchFilter(entry: LogEntry): Boolean = {
-    computeCurrentFilter().matches(entry.value)
-  }
 
   private def matchTimeRange(entry: LogEntry): Boolean = {
     entry.someInstant match {
@@ -116,11 +116,11 @@ class MutLogFileSettings {
 
   def setDateTimeFormatter(dateTimeFormatter: DateTimeFormatter): Unit = dateTimeFormatterProperty.set(dateTimeFormatter)
 
-  def setFilters(filters: Seq[MutFilter[_]]): Unit = {
+  def setFilters(filters: Seq[MutFilter]): Unit = {
     filtersProperty.setAll(filters.asJava)
   }
 
-  def getFilters: ObservableList[MutFilter[_]] = filtersProperty.get()
+  def getFilters: ObservableList[MutFilter] = filtersProperty.get()
 
 
   val hasTimestampSetting: BooleanBinding = new BooleanBinding {
@@ -180,7 +180,7 @@ class MutLogFileSettings {
         , firstOpenedProperty.get()
         , dividerPositionProperty.get()
         , fontSizeProperty.get()
-        , getFilters.asScala.toSeq.map(f => Filter(f.getPredicate.description, f.getColor, f.isActive))
+        , getSearchTerms
         , BlockSettings(blockSizeProperty.get())
         , someTimestampSettings.get()
         , autoScrollActiveProperty.get()
@@ -189,6 +189,10 @@ class MutLogFileSettings {
         , lowerTimestampValueProperty.get()
         , upperTimestampValueProperty.get())
     lfs
+  }
+
+  def getSearchTerms: Seq[SearchTerm] = {
+    getFilters.asScala.toSeq.map(f => SearchTerm(f.getPredicate.description, f.getColor, f.isActive))
   }
 }
 
