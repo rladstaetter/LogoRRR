@@ -1,13 +1,11 @@
 package app.logorrr.issues
 
 import app.logorrr.TestFiles
-import app.logorrr.clv.ChunkListCell
 import app.logorrr.conf.Settings.calcDefaultScreenPosition
 import app.logorrr.conf.{BlockSettings, Settings, StageSettings}
-import app.logorrr.model.{LogEntry, LogFileSettings}
+import app.logorrr.model.LogFileSettings
+import app.logorrr.steps.{ChunkListViewActions, LogTextViewActions}
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.logfiletab.LogoRRRChunkListView
-import app.logorrr.views.text.LogTextView
 import org.junit.jupiter.api.Test
 
 /**
@@ -18,7 +16,9 @@ import org.junit.jupiter.api.Test
  *
  * */
 class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
-  extends SingleFileApplicationTest(TestFiles.simpleLog1) {
+  extends SingleFileApplicationTest(TestFiles.simpleLog1)
+    with LogTextViewActions
+    with ChunkListViewActions {
 
   /** setup settings such that the issue is triggered and can be inspected visually */
   override lazy val settings: Settings = Settings(
@@ -36,18 +36,14 @@ class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
   // start LogoRRRApp afterwards to tinker around
   @Test def testIssue294(): Unit = {
 
-    // check that no text view element is selected:
-
-    val logTextViewUiElem = LogTextView.uiNode(fileId)
-    val ltv = lookup(logTextViewUiElem.ref).query[LogTextView]
+    val ltv = lookupLogTextView(fileId)
 
     assert(ltv.getSelectionModel.getSelectedItems.size() == 0)
 
     // simple log is shown.
-    val chunkListViewUiElem = LogoRRRChunkListView.uiNode(fileId)
-    val clv = lookup(chunkListViewUiElem.ref).query[LogoRRRChunkListView]
+    val clv = lookupChunkListView(fileId)
 
-    val firstCell = from(clv).lookup(".list-cell").nth(0).query[ChunkListCell[LogEntry]]()
+    val firstCell = nthCell(clv, 0)
 
     val imageView = firstCell.view
 
