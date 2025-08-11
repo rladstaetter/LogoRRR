@@ -1,6 +1,6 @@
 package app.logorrr.clv
 
-import app.logorrr.clv.color.ColorChozzer
+import app.logorrr.clv.color.ColorPicker
 import javafx.application.Platform
 import javafx.beans.binding.{Bindings, BooleanBinding, IntegerBinding}
 import javafx.beans.property.SimpleIntegerProperty
@@ -54,7 +54,7 @@ class ChunkListView[A](val elements: ObservableList[A]
                        , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
                        , selectInTextView: A => Unit
                        , logEntryVizor: Vizor[A]
-                       , logEntryChozzer: ColorChozzer[A]
+                       , elementColorPicker: ColorPicker[A]
                        , logEntrySelector: ElementSelector[A])
   extends ListView[Chunk[A]] with CanLog {
 
@@ -122,7 +122,7 @@ class ChunkListView[A](val elements: ObservableList[A]
         blockSizeProperty
         , selectInTextView
         , logEntryVizor
-        , logEntryChozzer
+        , elementColorPicker
         , logEntrySelector
         , chunkListWidthProperty)
     })
@@ -202,10 +202,7 @@ class ChunkListView[A](val elements: ObservableList[A]
     if (!recalculateScheduled && widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0) {
       recalculateScheduled = true
       Platform.runLater(() => {
-        // println(s"recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
-        //        println(s"elems.size: ${elements.size()}")
         Chunk.updateChunks[A](getItems, elements, blockSizeProperty.get(), chunkListWidthProperty.get(), heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
-        //setItems(chunks)
         recalculateScheduled = false
       })
     } else {

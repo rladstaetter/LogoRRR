@@ -6,7 +6,7 @@ import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import app.logorrr.views.search.{FiltersToolBar, OpsToolBar}
 import app.logorrr.views.text.LogTextView
-import app.logorrr.views.{Filter, MutFilter}
+import app.logorrr.views.{MutFilter, SearchTerm}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
@@ -29,7 +29,6 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   // graphical display to the left
   private val chunkListView = LogoRRRChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem, widthProperty)
 
-
   private val blockSizeSlider = {
     val bs = new BlockSizeSlider(mutLogFileSettings.getFileId)
     bs.valueProperty().bindBidirectional(mutLogFileSettings.blockSizeProperty)
@@ -50,7 +49,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     logTextView.scrollTo(logTextView.getItems.size)
   }
 
-  def activeFilters: Seq[Filter] = filtersToolBar.activeFilters()
+  def activeFilters: Seq[SearchTerm] = filtersToolBar.activeFilters()
 
   def addTailerListener(): Unit = filteredList.addListener(scrollToEndEventListener)
 
@@ -97,9 +96,13 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     chunkListView.removeListeners()
   }
 
-  def addFilter(filter: MutFilter[_]): Unit = mutLogFileSettings.filtersProperty.add(filter)
+  def addFilter(filter: MutFilter): Unit = {
+    mutLogFileSettings.filtersProperty.add(filter)
+  }
 
-  def removeFilter(filter: MutFilter[_]): Unit = mutLogFileSettings.filtersProperty.remove(filter)
+  def removeFilter(filter: MutFilter): Unit = {
+    mutLogFileSettings.filtersProperty.remove(filter)
+  }
 
   /**
    * Called if a tab is selected

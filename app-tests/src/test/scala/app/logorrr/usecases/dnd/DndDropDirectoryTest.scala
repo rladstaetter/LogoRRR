@@ -39,7 +39,7 @@ class DndDropDirectoryTest extends StartEmptyApplicationTest
   @Test def testOpeningDirectoryWith5FilesAndAZipContaining10Files(): Unit = {
     checkForEmptyTabPane()
     drag(DragSourceButton.uiNode(FileId(TestFiles.baseDir)).ref, MouseButton.PRIMARY).dropTo(UiNodes.MainTabPane.ref)
-    expectCountOfOpenFiles(15)
+    expectCountOfOpenFiles(TestFiles.seq.size + 10)
   }
 
 }

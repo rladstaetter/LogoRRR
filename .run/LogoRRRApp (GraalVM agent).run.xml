@@ -7,7 +7,7 @@
     <option name="VM_PARAMETERS" value="-Xmx4g -Dprism.verbose=true -Djava.util.logging.config.file=develop-logging.properties -Djava.library.path=$PROJECT_DIR$/env/target/javafx-sdk-24.0.2/lib:$PROJECT_DIR$/native/native-osx/target -Duser.language=en --enable-native-access=javafx.graphics --module-path $PROJECT_DIR$/env/target/javafx-sdk-24.0.2/lib --add-modules javafx.controls,javafx.fxml --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED -Dprism.verbose=true -agentlib:native-image-agent=dist-linux/graal-linux/src/main/resources" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="app.logorrr.*" />
+        <option name="PATTERN" value="app.logorrr.issues.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

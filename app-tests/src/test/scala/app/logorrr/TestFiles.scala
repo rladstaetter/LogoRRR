@@ -13,6 +13,7 @@ object TestFiles {
   val simpleLog2: FileId = FileId(baseDir.resolve("SimpleLog-2.txt")) // 5 entries
   val simpleLog3: FileId = FileId(baseDir.resolve("SimpleLog-3.txt")) // 4 entries
   val simpleLog4: FileId = FileId(baseDir.resolve("SimpleLog-4.txt")) // 4 entries
+  val simpleLog5: FileId = FileId(baseDir.resolve("SimpleLog-5.txt")) // 1 line, 'a b c d e'
 
   val timedLog: FileId = simpleLog1
 
@@ -24,5 +25,6 @@ object TestFiles {
     , simpleLog2
     , simpleLog3
     , simpleLog4
+    , simpleLog5
   )
 }

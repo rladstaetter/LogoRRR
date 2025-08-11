@@ -1,10 +1,10 @@
 package app.logorrr.views.logfiletab
 
-import app.logorrr.clv.color.ColorChozzer
+import app.logorrr.clv.color.ColorPicker
 import app.logorrr.clv.{ChunkListView, ElementSelector, Vizor}
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
-import app.logorrr.model.{LogEntry, LogEntryChozzer, LogEntrySelector, LogEntryVizor}
+import app.logorrr.model.{LogEntry, LogEntryPicker, LogEntrySelector, LogEntryVizor}
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
@@ -23,7 +23,6 @@ object LogoRRRChunkListView extends UiNodeFileIdAware {
       , mutLogFileSettings.blockSizeProperty
       , mutLogFileSettings.firstVisibleTextCellIndexProperty
       , mutLogFileSettings.lastVisibleTextCellIndexProperty)
-    val logEntryChozzer = LogEntryChozzer(mutLogFileSettings.filtersProperty)
     val logEntrySelector = LogEntrySelector(mutLogFileSettings.selectedLineNumberProperty)
 
     new LogoRRRChunkListView(entries
@@ -33,7 +32,7 @@ object LogoRRRChunkListView extends UiNodeFileIdAware {
       , mutLogFileSettings.lastVisibleTextCellIndexProperty
       , selectInTextView
       , logEntryVizor
-      , logEntryChozzer
+      , new LogEntryPicker(mutLogFileSettings)
       , logEntrySelector
       , mutLogFileSettings.getFileId)
   }
@@ -49,12 +48,12 @@ class LogoRRRChunkListView(override val elements: ObservableList[LogEntry]
                            , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
                            , selectInTextView: LogEntry => Unit
                            , logEntryVizor: Vizor[LogEntry]
-                           , logEntryChozzer: ColorChozzer[LogEntry]
+                           , logEntryPicker: ColorPicker[LogEntry]
                            , logEntrySelector: ElementSelector[LogEntry]
                            , fileId: FileId)
   extends ChunkListView[LogEntry](elements, selectedLineNumberProperty, blockSizeProperty, firstVisibleTextCellIndexProperty
     , lastVisibleTextCellIndexProperty, selectInTextView,
-    logEntryVizor, logEntryChozzer, logEntrySelector) {
+    logEntryVizor, logEntryPicker, logEntrySelector) {
 
   // set Id to track it for UI tests
   setId(LogoRRRChunkListView.uiNode(fileId).value)

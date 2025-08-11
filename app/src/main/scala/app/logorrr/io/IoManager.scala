@@ -76,7 +76,8 @@ object IoManager extends CanLog {
     FXCollections.observableList(arraylist)
   }
 
-  def from(logFile: Path, logEntryTimeFormat: TimestampSettings): ObservableList[LogEntry] = {
+  def from(logFile: Path
+           , logEntryTimeFormat: TimestampSettings): ObservableList[LogEntry] = {
     var lineNumber: Int = 0
     var someFirstEntryTimestamp: Option[Instant] = None
     val arraylist = new util.ArrayList[LogEntry]()
@@ -87,18 +88,18 @@ object IoManager extends CanLog {
         someFirstEntryTimestamp = someInstant
       }
 
-      val diffFromStart: Option[Duration] = for {
+      val someDiffFromStart: Option[Duration] = for {
         firstEntry <- someFirstEntryTimestamp
         instant <- someInstant
       } yield Duration.between(firstEntry, instant)
-
-      // first entry
-      arraylist.add(LogEntry(lineNumber, l, someInstant, diffFromStart))
+      val entry = LogEntry(lineNumber, l, someInstant, someDiffFromStart)
+      arraylist.add(entry)
     })
     FXCollections.observableList(arraylist)
   }
 
-  def readEntries(path: Path, someLogEntryInstantFormat: Option[TimestampSettings]): ObservableList[LogEntry] = {
+  def readEntries(path: Path
+                  , someLogEntryInstantFormat: Option[TimestampSettings]): ObservableList[LogEntry] = {
     if (isPathValid(path)) {
       Try(someLogEntryInstantFormat match {
         case None => IoManager.from(path)
@@ -128,11 +129,11 @@ object IoManager extends CanLog {
    * Given a zip file, extract its contents recursively and return all files contained in a map. the key of this
    * map represents the file name in the zip file, and the value is the contents of the file as string.
    *
-   * @param zipFile the zip file
-   * @param filters if empty, return all files, else only those which match given file ids
+   * @param zipFile       the zip file
+   * @param relevantFiles if empty, return all files, else only those which match given file ids
    * @return
    */
-  def unzip(zipFile: Path, filters: Set[FileId] = Set()): Map[FileId, ObservableList[LogEntry]] = {
+  def unzip(zipFile: Path, relevantFiles: Set[FileId] = Set()): Map[FileId, ObservableList[LogEntry]] = {
     OsxBridgeHelper.registerPath(zipFile)
     var resultMap: Map[FileId, ObservableList[LogEntry]] = Map()
     try {
@@ -142,7 +143,7 @@ object IoManager extends CanLog {
         if (!entry.isDirectory) {
           // by convention reference a file which is contained in a zip file like that
           val id = FileId(zipFile.toAbsolutePath.toString + "@" + entry.getName)
-          if (filters.isEmpty || filters.contains(id)) { // do not read all entries if there is no need to do it
+          if (relevantFiles.isEmpty || relevantFiles.contains(id)) { // do not read all entries if there is no need to do it
             resultMap += (id -> IoManager.from(zipIn.readAllBytes()))
           }
         }

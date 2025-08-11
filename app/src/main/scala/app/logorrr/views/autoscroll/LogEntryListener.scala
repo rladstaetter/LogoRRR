@@ -13,8 +13,7 @@ import org.apache.commons.io.input.{Tailer, TailerListener}
  *
  * @param ol list containing current entries
  */
-class LogEntryListener(ol: ObservableList[LogEntry])
-  extends TailerListener with CanLog {
+class LogEntryListener(ol: ObservableList[LogEntry]) extends TailerListener with CanLog {
 
   private var currentCnt = ol.size()
 

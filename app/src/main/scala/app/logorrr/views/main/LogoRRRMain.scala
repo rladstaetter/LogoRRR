@@ -56,7 +56,9 @@ class LogoRRRMain(closeStage: => Unit
 
   private def loadLogFiles(settings: Seq[LogFileSettings]): Seq[LogFileTab] = {
     val (zipSettings, fileSettings) = settings.partition(p => p.fileId.isZipEntry)
+
     val zipSettingsMap: Map[FileId, LogFileSettings] = zipSettings.map(s => s.fileId -> s).toMap
+
     // zips is a map which contains fileIds as keys which have to be loaded, and as values their corresponding
     // settings. this is necessary as not to lose settings from previous runs
     val zips: Map[FileId, Seq[FileId]] = FileId.reduceZipFiles(zipSettingsMap.keys.toSeq)
@@ -88,7 +90,8 @@ class LogoRRRMain(closeStage: => Unit
         }, s"Loaded '${lfs.fileId.absolutePathAsString}' from filesystem ...")
       })
 
-      zipFutures ++ fileBasedSettings
+      val res: Seq[Future[Option[LogFileTab]]] = zipFutures ++ fileBasedSettings
+      res
     }
     val logFileTabs: Seq[LogFileTab] = Await.result(futures, Duration.Inf).flatten
     logTrace("Loaded " + logFileTabs.size + " files ... ")

@@ -10,7 +10,7 @@ import net.ladstatt.util.log.CanLog
 
 object FilterButton extends UiNodeFilterAware {
 
-  override def uiNode(fileId: FileId, filter: MutFilter[_]): UiNode = UiNode(classOf[FilterButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + filter.getPredicate.description))
+  override def uiNode(fileId: FileId, filter: MutFilter): UiNode = UiNode(classOf[FilterButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + filter.getPredicate.description))
 
 }
 
@@ -18,13 +18,13 @@ object FilterButton extends UiNodeFilterAware {
  * Displays a search term and triggers displaying the results.
  */
 class FilterButton(val fileId: FileId
-                   , val filter: MutFilter[_]
-                   , i: Int
+                   , val filter: MutFilter
+                   , hits: Int
                    , updateActiveFilter: => Unit
-                   , removeFilter: MutFilter[_] => Unit) extends ToggleButton(filter.getPredicate.description) with CanLog {
+                   , removeFilter: MutFilter => Unit) extends ToggleButton(filter.getPredicate.description) with CanLog {
 
   setId(FilterButton.uiNode(fileId, filter).value)
-  setTooltip(new Tooltip(if (i == 1) "one item found" else s"$i items found"))
+  setTooltip(new Tooltip(if (hits == 1) "one item found" else s"$hits items found"))
 
   if (!isUnclassified) {
     setContentDisplay(ContentDisplay.RIGHT)

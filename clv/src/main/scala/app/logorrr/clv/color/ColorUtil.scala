@@ -21,27 +21,6 @@ object ColorUtil {
     new Color(red, green, blue, alpha)
   }
 
-  /**
-   * calculate a color for this log entry.
-   *
-   * - either white if no search filter hits
-   * - given color if only one hit
-   * - a melange of all colors from all hits in all other cases
-   * */
-  def calcColor(value: String, filters: Seq[ColorMatcher]): Color = {
-    val hits = filters.filter(_.matches(value))
-    val color = {
-      if (hits.isEmpty) {
-        Color.LIGHTGREY
-      } else if (hits.size == 1) {
-        hits.head.getColor
-      } else {
-        val c = hits.tail.foldLeft(hits.head.getColor)((acc, sf) => acc.interpolate(sf.getColor, 0.5))
-        c
-      }
-    }
-    color
-  }
 
 
 }

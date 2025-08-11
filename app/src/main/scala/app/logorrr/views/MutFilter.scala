@@ -1,16 +1,28 @@
 package app.logorrr.views
 
 import app.logorrr.clv.color.ColorMatcher
-import app.logorrr.views.search.predicates.DescriptivePredicate
+import app.logorrr.views.search.predicates.{ContainsPredicate, LabelledFunction}
 import javafx.beans.property.{BooleanProperty, SimpleBooleanProperty, SimpleObjectProperty}
 import javafx.scene.paint.Color
 
 object MutFilter {
 
-  def apply[A](predicate: DescriptivePredicate
-               , color: Color
-               , active: Boolean): MutFilter[A] = {
-    val filter = new MutFilter[A]()
+  val DefaultFilters: Seq[MutFilter] = SearchTerm.DefaultFilters.map(MutFilter.apply)
+
+  def apply(searchTerm: SearchTerm): MutFilter = {
+    apply(searchTerm.value, searchTerm.color, searchTerm.active)
+  }
+
+  private def apply(pattern: String
+                    , color: Color
+                    , active: Boolean): MutFilter = {
+    apply(ContainsPredicate(pattern), color, active)
+  }
+
+  private def apply(predicate: LabelledFunction
+                    , color: Color
+                    , active: Boolean): MutFilter = {
+    val filter = new MutFilter()
     filter.init(predicate, color, active)
     filter
   }
@@ -18,10 +30,13 @@ object MutFilter {
 }
 
 
+class MutFilter extends ColorMatcher {
 
-class MutFilter[A] extends ColorMatcher {
+  val predicateProperty: SimpleObjectProperty[LabelledFunction] = new SimpleObjectProperty[LabelledFunction]()
+  val colorProperty: SimpleObjectProperty[Color] = new SimpleObjectProperty[Color]()
+  val activeProperty: SimpleBooleanProperty = new SimpleBooleanProperty()
 
-  def init(predicate: DescriptivePredicate
+  def init(predicate: LabelledFunction
            , color: Color
            , active: Boolean): Unit = {
     setPredicate(predicate)
@@ -29,30 +44,23 @@ class MutFilter[A] extends ColorMatcher {
     setActive(active)
   }
 
-  val predicateProperty: SimpleObjectProperty[DescriptivePredicate] = new SimpleObjectProperty[DescriptivePredicate]()
-  val colorProperty: SimpleObjectProperty[Color] = new SimpleObjectProperty[Color]()
-  val activeProperty: SimpleBooleanProperty = new SimpleBooleanProperty()
-
   def matches(searchTerm: String): Boolean = Option(predicateProperty.get()).exists(p => p.apply(searchTerm))
-
-  def getColor: Color = colorProperty.get()
-
-  def getPredicate: DescriptivePredicate = predicateProperty.get()
-
-  def isActive: Boolean = activeProperty.get()
 
   def unbind(): Unit = activeProperty.unbind()
 
-  def bind(activeProperty: BooleanProperty): Unit = {
-    this.activeProperty.bind(activeProperty)
-  }
+  def bind(activeProperty: BooleanProperty): Unit = this.activeProperty.bind(activeProperty)
 
-  def setPredicate(predicate: DescriptivePredicate): Unit = predicateProperty.set(predicate)
+  def getPredicate: LabelledFunction = predicateProperty.get()
 
+  def setPredicate(predicate: LabelledFunction): Unit = predicateProperty.set(predicate)
+
+  def getColor: Color = colorProperty.get()
 
   def setColor(color: Color): Unit = colorProperty.set(color)
 
   def setActive(active: Boolean): Unit = activeProperty.set(active)
+
+  def isActive: Boolean = activeProperty.get()
 
 }
 

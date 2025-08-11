@@ -16,7 +16,7 @@ import javafx.scene.paint.Color
  */
 case class LogTextViewLabel(e: LogEntry
                             , maxLength: Int
-                            , filters: Seq[_ <: MutFilter[_]]
+                            , filters: Seq[_ <: MutFilter]
                             , fontStyleBinding: StringBinding
                             , fontSizeProperty: IntegerProperty
                            ) extends HBox {

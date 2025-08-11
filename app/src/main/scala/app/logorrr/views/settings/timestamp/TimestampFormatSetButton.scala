@@ -36,7 +36,7 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
     val leif: TimestampSettings = TimestampSettings(getRange, timeFormatTf.getText.trim)
     mutLogFileSettings.setSomeLogEntryInstantFormat(Option(leif))
     LogoRRRGlobals.persist()
-    // we have to deactivate this listener otherwise
+    // we have to deactivate this listener otherwise to many invalidationevents are triggered
     chunkListView.removeInvalidationListener()
     var someFirstEntryTimestamp: Option[Instant] = None
 
@@ -48,12 +48,12 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
         someFirstEntryTimestamp = someInstant
       }
 
-      val diffFromStart: Option[Duration] = for {
+      val someDiffFromStart: Option[Duration] = for {
         firstEntry <- someFirstEntryTimestamp
         instant <- someInstant
       } yield Duration.between(firstEntry, instant)
 
-      tempList.add(e.copy(someInstant = someInstant, someDurationSinceFirstInstant = diffFromStart))
+      tempList.add(e.copy(someInstant = someInstant, someDurationSinceFirstInstant = someDiffFromStart))
     }
     logEntries.setAll(tempList)
     // activate listener again

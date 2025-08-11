@@ -7,6 +7,6 @@ import app.logorrr.io.FileId
  */
 trait UiNodeFilterAware {
 
-  def uiNode(fileId: FileId, filter: MutFilter[_]): UiNode
+  def uiNode(fileId: FileId, filter: MutFilter): UiNode
 
 }

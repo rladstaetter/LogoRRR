@@ -1,6 +1,6 @@
 package app.logorrr.clv
 
-import app.logorrr.clv.color.{BlockColor, ColorChozzer, ColorUtil, LColors}
+import app.logorrr.clv.color.{BlockColor, ColorPicker, ColorUtil, LColors}
 import javafx.beans.binding.IntegerBinding
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.event.EventHandler
@@ -163,7 +163,7 @@ object ChunkListCell extends CanLog {
 class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
                        , scrollTo: A => Unit
                        , logEntryVizor: Vizor[A]
-                       , logEntryChozzer: ColorChozzer[A]
+                       , elementColorPicker: ColorPicker[A]
                        , elementSelector: ElementSelector[A]
                        , chunkListViewWidthBinding: IntegerBinding
                       ) extends ListCell[Chunk[A]] with CanLog {
@@ -263,6 +263,8 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
              , blockSize: Int
             ): Unit = {
     if (shape.width > blockSize) {
+      // do this once for all paint operations
+      elementColorPicker.init()
       if (blockSize > 1) {
         paintRects(pixelBuffer, entries, shape, blockSize)
       } else {
@@ -287,7 +289,7 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
         // we bailout with an exception.
         Try(entries.get(o)).toOption match {
           case Some(e) =>
-            ChunkListCell.paintBlock(pb, i, logEntryChozzer.calc(e), blockSize, shape.width, logEntryVizor.isSelected(e), logEntryVizor.isFirstVisible(e), logEntryVizor.isLastVisible(e), logEntryVizor.isVisibleInTextView(e))
+            ChunkListCell.paintBlock(pb, i, elementColorPicker.calc(e), blockSize, shape.width, logEntryVizor.isSelected(e), logEntryVizor.isFirstVisible(e), logEntryVizor.isLastVisible(e), logEntryVizor.isVisibleInTextView(e))
             i = i + 1
           case None => // logWarn("Concurrent change of entries detected")
         }
@@ -302,8 +304,8 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
     entries.forEach(e => {
       val col =
         (logEntryVizor.isSelected(e), logEntryVizor.isVisible(e)) match {
-          case (false, false) => ColorUtil.toARGB(logEntryChozzer.calc(e))
-          case (false, true) => ColorUtil.toARGB(logEntryChozzer.calc(e).brighter())
+          case (false, false) => ColorUtil.toARGB(elementColorPicker.calc(e))
+          case (false, true) => ColorUtil.toARGB(elementColorPicker.calc(e).brighter())
           case (true, false) => LColors.y
           case (true, true) => LColors.yb
         }
