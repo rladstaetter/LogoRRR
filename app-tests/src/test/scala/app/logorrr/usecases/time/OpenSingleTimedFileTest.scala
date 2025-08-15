@@ -38,12 +38,9 @@ class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedL
     openFile(fileId)
     clickOn(TimestampSettingsButton.uiNode(fileId))
     clickOn(TimestampFormatSetButton.uiNode(fileId))
-    // settings aren't set after click on reset button
-    assert(LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.get())
 
-    // label is set to gibberish since we couldn't parse the timestamp properly (no position set)
-    expectLabelText(fileId, Pos.CENTER_LEFT, "1970-01-01 01:00:00.000")
-    expectLabelText(fileId, Pos.CENTER_RIGHT, "1970-01-01 01:00:00.000")
+    // settings aren't set after click on set button with invalid settings
+    assert(!LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.get())
   }
 
   @Test def setPositionAndFormatTest(): Unit = {
@@ -78,7 +75,7 @@ class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedL
     expectLabelText(fileId, Pos.CENTER_RIGHT, latestTimestamp)
 
     // drag lower slider to highest point
-    drag(SliderVBox.uiNode(fileId, Pos.CENTER_LEFT).ref).moveBy(TimerSlider.Width/2, 0).release(MouseButton.PRIMARY)
+    drag(SliderVBox.uiNode(fileId, Pos.CENTER_LEFT).ref).moveBy(TimerSlider.Width / 2, 0).release(MouseButton.PRIMARY)
     expectLabelText(fileId, Pos.CENTER_LEFT, latestTimestamp)
 
   }

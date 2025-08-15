@@ -25,7 +25,7 @@ class TimerSliderSpec extends AnyWordSpec {
     }
     ".one entry with timestamp" in {
       val l = FXCollections.observableList(Collections.singletonList[LogEntry](LogEntry(0, "",  Option(Instant.now), Option(Duration.ofSeconds(0)))))
-      assert(TimeUtil.calcTimeInfo(l).isDefined)
+      assert(TimeUtil.calcTimeInfo(l).isEmpty)
     }
     ".two entries with timestamp" in {
       val l = FXCollections.observableArrayList(

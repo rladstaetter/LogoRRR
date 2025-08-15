@@ -1,9 +1,9 @@
 package app.logorrr.views.settings.timestamp
 
+import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
-import app.logorrr.clv.ChunkListView
 import app.logorrr.model.{LogEntry, TimestampSettings}
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
@@ -34,7 +34,11 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
   setAlignment(Pos.CENTER)
   setOnAction(_ => {
     val leif: TimestampSettings = TimestampSettings(getRange, timeFormatTf.getText.trim)
-    mutLogFileSettings.setSomeLogEntryInstantFormat(Option(leif))
+    if (getRange.length == 0) {
+      mutLogFileSettings.setSomeLogEntryInstantFormat(None)
+    } else {
+      mutLogFileSettings.setSomeLogEntryInstantFormat(Option(leif))
+    }
     LogoRRRGlobals.persist()
     // we have to deactivate this listener otherwise to many invalidationevents are triggered
     chunkListView.removeInvalidationListener()
@@ -59,7 +63,7 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
     // activate listener again
     chunkListView.addInvalidationListener()
     // update slider boundaries
-    timeOpsToolBar.updateSliderBoundaries()
+    timeOpsToolBar.initializeRanges()
     closeStage
   })
 
