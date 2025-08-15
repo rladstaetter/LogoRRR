@@ -110,7 +110,7 @@ class MutLogFileSettings {
 
   def getLowerTimestampValue: Long = lowerTimestampValueProperty.get()
 
-  val filteredRangeBinding = new ObjectBinding[TimeRange]() {
+  val filteredRangeBinding: ObjectBinding[TimeRange] = new ObjectBinding[TimeRange]() {
     bind(lowerTimestampValueProperty, upperTimestampValueProperty)
 
     override def computeValue(): TimeRange = {
