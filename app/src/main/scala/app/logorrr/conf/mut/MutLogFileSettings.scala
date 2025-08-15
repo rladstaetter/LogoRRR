@@ -5,15 +5,18 @@ import app.logorrr.conf.BlockSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.{LogEntry, LogFileSettings, TimestampSettings}
 import app.logorrr.util.LogoRRRFonts
+import app.logorrr.views.ops.time.TimeRange
 import app.logorrr.views.search.FilterButton
 import app.logorrr.views.{MutFilter, SearchTerm}
-import javafx.beans.binding.{BooleanBinding, StringBinding}
+import javafx.beans.binding.{BooleanBinding, ObjectBinding, StringBinding}
 import javafx.beans.property._
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ObservableList}
 
+import java.time.Instant
 import java.time.format.DateTimeFormatter
 import scala.jdk.CollectionConverters._
+import scala.util.Try
 
 object MutLogFileSettings {
 
@@ -32,10 +35,8 @@ object MutLogFileSettings {
       case None =>
     }
     s.setAutoScroll(logFileSettings.autoScroll)
-    // TODO: set values and boundaries correctly for sliders
-    // https://github.com/rladstaetter/LogoRRR/issues/261
-    //s.setLowerTimestampValue(logFileSettings.lowerTimestamp)
-    //s.setUpperTimestampValue(logFileSettings.upperTimestamp)
+    s.setLowerTimestampValue(logFileSettings.lowerTimestamp)
+    s.setUpperTimestampValue(logFileSettings.upperTimestamp)
     s
   }
 }
@@ -48,7 +49,6 @@ class MutLogFileSettings {
 
   private val fileIdProperty = new SimpleObjectProperty[FileId]()
   private val firstOpenedProperty = new SimpleLongProperty()
-  private val someTimestampSettings = new SimpleObjectProperty[Option[TimestampSettings]](None)
   private val dateTimeFormatterProperty = new SimpleObjectProperty[DateTimeFormatter](TimestampSettings.DefaultFormatter)
 
   val fontSizeProperty = new SimpleIntegerProperty()
@@ -56,8 +56,13 @@ class MutLogFileSettings {
   val selectedLineNumberProperty = new SimpleIntegerProperty()
   val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty()
   val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
-  private val lowerTimestampValueProperty = new SimpleLongProperty(LogFileSettings.DefaultLowerTimestamp)
-  private val upperTimestampValueProperty = new SimpleLongProperty(LogFileSettings.DefaultUpperTimestamp)
+
+  private val someTimestampSettings = new SimpleObjectProperty[Option[TimestampSettings]](None)
+  private val lowerTimestampValueProperty = new SimpleLongProperty()
+  private val upperTimestampValueProperty = new SimpleLongProperty()
+
+  //  private val lowerTimestampValueProperty = new SimpleLongProperty(LogFileSettings.DefaultLowerTimestamp)
+  //  private val upperTimestampValueProperty = new SimpleLongProperty(LogFileSettings.DefaultUpperTimestamp)
 
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
@@ -73,7 +78,7 @@ class MutLogFileSettings {
           val res = dontMatch || matchedFilter
           res
         } else {
-         matchedFilter
+          matchedFilter
         }
       case _ =>
         matchedFilter
@@ -97,7 +102,7 @@ class MutLogFileSettings {
       case None => true // if instant is not set, return true
       case Some(value) =>
         val asMilli = value.toEpochMilli
-        getLowerTimestampValue <= asMilli && asMilli <= getHigherTimestampValue
+        getLowerTimestampValue <= asMilli && asMilli <= getUpperTimestampValue
     }
   }
 
@@ -105,10 +110,19 @@ class MutLogFileSettings {
 
   def getLowerTimestampValue: Long = lowerTimestampValueProperty.get()
 
+  val filteredRangeBinding: ObjectBinding[TimeRange] = new ObjectBinding[TimeRange]() {
+    bind(lowerTimestampValueProperty, upperTimestampValueProperty)
+
+    override def computeValue(): TimeRange = {
+      (for {lower <- Option(lowerTimestampValueProperty.get()).map(Instant.ofEpochMilli)
+            upper <- Option(upperTimestampValueProperty.get()).map(Instant.ofEpochMilli)
+            } yield Try(TimeRange(lower, upper)).getOrElse(null)).orNull
+    }
+  }
+
   def setUpperTimestampValue(upperValue: Long): Unit = upperTimestampValueProperty.set(upperValue)
 
-  def getHigherTimestampValue: Long = upperTimestampValueProperty.get()
-
+  def getUpperTimestampValue: Long = upperTimestampValueProperty.get()
 
   def getSomeTimestampSettings: Option[TimestampSettings] = someTimestampSettings.get()
 

@@ -68,9 +68,9 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   }
   val timeOpsToolBar = new TimeOpsToolBar(mutLogFileSettings
     , chunkListView
-    , logTextView
-    , entries // we write on this list potentially
+    , entries
     , filteredList)
+
   private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, filtersToolBar, timeOpsToolBar)
 
   private val pane = new SplitPane(blockPane, logTextView)

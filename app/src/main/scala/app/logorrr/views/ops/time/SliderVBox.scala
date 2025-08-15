@@ -13,13 +13,18 @@ object SliderVBox extends UiNodeFileIdAndPosAware {
 }
 
 class SliderVBox(mutLogFileSettings: MutLogFileSettings
+                 , pos: Pos
                  , tooltipText: String
-                 , pos: Pos) extends VBox {
+                 , sliderRange : TimeRange) extends VBox {
 
   setId(SliderVBox.uiNode(mutLogFileSettings.getFileId, pos).value)
-  val slider = new TimerSlider(mutLogFileSettings, pos, tooltipText)
+  val slider = new TimerSlider(mutLogFileSettings, pos, tooltipText, sliderRange)
   val label = new TimestampSliderLabel(mutLogFileSettings, slider)
 
   setAlignment(pos)
   getChildren.addAll(slider, label)
+
+  def resetRange(range : TimeRange) : Unit = {
+    slider.setRange(range)
+  }
 }

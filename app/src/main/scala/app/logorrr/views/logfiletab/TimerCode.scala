@@ -1,6 +1,7 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.model.LogEntry
+import app.logorrr.views.ops.time.TimeRange
 import javafx.collections.ObservableList
 
 /**
