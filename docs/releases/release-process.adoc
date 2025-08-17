@@ -1,0 +1,30 @@
+= Release Documentation
+
+For every release, certain steps have to be performed:
+
+== Verify Release
+
+- test application on all platforms
+
+== Create Release resources
+
+- create screenshots with Screenshotter App
+
+== Documentation
+
+- create release notes for github, describing new features/bugfixes
+- create web site describing new features/bugfixes
+- create youtube video with a walkthrough to all new features
+
+== Release on App stores
+
+- release on mac app store
+- release on windows app store
+- release on flathub
+- create release binaries for windows, mac and linux
+
+== Social Media
+
+- post on bluesky
+- post on reddit
+- post on instagram?
