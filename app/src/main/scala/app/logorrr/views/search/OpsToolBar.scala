@@ -18,8 +18,6 @@ import net.ladstatt.util.os.OsUtil
 
 object OpsToolBar {
 
-  /** increment / decrement font size */
-  val fontSizeStep: Int = 1
 
 }
 

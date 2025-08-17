@@ -1,8 +1,8 @@
 package app.logorrr.views.text.toolbaractions
 
 import app.logorrr.io.FileId
+import app.logorrr.views.logfiletab.TextConstants
 import app.logorrr.views.ops.TextSizeButton
-import app.logorrr.views.search.OpsToolBar
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 
 object DecreaseTextSizeButton extends UiNodeFileIdAware {
@@ -15,8 +15,8 @@ class DecreaseTextSizeButton(val fileId: FileId) extends TextSizeButton(9, "decr
 
   setId(DecreaseTextSizeButton.uiNode(fileId).value)
   setOnAction(_ => {
-    if (getFontSize - OpsToolBar.fontSizeStep > 0) {
-      setFontSize(getFontSize - OpsToolBar.fontSizeStep)
+    if (getFontSize - TextConstants.fontSizeStep > 0) {
+      setFontSize(getFontSize - TextConstants.fontSizeStep)
     }
   })
 }

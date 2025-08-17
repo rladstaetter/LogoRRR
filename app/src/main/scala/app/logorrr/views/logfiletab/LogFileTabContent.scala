@@ -2,17 +2,30 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
+import app.logorrr.views.SearchTerm
 import app.logorrr.views.ops.OpsRegion
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import app.logorrr.views.search.{FiltersToolBar, OpsToolBar}
 import app.logorrr.views.text.LogTextView
-import app.logorrr.views.{MutFilter, SearchTerm}
+import javafx.beans.property.Property
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
-import javafx.scene.control.SplitPane
+import javafx.scene.control.{ListView, Slider, SplitPane}
 import javafx.scene.layout.{BorderPane, VBox}
 
+object LogFileTabContent {
+
+  /** wire pane and slider together */
+  def mkPane(listView: ListView[_], slider: Slider, boundProp: Property[Number]): BorderPane = {
+    val bBp = new BorderPane(listView, slider, null, null, null)
+    slider.valueProperty().bindBidirectional(boundProp)
+    VBox.setVgrow(bBp, javafx.scene.layout.Priority.ALWAYS)
+    bBp.setMaxHeight(java.lang.Double.MAX_VALUE)
+    bBp
+  }
+
+}
 
 class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
                         , val entries: ObservableList[LogEntry]) extends BorderPane {
@@ -29,19 +42,10 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   // graphical display to the left
   private val chunkListView = LogoRRRChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem, widthProperty)
 
-  private val blockSizeSlider = {
-    val bs = new BlockSizeSlider(mutLogFileSettings.getFileId)
-    bs.valueProperty().bindBidirectional(mutLogFileSettings.blockSizeProperty)
-    bs
-  }
+  private val textPane = LogFileTabContent.mkPane(logTextView, new TextSizeSlider(mutLogFileSettings.getFileId), mutLogFileSettings.fontSizeProperty)
 
-  private val blockPane = {
-    val bBp = new BorderPane(chunkListView, blockSizeSlider, null, null, null)
-    // vBox.setStyle("-fx-background-color: #b6ff7a;")
-    VBox.setVgrow(bBp, javafx.scene.layout.Priority.ALWAYS)
-    bBp.setMaxHeight(java.lang.Double.MAX_VALUE)
-    bBp
-  }
+  private val chunkPane = LogFileTabContent.mkPane(chunkListView, new BlockSizeSlider(mutLogFileSettings.getFileId), mutLogFileSettings.blockSizeProperty)
+
 
   // start listener declarations
   private lazy val scrollToEndEventListener: InvalidationListener = (_: Observable) => {
@@ -56,13 +60,13 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   def removeTailerListener(): Unit = filteredList.removeListener(scrollToEndEventListener)
 
   val opsToolBar = new OpsToolBar(mutLogFileSettings.getFileId
-    , addFilter
+    , mutLogFileSettings.filtersProperty.add(_)
     , entries
     , filteredList
     , mutLogFileSettings.blockSizeProperty)
 
   private val filtersToolBar = {
-    val fbtb = new FiltersToolBar(mutLogFileSettings, filteredList, removeFilter)
+    val fbtb = new FiltersToolBar(mutLogFileSettings, filteredList, mutLogFileSettings.filtersProperty.remove(_))
     fbtb.filtersProperty.bind(mutLogFileSettings.filtersProperty)
     fbtb
   }
@@ -73,7 +77,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, filtersToolBar, timeOpsToolBar)
 
-  private val pane = new SplitPane(blockPane, logTextView)
+  private val pane = new SplitPane(chunkPane, textPane)
 
   def init(): Unit = {
     divider.setPosition(mutLogFileSettings.getDividerPosition)
@@ -94,14 +98,6 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   def removeListeners(): Unit = {
     logTextView.removeListeners()
     chunkListView.removeListeners()
-  }
-
-  def addFilter(filter: MutFilter): Unit = {
-    mutLogFileSettings.filtersProperty.add(filter)
-  }
-
-  def removeFilter(filter: MutFilter): Unit = {
-    mutLogFileSettings.filtersProperty.remove(filter)
   }
 
   /**
