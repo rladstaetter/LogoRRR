@@ -48,7 +48,9 @@ class MutSettings {
   /** tracks which log file is active */
   private val someActiveLogProperty = new SimpleObjectProperty[Option[FileId]](None)
 
-  def getMutLogFileSetting(key: FileId): MutLogFileSettings = mutLogFileSettingsMapProperty.get(key)
+  def getMutLogFileSetting(key: FileId): MutLogFileSettings = {
+    mutLogFileSettingsMapProperty.get(key)
+  }
 
   def putMutLogFileSetting(mutLogFileSettings: MutLogFileSettings): Unit = {
     mutLogFileSettingsMapProperty.put(mutLogFileSettings.getFileId, mutLogFileSettings)

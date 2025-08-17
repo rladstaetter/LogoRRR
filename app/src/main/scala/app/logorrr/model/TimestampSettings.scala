@@ -15,7 +15,9 @@ object TimestampSettings extends CanLog {
 
   val DefaultFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(DefaultPattern)
 
+
   val Default: TimestampSettings = TimestampSettings(SimpleRange(1, 24), DefaultPattern)
+
 
   implicit lazy val reader: ConfigReader[TimestampSettings] = deriveReader[TimestampSettings]
   implicit lazy val writer: ConfigWriter[TimestampSettings] = deriveWriter[TimestampSettings]
