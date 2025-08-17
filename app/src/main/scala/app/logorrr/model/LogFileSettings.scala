@@ -3,6 +3,7 @@ package app.logorrr.model
 import app.logorrr.conf.BlockSettings
 import app.logorrr.io.FileId
 import app.logorrr.views.SearchTerm
+import app.logorrr.views.logfiletab.TextConstants
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
 
@@ -24,14 +25,13 @@ object LogFileSettings {
   val DefaultLowerTimestamp: Int = 0
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
 
-  private val DefaultFontSize = 12
 
   def apply(fileId: FileId): LogFileSettings = {
     LogFileSettings(fileId
       , DefaultSelectedIndex
       , Instant.now().toEpochMilli
       , DefaultDividerPosition
-      , DefaultFontSize
+      , TextConstants.DefaultFontSize
       , SearchTerm.DefaultFilters
       , DefaultBlockSettings
       , DefaultLogFormat

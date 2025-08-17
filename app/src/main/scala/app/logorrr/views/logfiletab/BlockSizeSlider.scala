@@ -7,7 +7,6 @@ import javafx.scene.control.Slider
 
 object BlockSizeSlider extends UiNodeFileIdAware {
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[BlockSizeSlider])
-
 }
 
 class BlockSizeSlider(fileId: FileId) extends Slider {
@@ -20,3 +19,6 @@ class BlockSizeSlider(fileId: FileId) extends Slider {
   setShowTickLabels(false)
   setShowTickMarks(false)
 }
+
+
+

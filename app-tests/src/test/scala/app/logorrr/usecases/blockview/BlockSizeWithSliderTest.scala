@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
  */
 class BlockSizeWithSliderTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
 
-  @Test def search(): Unit = {
+  @Test def testBlockSizeChange(): Unit = {
     openFile(fileId)
     waitForVisibility(BlockSizeSlider.uiNode(fileId))
 
