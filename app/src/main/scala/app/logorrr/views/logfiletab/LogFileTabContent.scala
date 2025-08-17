@@ -3,24 +3,42 @@ package app.logorrr.views.logfiletab
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.views.SearchTerm
-import app.logorrr.views.ops.OpsRegion
+import app.logorrr.views.block.BlockConstants
+import app.logorrr.views.ops._
 import app.logorrr.views.ops.time.TimeOpsToolBar
 import app.logorrr.views.search.{FiltersToolBar, OpsToolBar}
 import app.logorrr.views.text.LogTextView
+import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.Property
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
+import javafx.geometry.Pos
+import javafx.scene.Node
 import javafx.scene.control.{ListView, Slider, SplitPane}
-import javafx.scene.layout.{BorderPane, VBox}
+import javafx.scene.layout.{BorderPane, HBox, Priority, VBox}
+import javafx.scene.paint.Color
+
+case class PaneDefinition(jfxId: String, graphic: Node, step: Int, boundary: Int)
 
 object LogFileTabContent {
 
   /** wire pane and slider together */
-  def mkPane(listView: ListView[_], slider: Slider, boundProp: Property[Number]): BorderPane = {
-    val bBp = new BorderPane(listView, slider, null, null, null)
+  def mkPane(listView: ListView[_]
+             , slider: Slider
+             , inc: PaneDefinition
+             , dec: PaneDefinition
+             , boundProp: Property[Number]): BorderPane = {
+    val increaseButton = IncreaseSizeButton(inc.jfxId, inc.graphic, inc.step, inc.boundary, boundProp)
+    val decreaseButton = DecreaseSizeButton(dec.jfxId, dec.graphic, dec.step, dec.boundary, boundProp)
+    val hbox = new HBox(slider, decreaseButton, increaseButton)
+    HBox.setHgrow(slider, Priority.ALWAYS)
+    hbox.setAlignment(Pos.CENTER)
+    //BorderPane.HBox.setHgrow(hbox, Priority.ALWAYS)
+    hbox.setPrefWidth(java.lang.Double.MAX_VALUE)
+    val bBp = new BorderPane(listView, hbox, null, null, null)
     slider.valueProperty().bindBidirectional(boundProp)
-    VBox.setVgrow(bBp, javafx.scene.layout.Priority.ALWAYS)
+    VBox.setVgrow(bBp, Priority.ALWAYS)
     bBp.setMaxHeight(java.lang.Double.MAX_VALUE)
     bBp
   }
@@ -42,9 +60,20 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   // graphical display to the left
   private val chunkListView = LogoRRRChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem, widthProperty)
 
-  private val textPane = LogFileTabContent.mkPane(logTextView, new TextSizeSlider(mutLogFileSettings.getFileId), mutLogFileSettings.fontSizeProperty)
+  private val textPane = LogFileTabContent.mkPane(
+     logTextView
+    , new TextSizeSlider(mutLogFileSettings.getFileId)
+    , PaneDefinition(IncreaseTextSizeButton.uiNode(mutLogFileSettings.getFileId).value, TextSizeButton.mkLabel(12), TextConstants.fontSizeStep, TextConstants.MaxFontSize)
+    , PaneDefinition(DecreaseTextSizeButton.uiNode(mutLogFileSettings.getFileId).value, TextSizeButton.mkLabel(8), TextConstants.fontSizeStep, TextConstants.MinFontSize)
+    , mutLogFileSettings.fontSizeProperty
+  )
 
-  private val chunkPane = LogFileTabContent.mkPane(chunkListView, new BlockSizeSlider(mutLogFileSettings.getFileId), mutLogFileSettings.blockSizeProperty)
+  private val chunkPane = LogFileTabContent.mkPane(
+     chunkListView
+    , new BlockSizeSlider(mutLogFileSettings.getFileId)
+    , PaneDefinition(IncreaseBlockSizeButton.uiNode(mutLogFileSettings.getFileId).value, RectButton.mkR(IncreaseBlockSizeButton.Size, IncreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MaxBlockSize)
+    , PaneDefinition(DecreaseBlockSizeButton.uiNode(mutLogFileSettings.getFileId).value, RectButton.mkR(DecreaseBlockSizeButton.Size, DecreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MinBlockSize)
+    , mutLogFileSettings.blockSizeProperty)
 
 
   // start listener declarations
@@ -58,6 +87,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   def addTailerListener(): Unit = filteredList.addListener(scrollToEndEventListener)
 
   def removeTailerListener(): Unit = filteredList.removeListener(scrollToEndEventListener)
+
 
   val opsToolBar = new OpsToolBar(mutLogFileSettings.getFileId
     , mutLogFileSettings.filtersProperty.add(_)

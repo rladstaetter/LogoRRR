@@ -4,9 +4,7 @@ import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.views.MutFilter
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
-import app.logorrr.views.block.HasBlockSizeProperty
-import app.logorrr.views.ops.{ClearLogButton, CopyLogButton, DecreaseBlockSizeButton, IncreaseBlockSizeButton}
-import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
+import app.logorrr.views.ops.{ClearLogButton, CopyLogButton}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
@@ -30,8 +28,8 @@ class OpsToolBar(fileId: FileId
                  , addFilterFn: MutFilter => Unit
                  , logEntries: ObservableList[LogEntry]
                  , filteredList: FilteredList[LogEntry]
-                 , val blockSizeProperty: SimpleIntegerProperty)
-  extends ToolBar with HasBlockSizeProperty {
+                 , val sizeProperty: SimpleIntegerProperty)
+  extends ToolBar {
 
   // TODO fix this; not really elegant
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
@@ -69,17 +67,10 @@ class OpsToolBar(fileId: FileId
 
   val searchItems: Seq[Control] = Seq[Control](searchTextField, colorPicker, searchButton)
 
-  val sizeItems: Seq[Control] = {
-    Seq(new DecreaseBlockSizeButton(fileId, blockSizeProperty)
-      , new IncreaseBlockSizeButton(fileId, blockSizeProperty)
-      , new DecreaseTextSizeButton(fileId)
-      , new IncreaseTextSizeButton(fileId))
-  }
-
   val otherItems: Seq[Node] = {
     Seq(autoScrollCheckBox, clearLogButton, copySelectionButton)
   }
 
-  getItems.addAll(searchItems ++ sizeItems ++ otherItems: _*)
+  getItems.addAll(searchItems  ++ otherItems: _*)
 
 }
