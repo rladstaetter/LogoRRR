@@ -1,7 +1,7 @@
 package app.logorrr.views.text
 
 import app.logorrr.model.LogEntry
-import app.logorrr.views.{MutFilter, SearchTerm}
+import app.logorrr.views.{MutableSearchTerm, SearchTerm}
 import app.logorrr.{LogEntrySpec, LogoRRRSpec, TestUtil}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.paint.Color
@@ -20,7 +20,7 @@ object SearchTermCalculatorSpec {
 class SearchTermCalculatorSpec extends LogoRRRSpec {
 
   def applySingleFilter(logEntry: String, pattern: String): Seq[Seq[LinePart]] = {
-    FilterCalculator(LogEntry(0, logEntry,  None, None), Seq(MutFilter(SearchTerm(pattern, Color.RED, active = true)))).filteredParts
+    SearchTermCalculator(LogEntry(0, logEntry,  None, None), Seq(MutableSearchTerm(SearchTerm(pattern, Color.RED, active = true)))).filteredParts
   }
 
   "calcParts" should {
@@ -80,12 +80,12 @@ class SearchTermCalculatorSpec extends LogoRRRSpec {
 
   "filteredParts" should {
     val filters = Seq(
-      MutFilter(SearchTerm("a", Color.RED, active = true))
-      , MutFilter(SearchTerm("b", Color.BLUE, active = true))
-      , MutFilter(SearchTerm("t", Color.YELLOW, active = true))
+      MutableSearchTerm(SearchTerm("a", Color.RED, active = true))
+      , MutableSearchTerm(SearchTerm("b", Color.BLUE, active = true))
+      , MutableSearchTerm(SearchTerm("t", Color.YELLOW, active = true))
     )
     val entry = LogEntry(0, "test a b c",  None, None)
-    val calculator = FilterCalculator(entry, filters)
+    val calculator = SearchTermCalculator(entry, filters)
 
     "produce correct amount of matches" in {
       val filteredParts = calculator.filteredParts

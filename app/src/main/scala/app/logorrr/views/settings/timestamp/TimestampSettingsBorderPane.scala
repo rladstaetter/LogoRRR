@@ -1,11 +1,11 @@
 package app.logorrr.views.settings.timestamp
 
-import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.clv.ChunkListView
+import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.HLink
 import app.logorrr.views.UiNodes
-import app.logorrr.views.ops.time.TimeOpsToolBar
+import app.logorrr.views.search.OpsToolBar
 import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.{FXCollections, ObservableList}
@@ -18,7 +18,7 @@ import net.ladstatt.util.log.CanLog
 class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
                                   , logEntries: ObservableList[LogEntry]
                                   , chunkListView: ChunkListView[LogEntry]
-                                  , timeOpsToolBar: TimeOpsToolBar
+                                  , opsToolBar: OpsToolBar
                                   , closeStage: => Unit)
   extends BorderPane with CanLog {
 
@@ -53,8 +53,8 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
   }, endColProperty))
 
   private val timeFormatTf = new TimeFormatTextField(mutLogFileSettings.getFileId)
-  private val setTimestampFormatButton = new TimestampFormatSetButton(mutLogFileSettings, getRange, timeFormatTf, chunkListView, logEntries, timeOpsToolBar, closeStage)
-  private val resetTimestampFormatButton = new TimestampFormatResetButton(mutLogFileSettings, chunkListView, logEntries, timeOpsToolBar, closeStage)
+  private val setTimestampFormatButton = new TimestampFormatSetButton(mutLogFileSettings, getRange, timeFormatTf, chunkListView, logEntries, opsToolBar, closeStage)
+  private val resetTimestampFormatButton = new TimestampFormatResetButton(mutLogFileSettings, chunkListView, logEntries, opsToolBar, closeStage)
 
   // has to be assigned to a val otherwise this won't get executed
   val binding: ObjectBinding[String] =

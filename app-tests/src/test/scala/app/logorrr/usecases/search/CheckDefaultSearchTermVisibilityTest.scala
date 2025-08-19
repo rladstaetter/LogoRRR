@@ -2,8 +2,8 @@ package app.logorrr.usecases.search
 
 import app.logorrr.TestFiles
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.MutFilter
-import app.logorrr.views.search.FilterButton
+import app.logorrr.views.MutableSearchTerm
+import app.logorrr.views.search.SearchTermButton
 import org.junit.jupiter.api.Test
 
 /**
@@ -14,8 +14,8 @@ class CheckDefaultSearchTermVisibilityTest extends SingleFileApplicationTest(Tes
   @Test def checkIfDefaultFiltersAreActive(): Unit = {
     openFile(fileId)
 
-    MutFilter.DefaultFilters.foreach {
-      f => waitForVisibility(FilterButton.uiNode(fileId, f))
+    MutableSearchTerm.DefaultFilters.foreach {
+      f => waitForVisibility(SearchTermButton.uiNode(fileId, f))
     }
   }
 

@@ -5,24 +5,24 @@ import app.logorrr.views.search.predicates.{ContainsPredicate, LabelledFunction}
 import javafx.beans.property.{BooleanProperty, SimpleBooleanProperty, SimpleObjectProperty}
 import javafx.scene.paint.Color
 
-object MutFilter {
+object MutableSearchTerm {
 
-  val DefaultFilters: Seq[MutFilter] = SearchTerm.DefaultFilters.map(MutFilter.apply)
+  val DefaultFilters: Seq[MutableSearchTerm] = SearchTerm.DefaultFilters.map(MutableSearchTerm.apply)
 
-  def apply(searchTerm: SearchTerm): MutFilter = {
+  def apply(searchTerm: SearchTerm): MutableSearchTerm = {
     apply(searchTerm.value, searchTerm.color, searchTerm.active)
   }
 
   private def apply(pattern: String
                     , color: Color
-                    , active: Boolean): MutFilter = {
+                    , active: Boolean): MutableSearchTerm = {
     apply(ContainsPredicate(pattern), color, active)
   }
 
   private def apply(predicate: LabelledFunction
                     , color: Color
-                    , active: Boolean): MutFilter = {
-    val filter = new MutFilter()
+                    , active: Boolean): MutableSearchTerm = {
+    val filter = new MutableSearchTerm()
     filter.init(predicate, color, active)
     filter
   }
@@ -30,7 +30,7 @@ object MutFilter {
 }
 
 
-class MutFilter extends ColorMatcher {
+class MutableSearchTerm extends ColorMatcher {
 
   val predicateProperty: SimpleObjectProperty[LabelledFunction] = new SimpleObjectProperty[LabelledFunction]()
   val colorProperty: SimpleObjectProperty[Color] = new SimpleObjectProperty[Color]()

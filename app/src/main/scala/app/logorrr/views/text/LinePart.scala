@@ -1,11 +1,11 @@
 package app.logorrr.views.text
 
-import app.logorrr.views.search.filter.UnclassifiedFilter
+import app.logorrr.views.search.MutableSearchTermUnclassified
 import javafx.scene.paint.Color
 
 object LinePart {
 
-  def apply(value: String, start: Int): LinePart = LinePart(value, start, UnclassifiedFilter.color)
+  def apply(value: String, start: Int): LinePart = LinePart(value, start, MutableSearchTermUnclassified.color)
 }
 
 /**

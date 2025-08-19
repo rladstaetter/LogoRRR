@@ -6,8 +6,8 @@ import app.logorrr.conf.{BlockSettings, Settings, StageSettings}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.steps.ChunkListViewActions
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.search.FilterButton
-import app.logorrr.views.{MutFilter, SearchTerm}
+import app.logorrr.views.search.SearchTermButton
+import app.logorrr.views.{MutableSearchTerm, SearchTerm}
 import javafx.scene.paint.Color
 import org.junit.jupiter.api.Test
 
@@ -81,14 +81,14 @@ class Issue292TripleColorWithDeactivationTest extends Issue292ColorCalculationSe
   @Test override def testIssue292(): Unit = {
     openFile(TestFiles.simpleLog5)
 
-    val searchTerm = MutFilter(searchTerms.head)
+    val searchTerm = MutableSearchTerm(searchTerms.head)
     clickAndCheckColor(searchTerm, Color.web("0x00407fff"))
     clickAndCheckColor(searchTerm, Color.web("0x552a55ff"))
 
   }
 
-  private def clickAndCheckColor(searchTerm: MutFilter, desiredColor: Color): Unit = {
-    waitAndClickVisibleItem(FilterButton.uiNode(fileId, searchTerm))
+  private def clickAndCheckColor(searchTerm: MutableSearchTerm, desiredColor: Color): Unit = {
+    waitAndClickVisibleItem(SearchTermButton.uiNode(fileId, searchTerm))
     val color = nthCell(lookupChunkListView(fileId), 0).view.getImage.getPixelReader.getColor(5, 5)
     assert(color == desiredColor, s"${color.toString} != ${desiredColor.toString}")
   }

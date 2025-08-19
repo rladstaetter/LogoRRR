@@ -5,7 +5,7 @@ import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.{LogEntry, TimestampSettings}
-import app.logorrr.views.ops.time.TimeOpsToolBar
+import app.logorrr.views.search.OpsToolBar
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
@@ -27,7 +27,7 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
                                , timeFormatTf: TextField
                                , chunkListView: ChunkListView[LogEntry]
                                , logEntries: ObservableList[LogEntry]
-                               , timeOpsToolBar: TimeOpsToolBar
+                               , opsToolBar: OpsToolBar
                                , closeStage: => Unit) extends Button("set format") {
   setId(TimestampFormatSetButton.uiNode(mutLogFileSettings.getFileId).value)
   setPrefWidth(350)
@@ -63,7 +63,7 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
     // activate listener again
     chunkListView.addInvalidationListener()
     // update slider boundaries
-    timeOpsToolBar.initializeRanges()
+    opsToolBar.initializeRanges()
     closeStage
   })
 
