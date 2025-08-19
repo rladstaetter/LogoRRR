@@ -2,9 +2,8 @@ package app.logorrr.usecases.search
 
 import app.logorrr.TestFiles
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.MutFilter
-import app.logorrr.views.search.FilterButton
-import app.logorrr.views.search.filter.UnclassifiedFilter
+import app.logorrr.views.MutableSearchTerm
+import app.logorrr.views.search.{MutableSearchTermUnclassified, SearchTermButton}
 import app.logorrr.views.text.LogTextView
 import org.junit.jupiter.api.Test
 
@@ -19,31 +18,31 @@ class SelectDefaultSearchTermTest extends SingleFileApplicationTest(TestFiles.si
     // and a 'unclassified' line
     openFile(fileId)
 
-    MutFilter.DefaultFilters.foreach {
+    MutableSearchTerm.DefaultFilters.foreach {
       f =>
         // deselect all filters except unclassified
-        clickFilters(MutFilter.DefaultFilters)
+        clickFilters(MutableSearchTerm.DefaultFilters)
 
         // now, only 'unclassified' filter is active. since there are no unclassified
         // entries available, the number of displayed log entries is one
         checkNumberOfShownElements(1)
 
         // select one specific filter- now two lines are shown in total
-        waitAndClickVisibleItem(FilterButton.uiNode(fileId, f))
+        waitAndClickVisibleItem(SearchTermButton.uiNode(fileId, f))
         checkNumberOfShownElements(2)
 
         // deselect filter again
-        waitAndClickVisibleItem(FilterButton.uiNode(fileId, f))
-        clickFilters(MutFilter.DefaultFilters)
+        waitAndClickVisibleItem(SearchTermButton.uiNode(fileId, f))
+        clickFilters(MutableSearchTerm.DefaultFilters)
     }
 
     // finally, deselect all filters
-    clickFilters(MutFilter.DefaultFilters)
+    clickFilters(MutableSearchTerm.DefaultFilters)
     // one entry is shown (unclassified)
     checkNumberOfShownElements(1)
 
     // deselect unclassified filter works as well
-    clickFilters(Seq(UnclassifiedFilter(MutFilter.DefaultFilters.toSet)))
+    clickFilters(Seq(MutableSearchTermUnclassified(MutableSearchTerm.DefaultFilters.toSet)))
     checkNumberOfShownElements(0)
   }
 
@@ -51,9 +50,9 @@ class SelectDefaultSearchTermTest extends SingleFileApplicationTest(TestFiles.si
     assert(lookup(LogTextView.uiNode(fileId).ref).query[LogTextView].getItems.size() == expectedElements)
   }
 
-  def clickFilters(filters: Seq[MutFilter]): Unit = {
+  def clickFilters(filters: Seq[MutableSearchTerm]): Unit = {
     filters.foreach {
-      ff => waitAndClickVisibleItem(FilterButton.uiNode(fileId, ff)) // enable all filters
+      ff => waitAndClickVisibleItem(SearchTermButton.uiNode(fileId, ff)) // enable all filters
     }
   }
 

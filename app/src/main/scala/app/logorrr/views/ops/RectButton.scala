@@ -1,9 +1,18 @@
 package app.logorrr.views.ops
 
-import javafx.scene.control.{Button, Tooltip}
-import javafx.scene.input.{KeyCode, KeyEvent}
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
+
+object RectButton {
+
+  def mkR(width: Int, height: Int, color: Color): Rectangle = {
+    val r = new Rectangle(width, height)
+    r.setFill(color)
+    r.setStroke(Color.WHITE)
+    r
+  }
+
+}
 
 /**
  * A button which contains a rectangle of given color and size.
@@ -16,21 +25,6 @@ import javafx.scene.shape.Rectangle
 abstract class RectButton(width: Int
                           , height: Int
                           , color: Color
-                          , tooltipMessage: String) extends Button {
+                          , tooltipMessage: String)
+  extends SizeButton(RectButton.mkR(width, height, color), tooltipMessage)
 
-  setTooltip(new Tooltip(tooltipMessage))
-  setGraphic(mkR(width, height, color))
-  setOnKeyPressed((event: KeyEvent) => {
-    if (event.getCode == KeyCode.ENTER) {
-      fire()
-    }
-  })
-
-  def mkR(width: Int, height: Int, color: Color): Rectangle = {
-    val r = new Rectangle(width, height)
-    r.setFill(color)
-    r.setStroke(Color.WHITE)
-    r
-  }
-
-}

@@ -3,7 +3,7 @@ package app.logorrr.views.search
 
 import app.logorrr.io.FileId
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.{MutFilter, SearchTerm, UiNode, UiNodeFileIdAware}
+import app.logorrr.views.{MutableSearchTerm, SearchTerm, UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{Button, Tooltip}
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
 import org.kordamp.ikonli.javafx.FontIcon
@@ -17,7 +17,7 @@ object SearchButton extends UiNodeFileIdAware {
 class SearchButton(fileId: FileId
                    , searchTextField: SearchTextField
                    , colorPicker: SearchColorPicker
-                   , addFilterFn: MutFilter => Unit) extends Button {
+                   , addFilterFn: MutableSearchTerm => Unit) extends Button {
 
   setId(SearchButton.uiNode(fileId).value)
   setGraphic(new FontIcon(FontAwesomeSolid.SEARCH))
@@ -27,7 +27,7 @@ class SearchButton(fileId: FileId
   setOnAction(_ => {
     if (searchTextField.getText.nonEmpty) {
       val term = SearchTerm(searchTextField.getText, colorPicker.getValue, active = true)
-      addFilterFn(MutFilter(term))
+      addFilterFn(MutableSearchTerm(term))
       resetColorPickerAndSearchField()
     }
   })

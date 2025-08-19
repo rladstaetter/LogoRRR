@@ -1,10 +1,10 @@
 package app.logorrr.views.settings.timestamp
 
-import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.clv.ChunkListView
+import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.ops.time.TimeOpsToolBar
+import app.logorrr.views.search.OpsToolBar
 import javafx.collections.ObservableList
 import javafx.scene.Scene
 import javafx.stage.{Modality, Stage, Window}
@@ -20,7 +20,7 @@ class TimestampSettingStage(owner: Window
                             , settings: MutLogFileSettings
                             , chunkListView: ChunkListView[LogEntry]
                             , logEntries: ObservableList[LogEntry]
-                            , timeOpsToolBar: TimeOpsToolBar) extends Stage {
+                            , opsToolBar: OpsToolBar) extends Stage {
 
   initOwner(owner)
   initModality(Modality.APPLICATION_MODAL)
@@ -30,7 +30,7 @@ class TimestampSettingStage(owner: Window
     new TimestampSettingsBorderPane(settings
       , logEntries
       , chunkListView
-      , timeOpsToolBar
+      , opsToolBar
       , JfxUtils.closeStage(this))
     , TimestampSettingStage.width
     , TimestampSettingStage.height)

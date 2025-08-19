@@ -1,9 +1,10 @@
 package app.logorrr.views.ops.time
 
+import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
-import app.logorrr.clv.ChunkListView
 import app.logorrr.model.LogEntry
+import app.logorrr.views.search.OpsToolBar
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.ObservableList
@@ -31,7 +32,7 @@ object TimestampSettingsButton extends UiNodeFileIdAware {
 class TimestampSettingsButton(settings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
-                              , timeOpsToolBar: TimeOpsToolBar) extends StackPane {
+                              , opsToolBar: OpsToolBar) extends StackPane {
 
   setId(TimestampSettingsButton.uiNode(settings.getFileId).value)
 
@@ -47,7 +48,7 @@ class TimestampSettingsButton(settings: MutLogFileSettings
         |""".stripMargin)
     btn.setGraphic(new FontIcon(FontAwesomeRegular.CLOCK))
     btn.setTooltip(new Tooltip("configure time format"))
-    btn.setOnAction(_ => new TimestampSettingStage(getScene.getWindow, settings, chunkListView, logEntries, timeOpsToolBar).showAndWait())
+    btn.setOnAction(_ => new TimestampSettingStage(getScene.getWindow, settings, chunkListView, logEntries, opsToolBar).showAndWait())
     btn
   }
 

@@ -1,11 +1,11 @@
 package app.logorrr.views.settings.timestamp
 
+import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
-import app.logorrr.clv.ChunkListView
 import app.logorrr.model.LogEntry
-import app.logorrr.views.ops.time.TimeOpsToolBar
+import app.logorrr.views.search.OpsToolBar
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
@@ -21,7 +21,7 @@ object TimestampFormatResetButton extends UiNodeFileIdAware {
 class TimestampFormatResetButton(mutLogFileSettings: MutLogFileSettings
                                  , chunkListView: ChunkListView[LogEntry]
                                  , logEntries: ObservableList[LogEntry]
-                                 , timeOpsToolBar: TimeOpsToolBar
+                                 , opsToolBar: OpsToolBar
                                  , closeStage: => Unit) extends Button("reset") {
   setId(TimestampFormatResetButton.uiNode(mutLogFileSettings.getFileId).value)
   setAlignment(Pos.CENTER_RIGHT)
@@ -38,7 +38,7 @@ class TimestampFormatResetButton(mutLogFileSettings: MutLogFileSettings
     logEntries.setAll(tempList)
     // activate listener again
     chunkListView.addInvalidationListener()
-    timeOpsToolBar.initializeRanges()
+    opsToolBar.initializeRanges()
     closeStage
   })
 }

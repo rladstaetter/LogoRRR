@@ -3,8 +3,8 @@ package app.logorrr.issues
 import app.logorrr.TestFiles
 import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.MultipleFileApplicationTest
-import app.logorrr.views.MutFilter
-import app.logorrr.views.search.FilterButton
+import app.logorrr.views.MutableSearchTerm
+import app.logorrr.views.search.SearchTermButton
 import javafx.scene.control.ToggleButton
 import org.junit.jupiter.api.Test
 import org.testfx.api.FxAssert
@@ -26,7 +26,7 @@ class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
     openFile(TestFiles.simpleLog0)
 
     // change filters to a non default configuration
-    val firstFilterTab1 = FilterButton.uiNode(TestFiles.simpleLog0, MutFilter.DefaultFilters.head)
+    val firstFilterTab1 = SearchTermButton.uiNode(TestFiles.simpleLog0, MutableSearchTerm.DefaultFilters.head)
     waitAndClickVisibleItem(firstFilterTab1)
 
     // check that the toggle button is deselected
@@ -38,7 +38,7 @@ class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
     openFile(TestFiles.simpleLog1)
 
     // test that second file has the default filter configuration
-    val firstFilterTab2 = FilterButton.uiNode(TestFiles.simpleLog1, MutFilter.DefaultFilters.head)
+    val firstFilterTab2 = SearchTermButton.uiNode(TestFiles.simpleLog1, MutableSearchTerm.DefaultFilters.head)
     FxAssert.verifyThat(lookup(firstFilterTab2.ref), new Predicate[ToggleButton] {
       override def test(t: ToggleButton): Boolean = t.isSelected
     })
