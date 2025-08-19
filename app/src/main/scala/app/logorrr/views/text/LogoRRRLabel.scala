@@ -1,6 +1,6 @@
 package app.logorrr.views.text
 
-import app.logorrr.views.search.filter.UnclassifiedFilter
+import app.logorrr.views.search.MutableSearchTermUnclassified
 import javafx.geometry.Insets
 import javafx.scene.control.Label
 import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}
@@ -12,7 +12,7 @@ object LogoRRRLabel {
 
   def mkL(msg: String, color: Color): Label = {
     val l = new Label(msg)
-    if (color != UnclassifiedFilter.color) {
+    if (color != MutableSearchTermUnclassified.color) {
       l.setBackground(mkBg(color))
     }
     l

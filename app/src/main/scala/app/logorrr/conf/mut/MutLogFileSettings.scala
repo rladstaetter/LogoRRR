@@ -6,8 +6,8 @@ import app.logorrr.io.FileId
 import app.logorrr.model.{LogEntry, LogFileSettings, TimestampSettings}
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.ops.time.TimeRange
-import app.logorrr.views.search.FilterButton
-import app.logorrr.views.{MutFilter, SearchTerm}
+import app.logorrr.views.search.SearchTermButton
+import app.logorrr.views.{MutableSearchTerm, SearchTerm}
 import javafx.beans.binding.{BooleanBinding, ObjectBinding, StringBinding}
 import javafx.beans.property._
 import javafx.collections.transformation.FilteredList
@@ -28,7 +28,7 @@ object MutLogFileSettings {
     s.setBlockSettings(logFileSettings.blockSettings)
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
     s.setDividerPosition(logFileSettings.dividerPosition)
-    s.setFilters(logFileSettings.searchTerms.map(f => MutFilter(f)))
+    s.setFilters(logFileSettings.searchTerms.map(f => MutableSearchTerm(f)))
     s.someTimestampSettings.set(logFileSettings.someTimestampSettings)
     logFileSettings.someTimestampSettings match {
       case Some(sts) => s.setDateTimeFormatter(sts.dateTimeFormatter)
@@ -44,8 +44,8 @@ object MutLogFileSettings {
 
 class MutLogFileSettings {
 
-  var someUnclassifiedFilter: Option[(MutFilter, FilterButton)] = None
-  var filterButtons: Map[ColorMatcher, FilterButton] = Map[ColorMatcher, FilterButton]()
+  var someUnclassifiedFilter: Option[(MutableSearchTerm, SearchTermButton)] = None
+  var filterButtons: Map[ColorMatcher, SearchTermButton] = Map[ColorMatcher, SearchTermButton]()
 
   private val fileIdProperty = new SimpleObjectProperty[FileId]()
   private val firstOpenedProperty = new SimpleLongProperty()
@@ -66,7 +66,7 @@ class MutLogFileSettings {
 
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
-  val filtersProperty: SimpleListProperty[MutFilter] = new SimpleListProperty[MutFilter](FXCollections.observableArrayList())
+  val filtersProperty: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm](FXCollections.observableArrayList())
 
 
   private def matchFilter(entry: LogEntry): Boolean = {
@@ -130,11 +130,11 @@ class MutLogFileSettings {
 
   def setDateTimeFormatter(dateTimeFormatter: DateTimeFormatter): Unit = dateTimeFormatterProperty.set(dateTimeFormatter)
 
-  def setFilters(filters: Seq[MutFilter]): Unit = {
+  def setFilters(filters: Seq[MutableSearchTerm]): Unit = {
     filtersProperty.setAll(filters.asJava)
   }
 
-  def getFilters: ObservableList[MutFilter] = filtersProperty.get()
+  def getFilters: ObservableList[MutableSearchTerm] = filtersProperty.get()
 
 
   val hasTimestampSetting: BooleanBinding = new BooleanBinding {

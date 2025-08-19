@@ -2,8 +2,8 @@ package app.logorrr.usecases.search
 
 import app.logorrr.TestFiles
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.MutFilter
-import app.logorrr.views.search.RemoveFilterbutton
+import app.logorrr.views.MutableSearchTerm
+import app.logorrr.views.search.RemoveSearchTermButton
 import app.logorrr.views.text.LogTextView
 import org.junit.jupiter.api.Test
 
@@ -15,8 +15,8 @@ class CloseDefaultSearchTermTest extends SingleFileApplicationTest(TestFiles.sim
     openFile(fileId)
     val lines = Files.lines(fileId.asPath).count
 
-    MutFilter.DefaultFilters.foreach {
-      f => waitAndClickVisibleItem(RemoveFilterbutton.uiNode(fileId, f))
+    MutableSearchTerm.DefaultFilters.foreach {
+      f => waitAndClickVisibleItem(RemoveSearchTermButton.uiNode(fileId, f))
     }
 
     waitForVisibility(LogTextView.uiNode(fileId))

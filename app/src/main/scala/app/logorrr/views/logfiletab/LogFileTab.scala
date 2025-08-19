@@ -7,7 +7,7 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util._
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.logfiletab.actions._
-import app.logorrr.views.{LogoRRRAccelerators, MutFilter, UiNode, UiNodeFileIdAware}
+import app.logorrr.views.{LogoRRRAccelerators, MutableSearchTerm, UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.event.Event
@@ -103,9 +103,9 @@ class LogFileTab(val fileId: FileId
       }
   }
 
-  private val filterChangeListener: ListChangeListener[MutFilter] = {
+  private val filterChangeListener: ListChangeListener[MutableSearchTerm] = {
 
-    def handleFilterChange(change: ListChangeListener.Change[_ <: MutFilter]): Unit = {
+    def handleFilterChange(change: ListChangeListener.Change[_ <: MutableSearchTerm]): Unit = {
       while (change.next()) {
         Future {
           LogoRRRGlobals.persist()
@@ -113,7 +113,7 @@ class LogFileTab(val fileId: FileId
       }
     }
 
-    JfxUtils.mkListChangeListener[MutFilter](handleFilterChange)
+    JfxUtils.mkListChangeListener[MutableSearchTerm](handleFilterChange)
   }
 
   private val selectedListener = JfxUtils.onNew[lang.Boolean](b => {

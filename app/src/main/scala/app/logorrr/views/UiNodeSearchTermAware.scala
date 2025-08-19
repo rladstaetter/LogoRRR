@@ -5,8 +5,8 @@ import app.logorrr.io.FileId
 /**
  * UiNodes for filter toggle buttons need a reference to a file and its specific filter
  */
-trait UiNodeFilterAware {
+trait UiNodeSearchTermAware {
 
-  def uiNode(fileId: FileId, filter: MutFilter): UiNode
+  def uiNode(fileId: FileId, searchTerm: MutableSearchTerm): UiNode
 
 }

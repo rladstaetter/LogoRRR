@@ -1,7 +1,7 @@
 package app.logorrr.views.text
 
 import app.logorrr.model.LogEntry
-import app.logorrr.views.MutFilter
+import app.logorrr.views.MutableSearchTerm
 import javafx.beans.binding.StringBinding
 import javafx.beans.property.IntegerProperty
 import javafx.geometry.Pos
@@ -16,7 +16,7 @@ import javafx.scene.paint.Color
  */
 case class LogTextViewLabel(e: LogEntry
                             , maxLength: Int
-                            , filters: Seq[_ <: MutFilter]
+                            , filters: Seq[_ <: MutableSearchTerm]
                             , fontStyleBinding: StringBinding
                             , fontSizeProperty: IntegerProperty
                            ) extends HBox {
@@ -24,7 +24,7 @@ case class LogTextViewLabel(e: LogEntry
   setHeight(fontSizeProperty.get())
   setAlignment(Pos.CENTER_LEFT)
 
-  val stringsAndColor: Seq[(String, Color)] = FilterCalculator(e, filters).stringColorPairs
+  val stringsAndColor: Seq[(String, Color)] = SearchTermCalculator(e, filters).stringColorPairs
 
   val labels: Seq[Label] = stringsAndColor.map {
     case (text, color) =>
