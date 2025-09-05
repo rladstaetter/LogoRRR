@@ -22,7 +22,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>app.logorrr.LogoRRRApp</main.class>
         <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>
-        <graalvm.log>${project.build.directory}/graal.log</graalvm.log>
         <jdk.jlink.binary>${env.JAVA_HOME}/bin/jlink</jdk.jlink.binary>
         <jdk.jpackage.binary>${env.JAVA_HOME}/bin/jpackage</jdk.jpackage.binary>
         <jmh.version>1.37</jmh.version>
