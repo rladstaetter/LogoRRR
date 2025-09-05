@@ -21,7 +21,7 @@ import java.nio.file.Paths
 // have fun and thanks for reading the code!
 object LogoRRRApp extends CanLog {
 
-  val appMeta = net.ladstatt.app.AppMeta(AppId("LogoRRR", "logorrr", "logorrr.app"), AppMeta.LogFormat)
+  val appMeta: AppMeta = net.ladstatt.app.AppMeta(AppId("LogoRRR", "logorrr", "logorrr.app"), AppMeta.LogFormat)
 
   def main(args: Array[String]): Unit = {
     net.ladstatt.app.AppMeta.initApp(appMeta)
