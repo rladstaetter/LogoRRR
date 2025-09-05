@@ -1,7 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ClvApp" type="Application" factoryName="Application">
     <option name="ALTERNATIVE_JRE_PATH" value="graalvm-ce-24" />
-    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="app.logorrr.clv.ClvApp" />
     <module name="clv-app" />
     <option name="VM_PARAMETERS" value="-Xmx1g -Djava.util.logging.config.file=develop-logging.properties -Duser.language=en --sun-misc-unsafe-memory-access=allow --enable-native-access=javafx.graphics --module-path $PROJECT_DIR$/env/target/javafx-sdk-24.0.2/lib --add-modules javafx.controls --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED -XX:+UseSerialGC" />

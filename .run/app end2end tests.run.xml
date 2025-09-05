@@ -2,7 +2,7 @@
   <configuration default="false" name="app end2end tests" type="JUnit" factoryName="JUnit" folderName="junit module tests">
     <module name="app-tests" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-    <option name="ALTERNATIVE_JRE_PATH" value="graalvm-ce-24" />
+    <option name="ALTERNATIVE_JRE_PATH" value="graalvm-ce-24.0.2" />
     <option name="PACKAGE_NAME" value="" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
