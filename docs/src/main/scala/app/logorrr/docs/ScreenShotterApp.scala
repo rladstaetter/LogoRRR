@@ -1,7 +1,6 @@
 package app.logorrr.docs
 
 import app.logorrr.LogoRRRApp
-import app.logorrr.clv.JfxUtils
 import app.logorrr.conf._
 import app.logorrr.conf.mut.MutSettings
 import app.logorrr.meta.AppInfo
