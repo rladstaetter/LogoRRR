@@ -18,7 +18,7 @@
         <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
         <gluonfx.plugin.version>1.0.26</gluonfx.plugin.version>
         <!-- no need to change these -->
-        <changelist>-SNAPSHOT</changelist>
+        <changelist></changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>app.logorrr.LogoRRRApp</main.class>
         <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>
