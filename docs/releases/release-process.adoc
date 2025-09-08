@@ -15,6 +15,8 @@ For every release, certain steps have to be performed:
 - create release notes for github, describing new features/bugfixes
 - create web site describing new features/bugfixes
 - create youtube video with a walkthrough to all new features
+- update Screenshots.md, Readme.md with screenshot of new release
+- create screenshots on windows for windows app store
 
 == Release on App stores
 
