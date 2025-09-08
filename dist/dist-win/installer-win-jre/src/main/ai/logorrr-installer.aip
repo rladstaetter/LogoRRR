@@ -101,7 +101,7 @@
     <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DigCertStoreComponent">
-    <ROW TimeStampUrl="http://time.certum.pl" SignerDescription="[|ProductName]" SignOptions="7" SignTool="0" UseSha256="1" Thumbprint="E6422686DA0036346DF50D1E12C69BDF8EF52C68 Subject: Open Source Developer, Robert Ladstätter&#10;Issuer: Certum Code Signing 2021 CA&#10;Valid from 05/14/2024 to 05/14/2025" Subject="CN=&quot;Open Source Developer, Robert Ladstätter&quot;, O=Open Source Developer, L=Graz, S=Styria, C=AT" Store="User\MY"/>
+    <ROW TimeStampUrl="http://time.certum.pl" SignerDescription="[|ProductName]" SignOptions="7" SignTool="0" UseSha256="1" Subject="CN=&quot;Open Source Developer, Robert Ladstätter&quot;, O=Open Source Developer, L=Graz, S=Styria, C=AT" Store="User\MY"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
     <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
@@ -294,6 +294,6 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.SynchronizedFolderComponent">
     <ROW Directory_="APPDIR" SourcePath="programfiles" Feature="MainFeature" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6"/>
-    <ROW Directory_="jre64_Dir" SourcePath="jdk-21.0.5+11-jre" Feature="MainFeature" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="8"/>
+    <ROW Directory_="jre64_Dir" SourcePath="jdk-22.0.1+8-jre" Feature="MainFeature" ExcludePattern="*~|#*#|%*%|._|CVS|.cvsignore|SCCS|vssver.scc|mssccprj.scc|vssver2.scc|.svn|.DS_Store" ExcludeFlags="6" FileAddOptions="8"/>
   </COMPONENT>
 </DOCUMENT>
