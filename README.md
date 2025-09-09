@@ -2,6 +2,27 @@
 
 [![Watch a video of LogoRRRs features](docs/releases/25.1.0/1440x900.png)](https://youtu.be/5ogC95PX0Ag)
 
+
+<table>
+  <tr>
+    <td>
+
+[![Get it on Windows App Store](docs/appstores/win/windows-store.png)](https://aka.ms/AAr3sxs)
+
+</td>
+<td>
+
+[![Get it on Apple App Store](docs/appstores/mac/apple-store.png)](https://apps.apple.com/at/app/logorrr/id1583786769)
+
+</td>
+<td>
+
+[![Get it on Flathub](docs/appstores/flathub/flathub.png)](https://flathub.org/apps/app.logorrr.LogoRRR)
+
+</td>
+
+</table>
+
 LogoRRR is a powerful desktop application designed to simplify the analysis of text files for recurring patterns. Whether you’re searching for specific events in log files or analysing any other type of text file, LogoRRR makes the process effortless and efficient.
 
 * **Easy Pattern Recognition**: Quickly identify recurring patterns in your text files.
@@ -11,7 +32,11 @@ LogoRRR is a powerful desktop application designed to simplify the analysis of t
 Visit the [www.logorrr.app](https://www.logorrr.app/) for more information.
 
 
+
+
+
 ## Windows installation
+
 
 The easiest way on Windows to install `LogoRRR` is by [downloading LogoRRR from the Microsoft App Store](https://aka.ms/AAr3sxs).
 
@@ -19,13 +44,14 @@ Alternatively, you can download the latest [Windows installers](https://github.c
 
 ## MacOsX installation
 
+
 `LogoRRR` is available on the OsX [App Store](https://apps.apple.com/at/app/logorrr/id1583786769). You can [download](https://apps.apple.com/at/app/logorrr/id1583786769) and install it securely and certified from there.
 
 Older releases versions are available on the [releases page](https://github.com/rladstaetter/LogoRRR/releases).
 
 ## Linux installation
 
-[![Get it on Flathub](https://flathub.org/api/badge?locale=en)](https://flathub.org/apps/app.logorrr.LogoRRR)
+You can install `LogoRRR` from the [flathub store](https://flathub.org/apps/app.logorrr.LogoRRR).
 
 Alternatively, linux installation packages (.deb) can be downloaded [from the github release page](https://github.com/rladstaetter/LogoRRR/releases/tag/24.5.1).
 
