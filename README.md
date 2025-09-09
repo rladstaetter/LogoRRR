@@ -36,9 +36,8 @@ Alternatively, linux installation packages (.deb) can be downloaded [from the gi
 - **Interactive Filtering**: Effortlessly filter log entries to find exactly what you need.
 - **Multi-File Handling**: Manage and view multiple log files simultaneously.
 - **Zip File Support**: Directly work with zip files - no need to unpack data before analyzing.
-- **Advanced Search Options**: Utilize case-sensitive and regex searches for precise results.
 - **Real-Time Monitoring**: Stay updated with Unix `tail -f` like functionality for ongoing events.
-- **Efficiency at Your Fingertips**: Quick keyboard shortcuts streamline your workflow.
+- **Quick keyboard shortcuts**:  streamline your workflow by using STRG/CMD - F to search
 - **Easy export**: Copy your extracted data to the clipboard - to include it in emails for example.
 - **Remembers settings**: `LogoRRR` smartly recalls your last files and settings on restart.
 
