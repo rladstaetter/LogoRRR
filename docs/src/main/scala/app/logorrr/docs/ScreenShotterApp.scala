@@ -1,17 +1,15 @@
 package app.logorrr.docs
 
+import app.logorrr.LogoRRRApp
 import app.logorrr.conf._
 import app.logorrr.conf.mut.MutSettings
 import app.logorrr.meta.AppInfo
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
 import app.logorrr.services.hostservices.NativeHostServices
-import app.logorrr.{LogoRRRApp, LogoRRRNative}
-import javafx.application.Application
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Node
 import javafx.stage.Stage
-import net.ladstatt.app.{AppId, AppMeta}
 import net.ladstatt.util.io.Fs
 import net.ladstatt.util.log.CanLog
 
@@ -30,9 +28,6 @@ object ScreenShotterApp {
   }
 
   def main(args: Array[String]): Unit = {
-    val appMeta = net.ladstatt.app.AppMeta(AppId("ScreenShotterApp", "screenshotterapp", "screenshotter.app"), AppMeta.LogFormat)
-    net.ladstatt.app.AppMeta.initApp(appMeta)
-    LogoRRRNative.loadNativeLibraries()
     javafx.application.Application.launch(classOf[ScreenShotterApp], args: _*)
   }
 }
@@ -48,12 +43,6 @@ class ScreenShotterApp extends javafx.application.Application
       Console.err.println("Usage: ScreenShotterApp <mode>")
     } else {
       if (Try(args.get(0).toInt).isSuccess) {
-        Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
-        /*
-        val s0 = Seq[Area](R1280x800)
-        val s0 = Seq[Area](R1440x900)
-        val s0 = Seq[Area](R2560x1600)
-        */
         val s0 = Area.seq(args.get(0).toInt)
         for (Area(w, h, _, _) <- Seq(s0)) {
           val path = Paths.get(s"src/main/resources/screenshotter-$w-$h.conf")
@@ -71,7 +60,7 @@ class ScreenShotterApp extends javafx.application.Application
           createDirectories(bPath)
 
           val f = bPath.resolve(s"${w}x$h.png")
-          ScreenShotterApp.persistNodeState(stage.getScene.getRoot, f)
+            ScreenShotterApp.persistNodeState(stage.getScene.getRoot, f)
           logInfo(s"created ${f.toAbsolutePath.toString}")
         }
       } else {
