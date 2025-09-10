@@ -20,7 +20,7 @@
 [![Get it on Flathub](docs/appstores/flathub/flathub.png)](https://flathub.org/apps/app.logorrr.LogoRRR)
 
 </td>
-
+</tr>
 </table>
 
 LogoRRR is a powerful desktop application designed to simplify the analysis of text files for recurring patterns. Whether you’re searching for specific events in log files or analysing any other type of text file, LogoRRR makes the process effortless and efficient.
