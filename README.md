@@ -23,7 +23,9 @@
 </tr>
 </table>
 
-LogoRRR is a powerful desktop application designed to simplify the analysis of text files for recurring patterns. Whether you’re searching for specific events in log files or analysing any other type of text file, LogoRRR makes the process effortless and efficient.
+LogoRRR is a powerful desktop application designed to simplify the analysis of text files for recurring patterns.
+Whether you’re searching for specific events in log files or analysing any other type of text file, LogoRRR makes the
+process effortless and efficient.
 
 * **Easy Pattern Recognition**: Quickly identify recurring patterns in your text files.
 * **Versatile Application**: Perfect for log file analysis, but adaptable to any text file.
@@ -31,40 +33,67 @@ LogoRRR is a powerful desktop application designed to simplify the analysis of t
 
 Visit the [www.logorrr.app](https://www.logorrr.app/) for more information.
 
+## Standalone installers
+
+If you don't want to use app stores, installers are provided also for following platforms:
+
+<table>
+<tr>
+<th>Platform</th>
+<th>Installer</th>
+</tr>
+
+<tr>
+<td>Windows</td>
+<td>
+
+[LogoRRR Windows 10+ Installer, x64, msi](https://github.com/rladstaetter/LogoRRR/releases/download/25.1.0/LogoRRR-25.1.0-installer.msi)
+
+</td>
+</tr>
+
+<tr>
+<td>Windows</td>
+<td>
+
+[LogoRRR Windows 10+ Installer, x64, exe](https://github.com/rladstaetter/LogoRRR/releases/download/25.1.0/LogoRRR-25.1.0-installer.exe)
+
+</td>
+</tr>
 
 
+<tr>
+<td>Linux</td>
+<td>
 
+[LogoRRR x64 Linux Installer, .deb](https://github.com/rladstaetter/LogoRRR/releases/download/25.1.0/logorrr_25.1.0_amd64.deb)
 
-## Windows installation
+</td>
+</tr>
 
+<tr>
+<td>Linux</td>
+<td>
 
-The easiest way on Windows to install `LogoRRR` is by [downloading LogoRRR from the Microsoft App Store](https://aka.ms/AAr3sxs).
+[LogoRRR aarch Linux Installer, .deb](https://github.com/rladstaetter/LogoRRR/releases/download/25.1.0/logorrr_25.1.0_arm64.deb)
 
-Alternatively, you can download the latest [Windows installers](https://github.com/rladstaetter/LogoRRR/releases/tag/24.5.1) from the github release page.
+</td>
+</tr>
 
-## MacOsX installation
+</table>
 
-
-`LogoRRR` is available on the OsX [App Store](https://apps.apple.com/at/app/logorrr/id1583786769). You can [download](https://apps.apple.com/at/app/logorrr/id1583786769) and install it securely and certified from there.
-
-Older releases versions are available on the [releases page](https://github.com/rladstaetter/LogoRRR/releases).
-
-## Linux installation
-
-You can install `LogoRRR` from the [flathub store](https://flathub.org/apps/app.logorrr.LogoRRR).
-
-Alternatively, linux installation packages (.deb) can be downloaded [from the github release page](https://github.com/rladstaetter/LogoRRR/releases/tag/24.5.1).
+Of course you can build it from source if your platform is not listed above.
 
 ## Features
 
-- **Cross-Platform Compatibility**: Easily use on **Windows, macOS, Linux**.
-- **Drag and Drop**: Just drag and drop log files or directories for instant access.
+- **Cross-Platform Compatibility**: LogoRRR runs on **Windows, macOS, Linux**.
+- **Drag and Drop**: LogoRRR supports Drag'n Drop to load log files, directories or zip files. 
 - **Interactive Filtering**: Effortlessly filter log entries to find exactly what you need.
 - **Multi-File Handling**: Manage and view multiple log files simultaneously.
 - **Zip File Support**: Directly work with zip files - no need to unpack data before analyzing.
 - **Real-Time Monitoring**: Stay updated with Unix `tail -f` like functionality for ongoing events.
-- **Quick keyboard shortcuts**:  streamline your workflow by using STRG/CMD - F to search
-- **Easy export**: Copy your extracted data to the clipboard - to include it in emails for example.
+- **Keyboard shortcuts**:  streamline your workflow by using STRG/CMD - F to search
+- **Export filtered data**: Use LogoRRR to create snippets of your log files and export those snippets to other applications (email, Slack, Teams ...) to share it with your team. 
 - **Remembers settings**: `LogoRRR` smartly recalls your last files and settings on restart.
 
 Have a look at more [Screenshots](Screenshots.md) which are available [here](Screenshots.md).
