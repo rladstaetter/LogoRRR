@@ -3,6 +3,7 @@ package app.logorrr.views.search
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
+import app.logorrr.views.search.searchterm.SearchTermButton
 import app.logorrr.views.{MutableSearchTerm, SearchTerm}
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener
@@ -93,7 +94,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
       if (st.isUnclassified) {
         None
       } else {
-        Option(new SearchTerm(st.filter.getPredicate.description, st.filter.getColor, st.filter.isActive))
+        Option(new SearchTerm(st.searchTerm.getPredicate.description, st.searchTerm.getColor, st.searchTerm.isActive))
       }
     }).flatten.toSeq
   }

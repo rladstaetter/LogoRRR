@@ -4,7 +4,7 @@ import app.logorrr.TestFiles
 import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.MultipleFileApplicationTest
 import app.logorrr.views.MutableSearchTerm
-import app.logorrr.views.search.SearchTermButton
+import app.logorrr.views.search.searchterm.SearchTermButton
 import javafx.scene.control.ToggleButton
 import org.junit.jupiter.api.Test
 import org.testfx.api.FxAssert

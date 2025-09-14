@@ -3,7 +3,7 @@ package app.logorrr.usecases.search
 import app.logorrr.TestFiles
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.MutableSearchTerm
-import app.logorrr.views.search.SearchTermButton
+import app.logorrr.views.search.searchterm.SearchTermButton
 import org.junit.jupiter.api.Test
 
 /**

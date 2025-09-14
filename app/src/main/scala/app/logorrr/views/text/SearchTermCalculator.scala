@@ -1,8 +1,7 @@
 package app.logorrr.views.text
 
 import app.logorrr.model.LogEntry
-import app.logorrr.views.MutableSearchTerm
-import app.logorrr.views.search.MutableSearchTermUnclassified
+import app.logorrr.views.{MutableSearchTerm, SearchTerm}
 import javafx.scene.paint.Color
 
 import scala.collection.mutable.ListBuffer
@@ -71,7 +70,7 @@ case class SearchTermCalculator(logEntry: LogEntry
     val value = logEntry.value
     // if there are no filters, it is easy - just return the whole string with special color
     if (filteredParts.isEmpty) {
-      Seq((value, MutableSearchTermUnclassified.color))
+      Seq((value, SearchTerm.Unclassified))
     } else {
       // brute force:
       // for all filters, calculate if there is a hit or not.
@@ -115,7 +114,7 @@ case class SearchTermCalculator(logEntry: LogEntry
           val curColor =
             someCol match {
               case Some(value) => value
-              case None => MutableSearchTermUnclassified.color
+              case None => SearchTerm.Unclassified
             }
           // handle special case for first element
           if (acc.isEmpty) {
