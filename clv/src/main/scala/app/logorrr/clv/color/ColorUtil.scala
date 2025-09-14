@@ -21,6 +21,16 @@ object ColorUtil {
     new Color(red, green, blue, alpha)
   }
 
+  def toCssString(color: Color): String = {
+    // Get the hexadecimal representation of the color
+    // The format is "#RRGGBB"
+    String.format("#%02X%02X%02X", (color.getRed * 255).asInstanceOf[Int], (color.getGreen * 255).asInstanceOf[Int], (color.getBlue * 255).asInstanceOf[Int])
+  }
+
+  def mkCssBackgroundString(color: Color): String = {
+    "-fx-background-color: " + ColorUtil.toCssString(color) + ";"
+  }
+
 
 
 }

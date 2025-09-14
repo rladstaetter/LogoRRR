@@ -28,7 +28,7 @@ echo "Building project with Maven..."
 MAVEN_OPTS="--enable-native-access=ALL-UNNAMED" mvn clean install -T1C
 
 # Install the appropriate .deb
-DEB_PATH="./dist/dist-linux/deb/target/installer/logorrr_25.1.0_${DEB_ARCH}.deb"
+DEB_PATH="./dist/dist-linux/deb/target/installer/logorrr_25.1.1_${DEB_ARCH}.deb"
 
 if [[ ! -f "$DEB_PATH" ]]; then
   echo "Error: .deb file not found at $DEB_PATH"

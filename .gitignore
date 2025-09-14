@@ -4,3 +4,4 @@ logfiles/
 **/.flattened-pom.xml
 /develop-logging.properties
 /target/
+**/**/dependency-reduced-pom.xml
