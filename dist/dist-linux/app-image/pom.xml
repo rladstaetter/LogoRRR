@@ -81,6 +81,7 @@
                             <arguments>
                                 <argument>@jpackage.options</argument>
                             </arguments>
+                            <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>
                 </executions>

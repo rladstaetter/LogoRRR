@@ -150,6 +150,7 @@
                                 <argument>flatpak-target-dir</argument>
                                 <argument>app.logorrr.LogoRRR.yml</argument>
                             </arguments>
+                            <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>
                     <execution>

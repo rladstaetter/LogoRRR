@@ -141,6 +141,7 @@
                             <arguments>
                                 <argument>@jpackage-commandline.options</argument>
                             </arguments>
+                            <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>
                 </executions>
