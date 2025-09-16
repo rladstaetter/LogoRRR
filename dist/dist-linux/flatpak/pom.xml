@@ -53,7 +53,9 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <!-- Generate flatpak.archive version -->
@@ -150,6 +152,7 @@
                                 <argument>flatpak-target-dir</argument>
                                 <argument>app.logorrr.LogoRRR.yml</argument>
                             </arguments>
+                            <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>
                     <execution>

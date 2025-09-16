@@ -24,25 +24,38 @@
         </dependency>
     </dependencies>
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/ai</directory>
-                <includes>
-                    <include>logorrr-icon-128.ico</include>
-                </includes>
-                <targetPath>${project.build.directory}/installer/</targetPath>
-                <filtering>false</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/ai</directory>
-                <includes>
-                    <include>*.aip</include>
-                </includes>
-                <targetPath>${project.build.directory}/installer/</targetPath>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
         <plugins>
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+            <execution>
+                <id>copy-installer-icons</id>
+                <phase>process-resources</phase>
+                <goals>
+                    <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/installer/</outputDirectory>
+                    <resources>
+                        <resource>
+                            <directory>src/main/ai</directory>
+                            <includes>
+                                <include>logorrr-icon-128.ico</include>
+                            </includes>
+                            <filtering>false</filtering>
+                        </resource>
+                        <resource>
+                            <directory>src/main/ai</directory>
+                            <includes>
+                                <include>logorrr-installer.aip</include>
+                            </includes>
+                            <filtering>true</filtering>
+                        </resource>
+                    </resources>
+                </configuration>
+            </execution>
+            </executions></plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -96,6 +109,7 @@
                                 <argument>${project.artifactId}-${revision}</argument>
                             </arguments>
                             <includePluginDependencies>true</includePluginDependencies>
+                            <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>
                     <!-- Create installer -->
@@ -112,6 +126,7 @@
                                 <argument>/rebuild</argument>
                                 <argument>logorrr-installer.aip</argument>
                             </arguments>
+                            <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>
                 </executions>
