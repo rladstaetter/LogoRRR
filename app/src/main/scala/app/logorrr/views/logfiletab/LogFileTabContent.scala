@@ -81,7 +81,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     logTextView.scrollTo(logTextView.getItems.size)
   }
 
-  def activeFilters: Seq[SearchTerm] = searchTermToolBar.activeFilters()
+  def activeFilters: Seq[SearchTerm] = searchTermToolBar.activeSearchTerms()
 
   def addTailerListener(): Unit = filteredList.addListener(scrollToEndEventListener)
 

@@ -7,7 +7,7 @@ object TestUtil {
 
   val searchTermGen: Gen[SearchTerm] = for {f <- Gen.oneOf(SearchTerm.DefaultFilters)} yield f
 
-  val mutFilterGen: Gen[MutableSearchTerm] = for {
+  val mutSearchTermGen: Gen[MutableSearchTerm] = for {
     f <- Gen.oneOf(MutableSearchTerm.DefaultFilters)
   } yield f
 

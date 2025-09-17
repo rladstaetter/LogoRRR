@@ -5,6 +5,7 @@ import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
 import app.logorrr.io.{FileId, OsxBridgeHelper}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.services.hostservices.LogoRRRHostServices
+import app.logorrr.views.SearchTerm
 import javafx.beans.property.SimpleObjectProperty
 import javafx.stage.Window
 import net.ladstatt.util.io.Fs
@@ -41,6 +42,7 @@ object LogoRRRGlobals extends CanLog with Fs {
 
     mutSettings.bindWindowProperties(window)
   }
+
 
   def unbindWindow(): Unit = {
     mutSettings.unbindWindow()
@@ -106,5 +108,6 @@ object LogoRRRGlobals extends CanLog with Fs {
 
   def getLogFileSettings(fileId: FileId): MutLogFileSettings = mutSettings.getMutLogFileSetting(fileId)
 
+  def putSearchTerms(name: String, searchTerms: Seq[SearchTerm]): Unit = mutSettings.putSearchTerms(name, searchTerms)
 
 }

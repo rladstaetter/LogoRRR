@@ -2,6 +2,7 @@ package app.logorrr.conf
 
 import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.LogFileSettings
+import app.logorrr.views.SearchTerm
 import javafx.geometry.Rectangle2D
 import javafx.stage.Screen
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
@@ -44,6 +45,7 @@ object Settings {
     , Map()
     , None
     , None
+    , Map()
   )
 
 }
@@ -53,7 +55,8 @@ case class Settings(stageSettings: StageSettings
                     // key is FileId.value
                     , fileSettings: Map[String, LogFileSettings]
                     , someActive: Option[FileId]
-                    , someLastUsedDirectory: Option[Path]) {
+                    , someLastUsedDirectory: Option[Path]
+                    , searchTerms: Map[String, Seq[SearchTerm]]) {
 
   /** updates recent files with given log setting */
   def update(logFileSetting: LogFileSettings): Settings = {

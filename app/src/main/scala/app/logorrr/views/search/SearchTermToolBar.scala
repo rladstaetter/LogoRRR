@@ -39,6 +39,8 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
   private def init(): Unit = {
     searchTermsProperty.addListener(JfxUtils.mkListChangeListener[MutableSearchTerm](processFiltersChange))
     updateUnclassified()
+    val stcm = new SearchTermContextMenu(this)
+    setContextMenu(stcm)
   }
 
 
@@ -88,13 +90,16 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     mutLogFileSettings.filterButtons = mutLogFileSettings.filterButtons.removed(filter)
   }
 
-  def activeFilters(): Seq[SearchTerm] = {
+  def activeSearchTerms(): Seq[SearchTerm] = {
     (for (i <- getItems.asScala) yield {
-      val st = i.asInstanceOf[SearchTermButton]
-      if (st.isUnclassified) {
-        None
-      } else {
-        Option(new SearchTerm(st.searchTerm.getPredicate.description, st.searchTerm.getColor, st.searchTerm.isActive))
+      i match {
+        case st: SearchTermButton =>
+          if (st.isUnclassified) {
+            None
+          } else {
+            Option(new SearchTerm(st.searchTerm.getPredicate.description, st.searchTerm.getColor, st.searchTerm.isActive))
+          }
+        case _ => None
       }
     }).flatten.toSeq
   }

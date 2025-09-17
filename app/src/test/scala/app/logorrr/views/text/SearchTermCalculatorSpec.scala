@@ -13,8 +13,8 @@ object SearchTermCalculatorSpec {
     for {
       e <- LogEntrySpec.gen
       maxLength <- Gen.posNum[Int]
-      filters <- Gen.listOf(TestUtil.mutFilterGen)
-    } yield LogTextViewLabel(e, maxLength, filters, () => "", new SimpleIntegerProperty())
+      searchTerms <- Gen.listOf(TestUtil.mutSearchTermGen)
+    } yield LogTextViewLabel(e, maxLength, searchTerms, () => "", new SimpleIntegerProperty())
 }
 
 class SearchTermCalculatorSpec extends LogoRRRSpec {
@@ -32,7 +32,7 @@ class SearchTermCalculatorSpec extends LogoRRRSpec {
       })
     }
     "return empty List for empty LogEntry string" in {
-      check(Prop.forAll(TestUtil.mutFilterGen) {
+      check(Prop.forAll(TestUtil.mutSearchTermGen) {
         filter =>
           val filteredParts = applySingleFilter("", filter.getPredicate.description)
           filteredParts.length == 1 && filteredParts.head.isEmpty

@@ -3,6 +3,7 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.{Settings, StageSettings}
 import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
+import app.logorrr.views.SearchTerm
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.FXCollections
 import javafx.stage.Window
@@ -18,7 +19,7 @@ object MutSettings {
    * due to glorious app logic we need this constant to add to our windows height calculation
    *
    * will not work always exactly, depending on user settings/skins - has to be improved ...
-   **/
+   * */
   val WindowHeightHack: Int = {
     if (OsUtil.isMac) 28
     else if (OsUtil.isLinux) 37
@@ -27,8 +28,8 @@ object MutSettings {
   }
 }
 
-class MutSettings {
 
+class MutSettings {
 
   /** remembers last opened directory for the next execution */
   val lastUsedDirectoryProperty = new SimpleObjectProperty[Option[Path]](None)
@@ -39,8 +40,13 @@ class MutSettings {
     lastUsedDirectoryProperty.set(someDirectory)
   }
 
+
   /** contains mutable information for the application stage */
   private val mutStageSettings = new MutStageSettings
+
+  private val mutSearchTermSettings = new MutSearchTermSettings
+
+  def putSearchTerms(name: String, searchTerms: Seq[SearchTerm]): Unit = mutSearchTermSettings.put(name, searchTerms)
 
   /** contains mutable state information for all log files */
   private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
@@ -73,7 +79,7 @@ class MutSettings {
     val logFileSettings: Map[String, LogFileSettings] = (for ((k, v) <- mutLogFileSettingsMapProperty.get.asScala) yield {
       k.absolutePathAsString -> v.mkImmutable()
     }).toMap
-    Settings(mutStageSettings.mkImmutable(), logFileSettings, getSomeActiveLogFile, getSomeLastUsedDirectory)
+    Settings(mutStageSettings.mkImmutable(), logFileSettings, getSomeActiveLogFile, getSomeLastUsedDirectory, mutSearchTermSettings.mkImmutable())
   }
 
   def setStageSettings(stageSettings: StageSettings): Unit = {
