@@ -15,7 +15,7 @@ object SearchTerm {
   val Unclassified: Color = Color.LIGHTGREY
 
   /** Default mapping for filters */
-  val DefaultFilters: Seq[SearchTerm] = Seq(
+  val DefaultSearchTerms: Seq[SearchTerm] = Seq(
     SearchTerm("FINEST", Color.GREY, active = true)
     , SearchTerm("INFO", Color.GREEN, active = true)
     , SearchTerm("WARNING", Color.ORANGE, active = true)

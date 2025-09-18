@@ -32,7 +32,7 @@ object LogFileSettings {
       , Instant.now().toEpochMilli
       , DefaultDividerPosition
       , TextConstants.DefaultFontSize
-      , SearchTerm.DefaultFilters
+      , SearchTerm.DefaultSearchTerms
       , DefaultBlockSettings
       , DefaultLogFormat
       , DefaultAutoScroll

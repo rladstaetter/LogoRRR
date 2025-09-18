@@ -1,5 +1,6 @@
 package app.logorrr.views.search
 
+import app.logorrr.util.JfxUtils
 import javafx.scene.control._
 
 class SearchTermTitleLabel(text: String) extends Label(text) {
@@ -9,13 +10,17 @@ class SearchTermTitleLabel(text: String) extends Label(text) {
 
 object SearchTermContextMenu {
 
-  class SaveAsMenuItem(searchTermToolbar: SearchTermToolBar, contextMenu: SearchTermContextMenu) extends MenuItem("Save as ...") {
-    setOnAction(_ => {
-      val saveStage = new SearchTermTitleDialogue(searchTermToolbar, contextMenu)
-      saveStage.show()
-    })
+  val toggleGroup = new ToggleGroup()
 
-  }
+  toggleGroup.selectedToggleProperty.addListener(JfxUtils.onNew[Toggle](
+    newToggle => {
+      Option(newToggle) match {
+        case Some(selectedItem: RadioMenuItem) =>
+          System.out.println("Selected search term group: " + selectedItem.getText)
+        case _ =>
+      }
+    }))
+
 
 }
 
@@ -25,11 +30,18 @@ object SearchTermContextMenu {
  *
  * It provides means to save the current search term
  */
-class SearchTermContextMenu(searchTermToolbar: SearchTermToolBar) extends ContextMenu {
+class SearchTermContextMenu() extends ContextMenu {
 
-  val saveAsItem = new SearchTermContextMenu.SaveAsMenuItem(searchTermToolbar, this)
-
-  getItems.addAll(saveAsItem)
+  def add(searchTermGroupName: String): Unit = {
+    // if it is the first menu item, add a spacer
+    if (getItems.size() == 1) {
+      getItems.add(new SeparatorMenuItem)
+    }
+    val item = new RadioMenuItem(searchTermGroupName)
+    item.setToggleGroup(SearchTermContextMenu.toggleGroup)
+    item.setSelected(true)
+    getItems.add(item)
+  }
 
 
 }

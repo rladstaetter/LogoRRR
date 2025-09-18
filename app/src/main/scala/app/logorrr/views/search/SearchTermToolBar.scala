@@ -12,11 +12,6 @@ import javafx.scene.control.ToolBar
 
 import scala.jdk.CollectionConverters._
 
-/** A toolbar with buttons which filter log events */
-object SearchTermToolBar {
-
-}
-
 
 /**
  * Depending on buttons pressed, filteredList will be mutated to show only selected items.
@@ -29,6 +24,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
 
   setMaxHeight(Double.PositiveInfinity)
 
+
   var occurrences: Map[MutableSearchTerm, Int] = Map().withDefaultValue(0)
 
   /** will be bound to the current active filter list */
@@ -37,10 +33,11 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
   init()
 
   private def init(): Unit = {
+    getItems.addAll(new SearchTermGroupChoiceBox(this))
     searchTermsProperty.addListener(JfxUtils.mkListChangeListener[MutableSearchTerm](processFiltersChange))
     updateUnclassified()
-    val stcm = new SearchTermContextMenu(this)
-    setContextMenu(stcm)
+
+
   }
 
 
@@ -65,7 +62,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     val unclassified = MutableSearchTermUnclassified(mutLogFileSettings.filterButtons.keySet)
     val filterButton: SearchTermButton = updateOccurrencesAndFilter(unclassified)
     mutLogFileSettings.someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
-    getItems.add(0, filterButton)
+    getItems.add(1, filterButton)
     mutLogFileSettings.someUnclassifiedFilter = Option((unclassified, filterButton))
     mutLogFileSettings.updateActiveFilter(filteredList)
   }
@@ -104,7 +101,20 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     }).flatten.toSeq
   }
 
+  def addSearchGroupName(name: String): Unit = {
+    val label = new SearchTermTitleLabel(name)
+    val indexOfLastElement = getItems.size() - 1
+    val lastItem = getItems.get(indexOfLastElement)
+    if (lastItem.isInstanceOf[SearchTermTitleLabel]) {
+      getItems.remove(indexOfLastElement)
+      getItems.add(label)
+    } else {
+
+    }
+  }
 
 }
+
+
 
 

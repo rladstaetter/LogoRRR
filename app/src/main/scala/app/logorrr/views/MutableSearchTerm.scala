@@ -7,7 +7,7 @@ import javafx.scene.paint.Color
 
 object MutableSearchTerm {
 
-  val DefaultFilters: Seq[MutableSearchTerm] = SearchTerm.DefaultFilters.map(MutableSearchTerm.apply)
+  val DefaultFilters: Seq[MutableSearchTerm] = SearchTerm.DefaultSearchTerms.map(MutableSearchTerm.apply)
 
   def apply(searchTerm: SearchTerm): MutableSearchTerm = {
     apply(searchTerm.value, searchTerm.color, searchTerm.active)
