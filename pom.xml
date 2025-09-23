@@ -14,8 +14,6 @@
         <scala.version>${scala.major.version}.16</scala.version>
         <openjfx.version>25</openjfx.version>
         <ikonli.version>12.3.1</ikonli.version>
-        <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-        <gluonfx.plugin.version>1.0.26</gluonfx.plugin.version>
         <!-- no need to change these -->
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
