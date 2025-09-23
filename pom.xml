@@ -23,7 +23,7 @@
         <jdk.jpackage.binary>${env.JAVA_HOME}/bin/jpackage</jdk.jpackage.binary>
         <jmh.version>1.37</jmh.version>
         <windows.temurin.version>
-            https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_windows_hotspot_22.0.1_8.zip
+            https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25%2B36/OpenJDK25U-jre_x64_windows_hotspot_25_36.zip
         </windows.temurin.version>
     </properties>
     <scm>
