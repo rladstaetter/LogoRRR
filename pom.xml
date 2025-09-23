@@ -12,10 +12,8 @@
         <revision>25.1.1</revision>
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.16</scala.version>
-        <openjfx.version>24.0.2</openjfx.version>
+        <openjfx.version>25</openjfx.version>
         <ikonli.version>12.3.1</ikonli.version>
-        <!-- check https://github.com/gluonhq/graal/releases/ for latest gluon graal release -->
-        <gluonfx.plugin.version>1.0.26</gluonfx.plugin.version>
         <!-- no need to change these -->
         <changelist>-SNAPSHOT</changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,7 +23,7 @@
         <jdk.jpackage.binary>${env.JAVA_HOME}/bin/jpackage</jdk.jpackage.binary>
         <jmh.version>1.37</jmh.version>
         <windows.temurin.version>
-            https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.1%2B8/OpenJDK22U-jre_x64_windows_hotspot_22.0.1_8.zip
+            https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25%2B36/OpenJDK25U-jre_x64_windows_hotspot_25_36.zip
         </windows.temurin.version>
     </properties>
     <scm>
