@@ -20,6 +20,19 @@ import net.ladstatt.util.os.OsUtil
 
 object OpsToolBar {
 
+  def apply(mutLogFileSettings: MutLogFileSettings
+            , chunkListView: ChunkListView[LogEntry]
+            , entries: ObservableList[LogEntry]
+            , filteredList: FilteredList[LogEntry]): OpsToolBar = {
+
+    new OpsToolBar(mutLogFileSettings.getFileId
+      , mutLogFileSettings
+      , chunkListView
+      , mutLogFileSettings.filtersProperty.add(_)
+      , entries
+      , filteredList
+      , mutLogFileSettings.blockSizeProperty)
+  }
 
 }
 

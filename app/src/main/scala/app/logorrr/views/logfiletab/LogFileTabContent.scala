@@ -51,13 +51,29 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   setStyle("-fx-background-color: white;")
 
   /** list which holds all entries, default to display all (can be changed via buttons) */
-  private val filteredList = new FilteredList[LogEntry](entries)
+  private val filteredEntries = new FilteredList[LogEntry](entries)
 
   // display text to the right
-  private val logTextView = new LogTextView(mutLogFileSettings, filteredList)
+  private val logTextView = new LogTextView(mutLogFileSettings, filteredEntries)
 
   // graphical display to the left
-  private val chunkListView = LogoRRRChunkListView(filteredList, mutLogFileSettings, logTextView.scrollToItem, widthProperty)
+  private val chunkListView = LogoRRRChunkListView(filteredEntries, mutLogFileSettings, logTextView.scrollToItem, widthProperty)
+
+  val opsToolBar = OpsToolBar(mutLogFileSettings
+    , chunkListView
+    , entries
+    , filteredEntries)
+
+  private val searchTermToolBar = {
+    val fbtb =
+      new SearchTermToolBar(
+        mutLogFileSettings
+        , filteredEntries
+        , mutLogFileSettings.filtersProperty.remove(_)
+      )
+    fbtb.searchTermsProperty.bind(mutLogFileSettings.filtersProperty)
+    fbtb
+  }
 
   private val textPane = LogFileTabContent.mkPane(
     logTextView
@@ -83,35 +99,13 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   def activeFilters: Seq[SearchTerm] = searchTermToolBar.activeSearchTerms()
 
-  def addTailerListener(): Unit = filteredList.addListener(scrollToEndEventListener)
+  def addTailerListener(): Unit = filteredEntries.addListener(scrollToEndEventListener)
 
-  def removeTailerListener(): Unit = filteredList.removeListener(scrollToEndEventListener)
+  def removeTailerListener(): Unit = filteredEntries.removeListener(scrollToEndEventListener)
 
 
-  val opsToolBar = new OpsToolBar(mutLogFileSettings.getFileId
-    , mutLogFileSettings
-    , chunkListView
-    , mutLogFileSettings.filtersProperty.add(_)
-    , entries
-    , filteredList
-    , mutLogFileSettings.blockSizeProperty)
 
-  private val searchTermToolBar = {
-    val fbtb =
-      new SearchTermToolBar(
-        mutLogFileSettings
-        , filteredList
-        , mutLogFileSettings.filtersProperty.remove(_)
-      )
-    fbtb.searchTermsProperty.bind(mutLogFileSettings.filtersProperty)
-    fbtb
-  }
-  /*
-  val timeOpsToolBar = new TimeOpsToolBar(mutLogFileSettings
-    , chunkListView
-    , entries
-    , filteredList)
-*/
+
 
   private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, searchTermToolBar)
 

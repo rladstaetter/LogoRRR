@@ -24,7 +24,6 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
 
   setMaxHeight(Double.PositiveInfinity)
 
-
   var occurrences: Map[MutableSearchTerm, Int] = Map().withDefaultValue(0)
 
   /** will be bound to the current active filter list */
@@ -36,7 +35,6 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     getItems.addAll(new SearchTermGroupChoiceBox(this))
     searchTermsProperty.addListener(JfxUtils.mkListChangeListener[MutableSearchTerm](processFiltersChange))
     updateUnclassified()
-
 
   }
 
