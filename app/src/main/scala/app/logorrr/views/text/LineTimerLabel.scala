@@ -1,6 +1,6 @@
 package app.logorrr.views.text
 
-import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid
+import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid
 import org.kordamp.ikonli.javafx.FontIcon
 
 import java.time.Duration

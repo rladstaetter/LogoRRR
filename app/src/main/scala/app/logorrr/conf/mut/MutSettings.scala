@@ -5,7 +5,7 @@ import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
 import app.logorrr.views.SearchTerm
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
-import javafx.collections.FXCollections
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.stage.Window
 import net.ladstatt.util.os.OsUtil
 
@@ -46,7 +46,13 @@ class MutSettings {
 
   private val mutSearchTermSettings = new MutSearchTermSettings
 
-  def putSearchTerms(name: String, searchTerms: Seq[SearchTerm]): Unit = mutSearchTermSettings.put(name, searchTerms)
+  def putSearchTerms(groupName: String, searchTerms: Seq[SearchTerm]): Unit = mutSearchTermSettings.put(groupName, searchTerms)
+
+  def getSearchTerms(groupName: String): Option[Seq[SearchTerm]] = mutSearchTermSettings.get(groupName)
+
+  def removeSearchTermGroup(searchTermGroupName: String): Unit = mutSearchTermSettings.remove(searchTermGroupName)
+
+  val searchTermGroupNames: ObservableList[String] = mutSearchTermSettings.searchTermGroupNames
 
   /** contains mutable state information for all log files */
   private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
@@ -120,6 +126,8 @@ class MutSettings {
     val seq = mutLogFileSettingsMapProperty.get().values.asScala.toSeq
     seq.sortWith((lt, gt) => lt.getFirstOpened < gt.getFirstOpened).map(_.mkImmutable())
   }
+
+
 
 
 }

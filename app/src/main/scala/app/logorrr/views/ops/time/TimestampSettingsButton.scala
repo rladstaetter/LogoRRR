@@ -10,7 +10,7 @@ import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.layout.StackPane
-import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular
+import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
 object TimestampSettingsButton extends UiNodeFileIdAware {

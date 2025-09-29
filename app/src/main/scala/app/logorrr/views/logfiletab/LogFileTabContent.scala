@@ -23,17 +23,16 @@ case class PaneDefinition(jfxId: String, graphic: Node, step: Int, boundary: Int
 object LogFileTabContent {
 
   /** wire pane and slider together */
-  def mkPane(listView: ListView[_]
-             , slider: Slider
-             , inc: PaneDefinition
-             , dec: PaneDefinition
-             , boundProp: Property[Number]): BorderPane = {
+  private def mkPane(listView: ListView[_]
+                     , slider: Slider
+                     , inc: PaneDefinition
+                     , dec: PaneDefinition
+                     , boundProp: Property[Number]): BorderPane = {
     val increaseButton = IncreaseSizeButton(inc.jfxId, inc.graphic, inc.step, inc.boundary, boundProp)
     val decreaseButton = DecreaseSizeButton(dec.jfxId, dec.graphic, dec.step, dec.boundary, boundProp)
     val hbox = new HBox(slider, decreaseButton, increaseButton)
     HBox.setHgrow(slider, Priority.ALWAYS)
     hbox.setAlignment(Pos.CENTER)
-    //BorderPane.HBox.setHgrow(hbox, Priority.ALWAYS)
     hbox.setPrefWidth(java.lang.Double.MAX_VALUE)
     val bBp = new BorderPane(listView, hbox, null, null, null)
     slider.valueProperty().bindBidirectional(boundProp)
@@ -59,21 +58,9 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   // graphical display to the left
   private val chunkListView = LogoRRRChunkListView(filteredEntries, mutLogFileSettings, logTextView.scrollToItem, widthProperty)
 
-  val opsToolBar = OpsToolBar(mutLogFileSettings
-    , chunkListView
-    , entries
-    , filteredEntries)
+  val opsToolBar = OpsToolBar(mutLogFileSettings, chunkListView, entries, filteredEntries)
 
-  private val searchTermToolBar = {
-    val fbtb =
-      new SearchTermToolBar(
-        mutLogFileSettings
-        , filteredEntries
-        , mutLogFileSettings.filtersProperty.remove(_)
-      )
-    fbtb.searchTermsProperty.bind(mutLogFileSettings.filtersProperty)
-    fbtb
-  }
+  private val searchTermToolBar = new SearchTermToolBar(mutLogFileSettings, filteredEntries)
 
   private val textPane = LogFileTabContent.mkPane(
     logTextView
@@ -102,9 +89,6 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   def addTailerListener(): Unit = filteredEntries.addListener(scrollToEndEventListener)
 
   def removeTailerListener(): Unit = filteredEntries.removeListener(scrollToEndEventListener)
-
-
-
 
 
   private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, searchTermToolBar)

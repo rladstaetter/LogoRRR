@@ -6,7 +6,7 @@ import app.logorrr.util.HashUtil
 import app.logorrr.views.{MutableSearchTerm, UiNode, UiNodeSearchTermAware}
 import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.paint.Color
-import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular
+import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
 

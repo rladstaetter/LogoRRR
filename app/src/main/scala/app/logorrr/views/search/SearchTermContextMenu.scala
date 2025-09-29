@@ -3,11 +3,6 @@ package app.logorrr.views.search
 import app.logorrr.util.JfxUtils
 import javafx.scene.control._
 
-class SearchTermTitleLabel(text: String) extends Label(text) {
-  setStyle("-fx-font-weight: bold; -fx-font-size: 20pt; -fx-opacity: 0.5;")
-}
-
-
 object SearchTermContextMenu {
 
   val toggleGroup = new ToggleGroup()

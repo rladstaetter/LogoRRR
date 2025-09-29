@@ -1,5 +1,6 @@
 package app.logorrr.views.search
 
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
@@ -13,29 +14,33 @@ import javafx.scene.control.ToolBar
 import scala.jdk.CollectionConverters._
 
 
+
 /**
  * Depending on buttons pressed, filteredList will be mutated to show only selected items.
  *
  * @param filteredList list of entries which are displayed (can be filtered via buttons)
  */
 class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
-                        , filteredList: FilteredList[LogEntry]
-                        , removeFilter: MutableSearchTerm => Unit) extends ToolBar {
+                        , filteredList: FilteredList[LogEntry]) extends ToolBar {
 
   setMaxHeight(Double.PositiveInfinity)
 
   var occurrences: Map[MutableSearchTerm, Int] = Map().withDefaultValue(0)
 
   /** will be bound to the current active filter list */
-  val searchTermsProperty = new SimpleListProperty[MutableSearchTerm]()
+  val searchTermsProperty: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm]()
+  val groupChoiceBox = new SearchTermGroupChoiceBox(searchTermsProperty)
+  groupChoiceBox.itemsProperty.set(LogoRRRGlobals.searchTermGroupNames)
+
+  val saveButton = new SearchTermGroupSaveButton(addNewSearchTermGroup)
 
   init()
 
   private def init(): Unit = {
-    getItems.addAll(new SearchTermGroupChoiceBox(this))
+    getItems.addAll(groupChoiceBox, saveButton)
     searchTermsProperty.addListener(JfxUtils.mkListChangeListener[MutableSearchTerm](processFiltersChange))
     updateUnclassified()
-
+    searchTermsProperty.bind(mutLogFileSettings.filtersProperty)
   }
 
 
@@ -43,29 +48,29 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
   private def processFiltersChange(change: ListChangeListener.Change[_ <: MutableSearchTerm]): Unit = {
     while (change.next()) {
       if (change.wasAdded()) {
-        change.getAddedSubList.asScala.foreach(addFilterButton)
+        change.getAddedSubList.asScala.foreach(addSearchTermButton)
         updateUnclassified()
       } else if (change.wasRemoved()) {
-        change.getRemoved.asScala.foreach(removeFilterButton)
+        change.getRemoved.asScala.foreach(removeSearchTermButton)
         updateUnclassified()
       }
     }
   }
 
-  private def updateOccurrences(sf: MutableSearchTerm): Unit = {
-    occurrences = occurrences + (sf -> filteredList.getSource.asScala.count(e => sf.matches(e.value)))
+  private def updateOccurrences(mutableSearchTerm: MutableSearchTerm): Unit = {
+    occurrences = occurrences + (mutableSearchTerm -> filteredList.getSource.asScala.count(e => mutableSearchTerm.matches(e.value)))
   }
 
   private def updateUnclassified(): Unit = {
     val unclassified = MutableSearchTermUnclassified(mutLogFileSettings.filterButtons.keySet)
-    val filterButton: SearchTermButton = updateOccurrencesAndFilter(unclassified)
+    val searchTermButton: SearchTermButton = updateOccurrencesAndFilter(unclassified)
     mutLogFileSettings.someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
-    getItems.add(1, filterButton)
-    mutLogFileSettings.someUnclassifiedFilter = Option((unclassified, filterButton))
+    getItems.add(2, searchTermButton)
+    mutLogFileSettings.someUnclassifiedFilter = Option((unclassified, searchTermButton))
     mutLogFileSettings.updateActiveFilter(filteredList)
   }
 
-  private def addFilterButton(filter: MutableSearchTerm): Unit = {
+  private def addSearchTermButton(filter: MutableSearchTerm): Unit = {
     val filterButton = updateOccurrencesAndFilter(filter)
     filter.bind(filterButton.selectedProperty())
     filter.activeProperty.bind(filterButton.selectedProperty())
@@ -73,12 +78,17 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     mutLogFileSettings.filterButtons = mutLogFileSettings.filterButtons.updated(filter, filterButton)
   }
 
-  private def updateOccurrencesAndFilter(unclassified: MutableSearchTerm): SearchTermButton = {
-    updateOccurrences(unclassified)
-    new SearchTermButton(mutLogFileSettings.getFileId, unclassified, occurrences(unclassified), mutLogFileSettings.updateActiveFilter(filteredList), removeFilter)
+  private def updateOccurrencesAndFilter(searchTerm: MutableSearchTerm): SearchTermButton = {
+    updateOccurrences(searchTerm)
+    new SearchTermButton(
+      mutLogFileSettings.getFileId
+      , searchTerm
+      , occurrences(searchTerm)
+      , mutLogFileSettings.updateActiveFilter(filteredList)
+      , mutLogFileSettings.filtersProperty.remove(_))
   }
 
-  private def removeFilterButton(filter: MutableSearchTerm): Unit = {
+  private def removeSearchTermButton(filter: MutableSearchTerm): Unit = {
     val button = mutLogFileSettings.filterButtons(filter)
     filter.unbind()
     getItems.remove(button)
@@ -99,16 +109,10 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     }).flatten.toSeq
   }
 
-  def addSearchGroupName(name: String): Unit = {
-    val label = new SearchTermTitleLabel(name)
-    val indexOfLastElement = getItems.size() - 1
-    val lastItem = getItems.get(indexOfLastElement)
-    if (lastItem.isInstanceOf[SearchTermTitleLabel]) {
-      getItems.remove(indexOfLastElement)
-      getItems.add(label)
-    } else {
-
-    }
+  def addNewSearchTermGroup(searchTermGroup: String): Unit = {
+    LogoRRRGlobals.putSearchTerms(searchTermGroup, activeSearchTerms())
+    LogoRRRGlobals.persist()
+    groupChoiceBox.setValue(searchTermGroup)
   }
 
 }

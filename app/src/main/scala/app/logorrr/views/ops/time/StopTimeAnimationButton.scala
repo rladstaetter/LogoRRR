@@ -4,7 +4,7 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{Button, Tooltip}
-import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular
+import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
 object StopTimeAnimationButton extends UiNodeFileIdAware {

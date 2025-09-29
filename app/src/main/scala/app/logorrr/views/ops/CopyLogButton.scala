@@ -6,7 +6,7 @@ import app.logorrr.util.ClipBoardUtils
 import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
-import org.kordamp.ikonli.fontawesome5.{FontAwesomeRegular, FontAwesomeSolid}
+import org.kordamp.ikonli.fontawesome6.{FontAwesomeRegular, FontAwesomeSolid}
 import org.kordamp.ikonli.javafx.FontIcon
 
 import java.time.Duration
