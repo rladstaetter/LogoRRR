@@ -6,6 +6,7 @@ import app.logorrr.io.{FileId, OsxBridgeHelper}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.services.hostservices.LogoRRRHostServices
 import app.logorrr.views.SearchTerm
+import app.logorrr.views.search.SearchTermGroupEntry
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import javafx.stage.Window
@@ -45,7 +46,7 @@ object LogoRRRGlobals extends CanLog with Fs {
   }
 
   val searchTermGroupNames: ObservableList[String] = mutSettings.searchTermGroupNames
-
+  val searchTermGroupEntries : ObservableList[SearchTermGroupEntry] = mutSettings.searchTermGroupEntries
 
   def unbindWindow(): Unit = mutSettings.unbindWindow()
 

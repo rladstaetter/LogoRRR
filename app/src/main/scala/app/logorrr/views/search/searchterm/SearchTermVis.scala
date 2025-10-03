@@ -1,15 +1,11 @@
 package app.logorrr.views.search.searchterm
 
-import app.logorrr.clv.color.ColorUtil
 import app.logorrr.io.FileId
 import app.logorrr.views.MutableSearchTerm
 import javafx.beans.binding.Bindings
-import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty, SimpleStringProperty}
+import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.event.ActionEvent
-import javafx.scene.control.Label
-import javafx.scene.layout.{HBox, Priority, Region, VBox}
-import javafx.scene.paint.Color
 
 object SearchTermVis {
 
@@ -35,15 +31,14 @@ object SearchTermVis {
 }
 
 
-class SearchTermVis extends VBox {
+
+
+class SearchTermVis extends SimpleSearchTermVis {
 
   val removeFilterButton = new RemoveSearchTermButton
   val removeFnProperty = new SimpleObjectProperty[MutableSearchTerm => Unit]()
   val searchTermProperty = new SimpleObjectProperty[MutableSearchTerm]()
   val fileIdProperty = new SimpleObjectProperty[FileId]()
-  val hitsProperty = new SimpleIntegerProperty()
-  val textProperty = new SimpleStringProperty()
-  val colorProperty = new SimpleObjectProperty[Color]()
 
   removeFilterButton.idProperty.bind(Bindings.createStringBinding(
     () =>
@@ -60,28 +55,10 @@ class SearchTermVis extends VBox {
     }
   })
 
-  colorProperty.addListener(new InvalidationListener {
-    override def invalidated(observable: Observable): Unit = {
-      setStyle(ColorUtil.mkCssBackgroundString(colorProperty.get()))
-    }
-  })
-
-  private val label = new Label()
-  label.setStyle("-fx-font-weight: bold;")
-  label.textProperty().bind(textProperty)
-
-
-  val spacer: Region = new Region
-  spacer.setMinWidth(30)
-  HBox.setHgrow(spacer, Priority.ALWAYS)
-
-  private val hbox = new HBox(label, spacer, removeFilterButton)
-  hbox.setMaxWidth(Double.MaxValue)
-  private val hitsLabel = new SearchTermHitsLabel
   hitsLabel.textProperty().bind(Bindings.createStringBinding(() => {
     "Hits: " + hitsProperty.get()
   }, hitsProperty))
 
-  getChildren.addAll(hbox, hitsLabel)
+  hbox.getChildren.add(removeFilterButton)
 
 }

@@ -1,6 +1,7 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.views.SearchTerm
+import app.logorrr.views.search.SearchTermGroupEntry
 import javafx.beans.property.SimpleMapProperty
 import javafx.collections.{FXCollections, MapChangeListener, ObservableList}
 
@@ -9,13 +10,18 @@ import scala.jdk.CollectionConverters._
 
 class MutSearchTermSettings {
 
-  private val searchTermMapping = new SimpleMapProperty[String, Seq[SearchTerm]](FXCollections.observableMap(new util.HashMap()))
+  private val searchTermMapping: SimpleMapProperty[String, Seq[SearchTerm]] = new SimpleMapProperty[String, Seq[SearchTerm]](FXCollections.observableMap(new util.HashMap()))
 
-  val searchTermGroupNames: ObservableList[String] = FXCollections.observableArrayList(searchTermMapping.keySet().asScala.toSeq: _*)
+  val searchTermGroupNames: ObservableList[String] = FXCollections.observableArrayList(searchTermMapping.keySet().asScala.toSeq.sorted: _*)
+
+  def toObservableList(mapping: SimpleMapProperty[String, Seq[SearchTerm]]): util.List[SearchTermGroupEntry] = mapping.entrySet().asScala.map(e => SearchTermGroupEntry(e.getKey, e.getValue)).toSeq.sortBy(_.name).asJava
+
+  val searchTermGroupEntries: ObservableList[SearchTermGroupEntry] = FXCollections.observableArrayList(toObservableList(searchTermMapping))
 
   searchTermMapping.addListener(new MapChangeListener[String, Seq[SearchTerm]] {
     override def onChanged(change: MapChangeListener.Change[_ <: String, _ <: Seq[SearchTerm]]): Unit = {
-      searchTermGroupNames.setAll(searchTermMapping.keySet().asScala.toSeq: _*)
+      searchTermGroupNames.setAll(searchTermMapping.keySet().asScala.toSeq.sorted: _*)
+      searchTermGroupEntries.setAll(toObservableList(searchTermMapping))
     }
   })
 

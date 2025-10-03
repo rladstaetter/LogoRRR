@@ -66,7 +66,7 @@ class MutLogFileSettings {
 
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
-  val filtersProperty: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm](FXCollections.observableArrayList())
+  val mutSearchTerms: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm](FXCollections.observableArrayList())
 
 
   private def matchFilter(entry: LogEntry): Boolean = {
@@ -131,10 +131,10 @@ class MutLogFileSettings {
   def setDateTimeFormatter(dateTimeFormatter: DateTimeFormatter): Unit = dateTimeFormatterProperty.set(dateTimeFormatter)
 
   def setFilters(filters: Seq[MutableSearchTerm]): Unit = {
-    filtersProperty.setAll(filters.asJava)
+    mutSearchTerms.setAll(filters.asJava)
   }
 
-  def getFilters: ObservableList[MutableSearchTerm] = filtersProperty.get()
+  def getFilters: ObservableList[MutableSearchTerm] = mutSearchTerms.get()
 
 
   val hasTimestampSetting: BooleanBinding = new BooleanBinding {

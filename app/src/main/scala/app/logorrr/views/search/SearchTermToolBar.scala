@@ -40,7 +40,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     getItems.addAll(groupChoiceBox, saveButton)
     searchTermsProperty.addListener(JfxUtils.mkListChangeListener[MutableSearchTerm](processFiltersChange))
     updateUnclassified()
-    searchTermsProperty.bind(mutLogFileSettings.filtersProperty)
+    searchTermsProperty.bind(mutLogFileSettings.mutSearchTerms)
   }
 
 
@@ -85,7 +85,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
       , searchTerm
       , occurrences(searchTerm)
       , mutLogFileSettings.updateActiveFilter(filteredList)
-      , mutLogFileSettings.filtersProperty.remove(_))
+      , mutLogFileSettings.mutSearchTerms.remove(_))
   }
 
   private def removeSearchTermButton(filter: MutableSearchTerm): Unit = {

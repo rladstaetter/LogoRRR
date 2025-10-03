@@ -228,7 +228,7 @@ class LogFileTab(val fileId: FileId
     selectedProperty().addListener(selectedListener)
 
     mutLogFileSettings.autoScrollActiveProperty.addListener(autoScrollListener)
-    mutLogFileSettings.filtersProperty.addListener(searchTermChangeListener)
+    mutLogFileSettings.mutSearchTerms.addListener(searchTermChangeListener)
   }
 
   private def initBindings(): Unit = {
@@ -245,7 +245,7 @@ class LogFileTab(val fileId: FileId
 
     logFileTabContent.removeListeners()
     mutLogFileSettings.autoScrollActiveProperty.removeListener(autoScrollListener)
-    mutLogFileSettings.filtersProperty.removeListener(searchTermChangeListener)
+    mutLogFileSettings.mutSearchTerms.removeListener(searchTermChangeListener)
   }
 
   def shutdown(): Unit = {

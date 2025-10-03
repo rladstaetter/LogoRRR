@@ -28,7 +28,7 @@ object OpsToolBar {
     new OpsToolBar(mutLogFileSettings.getFileId
       , mutLogFileSettings
       , chunkListView
-      , mutLogFileSettings.filtersProperty.add(_)
+      , mutLogFileSettings.mutSearchTerms.add(_)
       , entries
       , filteredList
       , mutLogFileSettings.blockSizeProperty)

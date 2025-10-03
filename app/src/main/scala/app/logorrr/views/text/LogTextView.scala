@@ -125,7 +125,7 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
     private def calculateLabel(e: LogEntry): Unit = {
       val entry = LogTextViewLabel(e
         , maxLength
-        , mutLogFileSettings.filtersProperty.get().asScala.toSeq
+        , mutLogFileSettings.mutSearchTerms.get().asScala.toSeq
         , mutLogFileSettings.fontStyleBinding
         , mutLogFileSettings.fontSizeProperty)
 
