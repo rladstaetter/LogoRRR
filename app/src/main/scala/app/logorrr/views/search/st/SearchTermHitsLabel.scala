@@ -1,4 +1,4 @@
-package app.logorrr.views.search.searchterm
+package app.logorrr.views.search.st
 
 import javafx.scene.control.Label
 

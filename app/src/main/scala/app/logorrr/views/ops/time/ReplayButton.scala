@@ -3,9 +3,9 @@ package app.logorrr.views.ops.time
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.ops.PulsatingAnimationTimer
 import app.logorrr.views.text.LogTextView
-import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.animation.{Animation, KeyFrame, Timeline}
 import javafx.beans.binding.StringBinding
 import javafx.beans.property.{IntegerProperty, SimpleIntegerProperty}

@@ -1,8 +1,8 @@
 package app.logorrr.services.hostservices
 
-import net.ladstatt.util.log.CanLog
 import app.logorrr.views.a11y.UiNode
 import javafx.collections.{FXCollections, ObservableList}
+import net.ladstatt.util.log.CanLog
 
 class MockHostServices extends LogoRRRHostServices with CanLog {
 

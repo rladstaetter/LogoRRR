@@ -4,7 +4,7 @@ import app.logorrr.TestFiles
 import app.logorrr.conf.Settings.calcDefaultScreenPosition
 import app.logorrr.conf.{BlockSettings, Settings, StageSettings}
 import app.logorrr.model.LogFileSettings
-import app.logorrr.steps.ChunkListViewActions
+import app.logorrr.steps.TestFxListViewActions
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.st.SearchTermButton
 import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test
  * - checking color of element of chunklistview
  * */
 abstract class Issue292ColorCalculationSetup(desiredColor: Color, val searchTerms: Seq[SearchTerm]) extends SingleFileApplicationTest(TestFiles.simpleLog5)
-  with ChunkListViewActions {
+  with TestFxListViewActions {
 
 
   /** setup settings such that the issue is triggered and can be inspected visually */

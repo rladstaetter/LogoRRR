@@ -37,14 +37,14 @@ class TestFxBaseApplicationTest
 
   def waitForVisibility(query: String): Unit = waitForVisibility(lookup(query))
 
-  def waitForVisibility(nodeQuery: NodeQuery, finiteDuration: FiniteDuration = 2.seconds): Unit = {
-    WaitForAsyncUtils.waitFor(finiteDuration.toSeconds, TimeUnit.SECONDS, new Callable[java.lang.Boolean] {
+  def waitForVisibility(nodeQuery: NodeQuery, timeout: FiniteDuration = 2.seconds): Unit = {
+    WaitForAsyncUtils.waitFor(timeout.toSeconds, TimeUnit.SECONDS, new Callable[java.lang.Boolean] {
       override def call(): java.lang.Boolean = nodeQuery.`match`(NodeQueryUtils.isVisible).tryQuery.isPresent
     })
   }
 
-  def waitForPredicate[A <: Node](id: UiNode, clazz: Class[A], predicate: A => Boolean): Unit = {
-    WaitForAsyncUtils.waitFor(2, TimeUnit.SECONDS, new Callable[java.lang.Boolean] {
+  def waitForPredicate[A <: Node](id: UiNode, clazz: Class[A], predicate: A => Boolean, timeout: FiniteDuration = 2.seconds): Unit = {
+    WaitForAsyncUtils.waitFor(timeout.toSeconds, TimeUnit.SECONDS, new Callable[java.lang.Boolean] {
       override def call(): java.lang.Boolean = {
         predicate(lookup(id.ref).queryAs(clazz))
       }

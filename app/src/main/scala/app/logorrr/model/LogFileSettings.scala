@@ -2,8 +2,8 @@ package app.logorrr.model
 
 import app.logorrr.conf.BlockSettings
 import app.logorrr.io.FileId
-import app.logorrr.views.search.SearchTerm
 import app.logorrr.views.logfiletab.TextConstants
+import app.logorrr.views.search.SearchTerm
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
 

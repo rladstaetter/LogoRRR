@@ -1,12 +1,11 @@
-package app.logorrr.views.search
+package app.logorrr.views.search.st
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.search.st.SearchTermButton
-import app.logorrr.views.search.stg.OpenStgEditorButton
-import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
+import app.logorrr.views.search.stg.{OpenStgEditorButton, StgChoiceBox}
+import app.logorrr.views.search.{MutableSearchTerm, MutableSearchTermUnclassified, SearchTerm}
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
@@ -28,8 +27,12 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
 
   /** will be bound to the current active filter list */
   val searchTermsProperty: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm]()
-  val groupChoiceBox = new SearchTermGroupChoiceBox(searchTermsProperty)
-  groupChoiceBox.itemsProperty.set(LogoRRRGlobals.searchTermGroupNames)
+
+  val groupChoiceBox = {
+    val gcb = new StgChoiceBox(mutLogFileSettings.getFileId, searchTermsProperty)
+    gcb.itemsProperty.set(LogoRRRGlobals.searchTermGroupNames)
+    gcb
+  }
 
   val openStgEditor = new OpenStgEditorButton(mutLogFileSettings.getFileId, addNewSearchTermGroup)
 

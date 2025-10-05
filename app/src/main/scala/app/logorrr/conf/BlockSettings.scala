@@ -1,7 +1,7 @@
 package app.logorrr.conf
 
-import pureconfig.{ConfigReader, ConfigWriter}
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
+import pureconfig.{ConfigReader, ConfigWriter}
 
 object BlockSettings {
 

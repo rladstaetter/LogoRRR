@@ -1,14 +1,13 @@
 package app.logorrr.views.search.stg
 
 import app.logorrr.io.FileId
-import app.logorrr.views.a11y.{FileIdAware, UiNode}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{Button, Tooltip}
 import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
 
-
-object OpenStgEditorButton extends FileIdAware {
+object OpenStgEditorButton extends UiNodeFileIdAware {
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[OpenStgEditorButton])
 
@@ -18,7 +17,7 @@ case class OpenStgEditorButton(fileId: FileId, addFn: String => Unit) extends Bu
   setId(OpenStgEditorButton.uiNode(fileId).value)
   setGraphic(new FontIcon(FontAwesomeRegular.EDIT))
   setTooltip(new Tooltip("edit search term groups"))
-  setOnAction(_ => new SearchTermGroupEditor(addFn).showAndWait())
+  setOnAction(_ => new SearchTermGroupEditor(fileId, addFn).showAndWait())
 
 
 }

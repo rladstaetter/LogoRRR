@@ -4,7 +4,7 @@ import app.logorrr.conf.{Settings, StageSettings}
 import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
 import app.logorrr.views.search.SearchTerm
-import app.logorrr.views.search.SearchTermGroupEntry
+import app.logorrr.views.search.stg.StgEntry
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.stage.Window
@@ -55,7 +55,7 @@ class MutSettings {
 
   val searchTermGroupNames: ObservableList[String] = mutSearchTermSettings.searchTermGroupNames
 
-  val searchTermGroupEntries : ObservableList[SearchTermGroupEntry] = mutSearchTermSettings.searchTermGroupEntries
+  val searchTermGroupEntries : ObservableList[StgEntry] = mutSearchTermSettings.searchTermGroupEntries
 
   /** contains mutable state information for all log files */
   private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))

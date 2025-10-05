@@ -111,10 +111,8 @@ class MainTabPane extends TabPane with CanLog {
   def getByFileId(fileId: FileId): Option[LogFileTab] = getLogFileTabs.find(_.fileId == fileId)
 
   def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
-    _ match {
-      case l: LogFileTab => Option(l)
-      case _ => None
-    }
+    case l: LogFileTab => Option(l)
+    case _ => None
   }
 
   /** shutdown all tabs */

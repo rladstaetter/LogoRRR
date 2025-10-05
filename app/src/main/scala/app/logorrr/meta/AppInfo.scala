@@ -1,7 +1,7 @@
 package app.logorrr.meta
 
-import pureconfig.{ConfigReader, ConfigSource}
 import pureconfig.generic.semiauto.deriveReader
+import pureconfig.{ConfigReader, ConfigSource}
 
 object AppInfo {
 
