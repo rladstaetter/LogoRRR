@@ -3,7 +3,7 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.{Settings, StageSettings}
 import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
-import app.logorrr.views.SearchTerm
+import app.logorrr.views.search.SearchTerm
 import app.logorrr.views.search.SearchTermGroupEntry
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, ObservableList}

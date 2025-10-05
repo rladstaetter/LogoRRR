@@ -6,7 +6,7 @@ import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.views.search.OpsToolBar
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.layout.StackPane

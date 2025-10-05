@@ -6,8 +6,8 @@ import app.logorrr.io.FileId
 import app.logorrr.model.{LogEntry, LogFileSettings, TimestampSettings}
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.ops.time.TimeRange
-import app.logorrr.views.search.searchterm.SearchTermButton
-import app.logorrr.views.{MutableSearchTerm, SearchTerm}
+import app.logorrr.views.search.st.SearchTermButton
+import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
 import javafx.beans.binding.{BooleanBinding, ObjectBinding, StringBinding}
 import javafx.beans.property._
 import javafx.collections.transformation.FilteredList

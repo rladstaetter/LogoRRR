@@ -1,7 +1,7 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.io.FileId
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.geometry.Pos
 import javafx.scene.control.Label
 

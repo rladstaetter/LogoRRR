@@ -5,7 +5,7 @@ import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.text.contextactions.{CopyEntriesMenuItem, IgnoreAboveMenuItem, IgnoreBelowMenuItem}
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 import net.ladstatt.util.log.CanLog

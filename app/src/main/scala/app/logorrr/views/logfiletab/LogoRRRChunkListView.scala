@@ -5,7 +5,7 @@ import app.logorrr.clv.{ChunkListView, ElementSelector, Vizor}
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.{LogEntry, LogEntryPicker, LogEntrySelector, LogEntryVizor}
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
 

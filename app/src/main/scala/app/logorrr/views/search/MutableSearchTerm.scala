@@ -1,4 +1,4 @@
-package app.logorrr.views
+package app.logorrr.views.search
 
 import app.logorrr.clv.color.ColorMatcher
 import app.logorrr.views.search.predicates.{ContainsPredicate, LabelledFunction}

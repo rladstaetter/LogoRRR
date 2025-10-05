@@ -1,7 +1,7 @@
 package app.logorrr.usecases
 
 import app.logorrr.steps.FileMenuActions
-import app.logorrr.views.UiNode
+import app.logorrr.views.a11y.UiNode
 import javafx.scene.Node
 import javafx.scene.input.{KeyCode, MouseButton}
 import org.junit.jupiter.api.AfterEach

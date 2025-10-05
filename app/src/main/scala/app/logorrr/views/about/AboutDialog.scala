@@ -2,7 +2,7 @@ package app.logorrr.views.about
 
 import app.logorrr.meta.AppInfo
 import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts, PropsCp}
-import app.logorrr.views.UiNodes
+import app.logorrr.views.a11y.UiNodes
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control._
 import javafx.scene.layout.{BorderPane, HBox, VBox}

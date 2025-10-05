@@ -1,4 +1,4 @@
-package app.logorrr.views
+package app.logorrr.views.search
 
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}

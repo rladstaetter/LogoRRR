@@ -1,7 +1,7 @@
 package app.logorrr.usecases.dnd
 
 import app.logorrr.io.FileId
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.Button
 import javafx.scene.input.{ClipboardContent, TransferMode}
 

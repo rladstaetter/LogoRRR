@@ -4,16 +4,15 @@ import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.search.searchterm.SearchTermButton
-import app.logorrr.views.{MutableSearchTerm, SearchTerm}
+import app.logorrr.views.search.st.SearchTermButton
+import app.logorrr.views.search.stg.OpenStgEditorButton
+import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.ToolBar
 
 import scala.jdk.CollectionConverters._
-
-
 
 /**
  * Depending on buttons pressed, filteredList will be mutated to show only selected items.
@@ -32,12 +31,12 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
   val groupChoiceBox = new SearchTermGroupChoiceBox(searchTermsProperty)
   groupChoiceBox.itemsProperty.set(LogoRRRGlobals.searchTermGroupNames)
 
-  val saveButton = new SearchTermGroupSaveButton(addNewSearchTermGroup)
+  val openStgEditor = new OpenStgEditorButton(mutLogFileSettings.getFileId, addNewSearchTermGroup)
 
   init()
 
   private def init(): Unit = {
-    getItems.addAll(groupChoiceBox, saveButton)
+    getItems.addAll(groupChoiceBox, openStgEditor)
     searchTermsProperty.addListener(JfxUtils.mkListChangeListener[MutableSearchTerm](processFiltersChange))
     updateUnclassified()
     searchTermsProperty.bind(mutLogFileSettings.mutSearchTerms)

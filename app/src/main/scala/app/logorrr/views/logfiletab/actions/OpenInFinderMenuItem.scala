@@ -2,7 +2,7 @@ package app.logorrr.views.logfiletab.actions
 
 import app.logorrr.io.FileId
 import net.ladstatt.util.os.OsUtil
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.MenuItem
 
 import java.awt.Desktop

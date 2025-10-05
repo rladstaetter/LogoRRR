@@ -3,7 +3,7 @@ package app.logorrr.views.ops
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util.ClipBoardUtils
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
 import org.kordamp.ikonli.fontawesome6.{FontAwesomeRegular, FontAwesomeSolid}

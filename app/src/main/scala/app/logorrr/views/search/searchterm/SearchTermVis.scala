@@ -1,7 +1,7 @@
 package app.logorrr.views.search.searchterm
 
 import app.logorrr.io.FileId
-import app.logorrr.views.MutableSearchTerm
+import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.{InvalidationListener, Observable}

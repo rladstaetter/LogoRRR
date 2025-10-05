@@ -5,8 +5,7 @@ import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
 import app.logorrr.io.{FileId, OsxBridgeHelper}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.services.hostservices.LogoRRRHostServices
-import app.logorrr.views.SearchTerm
-import app.logorrr.views.search.SearchTermGroupEntry
+import app.logorrr.views.search.{SearchTerm, SearchTermGroupEntry}
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import javafx.stage.Window

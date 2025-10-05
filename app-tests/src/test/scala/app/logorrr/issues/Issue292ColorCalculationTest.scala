@@ -6,8 +6,8 @@ import app.logorrr.conf.{BlockSettings, Settings, StageSettings}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.steps.ChunkListViewActions
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.search.searchterm.SearchTermButton
-import app.logorrr.views.{MutableSearchTerm, SearchTerm}
+import app.logorrr.views.search.st.SearchTermButton
+import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
 import javafx.scene.paint.Color
 import org.junit.jupiter.api.Test
 

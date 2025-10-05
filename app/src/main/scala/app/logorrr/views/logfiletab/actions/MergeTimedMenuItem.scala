@@ -4,7 +4,7 @@ import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.views.logfiletab.LogFileTab
 import app.logorrr.views.main.MainTabPane
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{Menu, MenuItem}
 
 import java.nio.file.Files

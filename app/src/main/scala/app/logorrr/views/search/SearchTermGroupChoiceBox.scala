@@ -2,7 +2,6 @@ package app.logorrr.views.search
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.MutableSearchTerm
 import javafx.beans.property.SimpleListProperty
 import javafx.scene.control.{ChoiceBox, Tooltip}
 

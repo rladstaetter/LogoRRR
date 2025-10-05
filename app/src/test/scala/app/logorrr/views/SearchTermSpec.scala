@@ -1,5 +1,6 @@
 package app.logorrr.views
 
+import app.logorrr.views.search.SearchTerm
 import javafx.scene.paint.Color
 import org.scalacheck.Prop.propBoolean
 import org.scalacheck.{Arbitrary, Gen}

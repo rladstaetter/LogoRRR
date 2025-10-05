@@ -1,7 +1,7 @@
 package app.logorrr.services.hostservices
 
 import app.logorrr.OsxBridge
-import app.logorrr.views.UiNode
+import app.logorrr.views.a11y.UiNode
 import javafx.application.HostServices
 import net.ladstatt.util.os.OsUtil
 

@@ -2,7 +2,7 @@ package app.logorrr.views.settings.timestamp
 
 import app.logorrr.io.FileId
 import app.logorrr.model.TimestampSettings
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.TextField
 
 object TimeFormatTextField extends UiNodeFileIdAware {

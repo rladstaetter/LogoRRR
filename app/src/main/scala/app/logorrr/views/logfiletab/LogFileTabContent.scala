@@ -2,7 +2,7 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.views.SearchTerm
+import app.logorrr.views.search.SearchTerm
 import app.logorrr.views.block.BlockConstants
 import app.logorrr.views.ops._
 import app.logorrr.views.search.{OpsToolBar, SearchTermToolBar}

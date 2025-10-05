@@ -1,7 +1,7 @@
 package app.logorrr.views.text
 
 import app.logorrr.model.LogEntry
-import app.logorrr.views.{MutableSearchTerm, SearchTerm}
+import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
 import app.logorrr.{LogEntrySpec, LogoRRRSpec, TestUtil}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.paint.Color

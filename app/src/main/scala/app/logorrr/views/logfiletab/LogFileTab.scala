@@ -5,9 +5,11 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
+import app.logorrr.views.LogoRRRAccelerators
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.logfiletab.actions._
-import app.logorrr.views.{LogoRRRAccelerators, MutableSearchTerm, UiNode, UiNodeFileIdAware}
+import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.event.Event

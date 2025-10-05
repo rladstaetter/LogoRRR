@@ -3,7 +3,7 @@ package app.logorrr.views.search
 
 import app.logorrr.io.FileId
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.{MutableSearchTerm, SearchTerm, UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{Button, Tooltip}
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid
 import org.kordamp.ikonli.javafx.FontIcon

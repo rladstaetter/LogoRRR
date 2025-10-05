@@ -1,7 +1,7 @@
 package app.logorrr.views.ops
 
 import app.logorrr.io.FileId
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 
 object DecreaseBlockSizeButton extends UiNodeFileIdAware {
 

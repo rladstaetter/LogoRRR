@@ -1,7 +1,7 @@
 package app.logorrr.steps
 
 import app.logorrr.usecases.TestFxBaseApplicationTest
-import app.logorrr.views.UiNodes
+import app.logorrr.views.a11y.UiNodes
 import javafx.scene.control.TabPane
 
 

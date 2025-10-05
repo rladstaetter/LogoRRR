@@ -2,7 +2,7 @@ package app.logorrr.views.menubar
 
 import app.logorrr.io.FileId
 import app.logorrr.meta.AppInfo
-import app.logorrr.views.UiNodes
+import app.logorrr.views.a11y.UiNodes
 import app.logorrr.views.about.AboutDialog
 import app.logorrr.views.menubar.HelpMenu.{AboutMenuItem, LogMenuItem}
 import javafx.scene.Scene

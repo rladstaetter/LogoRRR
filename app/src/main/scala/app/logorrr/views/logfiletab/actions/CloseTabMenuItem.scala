@@ -2,7 +2,7 @@ package app.logorrr.views.logfiletab.actions
 
 import app.logorrr.io.FileId
 import app.logorrr.views.logfiletab.LogFileTab
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.MenuItem
 
 object CloseTabMenuItem extends UiNodeFileIdAware {

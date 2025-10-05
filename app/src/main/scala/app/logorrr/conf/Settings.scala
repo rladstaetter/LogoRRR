@@ -2,7 +2,7 @@ package app.logorrr.conf
 
 import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.LogFileSettings
-import app.logorrr.views.SearchTerm
+import app.logorrr.views.search.SearchTerm
 import javafx.geometry.Rectangle2D
 import javafx.stage.Screen
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}

@@ -1,7 +1,7 @@
 package app.logorrr.views.text
 
 import app.logorrr.model.LogEntry
-import app.logorrr.views.MutableSearchTerm
+import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.StringBinding
 import javafx.beans.property.IntegerProperty
 import javafx.geometry.Pos

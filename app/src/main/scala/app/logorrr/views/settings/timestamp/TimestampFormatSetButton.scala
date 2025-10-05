@@ -6,7 +6,7 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.{LogEntry, TimestampSettings}
 import app.logorrr.views.search.OpsToolBar
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
 import javafx.scene.control.{Button, TextField}

@@ -2,7 +2,7 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.io.FileId
 import app.logorrr.views.block.BlockConstants
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.Slider
 
 object BlockSizeSlider extends UiNodeFileIdAware {
