@@ -5,9 +5,11 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
+import app.logorrr.views.LogoRRRAccelerators
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.logfiletab.actions._
-import app.logorrr.views.{LogoRRRAccelerators, MutableSearchTerm, UiNode, UiNodeFileIdAware}
+import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.event.Event
@@ -103,9 +105,9 @@ class LogFileTab(val fileId: FileId
       }
   }
 
-  private val filterChangeListener: ListChangeListener[MutableSearchTerm] = {
+  private val searchTermChangeListener: ListChangeListener[MutableSearchTerm] = {
 
-    def handleFilterChange(change: ListChangeListener.Change[_ <: MutableSearchTerm]): Unit = {
+    def handleSearchTermChange(change: ListChangeListener.Change[_ <: MutableSearchTerm]): Unit = {
       while (change.next()) {
         Future {
           LogoRRRGlobals.persist()
@@ -113,7 +115,7 @@ class LogFileTab(val fileId: FileId
       }
     }
 
-    JfxUtils.mkListChangeListener[MutableSearchTerm](handleFilterChange)
+    JfxUtils.mkListChangeListener[MutableSearchTerm](handleSearchTermChange)
   }
 
   private val selectedListener = JfxUtils.onNew[lang.Boolean](b => {
@@ -228,7 +230,7 @@ class LogFileTab(val fileId: FileId
     selectedProperty().addListener(selectedListener)
 
     mutLogFileSettings.autoScrollActiveProperty.addListener(autoScrollListener)
-    mutLogFileSettings.filtersProperty.addListener(filterChangeListener)
+    mutLogFileSettings.mutSearchTerms.addListener(searchTermChangeListener)
   }
 
   private def initBindings(): Unit = {
@@ -245,7 +247,7 @@ class LogFileTab(val fileId: FileId
 
     logFileTabContent.removeListeners()
     mutLogFileSettings.autoScrollActiveProperty.removeListener(autoScrollListener)
-    mutLogFileSettings.filtersProperty.removeListener(filterChangeListener)
+    mutLogFileSettings.mutSearchTerms.removeListener(searchTermChangeListener)
   }
 
   def shutdown(): Unit = {

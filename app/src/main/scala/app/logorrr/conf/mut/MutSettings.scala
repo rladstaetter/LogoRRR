@@ -3,8 +3,10 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.{Settings, StageSettings}
 import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
+import app.logorrr.views.search.SearchTerm
+import app.logorrr.views.search.stg.StgEntry
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
-import javafx.collections.FXCollections
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.stage.Window
 import net.ladstatt.util.os.OsUtil
 
@@ -18,7 +20,7 @@ object MutSettings {
    * due to glorious app logic we need this constant to add to our windows height calculation
    *
    * will not work always exactly, depending on user settings/skins - has to be improved ...
-   **/
+   * */
   val WindowHeightHack: Int = {
     if (OsUtil.isMac) 28
     else if (OsUtil.isLinux) 37
@@ -27,8 +29,8 @@ object MutSettings {
   }
 }
 
-class MutSettings {
 
+class MutSettings {
 
   /** remembers last opened directory for the next execution */
   val lastUsedDirectoryProperty = new SimpleObjectProperty[Option[Path]](None)
@@ -39,8 +41,21 @@ class MutSettings {
     lastUsedDirectoryProperty.set(someDirectory)
   }
 
+
   /** contains mutable information for the application stage */
   private val mutStageSettings = new MutStageSettings
+
+  private val mutSearchTermSettings = new MutSearchTermSettings
+
+  def putSearchTerms(groupName: String, searchTerms: Seq[SearchTerm]): Unit = mutSearchTermSettings.put(groupName, searchTerms)
+
+  def getSearchTerms(groupName: String): Option[Seq[SearchTerm]] = mutSearchTermSettings.get(groupName)
+
+  def removeSearchTermGroup(searchTermGroupName: String): Unit = mutSearchTermSettings.remove(searchTermGroupName)
+
+  val searchTermGroupNames: ObservableList[String] = mutSearchTermSettings.searchTermGroupNames
+
+  val searchTermGroupEntries : ObservableList[StgEntry] = mutSearchTermSettings.searchTermGroupEntries
 
   /** contains mutable state information for all log files */
   private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
@@ -73,7 +88,7 @@ class MutSettings {
     val logFileSettings: Map[String, LogFileSettings] = (for ((k, v) <- mutLogFileSettingsMapProperty.get.asScala) yield {
       k.absolutePathAsString -> v.mkImmutable()
     }).toMap
-    Settings(mutStageSettings.mkImmutable(), logFileSettings, getSomeActiveLogFile, getSomeLastUsedDirectory)
+    Settings(mutStageSettings.mkImmutable(), logFileSettings, getSomeActiveLogFile, getSomeLastUsedDirectory, mutSearchTermSettings.mkImmutable())
   }
 
   def setStageSettings(stageSettings: StageSettings): Unit = {
@@ -114,6 +129,8 @@ class MutSettings {
     val seq = mutLogFileSettingsMapProperty.get().values.asScala.toSeq
     seq.sortWith((lt, gt) => lt.getFirstOpened < gt.getFirstOpened).map(_.mkImmutable())
   }
+
+
 
 
 }

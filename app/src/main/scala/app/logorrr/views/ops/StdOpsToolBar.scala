@@ -1,6 +1,7 @@
 package app.logorrr.views.ops
 
-import app.logorrr.views.search.{SearchTermToolBar, OpsToolBar}
+import app.logorrr.views.search.OpsToolBar
+import app.logorrr.views.search.st.SearchTermToolBar
 import javafx.geometry.Pos
 import javafx.scene.layout.HBox
 

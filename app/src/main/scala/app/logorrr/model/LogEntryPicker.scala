@@ -2,7 +2,7 @@ package app.logorrr.model
 
 import app.logorrr.clv.color.ColorPicker
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.views.SearchTerm
+import app.logorrr.views.search.SearchTerm
 import javafx.scene.paint.Color
 
 class LogEntryPicker(settings: MutLogFileSettings) extends ColorPicker[LogEntry] {

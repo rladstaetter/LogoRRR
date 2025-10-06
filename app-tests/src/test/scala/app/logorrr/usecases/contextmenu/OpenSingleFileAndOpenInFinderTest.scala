@@ -3,7 +3,7 @@ package app.logorrr.usecases.contextmenu
 import app.logorrr.TestFiles
 import app.logorrr.steps.{CheckTabPaneActions, VisibleItemActions}
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.UiNodes
+import app.logorrr.views.a11y.UiNodes
 import app.logorrr.views.logfiletab.actions.OpenInFinderMenuItem
 import javafx.scene.input.MouseButton
 import javafx.scene.layout.StackPane

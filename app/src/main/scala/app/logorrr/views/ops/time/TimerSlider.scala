@@ -3,7 +3,7 @@ package app.logorrr.views.ops.time
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
-import app.logorrr.views.{UiNode, UiNodeFileIdAndPosAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAndPosAware}
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
 import javafx.scene.control.{Slider, Tooltip}

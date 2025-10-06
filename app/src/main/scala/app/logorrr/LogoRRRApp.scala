@@ -54,9 +54,9 @@ class LogoRRRApp extends javafx.application.Application with CanLog {
         new MacNativeHostService
       } else new NativeHostServices(getHostServices)
     }
-    logInfo(s"Loading settings from ${settingsFilePath.toAbsolutePath.toString}.")
+    val settings = SettingsIO.fromFile(settingsFilePath)
     val services = logorrr.services.LogoRRRServices(
-      SettingsIO.fromFile(settingsFilePath)
+      settings
       , hostServices
       , new DefaultFileIdService(() => stage.getScene.getWindow)
       , isUnderTest = false)

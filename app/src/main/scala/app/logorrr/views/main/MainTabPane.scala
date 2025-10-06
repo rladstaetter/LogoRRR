@@ -4,7 +4,7 @@ import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.{LogEntry, LogFileSettings}
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.UiNodes
+import app.logorrr.views.a11y.UiNodes
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.beans.value.ChangeListener
 import javafx.collections.ObservableList
@@ -111,10 +111,8 @@ class MainTabPane extends TabPane with CanLog {
   def getByFileId(fileId: FileId): Option[LogFileTab] = getLogFileTabs.find(_.fileId == fileId)
 
   def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
-    _ match {
-      case l: LogFileTab => Option(l)
-      case _ => None
-    }
+    case l: LogFileTab => Option(l)
+    case _ => None
   }
 
   /** shutdown all tabs */

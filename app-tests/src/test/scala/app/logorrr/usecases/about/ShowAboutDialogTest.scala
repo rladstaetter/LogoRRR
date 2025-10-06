@@ -6,7 +6,7 @@ import app.logorrr.services.file.EmptyFileIdService
 import app.logorrr.services.hostservices.MockHostServices
 import app.logorrr.steps.{CanStartApplication, VisibleItemActions}
 import app.logorrr.usecases.TestFxBaseApplicationTest
-import app.logorrr.views.UiNodes
+import app.logorrr.views.a11y.UiNodes
 import app.logorrr.views.about.AboutDialog
 import org.junit.jupiter.api.Test
 

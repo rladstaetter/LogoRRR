@@ -1,6 +1,6 @@
 package app.logorrr.services.hostservices
 
-import app.logorrr.views.UiNode
+import app.logorrr.views.a11y.UiNode
 
 /**
  * To wrap native HostServices

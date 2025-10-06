@@ -4,7 +4,7 @@ import app.logorrr.TestFiles
 import app.logorrr.conf.Settings.calcDefaultScreenPosition
 import app.logorrr.conf.{BlockSettings, Settings, StageSettings}
 import app.logorrr.model.LogFileSettings
-import app.logorrr.steps.{ChunkListViewActions, LogTextViewActions}
+import app.logorrr.steps.{TestFxListViewActions, LogTextViewActions}
 import app.logorrr.usecases.SingleFileApplicationTest
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test
 class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
   extends SingleFileApplicationTest(TestFiles.simpleLog1)
     with LogTextViewActions
-    with ChunkListViewActions {
+    with TestFxListViewActions {
 
   /** setup settings such that the issue is triggered and can be inspected visually */
   override lazy val settings: Settings = Settings(
@@ -30,6 +30,7 @@ class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
           , dividerPosition = 0.599))
     , None
     , None
+    , Map()
   )
 
   // atm this is only a setup test which helps to get LogoRRR in a repeatable, defined state

@@ -3,7 +3,7 @@ package app.logorrr.views.menubar
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
 import app.logorrr.services.file.FileIdService
-import app.logorrr.views.UiNodes
+import app.logorrr.views.a11y.UiNodes
 import javafx.scene.control.{Menu, MenuItem}
 import javafx.stage.{FileChooser, Window}
 import net.ladstatt.util.log.CanLog

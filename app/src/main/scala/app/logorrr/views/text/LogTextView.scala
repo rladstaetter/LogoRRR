@@ -4,8 +4,8 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.text.contextactions.{CopyEntriesMenuItem, IgnoreAboveMenuItem, IgnoreBelowMenuItem}
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
 import net.ladstatt.util.log.CanLog
@@ -125,7 +125,7 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
     private def calculateLabel(e: LogEntry): Unit = {
       val entry = LogTextViewLabel(e
         , maxLength
-        , mutLogFileSettings.filtersProperty.get().asScala.toSeq
+        , mutLogFileSettings.mutSearchTerms.get().asScala.toSeq
         , mutLogFileSettings.fontStyleBinding
         , mutLogFileSettings.fontSizeProperty)
 

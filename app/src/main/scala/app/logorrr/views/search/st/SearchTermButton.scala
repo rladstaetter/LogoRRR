@@ -1,11 +1,10 @@
-package app.logorrr.views.search.searchterm
-
+package app.logorrr.views.search.st
 import app.logorrr.clv.JfxUtils
 import app.logorrr.clv.color.ColorUtil
 import app.logorrr.io.FileId
 import app.logorrr.util.HashUtil
-import app.logorrr.views.search.MutableSearchTermUnclassified
-import app.logorrr.views.{MutableSearchTerm, UiNode, UiNodeSearchTermAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
+import app.logorrr.views.search.{MutableSearchTerm, MutableSearchTermUnclassified}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.scene.control.ToggleButton
 import javafx.scene.paint.Color
@@ -35,7 +34,7 @@ class SearchTermButton(val fileId: FileId
   })
   selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](selected => {
     if (selected) {
-      setStyle(ColorUtil.mkCssBackgroundString(searchTerm.getColor));
+      setStyle(ColorUtil.mkCssBackgroundString(searchTerm.getColor))
     } else {
       setStyle(ColorUtil.mkCssBackgroundString(Color.WHITESMOKE))
     }

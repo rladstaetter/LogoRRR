@@ -1,7 +1,7 @@
 package app.logorrr.util
 
 import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.views.UiNode
+import app.logorrr.views.a11y.UiNode
 import javafx.scene.control.Hyperlink
 
 import java.net.{URI, URL}

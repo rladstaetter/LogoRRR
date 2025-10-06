@@ -4,13 +4,13 @@ import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.OpsToolBar
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.layout.StackPane
-import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular
+import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
 object TimestampSettingsButton extends UiNodeFileIdAware {

@@ -1,7 +1,7 @@
 package app.logorrr.conf
 
-import net.ladstatt.util.log.CanLog
 import com.typesafe.config.ConfigRenderOptions
+import net.ladstatt.util.log.CanLog
 import pureconfig.ConfigSource
 
 import java.nio.file.Path
@@ -16,7 +16,7 @@ object SettingsIO extends CanLog {
   val renderOptions: ConfigRenderOptions = ConfigRenderOptions.defaults().setOriginComments(false)
 
   /** read settings from default place and filter all paths which don't exist anymore */
-  def fromFile(settingsFilePath: Path): Settings = {
+  def fromFile(settingsFilePath: Path): Settings = timeR({
     Try(ConfigSource.file(settingsFilePath).loadOrThrow[Settings].filterWithValidPaths()) match {
       case Failure(_) =>
         logWarn(s"Could not load $settingsFilePath, using default settings ...")
@@ -25,6 +25,6 @@ object SettingsIO extends CanLog {
         logTrace(s"Loaded settings from '$settingsFilePath'.")
         value
     }
-  }
+  }, s"Loading settings from ${settingsFilePath.toAbsolutePath}")
 
 }

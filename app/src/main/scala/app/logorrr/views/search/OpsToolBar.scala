@@ -4,7 +4,6 @@ import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
-import app.logorrr.views.MutableSearchTerm
 import app.logorrr.views.autoscroll.AutoScrollCheckBox
 import app.logorrr.views.ops.time.{SliderVBox, TimeRange, TimeUtil, TimestampSettingsButton}
 import app.logorrr.views.ops.{ClearLogButton, CopyLogButton}
@@ -20,6 +19,19 @@ import net.ladstatt.util.os.OsUtil
 
 object OpsToolBar {
 
+  def apply(mutLogFileSettings: MutLogFileSettings
+            , chunkListView: ChunkListView[LogEntry]
+            , entries: ObservableList[LogEntry]
+            , filteredList: FilteredList[LogEntry]): OpsToolBar = {
+
+    new OpsToolBar(mutLogFileSettings.getFileId
+      , mutLogFileSettings
+      , chunkListView
+      , mutLogFileSettings.mutSearchTerms.add(_)
+      , entries
+      , filteredList
+      , mutLogFileSettings.blockSizeProperty)
+  }
 
 }
 

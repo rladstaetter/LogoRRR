@@ -2,7 +2,7 @@ package app.logorrr.views.settings.timestamp
 
 import app.logorrr.io.FileId
 import app.logorrr.util.HashUtil
-import app.logorrr.views.UiNode
+import app.logorrr.views.a11y.UiNode
 import javafx.scene.control.{Label, Tooltip}
 import javafx.scene.input.MouseEvent
 

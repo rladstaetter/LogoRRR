@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
-            <artifactId>ikonli-fontawesome5-pack</artifactId>
+            <artifactId>ikonli-fontawesome6-pack</artifactId>
         </dependency>
         <!-- needed for Tailer functionality -->
         <dependency>

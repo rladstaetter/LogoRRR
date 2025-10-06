@@ -1,12 +1,13 @@
-package app.logorrr.views.search.searchterm
+package app.logorrr.views.search.st
 
 import app.logorrr.clv.color.ColorUtil
 import app.logorrr.io.FileId
 import app.logorrr.util.HashUtil
-import app.logorrr.views.{MutableSearchTerm, UiNode, UiNodeSearchTermAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
+import app.logorrr.views.search.MutableSearchTerm
 import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.paint.Color
-import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular
+import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
 

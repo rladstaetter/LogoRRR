@@ -1,7 +1,7 @@
 package app.logorrr.views.text
 
 import app.logorrr.model.LogEntry
-import app.logorrr.views.{MutableSearchTerm, SearchTerm}
+import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
 import app.logorrr.{LogEntrySpec, LogoRRRSpec, TestUtil}
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.paint.Color
@@ -13,8 +13,8 @@ object SearchTermCalculatorSpec {
     for {
       e <- LogEntrySpec.gen
       maxLength <- Gen.posNum[Int]
-      filters <- Gen.listOf(TestUtil.mutFilterGen)
-    } yield LogTextViewLabel(e, maxLength, filters, () => "", new SimpleIntegerProperty())
+      searchTerms <- Gen.listOf(TestUtil.mutSearchTermGen)
+    } yield LogTextViewLabel(e, maxLength, searchTerms, () => "", new SimpleIntegerProperty())
 }
 
 class SearchTermCalculatorSpec extends LogoRRRSpec {
@@ -32,7 +32,7 @@ class SearchTermCalculatorSpec extends LogoRRRSpec {
       })
     }
     "return empty List for empty LogEntry string" in {
-      check(Prop.forAll(TestUtil.mutFilterGen) {
+      check(Prop.forAll(TestUtil.mutSearchTermGen) {
         filter =>
           val filteredParts = applySingleFilter("", filter.getPredicate.description)
           filteredParts.length == 1 && filteredParts.head.isEmpty

@@ -14,9 +14,10 @@ class MutSettingsSpec extends LogoRRRSpec {
     s.setSomeActive(settings.someActive)
     s
   }
+
   "MutSettings" should {
     "deserialize" in {
-      val s = Settings(StageSettings(0.15142984837327833, 0.5216122226307276, 1, 1), Map(), None, None)
+      val s = Settings(StageSettings(0.15142984837327833, 0.5216122226307276, 1, 1), Map(), None, None, Map())
       assert(s == mkMutSettings(s).mkImmutable())
     }
     "de/serialize" in {

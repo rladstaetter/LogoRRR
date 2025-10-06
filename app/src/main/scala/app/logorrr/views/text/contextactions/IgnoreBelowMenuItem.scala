@@ -1,9 +1,9 @@
 package app.logorrr.views.text.contextactions
 
 import app.logorrr.model.LogEntry
-import net.ladstatt.util.log.CanLog
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.MenuItem
+import net.ladstatt.util.log.CanLog
 
 /**
  * Cuts away all entries following the current log entry.

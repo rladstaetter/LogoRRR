@@ -2,7 +2,7 @@ package app.logorrr.steps
 
 import app.logorrr.io.FileId
 import app.logorrr.usecases.TestFxBaseApplicationTest
-import app.logorrr.views.UiNodes
+import app.logorrr.views.a11y.UiNodes
 import app.logorrr.views.logfiletab.LogFileTab
 import org.testfx.api.FxRobotInterface
 

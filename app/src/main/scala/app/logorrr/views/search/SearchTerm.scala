@@ -1,4 +1,4 @@
-package app.logorrr.views
+package app.logorrr.views.search
 
 import javafx.scene.paint.Color
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
@@ -15,7 +15,7 @@ object SearchTerm {
   val Unclassified: Color = Color.LIGHTGREY
 
   /** Default mapping for filters */
-  val DefaultFilters: Seq[SearchTerm] = Seq(
+  val DefaultSearchTerms: Seq[SearchTerm] = Seq(
     SearchTerm("FINEST", Color.GREY, active = true)
     , SearchTerm("INFO", Color.GREEN, active = true)
     , SearchTerm("WARNING", Color.ORANGE, active = true)

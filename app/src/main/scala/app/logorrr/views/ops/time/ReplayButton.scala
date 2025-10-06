@@ -3,9 +3,9 @@ package app.logorrr.views.ops.time
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.ops.PulsatingAnimationTimer
 import app.logorrr.views.text.LogTextView
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
 import javafx.animation.{Animation, KeyFrame, Timeline}
 import javafx.beans.binding.StringBinding
 import javafx.beans.property.{IntegerProperty, SimpleIntegerProperty}
@@ -13,7 +13,7 @@ import javafx.collections.ObservableList
 import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.control.{Button, Label, Tooltip}
 import javafx.scene.layout.StackPane
-import org.kordamp.ikonli.fontawesome5.{FontAwesomeRegular, FontAwesomeSolid}
+import org.kordamp.ikonli.fontawesome6.{FontAwesomeRegular, FontAwesomeSolid}
 import org.kordamp.ikonli.javafx.FontIcon
 
 import scala.collection.mutable.ListBuffer
@@ -41,7 +41,7 @@ class ReplayStackPane(mutLogFileSettings: MutLogFileSettings
   // set visible only if we have a valid timestamp
   visibleProperty().bind(mutLogFileSettings.hasTimestampSetting)
 
-  val binding = new StringBinding {
+  val binding: StringBinding = new StringBinding {
     bind(replaySpeedIndexProperty)
 
     override def computeValue(): String = ReplayStackPane.availableSpeeds(replaySpeedIndexProperty.get).toInt.toString

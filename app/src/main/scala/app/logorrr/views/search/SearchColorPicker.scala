@@ -2,7 +2,7 @@ package app.logorrr.views.search
 
 import app.logorrr.io.FileId
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{ColorPicker, Tooltip}
 
 object SearchColorPicker extends UiNodeFileIdAware {

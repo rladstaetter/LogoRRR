@@ -1,6 +1,6 @@
 package app.logorrr.views.text
 
-import app.logorrr.views.SearchTerm
+import app.logorrr.views.search.SearchTerm
 import javafx.geometry.Insets
 import javafx.scene.control.Label
 import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}

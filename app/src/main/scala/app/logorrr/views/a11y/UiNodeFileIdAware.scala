@@ -1,4 +1,4 @@
-package app.logorrr.views
+package app.logorrr.views.a11y
 
 import app.logorrr.io.FileId
 
