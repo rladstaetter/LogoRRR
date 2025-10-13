@@ -3,7 +3,7 @@ package app.logorrr.views.search.st
 import app.logorrr.clv.color.ColorUtil
 import app.logorrr.views.search.SearchTerm
 import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty, SimpleStringProperty}
-import javafx.beans.{InvalidationListener, Observable}
+import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.control.Label
 import javafx.scene.layout.{HBox, Priority, Region, VBox}
 import javafx.scene.paint.Color
@@ -12,8 +12,8 @@ object SimpleSearchTermVis {
 
   def apply(searchTerm: SearchTerm): SimpleSearchTermVis = {
     val sstv = new SimpleSearchTermVis
-    sstv.textProperty.set(searchTerm.value)
     sstv.colorProperty.set(searchTerm.color)
+    sstv.textProperty.set(searchTerm.value)
     sstv
   }
 }
@@ -24,15 +24,23 @@ class SimpleSearchTermVis extends VBox {
   val textProperty = new SimpleStringProperty()
   val colorProperty = new SimpleObjectProperty[Color]()
 
+  /*
   colorProperty.addListener(new InvalidationListener {
     override def invalidated(observable: Observable): Unit = {
       setStyle(ColorUtil.mkCssBackgroundString(colorProperty.get()))
+      val css = ColorUtil.mkCssTextFill(ColorUtil.getBlackOrWhiteContrast(colorProperty.get()))
+      println(css)
+      label.setStyle(css)
     }
   })
+*/
+
+
 
   private val label = new Label()
-  label.setStyle("-fx-font-weight: bold;")
+  // label.setStyle("-fx-text-fill: "+ ColorUtil.mkCssTextFill(ColorUtil.getBlackOrWhiteContrast(colorProperty.get())) + "; -fx-font-weight: bold;")
   label.textProperty().bind(textProperty)
+
 
 
   protected val hbox: HBox = {
