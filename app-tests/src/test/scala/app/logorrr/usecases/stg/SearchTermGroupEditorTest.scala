@@ -40,7 +40,7 @@ class SearchTermGroupEditorTest extends SingleFileApplicationTest(TestFiles.simp
 
 }
 
-class StgCheckEmptyTest extends SearchTermGroupEditorTest {
+class StgCheckDefaultTest extends SearchTermGroupEditorTest {
 
   @Test def checkChoiceBoxEmptyOnStart(): Unit = {
     // open file such that search term group editor icon appears
@@ -49,7 +49,7 @@ class StgCheckEmptyTest extends SearchTermGroupEditorTest {
     // wait for visibility
     waitForVisibility(StgChoiceBox.uiNode(fileId))
     // trivial check - choicebox is empty
-    matchItems[String](StgChoiceBox.uiNode(fileId), Seq[String]())
+    matchItems[String](StgChoiceBox.uiNode(fileId), StgEntry.mkSearchTermGroups.keys.toSeq.sorted)
   }
 }
 
@@ -64,7 +64,7 @@ class StgHelloWorldTest extends SearchTermGroupEditorTest {
 
     closeStgEditor(fileId)
 
-    matchItems[String](StgChoiceBox.uiNode(fileId), Seq[String]("Test Group"))
+    matchItems[String](StgChoiceBox.uiNode(fileId), (StgEntry.mkSearchTermGroups.keys.toSeq ++ Seq[String]("Test Group")).sorted)
   }
 }
 

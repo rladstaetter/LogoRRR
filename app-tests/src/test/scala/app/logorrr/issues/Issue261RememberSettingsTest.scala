@@ -32,7 +32,6 @@ class Issue261RememberSettingsTest extends SingleFileApplicationTest(TestFiles.t
           , someTimestampSettings = Option(TimestampSettings(SimpleRange(0, 23), "yyyy-MM-dd HH:mm:ss,SSS"))))
     , None
     , None
-    , Map()
   )
 
   @Test def checkVisibilityOfSlidersAndLabelText(): Unit = {

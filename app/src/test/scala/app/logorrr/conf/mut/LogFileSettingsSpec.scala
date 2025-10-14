@@ -20,6 +20,7 @@ object LogFileSettingsSpec {
     blockSettings <- BlockSettingsSpec.gen
     fontSize <- Gen.posNum[Int]
     autoScroll <- CoreGen.booleanGen
+    someSelectedSearchTermGroup <- Gen.option(Gen.identifier)
   } yield LogFileSettings(fileId
     , selectedIndex
     , firstOpened
@@ -32,5 +33,7 @@ object LogFileSettingsSpec {
     , 0
     , 10
     , LogFileSettings.DefaultLowerTimestamp
-    , LogFileSettings.DefaultUpperTimestamp)
+    , LogFileSettings.DefaultUpperTimestamp
+    , someSelectedSearchTermGroup
+    , Map())
 }

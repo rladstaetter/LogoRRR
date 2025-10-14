@@ -13,7 +13,7 @@ object StgListView extends UiNodeFileIdAware {
 
 case class StgListView(fileId: FileId) extends ListView[StgEntry] {
   setId(StgListView.uiNode(fileId).value)
-  itemsProperty.set(LogoRRRGlobals.searchTermGroupEntries)
+  itemsProperty.set(LogoRRRGlobals.getLogFileSettings(fileId).searchTermGroupEntries)
   // setMinHeight(200) // Give the list some height
 
   // Set the custom cell factory to add the 'X' delete button

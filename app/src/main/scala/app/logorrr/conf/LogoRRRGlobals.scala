@@ -5,10 +5,7 @@ import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
 import app.logorrr.io.{FileId, OsxBridgeHelper}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.services.hostservices.LogoRRRHostServices
-import app.logorrr.views.search.SearchTerm
-import app.logorrr.views.search.stg.StgEntry
 import javafx.beans.property.SimpleObjectProperty
-import javafx.collections.ObservableList
 import javafx.stage.Window
 import net.ladstatt.util.io.Fs
 import net.ladstatt.util.log.CanLog
@@ -45,8 +42,6 @@ object LogoRRRGlobals extends CanLog with Fs {
     mutSettings.bindWindowProperties(window)
   }
 
-  val searchTermGroupNames: ObservableList[String] = mutSettings.searchTermGroupNames
-  val searchTermGroupEntries : ObservableList[StgEntry] = mutSettings.searchTermGroupEntries
 
   def unbindWindow(): Unit = mutSettings.unbindWindow()
 
@@ -67,9 +62,6 @@ object LogoRRRGlobals extends CanLog with Fs {
     mutSettings.setLogFileSettings(settings.fileSettings)
     mutSettings.setSomeActive(settings.someActive)
     mutSettings.setSomeLastUsedDirectory(settings.someLastUsedDirectory)
-    for ((k, terms) <- settings.searchTerms) {
-      mutSettings.putSearchTerms(k, terms)
-    }
     setHostServices(hostServices)
   }
 
@@ -113,10 +105,6 @@ object LogoRRRGlobals extends CanLog with Fs {
 
   def getLogFileSettings(fileId: FileId): MutLogFileSettings = mutSettings.getMutLogFileSetting(fileId)
 
-  def putSearchTerms(groupName: String, searchTerms: Seq[SearchTerm]): Unit = mutSettings.putSearchTerms(groupName, searchTerms)
 
-  def getSearchTerms(groupName: String): Option[Seq[SearchTerm]] = mutSettings.getSearchTerms(groupName)
-
-  def removeSearchTermGroup(searchTermGroupName: String): Unit = mutSettings.removeSearchTermGroup(searchTermGroupName)
 
 }

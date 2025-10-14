@@ -7,6 +7,7 @@ import app.logorrr.model.{LogEntry, LogFileSettings, TimestampSettings}
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.ops.time.TimeRange
 import app.logorrr.views.search.st.SearchTermButton
+import app.logorrr.views.search.stg.StgEntry
 import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
 import javafx.beans.binding.{BooleanBinding, ObjectBinding, StringBinding}
 import javafx.beans.property._
@@ -37,6 +38,10 @@ object MutLogFileSettings {
     s.setAutoScroll(logFileSettings.autoScroll)
     s.setLowerTimestampValue(logFileSettings.lowerTimestamp)
     s.setUpperTimestampValue(logFileSettings.upperTimestamp)
+    s.setSomeSelectedSearchTermGroup(logFileSettings.someSelectedSearchTermGroup)
+    for ((k, terms) <- logFileSettings.searchTermGroups) {
+      s.putSearchTerms(k, terms)
+    }
     s
   }
 }
@@ -61,12 +66,26 @@ class MutLogFileSettings {
   private val lowerTimestampValueProperty = new SimpleLongProperty()
   private val upperTimestampValueProperty = new SimpleLongProperty()
 
-  //  private val lowerTimestampValueProperty = new SimpleLongProperty(LogFileSettings.DefaultLowerTimestamp)
-  //  private val upperTimestampValueProperty = new SimpleLongProperty(LogFileSettings.DefaultUpperTimestamp)
+  private val someSelectedSearchTermGroupProperty = new SimpleObjectProperty[Option[String]](None)
+
 
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
   val mutSearchTerms: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm](FXCollections.observableArrayList())
+
+
+  private val mutSearchTermSettings = new MutSearchTermSettings
+
+  def putSearchTerms(groupName: String, searchTerms: Seq[SearchTerm]): Unit = mutSearchTermSettings.put(groupName, searchTerms)
+
+  def getSearchTerms(groupName: String): Option[Seq[SearchTerm]] = mutSearchTermSettings.get(groupName)
+
+  def removeSearchTermGroup(searchTermGroupName: String): Unit = mutSearchTermSettings.remove(searchTermGroupName)
+
+  val searchTermGroupNames: ObservableList[String] = mutSearchTermSettings.searchTermGroupNames
+
+  val searchTermGroupEntries: ObservableList[StgEntry] = mutSearchTermSettings.searchTermGroupEntries
+
 
 
   private def matchFilter(entry: LogEntry): Boolean = {
@@ -201,12 +220,22 @@ class MutLogFileSettings {
         , firstVisibleTextCellIndexProperty.get()
         , lastVisibleTextCellIndexProperty.get()
         , lowerTimestampValueProperty.get()
-        , upperTimestampValueProperty.get())
+        , upperTimestampValueProperty.get()
+        , someSelectedSearchTermGroupProperty.get()
+        , mutSearchTermSettings.mkImmutable()
+      )
     lfs
   }
 
   def getSearchTerms: Seq[SearchTerm] = {
     getFilters.asScala.toSeq.map(f => SearchTerm(f.getPredicate.description, f.getColor, f.isActive))
   }
+
+  def setSomeSelectedSearchTermGroup(someSelectedSearchTermGroupId: Option[String]): Unit = {
+    someSelectedSearchTermGroupProperty.set(someSelectedSearchTermGroupId)
+  }
+
+  def getSomeSelectedSearchTermGroup: Option[String] = someSelectedSearchTermGroupProperty.get()
+
 }
 

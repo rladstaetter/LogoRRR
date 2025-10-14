@@ -4,6 +4,7 @@ import app.logorrr.conf.BlockSettings
 import app.logorrr.io.FileId
 import app.logorrr.views.logfiletab.TextConstants
 import app.logorrr.views.search.SearchTerm
+import app.logorrr.views.search.stg.StgEntry
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
 
@@ -24,22 +25,25 @@ object LogFileSettings {
   private val DefaultLastViewIndex = -1
   val DefaultLowerTimestamp: Int = 0
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
-
+  val DefaultSearchTermGroup = Option(StgEntry.Default.name)
 
   def apply(fileId: FileId): LogFileSettings = {
+    val now = Instant.now().toEpochMilli
     LogFileSettings(fileId
       , DefaultSelectedIndex
-      , Instant.now().toEpochMilli
+      , now
       , DefaultDividerPosition
       , TextConstants.DefaultFontSize
-      , SearchTerm.DefaultSearchTerms
+      , StgEntry.Default.terms
       , DefaultBlockSettings
       , DefaultLogFormat
       , DefaultAutoScroll
       , DefaultFirstViewIndex
       , DefaultLastViewIndex
       , DefaultLowerTimestamp
-      , Instant.now().toEpochMilli)
+      , now
+      , DefaultSearchTermGroup
+      , StgEntry.mkSearchTermGroups)
   }
 
 }
@@ -53,17 +57,18 @@ object LogFileSettings {
  *
  * Filters define which keywords are relevant for this given log file.
  *
- * @param fileId                    wraps file reference
- * @param selectedLineNumber        which line number was selected
- * @param firstOpened               used to sort log files in tabs
- * @param dividerPosition           position of divider for this view
- * @param fontSize                  font size to use
- * @param searchTerms               elements to be searched for, with their coloring and activation
- * @param blockSettings             settings for the left view
- * @param someTimestampSettings     used timestamp format
- * @param autoScroll                true if 'follow mode' is active
- * @param firstVisibleTextCellIndex which index is the first visible on the screen (depending on resolution, window size ...)
- * @param lastVisibleTextCellIndex  which index is the last visible on the screen (depending on resolution, window size ...)
+ * @param fileId                      wraps file reference
+ * @param selectedLineNumber          which line number was selected
+ * @param firstOpened                 used to sort log files in tabs
+ * @param dividerPosition             position of divider for this view
+ * @param fontSize                    font size to use
+ * @param searchTerms                 elements to be searched for, with their coloring and activation
+ * @param blockSettings               settings for the left view
+ * @param someTimestampSettings       used timestamp format
+ * @param autoScroll                  true if 'follow mode' is active
+ * @param firstVisibleTextCellIndex   which index is the first visible on the screen (depending on resolution, window size ...)
+ * @param lastVisibleTextCellIndex    which index is the last visible on the screen (depending on resolution, window size ...)
+ * @param someSelectedSearchTermGroup selected search term group, if any
  */
 case class LogFileSettings(fileId: FileId
                            , selectedLineNumber: Int
@@ -77,8 +82,10 @@ case class LogFileSettings(fileId: FileId
                            , firstVisibleTextCellIndex: Int
                            , lastVisibleTextCellIndex: Int
                            , lowerTimestamp: Long
-                           , upperTimestamp: Long) {
+                           , upperTimestamp: Long
+                           , someSelectedSearchTermGroup: Option[String]
+                           , searchTermGroups: Map[String, Seq[SearchTerm]]) {
 
-  val path: Path = fileId.asPath.toAbsolutePath
+  lazy val path: Path = fileId.asPath.toAbsolutePath
 
 }

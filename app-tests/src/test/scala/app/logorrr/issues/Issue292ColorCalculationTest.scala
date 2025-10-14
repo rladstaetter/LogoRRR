@@ -35,7 +35,6 @@ abstract class Issue292ColorCalculationSetup(desiredColor: Color, val searchTerm
           , dividerPosition = 0.599))
     , None
     , None
-    , Map()
   )
 
   @Test def testIssue292(): Unit = {
@@ -56,7 +55,7 @@ class Issue292DualColorTest extends Issue292ColorCalculationSetup(Color.web("0x7
 
 class Issue292DualColorInactiveTest extends Issue292ColorCalculationSetup(Color.web("0x7f7f7fff"),
   Seq(
-     SearchTerm("aaaaaa", Color.color(0.0, 0.0, 0.0), active = true)
+    SearchTerm("aaaaaa", Color.color(0.0, 0.0, 0.0), active = true)
     , SearchTerm("bbbbbb", Color.color(1.0, 1.0, 1.0), active = true)
     , SearchTerm("cccccc", Color.color(1.0, 1.0, 1.0), active = false)
   ))

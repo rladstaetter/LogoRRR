@@ -7,8 +7,8 @@ import app.logorrr.util.JfxUtils
 import app.logorrr.views.search.stg.{OpenStgEditorButton, StgChoiceBox}
 import app.logorrr.views.search.{MutableSearchTerm, MutableSearchTermUnclassified, SearchTerm}
 import javafx.beans.property.SimpleListProperty
-import javafx.collections.ListChangeListener
 import javafx.collections.transformation.FilteredList
+import javafx.collections.{FXCollections, ListChangeListener}
 import javafx.scene.control.ToolBar
 
 import scala.jdk.CollectionConverters._
@@ -26,15 +26,16 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
   var occurrences: Map[MutableSearchTerm, Int] = Map().withDefaultValue(0)
 
   /** will be bound to the current active filter list */
-  val searchTermsProperty: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm]()
+  val searchTermsProperty: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm](FXCollections.observableArrayList())
 
-  val groupChoiceBox = {
-    val gcb = new StgChoiceBox(mutLogFileSettings.getFileId, searchTermsProperty)
-    gcb.itemsProperty.set(LogoRRRGlobals.searchTermGroupNames)
+  private val groupChoiceBox: StgChoiceBox = {
+    val gcb = new StgChoiceBox(mutLogFileSettings, searchTermsProperty)
+    gcb.itemsProperty.set(mutLogFileSettings.searchTermGroupNames)
+    mutLogFileSettings.getSomeSelectedSearchTermGroup.foreach(gcb.setValue)
     gcb
   }
 
-  val openStgEditor = new OpenStgEditorButton(mutLogFileSettings.getFileId, addNewSearchTermGroup)
+  val openStgEditor = new OpenStgEditorButton(mutLogFileSettings.getFileId, addNewSearchTermGroup(mutLogFileSettings))
 
   init()
 
@@ -111,8 +112,8 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     }).flatten.toSeq
   }
 
-  def addNewSearchTermGroup(searchTermGroup: String): Unit = {
-    LogoRRRGlobals.putSearchTerms(searchTermGroup, activeSearchTerms())
+  def addNewSearchTermGroup(mutLogFileSettings: MutLogFileSettings)(searchTermGroup: String): Unit = {
+    mutLogFileSettings.putSearchTerms(searchTermGroup, activeSearchTerms())
     LogoRRRGlobals.persist()
     groupChoiceBox.setValue(searchTermGroup)
   }

@@ -2,12 +2,13 @@ package app.logorrr.views.search
 
 import app.logorrr.clv.color.ColorMatcher
 import app.logorrr.views.search.predicates.{ContainsPredicate, LabelledFunction}
+import app.logorrr.views.search.stg.StgEntry
 import javafx.beans.property.{BooleanProperty, SimpleBooleanProperty, SimpleObjectProperty}
 import javafx.scene.paint.Color
 
 object MutableSearchTerm {
 
-  val DefaultFilters: Seq[MutableSearchTerm] = SearchTerm.DefaultSearchTerms.map(MutableSearchTerm.apply)
+  val DefaultFilters: Seq[MutableSearchTerm] = StgEntry.Default.terms.map(MutableSearchTerm.apply)
 
   def apply(searchTerm: SearchTerm): MutableSearchTerm = {
     apply(searchTerm.value, searchTerm.color, searchTerm.active)

@@ -38,7 +38,7 @@ class StgEditorListviewCell(fileId: FileId) extends ListCell[StgEntry] {
         val itemToRemove = getItem
         if (itemToRemove != null) {
           // Remove the item from the ObservableList
-          LogoRRRGlobals.removeSearchTermGroup(itemToRemove.name)
+          LogoRRRGlobals.getLogFileSettings(fileId).removeSearchTermGroup(itemToRemove.name)
         }
       })
 
