@@ -35,7 +35,7 @@ if [[ ! -f "$DEB_PATH" ]]; then
   exit 1
 fi
 
-echo "Installing .deb package..."
+echo "Installing .deb package '$DEB_PATH'"
 sudo apt install "$DEB_PATH"
 
 # Run the app (installed via .deb)
