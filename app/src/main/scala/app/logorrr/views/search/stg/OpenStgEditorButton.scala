@@ -17,7 +17,7 @@ case class OpenStgEditorButton(fileId: FileId, addFn: String => Unit) extends Bu
   setId(OpenStgEditorButton.uiNode(fileId).value)
   setGraphic(new FontIcon(FontAwesomeRegular.EDIT))
   setTooltip(new Tooltip("edit search term groups"))
-  setOnAction(_ => new SearchTermGroupEditor(fileId, addFn).showAndWait())
+  setOnAction(_ => new SearchTermGroupEditor(this.getScene.getWindow, fileId, addFn).showAndWait())
 
 
 }

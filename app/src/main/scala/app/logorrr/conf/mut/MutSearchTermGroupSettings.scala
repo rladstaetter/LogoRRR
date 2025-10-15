@@ -8,20 +8,24 @@ import javafx.collections.{FXCollections, MapChangeListener, ObservableList}
 import java.util
 import scala.jdk.CollectionConverters._
 
-class MutSearchTermSettings {
+object MutSearchTermGroupSettings {
+
+  def toObservableList(mapping: SimpleMapProperty[String, Seq[SearchTerm]]): util.List[StgEntry] = mapping.entrySet().asScala.map(e => StgEntry(e.getKey, e.getValue)).toSeq.sortBy(_.name).asJava
+
+}
+
+class MutSearchTermGroupSettings {
 
   private val searchTermMapping: SimpleMapProperty[String, Seq[SearchTerm]] = new SimpleMapProperty[String, Seq[SearchTerm]](FXCollections.observableMap(new util.HashMap()))
 
   val searchTermGroupNames: ObservableList[String] = FXCollections.observableArrayList(searchTermMapping.keySet().asScala.toSeq.sorted: _*)
 
-  def toObservableList(mapping: SimpleMapProperty[String, Seq[SearchTerm]]): util.List[StgEntry] = mapping.entrySet().asScala.map(e => StgEntry(e.getKey, e.getValue)).toSeq.sortBy(_.name).asJava
-
-  val searchTermGroupEntries: ObservableList[StgEntry] = FXCollections.observableArrayList(toObservableList(searchTermMapping))
+  val searchTermGroupEntries: ObservableList[StgEntry] = FXCollections.observableArrayList(MutSearchTermGroupSettings.toObservableList(searchTermMapping))
 
   searchTermMapping.addListener(new MapChangeListener[String, Seq[SearchTerm]] {
     override def onChanged(change: MapChangeListener.Change[_ <: String, _ <: Seq[SearchTerm]]): Unit = {
       searchTermGroupNames.setAll(searchTermMapping.keySet().asScala.toSeq.sorted: _*)
-      searchTermGroupEntries.setAll(toObservableList(searchTermMapping))
+      searchTermGroupEntries.setAll(MutSearchTermGroupSettings.toObservableList(searchTermMapping))
     }
   })
 
@@ -29,7 +33,9 @@ class MutSearchTermSettings {
 
   def get(groupName: String): Option[Seq[SearchTerm]] = Option(searchTermMapping.get(groupName))
 
+  def remove(groupName: String): Unit = searchTermMapping.remove(groupName)
+
   def mkImmutable(): Map[String, Seq[SearchTerm]] = searchTermMapping.asScala.toMap
 
-  def remove(groupName: String): Unit = searchTermMapping.remove(groupName)
+
 }

@@ -73,18 +73,17 @@ class MutLogFileSettings {
   val autoScrollActiveProperty = new SimpleBooleanProperty()
   val mutSearchTerms: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm](FXCollections.observableArrayList())
 
+  private val mutSearchTermGroupSettings = new MutSearchTermGroupSettings
 
-  private val mutSearchTermSettings = new MutSearchTermSettings
+  def putSearchTerms(groupName: String, searchTerms: Seq[SearchTerm]): Unit = mutSearchTermGroupSettings.put(groupName, searchTerms)
 
-  def putSearchTerms(groupName: String, searchTerms: Seq[SearchTerm]): Unit = mutSearchTermSettings.put(groupName, searchTerms)
+  def getSearchTerms(groupName: String): Option[Seq[SearchTerm]] = mutSearchTermGroupSettings.get(groupName)
 
-  def getSearchTerms(groupName: String): Option[Seq[SearchTerm]] = mutSearchTermSettings.get(groupName)
+  def removeSearchTermGroup(searchTermGroupName: String): Unit = mutSearchTermGroupSettings.remove(searchTermGroupName)
 
-  def removeSearchTermGroup(searchTermGroupName: String): Unit = mutSearchTermSettings.remove(searchTermGroupName)
+  val searchTermGroupNames: ObservableList[String] = mutSearchTermGroupSettings.searchTermGroupNames
 
-  val searchTermGroupNames: ObservableList[String] = mutSearchTermSettings.searchTermGroupNames
-
-  val searchTermGroupEntries: ObservableList[StgEntry] = mutSearchTermSettings.searchTermGroupEntries
+  val searchTermGroupEntries: ObservableList[StgEntry] = mutSearchTermGroupSettings.searchTermGroupEntries
 
 
 
@@ -222,7 +221,7 @@ class MutLogFileSettings {
         , lowerTimestampValueProperty.get()
         , upperTimestampValueProperty.get()
         , someSelectedSearchTermGroupProperty.get()
-        , mutSearchTermSettings.mkImmutable()
+        , mutSearchTermGroupSettings.mkImmutable()
       )
     lfs
   }

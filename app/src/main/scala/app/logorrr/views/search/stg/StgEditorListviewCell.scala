@@ -2,26 +2,15 @@ package app.logorrr.views.search.stg
 
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
-import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.st.SimpleSearchTermVis
-import javafx.scene.control.{Button, Label, ListCell, ToolBar}
+import javafx.scene.control._
 import javafx.scene.layout.{HBox, Priority, Region}
-import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
-import org.kordamp.ikonli.javafx.FontIcon
 
-object DeleteStgButton extends UiNodeFileIdAware {
-  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[DeleteStgButton])
-}
-
-case class DeleteStgButton(fileId: FileId) extends Button {
-  setId(DeleteStgButton.uiNode(fileId).value)
-  setGraphic(new FontIcon(FontAwesomeRegular.WINDOW_CLOSE))
-}
 
 class StgEditorListviewCell(fileId: FileId) extends ListCell[StgEntry] {
 
   val deleteButton = DeleteStgButton(fileId)
-
+  val globalStgButton = AddToGlobalSearchTermGroupListButton(fileId)
 
   override def updateItem(item: StgEntry, empty: Boolean): Unit = {
     super.updateItem(item, empty)
@@ -32,13 +21,36 @@ class StgEditorListviewCell(fileId: FileId) extends ListCell[StgEntry] {
       val label = new Label(item.name)
       label.setPrefWidth(100)
 
-      // Action when the 'X' button is clicked
+      // if the list is already contained in the global list, mark it as dark and disabled
+      Option(item)
+        .foreach(item => globalStgButton.setSelected(LogoRRRGlobals.searchTermGroupNames.contains(item.name)))
+
+      // action when the 'X' button is clicked
       deleteButton.setOnAction(_ => {
-        // get the item for this cell
-        val itemToRemove = getItem
-        if (itemToRemove != null) {
-          // Remove the item from the ObservableList
-          LogoRRRGlobals.getLogFileSettings(fileId).removeSearchTermGroup(itemToRemove.name)
+        Option(getItem) match {
+          case Some(stg) =>
+            LogoRRRGlobals.getLogFileSettings(fileId).removeSearchTermGroup(stg.name)
+          case None =>
+        }
+      })
+
+      // action when 'heart' symbol is clicked
+      globalStgButton.setOnAction(_ => {
+        // item in list, remove on action
+        if (globalStgButton.isSelected) {
+          println("is selected")
+          Option(getItem).foreach(i => {
+            println("is REAAALYYY SELECTED : " + i.name)
+            LogoRRRGlobals.putSearchTermGroup(i)
+            println(LogoRRRGlobals.getSettings.searchTermGroups.keys)
+          })
+        } else {
+          println("is not selected")
+          Option(getItem).foreach(i => {
+            println("is really not selected:" + i.name)
+            LogoRRRGlobals.removeSearchTermGroup(i)
+            println(LogoRRRGlobals.getSettings.searchTermGroups.keys)
+          })
         }
       })
 
@@ -49,9 +61,11 @@ class StgEditorListviewCell(fileId: FileId) extends ListCell[StgEntry] {
       val vis: Seq[SimpleToggleButton] = item.terms.map(t => new SimpleToggleButton(SimpleSearchTermVis(t)))
 
       val toolBar = new ToolBar
-      toolBar.getItems.addAll(deleteButton, label)
+      toolBar.getItems.addAll(deleteButton, globalStgButton, label)
       toolBar.getItems.addAll(vis: _*)
       setGraphic(toolBar)
     }
   }
+
+
 }

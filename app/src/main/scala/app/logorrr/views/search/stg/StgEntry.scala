@@ -16,6 +16,7 @@ object StgEntry {
   ))
 
   def mkSearchTermGroups: Map[String, Seq[SearchTerm]] = Seq(Default, Empty).map(stg => stg.name -> stg.terms).toMap
+
 }
 
 case class StgEntry(name: String, terms: Seq[SearchTerm])

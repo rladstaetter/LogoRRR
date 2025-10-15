@@ -1,6 +1,6 @@
 package app.logorrr.model
 
-import app.logorrr.conf.BlockSettings
+import app.logorrr.conf.{BlockSettings, LogoRRRGlobals}
 import app.logorrr.io.FileId
 import app.logorrr.views.logfiletab.TextConstants
 import app.logorrr.views.search.SearchTerm
@@ -43,7 +43,7 @@ object LogFileSettings {
       , DefaultLowerTimestamp
       , now
       , DefaultSearchTermGroup
-      , StgEntry.mkSearchTermGroups)
+      , LogoRRRGlobals.getSettings.searchTermGroups)
   }
 
 }

@@ -112,7 +112,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     }).flatten.toSeq
   }
 
-  def addNewSearchTermGroup(mutLogFileSettings: MutLogFileSettings)(searchTermGroup: String): Unit = {
+  private def addNewSearchTermGroup(mutLogFileSettings: MutLogFileSettings)(searchTermGroup: String): Unit = {
     mutLogFileSettings.putSearchTerms(searchTermGroup, activeSearchTerms())
     LogoRRRGlobals.persist()
     groupChoiceBox.setValue(searchTermGroup)

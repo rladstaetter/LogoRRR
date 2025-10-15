@@ -3,8 +3,9 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.{Settings, StageSettings}
 import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
+import app.logorrr.views.search.stg.StgEntry
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
-import javafx.collections.FXCollections
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.stage.Window
 import net.ladstatt.util.os.OsUtil
 
@@ -30,6 +31,11 @@ object MutSettings {
 
 class MutSettings {
 
+  /** global container for search term groups */
+  val mutSearchTermGroupSettings = new MutSearchTermGroupSettings
+
+  def searchTermGroupNames: ObservableList[String] = mutSearchTermGroupSettings.searchTermGroupNames
+
   /** remembers last opened directory for the next execution */
   val lastUsedDirectoryProperty = new SimpleObjectProperty[Option[Path]](None)
 
@@ -45,6 +51,10 @@ class MutSettings {
 
   /** contains mutable state information for all log files */
   private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
+
+  def putSearchTermGroup(stg: StgEntry): Unit = mutSearchTermGroupSettings.put(stg.name, stg.terms)
+
+  def removeSearchTermGroup(stg: StgEntry): Unit = mutSearchTermGroupSettings.remove(stg.name)
 
   /** tracks which log file is active */
   private val someActiveLogProperty = new SimpleObjectProperty[Option[FileId]](None)
@@ -77,7 +87,8 @@ class MutSettings {
     Settings(mutStageSettings.mkImmutable()
       , logFileSettings
       , getSomeActiveLogFile
-      , getSomeLastUsedDirectory)
+      , getSomeLastUsedDirectory
+      , mutSearchTermGroupSettings.mkImmutable())
   }
 
   def setStageSettings(stageSettings: StageSettings): Unit = {

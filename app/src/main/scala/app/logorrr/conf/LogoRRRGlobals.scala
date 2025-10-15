@@ -5,7 +5,9 @@ import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
 import app.logorrr.io.{FileId, OsxBridgeHelper}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.services.hostservices.LogoRRRHostServices
+import app.logorrr.views.search.stg.StgEntry
 import javafx.beans.property.SimpleObjectProperty
+import javafx.collections.ObservableList
 import javafx.stage.Window
 import net.ladstatt.util.io.Fs
 import net.ladstatt.util.log.CanLog
@@ -23,7 +25,10 @@ object LogoRRRGlobals extends CanLog with Fs {
 
   private val mutSettings = new MutSettings
 
+
   private val hostServicesProperty = new SimpleObjectProperty[LogoRRRHostServices]()
+
+  def searchTermGroupNames: ObservableList[String] = mutSettings.searchTermGroupNames
 
   def persist(): Unit = persist(LogoRRRGlobals.getSettings)
 
@@ -42,6 +47,10 @@ object LogoRRRGlobals extends CanLog with Fs {
     mutSettings.bindWindowProperties(window)
   }
 
+
+  def putSearchTermGroup(stg: StgEntry): Unit = mutSettings.putSearchTermGroup(stg)
+
+  def removeSearchTermGroup(stg: StgEntry): Unit = mutSettings.removeSearchTermGroup(stg)
 
   def unbindWindow(): Unit = mutSettings.unbindWindow()
 
@@ -62,6 +71,18 @@ object LogoRRRGlobals extends CanLog with Fs {
     mutSettings.setLogFileSettings(settings.fileSettings)
     mutSettings.setSomeActive(settings.someActive)
     mutSettings.setSomeLastUsedDirectory(settings.someLastUsedDirectory)
+
+    // populate either from saved file or use default values.
+    // if values are saved in the .conf file, those should be used
+    val searchTermGroupsToUse =
+      if (settings.searchTermGroups.isEmpty) {
+        StgEntry.mkSearchTermGroups
+      } else settings.searchTermGroups
+
+    for ((k, v) <- searchTermGroupsToUse) {
+      mutSettings.mutSearchTermGroupSettings.put(k, v)
+    }
+
     setHostServices(hostServices)
   }
 
@@ -104,7 +125,6 @@ object LogoRRRGlobals extends CanLog with Fs {
   def registerSettings(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
 
   def getLogFileSettings(fileId: FileId): MutLogFileSettings = mutSettings.getMutLogFileSetting(fileId)
-
 
 
 }
