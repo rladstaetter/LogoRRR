@@ -1,11 +1,13 @@
 package app.logorrr.views.menubar
 
+import app.logorrr.LogoRRRApp
 import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
 import app.logorrr.services.file.FileIdService
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.UiNodes
 import javafx.scene.control.{Menu, MenuItem}
-import javafx.stage.{FileChooser, Window}
+import javafx.stage.{FileChooser, Stage, Window}
 import net.ladstatt.util.log.CanLog
 import net.ladstatt.util.os.OsUtil
 
@@ -55,24 +57,40 @@ object FileMenu {
     setOnAction(_ => removeAllLogFiles)
   }
 
-  class CloseApplicationMenuItem(closeApplication: => Unit) extends MenuItem("Quit") {
-    setId(UiNodes.FileMenu.CloseApplication.value)
-    setOnAction(_ => closeApplication)
+
+}
+
+object CloseApplicationMenuItem {
+
+  def apply(menuItem: MenuItem, stage:Stage) : MenuItem = {
+    menuItem.setId(UiNodes.FileMenu.CloseApplication.value)
+    Option(menuItem.getOnAction) match {
+      case Some(value) =>
+        menuItem.setOnAction(e => {
+          JfxUtils.closeStage(stage)
+          value.handle(e) // 'natively' quit application on macosx
+        })
+      case None =>
+        menuItem.setOnAction(_ => JfxUtils.closeStage(stage))
+    }
+    menuItem
   }
 
 }
 
-class FileMenu(isUnderTest: Boolean
+
+
+class FileMenu(stage : Stage
+,                isUnderTest: Boolean
                , fileIdService: FileIdService
                , openFile: FileId => Unit
-               , closeAllFiles: => Unit
-               , closeApplication: => Unit) extends Menu("File") {
+               , closeAllFiles: => Unit) extends Menu("File") {
 
   setId(UiNodes.FileMenu.Self.value)
 
   lazy val openMenuItem = new FileMenu.OpenFileMenuItem(fileIdService, openFile)
   lazy val closeAllMenuItem = new FileMenu.CloseAllFilesMenuItem(closeAllFiles)
-  lazy val closeApplicationMenuItem = new FileMenu.CloseApplicationMenuItem(closeApplication)
+  lazy val closeApplicationMenuItem = CloseApplicationMenuItem(new MenuItem(s"Quit ${LogoRRRApp.Name}"), stage)
 
   def init(): Unit = {
     getItems.clear()

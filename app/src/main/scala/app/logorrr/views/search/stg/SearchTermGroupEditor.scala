@@ -11,8 +11,8 @@ object SearchTermGroupEditor {
 }
 
 class SearchTermGroupEditor(owner: Window, fileId: FileId, addFn: String => Unit) extends Stage {
-  initModality(Modality.WINDOW_MODAL)
   initOwner(owner)
+  initModality(Modality.WINDOW_MODAL)
   setTitle("Edit search term groups")
 
   // Layout for existing groups (including list and close button)

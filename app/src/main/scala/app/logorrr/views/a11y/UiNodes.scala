@@ -24,6 +24,12 @@ case class UiNode(value: String) {
 
 object UiNodes {
 
+  object LogoRRRMenu {
+
+    val Settings: UiNode = UiNode("logorrr_menu_settings")
+
+  }
+
   object FileMenu {
 
     /** id for the file menu */

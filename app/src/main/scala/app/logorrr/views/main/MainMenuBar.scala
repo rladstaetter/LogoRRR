@@ -2,29 +2,28 @@ package app.logorrr.views.main
 
 import app.logorrr.io.FileId
 import app.logorrr.services.file.FileIdService
-import app.logorrr.views.menubar.{FileMenu, HelpMenu}
+import app.logorrr.views.menubar.{FileMenu, HelpMenu, OsxAppMenu}
+import de.jangassen.MenuToolkit
+import de.jangassen.model.AppearanceMode
 import javafx.scene.control.MenuBar
-import net.ladstatt.util.log.CanLog
-import net.ladstatt.util.os.OsUtil
+import javafx.stage.Stage
 
-class MainMenuBar(fileIdService: FileIdService
+class MainMenuBar(stage: Stage
+                  , fileIdService: FileIdService
                   , openFile: FileId => Unit
                   , closeAllFiles: => Unit
-                  , closeApplication: => Unit
-                  , isUnderTest: Boolean)
-  extends MenuBar
-    with CanLog {
+                  , isUnderTest: Boolean) extends MenuBar {
 
-  val fileMenu = new FileMenu(isUnderTest, fileIdService, openFile, closeAllFiles, closeApplication)
-  val helpMenu = new HelpMenu(openFile)
+  val tk: MenuToolkit = MenuToolkit.toolkit
+  tk.setAppearanceMode(AppearanceMode.AUTO)
 
-  setUseSystemMenuBar(OsUtil.isMac && !isUnderTest)
-  setManaged(!OsUtil.isMac || isUnderTest) // set managed to false for mac to fix visual glitch (https://github.com/rladstaetter/LogoRRR/issues/179)
+  val appMenu = OsxAppMenu.mkMenu(stage, tk)
+  val fileMenu = new FileMenu(stage, isUnderTest, fileIdService, openFile, closeAllFiles)
+  val helpMenu = new HelpMenu(stage, openFile)
 
-  private def init(): Unit = {
-    getMenus.clear()
-    getMenus.addAll(fileMenu, helpMenu)
-  }
+  //   setUseSystemMenuBar(OsUtil.isMac && !isUnderTest)
+  //   setManaged(!OsUtil.isMac || isUnderTest) // set managed to false for mac to fix visual glitch (https://github.com/rladstaetter/LogoRRR/issues/179)
+  getMenus.addAll(appMenu, fileMenu, helpMenu)
+  tk.setGlobalMenuBar(this)
 
-  init()
 }

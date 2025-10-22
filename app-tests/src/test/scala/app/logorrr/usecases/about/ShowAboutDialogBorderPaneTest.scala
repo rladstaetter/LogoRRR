@@ -7,11 +7,11 @@ import app.logorrr.services.hostservices.MockHostServices
 import app.logorrr.steps.{CanStartApplication, VisibleItemActions}
 import app.logorrr.usecases.TestFxBaseApplicationTest
 import app.logorrr.views.a11y.UiNodes
-import app.logorrr.views.about.AboutDialog
+import app.logorrr.views.about.AboutDialogBorderPane
 import org.junit.jupiter.api.Test
 
 
-class ShowAboutDialogTest extends TestFxBaseApplicationTest
+class ShowAboutDialogBorderPaneTest extends TestFxBaseApplicationTest
   with CanStartApplication
   with VisibleItemActions {
 
@@ -35,7 +35,7 @@ class ShowAboutDialogTest extends TestFxBaseApplicationTest
     waitAndClickVisibleItem(UiNodes.AboutDialogOpenIssuePage)
     waitAndClickVisibleItem(UiNodes.AboutDialogCloseButton)
 
-    assert(AboutDialog.links.map(_.url.toString).forall(u => mockHostServices.visitedUrls.contains(u)))
+    assert(AboutDialogBorderPane.links.map(_.url.toString).forall(u => mockHostServices.visitedUrls.contains(u)))
   }
 
 }

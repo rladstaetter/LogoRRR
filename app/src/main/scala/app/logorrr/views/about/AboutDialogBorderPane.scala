@@ -1,19 +1,15 @@
 package app.logorrr.views.about
 
 import app.logorrr.meta.AppInfo
-import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts, PropsCp}
+import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts}
 import app.logorrr.views.a11y.UiNodes
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control._
 import javafx.scene.layout.{BorderPane, HBox, VBox}
-import javafx.stage.{Stage, WindowEvent}
-
-import java.time.format.DateTimeFormatter
-import java.time.{Instant, ZoneId}
-import java.util.Properties
+import javafx.stage.Stage
 
 
-object AboutDialog {
+object AboutDialogBorderPane {
 
   val logo: ImageCp = ImageCp("/app/logorrr/icon/logorrr-icon-128.png", 128, 128)
 
@@ -39,43 +35,19 @@ object AboutDialog {
 }
 
 
-object BuildProps {
-
-  lazy val Instance = new BuildProps
-}
-
-class BuildProps {
-
-  lazy val buildProps: Properties = PropsCp("/build.properties").asProperties(getClass)
-
-  lazy val githash: String = buildProps.getProperty("revision")
-
-  lazy val timestamp: String = {
-    val PATTERN_FORMAT = "dd.MM.yyyy"
-    val formatter = DateTimeFormatter.ofPattern(PATTERN_FORMAT)
-      .withZone(ZoneId.systemDefault())
-    val i = Instant.ofEpochMilli(buildProps.getProperty("timestamp").toLong)
-    formatter.format(i)
-  }
-
-}
-
-class AboutDialog extends BorderPane {
+class AboutDialogBorderPane(stage: Stage) extends BorderPane {
 
   private val closeButton: Button = {
-    val b = new Button("", AboutDialog.logo.imageView())
+    val b = new Button("", AboutDialogBorderPane.logo.imageView())
     b.setId(UiNodes.AboutDialogCloseButton.value)
-    b.setOnAction(_ => {
-      val modalStage = getScene.getWindow.asInstanceOf[Stage]
-      modalStage.fireEvent(new WindowEvent(modalStage, WindowEvent.WINDOW_CLOSE_REQUEST))
-    })
+    b.setOnAction(_ => stage.close())
     b
   }
 
   setPadding(new Insets(10, 10, 10, 10))
-  setTop(AboutDialog.MonoLabel(AppInfo.fullAppNameWithVersion, 50))
+  setTop(AboutDialogBorderPane.MonoLabel(AppInfo.fullAppNameWithVersion, 50))
   setLeft(closeButton)
-  setRight(new AboutDialog.HLinkView(AboutDialog.links))
+  setRight(new AboutDialogBorderPane.HLinkView(AboutDialogBorderPane.links))
 
   val hBox = new HBox()
   hBox.setAlignment(Pos.CENTER_LEFT)
