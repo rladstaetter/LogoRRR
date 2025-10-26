@@ -25,13 +25,6 @@
     </dependencies>
 
     <build>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh</artifactId>
-                <version>3.5.3</version>
-            </extension>
-        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -120,23 +113,24 @@
                             <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>wagon-maven-plugin</artifactId>
-                <executions>
                     <execution>
-                        <id>sftp-upload-deb-file</id>
+                        <id>sftp-upload</id>
                         <phase>install</phase>
                         <goals>
-                            <goal>upload-single</goal>
+                            <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <serverId>logorrr.app</serverId>
-                            <fromFile>target/file.deb</fromFile>
-                            <fromFile>${project.build.directory}/installer/logorrr_${revision}_${os.arch}.deb</fromFile>
-                            <url>${app.logorrr.dist.linux.uploadserver}/downloads/${revision}/</url>
+                            <executable>bash</executable>
+                            <arguments>
+                                <argument>${basedir}/upload.sh</argument>
+                                <argument>${app.logorrr.dist.linux.uploadserver}</argument>
+                                <argument>${app.logorrr.dist.linux.username}</argument>
+                                <argument>${revision}</argument>
+                                <argument>${deb.os.arch}</argument>
+                                <argument>${app.logorrr.dist.linux.privatekey}</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>
                 </executions>

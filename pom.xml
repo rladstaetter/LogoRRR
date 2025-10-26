@@ -119,6 +119,35 @@
                 <module>app-tests</module>
             </modules>
         </profile>
+        <!-- Profile for x64 (amd64) architecture -->
+        <profile>
+            <id>x64-architecture</id>
+            <activation>
+                <property>
+                    <name>os.arch</name>
+                    <value>amd64</value>
+                </property>
+            </activation>
+            <properties>
+                <jfxdownload.os.arch>x64</jfxdownload.os.arch>
+                <deb.os.arch>amd64</deb.os.arch>
+            </properties>
+        </profile>
+
+        <!-- Profile for aarch64 architecture -->
+        <profile>
+            <id>aarch64-architecture</id>
+            <activation>
+                <property>
+                    <name>os.arch</name>
+                    <value>aarch64</value>
+                </property>
+            </activation>
+            <properties>
+                <jfxdownload.os.arch>aarch64</jfxdownload.os.arch>
+                <deb.os.arch>arm64</deb.os.arch>
+            </properties>
+        </profile>
     </profiles>
     <modules>
         <module>build</module>
@@ -374,11 +403,6 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>3.5.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>wagon-maven-plugin</artifactId>
-                    <version>2.0.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>

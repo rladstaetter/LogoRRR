@@ -22,36 +22,6 @@
         </openjfx.sdk.download.url>
     </properties>
 
-    <profiles>
-        <!-- Profile for x64 (amd64) architecture -->
-        <profile>
-            <id>x64-architecture</id>
-            <activation>
-                <property>
-                    <name>os.arch</name>
-                    <value>amd64</value>
-                </property>
-            </activation>
-            <properties>
-                <jfxdownload.os.arch>x64</jfxdownload.os.arch>
-            </properties>
-        </profile>
-
-        <!-- Profile for aarch64 architecture -->
-        <profile>
-            <id>aarch64-architecture</id>
-            <activation>
-                <property>
-                    <name>os.arch</name>
-                    <value>aarch64</value>
-                </property>
-            </activation>
-            <properties>
-                <jfxdownload.os.arch>aarch64</jfxdownload.os.arch>
-            </properties>
-        </profile>
-    </profiles>
-
     <build>
         <plugins>
             <plugin>
