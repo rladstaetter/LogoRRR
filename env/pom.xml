@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
     <description>Downloads and provides openjfx sdk (needed for intellij run configurations)</description>
     <properties>
-        <jfxdownload.os.arch/>
         <openjfx.jmods.download.url>
             https://download2.gluonhq.com/openjfx/${openjfx.version}/openjfx-${openjfx.version}_${openjfx.os.prefix}-${jfxdownload.os.arch}_bin-jmods.zip
         </openjfx.jmods.download.url>
