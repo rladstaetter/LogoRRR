@@ -8,11 +8,24 @@ import javafx.scene.control.{Menu, MenuItem, SeparatorMenuItem}
 import javafx.stage.Stage
 
 /**
- * Menu only shown on OsX
+ * App menus differ between OsX and Windows / Linux
  */
-object OsxAppMenu {
+object AppMenuBuilder {
 
-  def mkMenu(stage: Stage, tk: MenuToolkit, isUnderTest: Boolean): Menu = {
+  def mkMenu(stage: Stage, isUnderTest: Boolean): Menu = {
+    val closeMenuItem = CloseApplicationMenuItem(new MenuItem("Exit"), stage, isUnderTest)
+    val menu = new Menu(LogoRRRApp.Name)
+    menu.setId(LogoRRRMenu.Self.value)
+    val settingsMenuitem = new SettingsMenuItem(stage)
+    menu.getItems.addAll(
+       settingsMenuitem
+      , new SeparatorMenuItem
+      , closeMenuItem)
+    menu
+  }
+
+
+  def mkOsxMenu(stage: Stage, tk: MenuToolkit, isUnderTest: Boolean): Menu = {
     val aboutMenuItem = AboutMenuItem(tk.createNativeAboutMenuItem(LogoRRRApp.Name), stage)
     val hideMenuItem = tk.createHideMenuItem(LogoRRRApp.Name)
     val hideOthersMenuItem = tk.createHideOthersMenuItem

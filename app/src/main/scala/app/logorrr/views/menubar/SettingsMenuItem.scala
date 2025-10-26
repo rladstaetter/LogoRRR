@@ -7,9 +7,14 @@ import javafx.scene.control.MenuItem
 import javafx.scene.input.{KeyCode, KeyCodeCombination, KeyCombination}
 import javafx.stage.Stage
 import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.os.OsUtil
 
 class SettingsMenuItem(stage: Stage) extends MenuItem("Settings...") with CanLog {
   setId(LogoRRRMenu.Settings.value)
-  setAccelerator(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.META_DOWN))
+  if (OsUtil.isMac) {
+    setAccelerator(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.META_DOWN))
+  } else {
+    setAccelerator(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.CONTROL_DOWN))
+  }
   setOnAction(_ => new SettingsEditor(stage, FileId("")).showAndWait())
 }

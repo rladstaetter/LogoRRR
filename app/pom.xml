@@ -67,6 +67,10 @@
             <artifactId>clv</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.jangassen</groupId>
+            <artifactId>nsmenufx</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-core</artifactId>
         </dependency>
@@ -136,10 +140,7 @@
                     <type>zip</type>
                     <classifier>dylibs</classifier>
                 </dependency>
-                <dependency>
-                    <groupId>de.jangassen</groupId>
-                    <artifactId>nsmenufx</artifactId>
-                </dependency>
+
             </dependencies>
             <build>
                 <plugins>
