@@ -2,7 +2,7 @@ package app.logorrr.views.about
 
 import app.logorrr.meta.AppInfo
 import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts}
-import app.logorrr.views.a11y.UiNodes
+import app.logorrr.views.a11y.uinodes.AboutDialog
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control._
 import javafx.scene.layout.{BorderPane, HBox, VBox}
@@ -14,9 +14,9 @@ object AboutDialogBorderPane {
   val logo: ImageCp = ImageCp("/app/logorrr/icon/logorrr-icon-128.png", 128, 128)
 
   lazy val links: Seq[HLink] = Seq(
-    HLink(UiNodes.AboutDialogOpenLogorrrMainSite, "https://www.logorrr.app/", "https://www.logorrr.app/")
-    , HLink(UiNodes.AboutDialogOpenDevelopmentBlog, "https://www.logorrr.app/posts/index.html", "Development blog")
-    , HLink(UiNodes.AboutDialogOpenIssuePage, "https://github.com/rladstaetter/LogoRRR/issues/", "Request a feature or report a bug"))
+    HLink(AboutDialog.AboutDialogOpenLogorrrMainSite, "https://www.logorrr.app/", "https://www.logorrr.app/")
+    , HLink(AboutDialog.AboutDialogOpenDevelopmentBlog, "https://www.logorrr.app/posts/index.html", "Development blog")
+    , HLink(AboutDialog.AboutDialogOpenIssuePage, "https://github.com/rladstaetter/LogoRRR/issues/", "Request a feature or report a bug"))
 
   case class MonoLabel(text: String, size: Int) extends Label(text) {
     setStyle(LogoRRRFonts.jetBrainsMono(size))
@@ -39,7 +39,7 @@ class AboutDialogBorderPane(stage: Stage) extends BorderPane {
 
   private val closeButton: Button = {
     val b = new Button("", AboutDialogBorderPane.logo.imageView())
-    b.setId(UiNodes.AboutDialogCloseButton.value)
+    b.setId(AboutDialog.AboutDialogCloseButton.value)
     b.setOnAction(_ => stage.close())
     b
   }

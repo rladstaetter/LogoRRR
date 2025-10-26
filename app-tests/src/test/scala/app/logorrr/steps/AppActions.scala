@@ -8,7 +8,7 @@ import javafx.stage.Stage
 /**
  * Startup LogoRRR
  */
-trait CanStartApplication {
+trait AppActions {
   self: TestFxBaseApplicationTest =>
 
   def services: LogoRRRServices

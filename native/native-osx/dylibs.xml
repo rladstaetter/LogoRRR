@@ -15,5 +15,12 @@
             </includes>
             <outputDirectory/>
         </fileSet>
+        <fileSet>
+            <directory>target/com/sun/jna/darwin-aarch64/</directory>
+            <includes>
+                <include>libjnidispatch.jnilib</include>
+            </includes>
+            <outputDirectory/>
+        </fileSet>
     </fileSets>
 </assembly>

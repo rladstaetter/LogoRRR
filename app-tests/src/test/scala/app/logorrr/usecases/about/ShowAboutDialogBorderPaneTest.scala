@@ -4,15 +4,15 @@ import app.logorrr.conf.Settings
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.EmptyFileIdService
 import app.logorrr.services.hostservices.MockHostServices
-import app.logorrr.steps.{CanStartApplication, VisibleItemActions}
+import app.logorrr.steps.{AppActions, VisibleItemActions}
 import app.logorrr.usecases.TestFxBaseApplicationTest
-import app.logorrr.views.a11y.UiNodes
+import app.logorrr.views.a11y.uinodes.{AboutDialog, LogoRRRMenu}
 import app.logorrr.views.about.AboutDialogBorderPane
 import org.junit.jupiter.api.Test
 
 
 class ShowAboutDialogBorderPaneTest extends TestFxBaseApplicationTest
-  with CanStartApplication
+  with AppActions
   with VisibleItemActions {
 
   // to get a handle to clicked urls
@@ -27,13 +27,13 @@ class ShowAboutDialogBorderPaneTest extends TestFxBaseApplicationTest
 
 
   @Test def showAboutDialog(): Unit = {
-    waitAndClickVisibleItem(UiNodes.HelpMenu.Self)
-    waitAndClickVisibleItem(UiNodes.HelpMenu.About)
+    waitAndClickVisibleItem(LogoRRRMenu.Self)
+    waitAndClickVisibleItem(LogoRRRMenu.About)
 
-    waitAndClickVisibleItem(UiNodes.AboutDialogOpenLogorrrMainSite)
-    waitAndClickVisibleItem(UiNodes.AboutDialogOpenDevelopmentBlog)
-    waitAndClickVisibleItem(UiNodes.AboutDialogOpenIssuePage)
-    waitAndClickVisibleItem(UiNodes.AboutDialogCloseButton)
+    waitAndClickVisibleItem(AboutDialog.AboutDialogOpenLogorrrMainSite)
+    waitAndClickVisibleItem(AboutDialog.AboutDialogOpenDevelopmentBlog)
+    waitAndClickVisibleItem(AboutDialog.AboutDialogOpenIssuePage)
+    waitAndClickVisibleItem(AboutDialog.AboutDialogCloseButton)
 
     assert(AboutDialogBorderPane.links.map(_.url.toString).forall(u => mockHostServices.visitedUrls.contains(u)))
   }

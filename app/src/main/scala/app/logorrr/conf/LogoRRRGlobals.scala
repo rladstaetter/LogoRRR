@@ -5,7 +5,7 @@ import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
 import app.logorrr.io.{FileId, OsxBridgeHelper}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.services.hostservices.LogoRRRHostServices
-import app.logorrr.views.search.stg.StgEntry
+import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import javafx.stage.Window
@@ -48,9 +48,11 @@ object LogoRRRGlobals extends CanLog with Fs {
   }
 
 
-  def putSearchTermGroup(stg: StgEntry): Unit = mutSettings.putSearchTermGroup(stg)
+  def putSearchTermGroup(stg: SearchTermGroup): Unit = mutSettings.putSearchTermGroup(stg)
 
-  def removeSearchTermGroup(stg: StgEntry): Unit = mutSettings.removeSearchTermGroup(stg)
+  def removeSearchTermGroup(name: String): Unit = mutSettings.removeSearchTermGroup(name)
+
+  def clearSearchTermGroups() : Unit = mutSettings.clearSearchTermGroups()
 
   def unbindWindow(): Unit = mutSettings.unbindWindow()
 
@@ -74,10 +76,7 @@ object LogoRRRGlobals extends CanLog with Fs {
 
     // populate either from saved file or use default values.
     // if values are saved in the .conf file, those should be used
-    val searchTermGroupsToUse =
-      if (settings.searchTermGroups.isEmpty) {
-        StgEntry.mkSearchTermGroups
-      } else settings.searchTermGroups
+    val searchTermGroupsToUse = settings.searchTermGroups
 
     for ((k, v) <- searchTermGroupsToUse) {
       mutSettings.mutSearchTermGroupSettings.put(k, v)
@@ -125,6 +124,8 @@ object LogoRRRGlobals extends CanLog with Fs {
   def registerSettings(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
 
   def getLogFileSettings(fileId: FileId): MutLogFileSettings = mutSettings.getMutLogFileSetting(fileId)
+
+  val searchTermGroupEntries: ObservableList[SearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
 
 
 }

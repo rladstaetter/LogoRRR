@@ -25,5 +25,7 @@
 --main-class ${main.launcher.class}
 --java-options -Xmx4096m
 --java-options -Djava.library.path=$APPDIR/.
+--java-options -Djna.nounpack=true
+--java-options -Djna.boot.library.path=$APPDIR/.
 --java-options --enable-native-access=javafx.graphics,ALL-UNNAMED
 --main-jar app-${project.version}.jar

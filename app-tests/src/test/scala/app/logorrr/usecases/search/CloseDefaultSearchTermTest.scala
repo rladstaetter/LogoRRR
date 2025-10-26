@@ -15,7 +15,7 @@ class CloseDefaultSearchTermTest extends SingleFileApplicationTest(TestFiles.sim
     openFile(fileId)
     val lines = Files.lines(fileId.asPath).count
 
-    MutableSearchTerm.DefaultFilters.foreach {
+    MutableSearchTerm.DefaultSearchTerms.foreach {
       f => waitAndClickVisibleItem(RemoveSearchTermButton.uiNode(fileId, f))
     }
 

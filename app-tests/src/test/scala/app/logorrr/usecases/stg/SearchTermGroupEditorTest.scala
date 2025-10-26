@@ -5,20 +5,16 @@ import app.logorrr.io.FileId
 import app.logorrr.steps.ChoiceBoxActions
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.stg._
-import org.junit.jupiter.api.Test
 import org.testfx.api.FxRobotInterface
 
 class SearchTermGroupEditorTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
   with ChoiceBoxActions {
 
-  def lookupStgListView(fileId: FileId): StgListView = {
-    lookup(StgListView.uiNode(fileId).ref).query[StgListView]
-  }
+  def lookupStgListView(fileId: FileId): StgListView = lookup[StgListView](StgListView.uiNode(fileId))
 
-  def nthCell(clv: StgListView, cellIndex: Int): StgEditorListviewCell = {
-    from(clv).lookup(".list-cell").nth(cellIndex).query[StgEditorListviewCell]
+  def nthCell(clv: StgListView, cellIndex: Int): StgEditorListViewCell = {
+    from(clv).lookup(".list-cell").nth(cellIndex).query[StgEditorListViewCell]
   }
-
 
   protected def createGroup(fileId: FileId, groupName: String): FxRobotInterface = {
     clickOn(StgNameTextField.uiNode(fileId)).write(groupName)
@@ -37,55 +33,5 @@ class SearchTermGroupEditorTest extends SingleFileApplicationTest(TestFiles.simp
     waitForVisibility(StgNameTextField.uiNode(fileId))
     waitForVisibility(CreateStgButton.uiNode(fileId))
   }
-
-}
-
-class StgCheckDefaultTest extends SearchTermGroupEditorTest {
-
-  @Test def checkChoiceBoxEmptyOnStart(): Unit = {
-    // open file such that search term group editor icon appears
-    openFile(fileId)
-
-    // wait for visibility
-    waitForVisibility(StgChoiceBox.uiNode(fileId))
-    // trivial check - choicebox is empty
-    matchItems[String](StgChoiceBox.uiNode(fileId), StgEntry.mkSearchTermGroups.keys.toSeq.sorted)
-  }
-}
-
-class StgHelloWorldTest extends SearchTermGroupEditorTest {
-
-  @Test def createNewGroupAndTestChoiceBox(): Unit = {
-    openFile(fileId)
-
-    openStgEditor(fileId)
-
-    createGroup(fileId, "Test Group")
-
-    closeStgEditor(fileId)
-
-    matchItems[String](StgChoiceBox.uiNode(fileId), (StgEntry.mkSearchTermGroups.keys.toSeq ++ Seq[String]("Test Group")).sorted)
-  }
-}
-
-class StgHelloScenario1 extends SearchTermGroupEditorTest {
-  @Test def scenario1(): Unit = {
-    openFile(fileId)
-
-    openStgEditor(fileId)
-    val expected = Seq("a", "b", "c")
-    expected.foreach(createGroup(fileId, _))
-
-    val view = lookupStgListView(fileId)
-
-    assert(view.getItems.size() == 3)
-    clickOn(nthCell(view, 0).deleteButton)
-    assert(view.getItems.size() == 2)
-
-    closeStgEditor(fileId)
-
-    matchItems[String](StgChoiceBox.uiNode(fileId), expected.tail)
-  }
-
 
 }

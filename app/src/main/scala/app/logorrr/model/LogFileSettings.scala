@@ -1,10 +1,9 @@
 package app.logorrr.model
 
-import app.logorrr.conf.{BlockSettings, LogoRRRGlobals}
+import app.logorrr.conf.{BlockSettings, LogoRRRGlobals, Settings}
 import app.logorrr.io.FileId
 import app.logorrr.views.logfiletab.TextConstants
 import app.logorrr.views.search.SearchTerm
-import app.logorrr.views.search.stg.StgEntry
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
 
@@ -25,7 +24,7 @@ object LogFileSettings {
   private val DefaultLastViewIndex = -1
   val DefaultLowerTimestamp: Int = 0
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
-  val DefaultSearchTermGroup = Option(StgEntry.Default.name)
+  val DefaultSearchTermGroup = Option(Settings.JavaLoggingGroup.name)
 
   def apply(fileId: FileId): LogFileSettings = {
     val now = Instant.now().toEpochMilli
@@ -34,7 +33,7 @@ object LogFileSettings {
       , now
       , DefaultDividerPosition
       , TextConstants.DefaultFontSize
-      , StgEntry.Default.terms
+      , Settings.JavaLoggingGroup.terms
       , DefaultBlockSettings
       , DefaultLogFormat
       , DefaultAutoScroll

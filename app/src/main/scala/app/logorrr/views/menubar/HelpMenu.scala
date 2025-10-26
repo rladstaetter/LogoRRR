@@ -1,7 +1,6 @@
 package app.logorrr.views.menubar
 
 import app.logorrr.io.FileId
-import app.logorrr.views.a11y.UiNodes
 import app.logorrr.views.about.AboutMenuItem
 import app.logorrr.views.menubar.HelpMenu.LogMenuItem
 import javafx.scene.control.{Menu, MenuItem}
@@ -12,7 +11,7 @@ import net.ladstatt.util.os.OsUtil
 object HelpMenu extends CanLog {
 
   class LogMenuItem(openLogFile: FileId => Unit) extends MenuItem("Open LogoRRRs log") {
-    setId(UiNodes.HelpMenu.OpenLogorrLog.value)
+    setId(app.logorrr.views.a11y.uinodes.HelpMenu.OpenLogorrLog.value)
     setOnAction(_ => openLogFile(FileId(logFilePath)))
   }
 
@@ -20,7 +19,7 @@ object HelpMenu extends CanLog {
 
 
 class HelpMenu(stage: Stage, openFile: FileId => Unit) extends Menu("Help") {
-  setId(UiNodes.HelpMenu.Self.value)
+  setId(app.logorrr.views.a11y.uinodes.HelpMenu.Self.value)
 
   val items: Seq[MenuItem] =
     Seq(new LogMenuItem(openFile)) ++

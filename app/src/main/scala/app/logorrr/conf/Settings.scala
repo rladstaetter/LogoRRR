@@ -3,8 +3,9 @@ package app.logorrr.conf
 import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.views.search.SearchTerm
-import app.logorrr.views.search.stg.StgEntry
+import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.geometry.Rectangle2D
+import javafx.scene.paint.Color
 import javafx.stage.Screen
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
@@ -21,6 +22,17 @@ object Settings {
 
   implicit lazy val reader: ConfigReader[Settings] = deriveReader[Settings]
   implicit lazy val writer: ConfigWriter[Settings] = deriveWriter[Settings]
+
+  private val EmptyGroup: SearchTermGroup = SearchTermGroup("empty", Seq())
+
+  val JavaLoggingGroup: SearchTermGroup = SearchTermGroup("default", Seq(
+    SearchTerm("FINEST", Color.GREY, active = true)
+    , SearchTerm("INFO", Color.GREEN, active = true)
+    , SearchTerm("WARNING", Color.ORANGE, active = true)
+    , SearchTerm("SEVERE", Color.RED, active = true)
+  ))
+
+  val DefaultSearchTermGroups: Seq[SearchTermGroup] = Seq(EmptyGroup, JavaLoggingGroup)
 
   def calcDefaultScreenPosition(): Rectangle2D = {
 
@@ -46,7 +58,7 @@ object Settings {
     , Map()
     , None
     , None
-    , StgEntry.mkSearchTermGroups
+    , DefaultSearchTermGroups.map(stg => stg.name -> stg.terms).toMap
   )
 
 }

@@ -12,7 +12,7 @@ import scala.util.{Failure, Success, Try}
  * */
 object SettingsIO extends CanLog {
 
-  /** turn off ugly 'hardcoded value' messages */
+  /** turn off 'hardcoded value' messages */
   val renderOptions: ConfigRenderOptions = ConfigRenderOptions.defaults().setOriginComments(false)
 
   /** read settings from default place and filter all paths which don't exist anymore */

@@ -1,6 +1,5 @@
 package app.logorrr.views.search.st
 
-import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
@@ -35,7 +34,9 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     gcb
   }
 
-  val openStgEditor = new OpenStgEditorButton(mutLogFileSettings.getFileId, addNewSearchTermGroup(mutLogFileSettings))
+  val openStgEditor = new OpenStgEditorButton(mutLogFileSettings
+    , mutLogFileSettings.getFileId
+    , activeSearchTerms)
 
   init()
 
@@ -111,12 +112,12 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
       }
     }).flatten.toSeq
   }
-
+           /*
   private def addNewSearchTermGroup(mutLogFileSettings: MutLogFileSettings)(searchTermGroup: String): Unit = {
     mutLogFileSettings.putSearchTerms(searchTermGroup, activeSearchTerms())
     LogoRRRGlobals.persist()
     groupChoiceBox.setValue(searchTermGroup)
-  }
+  }      */
 
 }
 

@@ -4,7 +4,7 @@ import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.HLink
-import app.logorrr.views.a11y.UiNodes
+import app.logorrr.views.a11y.uinodes.UiNodes
 import app.logorrr.views.search.OpsToolBar
 import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property.SimpleObjectProperty

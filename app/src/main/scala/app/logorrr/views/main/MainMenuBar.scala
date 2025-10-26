@@ -17,13 +17,15 @@ class MainMenuBar(stage: Stage
   val tk: MenuToolkit = MenuToolkit.toolkit
   tk.setAppearanceMode(AppearanceMode.AUTO)
 
-  val appMenu = OsxAppMenu.mkMenu(stage, tk)
-  val fileMenu = new FileMenu(stage, isUnderTest, fileIdService, openFile, closeAllFiles)
-  val helpMenu = new HelpMenu(stage, openFile)
+  private val appMenu = OsxAppMenu.mkMenu(stage, tk, isUnderTest)
+  private val fileMenu = new FileMenu(fileIdService, openFile, closeAllFiles)
+  private val helpMenu = new HelpMenu(stage, openFile)
 
   //   setUseSystemMenuBar(OsUtil.isMac && !isUnderTest)
   //   setManaged(!OsUtil.isMac || isUnderTest) // set managed to false for mac to fix visual glitch (https://github.com/rladstaetter/LogoRRR/issues/179)
   getMenus.addAll(appMenu, fileMenu, helpMenu)
-  tk.setGlobalMenuBar(this)
+  if (!isUnderTest) {
+    tk.setGlobalMenuBar(this)
+  }
 
 }

@@ -3,7 +3,7 @@ package app.logorrr.usecases.openclose
 import app.logorrr.TestFiles
 import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.MultipleFileApplicationTest
-import app.logorrr.views.a11y.UiNodes
+import app.logorrr.views.a11y.uinodes.UiNodes
 import javafx.scene.layout.StackPane
 import org.junit.jupiter.api.Test
 import org.testfx.service.query.NodeQuery

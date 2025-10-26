@@ -22,7 +22,7 @@ object LogoRRRApp extends CanLog {
 
   val Name = "LogoRRR"
 
-  val appMeta: AppMeta = net.ladstatt.app.AppMeta(AppId(Name, "logorrr", "logorrr.app"), AppMeta.LogFormat)
+  val appMeta: AppMeta = net.ladstatt.app.AppMeta(AppId(Name, "logorrr", "app.logorrr"), AppMeta.LogFormat)
 
   def main(args: Array[String]): Unit = {
     net.ladstatt.app.AppMeta.initApp(appMeta)
@@ -41,7 +41,10 @@ object LogoRRRApp extends CanLog {
     val logoRRRMain = new LogoRRRMain(stage, services.fileIdService, services.isUnderTest)
     LogoRRRStage.init(stage, logoRRRMain)
 
-    logInfo(s"Started ${app.logorrr.meta.AppInfo.fullAppNameWithVersion} in '${Paths.get("").toAbsolutePath.toString}'")
+    logInfo(s"          Started: ${app.logorrr.meta.AppInfo.fullAppNameWithVersion}")
+    logInfo(s"Working directory: '${Paths.get("").toAbsolutePath.toString}'")
+    logInfo(s"    Configuration: '$settingsFilePath'")
+    logInfo(s"          Logfile: '$logFilePath'")
     logoRRRMain
   }
 }

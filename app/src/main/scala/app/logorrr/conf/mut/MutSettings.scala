@@ -3,7 +3,7 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.{Settings, StageSettings}
 import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
-import app.logorrr.views.search.stg.StgEntry
+import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.stage.Window
@@ -52,9 +52,11 @@ class MutSettings {
   /** contains mutable state information for all log files */
   private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
 
-  def putSearchTermGroup(stg: StgEntry): Unit = mutSearchTermGroupSettings.put(stg.name, stg.terms)
+  def putSearchTermGroup(stg: SearchTermGroup): Unit = mutSearchTermGroupSettings.put(stg.name, stg.terms)
 
-  def removeSearchTermGroup(stg: StgEntry): Unit = mutSearchTermGroupSettings.remove(stg.name)
+  def clearSearchTermGroups(): Unit = mutSearchTermGroupSettings.clear()
+
+  def removeSearchTermGroup(name: String): Unit = mutSearchTermGroupSettings.remove(name)
 
   /** tracks which log file is active */
   private val someActiveLogProperty = new SimpleObjectProperty[Option[FileId]](None)

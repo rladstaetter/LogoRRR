@@ -18,7 +18,7 @@ object StgNameTextField extends UiNodeFileIdAware {
  */
 class StgNameTextField(fileId: FileId, fireEvent: () => Unit) extends TextField {
   setId(StgNameTextField.uiNode(fileId).value)
-  setPrefWidth(265)
+  setPrefWidth(150)
   val maxLength = 200
 
   setPromptText("Enter a name...")

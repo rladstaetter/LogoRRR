@@ -7,7 +7,7 @@ import app.logorrr.model.{LogEntry, LogFileSettings, TimestampSettings}
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.ops.time.TimeRange
 import app.logorrr.views.search.st.SearchTermButton
-import app.logorrr.views.search.stg.StgEntry
+import app.logorrr.views.search.stg.SearchTermGroup
 import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
 import javafx.beans.binding.{BooleanBinding, ObjectBinding, StringBinding}
 import javafx.beans.property._
@@ -83,7 +83,7 @@ class MutLogFileSettings {
 
   val searchTermGroupNames: ObservableList[String] = mutSearchTermGroupSettings.searchTermGroupNames
 
-  val searchTermGroupEntries: ObservableList[StgEntry] = mutSearchTermGroupSettings.searchTermGroupEntries
+  val searchTermGroupEntries: ObservableList[SearchTermGroup] = mutSearchTermGroupSettings.searchTermGroupEntries
 
 
 
