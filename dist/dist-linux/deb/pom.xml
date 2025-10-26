@@ -25,6 +25,13 @@
     </dependencies>
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>3.5.3</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -111,6 +118,25 @@
                                 <argument>@jpackage-commandline.options</argument>
                             </arguments>
                             <useMavenLogger>true</useMavenLogger>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>wagon-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sftp-upload-deb-file</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>upload-single</goal>
+                        </goals>
+                        <configuration>
+                            <serverId>logorrr.app</serverId>
+                            <fromFile>target/file.deb</fromFile>
+                            <fromFile>${project.build.directory}/installer/logorrr_${revision}_${os.arch}.deb</fromFile>
+                            <url>${app.logorrr.dist.linux.uploadserver}/downloads/${revision}/</url>
                         </configuration>
                     </execution>
                 </executions>
