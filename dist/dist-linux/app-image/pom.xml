@@ -103,7 +103,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${jdk.jpackage.binary}</executable>
+                            <executable>jpackage</executable>
                             <workingDirectory>${project.build.directory}</workingDirectory>
                             <arguments>
                                 <argument>@jpackage.options</argument>

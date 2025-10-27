@@ -28,7 +28,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${jdk.javac}</executable>
+                            <executable>javac</executable>
                             <workingDirectory>target</workingDirectory>
                             <arguments>
                                 <argument>-h</argument>

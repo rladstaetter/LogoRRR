@@ -102,7 +102,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${jdk.jpackage.binary}</executable>
+                            <executable>jpackage</executable>
                             <workingDirectory>${project.build.directory}</workingDirectory>
                             <environmentVariables>
                                 <JAVA_HOME>${env.JAVA_HOME}</JAVA_HOME>

@@ -19,8 +19,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>app.logorrr.LogoRRRApp</main.class>
         <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>
-        <jdk.jlink.binary>${env.JAVA_HOME}/bin/jlink</jdk.jlink.binary>
-        <jdk.jpackage.binary>${env.JAVA_HOME}/bin/jpackage</jdk.jpackage.binary>
         <jmh.version>1.37</jmh.version>
         <windows.temurin.version>
             https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25%2B36/OpenJDK25U-jre_x64_windows_hotspot_25_36.zip
@@ -63,8 +61,6 @@
                 </os>
             </activation>
             <properties>
-                <jdk.javac>${env.JAVA_HOME}/bin/javac</jdk.javac>
-                <jdk.javah>${env.JAVA_HOME}/bin/javah</jdk.javah>
                 <openjfx.os.prefix>osx</openjfx.os.prefix>
             </properties>
             <modules>
@@ -369,6 +365,7 @@
                         <failOnError>true</failOnError>
                         <args>
                             <arg>-deprecation</arg>
+                            <arg>-feature</arg>
                             <arg>-encoding</arg>
                             <arg>utf-8</arg>
                             <arg>-explaintypes</arg>
