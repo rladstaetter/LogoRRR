@@ -23,7 +23,6 @@
 --jlink-options "--strip-native-commands --no-header-files --no-man-pages --compress=zip-6 --strip-debug --include-locales=en"
 --app-version ${revision}
 --main-class ${main.launcher.class}
---java-options -Xmx4096m
 --java-options -Djava.library.path=$APPDIR/.
 --java-options -Djna.nounpack=true
 --java-options -Djna.boot.library.path=$APPDIR/.
