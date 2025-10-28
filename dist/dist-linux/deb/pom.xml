@@ -122,11 +122,11 @@
                         <configuration>
                             <executable>bash</executable>
                             <arguments>
-                                <argument>${basedir}/upload.sh</argument>
+                                <argument>${basedir}/../upload.sh</argument>
                                 <argument>${app.logorrr.dist.linux.uploadserver}</argument>
                                 <argument>${app.logorrr.dist.linux.username}</argument>
-                                <argument>${revision}</argument>
-                                <argument>${deb.os.arch}</argument>
+                                <argument>${project.build.directory}/installer/logorrr_${project.version}_${deb.os.arch}.deb</argument>
+                                <argument>public_html/downloads/${project.version}</argument>
                                 <argument>${app.logorrr.dist.linux.privatekey}</argument>
                             </arguments>
                             <workingDirectory>${project.basedir}</workingDirectory>
