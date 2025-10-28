@@ -2,7 +2,7 @@
 
 set -e  # Exit on error, except where overridden
 
-REVISION="25.1.1"
+PROJECTVERSION="25.1.1-SNAPSHOT"
 # Detect platform
 ARCH=$(uname -m)
 
@@ -29,7 +29,7 @@ echo "Building project with Maven..."
 MAVEN_OPTS="--enable-native-access=ALL-UNNAMED" mvn clean install -T1C
 
 # Install the appropriate .deb
-DEB_PATH="./dist/dist-linux/deb/target/installer/logorrr_${REVISION}_${DEB_ARCH}.deb"
+DEB_PATH="./dist/dist-linux/deb/target/installer/logorrr_${PROJECTVERSION}_${DEB_ARCH}.deb"
 
 if [[ ! -f "$DEB_PATH" ]]; then
   echo "Error: .deb file not found at $DEB_PATH"
@@ -47,11 +47,16 @@ echo "Starting LogoRRR in flatpak container ... "
 # run the app (installed via flatpak)
 flatpak run app.logorrr.LogoRRR
 
-# rebuild graalvm build (doesn't work in whole package)
-echo "Rebuilding LogoRRR as GraalVM binary ... "
+
+# run graalvm compilation again, a workaround for the graalvm compiler behavior
+# which places transitive dependencies into the output directory - but not if run
+# as multimodule build (??)
+echo "Rebuilding GraalVM variant"
 cd dist/dist-linux/graal-linux/
 mvn package
-./target/native/logorrr
 cd ../../..
+
+echo "Running GraalVM variant"
+./dist/dist-linux/graal-linux/target/native/logorrr
 
 
