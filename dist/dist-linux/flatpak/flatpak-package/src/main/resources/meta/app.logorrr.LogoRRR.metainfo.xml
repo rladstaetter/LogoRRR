@@ -55,9 +55,9 @@
         <!--
         <release version="${project.version}" date="${currentDate}"></release>
         -->
-        <release version="25.1.1" date="2025-12-01">
+        <release version="25.2.0" date="2025-11-01">
             <description>
-                <p>Feature and bugfix release.</p>
+                <p>This release contains an improved UI experience and a new feature to better manage your queries and share them among log files</p>
             </description>
         </release>
         <release version="25.1.0" date="2025-06-15">
