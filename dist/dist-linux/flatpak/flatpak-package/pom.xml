@@ -140,6 +140,64 @@
                             <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>upload-binary</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>bash</executable>
+                            <arguments>
+                                <argument>${basedir}/../../upload.sh</argument>
+                                <argument>${app.logorrr.dist.linux.uploadserver}</argument>
+                                <argument>${app.logorrr.dist.linux.username}</argument>
+                                <argument>${project.build.directory}/${flatpak.output}</argument>
+                                <argument>public_html/downloads/${project.version}</argument>
+                                <argument>${app.logorrr.dist.linux.privatekey}</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <useMavenLogger>true</useMavenLogger>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-checksum-properties</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>bash</executable>
+                            <arguments>
+                                <argument>${basedir}/checksum.sh</argument>
+                                <argument>${project.build.directory}/${flatpak.output}</argument>
+                                <argument>flatpak.package.${flatpak.os.arch}.checksum</argument>
+                                <argument>${project.build.directory}/${flatpak.output.checksum}</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <useMavenLogger>true</useMavenLogger>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>upload-binary-checksum</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>bash</executable>
+                            <arguments>
+                                <argument>${basedir}/../../upload.sh</argument>
+                                <argument>${app.logorrr.dist.linux.uploadserver}</argument>
+                                <argument>${app.logorrr.dist.linux.username}</argument>
+                                <argument>${project.build.directory}/${flatpak.output}.properties</argument>
+                                <argument>public_html/downloads/${project.version}</argument>
+                                <argument>${app.logorrr.dist.linux.privatekey}</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <useMavenLogger>true</useMavenLogger>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -153,29 +211,9 @@
                 <executions>
                     <execution>
                         <id>make-tar</id>
-                        <phase>package</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>generate-sha256</id>
-                        <phase>package</phase>
-                        <configuration>
-                            <target>
-                                <checksum fileext=".sha256" algorithm="SHA-256">
-                                    <fileset dir="${project.build.directory}" includes="*${os.arch}.tar.gz"/>
-                                </checksum>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
                         </goals>
                     </execution>
                 </executions>

@@ -16,6 +16,11 @@
     <description>Flatpak build for linux</description>
     <packaging>pom</packaging>
 
+    <properties>
+        <flatpak.output>flatpak-package-${project.version}-${flatpak.os.arch}.tar.gz</flatpak.output>
+        <flatpak.output.checksum>flatpak-package-${project.version}-${flatpak.os.arch}.tar.gz.properties</flatpak.output.checksum>
+    </properties>
+
     <modules>
         <module>flatpak-yml</module>
         <module>flatpak-package</module>
