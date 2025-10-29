@@ -15,7 +15,7 @@
         <openjfx.version>25</openjfx.version>
         <ikonli.version>12.4.0</ikonli.version>
         <!-- no need to change these -->
-        <changelist>-SNAPSHOT</changelist>
+        <changelist></changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>app.logorrr.LogoRRRApp</main.class>
         <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>

@@ -2,7 +2,7 @@
 
 set -e  # Exit on error, except where overridden
 
-PROJECTVERSION="25.1.1-SNAPSHOT"
+PROJECTVERSION="25.2.0"
 # Detect platform
 ARCH=$(uname -m)
 
