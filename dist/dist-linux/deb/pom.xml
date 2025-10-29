@@ -61,7 +61,7 @@
                                 <resource>
                                     <directory>src/main/installer</directory>
                                     <includes>
-                                        <include>jpackage-commandline.options</include>
+                                        <include>jpackage.options</include>
                                     </includes>
                                     <filtering>true</filtering>
                                 </resource>
@@ -102,14 +102,34 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${jdk.jpackage.binary}</executable>
+                            <executable>jpackage</executable>
                             <workingDirectory>${project.build.directory}</workingDirectory>
                             <environmentVariables>
                                 <JAVA_HOME>${env.JAVA_HOME}</JAVA_HOME>
                             </environmentVariables>
                             <arguments>
-                                <argument>@jpackage-commandline.options</argument>
+                                <argument>@jpackage.options</argument>
                             </arguments>
+                            <useMavenLogger>true</useMavenLogger>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>sftp-upload</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>bash</executable>
+                            <arguments>
+                                <argument>${basedir}/../upload.sh</argument>
+                                <argument>${app.logorrr.dist.linux.uploadserver}</argument>
+                                <argument>${app.logorrr.dist.linux.username}</argument>
+                                <argument>${project.build.directory}/installer/logorrr_${project.version}_${deb.os.arch}.deb</argument>
+                                <argument>public_html/downloads/${project.version}</argument>
+                                <argument>${app.logorrr.dist.linux.privatekey}</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}</workingDirectory>
                             <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>

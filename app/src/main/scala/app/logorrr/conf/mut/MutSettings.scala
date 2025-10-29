@@ -3,8 +3,7 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.{Settings, StageSettings}
 import app.logorrr.io.FileId
 import app.logorrr.model.LogFileSettings
-import app.logorrr.views.search.SearchTerm
-import app.logorrr.views.search.stg.StgEntry
+import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.stage.Window
@@ -32,6 +31,11 @@ object MutSettings {
 
 class MutSettings {
 
+  /** global container for search term groups */
+  val mutSearchTermGroupSettings = new MutSearchTermGroupSettings
+
+  def searchTermGroupNames: ObservableList[String] = mutSearchTermGroupSettings.searchTermGroupNames
+
   /** remembers last opened directory for the next execution */
   val lastUsedDirectoryProperty = new SimpleObjectProperty[Option[Path]](None)
 
@@ -41,24 +45,18 @@ class MutSettings {
     lastUsedDirectoryProperty.set(someDirectory)
   }
 
-
   /** contains mutable information for the application stage */
   private val mutStageSettings = new MutStageSettings
 
-  private val mutSearchTermSettings = new MutSearchTermSettings
-
-  def putSearchTerms(groupName: String, searchTerms: Seq[SearchTerm]): Unit = mutSearchTermSettings.put(groupName, searchTerms)
-
-  def getSearchTerms(groupName: String): Option[Seq[SearchTerm]] = mutSearchTermSettings.get(groupName)
-
-  def removeSearchTermGroup(searchTermGroupName: String): Unit = mutSearchTermSettings.remove(searchTermGroupName)
-
-  val searchTermGroupNames: ObservableList[String] = mutSearchTermSettings.searchTermGroupNames
-
-  val searchTermGroupEntries : ObservableList[StgEntry] = mutSearchTermSettings.searchTermGroupEntries
 
   /** contains mutable state information for all log files */
   private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
+
+  def putSearchTermGroup(stg: SearchTermGroup): Unit = mutSearchTermGroupSettings.put(stg.name, stg.terms)
+
+  def clearSearchTermGroups(): Unit = mutSearchTermGroupSettings.clear()
+
+  def removeSearchTermGroup(name: String): Unit = mutSearchTermGroupSettings.remove(name)
 
   /** tracks which log file is active */
   private val someActiveLogProperty = new SimpleObjectProperty[Option[FileId]](None)
@@ -78,8 +76,8 @@ class MutSettings {
   def getSomeActiveLogFile: Option[FileId] = someActiveLogProperty.get()
 
   def setLogFileSettings(logFileSettings: Map[String, LogFileSettings]): Unit = {
-    val m = for ((k, v) <- logFileSettings) yield {
-      FileId(k) -> MutLogFileSettings(v)
+    val m = for ((k, settings) <- logFileSettings) yield {
+      FileId(k) -> MutLogFileSettings(settings)
     }
     mutLogFileSettingsMapProperty.putAll(m.asJava)
   }
@@ -88,7 +86,11 @@ class MutSettings {
     val logFileSettings: Map[String, LogFileSettings] = (for ((k, v) <- mutLogFileSettingsMapProperty.get.asScala) yield {
       k.absolutePathAsString -> v.mkImmutable()
     }).toMap
-    Settings(mutStageSettings.mkImmutable(), logFileSettings, getSomeActiveLogFile, getSomeLastUsedDirectory, mutSearchTermSettings.mkImmutable())
+    Settings(mutStageSettings.mkImmutable()
+      , logFileSettings
+      , getSomeActiveLogFile
+      , getSomeLastUsedDirectory
+      , mutSearchTermGroupSettings.mkImmutable())
   }
 
   def setStageSettings(stageSettings: StageSettings): Unit = {
@@ -129,8 +131,6 @@ class MutSettings {
     val seq = mutLogFileSettingsMapProperty.get().values.asScala.toSeq
     seq.sortWith((lt, gt) => lt.getFirstOpened < gt.getFirstOpened).map(_.mkImmutable())
   }
-
-
 
 
 }

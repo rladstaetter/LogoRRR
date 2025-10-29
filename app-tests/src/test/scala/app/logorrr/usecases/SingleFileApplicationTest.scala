@@ -5,14 +5,14 @@ import app.logorrr.io.FileId
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.SingleFileIdService
 import app.logorrr.services.hostservices.MockHostServices
-import app.logorrr.steps.CanStartApplication
+import app.logorrr.steps.AppActions
 
 /**
  * Test which work with a single file can extend this test
  */
 class SingleFileApplicationTest(val fileId: FileId)
   extends TestFxBaseApplicationTest
-    with CanStartApplication {
+    with AppActions {
 
   protected lazy val settings: Settings = Settings.Default
 

@@ -3,7 +3,7 @@ package app.logorrr.usecases.openclose
 import app.logorrr.TestFiles
 import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.MultipleFileApplicationTest
-import app.logorrr.views.a11y.UiNodes
+import app.logorrr.views.a11y.uinodes.FileMenu
 import org.junit.jupiter.api.Test
 
 /**
@@ -18,10 +18,10 @@ class OpenAndCloseMultipleFilesViaMenuTest
       p => openFile(p)
     }
     // now close them all again
-    clickOn(UiNodes.FileMenu.Self)
+    clickOn(FileMenu.Self)
 
-    waitForVisibility(UiNodes.FileMenu.CloseAll)
-    clickOn(UiNodes.FileMenu.CloseAll)
+    waitForVisibility(FileMenu.CloseAll)
+    clickOn(FileMenu.CloseAll)
 
     checkForEmptyTabPane()
 

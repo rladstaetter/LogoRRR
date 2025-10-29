@@ -26,7 +26,7 @@ class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
     openFile(TestFiles.simpleLog0)
 
     // change filters to a non default configuration
-    val firstFilterTab1 = SearchTermButton.uiNode(TestFiles.simpleLog0, MutableSearchTerm.DefaultFilters.head)
+    val firstFilterTab1 = SearchTermButton.uiNode(TestFiles.simpleLog0, MutableSearchTerm.DefaultSearchTerms.head)
     waitAndClickVisibleItem(firstFilterTab1)
 
     // check that the toggle button is deselected
@@ -38,7 +38,7 @@ class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
     openFile(TestFiles.simpleLog1)
 
     // test that second file has the default filter configuration
-    val firstFilterTab2 = SearchTermButton.uiNode(TestFiles.simpleLog1, MutableSearchTerm.DefaultFilters.head)
+    val firstFilterTab2 = SearchTermButton.uiNode(TestFiles.simpleLog1, MutableSearchTerm.DefaultSearchTerms.head)
     FxAssert.verifyThat(lookup(firstFilterTab2.ref), new Predicate[ToggleButton] {
       override def test(t: ToggleButton): Boolean = t.isSelected
     })

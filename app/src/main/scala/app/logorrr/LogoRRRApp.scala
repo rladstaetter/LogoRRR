@@ -5,7 +5,6 @@ import app.logorrr.conf.{LogoRRRGlobals, SettingsIO}
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
 import app.logorrr.services.hostservices.{MacNativeHostService, NativeHostServices}
-import app.logorrr.util.JfxUtils
 import app.logorrr.views.main.{LogoRRRMain, LogoRRRStage}
 import javafx.application.Application
 import javafx.stage.Stage
@@ -21,7 +20,9 @@ import java.nio.file.Paths
 // have fun and thanks for reading the code!
 object LogoRRRApp extends CanLog {
 
-  val appMeta: AppMeta = net.ladstatt.app.AppMeta(AppId("LogoRRR", "logorrr", "logorrr.app"), AppMeta.LogFormat)
+  val Name = "LogoRRR"
+
+  val appMeta: AppMeta = net.ladstatt.app.AppMeta(AppId(Name, "logorrr", "app.logorrr"), AppMeta.LogFormat)
 
   def main(args: Array[String]): Unit = {
     net.ladstatt.app.AppMeta.initApp(appMeta)
@@ -37,10 +38,13 @@ object LogoRRRApp extends CanLog {
     Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
 
     LogoRRRGlobals.set(services.settings, services.hostServices)
-    val logoRRRMain = new LogoRRRMain(JfxUtils.closeStage(stage), services.fileIdService, services.isUnderTest)
+    val logoRRRMain = new LogoRRRMain(stage, services.fileIdService, services.isUnderTest)
     LogoRRRStage.init(stage, logoRRRMain)
 
-    logInfo(s"Started ${app.logorrr.meta.AppInfo.fullAppNameWithVersion} in '${Paths.get("").toAbsolutePath.toString}'")
+    logInfo(s"          Started: ${app.logorrr.meta.AppInfo.fullAppNameWithVersion}")
+    logInfo(s"Working directory: '${Paths.get("").toAbsolutePath.toString}'")
+    logInfo(s"    Configuration: '$settingsFilePath'")
+    logInfo(s"          Logfile: '$logFilePath'")
     logoRRRMain
   }
 }

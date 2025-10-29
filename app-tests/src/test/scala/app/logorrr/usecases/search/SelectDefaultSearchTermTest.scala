@@ -18,10 +18,10 @@ class SelectDefaultSearchTermTest extends SingleFileApplicationTest(TestFiles.si
     // and a 'unclassified' line
     openFile(fileId)
 
-    MutableSearchTerm.DefaultFilters.foreach {
+    MutableSearchTerm.DefaultSearchTerms.foreach {
       f =>
         // deselect all filters except unclassified
-        clickFilters(MutableSearchTerm.DefaultFilters)
+        clickFilters(MutableSearchTerm.DefaultSearchTerms)
 
         // now, only 'unclassified' filter is active. since there are no unclassified
         // entries available, the number of displayed log entries is one
@@ -33,16 +33,16 @@ class SelectDefaultSearchTermTest extends SingleFileApplicationTest(TestFiles.si
 
         // deselect filter again
         waitAndClickVisibleItem(SearchTermButton.uiNode(fileId, f))
-        clickFilters(MutableSearchTerm.DefaultFilters)
+        clickFilters(MutableSearchTerm.DefaultSearchTerms)
     }
 
     // finally, deselect all filters
-    clickFilters(MutableSearchTerm.DefaultFilters)
+    clickFilters(MutableSearchTerm.DefaultSearchTerms)
     // one entry is shown (unclassified)
     checkNumberOfShownElements(1)
 
     // deselect unclassified filter works as well
-    clickFilters(Seq(MutableSearchTermUnclassified(MutableSearchTerm.DefaultFilters.toSet)))
+    clickFilters(Seq(MutableSearchTermUnclassified(MutableSearchTerm.DefaultSearchTerms.toSet)))
     checkNumberOfShownElements(0)
   }
 

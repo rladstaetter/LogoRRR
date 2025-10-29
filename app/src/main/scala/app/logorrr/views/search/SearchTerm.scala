@@ -14,15 +14,6 @@ object SearchTerm {
 
   val Unclassified: Color = Color.LIGHTGREY
 
-  /** Default mapping for filters */
-  val DefaultSearchTerms: Seq[SearchTerm] = Seq(
-    SearchTerm("FINEST", Color.GREY, active = true)
-    , SearchTerm("INFO", Color.GREEN, active = true)
-    , SearchTerm("WARNING", Color.ORANGE, active = true)
-    , SearchTerm("SEVERE", Color.RED, active = true)
-  )
-
-
   /**
    * Determines if a given line should be filtered out based on a set of search terms.
    *

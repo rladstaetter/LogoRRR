@@ -23,7 +23,7 @@ class TimestampSettingStage(owner: Window
                             , opsToolBar: OpsToolBar) extends Stage {
 
   initOwner(owner)
-  initModality(Modality.APPLICATION_MODAL)
+  initModality(Modality.WINDOW_MODAL)
   setTitle(s"Specify timestamp range (from - to columns) and time pattern for ${settings.getFileId.fileName}")
 
   val scene = new Scene(

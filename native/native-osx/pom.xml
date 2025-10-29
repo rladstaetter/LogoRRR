@@ -28,7 +28,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${jdk.javac}</executable>
+                            <executable>javac</executable>
                             <workingDirectory>target</workingDirectory>
                             <arguments>
                                 <argument>-h</argument>
@@ -110,8 +110,46 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-jnidispatch-lib</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <!-- The path where the extracted file will be placed. 'target/' -->
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+
+                            <!-- Dependency to unpack: JNA (net.java.dev.jna:jna:5.9.0:jpms) -->
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>net.java.dev.jna</groupId>
+                                    <artifactId>jna</artifactId>
+                                    <version>5.9.0</version>
+                                    <classifier>jpms</classifier>
+                                </artifactItem>
+                            </artifactItems>
+
+                            <!--
+                                Specify the exact file path to include.
+                                This is the key to only extracting the single file you need.
+                            -->
+                            <includes>**/darwin-aarch64/libjnidispatch.jnilib</includes>
+
+                            <!--
+                                Setting stripVersion to true removes the version from the final file name.
+                                Setting stripClassifier to true removes the classifier from the final file name.
+                                Since we are unpacking to 'target/', we don't need to strip path components.
+                            -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>create-distribution</id>

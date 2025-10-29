@@ -1,60 +1,6 @@
 {
   "reflection": [
     {
-      "type": "[B"
-    },
-    {
-      "type": "[C"
-    },
-    {
-      "type": "[D"
-    },
-    {
-      "type": "[F"
-    },
-    {
-      "type": "[I"
-    },
-    {
-      "type": "[J"
-    },
-    {
-      "type": "[Lapp.logorrr.model.LogEntry;"
-    },
-    {
-      "type": "[Lapp.logorrr.views.block.Chunk;"
-    },
-    {
-      "type": "[Lapp.logorrr.views.settings.timestamp.LogViewLabel;"
-    },
-    {
-      "type": "[Ljava.lang.String;"
-    },
-    {
-      "type": "[Ljava.rmi.server.ObjID;"
-    },
-    {
-      "type": "[Ljavafx.scene.Node;"
-    },
-    {
-      "type": "[Ljavafx.scene.control.Label;"
-    },
-    {
-      "type": "[Ljavafx.scene.control.MenuItem;"
-    },
-    {
-      "type": "[Ljavafx.scene.layout.Pane;"
-    },
-    {
-      "type": "[Ljavax.management.openmbean.CompositeData;"
-    },
-    {
-      "type": "[S"
-    },
-    {
-      "type": "[Z"
-    },
-    {
       "type": "app.logorrr.LogoRRRApp",
       "methods": [
         {
@@ -70,6 +16,28 @@
       ]
     },
     {
+      "type": "app.logorrr.model.LogEntry[]"
+    },
+    {
+      "type": "app.logorrr.views.search.MutableSearchTerm[]"
+    },
+    {
+      "type": "app.logorrr.views.search.stg.SimpleToggleButton[]"
+    },
+    {
+      "type": "app.logorrr.views.settings.timestamp.LogViewLabel[]"
+    },
+    {
+      "type": "boolean[]"
+    },
+    {
+      "type": "byte[]",
+      "serializable": true
+    },
+    {
+      "type": "char[]"
+    },
+    {
       "type": "com.intellij.rt.execution.application.AppMainV2$Agent",
       "methods": [
         {
@@ -82,922 +50,8 @@
       ]
     },
     {
-      "type": "com.sun.glass.ui.gtk.GtkPlatformFactory",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "com.sun.javafx.font.freetype.FTFactory",
-      "methods": [
-        {
-          "name": "getFactory",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "com.sun.javafx.logging.PrintLogger",
-      "methods": [
-        {
-          "name": "createInstance",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "com.sun.javafx.logging.jfr.JFRPulseLogger",
-      "methods": [
-        {
-          "name": "createInstance",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "com.sun.javafx.tk.quantum.QuantumToolkit",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "com.sun.management.GarbageCollectorMXBean"
-    },
-    {
-      "type": "com.sun.management.GcInfo"
-    },
-    {
-      "type": "com.sun.management.HotSpotDiagnosticMXBean"
-    },
-    {
-      "type": "com.sun.management.OperatingSystemMXBean",
-      "methods": [
-        {
-          "name": "getProcessCpuLoad",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "com.sun.management.ThreadMXBean"
-    },
-    {
-      "type": "com.sun.management.UnixOperatingSystemMXBean"
-    },
-    {
-      "type": "com.sun.management.VMOption"
-    },
-    {
-      "type": "com.sun.management.internal.GarbageCollectorExtImpl"
-    },
-    {
-      "type": "com.sun.management.internal.HotSpotDiagnostic"
-    },
-    {
-      "type": "com.sun.management.internal.HotSpotThreadImpl"
-    },
-    {
-      "type": "com.sun.management.internal.OperatingSystemImpl"
-    },
-    {
-      "type": "com.sun.management.internal.VirtualThreadSchedulerImpls$VirtualThreadSchedulerImpl"
-    },
-    {
-      "type": "com.sun.prism.GraphicsPipeline",
-      "methods": [
-        {
-          "name": "getFontFactory",
-          "parameterTypes": []
-        },
-        {
-          "name": "getPipeline",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "com.sun.prism.es2.ES2Pipeline",
-      "methods": [
-        {
-          "name": "getInstance",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "com.sun.prism.es2.X11GLFactory",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "com.sun.prism.sw.SWPipeline",
-      "methods": [
-        {
-          "name": "getInstance",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "com.sun.scenario.effect.impl.prism.PrRenderer",
-      "methods": [
-        {
-          "name": "createRenderer",
-          "parameterTypes": [
-            "com.sun.scenario.effect.FilterContext"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "com.sun.scenario.effect.impl.prism.sw.PSWRenderer",
-      "methods": [
-        {
-          "name": "createRenderer",
-          "parameterTypes": [
-            "com.sun.scenario.effect.FilterContext"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "com.sun.scenario.effect.impl.sw.sse.SSELinearConvolveShadowPeer",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": [
-            "com.sun.scenario.effect.FilterContext",
-            "com.sun.scenario.effect.impl.Renderer",
-            "java.lang.String"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "com.sun.scenario.effect.impl.sw.sse.SSERendererDelegate",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "java.lang.AutoCloseable"
-    },
-    {
-      "type": "java.lang.Boolean",
-      "fields": [
-        {
-          "name": "TYPE"
-        }
-      ]
-    },
-    {
-      "type": "java.lang.Byte",
-      "fields": [
-        {
-          "name": "TYPE"
-        }
-      ]
-    },
-    {
-      "type": "java.lang.Character",
-      "fields": [
-        {
-          "name": "TYPE"
-        }
-      ],
-      "methods": [
-        {
-          "name": "isIdeographic",
-          "parameterTypes": [
-            "int"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "java.lang.ClassValue"
-    },
-    {
-      "type": "java.lang.Deprecated"
-    },
-    {
-      "type": "java.lang.Double",
-      "fields": [
-        {
-          "name": "TYPE"
-        }
-      ]
-    },
-    {
-      "type": "java.lang.Float",
-      "fields": [
-        {
-          "name": "TYPE"
-        }
-      ]
-    },
-    {
-      "type": "java.lang.Integer",
-      "fields": [
-        {
-          "name": "TYPE"
-        }
-      ]
-    },
-    {
-      "type": "java.lang.Long",
-      "fields": [
-        {
-          "name": "TYPE"
-        }
-      ]
-    },
-    {
-      "type": "java.lang.Short",
-      "fields": [
-        {
-          "name": "TYPE"
-        }
-      ]
-    },
-    {
-      "type": "java.lang.StackTraceElement"
-    },
-    {
-      "type": "java.lang.String",
-      "fields": [
-        {
-          "name": "TYPE"
-        }
-      ]
-    },
-    {
-      "type": "java.lang.System",
-      "methods": [
-        {
-          "name": "getSecurityManager",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "java.lang.Void",
-      "fields": [
-        {
-          "name": "TYPE"
-        }
-      ]
-    },
-    {
-      "type": "java.lang.invoke.VarHandle",
-      "methods": [
-        {
-          "name": "releaseFence",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "java.lang.management.BufferPoolMXBean"
-    },
-    {
-      "type": "java.lang.management.ClassLoadingMXBean"
-    },
-    {
-      "type": "java.lang.management.CompilationMXBean"
-    },
-    {
-      "type": "java.lang.management.LockInfo"
-    },
-    {
-      "type": "java.lang.management.MemoryMXBean",
-      "methods": [
-        {
-          "name": "getHeapMemoryUsage",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "java.lang.management.MemoryManagerMXBean"
-    },
-    {
-      "type": "java.lang.management.MemoryPoolMXBean"
-    },
-    {
-      "type": "java.lang.management.MemoryUsage",
-      "methods": [
-        {
-          "name": "getCommitted",
-          "parameterTypes": []
-        },
-        {
-          "name": "getInit",
-          "parameterTypes": []
-        },
-        {
-          "name": "getMax",
-          "parameterTypes": []
-        },
-        {
-          "name": "getUsed",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "java.lang.management.MonitorInfo"
-    },
-    {
-      "type": "java.lang.management.PlatformLoggingMXBean"
-    },
-    {
-      "type": "java.lang.management.RuntimeMXBean"
-    },
-    {
-      "type": "java.lang.management.ThreadInfo"
-    },
-    {
-      "type": "java.math.BigDecimal"
-    },
-    {
-      "type": "java.math.BigInteger"
-    },
-    {
-      "type": "java.nio.ByteBuffer",
-      "methods": [
-        {
-          "name": "order",
-          "parameterTypes": [
-            "java.nio.ByteOrder"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "java.nio.ByteOrder",
-      "methods": [
-        {
-          "name": "nativeOrder",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "java.rmi.dgc.Lease"
-    },
-    {
-      "type": "java.rmi.dgc.VMID"
-    },
-    {
-      "type": "java.rmi.server.ObjID"
-    },
-    {
-      "type": "java.rmi.server.UID"
-    },
-    {
-      "type": "java.util.Date"
-    },
-    {
-      "type": "java.util.logging.LogManager",
-      "methods": [
-        {
-          "name": "getLoggingMXBean",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "java.util.logging.LoggingMXBean"
-    },
-    {
-      "type": "javafx.animation.Interpolator"
-    },
-    {
-      "type": "javafx.animation.KeyValue"
-    },
-    {
-      "type": "javafx.scene.Camera"
-    },
-    {
-      "type": "javafx.scene.Group"
-    },
-    {
-      "type": "javafx.scene.Node"
-    },
-    {
-      "type": "javafx.scene.ParallelCamera"
-    },
-    {
-      "type": "javafx.scene.Parent"
-    },
-    {
-      "type": "javafx.scene.Scene"
-    },
-    {
-      "type": "javafx.scene.control.Control"
-    },
-    {
-      "type": "javafx.scene.control.Labeled"
-    },
-    {
-      "type": "javafx.scene.effect.Effect"
-    },
-    {
-      "type": "javafx.scene.image.Image"
-    },
-    {
-      "type": "javafx.scene.image.ImageView"
-    },
-    {
-      "type": "javafx.scene.layout.Pane"
-    },
-    {
-      "type": "javafx.scene.layout.Region"
-    },
-    {
-      "type": "javafx.scene.shape.LineTo"
-    },
-    {
-      "type": "javafx.scene.shape.MoveTo"
-    },
-    {
-      "type": "javafx.scene.shape.Path"
-    },
-    {
-      "type": "javafx.scene.shape.PathElement"
-    },
-    {
-      "type": "javafx.scene.shape.Rectangle"
-    },
-    {
-      "type": "javafx.scene.shape.SVGPath"
-    },
-    {
-      "type": "javafx.scene.shape.Shape"
-    },
-    {
-      "type": "javafx.scene.text.Font"
-    },
-    {
-      "type": "javafx.scene.text.Text"
-    },
-    {
-      "type": "javafx.scene.transform.Transform"
-    },
-    {
-      "type": "javafx.stage.PopupWindow"
-    },
-    {
-      "type": "javafx.stage.Stage"
-    },
-    {
-      "type": "javafx.stage.Window"
-    },
-    {
-      "type": "javax.management.MBeanOperationInfo"
-    },
-    {
-      "type": "javax.management.MBeanServerBuilder",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "javax.management.NotificationEmitter"
-    },
-    {
-      "type": "javax.management.ObjectName"
-    },
-    {
-      "type": "javax.management.StandardEmitterMBean"
-    },
-    {
-      "type": "javax.management.openmbean.CompositeData"
-    },
-    {
-      "type": "javax.management.openmbean.OpenMBeanOperationInfoSupport"
-    },
-    {
-      "type": "javax.management.openmbean.TabularData"
-    },
-    {
-      "type": "javax.management.remote.rmi.RMIConnection",
-      "methods": [
-        {
-          "name": "getAttribute",
-          "parameterTypes": [
-            "javax.management.ObjectName",
-            "java.lang.String",
-            "javax.security.auth.Subject"
-          ]
-        },
-        {
-          "name": "getConnectionId",
-          "parameterTypes": []
-        },
-        {
-          "name": "isInstanceOf",
-          "parameterTypes": [
-            "javax.management.ObjectName",
-            "java.lang.String",
-            "javax.security.auth.Subject"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "javax.management.remote.rmi.RMIConnectionImpl_Skel"
-    },
-    {
-      "type": "javax.management.remote.rmi.RMIConnectionImpl_Stub",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": [
-            "java.rmi.server.RemoteRef"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "javax.management.remote.rmi.RMIServer",
-      "methods": [
-        {
-          "name": "newClient",
-          "parameterTypes": [
-            "java.lang.Object"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "javax.management.remote.rmi.RMIServerImpl_Skel"
-    },
-    {
-      "type": "javax.management.remote.rmi.RMIServerImpl_Stub",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": [
-            "java.rmi.server.RemoteRef"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "jdk.management.VirtualThreadSchedulerMXBean"
-    },
-    {
-      "type": "jdk.management.jfr.ConfigurationInfo"
-    },
-    {
-      "type": "jdk.management.jfr.EventTypeInfo"
-    },
-    {
-      "type": "jdk.management.jfr.FlightRecorderMXBean"
-    },
-    {
-      "type": "jdk.management.jfr.FlightRecorderMXBeanImpl"
-    },
-    {
-      "type": "jdk.management.jfr.RecordingInfo"
-    },
-    {
-      "type": "jdk.management.jfr.SettingDescriptorInfo"
-    },
-    {
-      "type": "org.kordamp.ikonli.IkonliIkonResolver"
-    },
-    {
-      "type": "org.kordamp.ikonli.fontawesome5.FontAwesomeBrandsIkonHandler"
-    },
-    {
-      "type": "org.kordamp.ikonli.fontawesome5.FontAwesomeRegularIkonHandler"
-    },
-    {
-      "type": "org.kordamp.ikonli.fontawesome5.FontAwesomeSolidIkonHandler"
-    },
-    {
-      "type": "scala.Symbol",
-      "methods": [
-        {
-          "name": "apply",
-          "parameterTypes": [
-            "java.lang.String"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "sun.management.ClassLoadingImpl"
-    },
-    {
-      "type": "sun.management.CompilationImpl"
-    },
-    {
-      "type": "sun.management.ManagementFactoryHelper$1"
-    },
-    {
-      "type": "sun.management.ManagementFactoryHelper$PlatformLoggingImpl"
-    },
-    {
-      "type": "sun.management.MemoryImpl"
-    },
-    {
-      "type": "sun.management.MemoryManagerImpl"
-    },
-    {
-      "type": "sun.management.MemoryPoolImpl"
-    },
-    {
-      "type": "sun.management.RuntimeImpl"
-    },
-    {
-      "type": "sun.misc.Unsafe",
-      "fields": [
-        {
-          "name": "theUnsafe"
-        }
-      ]
-    },
-    {
-      "type": "sun.reflect.misc.Trampoline",
-      "methods": [
-        {
-          "name": "invoke",
-          "parameterTypes": [
-            "java.lang.reflect.Method",
-            "java.lang.Object",
-            "java.lang.Object[]"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "sun.rmi.registry.RegistryImpl_Stub"
-    },
-    {
-      "type": "sun.rmi.transport.DGCImpl_Skel",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "sun.rmi.transport.DGCImpl_Stub",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": [
-            "java.rmi.server.RemoteRef"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "sun.security.provider.MD5",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "sun.security.provider.NativePRNG",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": [
-            "java.security.SecureRandomParameters"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "sun.security.provider.SHA",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": []
-        }
-      ]
-    }
-  ],
-  "resources": [
-    {
-      "glob": "META-INF/fonts.mf"
-    },
-    {
-      "glob": "META-INF/resources/fontawesome5/5.15.3/fonts/fa-brands-400.ttf"
-    },
-    {
-      "glob": "META-INF/resources/fontawesome5/5.15.3/fonts/fa-regular-400.ttf"
-    },
-    {
-      "glob": "META-INF/resources/fontawesome5/5.15.3/fonts/fa-solid-900.ttf"
-    },
-    {
-      "glob": "META-INF/resources/ikonli/0.0.0/fonts/ikonli.ttf"
-    },
-    {
-      "glob": "META-INF/services/java.lang.System$LoggerFinder"
-    },
-    {
-      "glob": "META-INF/services/java.net.spi.InetAddressResolverProvider"
-    },
-    {
-      "glob": "META-INF/services/java.net.spi.URLStreamHandlerProvider"
-    },
-    {
-      "glob": "META-INF/services/java.rmi.server.RMIClassLoaderSpi"
-    },
-    {
-      "glob": "META-INF/services/java.time.zone.ZoneRulesProvider"
-    },
-    {
-      "glob": "META-INF/services/org.kordamp.ikonli.IkonHandler"
-    },
-    {
-      "glob": "app/logorrr/ChunkListView.css"
-    },
-    {
-      "glob": "app/logorrr/JetBrainsMono-Regular.ttf"
-    },
-    {
-      "glob": "app/logorrr/LogTextView.css"
-    },
-    {
-      "glob": "app/logorrr/LogoRRR.bss"
-    },
-    {
-      "glob": "app/logorrr/LogoRRR.css"
-    },
-    {
-      "glob": "app/logorrr/Slider.css"
-    },
-    {
-      "glob": "app/logorrr/drop-files-here.png"
-    },
-    {
-      "glob": "app/logorrr/icon/logorrr-icon-32.png"
-    },
-    {
-      "glob": "com/sun/javafx/scene/control/skin/resources/controls_en.properties"
-    },
-    {
-      "glob": "com/sun/javafx/tk/quantum/QuantumMessagesBundle_en.properties"
-    },
-    {
-      "glob": "meta.conf"
-    },
-    {
-      "module": "java.base",
-      "glob": "jdk/internal/icu/impl/data/icudt76b/ubidi.icu"
-    },
-    {
-      "module": "java.base",
-      "glob": "sun/net/www/content-types.properties"
-    },
-    {
-      "module": "java.logging",
-      "glob": "sun/util/logging/resources/logging_en.properties"
-    },
-    {
-      "module": "javafx.controls",
-      "glob": "com/sun/javafx/scene/control/skin/resources/controls.properties"
-    },
-    {
-      "module": "javafx.controls",
-      "glob": "com/sun/javafx/scene/control/skin/resources/controls_en.properties"
-    },
-    {
-      "module": "javafx.graphics",
-      "glob": "com/sun/glass/utils/NativeLibLoader.class"
-    },
-    {
-      "module": "javafx.graphics",
-      "glob": "com/sun/javafx/tk/quantum/QuantumMessagesBundle.properties"
-    },
-    {
-      "module": "javafx.graphics",
-      "glob": "com/sun/javafx/tk/quantum/QuantumMessagesBundle_en.properties"
-    },
-    {
-      "module": "jdk.jfr",
-      "glob": "jdk/jfr/internal/query/view.ini"
-    }
-  ],
-  "bundles": [
-    {
-      "name": "com.sun.javafx.tk.quantum.QuantumMessagesBundle",
-      "locales": [
-        "en"
-      ]
-    },
-    {
-      "name": "com/sun/javafx/scene/control/skin/resources/controls",
-      "locales": [
-        "en"
-      ]
-    }
-  ],
-  "serialization": [
-    {
-      "type": "byte[]"
-    },
-    {
-      "type": "java.lang.Double"
-    },
-    {
-      "type": "java.lang.Long"
-    },
-    {
-      "type": "java.lang.Number"
-    },
-    {
-      "type": "java.lang.String"
-    },
-    {
-      "type": "java.rmi.dgc.Lease"
-    },
-    {
-      "type": "java.rmi.dgc.VMID"
-    },
-    {
-      "type": "java.rmi.server.ObjID"
-    },
-    {
-      "type": "java.rmi.server.ObjID[]"
-    },
-    {
-      "type": "java.rmi.server.RemoteObject"
-    },
-    {
-      "type": "java.rmi.server.RemoteStub"
-    },
-    {
-      "type": "java.rmi.server.UID"
-    },
-    {
-      "type": "java.util.TreeMap"
-    },
-    {
-      "type": "javax.management.ObjectName"
-    },
-    {
-      "type": "javax.management.openmbean.CompositeDataSupport"
-    },
-    {
-      "type": "javax.management.openmbean.CompositeType"
-    },
-    {
-      "type": "javax.management.openmbean.OpenType"
-    },
-    {
-      "type": "javax.management.openmbean.SimpleType"
-    },
-    {
-      "type": "javax.management.remote.rmi.RMIConnectionImpl_Stub"
-    },
-    {
-      "type": "javax.management.remote.rmi.RMIServerImpl_Stub"
-    }
-  ],
-  "jni": [
-    {
-      "type": "[Lcom.sun.glass.ui.Screen;"
-    },
-    {
-      "type": "[Lcom.sun.javafx.font.FontConfigManager$FontConfigFont;"
-    },
-    {
-      "type": "[Lcom.sun.management.internal.DiagnosticCommandArgumentInfo;"
-    },
-    {
-      "type": "[Lcom.sun.management.internal.DiagnosticCommandInfo;"
-    },
-    {
       "type": "com.sun.glass.ui.Application",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "GetApplication",
@@ -1023,6 +77,7 @@
     },
     {
       "type": "com.sun.glass.ui.Clipboard",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "contentChanged",
@@ -1032,6 +87,7 @@
     },
     {
       "type": "com.sun.glass.ui.Cursor",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "ptr"
@@ -1040,6 +96,7 @@
     },
     {
       "type": "com.sun.glass.ui.Pixels",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "attachData",
@@ -1051,6 +108,7 @@
     },
     {
       "type": "com.sun.glass.ui.Screen",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "<init>",
@@ -1084,7 +142,11 @@
       ]
     },
     {
+      "type": "com.sun.glass.ui.Screen[]"
+    },
+    {
       "type": "com.sun.glass.ui.Size",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "<init>",
@@ -1097,6 +159,7 @@
     },
     {
       "type": "com.sun.glass.ui.View",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "ptr"
@@ -1214,6 +277,7 @@
     },
     {
       "type": "com.sun.glass.ui.Window",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "ptr"
@@ -1283,6 +347,7 @@
     },
     {
       "type": "com.sun.glass.ui.gtk.GtkApplication",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "display"
@@ -1297,6 +362,7 @@
     },
     {
       "type": "com.sun.glass.ui.gtk.GtkPixels",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "<init>",
@@ -1309,7 +375,17 @@
       ]
     },
     {
+      "type": "com.sun.glass.ui.gtk.GtkPlatformFactory",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "com.sun.glass.ui.gtk.GtkView",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "notifyInputMethodCandidateRelativePosRequest",
@@ -1330,7 +406,15 @@
     },
     {
       "type": "com.sun.glass.ui.gtk.GtkWindow",
+      "jniAccessible": true,
       "methods": [
+        {
+          "name": "dragAreaHitTest",
+          "parameterTypes": [
+            "int",
+            "int"
+          ]
+        },
         {
           "name": "notifyStateChanged",
           "parameterTypes": [
@@ -1340,7 +424,11 @@
       ]
     },
     {
+      "type": "com.sun.javafx.PreviewFeature"
+    },
+    {
       "type": "com.sun.javafx.font.FontConfigManager$FcCompFont",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "allFonts"
@@ -1355,6 +443,7 @@
     },
     {
       "type": "com.sun.javafx.font.FontConfigManager$FontConfigFont",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "familyName"
@@ -1377,7 +466,20 @@
       ]
     },
     {
+      "type": "com.sun.javafx.font.FontConfigManager$FontConfigFont[]"
+    },
+    {
+      "type": "com.sun.javafx.font.freetype.FTFactory",
+      "methods": [
+        {
+          "name": "getFactory",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "com.sun.javafx.font.freetype.FT_Bitmap",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "buffer"
@@ -1407,6 +509,7 @@
     },
     {
       "type": "com.sun.javafx.font.freetype.FT_GlyphSlotRec",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "advance_x"
@@ -1445,6 +548,7 @@
     },
     {
       "type": "com.sun.javafx.font.freetype.FT_Glyph_Metrics",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "height"
@@ -1473,7 +577,62 @@
       ]
     },
     {
+      "type": "com.sun.javafx.logging.PrintLogger",
+      "methods": [
+        {
+          "name": "createInstance",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.sun.javafx.logging.jfr.JFRPulseLogger",
+      "methods": [
+        {
+          "name": "createInstance",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.sun.javafx.tk.quantum.QuantumToolkit",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.sun.management.GarbageCollectorMXBean"
+    },
+    {
+      "type": "com.sun.management.GcInfo"
+    },
+    {
+      "type": "com.sun.management.HotSpotDiagnosticMXBean"
+    },
+    {
+      "type": "com.sun.management.OperatingSystemMXBean",
+      "methods": [
+        {
+          "name": "getProcessCpuLoad",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.sun.management.ThreadMXBean"
+    },
+    {
+      "type": "com.sun.management.UnixOperatingSystemMXBean"
+    },
+    {
+      "type": "com.sun.management.VMOption"
+    },
+    {
       "type": "com.sun.management.internal.DiagnosticCommandArgumentInfo",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "<init>",
@@ -1491,7 +650,11 @@
       ]
     },
     {
+      "type": "com.sun.management.internal.DiagnosticCommandArgumentInfo[]"
+    },
+    {
       "type": "com.sun.management.internal.DiagnosticCommandInfo",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "<init>",
@@ -1506,7 +669,26 @@
       ]
     },
     {
+      "type": "com.sun.management.internal.DiagnosticCommandInfo[]"
+    },
+    {
+      "type": "com.sun.management.internal.GarbageCollectorExtImpl"
+    },
+    {
+      "type": "com.sun.management.internal.HotSpotDiagnostic"
+    },
+    {
+      "type": "com.sun.management.internal.HotSpotThreadImpl"
+    },
+    {
+      "type": "com.sun.management.internal.OperatingSystemImpl"
+    },
+    {
+      "type": "com.sun.management.internal.VirtualThreadSchedulerImpls$VirtualThreadSchedulerImpl"
+    },
+    {
       "type": "com.sun.pisces.AbstractSurface",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "nativePtr"
@@ -1515,6 +697,7 @@
     },
     {
       "type": "com.sun.pisces.JavaSurface",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "dataInt"
@@ -1523,6 +706,7 @@
     },
     {
       "type": "com.sun.pisces.PiscesRenderer",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "nativePtr"
@@ -1534,6 +718,7 @@
     },
     {
       "type": "com.sun.pisces.Transform6",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "m00"
@@ -1556,13 +741,113 @@
       ]
     },
     {
+      "type": "com.sun.prism.GraphicsPipeline",
+      "methods": [
+        {
+          "name": "getFontFactory",
+          "parameterTypes": []
+        },
+        {
+          "name": "getPipeline",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.sun.prism.es2.ES2Pipeline",
+      "methods": [
+        {
+          "name": "getInstance",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.sun.prism.es2.X11GLFactory",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.sun.prism.sw.SWPipeline",
+      "methods": [
+        {
+          "name": "getInstance",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.sun.scenario.effect.impl.prism.PrRenderer",
+      "methods": [
+        {
+          "name": "createRenderer",
+          "parameterTypes": [
+            "com.sun.scenario.effect.FilterContext"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "com.sun.scenario.effect.impl.prism.sw.PSWRenderer",
+      "methods": [
+        {
+          "name": "createRenderer",
+          "parameterTypes": [
+            "com.sun.scenario.effect.FilterContext"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "com.sun.scenario.effect.impl.sw.sse.SSELinearConvolveShadowPeer",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "com.sun.scenario.effect.FilterContext",
+            "com.sun.scenario.effect.impl.Renderer",
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "com.sun.scenario.effect.impl.sw.sse.SSERendererDelegate",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "double[]"
+    },
+    {
+      "type": "float[]"
+    },
+    {
+      "type": "int[]"
+    },
+    {
+      "type": "java.lang.AutoCloseable"
+    },
+    {
       "type": "java.lang.Boolean",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "FALSE"
         },
         {
           "name": "TRUE"
+        },
+        {
+          "name": "TYPE"
         }
       ],
       "methods": [
@@ -1575,7 +860,63 @@
       ]
     },
     {
+      "type": "java.lang.Byte",
+      "fields": [
+        {
+          "name": "TYPE"
+        }
+      ]
+    },
+    {
+      "type": "java.lang.Character",
+      "fields": [
+        {
+          "name": "TYPE"
+        }
+      ],
+      "methods": [
+        {
+          "name": "isIdeographic",
+          "parameterTypes": [
+            "int"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "java.lang.ClassValue"
+    },
+    {
+      "type": "java.lang.Deprecated"
+    },
+    {
+      "type": "java.lang.Double",
+      "serializable": true,
+      "fields": [
+        {
+          "name": "TYPE"
+        }
+      ]
+    },
+    {
+      "type": "java.lang.Float",
+      "fields": [
+        {
+          "name": "TYPE"
+        }
+      ]
+    },
+    {
+      "type": "java.lang.Integer",
+      "fields": [
+        {
+          "name": "TYPE"
+        }
+      ]
+    },
+    {
       "type": "java.lang.InternalError",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "<init>",
@@ -1587,6 +928,7 @@
     },
     {
       "type": "java.lang.Iterable",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "iterator",
@@ -1595,7 +937,21 @@
       ]
     },
     {
+      "type": "java.lang.Long",
+      "serializable": true,
+      "fields": [
+        {
+          "name": "TYPE"
+        }
+      ]
+    },
+    {
+      "type": "java.lang.Number",
+      "serializable": true
+    },
+    {
       "type": "java.lang.Object",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "equals",
@@ -1607,6 +963,7 @@
     },
     {
       "type": "java.lang.Runnable",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "run",
@@ -1615,7 +972,20 @@
       ]
     },
     {
+      "type": "java.lang.Short",
+      "fields": [
+        {
+          "name": "TYPE"
+        }
+      ]
+    },
+    {
+      "type": "java.lang.StackTraceElement"
+    },
+    {
       "type": "java.lang.String",
+      "serializable": true,
+      "jniAccessible": true,
       "methods": [
         {
           "name": "toLowerCase",
@@ -1626,11 +996,113 @@
       ]
     },
     {
+      "type": "java.lang.String[]"
+    },
+    {
+      "type": "java.lang.System",
+      "methods": [
+        {
+          "name": "getSecurityManager",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "java.lang.Void",
+      "fields": [
+        {
+          "name": "TYPE"
+        }
+      ]
+    },
+    {
+      "type": "java.lang.invoke.VarHandle",
+      "methods": [
+        {
+          "name": "releaseFence",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "java.lang.management.BufferPoolMXBean"
+    },
+    {
+      "type": "java.lang.management.ClassLoadingMXBean"
+    },
+    {
+      "type": "java.lang.management.CompilationMXBean"
+    },
+    {
+      "type": "java.lang.management.LockInfo"
+    },
+    {
+      "type": "java.lang.management.MemoryMXBean",
+      "methods": [
+        {
+          "name": "getHeapMemoryUsage",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "java.lang.management.MemoryManagerMXBean"
+    },
+    {
+      "type": "java.lang.management.MemoryPoolMXBean"
+    },
+    {
+      "type": "java.lang.management.MemoryUsage",
+      "methods": [
+        {
+          "name": "getCommitted",
+          "parameterTypes": []
+        },
+        {
+          "name": "getInit",
+          "parameterTypes": []
+        },
+        {
+          "name": "getMax",
+          "parameterTypes": []
+        },
+        {
+          "name": "getUsed",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "java.lang.management.MonitorInfo"
+    },
+    {
+      "type": "java.lang.management.PlatformLoggingMXBean"
+    },
+    {
+      "type": "java.lang.management.RuntimeMXBean"
+    },
+    {
+      "type": "java.lang.management.ThreadInfo"
+    },
+    {
+      "type": "java.math.BigDecimal"
+    },
+    {
+      "type": "java.math.BigInteger"
+    },
+    {
       "type": "java.nio.ByteBuffer",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "array",
           "parameterTypes": []
+        },
+        {
+          "name": "order",
+          "parameterTypes": [
+            "java.nio.ByteOrder"
+          ]
         },
         {
           "name": "wrap",
@@ -1641,7 +1113,45 @@
       ]
     },
     {
+      "type": "java.nio.ByteOrder",
+      "methods": [
+        {
+          "name": "nativeOrder",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "java.rmi.dgc.Lease",
+      "serializable": true
+    },
+    {
+      "type": "java.rmi.dgc.VMID",
+      "serializable": true
+    },
+    {
+      "type": "java.rmi.server.ObjID",
+      "serializable": true
+    },
+    {
+      "type": "java.rmi.server.ObjID[]",
+      "serializable": true
+    },
+    {
+      "type": "java.rmi.server.RemoteObject",
+      "serializable": true
+    },
+    {
+      "type": "java.rmi.server.RemoteStub",
+      "serializable": true
+    },
+    {
+      "type": "java.rmi.server.UID",
+      "serializable": true
+    },
+    {
       "type": "java.util.ArrayList",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "<init>",
@@ -1669,6 +1179,7 @@
     },
     {
       "type": "java.util.Arrays",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "asList",
@@ -1680,6 +1191,7 @@
     },
     {
       "type": "java.util.Collections",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "unmodifiableMap",
@@ -1690,7 +1202,11 @@
       ]
     },
     {
+      "type": "java.util.Date"
+    },
+    {
       "type": "java.util.HashMap",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "<init>",
@@ -1719,6 +1235,7 @@
     },
     {
       "type": "java.util.HashSet",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "<init>",
@@ -1728,6 +1245,7 @@
     },
     {
       "type": "java.util.Iterator",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "hasNext",
@@ -1741,6 +1259,7 @@
     },
     {
       "type": "java.util.Map",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "containsKey",
@@ -1769,6 +1288,7 @@
     },
     {
       "type": "java.util.Set",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "add",
@@ -1789,7 +1309,72 @@
       ]
     },
     {
+      "type": "java.util.TreeMap",
+      "serializable": true
+    },
+    {
+      "type": "javafx.animation.Interpolator"
+    },
+    {
+      "type": "javafx.animation.KeyValue"
+    },
+    {
+      "type": "javafx.css.Rule"
+    },
+    {
+      "type": "javafx.scene.Camera"
+    },
+    {
+      "type": "javafx.scene.Group"
+    },
+    {
+      "type": "javafx.scene.Node"
+    },
+    {
+      "type": "javafx.scene.Node[]"
+    },
+    {
+      "type": "javafx.scene.ParallelCamera"
+    },
+    {
+      "type": "javafx.scene.Parent"
+    },
+    {
+      "type": "javafx.scene.Scene"
+    },
+    {
+      "type": "javafx.scene.control.Control"
+    },
+    {
+      "type": "javafx.scene.control.Control[]"
+    },
+    {
+      "type": "javafx.scene.control.Label[]"
+    },
+    {
+      "type": "javafx.scene.control.Labeled"
+    },
+    {
+      "type": "javafx.scene.control.MenuItem[]"
+    },
+    {
+      "type": "javafx.scene.effect.Effect"
+    },
+    {
+      "type": "javafx.scene.image.Image"
+    },
+    {
+      "type": "javafx.scene.image.ImageView"
+    },
+    {
+      "type": "javafx.scene.layout.Pane"
+    },
+    {
+      "type": "javafx.scene.layout.Region"
+    },
+    {
       "type": "javafx.scene.paint.Color",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "rgb",
@@ -1803,7 +1388,216 @@
       ]
     },
     {
+      "type": "javafx.scene.shape.LineTo"
+    },
+    {
+      "type": "javafx.scene.shape.MoveTo"
+    },
+    {
+      "type": "javafx.scene.shape.Path"
+    },
+    {
+      "type": "javafx.scene.shape.PathElement"
+    },
+    {
+      "type": "javafx.scene.shape.Rectangle"
+    },
+    {
+      "type": "javafx.scene.shape.SVGPath"
+    },
+    {
+      "type": "javafx.scene.shape.Shape"
+    },
+    {
+      "type": "javafx.scene.text.Font"
+    },
+    {
+      "type": "javafx.scene.text.Text"
+    },
+    {
+      "type": "javafx.scene.transform.Transform"
+    },
+    {
+      "type": "javafx.stage.PopupWindow"
+    },
+    {
+      "type": "javafx.stage.Stage"
+    },
+    {
+      "type": "javafx.stage.Window"
+    },
+    {
+      "type": "javax.management.MBeanOperationInfo"
+    },
+    {
+      "type": "javax.management.MBeanServerBuilder",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "javax.management.NotificationEmitter"
+    },
+    {
+      "type": "javax.management.ObjectName",
+      "serializable": true
+    },
+    {
+      "type": "javax.management.StandardEmitterMBean"
+    },
+    {
+      "type": "javax.management.openmbean.CompositeData"
+    },
+    {
+      "type": "javax.management.openmbean.CompositeDataSupport",
+      "serializable": true
+    },
+    {
+      "type": "javax.management.openmbean.CompositeData[]"
+    },
+    {
+      "type": "javax.management.openmbean.CompositeType",
+      "serializable": true
+    },
+    {
+      "type": "javax.management.openmbean.OpenMBeanOperationInfoSupport"
+    },
+    {
+      "type": "javax.management.openmbean.OpenType",
+      "serializable": true
+    },
+    {
+      "type": "javax.management.openmbean.SimpleType",
+      "serializable": true
+    },
+    {
+      "type": "javax.management.openmbean.TabularData"
+    },
+    {
+      "type": "javax.management.remote.rmi.RMIConnection",
+      "methods": [
+        {
+          "name": "getAttribute",
+          "parameterTypes": [
+            "javax.management.ObjectName",
+            "java.lang.String",
+            "javax.security.auth.Subject"
+          ]
+        },
+        {
+          "name": "getConnectionId",
+          "parameterTypes": []
+        },
+        {
+          "name": "isInstanceOf",
+          "parameterTypes": [
+            "javax.management.ObjectName",
+            "java.lang.String",
+            "javax.security.auth.Subject"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "javax.management.remote.rmi.RMIConnectionImpl_Skel"
+    },
+    {
+      "type": "javax.management.remote.rmi.RMIConnectionImpl_Stub",
+      "serializable": true,
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.rmi.server.RemoteRef"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "javax.management.remote.rmi.RMIServer",
+      "methods": [
+        {
+          "name": "newClient",
+          "parameterTypes": [
+            "java.lang.Object"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "javax.management.remote.rmi.RMIServerImpl_Skel"
+    },
+    {
+      "type": "javax.management.remote.rmi.RMIServerImpl_Stub",
+      "serializable": true,
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.rmi.server.RemoteRef"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "jdk.management.VirtualThreadSchedulerMXBean"
+    },
+    {
+      "type": "jdk.management.jfr.ConfigurationInfo"
+    },
+    {
+      "type": "jdk.management.jfr.EventTypeInfo"
+    },
+    {
+      "type": "jdk.management.jfr.FlightRecorderMXBean"
+    },
+    {
+      "type": "jdk.management.jfr.FlightRecorderMXBeanImpl"
+    },
+    {
+      "type": "jdk.management.jfr.RecordingInfo"
+    },
+    {
+      "type": "jdk.management.jfr.SettingDescriptorInfo"
+    },
+    {
+      "type": "long[]"
+    },
+    {
+      "type": "org.kordamp.ikonli.IkonliIkonResolver"
+    },
+    {
+      "type": "org.kordamp.ikonli.fontawesome6.FontAwesomeBrandsIkonHandler"
+    },
+    {
+      "type": "org.kordamp.ikonli.fontawesome6.FontAwesomeRegularIkonHandler"
+    },
+    {
+      "type": "org.kordamp.ikonli.fontawesome6.FontAwesomeSolidIkonHandler"
+    },
+    {
+      "type": "org.osgi.framework.BundleContext"
+    },
+    {
+      "type": "scala.Symbol",
+      "methods": [
+        {
+          "name": "apply",
+          "parameterTypes": [
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "short[]"
+    },
+    {
       "type": "sun.instrument.InstrumentationImpl",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "<init>",
@@ -1844,6 +1638,7 @@
     },
     {
       "type": "sun.launcher.LauncherHelper",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "isStaticMain"
@@ -1876,6 +1671,7 @@
     },
     {
       "type": "sun.launcher.LauncherHelper$FXHelper",
+      "jniAccessible": true,
       "methods": [
         {
           "name": "main",
@@ -1886,7 +1682,32 @@
       ]
     },
     {
+      "type": "sun.management.ClassLoadingImpl"
+    },
+    {
+      "type": "sun.management.CompilationImpl"
+    },
+    {
+      "type": "sun.management.ManagementFactoryHelper$1"
+    },
+    {
+      "type": "sun.management.ManagementFactoryHelper$PlatformLoggingImpl"
+    },
+    {
+      "type": "sun.management.MemoryImpl"
+    },
+    {
+      "type": "sun.management.MemoryManagerImpl"
+    },
+    {
+      "type": "sun.management.MemoryPoolImpl"
+    },
+    {
+      "type": "sun.management.RuntimeImpl"
+    },
+    {
       "type": "sun.management.VMManagementImpl",
+      "jniAccessible": true,
       "fields": [
         {
           "name": "compTimeMonitoringSupport"
@@ -1913,6 +1734,199 @@
           "name": "threadContentionMonitoringSupport"
         }
       ]
+    },
+    {
+      "type": "sun.reflect.misc.Trampoline",
+      "methods": [
+        {
+          "name": "invoke",
+          "parameterTypes": [
+            "java.lang.reflect.Method",
+            "java.lang.Object",
+            "java.lang.Object[]"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sun.rmi.registry.RegistryImpl_Stub"
+    },
+    {
+      "type": "sun.rmi.transport.DGCImpl_Skel",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "sun.rmi.transport.DGCImpl_Stub",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.rmi.server.RemoteRef"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sun.security.provider.MD5",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "sun.security.provider.NativePRNG",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.security.SecureRandomParameters"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sun.security.provider.SHA",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "sun.text.resources.cldr.FormatData"
+    },
+    {
+      "type": "sun.text.resources.cldr.FormatData_en"
+    },
+    {
+      "type": "sun.text.resources.cldr.FormatData_en_US"
+    },
+    {
+      "type": "sun.util.resources.cldr.CalendarData"
+    },
+    {
+      "type": "sun.util.resources.cldr.TimeZoneNames"
+    },
+    {
+      "type": "sun.util.resources.cldr.TimeZoneNames_en"
+    },
+    {
+      "type": "sun.util.resources.cldr.TimeZoneNames_en_US"
+    }
+  ],
+  "resources": [
+    {
+      "glob": "META-INF/fonts.mf"
+    },
+    {
+      "glob": "META-INF/resources/fontawesome6/6.5.2/fonts/fa-brands-400.ttf"
+    },
+    {
+      "glob": "META-INF/resources/fontawesome6/6.5.2/fonts/fa-regular-400.ttf"
+    },
+    {
+      "glob": "META-INF/resources/fontawesome6/6.5.2/fonts/fa-solid-900.ttf"
+    },
+    {
+      "glob": "META-INF/resources/ikonli/0.0.0/fonts/ikonli.ttf"
+    },
+    {
+      "glob": "META-INF/services/java.net.spi.InetAddressResolverProvider"
+    },
+    {
+      "glob": "META-INF/services/java.net.spi.URLStreamHandlerProvider"
+    },
+    {
+      "glob": "META-INF/services/java.rmi.server.RMIClassLoaderSpi"
+    },
+    {
+      "glob": "META-INF/services/java.time.zone.ZoneRulesProvider"
+    },
+    {
+      "glob": "META-INF/services/org.kordamp.ikonli.IkonHandler"
+    },
+    {
+      "glob": "app/logorrr/JetBrainsMono-Regular.ttf"
+    },
+    {
+      "glob": "app/logorrr/LogTextView.css"
+    },
+    {
+      "glob": "app/logorrr/LogoRRR.bss"
+    },
+    {
+      "glob": "app/logorrr/LogoRRR.css"
+    },
+    {
+      "glob": "app/logorrr/clv/ChunkListView.css"
+    },
+    {
+      "glob": "app/logorrr/drop-files-here.png"
+    },
+    {
+      "glob": "app/logorrr/icon/logorrr-icon-32.png"
+    },
+    {
+      "glob": "com/sun/javafx/scene/control/skin/resources/controls_en.properties"
+    },
+    {
+      "glob": "com/sun/javafx/tk/quantum/QuantumMessagesBundle_en.properties"
+    },
+    {
+      "glob": "meta.conf"
+    },
+    {
+      "module": "java.base",
+      "glob": "jdk/internal/icu/impl/data/icudt76b/ubidi.icu"
+    },
+    {
+      "module": "java.base",
+      "glob": "sun/net/www/content-types.properties"
+    },
+    {
+      "module": "java.logging",
+      "glob": "sun/util/logging/resources/logging_en.properties"
+    },
+    {
+      "module": "javafx.controls",
+      "glob": "com/sun/javafx/scene/control/skin/resources/controls.properties"
+    },
+    {
+      "module": "javafx.controls",
+      "glob": "com/sun/javafx/scene/control/skin/resources/controls_en.properties"
+    },
+    {
+      "module": "javafx.graphics",
+      "glob": "com/sun/glass/utils/NativeLibLoader.class"
+    },
+    {
+      "module": "javafx.graphics",
+      "glob": "com/sun/javafx/tk/quantum/QuantumMessagesBundle.properties"
+    },
+    {
+      "module": "javafx.graphics",
+      "glob": "com/sun/javafx/tk/quantum/QuantumMessagesBundle_en.properties"
+    },
+    {
+      "module": "jdk.jfr",
+      "glob": "jdk/jfr/internal/query/view.ini"
+    },
+    {
+      "bundle": "com.sun.javafx.tk.quantum.QuantumMessagesBundle"
+    },
+    {
+      "bundle": "com/sun/javafx/scene/control/skin/resources/controls"
+    },
+    {
+      "bundle": "sun.util.logging.resources.logging"
     }
   ]
 }

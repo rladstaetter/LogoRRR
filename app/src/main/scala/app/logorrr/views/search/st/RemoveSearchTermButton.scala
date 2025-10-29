@@ -4,11 +4,9 @@ import app.logorrr.clv.color.ColorUtil
 import app.logorrr.io.FileId
 import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
-import app.logorrr.views.search.MutableSearchTerm
-import javafx.scene.control.{Button, Tooltip}
+import app.logorrr.views.search.{MutableSearchTerm, GfxElements}
+import javafx.scene.control.Button
 import javafx.scene.paint.Color
-import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
-import org.kordamp.ikonli.javafx.FontIcon
 
 
 object RemoveSearchTermButton extends UiNodeSearchTermAware {
@@ -19,8 +17,8 @@ object RemoveSearchTermButton extends UiNodeSearchTermAware {
 
 class RemoveSearchTermButton extends Button {
 
-  setGraphic(new FontIcon(FontAwesomeRegular.WINDOW_CLOSE))
-  setTooltip(new Tooltip("remove"))
+  setGraphic(GfxElements.closeWindowIcon)
+  setTooltip(GfxElements.mkRemoveTooltip)
 
   useParentBackgroundColor()
 

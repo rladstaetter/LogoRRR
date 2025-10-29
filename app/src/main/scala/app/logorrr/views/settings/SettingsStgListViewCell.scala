@@ -1,0 +1,43 @@
+package app.logorrr.views.settings
+
+import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.views.a11y.uinodes.SettingsEditor
+import app.logorrr.views.search.st.SimpleSearchTermVis
+import app.logorrr.views.search.stg.{DeleteStgButton, SimpleToggleButton, SearchTermGroup}
+import javafx.scene.control.{Label, ListCell, ToolBar}
+
+
+class SettingsStgListViewCell extends ListCell[SearchTermGroup] {
+  setId(SettingsEditor.SettingsStgListView.value)
+
+  val deleteButton = DeleteStgButton(SettingsEditor.SettingsStgListViewDelete)
+
+  override def updateItem(item: SearchTermGroup, empty: Boolean): Unit = {
+    super.updateItem(item, empty)
+    if (empty || item == null) {
+      setText(null)
+      setGraphic(null)
+    } else {
+      val label = new Label(item.name)
+      label.setPrefWidth(100)
+
+      deleteButton.setOnAction(_ => {
+        Option(getItem) match {
+          case Some(stg) =>
+            getListView.getItems.remove(stg)
+            LogoRRRGlobals.removeSearchTermGroup(stg.name)
+          case None =>
+        }
+      })
+
+      val vis: Seq[SimpleToggleButton] = item.terms.map(t => new SimpleToggleButton(SimpleSearchTermVis(t)))
+
+      val toolBar = new ToolBar
+      toolBar.getItems.addAll(deleteButton, label)
+      toolBar.getItems.addAll(vis: _*)
+      setGraphic(toolBar)
+    }
+  }
+
+
+}

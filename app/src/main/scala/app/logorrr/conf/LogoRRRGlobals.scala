@@ -5,8 +5,7 @@ import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
 import app.logorrr.io.{FileId, OsxBridgeHelper}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.services.hostservices.LogoRRRHostServices
-import app.logorrr.views.search.SearchTerm
-import app.logorrr.views.search.stg.StgEntry
+import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import javafx.stage.Window
@@ -26,7 +25,10 @@ object LogoRRRGlobals extends CanLog with Fs {
 
   private val mutSettings = new MutSettings
 
+
   private val hostServicesProperty = new SimpleObjectProperty[LogoRRRHostServices]()
+
+  def searchTermGroupNames: ObservableList[String] = mutSettings.searchTermGroupNames
 
   def persist(): Unit = persist(LogoRRRGlobals.getSettings)
 
@@ -45,8 +47,12 @@ object LogoRRRGlobals extends CanLog with Fs {
     mutSettings.bindWindowProperties(window)
   }
 
-  val searchTermGroupNames: ObservableList[String] = mutSettings.searchTermGroupNames
-  val searchTermGroupEntries : ObservableList[StgEntry] = mutSettings.searchTermGroupEntries
+
+  def putSearchTermGroup(stg: SearchTermGroup): Unit = mutSettings.putSearchTermGroup(stg)
+
+  def removeSearchTermGroup(name: String): Unit = mutSettings.removeSearchTermGroup(name)
+
+  def clearSearchTermGroups() : Unit = mutSettings.clearSearchTermGroups()
 
   def unbindWindow(): Unit = mutSettings.unbindWindow()
 
@@ -67,9 +73,15 @@ object LogoRRRGlobals extends CanLog with Fs {
     mutSettings.setLogFileSettings(settings.fileSettings)
     mutSettings.setSomeActive(settings.someActive)
     mutSettings.setSomeLastUsedDirectory(settings.someLastUsedDirectory)
-    for ((k, terms) <- settings.searchTerms) {
-      mutSettings.putSearchTerms(k, terms)
+
+    // populate either from saved file or use default values.
+    // if values are saved in the .conf file, those should be used
+    val searchTermGroupsToUse = settings.searchTermGroups
+
+    for ((k, v) <- searchTermGroupsToUse) {
+      mutSettings.mutSearchTermGroupSettings.put(k, v)
     }
+
     setHostServices(hostServices)
   }
 
@@ -113,10 +125,7 @@ object LogoRRRGlobals extends CanLog with Fs {
 
   def getLogFileSettings(fileId: FileId): MutLogFileSettings = mutSettings.getMutLogFileSetting(fileId)
 
-  def putSearchTerms(groupName: String, searchTerms: Seq[SearchTerm]): Unit = mutSettings.putSearchTerms(groupName, searchTerms)
+  val searchTermGroupEntries: ObservableList[SearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
 
-  def getSearchTerms(groupName: String): Option[Seq[SearchTerm]] = mutSettings.getSearchTerms(groupName)
-
-  def removeSearchTermGroup(searchTermGroupName: String): Unit = mutSettings.removeSearchTermGroup(searchTermGroupName)
 
 }

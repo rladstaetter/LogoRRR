@@ -5,7 +5,7 @@ import app.logorrr.io.FileId
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.MockFileIdService
 import app.logorrr.services.hostservices.MockHostServices
-import app.logorrr.steps.{CanStartApplication, VisibleItemActions}
+import app.logorrr.steps.{AppActions, VisibleItemActions}
 
 /**
  * Extend this class if you have tests which involve more than one file
@@ -14,7 +14,7 @@ import app.logorrr.steps.{CanStartApplication, VisibleItemActions}
  */
 class MultipleFileApplicationTest(val files: Seq[FileId])
   extends TestFxBaseApplicationTest
-    with CanStartApplication
+    with AppActions
     with VisibleItemActions {
 
   lazy val services: LogoRRRServices = LogoRRRServices(Settings.Default

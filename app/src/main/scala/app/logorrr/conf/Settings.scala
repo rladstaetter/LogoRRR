@@ -3,7 +3,9 @@ package app.logorrr.conf
 import app.logorrr.io.{FileId, IoManager}
 import app.logorrr.model.LogFileSettings
 import app.logorrr.views.search.SearchTerm
+import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.geometry.Rectangle2D
+import javafx.scene.paint.Color
 import javafx.stage.Screen
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}
@@ -20,6 +22,17 @@ object Settings {
 
   implicit lazy val reader: ConfigReader[Settings] = deriveReader[Settings]
   implicit lazy val writer: ConfigWriter[Settings] = deriveWriter[Settings]
+
+  private val EmptyGroup: SearchTermGroup = SearchTermGroup("empty", Seq())
+
+  val JavaLoggingGroup: SearchTermGroup = SearchTermGroup("default", Seq(
+    SearchTerm("FINEST", Color.GREY, active = true)
+    , SearchTerm("INFO", Color.GREEN, active = true)
+    , SearchTerm("WARNING", Color.ORANGE, active = true)
+    , SearchTerm("SEVERE", Color.RED, active = true)
+  ))
+
+  val DefaultSearchTermGroups: Seq[SearchTermGroup] = Seq(EmptyGroup, JavaLoggingGroup)
 
   def calcDefaultScreenPosition(): Rectangle2D = {
 
@@ -45,18 +58,16 @@ object Settings {
     , Map()
     , None
     , None
-    , Map()
+    , DefaultSearchTermGroups.map(stg => stg.name -> stg.terms).toMap
   )
 
 }
 
 case class Settings(stageSettings: StageSettings
-                    // fileSettings has to stay Map[String,LogFileSettings] because of Reader/Writer derivation
-                    // key is FileId.value
                     , fileSettings: Map[String, LogFileSettings]
                     , someActive: Option[FileId]
                     , someLastUsedDirectory: Option[Path]
-                    , searchTerms: Map[String, Seq[SearchTerm]]) {
+                    , searchTermGroups: Map[String, Seq[SearchTerm]]) {
 
   /** updates recent files with given log setting */
   def update(logFileSetting: LogFileSettings): Settings = {

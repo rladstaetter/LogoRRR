@@ -15,13 +15,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class LogoRRRMain(closeStage: => Unit
+class LogoRRRMain(stage: Stage
                   , logoRRRFileOpenService: FileIdService
                   , isUnderTest: Boolean) extends BorderPane with CanLog {
 
-  private val mainTabPane = new MainTabPane
+  val bar = new MainMenuBar(stage, logoRRRFileOpenService, openFile, closeAllLogFiles(), isUnderTest)
 
-  val bar = new MainMenuBar(logoRRRFileOpenService, openFile, closeAllLogFiles(), closeStage, isUnderTest)
+  private val mainTabPane = new MainTabPane
 
   def getLogFileTabs: mutable.Seq[LogFileTab] = mainTabPane.getLogFileTabs
 
@@ -96,7 +96,6 @@ class LogoRRRMain(closeStage: => Unit
     val logFileTabs: Seq[LogFileTab] = Await.result(futures, Duration.Inf).flatten
     logTrace("Loaded " + logFileTabs.size + " files ... ")
     logFileTabs
-
 
   }
 

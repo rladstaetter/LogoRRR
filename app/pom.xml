@@ -17,6 +17,7 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
         </dependency>
+
         <!-- uncomment if atlantafx is needed for enhancing css
         <dependency>
             <groupId>io.github.mkpaz</groupId>
@@ -64,6 +65,10 @@
         <dependency>
             <groupId>app.logorrr</groupId>
             <artifactId>clv</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.jangassen</groupId>
+            <artifactId>nsmenufx</artifactId>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
@@ -135,6 +140,7 @@
                     <type>zip</type>
                     <classifier>dylibs</classifier>
                 </dependency>
+
             </dependencies>
             <build>
                 <plugins>

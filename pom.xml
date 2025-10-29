@@ -6,12 +6,12 @@
     <artifactId>logorrr</artifactId>
     <version>${revision}${changelist}</version>
     <name>app.logorrr</name>
-    <description>LogoRRR - the log visualisation tool</description>
+    <description>LogoRRR - logfiles at a glance.</description>
     <packaging>pom</packaging>
     <properties>
         <revision>25.1.1</revision>
         <scala.major.version>2.13</scala.major.version>
-        <scala.version>${scala.major.version}.16</scala.version>
+        <scala.version>${scala.major.version}.17</scala.version>
         <openjfx.version>25</openjfx.version>
         <ikonli.version>12.4.0</ikonli.version>
         <!-- no need to change these -->
@@ -19,8 +19,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>app.logorrr.LogoRRRApp</main.class>
         <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>
-        <jdk.jlink.binary>${env.JAVA_HOME}/bin/jlink</jdk.jlink.binary>
-        <jdk.jpackage.binary>${env.JAVA_HOME}/bin/jpackage</jdk.jpackage.binary>
         <jmh.version>1.37</jmh.version>
         <windows.temurin.version>
             https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25%2B36/OpenJDK25U-jre_x64_windows_hotspot_25_36.zip
@@ -63,8 +61,6 @@
                 </os>
             </activation>
             <properties>
-                <jdk.javac>${env.JAVA_HOME}/bin/javac</jdk.javac>
-                <jdk.javah>${env.JAVA_HOME}/bin/javah</jdk.javah>
                 <openjfx.os.prefix>osx</openjfx.os.prefix>
             </properties>
             <modules>
@@ -119,6 +115,37 @@
                 <module>app-tests</module>
             </modules>
         </profile>
+        <!-- Profile for x64 (amd64) architecture -->
+        <profile>
+            <id>x64-architecture</id>
+            <activation>
+                <property>
+                    <name>os.arch</name>
+                    <value>amd64</value>
+                </property>
+            </activation>
+            <properties>
+                <jfxdownload.os.arch>x64</jfxdownload.os.arch>
+                <deb.os.arch>amd64</deb.os.arch>
+                <flatpak.os.arch>amd64</flatpak.os.arch>
+            </properties>
+        </profile>
+
+        <!-- Profile for aarch64 architecture -->
+        <profile>
+            <id>aarch64-architecture</id>
+            <activation>
+                <property>
+                    <name>os.arch</name>
+                    <value>aarch64</value>
+                </property>
+            </activation>
+            <properties>
+                <jfxdownload.os.arch>aarch64</jfxdownload.os.arch>
+                <deb.os.arch>arm64</deb.os.arch>
+                <flatpak.os.arch>aarch64</flatpak.os.arch>
+            </properties>
+        </profile>
     </profiles>
     <modules>
         <module>build</module>
@@ -140,6 +167,11 @@
                 <groupId>net.ladstatt.core</groupId>
                 <artifactId>core</artifactId>
                 <version>0.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>de.jangassen</groupId>
+                <artifactId>nsmenufx</artifactId>
+                <version>3.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.testfx</groupId>
@@ -283,6 +315,11 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.graalvm.buildtools</groupId>
+                    <artifactId>native-maven-plugin</artifactId>
+                    <version>0.11.2</version>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>3.4.2</version>
@@ -321,7 +358,7 @@
                 <plugin>
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>scala-maven-plugin</artifactId>
-                    <version>4.9.5</version>
+                    <version>4.9.6</version>
                     <executions>
                         <execution>
                             <goals>
@@ -335,6 +372,7 @@
                         <failOnError>true</failOnError>
                         <args>
                             <arg>-deprecation</arg>
+                            <arg>-feature</arg>
                             <arg>-encoding</arg>
                             <arg>utf-8</arg>
                             <arg>-explaintypes</arg>

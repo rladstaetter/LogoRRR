@@ -38,7 +38,7 @@
                 <executions>
                     <execution>
                         <id>copy-javafx-libs-for-native-image</id>
-                        <phase>prepare-package</phase>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
@@ -46,20 +46,20 @@
                             <outputDirectory>${native.output.dir}</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>../../../env/target/javafx-sdk-24.0.1/lib/</directory>
+                                    <directory>../../../env/target/javafx-sdk-${openjfx.version}/lib/</directory>
                                     <filtering>false</filtering>
                                     <includes>
                                         <include>libdecora_sse.so</include>
-                                        <include>libglassgtk3.so</include>
-                                        <include>libjavafx_font.so</include>
-                                        <include>libjavafx_font_pango.so</include>
-                                        <include>libjvm.so</include>
-                                        <include>libprism_es2.so</include>
                                         <include>libglass.so</include>
+                                        <include>libglassgtk3.so</include>
                                         <include>libjava.so</include>
+                                        <include>libjavafx_font.so</include>
                                         <include>libjavafx_font_freetype.so</include>
+                                        <include>libjavafx_font_pango.so</include>
                                         <include>libjavajpeg.so</include>
+                                        <include>libjvm.so</include>
                                         <include>libprism_common.so</include>
+                                        <include>libprism_es2.so</include>
                                         <include>libprism_sw.so</include>
                                     </includes>
                                 </resource>
@@ -71,7 +71,6 @@
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
-                <version>0.10.6</version>
                 <extensions>true</extensions>
                 <executions>
                     <execution>
@@ -79,7 +78,7 @@
                         <goals>
                             <goal>compile-no-fork</goal>
                         </goals>
-                        <phase>package</phase>
+                        <phase>compile</phase>
                     </execution>
                 </executions>
                 <configuration>
@@ -105,9 +104,8 @@
                         </goals>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/main/assembly/binaries.xml</descriptor>
+                                <descriptor>archive.xml</descriptor>
                             </descriptors>
-                            <classifier>binaries</classifier>
                         </configuration>
                     </execution>
                 </executions>

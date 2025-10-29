@@ -14,7 +14,7 @@ class CheckDefaultSearchTermVisibilityTest extends SingleFileApplicationTest(Tes
   @Test def checkIfDefaultFiltersAreActive(): Unit = {
     openFile(fileId)
 
-    MutableSearchTerm.DefaultFilters.foreach {
+    MutableSearchTerm.DefaultSearchTerms.foreach {
       f => waitForVisibility(SearchTermButton.uiNode(fileId, f))
     }
   }

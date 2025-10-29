@@ -1,32 +1,9 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.io.FileId
 import app.logorrr.services.file.FileIdService
-import app.logorrr.views.a11y.UiNodes
 import javafx.scene.control.{Menu, MenuItem}
-import javafx.stage.{FileChooser, Window}
 import net.ladstatt.util.log.CanLog
-import net.ladstatt.util.os.OsUtil
-
-/**
- * Helper class to group file open operation and setting LogoRRRGlobals
- *
- * @param title title of file dialog (no effect on mac?)
- */
-class LogoRRRFileChooser(title: String) {
-
-  def performShowAndWait(window: Window): Option[FileId] = {
-    val fc = new FileChooser
-    fc.setTitle(title)
-    LogoRRRGlobals.getSomeLastUsedDirectory.foreach(d => fc.setInitialDirectory(d.toFile))
-    val someFileId: Option[FileId] = Option(fc.showOpenDialog(window)).map(f => FileId(f.toPath))
-    LogoRRRGlobals.setSomeLastUsedDirectory(someFileId.map(fileId => fileId.asPath.getParent))
-    LogoRRRGlobals.persist()
-    someFileId
-  }
-
-}
 
 
 object FileMenu {
@@ -39,8 +16,8 @@ object FileMenu {
    */
   class OpenFileMenuItem(fileIdService: FileIdService
                          , openFile: FileId => Unit)
-    extends MenuItem("Open") with CanLog {
-    setId(UiNodes.FileMenu.OpenFile.value)
+    extends MenuItem("Open...") with CanLog {
+    setId(app.logorrr.views.a11y.uinodes.FileMenu.OpenFile.value)
     setOnAction(_ => {
       fileIdService.provideFileId match {
         case Some(fileId) => openFile(fileId)
@@ -51,36 +28,29 @@ object FileMenu {
   }
 
   class CloseAllFilesMenuItem(removeAllLogFiles: => Unit) extends MenuItem("Close All") {
-    setId(UiNodes.FileMenu.CloseAll.value)
+    setId(app.logorrr.views.a11y.uinodes.FileMenu.CloseAll.value)
     setOnAction(_ => removeAllLogFiles)
   }
 
-  class CloseApplicationMenuItem(closeApplication: => Unit) extends MenuItem("Quit") {
-    setId(UiNodes.FileMenu.CloseApplication.value)
-    setOnAction(_ => closeApplication)
-  }
 
 }
 
-class FileMenu(isUnderTest: Boolean
-               , fileIdService: FileIdService
-               , openFile: FileId => Unit
-               , closeAllFiles: => Unit
-               , closeApplication: => Unit) extends Menu("File") {
 
-  setId(UiNodes.FileMenu.Self.value)
+
+
+class FileMenu(fileIdService: FileIdService
+               , openFile: FileId => Unit
+               , closeAllFiles: => Unit) extends Menu("File") {
+
+  setId(app.logorrr.views.a11y.uinodes.FileMenu.Self.value)
 
   lazy val openMenuItem = new FileMenu.OpenFileMenuItem(fileIdService, openFile)
   lazy val closeAllMenuItem = new FileMenu.CloseAllFilesMenuItem(closeAllFiles)
-  lazy val closeApplicationMenuItem = new FileMenu.CloseApplicationMenuItem(closeApplication)
 
   def init(): Unit = {
     getItems.clear()
     getItems.add(openMenuItem)
     getItems.add(closeAllMenuItem)
-    if (OsUtil.isLinux || OsUtil.isWin || isUnderTest) {
-      getItems.add(closeApplicationMenuItem)
-    }
   }
 
   init()

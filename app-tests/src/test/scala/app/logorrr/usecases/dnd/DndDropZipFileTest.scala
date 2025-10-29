@@ -2,7 +2,7 @@ package app.logorrr.usecases.dnd
 
 import app.logorrr.steps.{CheckTabPaneActions, VisibleItemActions}
 import app.logorrr.usecases.StartEmptyApplicationTest
-import app.logorrr.views.a11y.UiNodes
+import app.logorrr.views.a11y.uinodes.UiNodes
 import app.logorrr.{LogoRRRApp, TestFiles}
 import javafx.scene.Scene
 import javafx.scene.control.ToolBar

@@ -1,6 +1,6 @@
 package app.logorrr.usecases
 
-import app.logorrr.steps.FileMenuActions
+import app.logorrr.steps.{FileMenuActions, LogoRRRAppMenuActions}
 import app.logorrr.views.a11y.UiNode
 import javafx.scene.Node
 import javafx.scene.input.{KeyCode, MouseButton}
@@ -18,7 +18,8 @@ import scala.concurrent.duration.{DurationInt, FiniteDuration}
  */
 class TestFxBaseApplicationTest
   extends ApplicationTest
-    with FileMenuActions {
+    with FileMenuActions
+    with LogoRRRAppMenuActions {
 
   @AfterEach
   @throws[Exception]
@@ -30,6 +31,8 @@ class TestFxBaseApplicationTest
     release(Array[KeyCode](): _*)
     release(Array[MouseButton](): _*)
   }
+
+  def lookup[T <: Node](uiNode: UiNode): T = lookup(uiNode.ref).query[T]
 
   def clickOn(node: UiNode): FxRobotInterface = clickOn(node.ref)
 
