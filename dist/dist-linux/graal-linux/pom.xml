@@ -126,7 +126,7 @@
                                 <argument>${basedir}/../upload.sh</argument>
                                 <argument>${app.logorrr.dist.linux.uploadserver}</argument>
                                 <argument>${app.logorrr.dist.linux.username}</argument>
-                                <argument>${project.build.directory}/graal-linux-${project.version}_${deb.os.arch}.zip</argument>
+                                <argument>${project.build.directory}/graal-linux-${project.version}-${deb.os.arch}.zip</argument>
                                 <argument>public_html/downloads/${project.version}</argument>
                                 <argument>${app.logorrr.dist.linux.privatekey}</argument>
                             </arguments>
