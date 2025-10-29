@@ -128,6 +128,7 @@
                 <jfxdownload.os.arch>x64</jfxdownload.os.arch>
                 <deb.os.arch>amd64</deb.os.arch>
                 <flatpak.os.arch>amd64</flatpak.os.arch>
+                <graal.os.arch>aarch64</graal.os.arch>
             </properties>
         </profile>
 
@@ -144,6 +145,7 @@
                 <jfxdownload.os.arch>aarch64</jfxdownload.os.arch>
                 <deb.os.arch>arm64</deb.os.arch>
                 <flatpak.os.arch>aarch64</flatpak.os.arch>
+                <graal.os.arch>aarch64</graal.os.arch>
             </properties>
         </profile>
     </profiles>
