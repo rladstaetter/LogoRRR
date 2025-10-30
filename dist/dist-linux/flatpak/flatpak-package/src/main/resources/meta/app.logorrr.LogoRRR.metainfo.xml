@@ -3,7 +3,7 @@
     <id>app.logorrr.LogoRRR</id>
 
     <name>LogoRRR</name>
-    <summary>A log viewer which is simple to use</summary>
+    <summary>Log files at a glance - a log viewer which is simple to use!</summary>
 
     <metadata_license>CC-BY-4.0</metadata_license>
     <project_license>Apache-2.0</project_license>
@@ -42,8 +42,20 @@
     <launchable type="desktop-id">app.logorrr.LogoRRR.desktop</launchable>
     <screenshots>
         <screenshot type="default">
-            <image>https://www.logorrr.app/images/24.4.0-linux.png</image>
+            <image>https://www.logorrr.app/images/appstores/flathub/logorrr-main.png</image>
             <caption>LogoRRR - logfiles at a glance.</caption>
+        </screenshot>
+        <screenshot>
+            <image>https://www.logorrr.app/images/appstores/flathub/logorrr-timestamp.png</image>
+            <caption>Configure timestamps to enable time slot filtering</caption>
+        </screenshot>
+        <screenshot>
+            <image>https://www.logorrr.app/images/appstores/flathub/logorrr-searchtermgroups.png</image>
+            <caption>Use search term groups to filter for common events in all your log files</caption>
+        </screenshot>
+        <screenshot>
+            <image>https://www.logorrr.app/images/appstores/flathub/logorrr-clipboard.png</image>
+            <caption>Search for interesting events by filtering out stuff you don't need, export the results to chats or email</caption>
         </screenshot>
     </screenshots>
     <branding>
@@ -55,9 +67,27 @@
         <!--
         <release version="${project.version}" date="${currentDate}"></release>
         -->
-        <release version="25.2.0" date="2025-11-01">
+        <release version="25.2.0" date="2025-10-30">
             <description>
-                <p>This release contains an improved UI experience and a new feature to better manage your queries and share them among log files</p>
+                <p>This release contains various bug fixes and brings significant enhancements to user control and visualization.</p>
+                <ul>
+                    <li>
+                        **Customizable and Reusable Search Term Groups**:
+                        <ul>
+                            <li>Save and reuse sets of search terms (filters) across different log files.</li>
+                            <li>Mark groups as global (❤️) for universal access, or keep them log-specific.</li>
+                            <li>New 'default' and 'empty' groups are included for quick filtering and clearing.</li>
+                            <li>The application remembers the last-used group when opening files.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        **Show Occurrences of Each Search Term**:
+                        <ul>
+                            <li>Improves visual style by displaying the **number of hits** for each search term.</li>
+                            <li>This enhancement also simplifies the process of closing/removing search terms.</li>
+                        </ul>
+                    </li>
+                </ul>
             </description>
         </release>
         <release version="25.1.0" date="2025-06-15">
