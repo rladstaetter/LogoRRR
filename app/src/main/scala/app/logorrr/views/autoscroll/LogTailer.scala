@@ -4,49 +4,108 @@ import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import javafx.collections.ObservableList
 import net.ladstatt.util.log.CanLog
-import org.apache.commons.io.input.Tailer
 
-import java.time.Duration
+import java.io.RandomAccessFile
+import java.nio.charset.StandardCharsets
+import java.util.concurrent.{Executors, ScheduledExecutorService, ScheduledFuture, TimeUnit}
 
 /**
- * If active, this class adds entries to the given logEntries observable list.
- *
- * @param fileId     path to log file
- * @param logEntries list which will be modified if log file changes
+ * Monitors the log file for new lines using a scheduled executor and NIO.
  */
-case class LogTailer(fileId: FileId
-                     , logEntries: ObservableList[LogEntry])
-  extends CanLog {
+case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) extends CanLog {
 
-  var currentTailer: Option[Tailer] = None
+  // Use a dedicated, single-threaded scheduler for all polling operations
+  private var someScheduler: Option[ScheduledExecutorService] = None
+  private var future: Option[ScheduledFuture[_]] = None
+  private var lastPosition: Long = 0L
+  private val logFile = fileId.asPath.toFile
+  private val pollingDelayMs = 500L // Poll every half-second
 
-  private def mkTailer(): Tailer = {
-    Tailer.builder()
-      .setFile(fileId.asPath.toFile)
-      .setTailerListener(new LogEntryListener(logEntries))
-      .setDelayDuration(Duration.ofMillis(1000))
-      .setTailFromEnd(true)
-      .get()
+  // Current line counter for LogEntry ID
+  private var currentCnt: Int = logEntries.size()
+
+  /** Reads the file from the last known position to the end. */
+  private def readNewLines(): Unit = {
+    // We synchronize the reading/position update to prevent concurrent issues
+    synchronized {
+      val currentLength = logFile.length()
+      // Handle File Rotation: If the file size has drastically shrunk, clear and reset.
+      if (currentLength < lastPosition) {
+        logInfo(s"Log file ${fileId.value} rotated. Clearing entries.")
+        currentCnt = 0
+        lastPosition = 0L // Reset position to start of the new file
+        javafx.application.Platform.runLater(() => logEntries.clear())
+      }
+
+      // Read new content only if the file size has increased
+      if (currentLength > lastPosition) {
+        var raf: RandomAccessFile = null
+        try {
+          raf = new RandomAccessFile(logFile, "r")
+          raf.seek(lastPosition)
+
+          var lineBytes: String = null
+
+          // Use raf.readLine() which reads a line and advances the file pointer.
+          while ( {
+            lineBytes = raf.readLine()
+            lineBytes != null
+          }) {
+            // **CRITICAL:** Decode bytes using the correct Charset (e.g., UTF-8)
+            // Note: readLine() returns ISO-8859-1 string, which we must correctly re-encode.
+            val line = new String(lineBytes.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8)
+
+            processLine(line)
+          }
+
+          // Update the position for the next poll
+          lastPosition = raf.getFilePointer
+
+        } catch {
+          case e: Exception => logException(s"Error while reading new lines from ${fileId.value}", e)
+        } finally {
+          if (raf != null) raf.close()
+        }
+      }
+    }
   }
 
-  /** start observing log file for changes */
+  private def processLine(line: String): Unit = {
+    currentCnt = currentCnt + 1
+    val e = LogEntry(currentCnt, line, None, None)
+    javafx.application.Platform.runLater(() => {
+      logEntries.add(e)
+    })
+  }
+
+  /** Start observing log file for changes */
   def start(): Unit = synchronized {
-    currentTailer match {
+    future match {
       case Some(_) => logWarn("Not starting new LogTailer, already one in progress ...")
       case None =>
-        currentTailer = Option(mkTailer())
-        timeR(currentTailer.foreach(t => new Thread(t).start()), s"Started LogTailer for file $fileId")
+        // 1. Set initial position to the end of the file (TailFromEnd behavior)
+        lastPosition = logFile.length()
+
+        val r = new Runnable {
+          override def run(): Unit = readNewLines()
+        }
+        // 2. Schedule the polling task
+        //val runnable: Runnable = () => readNewLines()
+        someScheduler = Option(Executors.newSingleThreadScheduledExecutor())
+        future = someScheduler.map(_.scheduleWithFixedDelay(r,
+          0, // Initial delay (start reading immediately)
+          pollingDelayMs,
+          TimeUnit.MILLISECONDS
+        ))
+        logInfo(s"Started LogTailer for file ${fileId.value} with ${pollingDelayMs}ms delay.")
     }
   }
 
+  /** Stop observing log file */
   def stop(): Unit = timeR({
-    currentTailer match {
-      case Some(tailer) =>
-        tailer.close()
-        currentTailer = None
-      case None =>
-        logWarn("No LogTailer was active, ignoring ...")
-    }
+    future.foreach(_.cancel(true))
+    someScheduler.foreach(_.shutdown())
+    someScheduler = None
+    future = None
   }, s"Stopped LogTailer for file $fileId")
-
 }

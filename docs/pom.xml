@@ -16,10 +16,6 @@
             <artifactId>scala-library</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
             <groupId>app.logorrr</groupId>
             <artifactId>build</artifactId>
         </dependency>

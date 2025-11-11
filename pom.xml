@@ -211,11 +211,6 @@
                 <version>${ikonli.version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.19.0</version>
-            </dependency>
-            <dependency>
                 <groupId>com.github.pureconfig</groupId>
                 <artifactId>pureconfig_${scala.major.version}</artifactId>
                 <version>0.17.7</version>

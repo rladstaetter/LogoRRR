@@ -38,11 +38,6 @@
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-fontawesome6-pack</artifactId>
         </dependency>
-        <!-- needed for Tailer functionality -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.github.pureconfig</groupId>
             <artifactId>pureconfig_${scala.major.version}</artifactId>
