@@ -66,4 +66,10 @@
             </description>
         </release>
     </releases>
+    <keywords>
+        <keyword>log viewer</keyword>
+        <keyword>pattern recognition</keyword>
+        <keyword>log analysis</keyword>
+        <keyword>text file management</keyword>
+    </keywords>
 </component>
