@@ -1,10 +1,12 @@
 package app.logorrr.usecases.stg
 
+import app.logorrr.TestFiles
 import app.logorrr.conf.Settings
+import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.stg.StgChoiceBox
 import org.junit.jupiter.api.Test
 
-class StgHelloScenario1 extends SearchTermGroupEditorTest {
+class StgHelloScenario1 extends SingleFileApplicationTest(TestFiles.simpleLog0) with StgEditorActions {
 
   @Test def scenario1(): Unit = {
     openFile(fileId)

@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleListProperty
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ListChangeListener}
 import javafx.scene.control.ToolBar
+import net.ladstatt.util.log.CanLog
 
 import scala.jdk.CollectionConverters._
 
@@ -18,7 +19,7 @@ import scala.jdk.CollectionConverters._
  * @param filteredList list of entries which are displayed (can be filtered via buttons)
  */
 class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
-                        , filteredList: FilteredList[LogEntry]) extends ToolBar {
+                        , filteredList: FilteredList[LogEntry]) extends ToolBar with CanLog {
 
   setMaxHeight(Double.PositiveInfinity)
 
@@ -93,9 +94,14 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
   }
 
   private def removeSearchTermButton(filter: MutableSearchTerm): Unit = {
-    val button = mutLogFileSettings.filterButtons(filter)
-    filter.unbind()
-    getItems.remove(button)
+    try {
+      val button = mutLogFileSettings.filterButtons(filter)
+      getItems.remove(button)
+    } catch {
+      case e: Throwable => logException("Could not find or remove button", e)
+    } finally {
+      filter.unbind()
+    }
     mutLogFileSettings.filterButtons = mutLogFileSettings.filterButtons.removed(filter)
   }
 
@@ -112,12 +118,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
       }
     }).flatten.toSeq
   }
-           /*
-  private def addNewSearchTermGroup(mutLogFileSettings: MutLogFileSettings)(searchTermGroup: String): Unit = {
-    mutLogFileSettings.putSearchTerms(searchTermGroup, activeSearchTerms())
-    LogoRRRGlobals.persist()
-    groupChoiceBox.setValue(searchTermGroup)
-  }      */
+
 
 }
 
