@@ -519,8 +519,8 @@
                                         </message>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
-                                        <version>25</version>
-                                        <message>JDK 25 or newer is recommended to build LogoRRR</message>
+                                        <version>24</version>
+                                        <message>JDK 24 or newer is recommended to build LogoRRR</message>
                                     </requireJavaVersion>
                                 </rules>
                                 <fail>true</fail>

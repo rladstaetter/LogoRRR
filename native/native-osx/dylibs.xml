@@ -18,7 +18,7 @@
         <fileSet>
             <directory>target/com/sun/jna/darwin-aarch64/</directory>
             <includes>
-                <include>libjnidispatch.jnilib</include>
+                <include>libjnidispatch.dylib</include>
             </includes>
             <outputDirectory/>
         </fileSet>
