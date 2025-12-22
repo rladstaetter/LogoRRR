@@ -14,9 +14,7 @@
     <name>app.logorrr.dist.linux.flatpak.package</name>
     <description>Build flatpak package</description>
 
-    <properties>
-        <flatpak.binary>/usr/bin/flatpak-builder</flatpak.binary>
-    </properties>
+
 
     <dependencies>
         <dependency>
