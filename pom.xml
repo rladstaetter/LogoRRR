@@ -12,7 +12,7 @@
         <revision>25.2.0</revision>
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.18</scala.version>
-        <openjfx.version>25.0.1</openjfx.version>
+        <openjfx.version>25</openjfx.version>
         <ikonli.version>12.4.0</ikonli.version>
         <!-- no need to change these -->
         <changelist></changelist>
@@ -355,7 +355,7 @@
                 <plugin>
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>scala-maven-plugin</artifactId>
-                    <version>4.9.6</version>
+                    <version>4.9.8</version>
                     <executions>
                         <execution>
                             <goals>
