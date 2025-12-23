@@ -42,7 +42,7 @@
     <screenshots>
         <screenshot type="default">
             <image>https://www.logorrr.app/images/appstores/flathub/logorrr-main.png</image>
-            <caption>LogoRRR - logfiles at a glance.</caption>
+            <caption>LogoRRR - logfiles at a glance</caption>
         </screenshot>
         <screenshot>
             <image>https://www.logorrr.app/images/appstores/flathub/logorrr-timestamp.png</image>
@@ -50,57 +50,26 @@
         </screenshot>
         <screenshot>
             <image>https://www.logorrr.app/images/appstores/flathub/logorrr-searchtermgroups.png</image>
-            <caption>Use search term groups to filter for common events in all your log files</caption>
-        </screenshot>
-        <screenshot>
-            <image>https://www.logorrr.app/images/appstores/flathub/logorrr-clipboard.png</image>
-            <caption>Search for interesting events by filtering out stuff you don't need, export the results to chats or email</caption>
+            <caption>Use search term groups to filter for common events</caption>
         </screenshot>
     </screenshots>
     <branding>
         <color type="primary" scheme_preference="light">#ff00ff</color>
         <color type="primary" scheme_preference="dark">#993d3d</color>
     </branding>
-    <content_rating type="oars-1.1" />
+    <content_rating type="oars-1.1"/>
     <releases>
         <!--
         <release version="${project.version}" date="${currentDate}"></release>
         -->
-        <release version="25.2.0" date="2025-12-24">
+        <release version="25.2.0" date="2025-12-23">
             <description>
-                <p>This release contains various bug fixes and brings significant enhancements to user control and visualization.</p>
-                <ul>
-                    <li>
-                        **Customizable and Reusable Search Term Groups**:
-                        <ul>
-                            <li>Save and reuse sets of search terms (filters) across different log files.</li>
-                            <li>Mark groups as global (❤️) for universal access, or keep them log-specific.</li>
-                            <li>New 'default' and 'empty' groups are included for quick filtering and clearing.</li>
-                            <li>The application remembers the last-used group when opening files.</li>
-                        </ul>
-                    </li>
-                    <li>
-                        **Show Occurrences of Each Search Term**:
-                        <ul>
-                            <li>Improves visual style by displaying the **number of hits** for each search term.</li>
-                            <li>This enhancement also simplifies the process of closing/removing search terms.</li>
-                        </ul>
-                    </li>
-                    <li>
-                        ** Reimplementation of tail functionality **
-                        <ul>
-                            <li>Live observation of log files is possible again</li>
-                            <li>Uses less resources and works more consistently</li>
-                        </ul>
-                    </li>
-                    <li>
-                        ** Use JRE 25 and JFX 25 **
-                        <ul>
-                            <li>Updates to latest JavaFX and JRE versions</li>
-                        </ul>
-                    </li>
-
-                </ul>
+                <em>This release contains various bug fixes and brings significant enhancements to user control and
+                    visualization.
+                </em>
+                <p>Customizable and Reusable Search Term Groups</p>
+                <p>Improves visual style by displaying the **number of hits** for each search term.</p>
+                <p>Live observation of log files uses less resources</p>
             </description>
         </release>
         <release version="25.1.0" date="2025-06-15">
