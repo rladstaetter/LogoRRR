@@ -64,12 +64,11 @@
         -->
         <release version="25.2.0" date="2025-12-23">
             <description>
-                <em>This release contains various bug fixes and brings significant enhancements to user control and
-                    visualization.
-                </em>
-                <p>Customizable and Reusable Search Term Groups</p>
-                <p>Improves visual style by displaying the **number of hits** for each search term.</p>
-                <p>Live observation of log files uses less resources</p>
+                <p>This release contains various bug fixes and brings significant enhancements to user control and
+                    visualization.</p>
+                <p>It contains customizable and reusable search term groups.</p>
+                <p>It improves visual style by displaying the number of hits for each search term.</p>
+                <p>it improves live observation of log files and uses less resources.</p>
             </description>
         </release>
         <release version="25.1.0" date="2025-06-15">
