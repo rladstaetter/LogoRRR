@@ -9,13 +9,13 @@
     <description>LogoRRR - logfiles at a glance.</description>
     <packaging>pom</packaging>
     <properties>
-        <revision>25.1.1</revision>
+        <revision>25.2.0</revision>
         <scala.major.version>2.13</scala.major.version>
-        <scala.version>${scala.major.version}.17</scala.version>
+        <scala.version>${scala.major.version}.18</scala.version>
         <openjfx.version>25</openjfx.version>
         <ikonli.version>12.4.0</ikonli.version>
         <!-- no need to change these -->
-        <changelist>-SNAPSHOT</changelist>
+        <changelist></changelist>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>app.logorrr.LogoRRRApp</main.class>
         <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>
@@ -128,6 +128,7 @@
                 <jfxdownload.os.arch>x64</jfxdownload.os.arch>
                 <deb.os.arch>amd64</deb.os.arch>
                 <flatpak.os.arch>amd64</flatpak.os.arch>
+                <graal.os.arch>amd64</graal.os.arch>
             </properties>
         </profile>
 
@@ -144,6 +145,7 @@
                 <jfxdownload.os.arch>aarch64</jfxdownload.os.arch>
                 <deb.os.arch>arm64</deb.os.arch>
                 <flatpak.os.arch>aarch64</flatpak.os.arch>
+                <graal.os.arch>aarch64</graal.os.arch>
             </properties>
         </profile>
     </profiles>
@@ -353,7 +355,7 @@
                 <plugin>
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>scala-maven-plugin</artifactId>
-                    <version>4.9.6</version>
+                    <version>4.9.8</version>
                     <executions>
                         <execution>
                             <goals>
@@ -518,10 +520,7 @@
                                     </requireMavenVersion>
                                     <requireJavaVersion>
                                         <version>24</version>
-                                        <message>JDK 24 or newer is recommended to build LogoRRR, use SDKman.io or
-                                            download from a JDK provider like this one:
-                                            https://github.com/adoptium/temurin24-binaries/releases/download/jdk-24.0.1%2B9/OpenJDK24U-jdk_x64_windows_hotspot_24.0.1_9.zip
-                                        </message>
+                                        <message>JDK 24 or newer is recommended to build LogoRRR</message>
                                     </requireJavaVersion>
                                 </rules>
                                 <fail>true</fail>

@@ -147,6 +147,25 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- jpackager signs by default only dylibs, this is why we have to 'rename' this lib -->
+            <!-- otherwise app store would not accept it. Thankfully jna searches also for dylib, not only jnilib postfixes! -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <target>
+                                <copy file="${project.build.directory}/com/sun/jna/darwin-aarch64/libjnidispatch.jnilib"
+                                      tofile="${project.build.directory}/com/sun/jna/darwin-aarch64/libjnidispatch.dylib" />
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>

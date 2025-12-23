@@ -3,7 +3,7 @@
     <id>app.logorrr.LogoRRR</id>
 
     <name>LogoRRR</name>
-    <summary>A log viewer which is simple to use</summary>
+    <summary>Log files at a glance - a log viewer which is simple to use!</summary>
 
     <metadata_license>CC-BY-4.0</metadata_license>
     <project_license>Apache-2.0</project_license>
@@ -38,26 +38,37 @@
             <li>User-Friendly Interface: Designed with simplicity and ease of use in mind.</li>
         </ul>
     </description>
-
     <launchable type="desktop-id">app.logorrr.LogoRRR.desktop</launchable>
     <screenshots>
         <screenshot type="default">
-            <image>https://www.logorrr.app/images/24.4.0-linux.png</image>
-            <caption>LogoRRR - logfiles at a glance.</caption>
+            <image>https://www.logorrr.app/images/appstores/flathub/logorrr-main.png</image>
+            <caption>LogoRRR - logfiles at a glance</caption>
+        </screenshot>
+        <screenshot>
+            <image>https://www.logorrr.app/images/appstores/flathub/logorrr-timestamp.png</image>
+            <caption>Configure timestamps to enable time slot filtering</caption>
+        </screenshot>
+        <screenshot>
+            <image>https://www.logorrr.app/images/appstores/flathub/logorrr-searchtermgroups.png</image>
+            <caption>Use search term groups to filter for common events</caption>
         </screenshot>
     </screenshots>
     <branding>
         <color type="primary" scheme_preference="light">#ff00ff</color>
         <color type="primary" scheme_preference="dark">#993d3d</color>
     </branding>
-    <content_rating type="oars-1.1" />
+    <content_rating type="oars-1.1"/>
     <releases>
         <!--
         <release version="${project.version}" date="${currentDate}"></release>
         -->
-        <release version="25.2.0" date="2025-11-01">
+        <release version="25.2.0" date="2025-12-23">
             <description>
-                <p>This release contains an improved UI experience and a new feature to better manage your queries and share them among log files</p>
+                <p>This release contains various bug fixes and brings significant enhancements to user control and
+                    visualization.</p>
+                <p>It contains customizable and reusable search term groups.</p>
+                <p>It improves visual style by displaying the number of hits for each search term.</p>
+                <p>it improves live observation of log files and uses less resources.</p>
             </description>
         </release>
         <release version="25.1.0" date="2025-06-15">

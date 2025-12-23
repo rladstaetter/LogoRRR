@@ -2,7 +2,6 @@ package app.logorrr.docs
 
 import app.logorrr.LogoRRRApp
 import app.logorrr.conf._
-import app.logorrr.conf.mut.MutSettings
 import app.logorrr.meta.AppInfo
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
@@ -47,9 +46,7 @@ class ScreenShotterApp extends javafx.application.Application
         for (Area(w, h, _, _) <- Seq(s0)) {
           val path = Paths.get(s"src/main/resources/screenshotter-$w-$h.conf")
           val settings: Settings = SettingsIO.fromFile(path)
-          val updatedSettings = settings.copy(stageSettings = settings.stageSettings.copy(width = w, height = h + MutSettings.WindowHeightHack))
-
-          val services = LogoRRRServices(updatedSettings
+          val services = LogoRRRServices(settings
             , new NativeHostServices(getHostServices)
             , new DefaultFileIdService(() => stage.getScene.getWindow)
             , isUnderTest = false)

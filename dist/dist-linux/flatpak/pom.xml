@@ -19,6 +19,7 @@
     <properties>
         <flatpak.output>flatpak-package-${project.version}-${flatpak.os.arch}.tar.gz</flatpak.output>
         <flatpak.output.checksum>flatpak-package-${project.version}-${flatpak.os.arch}.tar.gz.properties</flatpak.output.checksum>
+        <flatpak.binary>/usr/bin/flatpak-builder</flatpak.binary>
     </properties>
 
     <modules>

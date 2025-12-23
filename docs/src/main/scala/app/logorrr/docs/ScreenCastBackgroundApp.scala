@@ -27,7 +27,7 @@ class ScreenCastBackgroundApp extends javafx.application.Application with CanLog
 
   def start(stage: Stage): Unit = {
     Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
-    val s0 = R1280x800
+    val s0 = R2560x1600
 
     val rectangle = new Rectangle(s0.width,s0.height)
     rectangle.setFill(Color.WHITE)

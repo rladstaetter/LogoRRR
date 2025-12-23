@@ -3,8 +3,8 @@
     <option name="ALTERNATIVE_JRE_PATH" value="graalvm-ce-24" />
     <option name="MAIN_CLASS_NAME" value="app.logorrr.clv.ClvApp" />
     <module name="clv-app" />
-    <option name="VM_PARAMETERS" value="-Xmx1g -Djava.util.logging.config.file=develop-logging.properties -Duser.language=en --sun-misc-unsafe-memory-access=allow --enable-native-access=javafx.graphics --module-path $PROJECT_DIR$/env/target/javafx-sdk-25/lib --add-modules javafx.controls --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED -XX:+UseSerialGC" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/clv-app" />
+    <option name="VM_PARAMETERS" value="-Xmx1g -Djava.util.logging.config.file=develop-logging.properties -Duser.language=en --sun-misc-unsafe-memory-access=allow --enable-native-access=javafx.graphics --module-path $PROJECT_DIR$/env/target/javafx-sdk-25.0.1/lib --add-modules javafx.controls --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED -XX:+UseSerialGC" />
+    <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="app.logorrr.views.search.predicates.*" />

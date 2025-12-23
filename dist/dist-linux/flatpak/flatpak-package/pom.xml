@@ -14,9 +14,7 @@
     <name>app.logorrr.dist.linux.flatpak.package</name>
     <description>Build flatpak package</description>
 
-    <properties>
-        <flatpak.binary>/usr/bin/flatpak-builder</flatpak.binary>
-    </properties>
+
 
     <dependencies>
         <dependency>
@@ -119,6 +117,23 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
+                    <execution>
+                        <id>validate-appstream</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>appstream-util</executable>
+                            <arguments>
+                                <argument>validate</argument>
+                                <argument>${project.basedir}/src/main/resources/meta/app.logorrr.LogoRRR.metainfo.xml</argument>
+                            </arguments>
+                            <successCodes>
+                                <successCode>0</successCode>
+                            </successCodes>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>create-flatpak-local</id>
                         <phase>compile</phase>

@@ -22,7 +22,6 @@ class TimestampSettingsSpec extends AnyWordSpec {
     "parse valid timestamp" in {
       val t: Option[Instant] = TimestampSettings.parseInstant("2024-08-11 12:38:00", TimestampSettings(SimpleRange(0, 19), "yyyy-MM-dd HH:mm:ss"))
       assert(t.isDefined)
-      t.foreach(x => println(x.toEpochMilli))
       assert(t.exists(_.toEpochMilli == 1723372680000L))
     }
     "Instant.MIN.toEpocMilli throws exception" in assert(Try(Instant.MIN.toEpochMilli).isFailure)

@@ -2,16 +2,15 @@ package app.logorrr.usecases.settings
 
 import app.logorrr.TestFiles
 import app.logorrr.conf.Settings
-import app.logorrr.steps.ChoiceBoxActions
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.usecases.stg.CreateNewGroupTest
+import app.logorrr.usecases.stg.StgEditorActions
 import app.logorrr.views.a11y.uinodes.{LogoRRRMenu, SettingsEditor}
 import app.logorrr.views.settings.SettingsStgListView
 import org.junit.jupiter.api.Test
 
 
 class SettingsTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
-  with ChoiceBoxActions {
+  with StgEditorActions {
 
   def lookupListView(): SettingsStgListView = lookup[SettingsStgListView](SettingsEditor.SettingsStgListView)
 
@@ -35,10 +34,9 @@ class SettingsTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
    * */
   @Test
   def addANewGroupAndVerifyFactoryDefaults(): Unit = {
-    val stgEditorRobot = new CreateNewGroupTest()
     val newGroup = "new group"
-    stgEditorRobot.addGroup(newGroup)
-    stgEditorRobot.addExistingGroupToGlobalGroup(newGroup)
+    addGroup(newGroup)
+    addExistingGroupToGlobalGroup(newGroup)
 
     var found = false
     openSettingsEditorAndPerform(

@@ -19,6 +19,6 @@ class IoManagerSpec extends AnyWordSpec {
   }
   "read ziputil-bit-more-complex.zip" in {
     val res = IoManager.unzip(Paths.get("src/test/resources/app/logorrr/io/ziputil-bit-more-complex.zip"))
-    println(res.size == 3)
+    assert(res.size == 3)
   }
 }
