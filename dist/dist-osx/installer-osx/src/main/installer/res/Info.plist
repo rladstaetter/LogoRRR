@@ -28,7 +28,7 @@
   <key>CFBundleVersion</key>
   <string>${revision}</string>
   <key>NSHumanReadableCopyright</key>
-  <string>Copyright 2021-2026 Robert Ladstaetter</string>
+  <string>Copyright 2021-2026 Robert Ladstätter</string>
   <key>NSHighResolutionCapable</key>
   <string>true</string>
  </dict>

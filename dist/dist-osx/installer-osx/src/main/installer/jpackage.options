@@ -1,30 +1,30 @@
---type pkg
+--add-modules javafx.controls,jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported
+--app-version ${revision}
+--copyright "Copyright 2021-${currentYear} Robert Ladstätter"
+--description "explore logs effortlessly"
+--dest app-tmp-image
+--dest installer
+--icon icon/logorrr-iconset.icns
+--input libs
+--java-options --enable-native-access=javafx.graphics,ALL-UNNAMED
+--java-options -Djava.library.path=$APPDIR/.
+--java-options -Djna.boot.library.path=$APPDIR/.
+--java-options -Djna.nounpack=true
+--jlink-options "--strip-native-commands --no-header-files --no-man-pages --compress=zip-6 --strip-debug --include-locales=en"
+--license-file ../../../../LICENSE
+--mac-app-category public.app-category.developer-tools
+--mac-app-store
+--mac-entitlements LogoRRR.entitlements.xml
 --mac-package-identifier app.logorrr
 --mac-package-name LogoRRR
 --mac-sign
 --mac-signing-key-user-name "${mac.signingkey.username}"
---mac-app-store
---mac-entitlements LogoRRR.entitlements.xml
---mac-app-category public.app-category.developer-tools
---copyright "Copyright 2021-${currentYear} Robert Ladstaetter"
---description "LogoRRR is a log file visualisation app, see https://www.logorrr.app/"
---icon icon/logorrr-iconset.icns
+--main-class ${main.launcher.class}
+--main-jar app-${project.version}.jar
+--module-path ../../../../env/target/javafx-jmods-${openjfx.version}
 --name LogoRRR
---dest app-tmp-image
+--resource-dir res/
 --temp app-tmp
+--type pkg
 --vendor logorrr.app
 --verbose
---input libs
---resource-dir res/
---license-file ../../../../LICENSE
---dest installer
---module-path ../../../../env/target/javafx-jmods-${openjfx.version}
---add-modules javafx.controls,jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported
---jlink-options "--strip-native-commands --no-header-files --no-man-pages --compress=zip-6 --strip-debug --include-locales=en"
---app-version ${revision}
---main-class ${main.launcher.class}
---java-options -Djava.library.path=$APPDIR/.
---java-options -Djna.nounpack=true
---java-options -Djna.boot.library.path=$APPDIR/.
---java-options --enable-native-access=javafx.graphics,ALL-UNNAMED
---main-jar app-${project.version}.jar

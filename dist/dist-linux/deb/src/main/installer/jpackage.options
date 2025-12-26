@@ -1,24 +1,24 @@
---type deb
---copyright "Copyright 2021-${currentYear} Robert Ladstaetter"
+--about-url http://www.logorrr.app/
+--add-modules javafx.controls,jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported
+--app-version ${project.version}
+--copyright "Copyright 2021-${currentYear} Robert Ladstätter"
 --description "explore logs effortlessly"
---icon icons/logorrr-icon-256.png
---name LogoRRR
 --dest app-tmp-image
+--dest installer
+--icon icons/logorrr-icon-256.png
+--input libs
+--java-options --enable-native-access=javafx.graphics,ALL-UNNAMED
+--java-options -Djava.library.path=$APPDIR/.
+--jlink-options "--strip-native-commands --no-header-files --no-man-pages --compress=zip-6 --strip-debug --include-locales=en"
+--license-file ../../../../LICENSE
+--linux-app-category Utility
+--linux-deb-maintainer support@logorrr.app
+--linux-package-name logorrr
+--linux-shortcut
+--main-class ${main.launcher.class}
+--main-jar app-${project.version}.jar
+--module-path ../../../../env/target/javafx-jmods-${openjfx.version}
+--name LogoRRR
+--type deb
 --vendor logorrr.app
 --verbose
---input libs
---license-file ../../../../LICENSE
---dest installer
---module-path ../../../../env/target/javafx-jmods-${openjfx.version}
---add-modules javafx.controls,jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported
---jlink-options "--strip-native-commands --no-header-files --no-man-pages --compress=zip-6 --strip-debug --include-locales=en"
---app-version ${project.version}
---main-class ${main.launcher.class}
---java-options -Djava.library.path=$APPDIR/.
---java-options --enable-native-access=javafx.graphics,ALL-UNNAMED
---main-jar app-${project.version}.jar
---about-url http://www.logorrr.app/
---linux-package-name logorrr
---linux-deb-maintainer support@logorrr.app
---linux-app-category Utility
---linux-shortcut
