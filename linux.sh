@@ -5,7 +5,7 @@ set -e  # Exit on error, except where overridden
 echo "cleaning all"
 mvn clean -T1C
 
-PROJECTVERSION="25.2.0"
+PROJECTVERSION="26.1.0"
 # Detect platform
 ARCH=$(uname -m)
 
