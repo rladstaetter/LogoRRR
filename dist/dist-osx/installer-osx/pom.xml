@@ -18,10 +18,6 @@
             <artifactId>app</artifactId>
         </dependency>
         <dependency>
-            <groupId>app.logorrr.dist.repackaged</groupId>
-            <artifactId>dist-repackaged</artifactId>
-        </dependency>
-        <dependency>
             <groupId>app.logorrr.native</groupId>
             <artifactId>native-osx</artifactId>
             <classifier>dylibs</classifier>

@@ -22,11 +22,6 @@
             <groupId>app.logorrr</groupId>
             <artifactId>app</artifactId>
         </dependency>
-        <!-- 3rd party packages and dependencies -->
-        <dependency>
-            <groupId>app.logorrr.dist.repackaged</groupId>
-            <artifactId>dist-repackaged</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

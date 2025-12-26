@@ -18,15 +18,6 @@
             <groupId>app.logorrr</groupId>
             <artifactId>app</artifactId>
         </dependency>
-        <dependency>
-            <groupId>app.logorrr.dist.repackaged</groupId>
-            <artifactId>dist-repackaged</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>app-icons</artifactId>
-            <type>jar</type>
-        </dependency>
     </dependencies>
 
     <build>
@@ -36,26 +27,7 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-non-filtered-resources</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/installer</directory>
-                                    <includes>
-                                        <include>icon/**</include>
-                                    </includes>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-filtered-resources</id>
+                        <id>filter-jpackage-options</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -122,9 +94,6 @@
                         <configuration>
                             <executable>jpackage</executable>
                             <workingDirectory>${project.build.directory}</workingDirectory>
-                            <environmentVariables>
-                                <JAVA_HOME>${env.JAVA_HOME}</JAVA_HOME>
-                            </environmentVariables>
                             <arguments>
                                 <argument>@jpackage.options</argument>
                             </arguments>

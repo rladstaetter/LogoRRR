@@ -13,10 +13,6 @@
     <name>app.logorrr.dist</name>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>dist-repackaged</module>
-    </modules>
-
     <profiles>
         <profile>
             <id>OS.windows</id>
