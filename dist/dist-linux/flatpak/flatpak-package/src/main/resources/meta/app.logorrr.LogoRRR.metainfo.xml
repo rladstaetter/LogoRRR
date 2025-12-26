@@ -2,7 +2,7 @@
 <component type="desktop-application">
     <id>app.logorrr.LogoRRR</id>
     <name>LogoRRR</name>
-    <summary>LogoRRR - a log viewer which is simple to use!</summary>
+    <summary>Explore logs effortlessly</summary>
     <metadata_license>CC-BY-4.0</metadata_license>
     <project_license>Apache-2.0</project_license>
     <url type="homepage">https://www.logorrr.app/</url>
@@ -35,6 +35,7 @@
             <li>Versatile Application: Perfect for log file analysis, but adaptable to any text file.</li>
             <li>User-Friendly Interface: Designed with simplicity and ease of use in mind.</li>
         </ul>
+        <p><em>R</em>ead. <em>R</em>eview. <em>R</em>elax.</p>
     </description>
     <launchable type="desktop-id">app.logorrr.LogoRRR.desktop</launchable>
     <screenshots>
