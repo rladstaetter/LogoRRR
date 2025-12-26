@@ -6,4 +6,4 @@ Exec=LogoRRR
 Icon=app.logorrr.LogoRRR
 Terminal=false
 StartupNotify=true
-Categories=Utility;
+Categories=System;Development;Utility;

@@ -14,8 +14,6 @@
     <name>app.logorrr.dist.linux.flatpak.package</name>
     <description>Build flatpak package</description>
 
-
-
     <dependencies>
         <dependency>
             <groupId>app.logorrr.dist.linux</groupId>
