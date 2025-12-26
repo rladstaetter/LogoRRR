@@ -31,6 +31,11 @@
             <type>pom</type>
         </dependency>
         <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>app-icons</artifactId>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>
         </dependency>

@@ -16,7 +16,7 @@ import net.ladstatt.util.log.CanLog
 
 object LogoRRRStage extends CanLog {
 
-  val icon: Image = new Image(getClass.getResourceAsStream("/app/logorrr/icon/logorrr-icon-32.png"))
+  val icon: Image = new Image(getClass.getResourceAsStream("/logorrr-icon-32.png"))
 
   /** after scene got initialized and scene was set to stage immediately set position of stage */
   val sceneListener: ChangeListener[Scene] = JfxUtils.onNew[Scene](scene => {

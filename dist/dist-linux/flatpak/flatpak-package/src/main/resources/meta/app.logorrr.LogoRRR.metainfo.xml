@@ -61,6 +61,8 @@
         <!--
         <release version="${project.version}" date="${currentDate}"></release>
         -->
+        <release version="26.1.0" date="2025-12-26">
+        </release>
         <release version="25.2.0" date="2025-12-23">
             <description>
                 <p>This release contains various bug fixes and brings significant enhancements to user control and

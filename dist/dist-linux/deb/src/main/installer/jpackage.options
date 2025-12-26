@@ -1,7 +1,7 @@
 --type deb
 --copyright "Copyright 2021-${currentYear} Robert Ladstaetter"
---description "LogoRRR is a log file visualisation app, see https://www.logorrr.app/"
---icon icon/icon_256x256.png
+--description "explore logs effortlessly"
+--icon icons/logorrr-icon-256.png
 --name LogoRRR
 --dest app-tmp-image
 --vendor logorrr.app
@@ -17,3 +17,8 @@
 --java-options -Djava.library.path=$APPDIR/.
 --java-options --enable-native-access=javafx.graphics,ALL-UNNAMED
 --main-jar app-${project.version}.jar
+--about-url http://www.logorrr.app/
+--linux-package-name logorrr
+--linux-deb-maintainer support@logorrr.app
+--linux-app-category Utility
+--linux-shortcut

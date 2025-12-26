@@ -22,6 +22,11 @@
             <groupId>app.logorrr.dist.repackaged</groupId>
             <artifactId>dist-repackaged</artifactId>
         </dependency>
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>app-icons</artifactId>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>
@@ -75,6 +80,19 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>unpack-app-icons</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>app.logorrr</includeGroupIds>
+                            <includeArtifactIds>app-icons</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/icons/</outputDirectory>
+                            <includes>**/logorrr-icon-256.png</includes>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>copy-dependencies</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -125,7 +143,9 @@
                                 <argument>${basedir}/../upload.sh</argument>
                                 <argument>${app.logorrr.dist.linux.uploadserver}</argument>
                                 <argument>${app.logorrr.dist.linux.username}</argument>
-                                <argument>${project.build.directory}/installer/logorrr_${project.version}_${deb.os.arch}.deb</argument>
+                                <argument>
+                                    ${project.build.directory}/installer/logorrr_${project.version}_${deb.os.arch}.deb
+                                </argument>
                                 <argument>public_html/downloads/${project.version}</argument>
                                 <argument>${app.logorrr.dist.linux.privatekey}</argument>
                             </arguments>

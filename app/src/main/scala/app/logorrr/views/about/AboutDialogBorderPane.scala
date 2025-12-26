@@ -11,7 +11,7 @@ import javafx.stage.Stage
 
 object AboutDialogBorderPane {
 
-  val logo: ImageCp = ImageCp("/app/logorrr/icon/logorrr-icon-128.png", 128, 128)
+  val logo: ImageCp = ImageCp("logorrr-icon-128.png", 128, 128)
 
   lazy val links: Seq[HLink] = Seq(
     HLink(AboutDialog.AboutDialogOpenLogorrrMainSite, "https://www.logorrr.app/", "https://www.logorrr.app/")
