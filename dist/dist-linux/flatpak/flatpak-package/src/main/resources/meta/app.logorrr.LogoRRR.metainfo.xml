@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
     <id>app.logorrr.LogoRRR</id>
-
     <name>LogoRRR</name>
-    <summary>Log files at a glance - a log viewer which is simple to use!</summary>
-
+    <summary>Explore logs effortlessly</summary>
     <metadata_license>CC-BY-4.0</metadata_license>
     <project_license>Apache-2.0</project_license>
     <url type="homepage">https://www.logorrr.app/</url>
@@ -37,6 +35,8 @@
             <li>Versatile Application: Perfect for log file analysis, but adaptable to any text file.</li>
             <li>User-Friendly Interface: Designed with simplicity and ease of use in mind.</li>
         </ul>
+        <p><em>R</em>ead. <em>R</em>eview. <em>R</em>elax.
+        </p>
     </description>
     <launchable type="desktop-id">app.logorrr.LogoRRR.desktop</launchable>
     <screenshots>
@@ -54,18 +54,30 @@
         </screenshot>
     </screenshots>
     <branding>
-        <color type="primary" scheme_preference="light">#ff00ff</color>
-        <color type="primary" scheme_preference="dark">#993d3d</color>
+        <color type="primary" scheme_preference="light">#abab9a</color>
+        <color type="primary" scheme_preference="dark">#54544b</color>
     </branding>
     <content_rating type="oars-1.1"/>
     <releases>
         <!--
         <release version="${project.version}" date="${currentDate}"></release>
         -->
+        <release version="26.1.0" date="2025-12-26">
+            <description>
+                <p>
+                    This release contains several enhancements and bugfixes.
+                    <ul>
+                        <li>new application icon</li>
+                        <li>Smaller installer package (10% size reduction)</li>
+                    </ul>
+                </p>
+            </description>
+        </release>
         <release version="25.2.0" date="2025-12-23">
             <description>
                 <p>This release contains various bug fixes and brings significant enhancements to user control and
-                    visualization.</p>
+                    visualization.
+                </p>
                 <p>It contains customizable and reusable search term groups.</p>
                 <p>It improves visual style by displaying the number of hits for each search term.</p>
                 <p>it improves live observation of log files and uses less resources.</p>
@@ -77,6 +89,11 @@
             </description>
         </release>
     </releases>
+    <categories>
+        <category>System</category>
+        <category>Development</category>
+        <category>Utility</category>
+    </categories>
     <keywords>
         <keyword>log viewer</keyword>
         <keyword>pattern recognition</keyword>

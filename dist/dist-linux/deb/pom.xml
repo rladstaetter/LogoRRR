@@ -18,10 +18,6 @@
             <groupId>app.logorrr</groupId>
             <artifactId>app</artifactId>
         </dependency>
-        <dependency>
-            <groupId>app.logorrr.dist.repackaged</groupId>
-            <artifactId>dist-repackaged</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -31,26 +27,7 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-non-filtered-resources</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/installer</directory>
-                                    <includes>
-                                        <include>icon/**</include>
-                                    </includes>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-filtered-resources</id>
+                        <id>filter-jpackage-options</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -74,6 +51,19 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
+                    <execution>
+                        <id>unpack-app-icons</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>app.logorrr</includeGroupIds>
+                            <includeArtifactIds>app-icons</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/icons/</outputDirectory>
+                            <includes>**/logorrr-icon-256.png</includes>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>copy-dependencies</id>
                         <phase>generate-resources</phase>
@@ -104,9 +94,6 @@
                         <configuration>
                             <executable>jpackage</executable>
                             <workingDirectory>${project.build.directory}</workingDirectory>
-                            <environmentVariables>
-                                <JAVA_HOME>${env.JAVA_HOME}</JAVA_HOME>
-                            </environmentVariables>
                             <arguments>
                                 <argument>@jpackage.options</argument>
                             </arguments>
@@ -125,7 +112,9 @@
                                 <argument>${basedir}/../upload.sh</argument>
                                 <argument>${app.logorrr.dist.linux.uploadserver}</argument>
                                 <argument>${app.logorrr.dist.linux.username}</argument>
-                                <argument>${project.build.directory}/installer/logorrr_${project.version}_${deb.os.arch}.deb</argument>
+                                <argument>
+                                    ${project.build.directory}/installer/logorrr_${project.version}_${deb.os.arch}.deb
+                                </argument>
                                 <argument>public_html/downloads/${project.version}</argument>
                                 <argument>${app.logorrr.dist.linux.privatekey}</argument>
                             </arguments>

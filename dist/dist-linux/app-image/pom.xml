@@ -17,10 +17,6 @@
             <groupId>app.logorrr</groupId>
             <artifactId>app</artifactId>
         </dependency>
-        <dependency>
-            <groupId>app.logorrr.dist.repackaged</groupId>
-            <artifactId>dist-repackaged</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -30,27 +26,7 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-installer-icons</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/icon</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/installer/icon</directory>
-                                    <includes>
-                                        <include>**/*</include>
-                                    </includes>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>copy-installer-options</id>
+                        <id>filter-jpackage-options</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -75,6 +51,19 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>unpack-app-icons</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>app.logorrr</includeGroupIds>
+                            <includeArtifactIds>app-icons</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/icons/</outputDirectory>
+                            <includes>**/logorrr-icon-256.png</includes>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>copy-dependencies</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -91,7 +80,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

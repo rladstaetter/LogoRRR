@@ -61,6 +61,19 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>unpack-app-icons</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>app.logorrr</includeGroupIds>
+                            <includeArtifactIds>app-icons</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/installer/</outputDirectory>
+                            <includes>**/logorrr-icon-128.ico</includes>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>copy-deps</id>
                         <phase>generate-resources</phase>
                         <goals>

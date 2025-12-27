@@ -9,7 +9,7 @@
     <description>LogoRRR - logfiles at a glance.</description>
     <packaging>pom</packaging>
     <properties>
-        <revision>25.2.0</revision>
+        <revision>26.1.0</revision>
         <scala.major.version>2.13</scala.major.version>
         <scala.version>${scala.major.version}.18</scala.version>
         <openjfx.version>25</openjfx.version>
@@ -154,6 +154,7 @@
         <module>env</module>
         <module>clv</module>
         <module>clv-app</module>
+        <module>app-icons</module>
         <module>app</module>
         <module>dist</module>
         <module>docs</module>
@@ -249,6 +250,12 @@
             </dependency>
             <dependency>
                 <groupId>app.logorrr</groupId>
+                <artifactId>app-icons</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>app.logorrr</groupId>
                 <artifactId>env</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
@@ -285,11 +292,7 @@
                 <artifactId>build</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>app.logorrr.dist.repackaged</groupId>
-                <artifactId>dist-repackaged</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>app.logorrr.dist.linux</groupId>
                 <artifactId>app-image</artifactId>

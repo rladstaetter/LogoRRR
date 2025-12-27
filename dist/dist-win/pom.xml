@@ -13,24 +13,8 @@
     <name>app.logorrr.dist.win</name>
     <packaging>pom</packaging>
     <description>Distribution bundle for windows</description>
-    <!--
-        <dependencyManagement>
-            <dependencies>
-                <dependency>
-                    <groupId>app.logorrr.dist</groupId>
-                    <artifactId>binary-win</artifactId>
-                    <version>${project.version}</version>
-                    <type>exe</type>
-                </dependency>
-            </dependencies>
-        </dependencyManagement>
-    -->
 
     <modules>
-        <!-- graalvm builds disabled until https://github.com/rladstaetter/LogoRRR/issues/91 is resolved
-        <module>binary-win</module>
-        <module>installer-win</module>
-        -->
         <module>installer-win-jre</module>
     </modules>
 
