@@ -4,7 +4,7 @@
 --description "explore logs effortlessly"
 --dest app-tmp-image
 --dest installer
---icon icon/logorrr-iconset.icns
+--icon iconset/logorrr-iconset.icns
 --input libs
 --java-options --enable-native-access=javafx.graphics,ALL-UNNAMED
 --java-options -Djava.library.path=$APPDIR/.

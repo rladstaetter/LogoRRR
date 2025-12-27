@@ -82,6 +82,19 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>unpack-app-icons</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>app.logorrr</includeGroupIds>
+                            <includeArtifactIds>app-icons</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/icons</outputDirectory>
+                            <includes>**/*.png</includes>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>copy-dependencies</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -119,6 +132,23 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
+                    <!-- create iconset structure from unpacked icons -->
+                    <execution>
+                        <id>create-iconset</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>bash</executable>
+                            <arguments>
+                                <argument>${basedir}/mkIconset.sh</argument>
+                            </arguments>
+                            <workingDirectory>${basedir}</workingDirectory>
+                            <useMavenLogger>true</useMavenLogger>
+                        </configuration>
+                    </execution>
+
                     <execution>
                         <id>create-app-store-pkg</id>
                         <phase>compile</phase>
