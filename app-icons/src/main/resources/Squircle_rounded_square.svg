@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="608" height="608" viewBox="-304 -304 608 608">
+ <title>Squircle: x to 4th plus y to 4th equals radius to 4th, compared with rounded square.</title>
+ <g fill="none" stroke-width="3.04">
+  <rect stroke="#ff0000" width="576" height="576" x="-288" y="-288" rx="156.44552" ry="156.44552"/>
+  <path stroke="#0000ff" stroke-opacity="0.75" d="M0,288 C126.2,288,196.3563,288,242.1782,242.1782 C288,196.3563,288,126.2,288,0 C288,-126.2,288,-196.3563,242.1782,-242.1782 C196.3563,-288,126.2,-288,0,-288 C-126.2,-288,-196.3563,-288,-242.1782,-242.1782 C-288,-196.3563,-288,-126.2,-288,0 C-288,126.2,-288,196.3563,-242.1782,242.1782 C-196.3563,288,-126.2,288,0,288Z"/>
+ </g>
+</svg>
