@@ -35,7 +35,8 @@
             <li>Versatile Application: Perfect for log file analysis, but adaptable to any text file.</li>
             <li>User-Friendly Interface: Designed with simplicity and ease of use in mind.</li>
         </ul>
-        <p><em>R</em>ead. <em>R</em>eview. <em>R</em>elax.</p>
+        <p><em>R</em>ead. <em>R</em>eview. <em>R</em>elax.
+        </p>
     </description>
     <launchable type="desktop-id">app.logorrr.LogoRRR.desktop</launchable>
     <screenshots>
@@ -62,11 +63,21 @@
         <release version="${project.version}" date="${currentDate}"></release>
         -->
         <release version="26.1.0" date="2025-12-26">
+            <description>
+                <p>
+                    This release contains several enhancements and bugfixes.
+                    <ul>
+                        <li>new application icon</li>
+                        <li>Smaller installer package (10% size reduction)</li>
+                    </ul>
+                </p>
+            </description>
         </release>
         <release version="25.2.0" date="2025-12-23">
             <description>
                 <p>This release contains various bug fixes and brings significant enhancements to user control and
-                    visualization.</p>
+                    visualization.
+                </p>
                 <p>It contains customizable and reusable search term groups.</p>
                 <p>It improves visual style by displaying the number of hits for each search term.</p>
                 <p>it improves live observation of log files and uses less resources.</p>
