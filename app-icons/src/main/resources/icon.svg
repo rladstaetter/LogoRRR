@@ -5,7 +5,7 @@
    viewBox="-304 -304 608 608"
    version="1.1"
    id="svg288"
-   sodipodi:docname="icon2.svg"
+   sodipodi:docname="icon.svg"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -106,15 +106,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="1.09375"
-     inkscape:cx="293.02857"
-     inkscape:cy="323.2"
+     inkscape:zoom="0.77339804"
+     inkscape:cx="221.10219"
+     inkscape:cy="362.68517"
      inkscape:window-width="1452"
      inkscape:window-height="871"
      inkscape:window-x="26"
      inkscape:window-y="23"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer4" />
   <title
      id="title280">Squircle: x to 4th plus y to 4th equals radius to 4th, compared with rounded square.</title>
   <g
@@ -138,6 +138,15 @@
      style="display:inline;filter:url(#filter6435)"
      transform="matrix(2.0741772,0,0,1.9461965,-259.37586,-243.27456)">
     <rect
+       style="display:inline;opacity:1;mix-blend-mode:normal;fill:#b2b2b2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.119;stroke-dasharray:none;stroke-opacity:1"
+       id="rect10053-6"
+       width="110"
+       height="90"
+       x="70"
+       y="90"
+       ry="7.2400708"
+       inkscape:label="mitte" />
+    <rect
        style="display:inline;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.935623;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
        id="links-7"
        width="35"
@@ -147,40 +156,31 @@
        ry="16.089045"
        inkscape:label="links" />
     <rect
-       style="display:inline;opacity:1;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.119;stroke-dasharray:none;stroke-opacity:1"
-       id="rect10053-6"
-       width="110"
-       height="90"
-       x="70"
-       y="90"
-       ry="7.2400708"
-       inkscape:label="mitte" />
-    <rect
-       style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.951349;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.98213;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
        id="unten"
        width="200"
-       height="35"
+       height="37.301476"
        x="25"
-       y="190"
-       ry="17.5"
+       y="189.87691"
+       ry="18.650738"
        inkscape:label="unten" />
     <rect
-       style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.935414;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;image-rendering:auto"
+       style="display:inline;fill:#e5e5e5;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.946277;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;image-rendering:auto"
        id="rechts"
        width="35"
-       height="180"
+       height="184.20544"
        x="190"
-       y="45"
-       ry="14.48014"
+       y="43.02573"
+       ry="14.818448"
        inkscape:label="rechts" />
     <rect
-       style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.471469;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:#d9d9d9;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.486972;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
        id="unten-7"
-       width="150"
-       height="35"
-       x="75.099998"
-       y="45"
-       ry="17.5"
+       width="150.15352"
+       height="37.301476"
+       x="74.944763"
+       y="40.266106"
+       ry="18.650738"
        inkscape:label="oben" />
   </g>
   <metadata
