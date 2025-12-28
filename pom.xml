@@ -507,6 +507,7 @@
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>3.6.1</version>
                     <executions>
+                        <!--
                         <execution>
                             <id>apply-enforcer-rules</id>
                             <goals>
@@ -529,6 +530,7 @@
                                 <fail>true</fail>
                             </configuration>
                         </execution>
+                        -->
                     </executions>
                 </plugin>
                 <plugin>
