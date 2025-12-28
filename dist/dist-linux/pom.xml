@@ -17,10 +17,12 @@
     <description>Distribution bundle for Linux</description>
 
     <modules>
+        <module>app-image</module>
+<!--
         <module>graal-linux</module>
         <module>flatpak</module>
-        <module>app-image</module>
         <module>deb</module>
+    -->
     </modules>
 
 
