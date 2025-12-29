@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="600"
+   height="199"
+   viewBox="0 0 158.75 52.652083"
+   version="1.1"
+   id="svg1176"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="banner_aspect_ratio_3_1.svg"
+   inkscape:export-filename="banner_aspect_ratio_3_1.png"
+   inkscape:export-xdpi="231.55779"
+   inkscape:export-ydpi="231.55779"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1178"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="0.83780451"
+     inkscape:cx="281.68862"
+     inkscape:cy="310.33493"
+     inkscape:window-width="1452"
+     inkscape:window-height="928"
+     inkscape:window-x="26"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer2" />
+  <defs
+     id="defs1173">
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3863"
+       id="linearGradient3865"
+       x1="-288.26782"
+       y1="-286.71432"
+       x2="286.17859"
+       y2="288.37854"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.26458333,0,0,0.26458333,83.226586,24.463754)" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3863">
+      <stop
+         style="stop-color:#c5b9a2;stop-opacity:1;"
+         offset="0"
+         id="stop3859" />
+      <stop
+         style="stop-color:#010007;stop-opacity:1;"
+         offset="1"
+         id="stop3861" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3902"
+       id="linearGradient3896"
+       x1="-288.26782"
+       y1="-286.71432"
+       x2="286.17859"
+       y2="288.37854"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.26458333,0,0,0.26458333,83.226586,24.463754)" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3902">
+      <stop
+         style="stop-color:#010007;stop-opacity:1;"
+         offset="0"
+         id="stop3900" />
+      <stop
+         style="stop-color:#806618;stop-opacity:0.12111389;"
+         offset="1"
+         id="stop3898" />
+    </linearGradient>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow"
+       id="filter2027"
+       x="-0.025459921"
+       y="-0.071572873"
+       width="1.0657715"
+       height="1.1848966">
+      <feFlood
+         flood-opacity="0.498039"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood2017" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite2019" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="1"
+         result="blur"
+         id="feGaussianBlur2021" />
+      <feOffset
+         dx="1.4"
+         dy="1.4"
+         result="offset"
+         id="feOffset2023" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite2025" />
+    </filter>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="matrix(0.29450312,0,0,0.29450312,5.0121204,18.659145)"
+     sodipodi:insensitive="true"
+     style="display:inline">
+    <rect
+       style="display:inline;fill:url(#linearGradient3865);fill-opacity:1;stroke:url(#linearGradient3896);stroke-width:1.05833;stroke-dasharray:none;stroke-opacity:1"
+       id="rect347"
+       width="152.13542"
+       height="152.13542"
+       x="7.0029693"
+       y="-51.503799"
+       ry="40.639996"
+       inkscape:label="background" />
+    <rect
+       style="display:inline;mix-blend-mode:normal;fill:#b2b2b2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.594852;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter6435)"
+       id="rect10053-6"
+       width="60.367199"
+       height="46.343803"
+       x="53.015549"
+       y="6.4411654"
+       ry="3.728138"
+       inkscape:label="mitte" />
+    <rect
+       style="display:inline;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.49737;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter6435)"
+       id="links-7"
+       width="19.207745"
+       height="102.98623"
+       x="28.319876"
+       y="-27.02936"
+       ry="8.28475"
+       inkscape:label="links" />
+    <rect
+       style="display:inline;fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.522093;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter6435)"
+       id="unten"
+       width="109.75854"
+       height="19.207691"
+       x="28.319876"
+       y="57.870895"
+       ry="9.6038456"
+       inkscape:label="unten" />
+    <rect
+       style="display:inline;fill:#e5e5e5;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.503034;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter6435);image-rendering:auto"
+       id="rechts"
+       width="19.207745"
+       height="94.853127"
+       x="118.87067"
+       y="-17.747351"
+       ry="7.6304808"
+       inkscape:label="rechts" />
+    <rect
+       style="display:inline;fill:#d9d9d9;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.258871;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter6435)"
+       id="unten-7"
+       width="82.40316"
+       height="19.207691"
+       x="55.729198"
+       y="-19.168367"
+       ry="9.6038456"
+       inkscape:label="oben" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Layer 2"
+     style="filter:url(#filter2027)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;font-family:'JetBrains Mono';-inkscape-font-specification:'JetBrains Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.05833"
+       x="59.859612"
+       y="47.308311"
+       id="text1357"
+       inkscape:label="text1357"><tspan
+         sodipodi:role="line"
+         id="tspan1355"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;font-family:'JetBrains Mono';-inkscape-font-specification:'JetBrains Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.05833"
+         x="59.859612"
+         y="47.308311">Explore logs effortlessly</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:'JetBrains Mono';-inkscape-font-specification:'JetBrains Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.05833"
+       x="58.547283"
+       y="27.280363"
+       id="text1521"><tspan
+         sodipodi:role="line"
+         id="tspan1519"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:'JetBrains Mono';-inkscape-font-specification:'JetBrains Mono, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:1.05833"
+         x="58.547283"
+         y="27.280363">LogoRRR</tspan></text>
+  </g>
+</svg>
