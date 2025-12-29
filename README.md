@@ -20,6 +20,11 @@
 [![Get it on Flathub](docs/appstores/flathub/flathub.png)](https://flathub.org/apps/app.logorrr.LogoRRR)
 
 </td>
+<td>
+
+[![Get it on Snapcraft](https://snapcraft.io/en/dark/install.svg)](https://snapcraft.io/logorrr)
+
+</td>
 </tr>
 </table>
 
