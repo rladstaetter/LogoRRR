@@ -2,34 +2,21 @@
 
 set -e  # Exit on error, except where overridden
 
+source "$(dirname "$0")/scripts/common.sh"
+
 echo "cleaning all"
-mvn clean -T1C
+mvn clean
 
-PROJECTVERSION="26.1.0"
-# Detect platform
-ARCH=$(uname -m)
+echo "cleaning deb"
+sudo apt purge -y logorrr || true
 
-case "$ARCH" in
-  x86_64)
-    DEB_ARCH="amd64"
-    ;;
-  aarch64 | arm64)
-    DEB_ARCH="arm64"
-    ;;
-  *)
-    echo "Unsupported architecture: $ARCH"
-    exit 1
-    ;;
-esac
-
-# Attempt to uninstall Flatpak version, ignore error if not installed
+echo "uninstall flatpak"
 if ! flatpak uninstall  --delete-data --user -y app.logorrr.LogoRRR 2>/dev/null; then
   echo "Warning: Flatpak app 'app.logorrr.LogoRRR' not found or already uninstalled."
 fi
 
-# Maven build
-echo "Building project with Maven..."
-MAVEN_OPTS="--enable-native-access=ALL-UNNAMED" mvn clean install -T1C
+# build everything on linux
+build app.logorrr.dist.linux:app-image,app.logorrr.dist.linux:deb,app.logorrr.dist.linux.flatpak:flatpak-package,app.logorrr.dist.linux:graal-linux
 
 # Install the appropriate .deb
 DEB_PATH="./dist/dist-linux/deb/target/installer/logorrr_${PROJECTVERSION}_${DEB_ARCH}.deb"
@@ -61,5 +48,7 @@ cd ../../..
 
 echo "Running GraalVM variant"
 ./dist/dist-linux/graal-linux/target/native/logorrr
+
+echo "Congrats, you've got all variants of logorrr running"
 
 

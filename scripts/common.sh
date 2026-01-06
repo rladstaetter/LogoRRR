@@ -1,6 +1,8 @@
 #!/bin/bash
 # common.sh - Shared configuration and platform detection
 
+set -e  # Exit on error, except where overridden
+
 export PROJECTVERSION="26.1.0"
 
 # Detect platform
@@ -20,3 +22,22 @@ case "$ARCH" in
 esac
 
 export DEB_ARCH
+
+
+build() {
+    local TARGET=$1
+
+    # Check if an argument was provided
+    if [[ -z "$TARGET" ]]; then
+        echo "Error: No target provided"
+        return 1
+    fi
+
+    echo "----------------------------------------------------"
+    echo "Building Target: $TARGET"
+    echo "----------------------------------------------------"
+
+    # Execute Maven
+    # Use -B (Batch Mode) for cleaner script logs
+    time mvn clean package -pl "$TARGET" -am -B
+}

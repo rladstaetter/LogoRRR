@@ -18,11 +18,9 @@
 
     <modules>
         <module>app-image</module>
-<!--
         <module>graal-linux</module>
         <module>flatpak</module>
         <module>deb</module>
-    -->
     </modules>
 
 
