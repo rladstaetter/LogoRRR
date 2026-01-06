@@ -4,9 +4,6 @@ set -e  # Exit on error, except where overridden
 
 source "$(dirname "$0")/scripts/common.sh"
 
-echo "cleaning all"
-mvn clean
-
 echo "cleaning deb"
 sudo apt purge -y logorrr || true
 

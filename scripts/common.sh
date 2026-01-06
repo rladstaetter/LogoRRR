@@ -39,5 +39,5 @@ build() {
 
     # Execute Maven
     # Use -B (Batch Mode) for cleaner script logs
-    time mvn clean package -pl "$TARGET" -am -B
+    time ./mvnw clean package -pl "$TARGET" -am -B
 }
