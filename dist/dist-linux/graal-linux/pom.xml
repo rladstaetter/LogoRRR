@@ -82,12 +82,13 @@
                     <outputDirectory>${native.output.dir}</outputDirectory>
                     <mainClass>${main.class}</mainClass>
                     <buildArgs>
-                        <buildArg>-H:ConfigurationFileDirectories=${basedir}/src/main/resources/</buildArg>
-                        <buildArg>--enable-url-protocols=https</buildArg>
                         <buildArg>-march=native</buildArg>
-                        <buildArg>--future-defaults=all</buildArg>
+                        <buildArg>-H:ConfigurationFileDirectories=${basedir}/src/main/resources/</buildArg>
                         <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
                         <buildArg>-H:+CompactingOldGen</buildArg>
+                        <buildArg>--future-defaults=all</buildArg>
+                        <buildArg>--enable-url-protocols=https</buildArg>
+                        <buildArg>--enable-native-access=ALL-UNNAMED</buildArg>
                     </buildArgs>
                 </configuration>
             </plugin>
