@@ -152,6 +152,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>app.logorrr.dist.linux.flatpak</groupId>
+                <artifactId>flatpak-yml</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.scala-lang</groupId>
                 <artifactId>scala-library</artifactId>
                 <version>${scala.version}</version>

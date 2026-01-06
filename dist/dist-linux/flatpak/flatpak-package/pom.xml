@@ -19,6 +19,10 @@
             <groupId>app.logorrr.dist.linux</groupId>
             <artifactId>app-image</artifactId>
         </dependency>
+        <dependency>
+            <groupId>app.logorrr.dist.linux.flatpak</groupId>
+            <artifactId>flatpak-yml</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
