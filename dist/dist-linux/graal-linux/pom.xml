@@ -82,7 +82,7 @@
                     <outputDirectory>${native.output.dir}</outputDirectory>
                     <mainClass>${main.class}</mainClass>
                     <buildArgs>
-                        <buildArg>-H:ConfigurationFileDirectories=src/main/resources/</buildArg>
+                        <buildArg>-H:ConfigurationFileDirectories=${basedir}/src/main/resources/</buildArg>
                         <buildArg>--enable-url-protocols=https</buildArg>
                         <buildArg>-march=native</buildArg>
                         <buildArg>--future-defaults=all</buildArg>
