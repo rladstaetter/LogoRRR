@@ -37,15 +37,6 @@ echo "Starting LogoRRR in flatpak container ... "
 # run the app (installed via flatpak)
 flatpak run app.logorrr.LogoRRR
 
-
-# run graalvm compilation again, a workaround for the graalvm compiler behavior
-# which places transitive dependencies into the output directory - but not if run
-# as multimodule build (??)
-echo "Rebuilding GraalVM variant"
-cd dist/dist-linux/graal-linux/
-mvn package
-cd ../../..
-
 echo "Running GraalVM variant"
 ./dist/dist-linux/graal-linux/target/native/logorrr
 
