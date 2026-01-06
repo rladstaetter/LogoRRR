@@ -1872,13 +1872,19 @@
       "glob": "app/logorrr/drop-files-here.png"
     },
     {
-      "glob": "app/logorrr/icon/logorrr-icon-32.png"
+      "glob": "build.properties"
     },
     {
       "glob": "com/sun/javafx/scene/control/skin/resources/controls_en.properties"
     },
     {
       "glob": "com/sun/javafx/tk/quantum/QuantumMessagesBundle_en.properties"
+    },
+    {
+      "glob": "logorrr-icon-128.png"
+    },
+    {
+      "glob": "logorrr-icon-32.png"
     },
     {
       "glob": "meta.conf"
