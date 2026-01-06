@@ -28,16 +28,4 @@
         <module>flatpak-dist</module>
     </modules>
 
-    <profiles>
-        <profile>
-            <id>OS.linux.flatpak.dist</id>
-            <activation>
-                <property>
-                    <name>OS.linux.flatpak.dist</name>
-                </property>
-            </activation>
-            <modules>
-            </modules>
-        </profile>
-    </profiles>
 </project>

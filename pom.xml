@@ -103,18 +103,6 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>benchmarks</id>
-            <modules>
-                <module>benchmarks</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>app-tests</id>
-            <modules>
-                <module>app-tests</module>
-            </modules>
-        </profile>
         <!-- Profile for x64 (amd64) architecture -->
         <profile>
             <id>x64-architecture</id>
@@ -150,14 +138,16 @@
         </profile>
     </profiles>
     <modules>
-        <module>build</module>
-        <module>env</module>
-        <module>clv</module>
-        <module>clv-app</module>
         <module>app-icons</module>
+        <module>app-tests</module>
         <module>app</module>
+        <module>benchmarks</module>
+        <module>build</module>
+        <module>clv-app</module>
+        <module>clv</module>
         <module>dist</module>
         <module>docs</module>
+        <module>env</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -351,8 +341,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.14.0</version>
                     <configuration>
-                        <source>21</source>
-                        <target>21</target>
+                        <source>25</source>
+                        <target>25</target>
                     </configuration>
                 </plugin>
                 <plugin>
