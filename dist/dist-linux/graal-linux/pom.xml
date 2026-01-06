@@ -84,6 +84,10 @@
                     <buildArgs>
                         <buildArg>-H:ConfigurationFileDirectories=src/main/resources/</buildArg>
                         <buildArg>--enable-url-protocols=https</buildArg>
+                        <buildArg>-march=native</buildArg>
+                        <buildArg>--future-defaults=all</buildArg>
+                        <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
+                        <buildArg>-H:+CompactingOldGen</buildArg>
                     </buildArgs>
                 </configuration>
             </plugin>
