@@ -139,7 +139,6 @@
                     <type>zip</type>
                     <classifier>dylibs</classifier>
                 </dependency>
-
             </dependencies>
             <build>
                 <plugins>
