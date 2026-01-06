@@ -122,7 +122,6 @@
                                 <argument>${project.artifactId}-${revision}</argument>
                             </arguments>
                             <includePluginDependencies>true</includePluginDependencies>
-                            <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>
                     <!-- Create installer -->
@@ -146,19 +145,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>app-tests</id>
-            <dependencies>
-                <!-- adds dependency to force app-tests to be run before proceeding with this module -->
-                <dependency>
-                    <groupId>app.logorrr</groupId>
-                    <artifactId>app-tests</artifactId>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
-
 </project>

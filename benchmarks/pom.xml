@@ -10,7 +10,7 @@
     <artifactId>benchmarks</artifactId>
     <packaging>jar</packaging>
 
-    <name>JMH benchmarks for LogoRRR</name>
+    <name>app.logorrr.benchmarks</name>
 
     <dependencies>
         <dependency>

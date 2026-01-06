@@ -33,7 +33,6 @@
         <dependency>
             <groupId>app.logorrr</groupId>
             <artifactId>app-icons</artifactId>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
@@ -140,7 +139,6 @@
                     <type>zip</type>
                     <classifier>dylibs</classifier>
                 </dependency>
-
             </dependencies>
             <build>
                 <plugins>

@@ -9,7 +9,18 @@ class AboutStage(owner: Window) extends Stage {
   initModality(Modality.WINDOW_MODAL)
   setTitle(s"About ${AppInfo.fullAppNameWithVersion}")
   setOnCloseRequest(_ => this.close())
-  setScene(new Scene(new AboutDialogBorderPane(this), 440, 250))
+  private val width = 450
+  private val height = 300
+  private val scene = new Scene(new AboutDialogBorderPane(this), width, height)
+  setScene(scene)
+
+  // to fix display bug when used on linux / snap
+  setOnShown(_ => {
+    this.setWidth(width)
+    this.setHeight(height)
+    // Optional: Center the window on the screen after resizing
+    this.centerOnScreen()
+  })
 }
 
 

@@ -25,19 +25,7 @@
     <modules>
         <module>flatpak-yml</module>
         <module>flatpak-package</module>
+        <module>flatpak-dist</module>
     </modules>
 
-    <profiles>
-        <profile>
-            <id>OS.linux.flatpak.dist</id>
-            <activation>
-                <property>
-                    <name>OS.linux.flatpak.dist</name>
-                </property>
-            </activation>
-            <modules>
-                <module>flatpak-dist</module>
-            </modules>
-        </profile>
-    </profiles>
 </project>

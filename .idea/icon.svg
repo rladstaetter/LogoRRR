@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="608"
+   height="608"
+   viewBox="-304 -304 608 608"
+   version="1.1"
+   id="svg288"
+   sodipodi:docname="icon.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs292">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3902">
+      <stop
+         style="stop-color:#010007;stop-opacity:1;"
+         offset="0"
+         id="stop3900" />
+      <stop
+         style="stop-color:#806618;stop-opacity:0.12111389;"
+         offset="1"
+         id="stop3898" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3863">
+      <stop
+         style="stop-color:#c5b9a2;stop-opacity:1;"
+         offset="0"
+         id="stop3859" />
+      <stop
+         style="stop-color:#010007;stop-opacity:1;"
+         offset="1"
+         id="stop3861" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3863"
+       id="linearGradient3865"
+       x1="-288.26782"
+       y1="-286.71432"
+       x2="286.17859"
+       y2="288.37854"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3902"
+       id="linearGradient3896"
+       x1="-288.26782"
+       y1="-286.71432"
+       x2="286.17859"
+       y2="288.37854"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow"
+       id="filter6435"
+       x="-0.035982009"
+       y="-0.036"
+       width="1.101949"
+       height="1.102">
+      <feFlood
+         flood-opacity="0.498039"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood6425" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite6427" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="3"
+         result="blur"
+         id="feGaussianBlur6429" />
+      <feOffset
+         dx="6"
+         dy="6"
+         result="offset"
+         id="feOffset6431" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite6433" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="namedview290"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="0.77339804"
+     inkscape:cx="221.10219"
+     inkscape:cy="362.68517"
+     inkscape:window-width="1452"
+     inkscape:window-height="871"
+     inkscape:window-x="26"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer4" />
+  <title
+     id="title280">Squircle: x to 4th plus y to 4th equals radius to 4th, compared with rounded square.</title>
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Background">
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient3865);stroke:url(#linearGradient3896);stroke-width:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       id="rect347"
+       width="575"
+       height="575"
+       x="-288.08926"
+       y="-287.12146"
+       ry="153.59999"
+       inkscape:label="background" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="Logo"
+     style="display:inline;filter:url(#filter6435)"
+     transform="matrix(2.0741772,0,0,1.9461965,-259.37586,-243.27456)">
+    <rect
+       style="display:inline;opacity:1;mix-blend-mode:normal;fill:#b2b2b2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.119;stroke-dasharray:none;stroke-opacity:1"
+       id="rect10053-6"
+       width="110"
+       height="90"
+       x="70"
+       y="90"
+       ry="7.2400708"
+       inkscape:label="mitte" />
+    <rect
+       style="display:inline;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.935623;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       id="links-7"
+       width="35"
+       height="200"
+       x="25"
+       y="25"
+       ry="16.089045"
+       inkscape:label="links" />
+    <rect
+       style="display:inline;fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.98213;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       id="unten"
+       width="200"
+       height="37.301476"
+       x="25"
+       y="189.87691"
+       ry="18.650738"
+       inkscape:label="unten" />
+    <rect
+       style="display:inline;fill:#e5e5e5;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.946277;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;image-rendering:auto"
+       id="rechts"
+       width="35"
+       height="184.20544"
+       x="190"
+       y="43.02573"
+       ry="14.818448"
+       inkscape:label="rechts" />
+    <rect
+       style="display:inline;fill:#d9d9d9;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.486972;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       id="unten-7"
+       width="150.15352"
+       height="37.301476"
+       x="74.944763"
+       y="40.266106"
+       ry="18.650738"
+       inkscape:label="oben" />
+  </g>
+  <metadata
+     id="metadata379">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>Squircle: x to 4th plus y to 4th equals radius to 4th, compared with rounded square.</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
