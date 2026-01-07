@@ -1,10 +1,11 @@
 package app.logorrr.views.search.st
 
+import app.logorrr.conf.SearchTerm
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.search.stg.{OpenStgEditorButton, StgChoiceBox}
-import app.logorrr.views.search.{MutableSearchTerm, MutableSearchTermUnclassified, SearchTerm}
+import app.logorrr.views.search.{MutableSearchTerm, MutableSearchTermUnclassified}
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ListChangeListener}

@@ -1,6 +1,6 @@
 package app.logorrr.views.search.st
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty

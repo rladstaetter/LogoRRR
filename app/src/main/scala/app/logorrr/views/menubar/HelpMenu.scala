@@ -1,6 +1,6 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.about.AboutMenuItem
 import app.logorrr.views.menubar.HelpMenu.LogMenuItem
 import javafx.scene.control.{Menu, MenuItem}

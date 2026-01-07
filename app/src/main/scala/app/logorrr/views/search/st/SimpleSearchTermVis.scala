@@ -1,7 +1,7 @@
 package app.logorrr.views.search.st
 
 import app.logorrr.clv.color.ColorUtil
-import app.logorrr.views.search.SearchTerm
+import app.logorrr.conf.SearchTerm
 import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty, SimpleStringProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.scene.control.Label

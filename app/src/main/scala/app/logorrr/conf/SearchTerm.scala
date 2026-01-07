@@ -1,16 +1,23 @@
-package app.logorrr.views.search
+package app.logorrr.conf
 
 import javafx.scene.paint.Color
-import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
-import pureconfig.{ConfigReader, ConfigWriter}
+import upickle.default._
 
 object SearchTerm {
 
-  implicit lazy val colorReader: ConfigReader[Color] = ConfigReader[String].map(s => Color.web(s))
-  implicit lazy val colorWriter: ConfigWriter[Color] = ConfigWriter[String].contramap(c => c.toString)
+  // 1. Define the Color mapping (Hex String <-> JavaFX Color)
+  implicit val colorRW: ReadWriter[Color] = readwriter[String].bimap[Color](
+    c => {
+      // Convert Color to Hex String (e.g., 0x112233ff -> "#112233")
+      f"#${(c.getRed * 255).toInt}%02x${(c.getGreen * 255).toInt}%02x${(c.getBlue * 255).toInt}%02x"
+    },
+    s => {
+      // Convert Hex String back to JavaFX Color
+      Color.web(s)
+    }
+  )
 
-  implicit lazy val reader: ConfigReader[SearchTerm] = deriveReader[SearchTerm]
-  implicit lazy val writer: ConfigWriter[SearchTerm] = deriveWriter[SearchTerm]
+  implicit lazy val rw: ReadWriter[SearchTerm] = macroRW
 
   val Unclassified: Color = Color.LIGHTGREY
 
@@ -147,4 +154,3 @@ object SearchTerm {
 case class SearchTerm(value: String
                       , color: Color
                       , active: Boolean)
-

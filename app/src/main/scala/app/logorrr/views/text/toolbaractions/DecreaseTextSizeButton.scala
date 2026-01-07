@@ -1,6 +1,6 @@
 package app.logorrr.views.text.toolbaractions
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 
 object DecreaseTextSizeButton extends UiNodeFileIdAware {

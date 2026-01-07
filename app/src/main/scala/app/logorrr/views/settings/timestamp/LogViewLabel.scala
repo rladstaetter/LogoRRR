@@ -1,6 +1,6 @@
 package app.logorrr.views.settings.timestamp
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.UiNode
 import javafx.scene.control.{Label, Tooltip}

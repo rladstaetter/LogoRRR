@@ -1,6 +1,6 @@
 package app.logorrr.views.main
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.services.file.FileIdService
 import app.logorrr.views.menubar.{FileMenu, HelpMenu, AppMenuBuilder}
 import de.jangassen.MenuToolkit

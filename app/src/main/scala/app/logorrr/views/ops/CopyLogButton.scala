@@ -1,6 +1,6 @@
 package app.logorrr.views.ops
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util.ClipBoardUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}

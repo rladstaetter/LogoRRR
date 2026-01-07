@@ -1,7 +1,6 @@
 package app.logorrr
 
-import app.logorrr.io.FileId
-
+import app.logorrr.conf.FileId
 import java.nio.file.{Path, Paths}
 
 object TestFiles {

@@ -2,11 +2,11 @@ package app.logorrr.issues
 
 import app.logorrr.TestFiles
 import app.logorrr.conf.Settings.calcDefaultScreenPosition
-import app.logorrr.conf.{BlockSettings, LogFileSettings, Settings, StageSettings}
+import app.logorrr.conf.{BlockSettings, LogFileSettings, SearchTerm, Settings, StageSettings}
 import app.logorrr.steps.TestFxListViewActions
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.st.SearchTermButton
-import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
+import app.logorrr.views.search.MutableSearchTerm
 import javafx.scene.paint.Color
 import org.junit.jupiter.api.Test
 
@@ -27,7 +27,7 @@ abstract class Issue292ColorCalculationSetup(desiredColor: Color, val searchTerm
   override lazy val settings: Settings = Settings(
     StageSettings(calcDefaultScreenPosition())
     , Map(TestFiles.simpleLog5.value ->
-      LogFileSettings(TestFiles.simpleLog5)
+      LogFileSettings.mk(TestFiles.simpleLog5)
         .copy(
           searchTerms = searchTerms
           , blockSettings = BlockSettings(50)

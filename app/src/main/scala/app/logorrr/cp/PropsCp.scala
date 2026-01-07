@@ -1,11 +1,6 @@
-package app.logorrr.util
-
-import javafx.scene.image.{Image, ImageView}
+package app.logorrr.cp
 
 import java.util.Properties
-
-
-abstract class CpResource
 
 case class PropsCp(classPathResource: String) extends CpResource {
 
@@ -20,9 +15,4 @@ case class PropsCp(classPathResource: String) extends CpResource {
     properties
   }
 
-}
-
-case class ImageCp(value: String, width: Int, height: Int) extends CpResource {
-  def imageView(): ImageView =
-    new ImageView(new Image(value, width, height, true, true, true))
 }

@@ -1,7 +1,6 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.io.FileId
+import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import javafx.stage.{FileChooser, Window}
 
 /**

@@ -1,7 +1,6 @@
 package app.logorrr.views.search.stg
 
-import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.io.FileId
+import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.views.search.st.SimpleSearchTermVis
 import javafx.scene.control._
 

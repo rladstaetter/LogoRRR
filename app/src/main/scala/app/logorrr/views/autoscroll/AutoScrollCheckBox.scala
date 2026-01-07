@@ -1,7 +1,6 @@
 package app.logorrr.views.autoscroll
 
-import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.io.FileId
+import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.model.HasFileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{CheckBox, Tooltip}

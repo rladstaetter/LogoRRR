@@ -1,6 +1,6 @@
 package app.logorrr.views.search.stg
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.GfxElements
 import javafx.scene.control.Button

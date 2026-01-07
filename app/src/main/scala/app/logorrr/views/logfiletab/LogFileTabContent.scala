@@ -1,11 +1,12 @@
 package app.logorrr.views.logfiletab
 
+import app.logorrr.conf.SearchTerm
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.views.block.BlockConstants
 import app.logorrr.views.ops._
 import app.logorrr.views.search.st.SearchTermToolBar
-import app.logorrr.views.search.{OpsToolBar, SearchTerm}
+import app.logorrr.views.search.OpsToolBar
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.Property

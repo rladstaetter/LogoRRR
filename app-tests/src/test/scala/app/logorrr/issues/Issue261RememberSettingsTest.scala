@@ -4,7 +4,6 @@ import app.logorrr.TestFiles
 import app.logorrr.conf.Settings.calcDefaultScreenPosition
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf._
-import app.logorrr.io.FileId
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.ops.time.{SliderVBox, TimerSlider}
 import javafx.geometry.Pos
@@ -25,7 +24,7 @@ class Issue261RememberSettingsTest extends SingleFileApplicationTest(TestFiles.t
   override protected lazy val settings: Settings = Settings(
     StageSettings(calcDefaultScreenPosition())
     , Map(TestFiles.timedLog.value ->
-      LogFileSettings(TestFiles.timedLog)
+      LogFileSettings.mk(TestFiles.timedLog)
         .copy(blockSettings = BlockSettings(50)
           , someTimestampSettings = Option(TimestampSettings(SimpleRange(0, 23), "yyyy-MM-dd HH:mm:ss,SSS"))))
     , None

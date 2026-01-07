@@ -1,6 +1,6 @@
 package app.logorrr.usecases.dnd
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.steps.{CheckTabPaneActions, VisibleItemActions}
 import app.logorrr.usecases.StartEmptyApplicationTest
 import app.logorrr.views.a11y.uinodes.UiNodes

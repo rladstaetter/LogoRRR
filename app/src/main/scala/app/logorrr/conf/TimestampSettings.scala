@@ -1,25 +1,22 @@
 package app.logorrr.conf
 
 import net.ladstatt.util.log.CanLog
-import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
-import pureconfig.{ConfigReader, ConfigWriter}
+import upickle.default._
 
-import java.time._
 import java.time.format.DateTimeFormatter
+import java.time._
 import scala.util.{Failure, Success, Try}
 
 object TimestampSettings extends CanLog {
+
+  implicit lazy val rw: ReadWriter[TimestampSettings] = macroRW
 
   val DefaultPattern = "yyyy-MM-dd HH:mm:ss.SSS"
 
   val DefaultFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(DefaultPattern)
 
-
   val Default: TimestampSettings = TimestampSettings(SimpleRange(1, 24), DefaultPattern)
 
-
-  implicit lazy val reader: ConfigReader[TimestampSettings] = deriveReader[TimestampSettings]
-  implicit lazy val writer: ConfigWriter[TimestampSettings] = deriveWriter[TimestampSettings]
 
   /**
    * Assumes that line contains a timestamp which encodes year/month/day hour/minute/second ... which hits

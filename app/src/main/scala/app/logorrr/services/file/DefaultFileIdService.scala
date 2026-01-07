@@ -1,6 +1,6 @@
 package app.logorrr.services.file
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.menubar.LogoRRRFileChooser
 import javafx.stage.Window
 

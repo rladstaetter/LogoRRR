@@ -1,6 +1,6 @@
 package app.logorrr.views.text
 
-import app.logorrr.views.search.SearchTerm
+import app.logorrr.conf.SearchTerm
 import javafx.scene.paint.Color
 
 object LinePart {

@@ -1,9 +1,8 @@
 package app.logorrr.views.search.stg
 
+import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.search.SearchTerm
 import javafx.scene.control.{Button, Tooltip}
 import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon

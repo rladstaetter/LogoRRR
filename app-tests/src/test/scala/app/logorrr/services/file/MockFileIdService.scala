@@ -1,6 +1,6 @@
 package app.logorrr.services.file
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 
 /**
  * Given a list of files, it returns each file in order, and if the last file is reached, a

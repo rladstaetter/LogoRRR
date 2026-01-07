@@ -1,6 +1,6 @@
 package app.logorrr.steps
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.usecases.TestFxBaseApplicationTest
 import app.logorrr.views.a11y.uinodes.FileMenu
 import app.logorrr.views.logfiletab.LogFileTab

@@ -1,18 +1,14 @@
 package app.logorrr.conf
 
-import app.logorrr.io.FileId
 import app.logorrr.views.logfiletab.TextConstants
-import app.logorrr.views.search.SearchTerm
-import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
-import pureconfig.{ConfigReader, ConfigWriter}
+import upickle.default._
 
 import java.nio.file.Path
-import java.time.Instant
+import java.time._
 
 object LogFileSettings {
 
-  implicit lazy val reader: ConfigReader[LogFileSettings] = deriveReader[LogFileSettings]
-  implicit lazy val writer: ConfigWriter[LogFileSettings] = deriveWriter[LogFileSettings]
+  implicit lazy val rw: ReadWriter[LogFileSettings] = macroRW
 
   private val DefaultSelectedIndex = 0
   private val DefaultDividerPosition = 0.5
@@ -25,7 +21,7 @@ object LogFileSettings {
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
   val DefaultSearchTermGroup = Option(Settings.JavaLoggingGroup.name)
 
-  def apply(fileId: FileId): LogFileSettings = {
+  def mk(fileId: FileId): LogFileSettings = {
     val now = Instant.now().toEpochMilli
     LogFileSettings(fileId
       , DefaultSelectedIndex
@@ -45,6 +41,7 @@ object LogFileSettings {
   }
 
 }
+
 
 
 /**
@@ -75,13 +72,13 @@ case class LogFileSettings(fileId: FileId
                            , fontSize: Int
                            , searchTerms: Seq[SearchTerm]
                            , blockSettings: BlockSettings
-                           , someTimestampSettings: Option[TimestampSettings]
+                           ,  someTimestampSettings: Option[TimestampSettings] = None
                            , autoScroll: Boolean
                            , firstVisibleTextCellIndex: Int
                            , lastVisibleTextCellIndex: Int
                            , lowerTimestamp: Long
                            , upperTimestamp: Long
-                           , someSelectedSearchTermGroup: Option[String]
+                           , someSelectedSearchTermGroup: scala.Option[String]
                            , searchTermGroups: Map[String, Seq[SearchTerm]]) {
 
   lazy val path: Path = fileId.asPath.toAbsolutePath

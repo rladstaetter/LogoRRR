@@ -1,8 +1,7 @@
 package app.logorrr.conf
 
-import app.logorrr.conf.SettingsIO.renderOptions
 import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
-import app.logorrr.io.{FileId, OsxBridgeHelper}
+import app.logorrr.io.{OsxBridgeHelper, SettingsFileIO}
 import app.logorrr.services.hostservices.LogoRRRHostServices
 import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.beans.property.SimpleObjectProperty
@@ -11,7 +10,6 @@ import javafx.stage.Window
 import net.ladstatt.util.io.Fs
 import net.ladstatt.util.log.CanLog
 import net.ladstatt.util.os.OsUtil
-import pureconfig.ConfigWriter
 
 import java.nio.file.Path
 
@@ -29,10 +27,10 @@ object LogoRRRGlobals extends CanLog with Fs {
 
   def searchTermGroupNames: ObservableList[String] = mutSettings.searchTermGroupNames
 
-  def persist(): Unit = persist(LogoRRRGlobals.getSettings)
+  def persist(): Unit = SettingsFileIO.toFile(LogoRRRGlobals.getSettings, settingsFilePath)
 
   def persist(settings: Settings): Unit = {
-    write(settingsFilePath, ConfigWriter[Settings].to(settings).render(renderOptions))
+    SettingsFileIO.toFile(settings, settingsFilePath)
   }
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings
@@ -51,7 +49,7 @@ object LogoRRRGlobals extends CanLog with Fs {
 
   def removeSearchTermGroup(name: String): Unit = mutSettings.removeSearchTermGroup(name)
 
-  def clearSearchTermGroups() : Unit = mutSettings.clearSearchTermGroups()
+  def clearSearchTermGroups(): Unit = mutSettings.clearSearchTermGroups()
 
   def unbindWindow(): Unit = mutSettings.unbindWindow()
 

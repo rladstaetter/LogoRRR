@@ -1,7 +1,7 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{LogFileSettings, LogoRRRGlobals}
-import app.logorrr.io.{FileId, IoManager}
+import app.logorrr.conf.{FileId, LogFileSettings, LogoRRRGlobals}
+import app.logorrr.io.IoManager
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.uinodes.UiNodes
@@ -77,7 +77,7 @@ class MainTabPane extends TabPane with CanLog {
       IoManager.unzip(path).foreach {
         case (fileId, entries) =>
           if (!contains(fileId)) {
-            addEntriesFromZip(LogFileSettings(fileId), entries)
+            addEntriesFromZip(LogFileSettings.mk(fileId), entries)
             selectFile(fileId)
           } else {
             logTrace(s"${fileId.absolutePathAsString} is already opened, selecting tab ...")
@@ -151,7 +151,7 @@ class MainTabPane extends TabPane with CanLog {
   }
 
   def addFile(fileId: FileId): Unit = {
-    val logFileSettings = LogFileSettings(fileId)
+    val logFileSettings = LogFileSettings.mk(fileId)
     LogoRRRGlobals.registerSettings(logFileSettings)
     val entries = IoManager.readEntries(logFileSettings.path, logFileSettings.someTimestampSettings)
     addLogFileTab(LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), entries))

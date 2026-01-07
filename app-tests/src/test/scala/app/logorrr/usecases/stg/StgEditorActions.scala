@@ -1,7 +1,6 @@
 package app.logorrr.usecases.stg
 
-import app.logorrr.conf.Settings
-import app.logorrr.io.FileId
+import app.logorrr.conf.{FileId, Settings}
 import app.logorrr.steps.ChoiceBoxActions
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.stg._

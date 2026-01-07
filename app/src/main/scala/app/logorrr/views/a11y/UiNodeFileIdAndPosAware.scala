@@ -1,6 +1,6 @@
 package app.logorrr.views.a11y
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import javafx.geometry.Pos
 
 trait UiNodeFileIdAndPosAware {

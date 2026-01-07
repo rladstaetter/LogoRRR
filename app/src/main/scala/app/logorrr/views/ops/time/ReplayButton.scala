@@ -1,7 +1,7 @@
 package app.logorrr.views.ops.time
 
+import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.ops.PulsatingAnimationTimer

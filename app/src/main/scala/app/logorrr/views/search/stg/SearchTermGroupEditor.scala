@@ -1,9 +1,8 @@
 package app.logorrr.views.search.stg
 
+import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.FileId
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.search.SearchTerm
 import javafx.geometry.Insets
 import javafx.scene.Scene
 import javafx.scene.control.{Button, Label}

@@ -1,5 +1,6 @@
 package app.logorrr.io
 
+import app.logorrr.conf.FileId
 import org.scalatest.wordspec.AnyWordSpec
 
 class FileIdSpec extends AnyWordSpec {

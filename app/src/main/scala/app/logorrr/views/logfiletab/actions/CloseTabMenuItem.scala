@@ -1,6 +1,6 @@
 package app.logorrr.views.logfiletab.actions
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.control.MenuItem

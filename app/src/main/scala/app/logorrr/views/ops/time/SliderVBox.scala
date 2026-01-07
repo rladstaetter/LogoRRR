@@ -1,7 +1,7 @@
 package app.logorrr.views.ops.time
 
+import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAndPosAware}
 import javafx.geometry.Pos
 import javafx.scene.layout.VBox

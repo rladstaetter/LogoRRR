@@ -1,8 +1,7 @@
 package app.logorrr.usecases.time
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.io.FileId
+import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.ops.time.{SliderVBox, TimerSlider, TimestampSettingsButton}
 import app.logorrr.views.settings.timestamp.{LogViewLabel, TimeFormatTextField, TimestampFormatResetButton, TimestampFormatSetButton}

@@ -1,8 +1,7 @@
 package app.logorrr.views.search.stg
 
+import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.FileId
-import app.logorrr.views.search.SearchTerm
 import app.logorrr.views.search.st.SimpleSearchTermVis
 import javafx.scene.control.ToolBar
 import net.ladstatt.util.log.CanLog

@@ -1,13 +1,17 @@
-package app.logorrr.io
+package app.logorrr.conf
 
-import pureconfig.{ConfigReader, ConfigWriter}
+import upickle.default._
 
 import java.nio.file.{Path, Paths}
 
 object FileId {
 
-  implicit lazy val reader: ConfigReader[FileId] = ConfigReader[String].map(s => FileId(s))
-  implicit lazy val writer: ConfigWriter[FileId] = ConfigWriter[String].contramap(c => c.value)
+  implicit lazy val rw: ReadWriter[FileId] = readwriter[String].bimap[FileId](
+    fileId => fileId.value, // How to write: FileId -> String
+    str => {
+      FileId(str) // How to read:  String -> FileId
+    }
+  )
 
   def apply(p: Path): FileId = {
     FileId(p.toAbsolutePath.toString)
@@ -17,7 +21,6 @@ object FileId {
 
 }
 
-
 /**
  * Identifies a log file or an entry in a zip file.
  *
@@ -26,6 +29,7 @@ object FileId {
  * @param value is an identifier which is used to discriminate between log files. typically it is a file path.
  */
 case class FileId(value: String) {
+
 
   def extractZipFileId: FileId = FileId(value.substring(0, value.indexOf(".zip@") + 4)) // get filename of zip file
 

@@ -1,6 +1,6 @@
 package app.logorrr.views.about
 
-import app.logorrr.meta.AppInfo
+import app.logorrr.conf.AppInfo
 import javafx.scene.Scene
 import javafx.stage.{Modality, Stage, Window}
 

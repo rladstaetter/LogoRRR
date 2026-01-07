@@ -2,7 +2,6 @@ package app.logorrr.docs
 
 import app.logorrr.LogoRRRApp
 import app.logorrr.conf._
-import app.logorrr.meta.AppInfo
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
 import app.logorrr.services.hostservices.NativeHostServices

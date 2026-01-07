@@ -1,8 +1,7 @@
 package app.logorrr.views.logfiletab
 
-import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.util._
 import app.logorrr.views.LogoRRRAccelerators

@@ -1,12 +1,9 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.conf.{AppInfo, FileId, LogoRRRGlobals, SearchTerm}
 import app.logorrr.conf.mut.MutStageSettings
-import app.logorrr.io.FileId
-import app.logorrr.meta.AppInfo
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.LogoRRRAccelerators
-import app.logorrr.views.search.SearchTerm
 import javafx.beans.value.ChangeListener
 import javafx.scene.Scene
 import javafx.scene.image.Image

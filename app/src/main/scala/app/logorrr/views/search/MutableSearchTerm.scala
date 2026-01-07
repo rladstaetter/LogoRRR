@@ -1,7 +1,7 @@
 package app.logorrr.views.search
 
 import app.logorrr.clv.color.ColorMatcher
-import app.logorrr.conf.Settings
+import app.logorrr.conf.{SearchTerm, Settings}
 import app.logorrr.views.search.predicates.{ContainsPredicate, LabelledFunction}
 import javafx.beans.property.{BooleanProperty, SimpleBooleanProperty, SimpleObjectProperty}
 import javafx.scene.paint.Color

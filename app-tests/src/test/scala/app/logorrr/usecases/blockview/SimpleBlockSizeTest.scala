@@ -1,8 +1,7 @@
 package app.logorrr.usecases.blockview
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.io.FileId
+import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.block.BlockConstants
 import app.logorrr.views.ops.{DecreaseBlockSizeButton, IncreaseBlockSizeButton}

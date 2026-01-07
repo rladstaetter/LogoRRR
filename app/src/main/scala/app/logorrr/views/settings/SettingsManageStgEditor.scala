@@ -1,6 +1,6 @@
 package app.logorrr.views.settings
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.collections.ObservableList
 import javafx.scene.control.Label

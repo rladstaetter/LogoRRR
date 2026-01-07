@@ -1,6 +1,6 @@
 package app.logorrr.model
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 
 trait HasFileId {
 

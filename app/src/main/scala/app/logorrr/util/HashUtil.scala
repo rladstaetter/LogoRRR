@@ -1,7 +1,6 @@
 package app.logorrr.util
 
-import app.logorrr.io.FileId
-
+import app.logorrr.conf.FileId
 import java.security.MessageDigest
 
 object HashUtil {

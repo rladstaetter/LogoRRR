@@ -1,6 +1,7 @@
 package app.logorrr.views.search
 
 import app.logorrr.clv.color.ColorMatcher
+import app.logorrr.conf.SearchTerm
 import app.logorrr.views.search.predicates.NoMatchPredicate
 import javafx.scene.paint.Color
 

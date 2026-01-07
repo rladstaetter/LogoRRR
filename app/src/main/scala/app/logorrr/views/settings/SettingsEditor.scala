@@ -1,7 +1,6 @@
 package app.logorrr.views.settings
 
-import app.logorrr.conf.{LogoRRRGlobals, Settings}
-import app.logorrr.io.FileId
+import app.logorrr.conf.{FileId, LogoRRRGlobals, Settings}
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.uinodes.SettingsEditor
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}

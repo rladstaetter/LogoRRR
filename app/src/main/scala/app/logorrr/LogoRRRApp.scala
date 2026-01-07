@@ -1,7 +1,7 @@
 package app.logorrr
 
 import app.logorrr
-import app.logorrr.conf.{LogoRRRGlobals, SettingsIO}
+import app.logorrr.conf.{AppInfo, LogoRRRGlobals, SettingsIO}
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
 import app.logorrr.services.hostservices.{MacNativeHostService, NativeHostServices}
@@ -41,7 +41,7 @@ object LogoRRRApp extends CanLog {
     val logoRRRMain = new LogoRRRMain(stage, services.fileIdService, services.isUnderTest)
     LogoRRRStage.init(stage, logoRRRMain)
 
-    logInfo(s"          Started: ${app.logorrr.meta.AppInfo.fullAppNameWithVersion}")
+    logInfo(s"          Started: ${AppInfo.fullAppNameWithVersion}")
     logInfo(s"Working directory: '${Paths.get("").toAbsolutePath.toString}'")
     logInfo(s"    Configuration: '$settingsFilePath'")
     logInfo(s"          Logfile: '$logFilePath'")

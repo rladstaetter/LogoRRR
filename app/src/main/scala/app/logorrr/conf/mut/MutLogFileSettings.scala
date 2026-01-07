@@ -1,14 +1,13 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.clv.color.ColorMatcher
-import app.logorrr.conf.{BlockSettings, LogFileSettings, TimestampSettings}
-import app.logorrr.io.FileId
+import app.logorrr.conf.{BlockSettings, FileId, LogFileSettings, SearchTerm, TimestampSettings}
 import app.logorrr.model.LogEntry
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.ops.time.TimeRange
 import app.logorrr.views.search.st.SearchTermButton
 import app.logorrr.views.search.stg.SearchTermGroup
-import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
+import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.{BooleanBinding, ObjectBinding, StringBinding}
 import javafx.beans.property._
 import javafx.collections.transformation.FilteredList

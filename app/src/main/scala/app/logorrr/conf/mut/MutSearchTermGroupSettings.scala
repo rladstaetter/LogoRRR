@@ -1,6 +1,6 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.views.search.SearchTerm
+import app.logorrr.conf.SearchTerm
 import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.beans.property.SimpleMapProperty
 import javafx.collections.{FXCollections, MapChangeListener, ObservableList}

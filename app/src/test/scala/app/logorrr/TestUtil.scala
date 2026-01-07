@@ -1,7 +1,7 @@
 package app.logorrr
 
-import app.logorrr.conf.Settings
-import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
+import app.logorrr.conf.{SearchTerm, Settings}
+import app.logorrr.views.search.MutableSearchTerm
 import org.scalacheck.Gen
 
 object TestUtil {

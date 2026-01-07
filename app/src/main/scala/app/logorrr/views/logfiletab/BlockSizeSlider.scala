@@ -1,6 +1,6 @@
 package app.logorrr.views.logfiletab
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.block.BlockConstants
 import javafx.scene.control.Slider

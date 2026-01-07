@@ -1,13 +1,9 @@
 package app.logorrr.conf
 
-import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
-import pureconfig.{ConfigReader, ConfigWriter}
+import upickle.default._
 
 object SimpleRange {
-
-  implicit lazy val reader: ConfigReader[SimpleRange] = deriveReader[SimpleRange]
-  implicit lazy val writer: ConfigWriter[SimpleRange] = deriveWriter[SimpleRange]
-
+  implicit lazy val rw: ReadWriter[SimpleRange] = macroRW
 }
 
 case class SimpleRange(start: Int, end: Int) {

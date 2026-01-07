@@ -1,6 +1,6 @@
 package app.logorrr.services.file
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 
 /**
  * Service which always opens given file

@@ -1,7 +1,7 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{LogFileSettings, LogoRRRGlobals}
-import app.logorrr.io.{FileId, IoManager}
+import app.logorrr.conf.{FileId, LogFileSettings, LogoRRRGlobals}
+import app.logorrr.io.IoManager
 import app.logorrr.services.file.FileIdService
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.logfiletab.LogFileTab

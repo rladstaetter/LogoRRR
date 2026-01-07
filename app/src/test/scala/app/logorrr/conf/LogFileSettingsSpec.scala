@@ -1,7 +1,6 @@
 package app.logorrr.conf
 
 import app.logorrr.TestUtil
-import app.logorrr.io.FileId
 import org.scalacheck.Gen
 
 

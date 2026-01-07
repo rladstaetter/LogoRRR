@@ -1,6 +1,6 @@
 package app.logorrr.views.logfiletab
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.model.LogEntry
 import javafx.beans.binding.Bindings
 import javafx.collections.ObservableList

@@ -1,12 +1,10 @@
 package app.logorrr.conf
 
-import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
-import pureconfig.{ConfigReader, ConfigWriter}
+import upickle.default._
 
 object BlockSettings {
 
-  implicit lazy val reader: ConfigReader[BlockSettings] = deriveReader[BlockSettings]
-  implicit lazy val writer: ConfigWriter[BlockSettings] = deriveWriter[BlockSettings]
+  implicit lazy val rw: ReadWriter[BlockSettings] = macroRW
 
 }
 

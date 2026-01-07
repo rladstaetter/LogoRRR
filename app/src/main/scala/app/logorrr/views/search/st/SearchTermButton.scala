@@ -1,7 +1,7 @@
 package app.logorrr.views.search.st
 import app.logorrr.clv.JfxUtils
 import app.logorrr.clv.color.ColorUtil
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
 import app.logorrr.views.search.{MutableSearchTerm, MutableSearchTermUnclassified}

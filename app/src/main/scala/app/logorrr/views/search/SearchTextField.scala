@@ -1,6 +1,6 @@
 package app.logorrr.views.search
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.{TextField, Tooltip}
 import net.ladstatt.util.os.OsUtil

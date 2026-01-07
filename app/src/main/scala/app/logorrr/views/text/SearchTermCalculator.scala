@@ -1,7 +1,8 @@
 package app.logorrr.views.text
 
+import app.logorrr.conf.SearchTerm
 import app.logorrr.model.LogEntry
-import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
+import app.logorrr.views.search.MutableSearchTerm
 import javafx.scene.paint.Color
 
 import scala.collection.mutable.ListBuffer

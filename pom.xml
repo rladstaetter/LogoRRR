@@ -214,11 +214,6 @@
                 <version>0.7.0</version>
             </dependency>
             <dependency>
-                <groupId>com.github.pureconfig</groupId>
-                <artifactId>pureconfig_${scala.major.version}</artifactId>
-                <version>0.17.7</version>
-            </dependency>
-            <dependency>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest_${scala.major.version}</artifactId>
                 <version>3.2.11</version>

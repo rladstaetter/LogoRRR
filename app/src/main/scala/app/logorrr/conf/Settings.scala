@@ -1,15 +1,13 @@
 package app.logorrr.conf
 
-import app.logorrr.io.{FileId, IoManager}
-import app.logorrr.views.search.SearchTerm
+import app.logorrr.io.IoManager
 import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.geometry.Rectangle2D
 import javafx.scene.paint.Color
 import javafx.stage.Screen
-import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
-import pureconfig.{ConfigReader, ConfigWriter}
+import upickle.default._
 
-import java.nio.file.Path
+import java.nio.file.{Path, Paths}
 
 /**
  * Global settings for LogoRRR
@@ -19,8 +17,13 @@ import java.nio.file.Path
  */
 object Settings {
 
-  implicit lazy val reader: ConfigReader[Settings] = deriveReader[Settings]
-  implicit lazy val writer: ConfigWriter[Settings] = deriveWriter[Settings]
+  // 1. Define how to read/write a single Path
+  implicit val pathRW: ReadWriter[Path] = readwriter[String].bimap[Path](
+    path => path.toString, // How to write: Path -> String
+    str => Paths.get(str) // How to read:  String -> Path
+  )
+
+  implicit lazy val rw: ReadWriter[Settings] = macroRW
 
   private val EmptyGroup: SearchTermGroup = SearchTermGroup("empty", Seq())
 
@@ -65,7 +68,7 @@ object Settings {
 case class Settings(stageSettings: StageSettings
                     , fileSettings: Map[String, LogFileSettings]
                     , someActive: Option[FileId]
-                    , someLastUsedDirectory: Option[Path]
+                    , someLastUsedDirectory: Option[Path] = None
                     , searchTermGroups: Map[String, Seq[SearchTerm]]) {
 
   /** updates recent files with given log setting */
@@ -84,12 +87,3 @@ case class Settings(stageSettings: StageSettings
 
 
 }
-
-
-
-
-
-
-
-
-

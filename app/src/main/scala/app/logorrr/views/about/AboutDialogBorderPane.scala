@@ -1,7 +1,8 @@
 package app.logorrr.views.about
 
-import app.logorrr.meta.AppInfo
-import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts}
+import app.logorrr.conf.AppInfo
+import app.logorrr.cp.ImageCp
+import app.logorrr.util.{HLink, LogoRRRFonts}
 import app.logorrr.views.a11y.uinodes.AboutDialog
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control._

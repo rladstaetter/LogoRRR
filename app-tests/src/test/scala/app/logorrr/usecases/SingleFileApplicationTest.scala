@@ -1,7 +1,6 @@
 package app.logorrr.usecases
 
-import app.logorrr.conf.Settings
-import app.logorrr.io.FileId
+import app.logorrr.conf.{FileId, Settings}
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.SingleFileIdService
 import app.logorrr.services.hostservices.MockHostServices
