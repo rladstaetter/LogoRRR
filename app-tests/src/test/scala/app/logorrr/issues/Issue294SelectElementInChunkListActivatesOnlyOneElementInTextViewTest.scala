@@ -2,9 +2,8 @@ package app.logorrr.issues
 
 import app.logorrr.TestFiles
 import app.logorrr.conf.Settings.calcDefaultScreenPosition
-import app.logorrr.conf.{BlockSettings, Settings, StageSettings}
-import app.logorrr.model.LogFileSettings
-import app.logorrr.steps.{TestFxListViewActions, LogTextViewActions}
+import app.logorrr.conf.{BlockSettings, LogFileSettings, Settings, StageSettings}
+import app.logorrr.steps.{LogTextViewActions, TestFxListViewActions}
 import app.logorrr.usecases.SingleFileApplicationTest
 import org.junit.jupiter.api.Test
 

@@ -1,9 +1,7 @@
-package app.logorrr.conf.mut
+package app.logorrr.conf
 
 import app.logorrr.TestUtil
-import app.logorrr.conf.CoreGen
 import app.logorrr.io.FileId
-import app.logorrr.model.{LogFileSettings, TimestampSettingsSpec}
 import org.scalacheck.Gen
 
 

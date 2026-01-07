@@ -1,7 +1,5 @@
-package app.logorrr.model
+package app.logorrr.conf
 
-import app.logorrr.conf.mut.SimpleRangeSpec
-import app.logorrr.views.settings.timestamp.SimpleRange
 import org.scalacheck.Gen
 import org.scalatest.wordspec.AnyWordSpec
 

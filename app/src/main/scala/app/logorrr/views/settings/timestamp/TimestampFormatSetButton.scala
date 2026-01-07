@@ -1,10 +1,10 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.clv.ChunkListView
-import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.conf.{LogoRRRGlobals, SimpleRange, TimestampSettings}
 import app.logorrr.io.FileId
-import app.logorrr.model.{LogEntry, TimestampSettings}
+import app.logorrr.model.LogEntry
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.OpsToolBar
 import javafx.collections.ObservableList

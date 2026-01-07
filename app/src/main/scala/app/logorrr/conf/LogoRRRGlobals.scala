@@ -3,7 +3,6 @@ package app.logorrr.conf
 import app.logorrr.conf.SettingsIO.renderOptions
 import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
 import app.logorrr.io.{FileId, OsxBridgeHelper}
-import app.logorrr.model.LogFileSettings
 import app.logorrr.services.hostservices.LogoRRRHostServices
 import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.beans.property.SimpleObjectProperty

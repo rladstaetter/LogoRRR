@@ -1,9 +1,9 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.clv.color.ColorMatcher
-import app.logorrr.conf.BlockSettings
+import app.logorrr.conf.{BlockSettings, LogFileSettings, TimestampSettings}
 import app.logorrr.io.FileId
-import app.logorrr.model.{LogEntry, LogFileSettings, TimestampSettings}
+import app.logorrr.model.LogEntry
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.ops.time.TimeRange
 import app.logorrr.views.search.st.SearchTermButton
@@ -84,7 +84,6 @@ class MutLogFileSettings {
   val searchTermGroupNames: ObservableList[String] = mutSearchTermGroupSettings.searchTermGroupNames
 
   val searchTermGroupEntries: ObservableList[SearchTermGroup] = mutSearchTermGroupSettings.searchTermGroupEntries
-
 
 
   private def matchFilter(entry: LogEntry): Boolean = {

@@ -209,6 +209,11 @@
                 <version>${ikonli.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>toolkit_${scala.major.version}</artifactId>
+                <version>0.7.0</version>
+            </dependency>
+            <dependency>
                 <groupId>com.github.pureconfig</groupId>
                 <artifactId>pureconfig_${scala.major.version}</artifactId>
                 <version>0.17.7</version>

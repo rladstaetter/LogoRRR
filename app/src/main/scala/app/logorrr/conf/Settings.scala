@@ -1,7 +1,6 @@
 package app.logorrr.conf
 
 import app.logorrr.io.{FileId, IoManager}
-import app.logorrr.model.LogFileSettings
 import app.logorrr.views.search.SearchTerm
 import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.geometry.Rectangle2D

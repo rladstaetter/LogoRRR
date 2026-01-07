@@ -3,12 +3,10 @@ package app.logorrr.issues
 import app.logorrr.TestFiles
 import app.logorrr.conf.Settings.calcDefaultScreenPosition
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.conf.{BlockSettings, LogoRRRGlobals, Settings, StageSettings}
+import app.logorrr.conf._
 import app.logorrr.io.FileId
-import app.logorrr.model.{LogFileSettings, TimestampSettings}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.ops.time.{SliderVBox, TimerSlider}
-import app.logorrr.views.settings.timestamp.SimpleRange
 import javafx.geometry.Pos
 import javafx.scene.input.MouseButton
 import org.junit.jupiter.api.Test

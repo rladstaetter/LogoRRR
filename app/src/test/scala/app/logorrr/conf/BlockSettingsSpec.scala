@@ -1,6 +1,5 @@
-package app.logorrr.conf.mut
+package app.logorrr.conf
 
-import app.logorrr.conf.BlockSettings
 import org.scalacheck.Gen
 
 object BlockSettingsSpec {

@@ -1,6 +1,5 @@
-package app.logorrr.conf.mut
+package app.logorrr.conf
 
-import app.logorrr.conf.StageSettings
 import org.scalacheck.Gen
 
 object StageSettingsSpec {

@@ -22,6 +22,24 @@
     </option>
     <option name="testKind" value="All in package" />
     <option name="workingDirectory" value="$MODULE_DIR$" />
+    <option name="classBuf">
+      <list>
+        <option value="app.logorrr.LogEntryFileReaderSpec" />
+        <option value="app.logorrr.LogEntrySpec" />
+        <option value="app.logorrr.util.CanLogSpec" />
+        <option value="app.logorrr.util.OsUtilSpec" />
+        <option value="app.logorrr.issues.Issue139Spec" />
+        <option value="app.logorrr.clv.ChunkSpec" />
+        <option value="app.logorrr.io.FileIdSpec" />
+        <option value="app.logorrr.io.IoManagerSpec" />
+        <option value="app.logorrr.conf.TimestampSettingsSpec" />
+        <option value="app.logorrr.conf.mut.MutSettingsSpec" />
+        <option value="app.logorrr.views.SearchTermSpec" />
+        <option value="app.logorrr.views.ops.time.TimeRangeSpec" />
+        <option value="app.logorrr.views.ops.time.TimerSliderSpec" />
+        <option value="app.logorrr.views.text.SearchTermCalculatorSpec" />
+      </list>
+    </option>
     <option name="javaOptions" value="-Xmx4g -Djava.util.logging.config.file=$PROJECT_DIR$/develop-logging.properties -Djava.library.path=$PROJECT_DIR$/native/native-osx/target -Duser.language=en --module-path $PROJECT_DIR$/env/target/javafx-sdk-25/lib --add-modules javafx.controls,javafx.fxml --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED" />
     <option name="searchTest" value="In single module" />
     <option name="shortenClasspath" value="NONE" />

@@ -1,6 +1,7 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.clv.ChunkListView
+import app.logorrr.conf.SimpleRange
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.HLink

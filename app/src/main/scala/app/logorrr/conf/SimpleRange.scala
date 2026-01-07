@@ -1,4 +1,4 @@
-package app.logorrr.views.settings.timestamp
+package app.logorrr.conf
 
 import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
 import pureconfig.{ConfigReader, ConfigWriter}

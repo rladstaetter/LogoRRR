@@ -1,6 +1,6 @@
-package app.logorrr.model
+package app.logorrr.clv
 
-import app.logorrr.clv.{Chunk, ChunkListView}
+import app.logorrr.model.LogEntry
 import javafx.collections.{FXCollections, ObservableList}
 import org.scalatest.wordspec.AnyWordSpec
 

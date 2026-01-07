@@ -1,8 +1,7 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.conf.{Settings, StageSettings}
+import app.logorrr.conf.{LogFileSettings, Settings, StageSettings}
 import app.logorrr.io.FileId
-import app.logorrr.model.LogFileSettings
 import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, ObservableList}

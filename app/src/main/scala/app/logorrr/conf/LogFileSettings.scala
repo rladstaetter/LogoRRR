@@ -1,6 +1,5 @@
-package app.logorrr.model
+package app.logorrr.conf
 
-import app.logorrr.conf.{BlockSettings, LogoRRRGlobals, Settings}
 import app.logorrr.io.FileId
 import app.logorrr.views.logfiletab.TextConstants
 import app.logorrr.views.search.SearchTerm

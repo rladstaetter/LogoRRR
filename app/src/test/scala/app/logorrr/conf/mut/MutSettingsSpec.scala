@@ -1,7 +1,7 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.LogoRRRSpec
-import app.logorrr.conf.{Settings, StageSettings}
+import app.logorrr.conf.{Settings, SettingsSpec, StageSettings}
 import org.scalacheck.Prop
 
 
