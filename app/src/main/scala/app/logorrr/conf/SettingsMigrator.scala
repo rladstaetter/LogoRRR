@@ -1,6 +1,6 @@
 package app.logorrr.conf
 
-import upickle.default._
+import upickle.default.*
 
 import java.io.File
 

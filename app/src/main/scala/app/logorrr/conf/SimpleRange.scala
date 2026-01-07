@@ -1,12 +1,12 @@
 package app.logorrr.conf
 
-import upickle.default._
+import upickle.default.*
 
 object SimpleRange {
-  implicit lazy val rw: ReadWriter[SimpleRange] = macroRW
+
 }
 
-case class SimpleRange(start: Int, end: Int) {
+case class SimpleRange(start: Int, end: Int) derives ReadWriter {
   require(start <= end, s"Expected start <= end, but was $start <= $end")
   val length: Int = end - start
 }

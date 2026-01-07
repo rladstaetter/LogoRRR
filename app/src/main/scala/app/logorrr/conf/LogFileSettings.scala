@@ -1,14 +1,12 @@
 package app.logorrr.conf
 
 import app.logorrr.views.logfiletab.TextConstants
-import upickle.default._
+import upickle.default.*
 
 import java.nio.file.Path
-import java.time._
+import java.time.*
 
 object LogFileSettings {
-
-  implicit lazy val rw: ReadWriter[LogFileSettings] = macroRW
 
   private val DefaultSelectedIndex = 0
   private val DefaultDividerPosition = 0.5
@@ -43,7 +41,6 @@ object LogFileSettings {
 }
 
 
-
 /**
  * Contains information which is necessary to display a log file.
  *
@@ -72,14 +69,14 @@ case class LogFileSettings(fileId: FileId
                            , fontSize: Int
                            , searchTerms: Seq[SearchTerm]
                            , blockSettings: BlockSettings
-                           ,  someTimestampSettings: Option[TimestampSettings] = None
+                           , someTimestampSettings: Option[TimestampSettings] = None
                            , autoScroll: Boolean
                            , firstVisibleTextCellIndex: Int
                            , lastVisibleTextCellIndex: Int
                            , lowerTimestamp: Long
                            , upperTimestamp: Long
                            , someSelectedSearchTermGroup: scala.Option[String]
-                           , searchTermGroups: Map[String, Seq[SearchTerm]]) {
+                           , searchTermGroups: Map[String, Seq[SearchTerm]]) derives ReadWriter {
 
   lazy val path: Path = fileId.asPath.toAbsolutePath
 

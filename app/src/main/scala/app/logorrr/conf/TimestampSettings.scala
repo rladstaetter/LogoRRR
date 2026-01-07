@@ -1,15 +1,13 @@
 package app.logorrr.conf
 
 import net.ladstatt.util.log.CanLog
-import upickle.default._
+import upickle.default.*
 
 import java.time.format.DateTimeFormatter
 import java.time._
 import scala.util.{Failure, Success, Try}
 
 object TimestampSettings extends CanLog {
-
-  implicit lazy val rw: ReadWriter[TimestampSettings] = macroRW
 
   val DefaultPattern = "yyyy-MM-dd HH:mm:ss.SSS"
 
@@ -53,7 +51,7 @@ object TimestampSettings extends CanLog {
 
 }
 
-case class TimestampSettings(range: SimpleRange, dateTimePattern: String) {
+case class TimestampSettings(range: SimpleRange, dateTimePattern: String) derives ReadWriter {
   val startCol: Int = range.start
   val endCol: Int = range.end
   val dateTimeFormatter: DateTimeFormatter = {

@@ -1,13 +1,11 @@
 package app.logorrr.conf
 
 import app.logorrr.cp.TxtCp
-import upickle.default._
+import upickle.default.*
 
 import scala.util.{Failure, Success}
 
 object AppInfo {
-
-  implicit lazy val rw: ReadWriter[AppInfo] = macroRW
 
   val meta = TxtCp("meta.json").asString() match {
     case Success(value) => read[AppInfo](value)
@@ -20,4 +18,4 @@ object AppInfo {
 
 }
 
-case class AppInfo(appName: String, appVersion: String)
+case class AppInfo(appName: String, appVersion: String) derives ReadWriter

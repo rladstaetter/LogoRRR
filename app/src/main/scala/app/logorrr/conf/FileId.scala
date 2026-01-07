@@ -1,23 +1,16 @@
 package app.logorrr.conf
 
-import upickle.default._
+import upickle.default.*
 
 import java.nio.file.{Path, Paths}
 
 object FileId {
 
-  implicit lazy val rw: ReadWriter[FileId] = readwriter[String].bimap[FileId](
-    fileId => fileId.value, // How to write: FileId -> String
-    str => {
-      FileId(str) // How to read:  String -> FileId
-    }
-  )
+  given rw: ReadWriter[FileId] = readwriter[String].bimap(_.value, FileId(_))
 
-  def apply(p: Path): FileId = {
-    FileId(p.toAbsolutePath.toString)
-  }
+  def apply(p: Path): FileId = FileId(p.toAbsolutePath.toString)
 
-  def reduceZipFiles(fileIds: Seq[FileId]): Map[FileId, Seq[FileId]] = fileIds.groupBy(fileId => fileId.extractZipFileId)
+  def reduceZipFiles(fileIds: Seq[FileId]): Map[FileId, Seq[FileId]] = fileIds.groupBy(_.extractZipFileId)
 
 }
 
@@ -29,7 +22,6 @@ object FileId {
  * @param value is an identifier which is used to discriminate between log files. typically it is a file path.
  */
 case class FileId(value: String) {
-
 
   def extractZipFileId: FileId = FileId(value.substring(0, value.indexOf(".zip@") + 4)) // get filename of zip file
 

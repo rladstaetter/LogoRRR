@@ -5,7 +5,7 @@ import app.logorrr.io.SettingsFileIO
 import net.ladstatt.util.log.CanLog
 import org.scalacheck.Gen
 import org.scalatest.wordspec.AnyWordSpec
-import upickle.default._
+import upickle.default.*
 
 import java.nio.file.{Files, Paths}
 import scala.util.{Failure, Success}

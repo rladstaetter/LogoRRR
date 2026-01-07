@@ -1,10 +1,8 @@
 package app.logorrr.conf
 
-import upickle.default._
+import upickle.default.*
 
 object BlockSettings {
-
-  implicit lazy val rw: ReadWriter[BlockSettings] = macroRW
 
 }
 
@@ -13,4 +11,4 @@ object BlockSettings {
  *
  * @param size size of blocks
  */
-case class BlockSettings(size: Int)
+case class BlockSettings(size: Int) derives ReadWriter

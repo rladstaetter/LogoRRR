@@ -5,7 +5,7 @@ import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.geometry.Rectangle2D
 import javafx.scene.paint.Color
 import javafx.stage.Screen
-import upickle.default._
+import upickle.default.*
 
 import java.nio.file.{Path, Paths}
 
@@ -22,8 +22,6 @@ object Settings {
     path => path.toString, // How to write: Path -> String
     str => Paths.get(str) // How to read:  String -> Path
   )
-
-  implicit lazy val rw: ReadWriter[Settings] = macroRW
 
   private val EmptyGroup: SearchTermGroup = SearchTermGroup("empty", Seq())
 
@@ -69,7 +67,7 @@ case class Settings(stageSettings: StageSettings
                     , fileSettings: Map[String, LogFileSettings]
                     , someActive: Option[FileId]
                     , someLastUsedDirectory: Option[Path] = None
-                    , searchTermGroups: Map[String, Seq[SearchTerm]]) {
+                    , searchTermGroups: Map[String, Seq[SearchTerm]]) derives ReadWriter {
 
   /** updates recent files with given log setting */
   def update(logFileSetting: LogFileSettings): Settings = {

@@ -1,7 +1,7 @@
 package app.logorrr.conf
 
 import javafx.scene.paint.Color
-import upickle.default._
+import upickle.default.*
 
 object SearchTerm {
 
@@ -16,8 +16,6 @@ object SearchTerm {
       Color.web(s)
     }
   )
-
-  implicit lazy val rw: ReadWriter[SearchTerm] = macroRW
 
   val Unclassified: Color = Color.LIGHTGREY
 
@@ -153,4 +151,4 @@ object SearchTerm {
  */
 case class SearchTerm(value: String
                       , color: Color
-                      , active: Boolean)
+                      , active: Boolean) derives ReadWriter

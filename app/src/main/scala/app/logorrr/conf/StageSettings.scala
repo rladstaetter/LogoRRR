@@ -1,11 +1,9 @@
 package app.logorrr.conf
 
 import javafx.geometry.Rectangle2D
-import upickle.default._
+import upickle.default.*
 
 object StageSettings {
-
-  implicit lazy val rw: ReadWriter[StageSettings] = macroRW
 
   def apply(rectangle2D: Rectangle2D): StageSettings = {
     StageSettings(rectangle2D.getMinX, rectangle2D.getMinY, rectangle2D.getWidth.toInt, rectangle2D.getHeight.toInt)
@@ -22,4 +20,4 @@ object StageSettings {
 case class StageSettings(x: Double
                          , y: Double
                          , width: Int
-                         , height: Int)
+                         , height: Int) derives ReadWriter
