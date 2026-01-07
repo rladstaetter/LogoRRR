@@ -16,7 +16,7 @@ import javafx.scene.paint.Color
  */
 case class LogTextViewLabel(e: LogEntry
                             , maxLength: Int
-                            , filters: Seq[_ <: MutableSearchTerm]
+                            , filters: Seq[? <: MutableSearchTerm]
                             , fontStyleBinding: StringBinding
                             , fontSizeProperty: IntegerProperty
                            ) extends HBox {
@@ -50,7 +50,7 @@ case class LogTextViewLabel(e: LogEntry
     duration => getChildren.add(LineTimerLabel(duration))
   )
   */
-  getChildren.addAll(labels: _*)
+  getChildren.addAll(labels*)
 
 }
 

@@ -20,7 +20,7 @@ class DragSourceButton(fileId: FileId) extends Button(fileId.fileName) {
     val content = new ClipboardContent()
     content.putFiles(Collections.singletonList(fileId.asPath.toFile))
     startFullDrag()
-    startDragAndDrop(TransferMode.ANY: _*).setContent(content)
+    startDragAndDrop(TransferMode.ANY*).setContent(content)
   })
 
 }

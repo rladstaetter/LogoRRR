@@ -28,8 +28,8 @@ class TestFxBaseApplicationTest
     // exit application
     //push(KeyCode.COMMAND, KeyCode.Q)
     FxToolkit.hideStage()
-    release(Array[KeyCode](): _*)
-    release(Array[MouseButton](): _*)
+    release(Array[KeyCode]()*)
+    release(Array[MouseButton]()*)
   }
 
   def lookup[T <: Node](uiNode: UiNode): T = lookup(uiNode.ref).query[T]

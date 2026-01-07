@@ -27,7 +27,7 @@ class CloseOtherFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends Me
         }
       }.toSeq
     }
-    tabPane.getTabs.removeAll(toBeDeleted: _*)
+    tabPane.getTabs.removeAll(toBeDeleted*)
     // reinit context menu since only one tab is left
     tabPane.getTabs.get(0).asInstanceOf[LogFileTab].initContextMenu()
   })

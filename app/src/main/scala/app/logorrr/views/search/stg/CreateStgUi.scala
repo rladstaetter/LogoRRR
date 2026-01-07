@@ -30,5 +30,5 @@ class CreateStgUi(mutLogFileSettings: MutLogFileSettings
 
   private val searchTermVis: Seq[SimpleToggleButton] = activeSearchTerms.map(s => new SimpleToggleButton(SimpleSearchTermVis(s)))
 
-  getItems.addAll(Seq(createButton, nameField) ++ searchTermVis: _*)
+  getItems.addAll(Seq(createButton, nameField) ++ searchTermVis*)
 }

@@ -10,11 +10,11 @@ import javafx.geometry.Pos
  */
 object UiNode {
 
-  def apply(fileId: FileId, pos: Pos, clazz: Class[_]): UiNode = {
+  def apply(fileId: FileId, pos: Pos, clazz: Class[?]): UiNode = {
     UiNode(s"${clazz.getSimpleName}-${pos.toString}-${HashUtil.md5Sum(fileId)}")
   }
 
-  def apply(fileId: FileId, clazz: Class[_]): UiNode = {
+  def apply(fileId: FileId, clazz: Class[?]): UiNode = {
     UiNode(clazz.getSimpleName + "-" + HashUtil.md5Sum(fileId))
   }
 

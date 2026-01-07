@@ -49,7 +49,7 @@ class StgEditorListViewCell(fileId: FileId) extends ListCell[SearchTermGroup] {
 
       val toolBar = new ToolBar
       toolBar.getItems.addAll(deleteButton, globalStgButton, label)
-      toolBar.getItems.addAll(vis: _*)
+      toolBar.getItems.addAll(vis*)
       setGraphic(toolBar)
     }
   }

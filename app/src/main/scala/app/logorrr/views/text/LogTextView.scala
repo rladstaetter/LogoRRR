@@ -49,7 +49,7 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
   /**
    * to observe the visible text and mark it in the boxview
    */
-  private lazy val skinListener = JfxUtils.onNew[Skin[_]](_ => {
+  private lazy val skinListener = JfxUtils.onNew[Skin[?]](_ => {
     ListViewHelper.findScrollBar(this).foreach(_.valueProperty.addListener(scrollBarListener))
   })
 

@@ -34,7 +34,7 @@ class SettingsStgListViewCell extends ListCell[SearchTermGroup] {
 
       val toolBar = new ToolBar
       toolBar.getItems.addAll(deleteButton, label)
-      toolBar.getItems.addAll(vis: _*)
+      toolBar.getItems.addAll(vis*)
       setGraphic(toolBar)
     }
   }

@@ -18,13 +18,13 @@ class MutSearchTermGroupSettings {
 
   private val searchTermMapping: SimpleMapProperty[String, Seq[SearchTerm]] = new SimpleMapProperty[String, Seq[SearchTerm]](FXCollections.observableMap(new util.HashMap()))
 
-  val searchTermGroupNames: ObservableList[String] = FXCollections.observableArrayList(searchTermMapping.keySet().asScala.toSeq.sorted: _*)
+  val searchTermGroupNames: ObservableList[String] = FXCollections.observableArrayList(searchTermMapping.keySet().asScala.toSeq.sorted*)
 
   val searchTermGroupEntries: ObservableList[SearchTermGroup] = FXCollections.observableArrayList(MutSearchTermGroupSettings.toObservableList(searchTermMapping))
 
   searchTermMapping.addListener(new MapChangeListener[String, Seq[SearchTerm]] {
-    override def onChanged(change: MapChangeListener.Change[_ <: String, _ <: Seq[SearchTerm]]): Unit = {
-      searchTermGroupNames.setAll(searchTermMapping.keySet().asScala.toSeq.sorted: _*)
+    override def onChanged(change: MapChangeListener.Change[? <: String, ? <: Seq[SearchTerm]]): Unit = {
+      searchTermGroupNames.setAll(searchTermMapping.keySet().asScala.toSeq.sorted*)
       searchTermGroupEntries.setAll(MutSearchTermGroupSettings.toObservableList(searchTermMapping))
     }
   })

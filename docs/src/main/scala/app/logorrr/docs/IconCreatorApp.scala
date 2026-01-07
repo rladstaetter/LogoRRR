@@ -38,7 +38,7 @@ object IconCreatorApp extends Fs with CanLog  {
   def main(args: Array[String]): Unit = {
     val appMeta = net.ladstatt.app.AppMeta(AppId("IconCreatorApp", "iconcreatorapp", "iconcreator.app"), AppMeta.LogFormat)
     net.ladstatt.app.AppMeta.initApp(appMeta)
-    javafx.application.Application.launch(classOf[IconCreatorApp], args: _*)
+    javafx.application.Application.launch(classOf[IconCreatorApp], args*)
   }
 }
 
@@ -59,7 +59,7 @@ class IconCreatorApp extends javafx.application.Application {
       }
     IconCreatorApp.writeIcons(ics, Paths.get("app/src/main/resources/app/logorrr/icon/"))
     IconCreatorApp.writeIcons(ics, Paths.get("dist/dist-linux/flatpak/flatpak-package/src/main/resources/icons/"))
-    val box = new VBox(10, ics.map(_._2): _*)
+    val box = new VBox(10, ics.map(_._2)*)
     box.setAlignment(Pos.CENTER)
     bp.setCenter(box)
     val scene = new Scene(bp, iconSizes.max + iconSizes.max / 10, iconSizes.sum + iconSizes.sum / 10)

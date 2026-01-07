@@ -19,16 +19,16 @@ object ChunkListView {
 
   val DefaultScrollBarWidth = 18
 
-  def lookupVirtualFlow(skin: Skin[_]): Option[VirtualFlow[ChunkListCell[_]]] = {
+  def lookupVirtualFlow(skin: Skin[?]): Option[VirtualFlow[ChunkListCell[?]]] = {
     Option(skin match {
       case skinBase: SkinBase[_] =>
-        skinBase.getChildren.asScala.find(_.getStyleClass.contains("virtual-flow")).orNull.asInstanceOf[VirtualFlow[ChunkListCell[_]]]
+        skinBase.getChildren.asScala.find(_.getStyleClass.contains("virtual-flow")).orNull.asInstanceOf[VirtualFlow[ChunkListCell[?]]]
       case _ =>
         null
     })
   }
 
-  def lookupScrollBar(flow: VirtualFlow[ChunkListCell[_]], orientation: Orientation): Option[ScrollBar] = {
+  def lookupScrollBar(flow: VirtualFlow[ChunkListCell[?]], orientation: Orientation): Option[ScrollBar] = {
     Option(flow.getChildrenUnmodifiable.toArray.collectFirst { case sb: ScrollBar if sb.getOrientation == orientation => sb }.orNull)
   }
 
@@ -78,7 +78,7 @@ class ChunkListView[A](val elements: ObservableList[A]
    * What should happen if the scrollbar appears/vanishes
    */
   private val scrollBarVisibilityListener = new ChangeListener[lang.Boolean] {
-    override def changed(observableValue: ObservableValue[_ <: lang.Boolean], t: lang.Boolean, isVisible: lang.Boolean): Unit = {
+    override def changed(observableValue: ObservableValue[? <: lang.Boolean], t: lang.Boolean, isVisible: lang.Boolean): Unit = {
       if (isVisible) {
         setScrollBarWidth(ChunkListView.DefaultScrollBarWidth)
         recalculateAndUpdateItems()
@@ -90,7 +90,7 @@ class ChunkListView[A](val elements: ObservableList[A]
   }
 
   // needed to get access to the scrollbar
-  private val chunkListViewSkinListener: ChangeListener[Skin[_]] = (_: ObservableValue[_ <: Skin[_]], _: Skin[_], currentSkin: Skin[_]) => {
+  private val chunkListViewSkinListener: ChangeListener[Skin[?]] = (_: ObservableValue[? <: Skin[?]], _: Skin[?], currentSkin: Skin[?]) => {
     for {skin <- Option(currentSkin)
          flow <- ChunkListView.lookupVirtualFlow(skin)
          horizontalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.HORIZONTAL)
@@ -107,7 +107,7 @@ class ChunkListView[A](val elements: ObservableList[A]
 
   /** if user selects a new active element, recalculate and implicitly repaint */
   //private val selectedRp = mkRecalculateAndUpdateItemListener("selected")
-  private val anyRp: ChangeListener[java.lang.Boolean] = (_: ObservableValue[_ <: java.lang.Boolean], _: java.lang.Boolean, _: java.lang.Boolean) => {
+  private val anyRp: ChangeListener[java.lang.Boolean] = (_: ObservableValue[? <: java.lang.Boolean], _: java.lang.Boolean, _: java.lang.Boolean) => {
     recalculateAndUpdateItems()
   }
 

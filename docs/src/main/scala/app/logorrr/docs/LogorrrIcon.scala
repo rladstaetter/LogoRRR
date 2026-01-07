@@ -22,7 +22,7 @@ object LogorrrIcon {
   }
 
   def drawIcon(graphicsContext: GraphicsContext, size: Int): Unit = {
-    val rws = LogorrrIcon.drawRoundedRectangleWithShadow(graphicsContext) _
+    val rws = LogorrrIcon.drawRoundedRectangleWithShadow(graphicsContext)
 
     val s = size.toDouble
     val factor = 10
@@ -44,7 +44,7 @@ object LogorrrIcon {
   }
 
   def drawIcon2(graphicsContext: GraphicsContext, size: Int): Unit = {
-    val rws = LogorrrIcon.drawRoundedRectangleWithShadow(graphicsContext) _
+    val rws = LogorrrIcon.drawRoundedRectangleWithShadow(graphicsContext)
 
     val s = size.toDouble
     val factor = 10

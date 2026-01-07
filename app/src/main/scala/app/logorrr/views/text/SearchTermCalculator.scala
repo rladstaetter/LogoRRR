@@ -14,7 +14,7 @@ import scala.collection.mutable.ListBuffer
  * @param searchTerms  filter containing color and search string
  */
 case class SearchTermCalculator(logEntry: LogEntry
-                                , searchTerms: Seq[_ <: MutableSearchTerm]) {
+                                , searchTerms: Seq[? <: MutableSearchTerm]) {
 
   private val logLine = logEntry.value
 

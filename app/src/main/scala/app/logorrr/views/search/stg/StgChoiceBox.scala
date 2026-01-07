@@ -24,7 +24,7 @@ class StgChoiceBox(mutLogFileSettings: MutLogFileSettings, searchTerms: SimpleLi
     mutLogFileSettings.getSearchTerms(groupName) match {
       case Some(selectedTerms) =>
         searchTerms.clear()
-        searchTerms.addAll(selectedTerms.map(MutableSearchTerm.apply): _*)
+        searchTerms.addAll(selectedTerms.map(MutableSearchTerm.apply)*)
         mutLogFileSettings.setSomeSelectedSearchTermGroup(Option(groupName))
       case None =>
         mutLogFileSettings.setSomeSelectedSearchTermGroup(None)

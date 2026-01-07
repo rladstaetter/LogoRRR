@@ -142,6 +142,6 @@ class OpsToolBar(fileId: FileId
 
   private val nodes: Seq[Node] = Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox)
 
-  getItems.addAll(searchItems ++ otherItems ++ nodes: _*)
+  getItems.addAll(searchItems ++ otherItems ++ nodes*)
 
 }

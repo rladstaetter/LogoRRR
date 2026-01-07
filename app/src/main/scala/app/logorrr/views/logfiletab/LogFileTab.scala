@@ -106,7 +106,7 @@ class LogFileTab(val fileId: FileId
 
   private val searchTermChangeListener: ListChangeListener[MutableSearchTerm] = {
 
-    def handleSearchTermChange(change: ListChangeListener.Change[_ <: MutableSearchTerm]): Unit = {
+    def handleSearchTermChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit = {
       while (change.next()) {
         Future {
           LogoRRRGlobals.persist()
@@ -222,7 +222,7 @@ class LogFileTab(val fileId: FileId
       }
     }
 
-    new ContextMenu(items: _*)
+    new ContextMenu(items*)
   }
 
   private def addListeners(): Unit = {

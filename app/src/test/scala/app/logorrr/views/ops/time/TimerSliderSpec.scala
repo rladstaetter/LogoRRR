@@ -20,7 +20,7 @@ class TimerSliderSpec extends AnyWordSpec {
     }
     ".more entries without timestamp" in {
       val list = List.fill(100)(LogEntry(0, "", None, None))
-      val l = FXCollections.observableArrayList(list: _*)
+      val l = FXCollections.observableArrayList(list*)
       assert(TimeUtil.calcTimeInfo(l).isEmpty)
     }
     ".one entry with timestamp" in {

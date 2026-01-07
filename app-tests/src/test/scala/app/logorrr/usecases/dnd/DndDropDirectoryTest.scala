@@ -30,7 +30,7 @@ class DndDropDirectoryTest extends StartEmptyApplicationTest
     LogoRRRApp.start(stage, services)
 
     val dndStage = new Stage()
-    val dropBox = new ToolBar(Seq(new DragSourceButton(FileId(TestFiles.baseDir))): _*)
+    val dropBox = new ToolBar(Seq(new DragSourceButton(FileId(TestFiles.baseDir)))*)
     dndStage.setScene(new Scene(dropBox))
     dndStage.show()
 

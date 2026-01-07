@@ -4,7 +4,7 @@ import java.util.Properties
 
 case class PropsCp(classPathResource: String) extends CpResource {
 
-  def asProperties(clazz: Class[_]): Properties = {
+  def asProperties(clazz: Class[?]): Properties = {
     val properties = new Properties()
     val is = clazz.getResourceAsStream(classPathResource)
     try {

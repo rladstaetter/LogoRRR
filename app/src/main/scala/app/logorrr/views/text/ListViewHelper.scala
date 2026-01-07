@@ -13,7 +13,7 @@ object ListViewHelper {
    */
   def getVisibleRange(listView: ListView[LogEntry]): (Int, Int) = {
     val skin = listView.getSkin.asInstanceOf[ListViewSkin[LogEntry]]
-    val flow = skin.getChildren.get(0).asInstanceOf[VirtualFlow[_ <: IndexedCell[LogEntry]]]
+    val flow = skin.getChildren.get(0).asInstanceOf[VirtualFlow[? <: IndexedCell[LogEntry]]]
     val firstVisibleIndex = {
       (for {fvc <- Option(flow.getFirstVisibleCell)
             g <- Option(fvc.getGraphic)} yield g.asInstanceOf[LogTextViewLabel].e.lineNumber).getOrElse(-1)

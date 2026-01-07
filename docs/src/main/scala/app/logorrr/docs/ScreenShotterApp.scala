@@ -26,7 +26,7 @@ object ScreenShotterApp {
   }
 
   def main(args: Array[String]): Unit = {
-    javafx.application.Application.launch(classOf[ScreenShotterApp], args: _*)
+    javafx.application.Application.launch(classOf[ScreenShotterApp], args*)
   }
 }
 

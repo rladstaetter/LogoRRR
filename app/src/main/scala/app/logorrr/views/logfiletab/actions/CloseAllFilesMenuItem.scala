@@ -23,7 +23,7 @@ class CloseAllFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends Menu
         Option(t)
       }.toSeq
     }
-    tabPane.getTabs.removeAll(toBeDeleted: _*)
+    tabPane.getTabs.removeAll(toBeDeleted*)
   })
 
 }

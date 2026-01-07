@@ -29,7 +29,7 @@ class DndDropZipFileTest extends StartEmptyApplicationTest
     LogoRRRApp.start(stage, services)
 
     val dndStage = new Stage()
-    val dropBox = new ToolBar(Seq(new DragSourceButton(TestFiles.zipFileContaining10Files)): _*)
+    val dropBox = new ToolBar(Seq(new DragSourceButton(TestFiles.zipFileContaining10Files))*)
     dndStage.setScene(new Scene(dropBox))
     dndStage.show()
 

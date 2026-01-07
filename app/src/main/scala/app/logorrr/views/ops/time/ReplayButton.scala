@@ -72,11 +72,11 @@ class ReplayButton(filteredList: ObservableList[LogEntry]
                    , replaySpeedIndexProperty: IntegerProperty
                    , logTextView: LogTextView) extends Button {
 
-  var timeline: Timeline = _
+  var timeline: Timeline = scala.compiletime.uninitialized
   private val icon = new FontIcon(FontAwesomeSolid.PLAY_CIRCLE)
   private val iconLight = new FontIcon(FontAwesomeRegular.PLAY_CIRCLE)
   private val tooltip = new Tooltip("replay log")
-  var animationTimer: PulsatingAnimationTimer = _
+  var animationTimer: PulsatingAnimationTimer = scala.compiletime.uninitialized
 
   setGraphic(icon)
   setTooltip(tooltip)
@@ -90,7 +90,7 @@ class ReplayButton(filteredList: ObservableList[LogEntry]
       case None =>
     }
     val frames = mkFrames()
-    timeline = new Timeline(frames.toList: _*)
+    timeline = new Timeline(frames.toList*)
     timeline.setRate(speedFactor)
     timeline.setCycleCount(Animation.INDEFINITE)
     timeline.play()

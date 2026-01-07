@@ -7,10 +7,10 @@ import java.nio.file.Paths
 
 class IoManagerSpec extends AnyWordSpec {
 
-   LogoRRRNative.loadNativeLibraries()
+  LogoRRRNative.loadNativeLibraries()
 
   "read ziputil-simple.zip" in {
-    val res = IoManager.unzip(Paths.get("src/test/resources/app/logorrr/io/ziputil-simple.zip") )
+    val res = IoManager.unzip(Paths.get("src/test/resources/app/logorrr/io/ziputil-simple.zip"))
     assert(res.size == 1)
     val (fileId, entries) = res.toSeq.head
     assert(fileId.fileName.endsWith("simple.log"))

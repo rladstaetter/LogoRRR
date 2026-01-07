@@ -24,7 +24,7 @@ case class PaneDefinition(jfxId: String, graphic: Node, step: Int, boundary: Int
 object LogFileTabContent {
 
   /** wire pane and slider together */
-  private def mkPane(listView: ListView[_]
+  private def mkPane(listView: ListView[?]
                      , slider: Slider
                      , inc: PaneDefinition
                      , dec: PaneDefinition

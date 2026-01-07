@@ -51,7 +51,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
 
 
   /** if filter list is changed in any way, react to this event and either add or remove filter from UI */
-  private def processFiltersChange(change: ListChangeListener.Change[_ <: MutableSearchTerm]): Unit = {
+  private def processFiltersChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit = {
     while (change.next()) {
       if (change.wasAdded()) {
         change.getAddedSubList.asScala.foreach(addSearchTermButton)

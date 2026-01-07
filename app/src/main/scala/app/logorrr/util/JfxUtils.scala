@@ -45,9 +45,9 @@ object JfxUtils extends CanLog {
 
   def mkInvalidationListener(invalidated: Observable => Unit): InvalidationListener = (observable: Observable) => invalidated(observable)
 
-  def onNew[T](f: T => Unit): ChangeListener[T] = (_: ObservableValue[_ <: T], _: T, t1: T) => f(t1)
+  def onNew[T](f: T => Unit): ChangeListener[T] = (_: ObservableValue[? <: T], _: T, t1: T) => f(t1)
 
-  def mkListChangeListener[T](fn: ListChangeListener.Change[_ <: T] => Unit): ListChangeListener[T] = (change: ListChangeListener.Change[_ <: T]) => fn(change)
+  def mkListChangeListener[T](fn: ListChangeListener.Change[? <: T] => Unit): ListChangeListener[T] = (change: ListChangeListener.Change[? <: T]) => fn(change)
 
   def randColor: Color = Color.color(Random.nextDouble()
     , Random.nextDouble()

@@ -276,9 +276,9 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
 
   private def getEntryAt(chunk: Chunk[A], index: Int): Option[A] = Try(chunk.entries.get(index)).toOption
 
-  private def paintPixels(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: ChunkShape): Unit = pixelBuffer.updateBuffer(updatePixels(entries, shape) _)
+  private def paintPixels(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: ChunkShape): Unit = pixelBuffer.updateBuffer(updatePixels(entries, shape))
 
-  private def paintRects(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: ChunkShape, blockSize: Int): Unit = pixelBuffer.updateBuffer(updateRects(entries, shape, blockSize) _)
+  private def paintRects(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: ChunkShape, blockSize: Int): Unit = pixelBuffer.updateBuffer(updateRects(entries, shape, blockSize))
 
   def updateRects(entries: java.util.List[A], shape: ChunkShape, blockSize: Int)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
     var i = 0

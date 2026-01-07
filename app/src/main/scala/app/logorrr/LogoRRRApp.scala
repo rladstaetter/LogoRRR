@@ -26,7 +26,7 @@ object LogoRRRApp extends CanLog {
 
   def main(args: Array[String]): Unit = {
     net.ladstatt.app.AppMeta.initApp(appMeta)
-    javafx.application.Application.launch(classOf[LogoRRRApp], args: _*)
+    javafx.application.Application.launch(classOf[LogoRRRApp], args*)
   }
 
   def start(stage: Stage

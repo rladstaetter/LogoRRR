@@ -39,7 +39,7 @@ class MainTabPane extends TabPane with CanLog {
   // setup DnD
   setOnDragOver((event: DragEvent) => {
     if (event.getDragboard.hasFiles) {
-      event.acceptTransferModes(TransferMode.ANY: _*)
+      event.acceptTransferModes(TransferMode.ANY*)
     }
   })
 

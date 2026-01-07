@@ -22,7 +22,8 @@ class MutSettingsSpec extends LogoRRRSpec {
     }
     "de/serialize" in {
       check(Prop.forAll(SettingsSpec.gen) {
-        expected: Settings => expected == mkMutSettings(mkMutSettings(expected).mkImmutable()).mkImmutable()
+        (expected: Settings) => 
+          expected == mkMutSettings(mkMutSettings(expected).mkImmutable()).mkImmutable()
       })
     }
   }

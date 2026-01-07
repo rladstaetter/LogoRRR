@@ -16,7 +16,7 @@ case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) exten
 
   // Use a dedicated, single-threaded scheduler for all polling operations
   private var someScheduler: Option[ScheduledExecutorService] = None
-  private var future: Option[ScheduledFuture[_]] = None
+  private var future: Option[ScheduledFuture[?]] = None
   private var lastPosition: Long = 0L
   private val logFile = fileId.asPath.toFile
   private val pollingDelayMs = 500L // Poll every half-second

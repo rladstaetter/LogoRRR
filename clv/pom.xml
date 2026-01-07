@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
+          <artifactId>scala3-library_3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -28,15 +28,15 @@
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_${scala.major.version}</artifactId>
+            <artifactId>scalatest_3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scalacheck</groupId>
-            <artifactId>scalacheck_${scala.major.version}</artifactId>
+            <artifactId>scalacheck_3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scalatestplus</groupId>
-            <artifactId>scalacheck-1-15_${scala.major.version}</artifactId>
+            <artifactId>scalacheck-1-15_3</artifactId>
         </dependency>
     </dependencies>
     <build>

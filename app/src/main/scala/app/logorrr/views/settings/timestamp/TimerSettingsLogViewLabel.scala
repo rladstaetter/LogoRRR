@@ -72,6 +72,6 @@ case class TimerSettingsLogViewLabel(settings: MutLogFileSettings
     }
   }
 
-  getChildren.addAll(chars: _*)
+  getChildren.addAll(chars*)
 
 }

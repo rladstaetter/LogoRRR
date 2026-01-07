@@ -28,6 +28,6 @@ class HelpMenu(stage: Stage, openFile: FileId => Unit) extends Menu("Help") {
       } else {
         Seq()
       })
-  getItems.addAll(items: _*)
+  getItems.addAll(items*)
 }
 
