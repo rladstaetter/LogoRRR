@@ -23,10 +23,6 @@
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_3</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.scalacheck</groupId>
-            <artifactId>scalacheck_3</artifactId>
-        </dependency>
     </dependencies>
     <build>
         <plugins>

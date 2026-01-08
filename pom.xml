@@ -208,9 +208,9 @@
                 <version>${ikonli.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.scala-lang</groupId>
-                <artifactId>toolkit_3</artifactId>
-                <version>0.7.0</version>
+                <groupId>com.lihaoyi</groupId>
+                <artifactId>upickle_3</artifactId>
+                <version>4.1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.scalatest</groupId>
@@ -220,14 +220,8 @@
             </dependency>
             <dependency>
                 <groupId>org.scalatestplus</groupId>
-                <artifactId>scalacheck-1-15_3</artifactId>
-                <version>3.2.11.0</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.scalacheck</groupId>
-                <artifactId>scalacheck_3</artifactId>
-                <version>1.15.4</version>
+                <artifactId>scalacheck-1-19_3</artifactId>
+                <version>3.2.19.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

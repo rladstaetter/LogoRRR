@@ -43,8 +43,8 @@
             <artifactId>ikonli-fontawesome6-pack</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>toolkit_3</artifactId>
+            <groupId>com.lihaoyi</groupId>
+            <artifactId>upickle_3</artifactId>
         </dependency>
         <dependency>
             <groupId>app.logorrr</groupId>
@@ -78,12 +78,8 @@
             <artifactId>scalatest_3</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.scalacheck</groupId>
-            <artifactId>scalacheck_3</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.scalatestplus</groupId>
-            <artifactId>scalacheck-1-15_3</artifactId>
+            <artifactId>scalacheck-1-19_3</artifactId>
         </dependency>
     </dependencies>
     <build>
