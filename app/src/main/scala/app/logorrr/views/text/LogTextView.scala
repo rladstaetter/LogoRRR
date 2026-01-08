@@ -3,135 +3,76 @@ package app.logorrr.views.text
 import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.text.contextactions.{CopyEntriesMenuItem, IgnoreAboveMenuItem, IgnoreBelowMenuItem}
 import javafx.collections.transformation.FilteredList
-import javafx.scene.control._
+import javafx.collections.{FXCollections, ObservableList}
+import javafx.scene.Node
+import javafx.scene.control.MultipleSelectionModel
+import jfx.incubator.scene.control.richtext.model.BasicTextModel.InMemoryContent
+import jfx.incubator.scene.control.richtext.{CodeArea, SideDecorator}
+import jfx.incubator.scene.control.richtext.model.CodeTextModel
 import net.ladstatt.util.log.CanLog
-
-import scala.jdk.CollectionConverters._
 
 
 object LogTextView extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogTextView])
 
+  def apply(mutLogFileSettings: MutLogFileSettings
+            , filteredList: FilteredList[LogEntry]) =
+    new LogTextView(mutLogFileSettings, new CodeTextModel(new LogEntryContent(filteredList)))
+
 
 class LogTextView(mutLogFileSettings: MutLogFileSettings
-                  , filteredList: FilteredList[LogEntry])
-  extends ListView[LogEntry]
-    with CanLog:
+                  , model: CodeTextModel)
+  extends CodeArea(model) with CanLog:
 
-  setId(LogTextView.uiNode(mutLogFileSettings.getFileId).value)
-  getSelectionModel.setSelectionMode(SelectionMode.MULTIPLE)
-
-  private lazy val selectedLineNumberListener = JfxUtils.onNew[LogEntry](e => {
-    Option(e) match {
-      case Some(value) =>
-        // implicitly sets active element in chunkview via global settings binding
-        mutLogFileSettings.setSelectedLineNumber(value.lineNumber)
-      case None => logTrace("Selected item was null")
-    }
-  })
-
-  // when changing font size, repaint
-  // otherwise listview is not repainted correctly since calculation of the cellheight is broken atm
-  private lazy val refreshListener = JfxUtils.onNew[Number](_ => refresh())
-
-  private lazy val scrollBarListener = JfxUtils.onNew[Number](_ => {
-    val (first, last) = ListViewHelper.getVisibleRange(this)
-    mutLogFileSettings.setFirstVisibleTextCellIndex(first)
-    mutLogFileSettings.setLastVisibleTextCellIndex(last)
-  })
-
-  /**
-   * to observe the visible text and mark it in the boxview
-   */
-  private lazy val skinListener = JfxUtils.onNew[Skin[?]](_ => {
-    ListViewHelper.findScrollBar(this).foreach(_.valueProperty.addListener(scrollBarListener))
-  })
+  def init(): Unit = {
+    setLineNumbersEnabled(true)
+    setHighlightCurrentParagraph(true)
+  }
 
 
-  def scrollToItem(item: LogEntry): Unit =
-    val relativeIndex = getItems.indexOf(item)
-    getSelectionModel.clearAndSelect(relativeIndex)
-    val cellHeight = mutLogFileSettings.getFontSize
-    JfxUtils.scrollTo[LogEntry](this, cellHeight, relativeIndex)
+  def removeListeners(): Unit = ()
 
-  def scrollToActiveLogEntry(): Unit =
-    if getHeight != 0 then
-      logTrace(s"scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
-      val candidates = filteredList.filtered(l => l.lineNumber == mutLogFileSettings.selectedLineNumberProperty.get())
-      if !candidates.isEmpty then
-        Option(candidates.get(0)) match
-          case Some(selectedEntry) =>
-            scrollToItem(selectedEntry)
-            // to trigger ChunkListView scrollTo and repaint
-            mutLogFileSettings.setSelectedLineNumber(selectedEntry.lineNumber)
-          case None => // do nothing
-      else
-        logTrace(s"NOT scrollToActiveLogEntry: no active element was set, not changing scroll position.")
-    else
-      logTrace(s"NOT scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
+  def getSelectionModel: MultipleSelectionModel[LogEntry] = new MultipleSelectionModel[LogEntry] {
+    override def getSelectedIndices: ObservableList[Integer] = ???
 
+    override def getSelectedItems: ObservableList[LogEntry] = ???
 
-  def init(): Unit =
-    getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
-    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
+    override def selectIndices(i: Int, ints: Int*): Unit = ???
 
-    getSelectionModel.selectedItemProperty().addListener(selectedLineNumberListener)
-    mutLogFileSettings.fontSizeProperty.addListener(refreshListener)
+    override def selectAll(): Unit = ???
 
-    skinProperty.addListener(skinListener)
+    override def selectFirst(): Unit = ???
 
-    setItems(filteredList)
+    override def selectLast(): Unit = ???
 
+    override def clearAndSelect(i: Int): Unit = ???
 
+    override def select(i: Int): Unit = ???
 
-  /** clean up listeners */
-  def removeListeners(): Unit =
-    getSelectionModel.selectedItemProperty().removeListener(selectedLineNumberListener)
-    mutLogFileSettings.fontSizeProperty.removeListener(refreshListener)
-    skinProperty.removeListener(skinListener)
-    ListViewHelper.findScrollBar(this).foreach(_.valueProperty.removeListener(scrollBarListener))
+    override def select(t: LogEntry): Unit = ???
 
-  /** determine width of max elems in this view */
-  def maxLength: Int = filteredList.size().toString.length
+    override def clearSelection(i: Int): Unit = ???
 
-  class LogEntryListCell extends ListCell[LogEntry]:
-    styleProperty().bind(mutLogFileSettings.fontStyleBinding)
-    setGraphic(null)
+    override def clearSelection(): Unit = ???
 
-    override def updateItem(t: LogEntry, b: Boolean): Unit =
-      super.updateItem(t, b)
+    override def isSelected(i: Int): Boolean = ???
 
-      Option(t) match
-        case Some(e) => calculateLabel(e)
-        case None =>
-          setGraphic(null)
-          setContextMenu(null)
+    override def isEmpty: Boolean = ???
 
-    private def calculateLabel(e: LogEntry): Unit =
-      val entry = LogTextViewLabel(e
-        , maxLength
-        , mutLogFileSettings.mutSearchTerms.get().asScala.toSeq
-        , mutLogFileSettings.fontStyleBinding
-        , mutLogFileSettings.fontSizeProperty)
+    override def selectPrevious(): Unit = ???
 
-      setGraphic(entry)
+    override def selectNext(): Unit = ???
+  }
 
-      val copySelectionMenuItem = new CopyEntriesMenuItem(getSelectionModel)
+  def scrollToActiveLogEntry(): Unit = ()
 
-      val ignoreAboveMenuItem = new IgnoreAboveMenuItem(mutLogFileSettings
-        , e
-        , filteredList
-        , scrollToActiveLogEntry)
-      val ignoreBelowMenuItem = new IgnoreBelowMenuItem(e, filteredList)
+  def scrollToItem(logEntry: LogEntry): Unit = ()
 
-      setContextMenu(new ContextMenu(copySelectionMenuItem, ignoreAboveMenuItem, ignoreBelowMenuItem))
+  def scrollTo(i: Int): Unit = ()
 
-
-
-
+  def getItems: ObservableList[LogEntry] =
+    FXCollections.observableArrayList()
 

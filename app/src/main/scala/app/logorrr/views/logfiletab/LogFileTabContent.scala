@@ -4,10 +4,10 @@ import app.logorrr.conf.SearchTerm
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.views.block.BlockConstants
-import app.logorrr.views.ops._
+import app.logorrr.views.ops.*
 import app.logorrr.views.search.st.SearchTermToolBar
 import app.logorrr.views.search.OpsToolBar
-import app.logorrr.views.text.LogTextView
+import app.logorrr.views.text.{LogTextView}
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.Property
 import javafx.beans.{InvalidationListener, Observable}
@@ -24,7 +24,7 @@ case class PaneDefinition(jfxId: String, graphic: Node, step: Int, boundary: Int
 object LogFileTabContent:
 
   /** wire pane and slider together */
-  private def mkPane(listView: ListView[?]
+  private def mkPane(view: Node
                      , slider: Slider
                      , inc: PaneDefinition
                      , dec: PaneDefinition
@@ -35,7 +35,7 @@ object LogFileTabContent:
     HBox.setHgrow(slider, Priority.ALWAYS)
     hbox.setAlignment(Pos.CENTER)
     hbox.setPrefWidth(java.lang.Double.MAX_VALUE)
-    val bBp = new BorderPane(listView, hbox, null, null, null)
+    val bBp = new BorderPane(view, hbox, null, null, null)
     slider.valueProperty().bindBidirectional(boundProp)
     VBox.setVgrow(bBp, Priority.ALWAYS)
     bBp.setMaxHeight(java.lang.Double.MAX_VALUE)
@@ -52,7 +52,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
   private val filteredEntries = new FilteredList[LogEntry](entries)
 
   // display text to the right
-  private val logTextView = new LogTextView(mutLogFileSettings, filteredEntries)
+  private val logTextView = LogTextView(mutLogFileSettings, filteredEntries)
 
   // graphical display to the left
   private val chunkListView = LogoRRRChunkListView(filteredEntries, mutLogFileSettings, logTextView.scrollToItem, widthProperty)
