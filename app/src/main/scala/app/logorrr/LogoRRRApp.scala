@@ -17,7 +17,6 @@ import java.nio.file.Paths
 /**
  * Main starting point for LogoRRR Application
  */
-// have fun and thanks for reading the code!
 object LogoRRRApp extends CanLog:
 
   val Name = "LogoRRR"
@@ -47,7 +46,7 @@ object LogoRRRApp extends CanLog:
     logoRRRMain
 
 
-class LogoRRRApp extends javafx.application.Application with CanLog {
+class LogoRRRApp extends javafx.application.Application with CanLog:
 
   def start(stage: Stage): Unit =
     val hostServices =
@@ -63,4 +62,3 @@ class LogoRRRApp extends javafx.application.Application with CanLog {
 
     LogoRRRApp.start(stage, services)
 
-}
