@@ -19,8 +19,9 @@ object LogTextView extends UiNodeFileIdAware:
 
 
 class LogTextView(mutLogFileSettings: MutLogFileSettings
-                  , filteredList: FilteredList[LogEntry]) extends CodeArea with CanLog:
+                  ,filteredList: FilteredList[LogEntry]) extends CodeArea with CanLog:
 
+  setId(LogTextView.uiNode(mutLogFileSettings.getFileId).value)
   private val elementInvalidationListener = JfxUtils.mkInvalidationListener(_ => updateLogTextView)
 
   def init(): Unit =
@@ -33,6 +34,7 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
 
   def removeListeners(): Unit =
     filteredList.removeListener(elementInvalidationListener)
+    styleProperty.unbind()
 
   def getSelectionModel: MultipleSelectionModel[LogEntry] = new MultipleSelectionModel[LogEntry] {
     override def getSelectedIndices: ObservableList[Integer] = ???
