@@ -12,6 +12,8 @@
         <revision>26.1.0</revision>
         <scala.version>3.7.4</scala.version>
         <openjfx.version>25</openjfx.version>
+        <jre.src.version>11</jre.src.version>
+        <jre.classes.output.version>11</jre.classes.output.version>
         <ikonli.version>12.4.0</ikonli.version>
         <!-- no need to change these -->
         <changelist/>
@@ -232,7 +234,7 @@
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
-                <version>5.13.0-M3</version>
+                <version>5.5.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -344,8 +346,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.14.0</version>
                     <configuration>
-                        <source>25</source>
-                        <target>25</target>
+                        <source>${jre.src.version}</source>
+                        <target>${jre.classes.output.version}</target>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -368,12 +370,13 @@
                     <configuration>
                         <scalaVersion>${scala.version}</scalaVersion>
                         <failOnError>true</failOnError>
-                        <args>
-                            <arg>-encoding</arg>
-                            <arg>utf-8</arg>
-                            <arg>-explain</arg>
-                            <arg>-deprecation</arg>
-                        </args>
+                        <args/>
+                        <javacArgs>
+                            <javacArg>-source</javacArg>
+                            <javacArg>${jre.src.version}</javacArg>
+                            <javacArg>-target</javacArg>
+                            <javacArg>${jre.classes.output.version}</javacArg>
+                        </javacArgs>
                     </configuration>
                 </plugin>
                 <plugin>

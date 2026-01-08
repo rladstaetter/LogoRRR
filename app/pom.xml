@@ -9,15 +9,14 @@
         <version>${revision}${changelist}</version>
     </parent>
     <artifactId>app</artifactId>
-    <description>Main application code for LogoRRR</description>
+    <description>Application code for LogoRRR</description>
     <inceptionYear>2021</inceptionYear>
     <name>app.logorrr.app</name>
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
-          <artifactId>scala3-library_3</artifactId>
+            <artifactId>scala3-library_3</artifactId>
         </dependency>
-
         <!-- uncomment if atlantafx is needed for enhancing css
         <dependency>
             <groupId>io.github.mkpaz</groupId>
@@ -35,6 +34,14 @@
             <artifactId>app-icons</artifactId>
         </dependency>
         <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>build</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>app.logorrr</groupId>
+            <artifactId>clv</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>
         </dependency>
@@ -46,10 +53,7 @@
             <groupId>com.lihaoyi</groupId>
             <artifactId>upickle_3</artifactId>
         </dependency>
-        <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>build</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -57,17 +61,6 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>jfx-incubator-richtext</artifactId>
-        </dependency>
-        <!-- needed if you want to use scenic view analyse the scenegraph -->
-        <!--
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-swing</artifactId>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>clv</artifactId>
         </dependency>
         <dependency>
             <groupId>de.jangassen</groupId>
