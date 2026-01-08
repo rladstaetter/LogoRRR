@@ -27,10 +27,9 @@ object LogoRRRGlobals extends CanLog with Fs:
 
   def searchTermGroupNames: ObservableList[String] = mutSettings.searchTermGroupNames
 
-  def persist(): Unit = SettingsFileIO.toFile(LogoRRRGlobals.getSettings, settingsFilePath)
+  def persist(): Unit = SettingsFileIO.toFile(getSettings, settingsFilePath)
 
-  def persist(settings: Settings): Unit =
-    SettingsFileIO.toFile(settings, settingsFilePath)
+  def persist(settings: Settings): Unit = SettingsFileIO.toFile(settings, settingsFilePath)
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings
 

@@ -5,9 +5,9 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.views.block.BlockConstants
 import app.logorrr.views.ops.*
-import app.logorrr.views.search.st.SearchTermToolBar
 import app.logorrr.views.search.OpsToolBar
-import app.logorrr.views.text.{LogTextView}
+import app.logorrr.views.search.st.SearchTermToolBar
+import app.logorrr.views.text.LogTextView
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.Property
 import javafx.beans.{InvalidationListener, Observable}
@@ -15,7 +15,7 @@ import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
 import javafx.geometry.Pos
 import javafx.scene.Node
-import javafx.scene.control.{ListView, Slider, SplitPane}
+import javafx.scene.control.{Slider, SplitPane}
 import javafx.scene.layout.{BorderPane, HBox, Priority, VBox}
 import javafx.scene.paint.Color
 

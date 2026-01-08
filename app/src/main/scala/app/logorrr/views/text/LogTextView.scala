@@ -3,13 +3,12 @@ package app.logorrr.views.text
 import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ObservableList}
-import javafx.scene.Node
 import javafx.scene.control.MultipleSelectionModel
-import jfx.incubator.scene.control.richtext.model.BasicTextModel.InMemoryContent
-import jfx.incubator.scene.control.richtext.{CodeArea, SideDecorator}
+import jfx.incubator.scene.control.richtext.CodeArea
 import jfx.incubator.scene.control.richtext.model.CodeTextModel
 import net.ladstatt.util.log.CanLog
 
@@ -18,22 +17,21 @@ object LogTextView extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogTextView])
 
-  def apply(mutLogFileSettings: MutLogFileSettings
-            , filteredList: FilteredList[LogEntry]) =
-    new LogTextView(mutLogFileSettings, new CodeTextModel(new LogEntryContent(filteredList)))
-
 
 class LogTextView(mutLogFileSettings: MutLogFileSettings
-                  , model: CodeTextModel)
-  extends CodeArea(model) with CanLog:
+                  , filteredList: FilteredList[LogEntry]) extends CodeArea with CanLog:
 
-  def init(): Unit = {
-    setLineNumbersEnabled(true)
-    setHighlightCurrentParagraph(true)
-  }
+  private val elementInvalidationListener = JfxUtils.mkInvalidationListener(_ => updateLogTextView)
 
+  def init(): Unit =
+    filteredList.addListener(elementInvalidationListener)
+    updateLogTextView
 
-  def removeListeners(): Unit = ()
+  def updateLogTextView: Unit =
+    setModel(new CodeTextModel(new LogEntryContent(filteredList)))
+
+  def removeListeners(): Unit =
+    filteredList.removeListener(elementInvalidationListener)
 
   def getSelectionModel: MultipleSelectionModel[LogEntry] = new MultipleSelectionModel[LogEntry] {
     override def getSelectedIndices: ObservableList[Integer] = ???
