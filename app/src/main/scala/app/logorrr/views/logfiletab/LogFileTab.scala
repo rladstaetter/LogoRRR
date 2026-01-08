@@ -21,7 +21,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-object LogFileTab extends UiNodeFileIdAware {
+object LogFileTab extends UiNodeFileIdAware:
 
   /** background for file log tabs */
   private val BackgroundStyle: String =
@@ -48,15 +48,13 @@ object LogFileTab extends UiNodeFileIdAware {
        |-fx-border-color: lightgrey""".stripMargin
 
   def apply(mutLogFileSettings: MutLogFileSettings
-            , entries: ObservableList[LogEntry]): LogFileTab = {
+            , entries: ObservableList[LogEntry]): LogFileTab =
     new LogFileTab(mutLogFileSettings.getFileId
       , mutLogFileSettings
       , entries)
-  }
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogFileTab])
 
-}
 
 /**
  * Represents a single 'document' UI approach for a log file.
@@ -69,15 +67,14 @@ class LogFileTab(val fileId: FileId
                  , val mutLogFileSettings: MutLogFileSettings
                  , val entries: ObservableList[LogEntry]) extends Tab
   with TimerCode
-  with CanLog {
+  with CanLog:
 
   setId(LogFileTab.uiNode(fileId).value)
 
-  if (fileId.isZipEntry) {
+  if fileId.isZipEntry then
     setStyle(LogFileTab.ZipBackgroundStyle)
-  } else {
+  else
     setStyle(LogFileTab.BackgroundStyle)
-  }
 
   assert(fileId == mutLogFileSettings.getFileId)
 
@@ -85,41 +82,33 @@ class LogFileTab(val fileId: FileId
 
   val logFileTabContent = new LogFileTabContent(mutLogFileSettings, entries)
 
-  private def startTailer(): Unit = {
+  private def startTailer(): Unit =
     logFileTabContent.addTailerListener()
     logTailer.start()
-  }
 
-  private def stopTailer(): Unit = {
+  private def stopTailer(): Unit =
     logFileTabContent.removeTailerListener()
     logTailer.stop()
-  }
 
-  private val autoScrollListener = JfxUtils.onNew[lang.Boolean] {
+  private val autoScrollListener = JfxUtils.onNew[lang.Boolean]:
     b =>
-      if (b) {
+      if b then
         startTailer()
-      } else {
+      else
         stopTailer()
-      }
-  }
 
-  private val searchTermChangeListener: ListChangeListener[MutableSearchTerm] = {
+  private val searchTermChangeListener: ListChangeListener[MutableSearchTerm] =
 
-    def handleSearchTermChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit = {
-      while (change.next()) {
-        Future {
+    def handleSearchTermChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit =
+      while change.next() do
+        Future:
           LogoRRRGlobals.persist()
-        }
-      }
-    }
 
     JfxUtils.mkListChangeListener[MutableSearchTerm](handleSearchTermChange)
-  }
 
   private val selectedListener = JfxUtils.onNew[lang.Boolean](b => {
-    if (b) {
-      if (fileId.isZipEntry) {
+    if b then {
+      if fileId.isZipEntry then {
         setStyle(LogFileTab.ZipBackgroundSelectedStyle)
       } else {
         setStyle(LogFileTab.BackgroundSelectedStyle)
@@ -129,7 +118,7 @@ class LogFileTab(val fileId: FileId
       LogoRRRAccelerators.setActiveSearchTextField(logFileTabContent.opsToolBar.searchTextField)
       recalculateChunkListViewAndScrollToActiveElement()
     } else {
-      if (fileId.isZipEntry) {
+      if fileId.isZipEntry then {
         setStyle(LogFileTab.ZipBackgroundStyle)
       } else {
         setStyle(LogFileTab.BackgroundStyle)
@@ -138,10 +127,9 @@ class LogFileTab(val fileId: FileId
   })
 
 
-  def recalculateChunkListViewAndScrollToActiveElement(): Unit = {
+  def recalculateChunkListViewAndScrollToActiveElement(): Unit =
     logFileTabContent.recalculateChunkListView()
     logFileTabContent.scrollToActiveElement()
-  }
 
   def init(): Unit = timeR({
     setTooltip(new LogFileTabToolTip(fileId, entries))
@@ -155,7 +143,7 @@ class LogFileTab(val fileId: FileId
     /** don't monitor file anymore if tab is closed, free listeners */
     setOnCloseRequest((_: Event) => shutdown())
 
-    if (mutLogFileSettings.isAutoScrollActive) {
+    if mutLogFileSettings.isAutoScrollActive then {
       startTailer()
     }
 
@@ -177,7 +165,7 @@ class LogFileTab(val fileId: FileId
   def initContextMenu(): Unit = setContextMenu(mkContextMenu())
 
 
-  private def mkContextMenu(): ContextMenu = {
+  private def mkContextMenu(): ContextMenu =
     val closeMenuItem = new CloseTabMenuItem(fileId, this)
     val openInFinderMenuItem = new OpenInFinderMenuItem(fileId)
 
@@ -186,78 +174,66 @@ class LogFileTab(val fileId: FileId
 
     // close left/right is not always shown. see https://github.com/rladstaetter/LogoRRR/issues/159
     val leftRightCloser =
-      if (getTabPane.getTabs.size() == 1) {
+      if getTabPane.getTabs.size() == 1 then
         Seq()
         // current tab is the first one, show only 'right'
-      } else if (getTabPane.getTabs.indexOf(this) == 0) {
+      else if getTabPane.getTabs.indexOf(this) == 0 then
         Seq(new CloseRightFilesMenuItem(fileId, this))
         // we are at the end of the list
-      } else if (getTabPane.getTabs.indexOf(this) == getTabPane.getTabs.size - 1) {
+      else if getTabPane.getTabs.indexOf(this) == getTabPane.getTabs.size - 1 then
         Seq(new CloseLeftFilesMenuItem(fileId, this))
         // we are somewhere in between, show both options
-      } else {
+      else
         Seq(new CloseLeftFilesMenuItem(fileId, this), new CloseRightFilesMenuItem(fileId, this))
-      }
 
     // val mergeTimedMenuItem = new MergeTimedMenuItem(fileId, this.getTabPane.asInstanceOf[MainTabPane])
 
-    val items: Seq[MenuItem] = {
+    val items: Seq[MenuItem] =
       // special handling if there is only one tab
-      if (getTabPane.getTabs.size() == 1) {
-        if (OsUtil.isMac) {
+      if getTabPane.getTabs.size() == 1 then
+        if OsUtil.isMac then
           Seq(closeMenuItem)
-        } else {
+        else
           Seq(closeMenuItem, openInFinderMenuItem)
-        }
-      } else {
+      else
         Seq(closeMenuItem
           , closeOtherFilesMenuItem
           , closeAllFilesMenuItem) ++ leftRightCloser ++ {
-          if (OsUtil.isMac) {
+          if OsUtil.isMac then
             Seq()
-          } else {
+          else
             Seq(openInFinderMenuItem)
-          } // ++ Seq(mergeTimedMenuItem)
+          // ++ Seq(mergeTimedMenuItem)
         }
-      }
-    }
 
     new ContextMenu(items*)
-  }
 
-  private def addListeners(): Unit = {
+  private def addListeners(): Unit =
     selectedProperty().addListener(selectedListener)
 
     mutLogFileSettings.autoScrollActiveProperty.addListener(autoScrollListener)
     mutLogFileSettings.mutSearchTerms.addListener(searchTermChangeListener)
-  }
 
-  private def initBindings(): Unit = {
-    if (fileId.isZipEntry) {
+  private def initBindings(): Unit =
+    if fileId.isZipEntry then
       textProperty.bind(Bindings.concat(fileId.zipEntryPath))
-    } else {
+    else
       textProperty.bind(Bindings.concat(fileId.fileName))
-    }
-  }
 
 
-  private def removeListeners(): Unit = {
+  private def removeListeners(): Unit =
     selectedProperty().removeListener(selectedListener)
 
     logFileTabContent.removeListeners()
     mutLogFileSettings.autoScrollActiveProperty.removeListener(autoScrollListener)
     mutLogFileSettings.mutSearchTerms.removeListener(searchTermChangeListener)
-  }
 
-  def shutdown(): Unit = {
-    if (mutLogFileSettings.isAutoScrollActive) {
+  def shutdown(): Unit =
+    if mutLogFileSettings.isAutoScrollActive then
       stopTailer()
-    }
     removeListeners()
     LogoRRRGlobals.removeLogFile(fileId)
-  }
 
 
-}
 
 

@@ -6,9 +6,7 @@ import app.logorrr.views.a11y.UiNode
 /**
  * Delegate opening urls directly to native code on mac (because of apples entitlements / security system)
  */
-class MacNativeHostService extends LogoRRRHostServices {
+class MacNativeHostService extends LogoRRRHostServices:
   /** opens given document */
-  override def showDocument(uiNode: UiNode, url: String): Unit = {
+  override def showDocument(uiNode: UiNode, url: String): Unit =
     OsxBridge.openUrl(url)
-  }
-}

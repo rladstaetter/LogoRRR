@@ -4,7 +4,7 @@ import upickle.default.*
 
 import java.nio.file.{Path, Paths}
 
-object FileId {
+object FileId:
 
   given rw: ReadWriter[FileId] = readwriter[String].bimap(_.value, FileId(_))
 
@@ -12,7 +12,6 @@ object FileId {
 
   def reduceZipFiles(fileIds: Seq[FileId]): Map[FileId, Seq[FileId]] = fileIds.groupBy(_.extractZipFileId)
 
-}
 
 /**
  * Identifies a log file or an entry in a zip file.
@@ -26,9 +25,8 @@ case class FileId(value: String) {
   def extractZipFileId: FileId = FileId(value.substring(0, value.indexOf(".zip@") + 4)) // get filename of zip file
 
   // if fileId is a zip part, show this relative part
-  def zipEntryPath: String = {
+  def zipEntryPath: String =
     extractZipFileId.fileName + value.substring(value.indexOf(".zip@") + 4, value.length)
-  }
 
   def isZipEntry: Boolean = value.contains(".zip@")
 

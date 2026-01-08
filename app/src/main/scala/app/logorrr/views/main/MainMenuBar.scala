@@ -13,9 +13,9 @@ class MainMenuBar(stage: Stage
                   , fileIdService: FileIdService
                   , openFile: FileId => Unit
                   , closeAllFiles: => Unit
-                  , isUnderTest: Boolean) extends MenuBar {
+                  , isUnderTest: Boolean) extends MenuBar:
 
-  if (OsUtil.isMac) {
+  if OsUtil.isMac then
     val tk: MenuToolkit = MenuToolkit.toolkit
     tk.setAppearanceMode(AppearanceMode.AUTO)
 
@@ -23,14 +23,11 @@ class MainMenuBar(stage: Stage
     val fileMenu = new FileMenu(fileIdService, openFile, closeAllFiles)
     val helpMenu = new HelpMenu(stage, openFile)
     getMenus.addAll(appMenu, fileMenu, helpMenu)
-    if (!isUnderTest) {
+    if !isUnderTest then
       tk.setGlobalMenuBar(this)
-    }
-  } else {
+  else
     val appMenu: Menu = AppMenuBuilder.mkMenu(stage, isUnderTest)
     val fileMenu = new FileMenu(fileIdService, openFile, closeAllFiles)
     val helpMenu = new HelpMenu(stage, openFile)
     getMenus.addAll(appMenu, fileMenu, helpMenu)
-  }
 
-}

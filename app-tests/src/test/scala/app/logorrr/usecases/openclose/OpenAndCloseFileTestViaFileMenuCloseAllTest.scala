@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test
  * Checks if a file can be opened and closed
  */
 class OpenAndCloseFileTestViaFileMenuCloseAllTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
-  with CheckTabPaneActions {
+  with CheckTabPaneActions:
 
   /**
    * checks if an open file creates a new logfiletab with an id matching the file opened.
    */
-  @Test def openAndCloseFileTest(): Unit = {
+  @Test def openAndCloseFileTest(): Unit =
     // wait until file menu is visible
     openFile(fileId)
 
@@ -23,6 +23,4 @@ class OpenAndCloseFileTestViaFileMenuCloseAllTest extends SingleFileApplicationT
     closeAllFiles()
 
     checkForEmptyTabPane()
-  }
 
-}

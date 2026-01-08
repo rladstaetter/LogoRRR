@@ -14,13 +14,12 @@ import scala.collection.mutable.ListBuffer
  * @param searchTerms  filter containing color and search string
  */
 case class SearchTermCalculator(logEntry: LogEntry
-                                , searchTerms: Seq[? <: MutableSearchTerm]) {
+                                , searchTerms: Seq[? <: MutableSearchTerm]):
 
   private val logLine = logEntry.value
 
-  lazy val filteredParts: Seq[Seq[LinePart]] = for (f <- searchTerms) yield {
+  lazy val filteredParts: Seq[Seq[LinePart]] = for f <- searchTerms yield
     calcParts(f.getPredicate.description, f.getColor)
-  }
 
   /**
    * For a given [[logLine]], compute the labels and associated colors which make up a displayed log line in the
@@ -41,58 +40,50 @@ case class SearchTermCalculator(logEntry: LogEntry
    * @return
    */
   private def calcParts(searchPattern: String
-                        , color: Color): Seq[LinePart] = {
-    if (searchPattern.isEmpty || logLine.isEmpty) {
+                        , color: Color): Seq[LinePart] =
+    if searchPattern.isEmpty || logLine.isEmpty then
       Seq()
-    } else {
-      if (logLine.length < searchPattern.length) {
+    else
+      if logLine.length < searchPattern.length then
         Seq()
-      } else {
+      else
         var currentIndex = 0
         val bf = new ListBuffer[LinePart]
-        while (currentIndex <= (logLine.length - searchPattern.length)) {
+        while currentIndex <= (logLine.length - searchPattern.length) do
           val lSearch = logLine.substring(currentIndex, logLine.length)
           val o = lSearch.indexOf(searchPattern)
-          if (o != -1) {
+          if o != -1 then
             val part = LinePart(searchPattern, currentIndex + o, color)
             bf.append(part)
             currentIndex = currentIndex + o + searchPattern.length
-          } else {
+          else
             // end while loop
             currentIndex = logLine.length
-          }
-        }
         bf.toSeq
-      }
-    }
-  }
 
-  private def calcStringColorPairs: Seq[(String, Color)] = {
+  private def calcStringColorPairs: Seq[(String, Color)] =
     val value = logEntry.value
     // if there are no filters, it is easy - just return the whole string with special color
-    if (filteredParts.isEmpty) {
+    if filteredParts.isEmpty then
       Seq((value, SearchTerm.Unclassified))
-    } else {
+    else
       // brute force:
       // for all filters, calculate if there is a hit or not.
       // if yes, provide the color for this filter, if not just None
       val jou: Seq[IndexedSeq[Option[Color]]] =
-        for (pts <- filteredParts) yield {
-          for (i <- 0 to value.length) yield {
-            pts.find(p => p.hit(i)) match {
+        for pts <- filteredParts yield
+          for i <- 0 to value.length yield
+            pts.find(p => p.hit(i)) match
               case Some(value) => Option(value.color)
               case None => None
-            }
-          }
-        }
 
       // reduce all colors:
       // we have a Seq[Seq[Option[Color]]] and want a Seq[Color] in the end.
       // as intermediate step, calculate a Seq[Option[Color]] by interpolating
       // all colors for each filter.
       val cols: Seq[Option[Color]] =
-        for {i <- 0 to value.length} yield {
-          val colors: Seq[Option[Color]] = for (j <- jou) yield j(i)
+        for i <- 0 to value.length yield
+          val colors: Seq[Option[Color]] = for j <- jou yield j(i)
           colors.tail.foldLeft(colors.head)((acc, c) => {
             (acc, c) match {
               case (None, None) => None
@@ -101,7 +92,6 @@ case class SearchTermCalculator(logEntry: LogEntry
               case (Some(aC), Some(c)) => Option(aC.interpolate(c, 0.5))
             }
           })
-        }
 
       // almost there, now we have already a Seq[(String,Color)]
       // but the caveat is that we produce many single labels in the end which
@@ -118,13 +108,13 @@ case class SearchTermCalculator(logEntry: LogEntry
               case None => SearchTerm.Unclassified
             }
           // handle special case for first element
-          if (acc.isEmpty) {
+          if acc.isEmpty then {
             Seq((c.toString, curColor))
           } else {
             // get last entry
             val (entry, lastColor) = acc.last
             // colors are the same - drop last element from sequence, add new element with mutated entry
-            if (lastColor == curColor) {
+            if lastColor == curColor then {
               acc.dropRight(1) :+ (entry + c, curColor)
             } else {
               // just add new entry to acc
@@ -133,7 +123,4 @@ case class SearchTermCalculator(logEntry: LogEntry
           }
       })
 
-    }
-  }
-}
 

@@ -8,14 +8,12 @@ import app.logorrr.conf.FileId
  *
  * @param files which this service is returning
  */
-class MockFileIdService(files: Seq[FileId]) extends FileIdService {
+class MockFileIdService(files: Seq[FileId]) extends FileIdService:
 
   private val it = files.iterator
 
-  override def provideFileId: Option[FileId] = {
-    if (it.hasNext) {
+  override def provideFileId: Option[FileId] =
+    if it.hasNext then
       Option(it.next())
-    } else None
-  }
+    else None
 
-}

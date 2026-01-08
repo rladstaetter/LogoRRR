@@ -7,17 +7,17 @@ import app.logorrr.views.search.stg.{DeleteStgButton, SimpleToggleButton, Search
 import javafx.scene.control.{Label, ListCell, ToolBar}
 
 
-class SettingsStgListViewCell extends ListCell[SearchTermGroup] {
+class SettingsStgListViewCell extends ListCell[SearchTermGroup]:
   setId(SettingsEditor.SettingsStgListView.value)
 
   val deleteButton = DeleteStgButton(SettingsEditor.SettingsStgListViewDelete)
 
-  override def updateItem(item: SearchTermGroup, empty: Boolean): Unit = {
+  override def updateItem(item: SearchTermGroup, empty: Boolean): Unit =
     super.updateItem(item, empty)
-    if (empty || item == null) {
+    if empty || item == null then
       setText(null)
       setGraphic(null)
-    } else {
+    else
       val label = new Label(item.name)
       label.setPrefWidth(100)
 
@@ -36,8 +36,5 @@ class SettingsStgListViewCell extends ListCell[SearchTermGroup] {
       toolBar.getItems.addAll(deleteButton, label)
       toolBar.getItems.addAll(vis*)
       setGraphic(toolBar)
-    }
-  }
 
 
-}

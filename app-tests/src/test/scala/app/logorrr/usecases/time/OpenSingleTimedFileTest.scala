@@ -19,30 +19,28 @@ import org.junit.jupiter.api.Test
  * - clicks on timersettings button and configure the position of the timestamp and set the timestamp format
  *
  */
-class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedLog) {
+class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedLog):
 
   /**
    * checks if an open file creates a new logfiletab with an id matching the file opened.
    */
-  @Test def openTimestampSettingsTest(): Unit = {
+  @Test def openTimestampSettingsTest(): Unit =
     openFile(fileId)
     clickOn(TimestampSettingsButton.uiNode(fileId))
     clickOn(TimestampFormatResetButton.uiNode(fileId))
     // settings aren't set after click on reset button
     assert(LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.not.get())
-  }
 
   // just click on the setFormat button, no position given
-  @Test def setFormatTest(): Unit = {
+  @Test def setFormatTest(): Unit =
     openFile(fileId)
     clickOn(TimestampSettingsButton.uiNode(fileId))
     clickOn(TimestampFormatSetButton.uiNode(fileId))
 
     // settings aren't set after click on set button with invalid settings
     assert(!LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.get())
-  }
 
-  @Test def setPositionAndFormatTest(): Unit = {
+  @Test def setPositionAndFormatTest(): Unit =
     openFile(fileId)
     clickOn(TimestampSettingsButton.uiNode(fileId))
 
@@ -77,13 +75,10 @@ class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedL
     drag(SliderVBox.uiNode(fileId, Pos.CENTER_LEFT).ref).moveBy(TimerSlider.Width / 2, 0).release(MouseButton.PRIMARY)
     expectLabelText(fileId, Pos.CENTER_LEFT, latestTimestamp)
 
-  }
 
-  def expectLabelText(fileId: FileId, pos: Pos, expectedText: String): Unit = {
+  def expectLabelText(fileId: FileId, pos: Pos, expectedText: String): Unit =
     waitForPredicate[SliderVBox](SliderVBox.uiNode(fileId, pos), classOf[SliderVBox], sliderBox => {
       sliderBox.label.getText == expectedText
     })
-  }
 
-}
 

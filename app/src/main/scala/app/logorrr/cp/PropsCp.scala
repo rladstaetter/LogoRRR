@@ -2,17 +2,14 @@ package app.logorrr.cp
 
 import java.util.Properties
 
-case class PropsCp(classPathResource: String) extends CpResource {
+case class PropsCp(classPathResource: String) extends CpResource:
 
-  def asProperties(clazz: Class[?]): Properties = {
+  def asProperties(clazz: Class[?]): Properties =
     val properties = new Properties()
     val is = clazz.getResourceAsStream(classPathResource)
-    try {
+    try
       properties.load(is)
-    } finally {
+    finally
       Option(is).foreach(_.close)
-    }
     properties
-  }
 
-}

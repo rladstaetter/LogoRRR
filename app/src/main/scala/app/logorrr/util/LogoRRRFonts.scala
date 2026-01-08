@@ -2,7 +2,7 @@ package app.logorrr.util
 
 import javafx.scene.text.Font
 
-object LogoRRRFonts {
+object LogoRRRFonts:
 
   // load font thanks to https://www.jetbrains.com/lp/mono/
   Font.loadFont(getClass.getResource("/app/logorrr/JetBrainsMono-Regular.ttf").toExternalForm, 12)
@@ -12,4 +12,3 @@ object LogoRRRFonts {
         |-fx-font-size: ${size.toString} px;
         |""".stripMargin
 
-}

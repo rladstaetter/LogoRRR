@@ -7,11 +7,10 @@ import javafx.scene.input.{ClipboardContent, TransferMode}
 
 import java.util.Collections
 
-object DragSourceButton extends UiNodeFileIdAware {
+object DragSourceButton extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[DragSourceButton])
 
-}
 
 class DragSourceButton(fileId: FileId) extends Button(fileId.fileName) {
   setId(DragSourceButton.uiNode(fileId).value)

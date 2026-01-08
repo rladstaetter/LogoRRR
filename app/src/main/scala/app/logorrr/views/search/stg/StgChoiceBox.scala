@@ -8,14 +8,13 @@ import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.property.SimpleListProperty
 import javafx.scene.control.{ChoiceBox, Tooltip}
 
-object StgChoiceBox extends UiNodeFileIdAware {
+object StgChoiceBox extends UiNodeFileIdAware:
   val style = "-fx-pref-width: 150;"
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[StgChoiceBox])
 
-}
 
-class StgChoiceBox(mutLogFileSettings: MutLogFileSettings, searchTerms: SimpleListProperty[MutableSearchTerm]) extends ChoiceBox[String] {
+class StgChoiceBox(mutLogFileSettings: MutLogFileSettings, searchTerms: SimpleListProperty[MutableSearchTerm]) extends ChoiceBox[String]:
   setId(StgChoiceBox.uiNode(mutLogFileSettings.getFileId).value)
   setStyle(StgChoiceBox.style)
   setTooltip(new Tooltip("shows search term groups"))
@@ -32,10 +31,8 @@ class StgChoiceBox(mutLogFileSettings: MutLogFileSettings, searchTerms: SimpleLi
 
   }))
 
-  def add(searchTermGroup: String): Unit = {
+  def add(searchTermGroup: String): Unit =
     getItems.add(searchTermGroup)
-  }
 
-}
 
 

@@ -11,17 +11,15 @@ import app.logorrr.steps.AppActions
  */
 class SingleFileApplicationTest(val fileId: FileId)
   extends TestFxBaseApplicationTest
-    with AppActions {
+    with AppActions:
 
   protected lazy val settings: Settings = Settings.Default
 
-  final def services: LogoRRRServices = {
+  final def services: LogoRRRServices =
     LogoRRRServices(settings
       , new MockHostServices
       , new SingleFileIdService(fileId)
       , isUnderTest = true)
-  }
 
 
-}
 

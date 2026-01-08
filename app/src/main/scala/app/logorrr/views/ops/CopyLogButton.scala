@@ -11,18 +11,17 @@ import org.kordamp.ikonli.javafx.FontIcon
 
 import java.time.Duration
 
-object CopyLogButton extends UiNodeFileIdAware {
+object CopyLogButton extends UiNodeFileIdAware:
 
   def uiNode(id: FileId): UiNode = UiNode(id, classOf[CopyLogButton])
 
-}
 
 /**
  * Copy current contents to clipboard.
  *
  * @param logEntries current active log entries
  */
-class CopyLogButton(id: FileId, logEntries: ObservableList[LogEntry]) extends Button {
+class CopyLogButton(id: FileId, logEntries: ObservableList[LogEntry]) extends Button:
 
   setId(CopyLogButton.uiNode(id).value)
 
@@ -33,7 +32,7 @@ class CopyLogButton(id: FileId, logEntries: ObservableList[LogEntry]) extends Bu
 
   init()
 
-  def init(): Unit = {
+  def init(): Unit =
     setGraphic(icon)
     setTooltip(defaultToolTip)
 
@@ -47,10 +46,8 @@ class CopyLogButton(id: FileId, logEntries: ObservableList[LogEntry]) extends Bu
 
       mkTimer().start() // visual response to click
     })
-  }
 
   def mkTimer() = new PulsatingAnimationTimer(this, iconLight, icon, defaultToolTip, TooltipText, Duration.ofSeconds(1))
 
-}
 
 

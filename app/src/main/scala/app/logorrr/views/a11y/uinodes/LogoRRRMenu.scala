@@ -2,7 +2,7 @@ package app.logorrr.views.a11y.uinodes
 
 import app.logorrr.views.a11y.UiNode
 
-object LogoRRRMenu {
+object LogoRRRMenu:
 
   val Self: UiNode = UiNode("logorrr_menu")
 
@@ -14,5 +14,4 @@ object LogoRRRMenu {
   /** quit application */
   val CloseApplication: UiNode = UiNode("logorrr_menu_close_application")
 
-}
 

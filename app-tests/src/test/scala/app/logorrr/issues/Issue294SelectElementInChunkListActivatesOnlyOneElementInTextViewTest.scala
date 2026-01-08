@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test
 class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
   extends SingleFileApplicationTest(TestFiles.simpleLog1)
     with LogTextViewActions
-    with TestFxListViewActions {
+    with TestFxListViewActions:
 
   /** setup settings such that the issue is triggered and can be inspected visually */
   override lazy val settings: Settings = Settings(
@@ -34,7 +34,7 @@ class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
 
   // atm this is only a setup test which helps to get LogoRRR in a repeatable, defined state
   // start LogoRRRApp afterwards to tinker around
-  @Test def testIssue294(): Unit = {
+  @Test def testIssue294(): Unit =
 
     val ltv = lookupLogTextView(fileId)
 
@@ -69,6 +69,4 @@ class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
     assert(ltv.getSelectionModel.getSelectedItems.size() == 1)
 
 
-  }
 
-}

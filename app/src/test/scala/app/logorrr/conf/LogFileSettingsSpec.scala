@@ -4,9 +4,9 @@ import app.logorrr.TestUtil
 import org.scalacheck.Gen
 
 
-object LogFileSettingsSpec {
+object LogFileSettingsSpec:
 
-  val gen: Gen[LogFileSettings] = for {
+  val gen: Gen[LogFileSettings] = for
     fileId <- Gen.identifier.map(FileId.apply)
     selectedIndex <- Gen.posNum[Int]
     firstOpened <- Gen.posNum[Long]
@@ -18,7 +18,7 @@ object LogFileSettingsSpec {
     fontSize <- Gen.posNum[Int]
     autoScroll <- CoreGen.booleanGen
     someSelectedSearchTermGroup <- Gen.option(Gen.identifier)
-  } yield LogFileSettings(fileId
+  yield LogFileSettings(fileId
     , selectedIndex
     , firstOpened
     , dPos
@@ -33,4 +33,3 @@ object LogFileSettingsSpec {
     , LogFileSettings.DefaultUpperTimestamp
     , someSelectedSearchTermGroup
     , Map())
-}

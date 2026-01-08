@@ -10,13 +10,13 @@ import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
 
 
-object LogoRRRChunkListView extends UiNodeFileIdAware {
+object LogoRRRChunkListView extends UiNodeFileIdAware:
 
   def apply(entries: ObservableList[LogEntry]
             , mutLogFileSettings: MutLogFileSettings
             , selectInTextView: LogEntry => Unit
             , widthProperty: ReadOnlyDoubleProperty
-           ): ChunkListView[LogEntry] = {
+           ): ChunkListView[LogEntry] =
     val logEntryVizor = LogEntryVizor(
       mutLogFileSettings.selectedLineNumberProperty
       , widthProperty
@@ -35,11 +35,9 @@ object LogoRRRChunkListView extends UiNodeFileIdAware {
       , new LogEntryPicker(mutLogFileSettings)
       , logEntrySelector
       , mutLogFileSettings.getFileId)
-  }
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogoRRRChunkListView])
 
-}
 
 class LogoRRRChunkListView(override val elements: ObservableList[LogEntry]
                            , override val selectedLineNumberProperty: SimpleIntegerProperty

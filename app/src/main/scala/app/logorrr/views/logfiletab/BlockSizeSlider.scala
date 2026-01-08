@@ -5,11 +5,10 @@ import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.block.BlockConstants
 import javafx.scene.control.Slider
 
-object BlockSizeSlider extends UiNodeFileIdAware {
+object BlockSizeSlider extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[BlockSizeSlider])
-}
 
-class BlockSizeSlider(fileId: FileId) extends Slider {
+class BlockSizeSlider(fileId: FileId) extends Slider:
   setId(BlockSizeSlider.uiNode(fileId).value)
   setMin(BlockConstants.MinBlockSize)
   setMax(BlockConstants.MaxBlockSize)
@@ -18,7 +17,6 @@ class BlockSizeSlider(fileId: FileId) extends Slider {
   setSnapToTicks(true)
   setShowTickLabels(false)
   setShowTickMarks(false)
-}
 
 
 

@@ -2,11 +2,10 @@ package app.logorrr.views.ops.time
 
 import java.time.{Duration, Instant}
 
-object TimeRange {
+object TimeRange:
 
   lazy val defaultTimeRange = TimeRange(Instant.EPOCH, Instant.now())
 
-}
 
 case class TimeRange(start: Instant, end: Instant) {
   require(start.isBefore(end))
@@ -18,9 +17,8 @@ case class TimeRange(start: Instant, end: Instant) {
    * @param other The other TimeRange to check for containment.
    * @return True if this TimeRange contains the other TimeRange, false otherwise.
    */
-  def contains(other: TimeRange): Boolean = {
+  def contains(other: TimeRange): Boolean =
     start.isBefore(other.start) && other.end.isBefore(end)
-  }
 
   /**
    * Checks if this TimeRange contains a specific Instant.
@@ -29,9 +27,8 @@ case class TimeRange(start: Instant, end: Instant) {
    * @param instant The Instant to check for containment.
    * @return True if this TimeRange contains the Instant, false otherwise.
    */
-  def contains(instant: Instant): Boolean = {
+  def contains(instant: Instant): Boolean =
     start.isBefore(instant) && instant.isBefore(end)
-  }
 
   // Calculate the duration of the TimeRange
   val duration: Duration = Duration.between(start, end)

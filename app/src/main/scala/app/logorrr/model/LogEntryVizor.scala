@@ -7,7 +7,7 @@ case class LogEntryVizor(selectedLineNumberProperty: SimpleIntegerProperty
                          , widthProperty: ReadOnlyDoubleProperty
                          , blockSizeProperty: SimpleIntegerProperty
                          , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
-                         , lastVisibleTextCellIndexProperty: SimpleIntegerProperty) extends Vizor[LogEntry] {
+                         , lastVisibleTextCellIndexProperty: SimpleIntegerProperty) extends Vizor[LogEntry]:
   /** returns true if entry is active (= selected) - typically this entry is highlighted in some form */
   def isSelected(e: LogEntry): Boolean = e.lineNumber == selectedLineNumberProperty.get()
 
@@ -18,8 +18,6 @@ case class LogEntryVizor(selectedLineNumberProperty: SimpleIntegerProperty
   def isLastVisible(e: LogEntry): Boolean = e.lineNumber == lastVisibleTextCellIndexProperty.get()
 
   /** element is visible in the text view */
-  def isVisibleInTextView(logEntry: LogEntry): Boolean = {
+  def isVisibleInTextView(logEntry: LogEntry): Boolean =
     firstVisibleTextCellIndexProperty.get() < logEntry.lineNumber && logEntry.lineNumber < lastVisibleTextCellIndexProperty.get()
-  }
 
-}

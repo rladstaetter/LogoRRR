@@ -19,29 +19,27 @@ case class LogTextViewLabel(e: LogEntry
                             , filters: Seq[? <: MutableSearchTerm]
                             , fontStyleBinding: StringBinding
                             , fontSizeProperty: IntegerProperty
-                           ) extends HBox {
+                           ) extends HBox:
 
   setHeight(fontSizeProperty.get())
   setAlignment(Pos.CENTER_LEFT)
 
   val stringsAndColor: Seq[(String, Color)] = SearchTermCalculator(e, filters).stringColorPairs
 
-  val labels: Seq[Label] = stringsAndColor.map {
+  val labels: Seq[Label] = stringsAndColor.map:
     case (text, color) =>
       val l = LogoRRRLabel.mkL(text, color)
       l.minHeightProperty().bind(heightProperty())
       l.maxHeightProperty().bind(heightProperty())
       l.styleProperty().bind(fontStyleBinding)
       l
-  }
 
-  val lineNumberLabel: LineNumberLabel = {
+  val lineNumberLabel: LineNumberLabel =
     val l = LineNumberLabel(e.lineNumber, maxLength)
     l.minHeightProperty().bind(heightProperty())
     l.maxHeightProperty().bind(heightProperty())
     l.styleProperty().bind(fontStyleBinding)
     l
-  }
 
 
   getChildren.add(lineNumberLabel)
@@ -52,6 +50,5 @@ case class LogTextViewLabel(e: LogEntry
   */
   getChildren.addAll(labels*)
 
-}
 
 

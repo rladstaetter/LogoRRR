@@ -7,11 +7,10 @@ import javafx.scene.control.{Button, Tooltip}
 import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
-object StopTimeAnimationButton extends UiNodeFileIdAware {
+object StopTimeAnimationButton extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[StopTimeAnimationButton])
 
-}
 
 class StopTimeAnimationButton(mutLogFileSettings: MutLogFileSettings
                               , replayStackPane: ReplayStackPane) extends Button {

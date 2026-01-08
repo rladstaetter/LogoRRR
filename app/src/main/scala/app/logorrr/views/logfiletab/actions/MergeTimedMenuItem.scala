@@ -11,19 +11,18 @@ import java.nio.file.Files
 import java.util
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
-object MergeTimedMenuItem extends UiNodeFileIdAware {
+object MergeTimedMenuItem extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[MergeTimedMenuItem])
 
-}
 
 class CombineFileMenuItem(thisFileId: FileId
                           , otherFileId: FileId
-                          , mainTabPane: MainTabPane) extends MenuItem(otherFileId.value) {
+                          , mainTabPane: MainTabPane) extends MenuItem(otherFileId.value):
 
   setOnAction(_ => {
-    for {thisTab <- mainTabPane.getByFileId(thisFileId)
-         otherTab <- mainTabPane.getByFileId(otherFileId)} yield {
+    for thisTab <- mainTabPane.getByFileId(thisFileId)
+         otherTab <- mainTabPane.getByFileId(otherFileId) yield {
       val list = new util.ArrayList[LogEntry]()
       list.addAll(thisTab.entries)
       list.addAll(otherTab.entries)
@@ -44,18 +43,15 @@ class CombineFileMenuItem(thisFileId: FileId
     }
   })
 
-}
 
 
 class MergeTimedMenuItem(thisFileId: FileId, tabPane: MainTabPane) extends Menu("Merge file with ...") {
   setId(MergeTimedMenuItem.uiNode(thisFileId).value)
 
-  for (t <- tabPane.getTabs.asScala) {
+  for t <- tabPane.getTabs.asScala do
     val otherFileTab = t.asInstanceOf[LogFileTab]
-    if (otherFileTab.fileId != thisFileId && otherFileTab.mutLogFileSettings.hasTimestampSetting.get) {
+    if otherFileTab.fileId != thisFileId && otherFileTab.mutLogFileSettings.hasTimestampSetting.get then
       getItems.add(new CombineFileMenuItem(thisFileId, otherFileTab.fileId, tabPane))
-    }
-  }
 
   /*
     setOnAction(_ => {

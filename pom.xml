@@ -157,7 +157,7 @@
             </dependency>
             <dependency>
                 <groupId>org.scala-lang</groupId>
-              <artifactId>scala3-library_3</artifactId>
+                <artifactId>scala3-library_3</artifactId>
                 <version>${scala.version}</version>
             </dependency>
             <dependency>
@@ -370,15 +370,10 @@
                         <scalaVersion>${scala.version}</scalaVersion>
                         <failOnError>true</failOnError>
                         <args>
-                            <arg>-deprecation</arg>
-                            <arg>-feature</arg>
                             <arg>-encoding</arg>
                             <arg>utf-8</arg>
-                            <arg>-unchecked</arg>
                             <arg>-explain</arg>
-                            <arg>-Wunused:all</arg>
-                            <arg>-rewrite</arg>
-                            <arg>-source:3.4-migration</arg>
+                            <arg>-deprecation</arg>
                         </args>
                     </configuration>
                 </plugin>

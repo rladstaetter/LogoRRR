@@ -10,9 +10,9 @@ import javafx.stage.Stage
 /**
  * App menus differ between OsX and Windows / Linux
  */
-object AppMenuBuilder {
+object AppMenuBuilder:
 
-  def mkMenu(stage: Stage, isUnderTest: Boolean): Menu = {
+  def mkMenu(stage: Stage, isUnderTest: Boolean): Menu =
     val closeMenuItem = CloseApplicationMenuItem(new MenuItem("Exit"), stage, isUnderTest)
     val menu = new Menu(LogoRRRApp.Name)
     menu.setId(LogoRRRMenu.Self.value)
@@ -22,10 +22,9 @@ object AppMenuBuilder {
       , new SeparatorMenuItem
       , closeMenuItem)
     menu
-  }
 
 
-  def mkOsxMenu(stage: Stage, tk: MenuToolkit, isUnderTest: Boolean): Menu = {
+  def mkOsxMenu(stage: Stage, tk: MenuToolkit, isUnderTest: Boolean): Menu =
     val aboutMenuItem = AboutMenuItem(tk.createNativeAboutMenuItem(LogoRRRApp.Name), stage)
     val hideMenuItem = tk.createHideMenuItem(LogoRRRApp.Name)
     val hideOthersMenuItem = tk.createHideOthersMenuItem
@@ -44,6 +43,4 @@ object AppMenuBuilder {
       , new SeparatorMenuItem
       , closeMenuItem)
     menu
-  }
 
-}

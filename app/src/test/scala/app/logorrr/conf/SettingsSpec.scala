@@ -10,21 +10,20 @@ import upickle.default.*
 import java.nio.file.{Files, Paths}
 import scala.util.{Failure, Success}
 
-object SettingsSpec {
+object SettingsSpec:
 
-  val gen: Gen[Settings] = for {
+  val gen: Gen[Settings] = for
     stageSettings <- StageSettingsSpec.gen
-  } yield Settings(stageSettings, Map(), None, None, Map())
+  yield Settings(stageSettings, Map(), None, None, Map())
 
-}
 
 class SettingsSpec extends AnyWordSpec with CanLog {
 
   val cpResource = "/app/logorrr/conf/app.logorrr.conf"
 
   /** the point of this test is to show we can read an old style (pre 26.1.0) conf file without exception */
-  "can read example config" in {
-    TxtCp(cpResource).asString() match {
+  "can read example config" in:
+    TxtCp(cpResource).asString() match
       case Success(value) =>
         val migrated = SettingsMigrator.migrate(value)
         val settings = read[Settings](migrated)
@@ -35,6 +34,4 @@ class SettingsSpec extends AnyWordSpec with CanLog {
       case Failure(exception) =>
         logException(s"Could not load $cpResource", exception)
         fail()
-    }
-  }
 }

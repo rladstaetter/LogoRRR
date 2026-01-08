@@ -1,6 +1,6 @@
 package app.logorrr.clv
 
-trait Vizor[A] {
+trait Vizor[A]:
 
   /** returns true if entry is active (= selected) - typically this entry is highlighted in some form */
   def isSelected(a: A): Boolean
@@ -16,4 +16,3 @@ trait Vizor[A] {
 
   def isVisible(a: A): Boolean = isFirstVisible(a) || isLastVisible(a) || isVisibleInTextView(a)
 
-}

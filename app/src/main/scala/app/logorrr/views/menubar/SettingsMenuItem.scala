@@ -9,12 +9,10 @@ import javafx.stage.Stage
 import net.ladstatt.util.log.CanLog
 import net.ladstatt.util.os.OsUtil
 
-class SettingsMenuItem(stage: Stage) extends MenuItem("Settings...") with CanLog {
+class SettingsMenuItem(stage: Stage) extends MenuItem("Settings...") with CanLog:
   setId(LogoRRRMenu.Settings.value)
-  if (OsUtil.isMac) {
+  if OsUtil.isMac then
     setAccelerator(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.META_DOWN))
-  } else {
+  else
     setAccelerator(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.CONTROL_DOWN))
-  }
   setOnAction(_ => new SettingsEditor(stage, FileId("")).showAndWait())
-}

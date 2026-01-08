@@ -11,12 +11,11 @@ import org.junit.jupiter.api.Test
  */
 class OpenAndCloseMultipleFilesViaMenuTest
   extends MultipleFileApplicationTest(TestFiles.seq)
-    with CheckTabPaneActions {
+    with CheckTabPaneActions:
 
-  @Test def openFilesAndCloseAllViaMenu(): Unit = {
-    TestFiles.seq.foreach {
+  @Test def openFilesAndCloseAllViaMenu(): Unit =
+    TestFiles.seq.foreach:
       p => openFile(p)
-    }
     // now close them all again
     clickOn(FileMenu.Self)
 
@@ -25,6 +24,4 @@ class OpenAndCloseMultipleFilesViaMenuTest
 
     checkForEmptyTabPane()
 
-  }
 
-}

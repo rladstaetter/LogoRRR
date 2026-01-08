@@ -8,13 +8,12 @@ import javafx.collections.{FXCollections, MapChangeListener, ObservableList}
 import java.util
 import scala.jdk.CollectionConverters._
 
-object MutSearchTermGroupSettings {
+object MutSearchTermGroupSettings:
 
   def toObservableList(mapping: SimpleMapProperty[String, Seq[SearchTerm]]): util.List[SearchTermGroup] = mapping.entrySet().asScala.map(e => SearchTermGroup(e.getKey, e.getValue)).toSeq.sortBy(_.name).asJava
 
-}
 
-class MutSearchTermGroupSettings {
+class MutSearchTermGroupSettings:
 
   private val searchTermMapping: SimpleMapProperty[String, Seq[SearchTerm]] = new SimpleMapProperty[String, Seq[SearchTerm]](FXCollections.observableMap(new util.HashMap()))
 
@@ -40,4 +39,3 @@ class MutSearchTermGroupSettings {
   def clear(): Unit = searchTermMapping.clear()
 
 
-}

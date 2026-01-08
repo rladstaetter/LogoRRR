@@ -9,7 +9,7 @@ import scala.util.{Failure, Success}
 /**
  * pureconfig provides tools to de/serialize configuration which is in use here.
  * */
-object SettingsIO extends CanLog {
+object SettingsIO extends CanLog:
 
   def fromFile(source: Path): Settings = timeR({
     SettingsFileIO.fromFile(source).map(_.filterWithValidPaths()) match {
@@ -22,5 +22,4 @@ object SettingsIO extends CanLog {
     }
   }, s"Loading settings from ${settingsFilePath.toAbsolutePath}")
 
-}
 

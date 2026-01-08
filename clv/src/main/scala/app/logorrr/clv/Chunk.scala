@@ -5,24 +5,23 @@ import javafx.collections.ObservableList
 import java.util
 import scala.math.BigDecimal.RoundingMode
 
-object Chunk {
+object Chunk:
 
   val MaxHeight = 4096
 
   /** defines how many list cells should be rendered per visible ListView space */
   val ChunksPerVisibleViewPort = 6
 
-  private def roundDown(doubleNumber: Double): Int = {
+  private def roundDown(doubleNumber: Double): Int =
     BigDecimal.double2bigDecimal(doubleNumber).setScale(0, RoundingMode.DOWN).intValue
-  }
 
   def calcDimensions(blockSize: Int
                      , listViewWidth: Double
                      , listViewHeight: Double
-                     , chunksPerPage: Int): (Int, Int) = {
+                     , chunksPerPage: Int): (Int, Int) =
 
     // to not get into division by zero territory
-    val cols: Int = if (listViewWidth < blockSize) 1 else roundDown(listViewWidth / blockSize)
+    val cols: Int = if listViewWidth < blockSize then 1 else roundDown(listViewWidth / blockSize)
 
     // per default, use 4 cells per visible page, align height with blocksize such that
     // we don't get artifacts. Further, make sure that the calculated height does not exceed
@@ -37,7 +36,6 @@ object Chunk {
     val h2 = Math.max(heightCandidate, chunksPerPage * blockSize)
     val height = Math.min(h2, maxHeight)
     (cols, height)
-  }
 
   /**
    * Depending on the visible area of a listview, partitions the entries list to one or several Chunks and fills them
@@ -54,16 +52,16 @@ object Chunk {
                       , blockSize: Int
                       , listViewWidth: Int
                       , listViewHeight: Double
-                      , nrChunksPerPage: Int): ObservableList[Chunk[A]] = {
+                      , nrChunksPerPage: Int): ObservableList[Chunk[A]] =
     clearChunks(chunkList)
 
-    if (
+    if
       elements.isEmpty ||
         listViewWidth == 0 ||
         listViewHeight == 0 ||
-        blockSize == 0) {
+        blockSize == 0 then
       chunkList
-    } else {
+    else
       // how many entries fit into a chunk?
       val (cols, height) = calcDimensions(blockSize, listViewWidth, listViewHeight, nrChunksPerPage)
       val nrElements = height / blockSize * cols
@@ -71,29 +69,22 @@ object Chunk {
       val entriesSize = elements.size()
       var curIndex = 0
 
-      while (curIndex < entriesSize) {
-        val end = if (curIndex + nrElements < entriesSize) {
+      while curIndex < entriesSize do
+        val end = if curIndex + nrElements < entriesSize then
           curIndex + nrElements
-        } else {
+        else
           entriesSize
-        }
         val blockViewEntries: util.List[A] = elements.subList(curIndex, end)
-        if (blockViewEntries.size() > 0) {
+        if blockViewEntries.size() > 0 then
           chunkList.add(new Chunk(chunkList.size, blockViewEntries, cols, height))
-        }
         curIndex = curIndex + nrElements
-      }
       chunkList
-    }
 
-  }
 
-  def clearChunks[A](observableList: ObservableList[Chunk[A]]): Unit = {
+  def clearChunks[A](observableList: ObservableList[Chunk[A]]): Unit =
        observableList.clear()
-  }
 
 
-}
 
 /**
  * Container for entries in order to fill ListView[Chunk]

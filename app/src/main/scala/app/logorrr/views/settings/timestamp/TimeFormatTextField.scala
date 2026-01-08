@@ -4,13 +4,11 @@ import app.logorrr.conf.{FileId, TimestampSettings}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.TextField
 
-object TimeFormatTextField extends UiNodeFileIdAware {
+object TimeFormatTextField extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[TimeFormatTextField])
-}
 
-class TimeFormatTextField(fileId: FileId) extends TextField {
+class TimeFormatTextField(fileId: FileId) extends TextField:
   setId(TimeFormatTextField.uiNode(fileId).value)
   setPromptText("<enter time format>")
   setText(TimestampSettings.DefaultPattern)
   setPrefColumnCount(30)
-}

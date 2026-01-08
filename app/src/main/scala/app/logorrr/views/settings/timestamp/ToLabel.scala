@@ -5,9 +5,8 @@ import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.geometry.Pos
 import javafx.scene.control.Label
 
-object ToLabel extends UiNodeFileIdAware {
+object ToLabel extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[ToLabel])
-}
 
 class ToLabel(id: FileId) extends Label("to column:") {
   setId(FromLabel.uiNode(id).value)

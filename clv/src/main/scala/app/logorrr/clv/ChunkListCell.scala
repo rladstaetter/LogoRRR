@@ -18,13 +18,12 @@ import scala.util.Try
 /**
  * Paint directly into a byte array for performant image manipulations.
  */
-object ChunkListCell extends CanLog {
+object ChunkListCell extends CanLog:
 
   // assuming we have a grid of rectangles, and x and y give the coordinate of a mouse click
   // this function should return the correct index for the surrounding rectangle
-  def indexOf(x: Int, y: Int, blockWidth: Int, blockViewWidth: Int): Int = {
+  def indexOf(x: Int, y: Int, blockWidth: Int, blockViewWidth: Int): Int =
     y / blockWidth * (blockViewWidth / blockWidth) + x / blockWidth
-  }
 
   def paintBlock(pixelBuffer: PixelBuffer[IntBuffer]
                  , index: Int
@@ -34,21 +33,20 @@ object ChunkListCell extends CanLog {
                  , isSelected: Boolean
                  , isFirstVisible: Boolean
                  , isLastVisible: Boolean
-                 , isVisibleInTextView: Boolean): Unit = {
+                 , isVisibleInTextView: Boolean): Unit =
     val blockColor: BlockColor = ChunkListCell.calcBlockColor(color, isSelected, isFirstVisible, isLastVisible, isVisibleInTextView)
     ChunkListCell.drawRectangle(pixelBuffer, index, blockColor, blockSize, width)
-  }
 
   def calcBlockColor(color: Color
                      , isSelected: Boolean
                      , isFirstVisible: Boolean
                      , isLastVisible: Boolean
-                     , isVisibleInTextView: Boolean): BlockColor = {
+                     , isVisibleInTextView: Boolean): BlockColor =
     val colbrighter = color.brighter()
     val (c, cd, cb, cbb) = (ColorUtil.toARGB(color), ColorUtil.toARGB(color.darker()), ColorUtil.toARGB(colbrighter), ColorUtil.toARGB(colbrighter.brighter()))
     // mystical color setting routine for setting border colors of viewport and blocks correctly
-    val blockColor = {
-      (isSelected, isFirstVisible, isLastVisible, isVisibleInTextView) match {
+    val blockColor =
+      (isSelected, isFirstVisible, isLastVisible, isVisibleInTextView) match
         case (false, false, false, false) => BlockColor(c, cb, cb, cd, cd)
         case (true, false, false, false) => LColors.color0
         case (false, true, false, false) => BlockColor(cb, LColors.yb, LColors.yb, LColors.y, cd)
@@ -58,10 +56,7 @@ object ChunkListCell extends CanLog {
         case (true, true, false, false) => LColors.color2
         case (true, false, true, false) => LColors.color2
         case _ => BlockColor(c, cb, cb, cd, cd) // should never happen (?)
-      }
-    }
     blockColor
-  }
 
   /**
    *
@@ -74,7 +69,7 @@ object ChunkListCell extends CanLog {
                     , index: Int
                     , blockColor: BlockColor
                     , blockSize: Int
-                    , width: Double): Unit = {
+                    , width: Double): Unit =
     val nrOfBlocksInX = (width / blockSize).toInt
     val xPos = (index % nrOfBlocksInX) * blockSize
     val yPos = (index / nrOfBlocksInX) * blockSize
@@ -86,7 +81,6 @@ object ChunkListCell extends CanLog {
       , blockSize
       , width.toInt
     )
-  }
 
   // performance sensitive function
   // using while loops for more performance
@@ -100,7 +94,7 @@ object ChunkListCell extends CanLog {
                             , y: Int
                             , width: Int
                             , height: Int
-                            , canvasWidth: Int): Unit = {
+                            , canvasWidth: Int): Unit =
     val rawInts = pixelBuffer.getBuffer.array()
     val maxHeight = y + height - 1
     val length = width - 1
@@ -109,7 +103,7 @@ object ChunkListCell extends CanLog {
     val endIdx = maxHeight * canvasWidth + x + length
 
     // Check if start and end indices are within bounds
-    if (startIdx >= 0 && endIdx < rawInts.length) {
+    if startIdx >= 0 && endIdx < rawInts.length then
       val color = blockColor.color
       val upperBorderCol = blockColor.upperBorderCol
       val bottomBorderCol = blockColor.bottomBorderCol
@@ -118,41 +112,34 @@ object ChunkListCell extends CanLog {
 
       // Update rawInts directly without array copying
       var ly = y
-      while (ly < maxHeight) {
+      while ly < maxHeight do
         val startPos = ly * canvasWidth + x
         var i = 0
-        while (i <= squareWidth) {
+        while i <= squareWidth do
           rawInts(startPos + i) = color
           i += 1
-        }
         ly += 1
-      }
 
       // Paint highlights & shadows if square is big enough
-      if (width >= 2 && height >= 2) {
+      if width >= 2 && height >= 2 then
         // Paint upper border from upper left corner to upper right corner
         var i = 0
-        while (i <= squareWidth) {
+        while i <= squareWidth do
           rawInts(y * canvasWidth + x + i) = upperBorderCol
           rawInts(maxHeight * canvasWidth + x + i) = bottomBorderCol
           i += 1
-        }
 
         // Calculate x positions for left and right borders
         ly = y
-        while (ly < maxHeight) {
+        while ly < maxHeight do
           val idx = ly * canvasWidth + x
           rawInts(idx) = leftBorderCol
           rawInts(idx + length) = rightBorderCol
           ly += 1
-        }
-      }
-    } else {
+    else {
       //      logWarn(s"tried to paint outside allowed index. [endIdx = maxHeight * canvasWidth + x + length] ($endIdx = $maxHeight * $canvasWidth + $x + $length) ")
     }
-  }
 
-}
 
 
 /**
@@ -166,7 +153,7 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
                        , elementColorPicker: ColorPicker[A]
                        , elementSelector: ElementSelector[A]
                        , chunkListViewWidthBinding: IntegerBinding
-                      ) extends ListCell[Chunk[A]] with CanLog {
+                      ) extends ListCell[Chunk[A]] with CanLog:
 
   val view = new ImageView()
 
@@ -175,33 +162,27 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
    * @param me               mouse event
    * @return -1 if MouseEvent is outside the region of interest
    */
-  private def calcIndex(maxOccupiedWidth: Double, me: MouseEvent): Int = {
-    if (me.getX <= maxOccupiedWidth) {
+  private def calcIndex(maxOccupiedWidth: Double, me: MouseEvent): Int =
+    if me.getX <= maxOccupiedWidth then
       ChunkListCell.indexOf(me.getX.toInt, me.getY.toInt, blockSizeProperty.get, chunkListViewWidthBinding.get())
-    } else -1
-  }
+    else -1
 
   // if user selects an entry in the ChunkListView set selectedLineNumberProperty. This property is observed
   // via an listener and a yellow square will be painted.
-  private val mouseClickedHandler = new EventHandler[MouseEvent]() {
-    override def handle(me: MouseEvent): Unit = {
+  private val mouseClickedHandler = new EventHandler[MouseEvent]():
+    override def handle(me: MouseEvent): Unit =
       // on left mouse button
-      if (me.getButton.equals(MouseButton.PRIMARY)) {
-        Option(getItem).map(_.cols) match {
+      if me.getButton.equals(MouseButton.PRIMARY) then
+        Option(getItem).map(_.cols) match
           case Some(cols) =>
             val index = calcIndex(cols * blockSizeProperty.get(), me)
-            getEntryAt(getItem, index) match {
+            getEntryAt(getItem, index) match
               case Some(value) =>
                 elementSelector.select(value)
                 // we have to select also the entry in the LogTextView, couldn't get it to work with bindings / listeners
                 scrollTo(value)
               case None =>
-            }
           case None => // outside of a chunk
-        }
-      }
-    }
-  }
 
 
   // see #262 - until this is fixed don't activate the mousemoved handler
@@ -238,13 +219,13 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
     */
   setOnMouseClicked(mouseClickedHandler)
 
-  override def updateItem(chunk: Chunk[A], empty: Boolean): Unit = {
+  override def updateItem(chunk: Chunk[A], empty: Boolean): Unit =
     super.updateItem(chunk, empty)
     val chunkListViewWidth = chunkListViewWidthBinding.get()
 
-    if (empty || Option(chunk).isEmpty || blockSizeProperty.get() <= 0 || chunkListViewWidth <= 0) {
+    if empty || Option(chunk).isEmpty || blockSizeProperty.get() <= 0 || chunkListViewWidth <= 0 then
       setGraphic(null)
-    } else {
+    else
       val shape = ChunkShape(chunkListViewWidth, chunk.height)
 
       val pbf = new PixelBuffer[IntBuffer](chunkListViewWidth
@@ -254,24 +235,19 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
       view.setImage(new WritableImage(pbf))
       setGraphic(view)
       update(pbf, shape, chunk.entries, blockSizeProperty.get())
-    }
-  }
 
   def update(pixelBuffer: PixelBuffer[IntBuffer]
              , shape: ChunkShape
              , entries: java.util.List[A]
              , blockSize: Int
-            ): Unit = {
-    if (shape.width > blockSize) {
+            ): Unit =
+    if shape.width > blockSize then
       // do this once for all paint operations
       elementColorPicker.init()
-      if (blockSize > 1) {
+      if blockSize > 1 then
         paintRects(pixelBuffer, entries, shape, blockSize)
-      } else {
+      else
         paintPixels(pixelBuffer, entries, shape)
-      }
-    }
-  }
 
 
   private def getEntryAt(chunk: Chunk[A], index: Int): Option[A] = Try(chunk.entries.get(index)).toOption
@@ -280,25 +256,21 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
 
   private def paintRects(pixelBuffer: PixelBuffer[IntBuffer], entries: java.util.List[A], shape: ChunkShape, blockSize: Int): Unit = pixelBuffer.updateBuffer(updateRects(entries, shape, blockSize))
 
-  def updateRects(entries: java.util.List[A], shape: ChunkShape, blockSize: Int)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
+  def updateRects(entries: java.util.List[A], shape: ChunkShape, blockSize: Int)(pb: PixelBuffer[IntBuffer]): Rectangle2D =
     var i = 0
-    if (!entries.isEmpty) {
-      for (o <- 0 to entries.size()) {
+    if !entries.isEmpty then
+      for o <- 0 to entries.size() do
         // entries can get changed by other threads so we
         // have to defensively query those entries otherwise
         // we bailout with an exception.
-        Try(entries.get(o)).toOption match {
+        Try(entries.get(o)).toOption match
           case Some(e) =>
             ChunkListCell.paintBlock(pb, i, elementColorPicker.calc(e), blockSize, shape.width, logEntryVizor.isSelected(e), logEntryVizor.isFirstVisible(e), logEntryVizor.isLastVisible(e), logEntryVizor.isVisibleInTextView(e))
             i = i + 1
           case None => // logWarn("Concurrent change of entries detected")
-        }
-      }
-    }
     shape
-  }
 
-  def updatePixels(entries: java.util.List[A], shape: Rectangle2D)(pb: PixelBuffer[IntBuffer]): Rectangle2D = {
+  def updatePixels(entries: java.util.List[A], shape: Rectangle2D)(pb: PixelBuffer[IntBuffer]): Rectangle2D =
     val rawInts = pb.getBuffer.array()
     var i = 0
     entries.forEach(e => {
@@ -309,12 +281,10 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
           case (true, false) => LColors.y
           case (true, true) => LColors.yb
         }
-      if (i < rawInts.length) {
+      if i < rawInts.length then {
         rawInts(i) = col
       }
       i = i + 1
     })
     shape
-  }
 
-}

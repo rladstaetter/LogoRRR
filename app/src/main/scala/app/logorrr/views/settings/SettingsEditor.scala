@@ -11,7 +11,7 @@ import javafx.scene.layout.{HBox, Priority, VBox}
 import javafx.stage.{Modality, Stage}
 
 
-class SettingsEditor(owner: Stage, fileId: FileId) extends Stage {
+class SettingsEditor(owner: Stage, fileId: FileId) extends Stage:
   initOwner(owner)
   initModality(Modality.WINDOW_MODAL)
   setTitle("Settings")
@@ -32,24 +32,21 @@ class SettingsEditor(owner: Stage, fileId: FileId) extends Stage {
 
   private val closeButton: Button = new CloseSettingsEditorButton(this)
 
-  private val hBox: HBox = {
+  private val hBox: HBox =
     val filler = JfxUtils.mkHgrowFiller()
     val h = new HBox()
     h.getChildren.addAll(resetButton, filler, closeButton)
     h
-  }
 
 
   contentLayout.getChildren.addAll(manageExistingSearchTermGroup, hBox)
 
   // --- Final Setup ---
   setScene(new Scene(contentLayout, 800, 600)) // Adjusted size for list view
-}
 
-object CloseSettingsEditorButton extends UiNodeFileIdAware {
+object CloseSettingsEditorButton extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseSettingsEditorButton])
-}
 
 class CloseSettingsEditorButton(stage: Stage) extends Button("Close") {
   setId(SettingsEditor.CloseButton.value)

@@ -18,7 +18,7 @@ import java.nio.file.Path
  *
  * The user can change certain values via interacting or explicitly setting values in the preferences dialog.
  */
-object LogoRRRGlobals extends CanLog with Fs {
+object LogoRRRGlobals extends CanLog with Fs:
 
   private val mutSettings = new MutSettings
 
@@ -29,20 +29,18 @@ object LogoRRRGlobals extends CanLog with Fs {
 
   def persist(): Unit = SettingsFileIO.toFile(LogoRRRGlobals.getSettings, settingsFilePath)
 
-  def persist(settings: Settings): Unit = {
+  def persist(settings: Settings): Unit =
     SettingsFileIO.toFile(settings, settingsFilePath)
-  }
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings
 
-  def bindWindow(window: Window): Unit = {
+  def bindWindow(window: Window): Unit =
     window.setX(LogoRRRGlobals.getStageX)
     window.setY(LogoRRRGlobals.getStageY)
     window.setWidth(LogoRRRGlobals.getStageWidth)
     window.setHeight(LogoRRRGlobals.getStageHeight)
 
     mutSettings.bindWindowProperties(window)
-  }
 
 
   def putSearchTermGroup(stg: SearchTermGroup): Unit = mutSettings.putSearchTermGroup(stg)
@@ -65,7 +63,7 @@ object LogoRRRGlobals extends CanLog with Fs {
 
   def getHostServices: LogoRRRHostServices = hostServicesProperty.get()
 
-  def set(settings: Settings, hostServices: LogoRRRHostServices): Unit = {
+  def set(settings: Settings, hostServices: LogoRRRHostServices): Unit =
     mutSettings.setStageSettings(settings.stageSettings)
     mutSettings.setLogFileSettings(settings.fileSettings)
     mutSettings.setSomeActive(settings.someActive)
@@ -75,12 +73,10 @@ object LogoRRRGlobals extends CanLog with Fs {
     // if values are saved in the .conf file, those should be used
     val searchTermGroupsToUse = settings.searchTermGroups
 
-    for ((k, v) <- searchTermGroupsToUse) {
+    for (k, v) <- searchTermGroupsToUse do
       mutSettings.mutSearchTermGroupSettings.put(k, v)
-    }
 
     setHostServices(hostServices)
-  }
 
   /** a case class representing current setting state */
   def getSettings: Settings = mutSettings.mkImmutable()
@@ -100,11 +96,11 @@ object LogoRRRGlobals extends CanLog with Fs {
       case x => x
     })
 
-    if (OsUtil.enableSecurityBookmarks) {
-      if (fileId.isZipEntry) {
+    if OsUtil.enableSecurityBookmarks then {
+      if fileId.isZipEntry then {
         // only release path if no other file is opened anymore for this particular zip file
         val zipInQuestion = fileId.extractZipFileId
-        if (!LogoRRRGlobals.getOrderedLogFileSettings.map(_.fileId.extractZipFileId).contains(zipInQuestion)) {
+        if !LogoRRRGlobals.getOrderedLogFileSettings.map(_.fileId.extractZipFileId).contains(zipInQuestion) then {
           val zipPath = fileId.extractZipFileId.asPath
           OsxBridgeHelper.releasePath(zipPath)
         }
@@ -125,4 +121,3 @@ object LogoRRRGlobals extends CanLog with Fs {
   val searchTermGroupEntries: ObservableList[SearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
 
 
-}

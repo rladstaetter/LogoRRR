@@ -6,7 +6,7 @@ import javafx.scene.control.{Menu, MenuItem}
 import net.ladstatt.util.log.CanLog
 
 
-object FileMenu {
+object FileMenu:
 
   /**
    * Menu Item to open a new file
@@ -16,7 +16,7 @@ object FileMenu {
    */
   class OpenFileMenuItem(fileIdService: FileIdService
                          , openFile: FileId => Unit)
-    extends MenuItem("Open...") with CanLog {
+    extends MenuItem("Open...") with CanLog:
     setId(app.logorrr.views.a11y.uinodes.FileMenu.OpenFile.value)
     setOnAction(_ => {
       fileIdService.provideFileId match {
@@ -25,15 +25,12 @@ object FileMenu {
       }
 
     })
-  }
 
-  class CloseAllFilesMenuItem(removeAllLogFiles: => Unit) extends MenuItem("Close All") {
+  class CloseAllFilesMenuItem(removeAllLogFiles: => Unit) extends MenuItem("Close All"):
     setId(app.logorrr.views.a11y.uinodes.FileMenu.CloseAll.value)
     setOnAction(_ => removeAllLogFiles)
-  }
 
 
-}
 
 
 
@@ -47,11 +44,10 @@ class FileMenu(fileIdService: FileIdService
   lazy val openMenuItem = new FileMenu.OpenFileMenuItem(fileIdService, openFile)
   lazy val closeAllMenuItem = new FileMenu.CloseAllFilesMenuItem(closeAllFiles)
 
-  def init(): Unit = {
+  def init(): Unit =
     getItems.clear()
     getItems.add(openMenuItem)
     getItems.add(closeAllMenuItem)
-  }
 
   init()
 }

@@ -21,14 +21,14 @@ import javafx.scene.paint.Color
 
 case class PaneDefinition(jfxId: String, graphic: Node, step: Int, boundary: Int)
 
-object LogFileTabContent {
+object LogFileTabContent:
 
   /** wire pane and slider together */
   private def mkPane(listView: ListView[?]
                      , slider: Slider
                      , inc: PaneDefinition
                      , dec: PaneDefinition
-                     , boundProp: Property[Number]): BorderPane = {
+                     , boundProp: Property[Number]): BorderPane =
     val increaseButton = IncreaseSizeButton(inc.jfxId, inc.graphic, inc.step, inc.boundary, boundProp)
     val decreaseButton = DecreaseSizeButton(dec.jfxId, dec.graphic, dec.step, dec.boundary, boundProp)
     val hbox = new HBox(slider, decreaseButton, increaseButton)
@@ -40,12 +40,10 @@ object LogFileTabContent {
     VBox.setVgrow(bBp, Priority.ALWAYS)
     bBp.setMaxHeight(java.lang.Double.MAX_VALUE)
     bBp
-  }
 
-}
 
 class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
-                        , val entries: ObservableList[LogEntry]) extends BorderPane {
+                        , val entries: ObservableList[LogEntry]) extends BorderPane:
 
   // make sure we have a white background for our tabs - see https://github.com/rladstaetter/LogoRRR/issues/188
   setStyle("-fx-background-color: white;")
@@ -96,7 +94,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   private val pane = new SplitPane(chunkPane, textPane)
 
-  def init(): Unit = {
+  def init(): Unit =
     divider.setPosition(mutLogFileSettings.getDividerPosition)
 
     setTop(opsRegion)
@@ -105,29 +103,25 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     logTextView.init()
     chunkListView.init()
 
-  }
 
 
   private def divider: SplitPane.Divider = pane.getDividers.get(0)
 
   def getDividerPosition: Double = divider.getPosition
 
-  def removeListeners(): Unit = {
+  def removeListeners(): Unit =
     logTextView.removeListeners()
     chunkListView.removeListeners()
-  }
 
   /**
    * Called if a tab is selected
    */
   def recalculateChunkListView(): Unit = chunkListView.recalculateAndUpdateItems()
 
-  def scrollToActiveElement(): Unit = {
+  def scrollToActiveElement(): Unit =
     chunkListView.scrollToActiveChunk()
     logTextView.scrollToActiveLogEntry()
-  }
 
-}
 
 
 

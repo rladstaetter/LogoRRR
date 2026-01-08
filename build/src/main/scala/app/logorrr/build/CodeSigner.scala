@@ -6,28 +6,25 @@ import scala.jdk.CollectionConverters._
 /**
  * Will be called in OSX Installer module
  */
-object CodeSigner {
+object CodeSigner:
 
-  def main(args: Array[String]): Unit = {
-    if (args.length != 4) {
+  def main(args: Array[String]): Unit =
+    if args.length != 4 then
       Console.println("CodeSigner <developerId> <codesign> <entitlements> <path to config>")
-    } else {
+    else
       val developerId = args(0)
       val codesign = Paths.get(args(1))
       val entitlements = Paths.get(args(2))
       val file = Paths.get(args(3)).toAbsolutePath
-      if (Files.exists(file)) {
+      if Files.exists(file) then
         Files.readAllLines(file).asScala.map(f => sign(codesign, entitlements, developerId, file.getParent.resolve(f)))
-      } else {
+      else
         Console.println(s"${file.toAbsolutePath} does not exist, could not execute signing operation ...")
-      }
-    }
-  }
 
   def sign(codesign: Path
            , entitlements: Path
            , developerId: String
-           , value: Path): Path = {
+           , value: Path): Path =
 
     val cmds = Seq(codesign.toAbsolutePath.toString
       , "--timestamp"
@@ -44,6 +41,4 @@ object CodeSigner {
     )
     Commander.execCmd(value.getParent, cmds)
     value
-  }
 
-}

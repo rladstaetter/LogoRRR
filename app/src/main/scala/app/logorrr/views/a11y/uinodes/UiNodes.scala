@@ -4,7 +4,7 @@ import app.logorrr.views.a11y.UiNode
 
 
 /** uinodes which don't have their own namespace */
-object UiNodes {
+object UiNodes:
 
   /**
    * ID of main tab pane where all log files are placed
@@ -21,5 +21,4 @@ object UiNodes {
   val OpenDateFormatterSite: UiNode = UiNode("date_time_formatter_url")
 
 
-}
 

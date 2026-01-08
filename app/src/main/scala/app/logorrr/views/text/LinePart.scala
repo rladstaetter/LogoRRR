@@ -3,10 +3,9 @@ package app.logorrr.views.text
 import app.logorrr.conf.SearchTerm
 import javafx.scene.paint.Color
 
-object LinePart {
+object LinePart:
 
   def apply(value: String, start: Int): LinePart = LinePart(value, start, SearchTerm.Unclassified)
-}
 
 /**
  * A subset of a line with a certain string value and a startposition, associated with a color.

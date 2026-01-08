@@ -8,26 +8,23 @@ import javafx.stage.Stage
 import net.ladstatt.util.log.CanLog
 import net.ladstatt.util.os.OsUtil
 
-object HelpMenu extends CanLog {
+object HelpMenu extends CanLog:
 
-  class LogMenuItem(openLogFile: FileId => Unit) extends MenuItem("Open LogoRRRs log") {
+  class LogMenuItem(openLogFile: FileId => Unit) extends MenuItem("Open LogoRRRs log"):
     setId(app.logorrr.views.a11y.uinodes.HelpMenu.OpenLogorrLog.value)
     setOnAction(_ => openLogFile(FileId(logFilePath)))
-  }
-
-}
 
 
-class HelpMenu(stage: Stage, openFile: FileId => Unit) extends Menu("Help") {
+
+class HelpMenu(stage: Stage, openFile: FileId => Unit) extends Menu("Help"):
   setId(app.logorrr.views.a11y.uinodes.HelpMenu.Self.value)
 
   val items: Seq[MenuItem] =
     Seq(new LogMenuItem(openFile)) ++
-      (if (!OsUtil.isMac) {
+      (if !OsUtil.isMac then {
         Seq(AboutMenuItem(new MenuItem("About"), stage))
       } else {
         Seq()
       })
   getItems.addAll(items*)
-}
 

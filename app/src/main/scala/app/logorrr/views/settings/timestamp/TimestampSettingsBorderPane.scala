@@ -21,7 +21,7 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
                                   , chunkListView: ChunkListView[LogEntry]
                                   , opsToolBar: OpsToolBar
                                   , closeStage: => Unit)
-  extends BorderPane with CanLog {
+  extends BorderPane with CanLog:
 
   private val fromTextField = new FromTextField(mutLogFileSettings.getFileId)
   private val toTextField = new ToTextField(mutLogFileSettings.getFileId)
@@ -34,10 +34,9 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
   /*
    * those properties exist since it is easier to use from the call sites.
    **/
-  private val (startColProperty, endColProperty) = mutLogFileSettings.getSomeTimestampSettings match {
+  private val (startColProperty, endColProperty) = mutLogFileSettings.getSomeTimestampSettings match
     case Some(value) => (new SimpleObjectProperty[java.lang.Integer](value.startCol), new SimpleObjectProperty[java.lang.Integer](value.endCol))
     case None => (new SimpleObjectProperty[java.lang.Integer](), new SimpleObjectProperty[java.lang.Integer]())
-  }
 
   fromTextField.textProperty().bind(Bindings.createStringBinding(() => {
     Option(getStartCol) match {
@@ -66,31 +65,27 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
     timerSettingsLogTextView.listView.refresh()
   })
 
-  private val hyperlink: Hyperlink = {
+  private val hyperlink: Hyperlink =
     val hl = HLink(UiNodes.OpenDateFormatterSite, "https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/time/format/DateTimeFormatter.html", "time pattern").mkHyperLink()
     hl.setAlignment(Pos.CENTER)
     hl.setPrefWidth(83)
     hl
-  }
 
   private val ShowMax = 100 // how many rows should be shown in the TimeStamp Settings Dialog at max
-  private lazy val showThisManyRows = if (logEntries.size() > ShowMax) ShowMax else logEntries.size()
+  private lazy val showThisManyRows = if logEntries.size() > ShowMax then ShowMax else logEntries.size()
   private val firstVisible = Option(mutLogFileSettings.firstVisibleTextCellIndexProperty.get()).getOrElse(0)
   private val lastVisible = Option(mutLogFileSettings.lastVisibleTextCellIndexProperty.get()).getOrElse(logEntries.size())
-  private val l = {
-    if (firstVisible == lastVisible && lastVisible == 0) { // if first/last visible was not yet set
-      FXCollections.observableArrayList((for (i <- firstVisible until showThisManyRows) yield logEntries.get(i))*)
-    } else {
-      FXCollections.observableArrayList((for (i <- firstVisible until lastVisible) yield logEntries.get(i))*)
-    }
-  }
+  private val l =
+    if firstVisible == lastVisible && lastVisible == 0 then // if first/last visible was not yet set
+      FXCollections.observableArrayList((for i <- firstVisible until showThisManyRows yield logEntries.get(i))*)
+    else
+      FXCollections.observableArrayList((for i <- firstVisible until lastVisible yield logEntries.get(i))*)
 
-  private val timerSettingsLogTextView = {
+  private val timerSettingsLogTextView =
     val tslv = new TimestampPositionSelectionBorderPane(mutLogFileSettings, l)
     startColProperty.bind(tslv.startColProperty)
     endColProperty.bind(tslv.endColProperty)
     tslv
-  }
 
 
   private val spacer = new AlwaysGrowHorizontalRegion
@@ -100,11 +95,10 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
   init()
 
 
-  def init(): Unit = {
-    mutLogFileSettings.getSomeTimestampSettings match {
+  def init(): Unit =
+    mutLogFileSettings.getSomeTimestampSettings match
       case Some(s) => timeFormatTf.setText(s.dateTimePattern)
       case None => logTrace("No time setting found ... ")
-    }
 
     val leftLabel = new Label("select range")
     val leftVBox = new VBox(leftLabel)
@@ -131,7 +125,6 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
     setCenter(timerSettingsLogTextView)
     setBottom(timeFormatBar)
 
-  }
 
   def setStartCol(startCol: Int): Unit = startColProperty.set(startCol)
 
@@ -141,7 +134,6 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
 
   def getEndCol: java.lang.Integer = endColProperty.get()
 
-}
 
 
 

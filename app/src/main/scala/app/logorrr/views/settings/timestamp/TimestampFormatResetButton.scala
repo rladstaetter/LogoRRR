@@ -12,16 +12,15 @@ import javafx.scene.control.Button
 
 import java.util
 
-object TimestampFormatResetButton extends UiNodeFileIdAware {
+object TimestampFormatResetButton extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[TimestampFormatResetButton])
-}
 
 /** reset log timestamp settings to default values */
 class TimestampFormatResetButton(mutLogFileSettings: MutLogFileSettings
                                  , chunkListView: ChunkListView[LogEntry]
                                  , logEntries: ObservableList[LogEntry]
                                  , opsToolBar: OpsToolBar
-                                 , closeStage: => Unit) extends Button("reset") {
+                                 , closeStage: => Unit) extends Button("reset"):
   setId(TimestampFormatResetButton.uiNode(mutLogFileSettings.getFileId).value)
   setAlignment(Pos.CENTER_RIGHT)
   setPrefWidth(180)
@@ -40,4 +39,3 @@ class TimestampFormatResetButton(mutLogFileSettings: MutLogFileSettings
     opsToolBar.initializeRanges()
     closeStage
   })
-}

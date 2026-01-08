@@ -5,12 +5,11 @@ import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.ListView
 
 
-object StgListView extends UiNodeFileIdAware {
+object StgListView extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[StgListView])
-}
 
-case class StgListView(fileId: FileId) extends ListView[SearchTermGroup] {
+case class StgListView(fileId: FileId) extends ListView[SearchTermGroup]:
   setId(StgListView.uiNode(fileId).value)
   setItems(LogoRRRGlobals.getLogFileSettings(fileId).searchTermGroupEntries)
   // setMinHeight(200) // Give the list some height
@@ -18,7 +17,6 @@ case class StgListView(fileId: FileId) extends ListView[SearchTermGroup] {
   // Set the custom cell factory to add the 'X' delete button
   setCellFactory(_ => new StgEditorListViewCell(fileId))
 
-}
 
 
 

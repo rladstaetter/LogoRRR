@@ -19,9 +19,9 @@ import java.util.function.Predicate
  * */
 class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
   extends MultipleFileApplicationTest(TestFiles.seq)
-    with CheckTabPaneActions {
+    with CheckTabPaneActions:
 
-  @Test def testIssue236(): Unit = {
+  @Test def testIssue236(): Unit =
     // open first file
     openFile(TestFiles.simpleLog0)
 
@@ -42,6 +42,4 @@ class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
     FxAssert.verifyThat(lookup(firstFilterTab2.ref), new Predicate[ToggleButton] {
       override def test(t: ToggleButton): Boolean = t.isSelected
     })
-  }
 
-}

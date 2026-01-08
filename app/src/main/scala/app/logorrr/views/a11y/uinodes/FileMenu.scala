@@ -2,7 +2,7 @@ package app.logorrr.views.a11y.uinodes
 
 import app.logorrr.views.a11y.UiNode
 
-object FileMenu {
+object FileMenu:
 
   /** id for the file menu */
   val Self: UiNode = UiNode("file_menu")
@@ -16,4 +16,3 @@ object FileMenu {
   val CloseAll: UiNode = UiNode("file_menu_close_all")
 
 
-}

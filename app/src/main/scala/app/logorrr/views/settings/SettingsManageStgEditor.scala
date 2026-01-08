@@ -7,7 +7,7 @@ import javafx.scene.control.Label
 import javafx.scene.layout.{Priority, VBox}
 
 case class SettingsManageStgEditor(fileId: FileId
-                                   , entries: ObservableList[SearchTermGroup]) extends VBox(10) {
+                                   , entries: ObservableList[SearchTermGroup]) extends VBox(10):
   VBox.setVgrow(this, Priority.ALWAYS)
   val title = new Label("Global Search Term Groups")
   title.setStyle("-fx-font-weight: bold")
@@ -15,4 +15,3 @@ case class SettingsManageStgEditor(fileId: FileId
   VBox.setVgrow(groupsListView, Priority.ALWAYS)
 
   getChildren.addAll(title, groupsListView)
-}

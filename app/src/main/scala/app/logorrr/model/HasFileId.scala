@@ -2,8 +2,7 @@ package app.logorrr.model
 
 import app.logorrr.conf.FileId
 
-trait HasFileId {
+trait HasFileId:
 
   def fileId: FileId
 
-}

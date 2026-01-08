@@ -10,15 +10,15 @@ import org.junit.jupiter.api.Test
 /**
  * enables/disables specific filters
  * */
-class SelectDefaultSearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2) {
+class SelectDefaultSearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2):
 
-  @Test def selectSpecificFilter(): Unit = {
+  @Test def selectSpecificFilter(): Unit =
     // file has 5 entries - each line consisting of one entry corresponding to
     // the default filters, like 'FINEST', 'INFO, ' WARNING', 'SEVERE'
     // and a 'unclassified' line
     openFile(fileId)
 
-    MutableSearchTerm.DefaultSearchTerms.foreach {
+    MutableSearchTerm.DefaultSearchTerms.foreach:
       f =>
         // deselect all filters except unclassified
         clickFilters(MutableSearchTerm.DefaultSearchTerms)
@@ -34,7 +34,6 @@ class SelectDefaultSearchTermTest extends SingleFileApplicationTest(TestFiles.si
         // deselect filter again
         waitAndClickVisibleItem(SearchTermButton.uiNode(fileId, f))
         clickFilters(MutableSearchTerm.DefaultSearchTerms)
-    }
 
     // finally, deselect all filters
     clickFilters(MutableSearchTerm.DefaultSearchTerms)
@@ -44,16 +43,11 @@ class SelectDefaultSearchTermTest extends SingleFileApplicationTest(TestFiles.si
     // deselect unclassified filter works as well
     clickFilters(Seq(MutableSearchTermUnclassified(MutableSearchTerm.DefaultSearchTerms.toSet)))
     checkNumberOfShownElements(0)
-  }
 
-  def checkNumberOfShownElements(expectedElements: Int): Unit = {
+  def checkNumberOfShownElements(expectedElements: Int): Unit =
     assert(lookup(LogTextView.uiNode(fileId).ref).query[LogTextView].getItems.size() == expectedElements)
-  }
 
-  def clickFilters(filters: Seq[MutableSearchTerm]): Unit = {
-    filters.foreach {
+  def clickFilters(filters: Seq[MutableSearchTerm]): Unit =
+    filters.foreach:
       ff => waitAndClickVisibleItem(SearchTermButton.uiNode(fileId, ff)) // enable all filters
-    }
-  }
 
-}

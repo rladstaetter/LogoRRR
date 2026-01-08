@@ -9,18 +9,17 @@ import javafx.collections.ObservableList
 import javafx.scene.Scene
 import javafx.stage.{Modality, Stage, Window}
 
-object TimestampSettingStage {
+object TimestampSettingStage:
 
   val width = 1100
   val height = 300
 
-}
 
 class TimestampSettingStage(owner: Window
                             , settings: MutLogFileSettings
                             , chunkListView: ChunkListView[LogEntry]
                             , logEntries: ObservableList[LogEntry]
-                            , opsToolBar: OpsToolBar) extends Stage {
+                            , opsToolBar: OpsToolBar) extends Stage:
 
   initOwner(owner)
   initModality(Modality.WINDOW_MODAL)
@@ -37,4 +36,3 @@ class TimestampSettingStage(owner: Window
 
   setScene(scene)
   setOnCloseRequest(_ => this.close())
-}

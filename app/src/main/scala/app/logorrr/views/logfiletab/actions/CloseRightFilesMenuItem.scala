@@ -8,11 +8,10 @@ import javafx.scene.control.{MenuItem, Tab}
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 
-object CloseRightFilesMenuItem extends UiNodeFileIdAware {
+object CloseRightFilesMenuItem extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseRightFilesMenuItem])
 
-}
 
 class CloseRightFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends MenuItem("Close Files to the Right") {
   setId(CloseRightFilesMenuItem.uiNode(fileId).value)
@@ -21,11 +20,11 @@ class CloseRightFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends Me
     var deletethem = false
     val toBeDeleted: Seq[Tab] = {
       tabPane.getTabs.asScala.flatMap { t =>
-        if (t.asInstanceOf[LogFileTab].fileId == fileTab.fileId) {
+        if t.asInstanceOf[LogFileTab].fileId == fileTab.fileId then {
           deletethem = true
           None
         } else {
-          if (deletethem) {
+          if deletethem then {
             t.asInstanceOf[LogFileTab].shutdown()
             Option(t)
           } else {

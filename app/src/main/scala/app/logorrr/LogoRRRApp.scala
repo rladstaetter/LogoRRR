@@ -18,19 +18,18 @@ import java.nio.file.Paths
  * Main starting point for LogoRRR Application
  */
 // have fun and thanks for reading the code!
-object LogoRRRApp extends CanLog {
+object LogoRRRApp extends CanLog:
 
   val Name = "LogoRRR"
 
   val appMeta: AppMeta = net.ladstatt.app.AppMeta(AppId(Name, "logorrr", "app.logorrr"), AppMeta.LogFormat)
 
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]): Unit =
     net.ladstatt.app.AppMeta.initApp(appMeta)
     javafx.application.Application.launch(classOf[LogoRRRApp], args*)
-  }
 
   def start(stage: Stage
-            , services: LogoRRRServices): LogoRRRMain = {
+            , services: LogoRRRServices): LogoRRRMain =
     System.setProperty("user.language", "en")
     net.ladstatt.app.AppMeta.initApp(appMeta)
     LogoRRRNative.loadNativeLibraries()
@@ -46,18 +45,15 @@ object LogoRRRApp extends CanLog {
     logInfo(s"    Configuration: '$settingsFilePath'")
     logInfo(s"          Logfile: '$logFilePath'")
     logoRRRMain
-  }
-}
 
 
 class LogoRRRApp extends javafx.application.Application with CanLog {
 
-  def start(stage: Stage): Unit = {
-    val hostServices = {
-      if (OsUtil.isMac) {
+  def start(stage: Stage): Unit =
+    val hostServices =
+      if OsUtil.isMac then
         new MacNativeHostService
-      } else new NativeHostServices(getHostServices)
-    }
+      else new NativeHostServices(getHostServices)
     val settings = SettingsIO.fromFile(settingsFilePath)
     val services = logorrr.services.LogoRRRServices(
       settings
@@ -66,6 +62,5 @@ class LogoRRRApp extends javafx.application.Application with CanLog {
       , isUnderTest = false)
 
     LogoRRRApp.start(stage, services)
-  }
 
 }

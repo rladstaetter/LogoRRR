@@ -13,11 +13,10 @@ import javafx.scene.layout.StackPane
 import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
 import org.kordamp.ikonli.javafx.FontIcon
 
-object TimestampSettingsButton extends UiNodeFileIdAware {
+object TimestampSettingsButton extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[TimestampSettingsButton])
 
-}
 
 /**
  * Displays a clock in the ops tool bar, with a red exclamation mark if there is no setting for the
@@ -32,13 +31,13 @@ object TimestampSettingsButton extends UiNodeFileIdAware {
 class TimestampSettingsButton(settings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
-                              , opsToolBar: OpsToolBar) extends StackPane {
+                              , opsToolBar: OpsToolBar) extends StackPane:
 
   setId(TimestampSettingsButton.uiNode(settings.getFileId).value)
 
   // since timerbutton is a stackpane, this css commands are necessary to have the same effect as
   // defined in primer-light.css
-  val button: Button = {
+  val button: Button =
     val btn = new Button()
     btn.setBackground(null)
     btn.setStyle(
@@ -50,9 +49,8 @@ class TimestampSettingsButton(settings: MutLogFileSettings
     btn.setTooltip(new Tooltip("configure time format"))
     btn.setOnAction(_ => new TimestampSettingStage(getScene.getWindow, settings, chunkListView, logEntries, opsToolBar).showAndWait())
     btn
-  }
 
-  private val fontIcon = {
+  private val fontIcon =
     val icon = new FontIcon()
     icon.setStyle("-fx-icon-code:fas-exclamation-circle;-fx-icon-color:rgba(255, 0, 0, 1);-fx-icon-size:8;")
     icon.setTranslateX(10)
@@ -61,8 +59,6 @@ class TimestampSettingsButton(settings: MutLogFileSettings
     /** red exclamation mark is only visible if there is no timestamp setting for a given log file */
     icon.visibleProperty().bind(settings.hasTimestampSetting.not())
     icon
-  }
 
   getChildren.addAll(button, fontIcon)
 
-}

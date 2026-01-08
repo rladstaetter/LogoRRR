@@ -15,22 +15,19 @@ import org.junit.jupiter.api.Test
 class OpenSingleFileAndOpenInFinderTest
   extends SingleFileApplicationTest(TestFiles.simpleLog0)
     with VisibleItemActions
-    with CheckTabPaneActions {
+    with CheckTabPaneActions:
 
   /**
    * checks if an open file creates a new logfiletab with an id matching the file opened.
    */
-  @Test def openSingleFileAndOpenInFinderTest(): Unit = {
+  @Test def openSingleFileAndOpenInFinderTest(): Unit =
     // basically skips this until https://github.com/rladstaetter/LogoRRR/issues/221#issuecomment-2083771649
-    if (false) {
+    if false then
       checkForEmptyTabPane()
       openFile(fileId)
       checkForNonEmptyTabPane()
       clickOn(lookup(UiNodes.LogFileHeaderTabs).query[StackPane](), MouseButton.SECONDARY)
       waitAndClickVisibleItem(OpenInFinderMenuItem.uiNode(fileId))
       checkForNonEmptyTabPane()
-    }
-  }
 
-}
 

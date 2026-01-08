@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 
 class SettingsTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
-  with StgEditorActions {
+  with StgEditorActions:
 
   def lookupListView(): SettingsStgListView = lookup[SettingsStgListView](SettingsEditor.SettingsStgListView)
 
@@ -33,7 +33,7 @@ class SettingsTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
    * check that there is the old list there
    * */
   @Test
-  def addANewGroupAndVerifyFactoryDefaults(): Unit = {
+  def addANewGroupAndVerifyFactoryDefaults(): Unit =
     val newGroup = "new group"
     addGroup(newGroup)
     addExistingGroupToGlobalGroup(newGroup)
@@ -42,7 +42,7 @@ class SettingsTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
     openSettingsEditorAndPerform(
       settingsListView => {
         settingsListView.entries.forEach(g => {
-          if (g.name == newGroup) {
+          if g.name == newGroup then {
             found = true
           }
         })
@@ -51,35 +51,29 @@ class SettingsTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
     assert(found) // ok, we found an entry
 
     // check that settings are reset to default
-    withOpenedSettingsEditor {
+    withOpenedSettingsEditor:
       waitAndClickVisibleItem(SettingsEditor.ResetToDefaultButton)
       assert(lookupListView().getItems.size() == Settings.Default.searchTermGroups.size)
-    }
 
-  }
 
   /**
    * Opens settings dialog, checks if the number of shown items for search term groups match the default settings.
    */
-  @Test def showEmptySettingsEditor(): Unit = {
+  @Test def showEmptySettingsEditor(): Unit =
     openSettingsEditorAndPerform(
       settingsListView => {
         assert(settingsListView.getItems.size() == Settings.Default.searchTermGroups.size)
       }
     )
-  }
 
-  def withOpenedSettingsEditor(f: => Unit): Unit = {
+  def withOpenedSettingsEditor(f: => Unit): Unit =
     waitAndClickVisibleItem(LogoRRRMenu.Self)
     waitAndClickVisibleItem(LogoRRRMenu.Settings)
     f
     waitAndClickVisibleItem(SettingsEditor.CloseButton)
-  }
 
 
-  private def openSettingsEditorAndPerform(fn: SettingsStgListView => Unit): Unit = {
+  private def openSettingsEditorAndPerform(fn: SettingsStgListView => Unit): Unit =
     withOpenedSettingsEditor(fn(lookupListView()))
-  }
 
-}
 

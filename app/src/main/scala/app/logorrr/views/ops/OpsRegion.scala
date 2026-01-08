@@ -6,10 +6,9 @@ import javafx.scene.layout.VBox
 
 
 class OpsRegion(opsToolBar: OpsToolBar
-                , searchTermToolBar: SearchTermToolBar) extends VBox {
+                , searchTermToolBar: SearchTermToolBar) extends VBox:
   getChildren.addAll(opsToolBar, searchTermToolBar)
 
-}
 
 
 

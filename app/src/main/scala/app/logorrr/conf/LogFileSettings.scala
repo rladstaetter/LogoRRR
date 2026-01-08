@@ -6,7 +6,7 @@ import upickle.default.*
 import java.nio.file.Path
 import java.time.*
 
-object LogFileSettings {
+object LogFileSettings:
 
   private val DefaultSelectedIndex = 0
   private val DefaultDividerPosition = 0.5
@@ -19,7 +19,7 @@ object LogFileSettings {
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
   val DefaultSearchTermGroup = Option(Settings.JavaLoggingGroup.name)
 
-  def mk(fileId: FileId): LogFileSettings = {
+  def mk(fileId: FileId): LogFileSettings =
     val now = Instant.now().toEpochMilli
     LogFileSettings(fileId
       , DefaultSelectedIndex
@@ -36,9 +36,7 @@ object LogFileSettings {
       , now
       , DefaultSearchTermGroup
       , LogoRRRGlobals.getSettings.searchTermGroups)
-  }
 
-}
 
 
 /**
@@ -76,8 +74,7 @@ case class LogFileSettings(fileId: FileId
                            , lowerTimestamp: Long
                            , upperTimestamp: Long
                            , someSelectedSearchTermGroup: scala.Option[String]
-                           , searchTermGroups: Map[String, Seq[SearchTerm]]) derives ReadWriter {
+                           , searchTermGroups: Map[String, Seq[SearchTerm]]) derives ReadWriter:
 
   lazy val path: Path = fileId.asPath.toAbsolutePath
 
-}

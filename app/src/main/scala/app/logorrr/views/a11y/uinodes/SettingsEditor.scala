@@ -2,7 +2,7 @@ package app.logorrr.views.a11y.uinodes
 
 import app.logorrr.views.a11y.UiNode
 
-object SettingsEditor {
+object SettingsEditor:
 
   val CloseButton: UiNode = UiNode("settings_close")
 
@@ -12,4 +12,3 @@ object SettingsEditor {
 
   val SettingsStgListViewDelete: UiNode = UiNode("settings_listview_delete")
 
-}

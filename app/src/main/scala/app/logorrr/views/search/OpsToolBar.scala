@@ -17,12 +17,12 @@ import javafx.scene.input.{KeyCode, KeyEvent}
 import net.ladstatt.util.os.OsUtil
 
 
-object OpsToolBar {
+object OpsToolBar:
 
   def apply(mutLogFileSettings: MutLogFileSettings
             , chunkListView: ChunkListView[LogEntry]
             , entries: ObservableList[LogEntry]
-            , filteredList: FilteredList[LogEntry]): OpsToolBar = {
+            , filteredList: FilteredList[LogEntry]): OpsToolBar =
 
     new OpsToolBar(mutLogFileSettings.getFileId
       , mutLogFileSettings
@@ -31,9 +31,7 @@ object OpsToolBar {
       , entries
       , filteredList
       , mutLogFileSettings.blockSizeProperty)
-  }
 
-}
 
 /**
  * Groups search ui widgets together.
@@ -46,7 +44,7 @@ class OpsToolBar(fileId: FileId
                  , addFilterFn: MutableSearchTerm => Unit
                  , logEntries: ObservableList[LogEntry]
                  , filteredList: FilteredList[LogEntry]
-                 , val sizeProperty: SimpleIntegerProperty) extends ToolBar {
+                 , val sizeProperty: SimpleIntegerProperty) extends ToolBar:
 
   setMaxHeight(Double.PositiveInfinity)
 
@@ -75,20 +73,17 @@ class OpsToolBar(fileId: FileId
   private val copySelectionButton = new CopyLogButton(fileId, filteredList)
 
 
-  def execSearchOnHitEnter(event: KeyEvent): Unit = {
-    if (event.getCode == KeyCode.ENTER) {
+  def execSearchOnHitEnter(event: KeyEvent): Unit =
+    if event.getCode == KeyCode.ENTER then
       searchButton.fire()
-    }
-  }
 
   searchTextField.setOnKeyPressed(execSearchOnHitEnter)
   colorPicker.setOnKeyPressed(execSearchOnHitEnter)
 
   val searchItems: Seq[Control] = Seq[Control](searchTextField, colorPicker, searchButton)
 
-  val otherItems: Seq[Node] = {
+  val otherItems: Seq[Node] =
     Seq(autoScrollCheckBox, clearLogButton, copySelectionButton)
-  }
 
 
   /**
@@ -114,34 +109,29 @@ class OpsToolBar(fileId: FileId
   upperSlider.valueProperty.addListener((_, _, newValue) => updateUpperTimestampSlider(newValue))
 
 
-  def initializeRanges(): Unit = {
+  def initializeRanges(): Unit =
     val range = timeRange
     lowerSlider.setRange(range)
     lowerSlider.setInstant(range.start)
     upperSlider.setRange(range)
     upperSlider.setInstant(range.end)
     setSliderPositions(range)
-  }
 
-  private def setSliderPositions(filterRange: TimeRange): Unit = {
+  private def setSliderPositions(filterRange: TimeRange): Unit =
     lowerSlider.setInstant(filterRange.start)
     upperSlider.setInstant(filterRange.end)
-  }
 
-  private def updateLowerTimestampSlider(newValue: Number): Unit = {
-    if (newValue.doubleValue > upperSlider.getValue) lowerSlider.setValue(upperSlider.getValue)
+  private def updateLowerTimestampSlider(newValue: Number): Unit =
+    if newValue.doubleValue > upperSlider.getValue then lowerSlider.setValue(upperSlider.getValue)
     mutLogFileSettings.setLowerTimestampValue(newValue.longValue())
     mutLogFileSettings.updateActiveFilter(filteredList)
-  }
 
-  private def updateUpperTimestampSlider(newValue: Number): Unit = {
-    if (newValue.doubleValue < lowerSlider.getValue) upperSlider.setValue(lowerSlider.getValue)
+  private def updateUpperTimestampSlider(newValue: Number): Unit =
+    if newValue.doubleValue < lowerSlider.getValue then upperSlider.setValue(lowerSlider.getValue)
     mutLogFileSettings.setUpperTimestampValue(newValue.longValue())
     mutLogFileSettings.updateActiveFilter(filteredList)
-  }
 
   private val nodes: Seq[Node] = Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox)
 
   getItems.addAll(searchItems ++ otherItems ++ nodes*)
 
-}

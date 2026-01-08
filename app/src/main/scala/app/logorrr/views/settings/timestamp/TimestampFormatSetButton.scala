@@ -13,9 +13,8 @@ import javafx.scene.control.{Button, TextField}
 import java.time.{Duration, Instant}
 import java.util
 
-object TimestampFormatSetButton extends UiNodeFileIdAware {
+object TimestampFormatSetButton extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[TimestampFormatSetButton])
-}
 
 /**
  * if ok button is clicked, log definition will be written, settings stage will be closed, associated logfile
@@ -27,13 +26,13 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
                                , chunkListView: ChunkListView[LogEntry]
                                , logEntries: ObservableList[LogEntry]
                                , opsToolBar: OpsToolBar
-                               , closeStage: => Unit) extends Button("set format") {
+                               , closeStage: => Unit) extends Button("set format"):
   setId(TimestampFormatSetButton.uiNode(mutLogFileSettings.getFileId).value)
   setPrefWidth(350)
   setAlignment(Pos.CENTER)
   setOnAction(_ => {
     val leif: TimestampSettings = TimestampSettings(getRange, timeFormatTf.getText.trim)
-    if (getRange.length == 0) {
+    if getRange.length == 0 then {
       mutLogFileSettings.setSomeLogEntryInstantFormat(None)
     } else {
       mutLogFileSettings.setSomeLogEntryInstantFormat(Option(leif))
@@ -44,17 +43,17 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
     var someFirstEntryTimestamp: Option[Instant] = None
 
     val tempList = new util.ArrayList[LogEntry]()
-    for (i <- 0 until logEntries.size()) {
+    for i <- 0 until logEntries.size() do {
       val e = logEntries.get(i)
       val someInstant = TimestampSettings.parseInstant(e.value, leif)
-      if (someFirstEntryTimestamp.isEmpty) {
+      if someFirstEntryTimestamp.isEmpty then {
         someFirstEntryTimestamp = someInstant
       }
 
-      val someDiffFromStart: Option[Duration] = for {
+      val someDiffFromStart: Option[Duration] = for
         firstEntry <- someFirstEntryTimestamp
         instant <- someInstant
-      } yield Duration.between(firstEntry, instant)
+      yield Duration.between(firstEntry, instant)
 
       tempList.add(e.copy(someInstant = someInstant, someDurationSinceFirstInstant = someDiffFromStart))
     }
@@ -67,4 +66,3 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
   })
 
 
-}

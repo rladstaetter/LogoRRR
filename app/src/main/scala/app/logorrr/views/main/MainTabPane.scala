@@ -18,7 +18,7 @@ import java.{lang, util}
 import scala.collection.mutable
 import scala.jdk.CollectionConverters._
 
-object MainTabPane {
+object MainTabPane:
 
   private val BackgroundStyle: String =
     """
@@ -29,27 +29,26 @@ object MainTabPane {
       |-fx-background-size: 100%;
       |""".stripMargin
 
-}
 
-class MainTabPane extends TabPane with CanLog {
+class MainTabPane extends TabPane with CanLog:
   // leave here otherwise css rendering breaks
   setStyle(MainTabPane.BackgroundStyle)
   setId(UiNodes.MainTabPane.value)
 
   // setup DnD
   setOnDragOver((event: DragEvent) => {
-    if (event.getDragboard.hasFiles) {
+    if event.getDragboard.hasFiles then {
       event.acceptTransferModes(TransferMode.ANY*)
     }
   })
 
   /** try to interpret dropped element as log file, activate view */
   setOnDragDropped((event: DragEvent) => {
-    for (f <- event.getDragboard.getFiles.asScala) {
+    for f <- event.getDragboard.getFiles.asScala do {
       val path = f.toPath
-      if (Files.isDirectory(path)) {
+      if Files.isDirectory(path) then {
         dropDirectory(path)
-      } else if (IoManager.isZip(path)) {
+      } else if IoManager.isZip(path) then {
         openZipFile(path)
       } else {
         openFile(FileId(path))
@@ -57,14 +56,13 @@ class MainTabPane extends TabPane with CanLog {
     }
   })
 
-  private val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew {
+  private val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew:
     case logFileTab: LogFileTab =>
       logTrace(s"Selected: '${logFileTab.fileId.value}'")
       LogoRRRGlobals.setSomeActiveLogFile(Option(logFileTab.fileId))
       // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
       getSelectionModel.select(logFileTab)
     case _ => getSelectionModel.select(null)
-  }
 
 
   /**
@@ -72,58 +70,49 @@ class MainTabPane extends TabPane with CanLog {
    *
    * @param path zip file to open
    */
-  def openZipFile(path: Path): Unit = {
-    if (IoManager.isZip(path)) {
-      IoManager.unzip(path).foreach {
+  def openZipFile(path: Path): Unit =
+    if IoManager.isZip(path) then
+      IoManager.unzip(path).foreach:
         case (fileId, entries) =>
-          if (!contains(fileId)) {
+          if !contains(fileId) then
             addEntriesFromZip(LogFileSettings.mk(fileId), entries)
             selectFile(fileId)
-          } else {
+          else
             logTrace(s"${fileId.absolutePathAsString} is already opened, selecting tab ...")
             selectFile(fileId)
-          }
-      }
-    } else {
+    else
       logWarn(s"Tried to open file as zip, but filename was: '${path.toAbsolutePath.toString}'.")
-    }
-  }
 
-  private def dropDirectory(path: Path): Unit = {
+  private def dropDirectory(path: Path): Unit =
     val files = Files.list(path).filter((p: Path) => Files.isRegularFile(p))
     // diff between regular files and zip files, try to open zip files as container
     val collectorResults: util.Map[lang.Boolean, util.List[Path]] = files.collect(Collectors.partitioningBy((p: Path) => p.getFileName.toString.endsWith(".zip")))
     collectorResults.get(false).forEach(p => openFile(FileId(p)))
     collectorResults.get(true).forEach(p => openZipFile(p))
-  }
 
   /**
    * Defines what should happen when a tab is selected
    * */
-  def initSelectionListener(): Unit = {
+  def initSelectionListener(): Unit =
     getSelectionModel.selectedItemProperty().addListener(selectedTabListener)
-  }
 
-  def contains(p: FileId): Boolean = {
+  def contains(p: FileId): Boolean =
     getLogFileTabs.exists(lr => lr.fileId == p)
-  }
 
   def getByFileId(fileId: FileId): Option[LogFileTab] = getLogFileTabs.find(_.fileId == fileId)
 
-  def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap {
+  def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap:
     case l: LogFileTab => Option(l)
     case _ => None
-  }
 
   /** shutdown all tabs */
-  def shutdown(): Unit = {
+  def shutdown(): Unit =
     getSelectionModel.selectedItemProperty().removeListener(selectedTabListener)
     getLogFileTabs.foreach(_.shutdown())
     getTabs.clear()
-  }
 
-  def selectFile(fileId: FileId): LogFileTab = {
-    getLogFileTabs.find(_.fileId == fileId) match {
+  def selectFile(fileId: FileId): LogFileTab =
+    getLogFileTabs.find(_.fileId == fileId) match
       case Some(logFileTab) =>
         logTrace(s"Activated tab for '${fileId.value}'.")
         getSelectionModel.select(logFileTab)
@@ -132,31 +121,25 @@ class MainTabPane extends TabPane with CanLog {
         logWarn(s"Couldn't find '${fileId.value}', selecting last tab ...")
         selectLastLogFile()
         getTabs.get(getTabs.size() - 1).asInstanceOf[LogFileTab]
-    }
-  }
 
   def selectLastLogFile(): Unit = getSelectionModel.selectLast()
 
-  private def openFile(fileId: FileId): Unit = {
-    if (Files.exists(fileId.asPath)) {
-      if (!contains(fileId)) {
+  private def openFile(fileId: FileId): Unit =
+    if Files.exists(fileId.asPath) then
+      if !contains(fileId) then
         addFile(fileId)
-      } else {
+      else
         logTrace(s"${fileId.absolutePathAsString} is already opened, selecting tab ...")
         selectFile(fileId)
-      }
-    } else {
+    else
       logWarn(s"${fileId.absolutePathAsString} does not exist.")
-    }
-  }
 
-  def addFile(fileId: FileId): Unit = {
+  def addFile(fileId: FileId): Unit =
     val logFileSettings = LogFileSettings.mk(fileId)
     LogoRRRGlobals.registerSettings(logFileSettings)
     val entries = IoManager.readEntries(logFileSettings.path, logFileSettings.someTimestampSettings)
     addLogFileTab(LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), entries))
     selectFile(fileId)
-  }
 
   private def addEntriesFromZip(logFileSettings: LogFileSettings, entries: ObservableList[LogEntry]): LogFileTab = timeR({
     LogoRRRGlobals.registerSettings(logFileSettings)
@@ -166,10 +149,8 @@ class MainTabPane extends TabPane with CanLog {
   }, s"Added ${logFileSettings.fileId.absolutePathAsString} to TabPane")
 
   /** Adds a new logfile to display and initializes bindings and listeners */
-  def addLogFileTab(tab: LogFileTab): Unit = {
+  def addLogFileTab(tab: LogFileTab): Unit =
     tab.init()
     getTabs.add(tab)
     tab.initContextMenu()
-  }
 
-}
