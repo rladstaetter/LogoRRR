@@ -32,31 +32,29 @@ class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
     , Map()
   )
 
-  // atm this is only a setup test which helps to get LogoRRR in a repeatable, defined state
-  // start LogoRRRApp afterwards to tinker around
+
+  /**
+   * Clicks on ChunkListView and tests if the LogTextView contains also a highlighted line, then selects
+   * another element and checks if the LogTextView has still a line selected (not two or none)
+   */
   @Test def testIssue294(): Unit =
 
     val ltv = lookupLogTextView(fileId)
-
+    // no element is selected
     assert(ltv.getSelectionModel.getSelectedItems.size() == 0)
-
     // simple log is shown.
+
+    // this block just looks up the correct coordinates to click on
     val clv = lookupChunkListView(fileId)
-
     val firstCell = nthCell(clv, 0)
-
     val imageView = firstCell.view
-
     val imageViewBounds = imageView.localToScreen(imageView.getBoundsInLocal)
     val imageViewX = imageViewBounds.getMinX
     val imageViewY = imageViewBounds.getMinY
-
     val localX = 15.0
     val localY = 25.0
-
     val screenClickX = imageViewX + localX
     val screenClickY = imageViewY + localY
-
     clickOn(screenClickX, screenClickY)
 
     // assert that now one element is selected
