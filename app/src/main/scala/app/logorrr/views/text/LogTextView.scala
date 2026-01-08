@@ -24,6 +24,7 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
   private val elementInvalidationListener = JfxUtils.mkInvalidationListener(_ => updateLogTextView)
 
   def init(): Unit =
+    styleProperty.bind(mutLogFileSettings.fontStyleBinding)
     filteredList.addListener(elementInvalidationListener)
     updateLogTextView
 
