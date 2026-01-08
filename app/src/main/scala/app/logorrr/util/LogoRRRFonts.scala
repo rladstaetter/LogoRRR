@@ -5,10 +5,10 @@ import javafx.scene.text.Font
 object LogoRRRFonts:
 
   // load font thanks to https://www.jetbrains.com/lp/mono/
-  Font.loadFont(getClass.getResource("/app/logorrr/JetBrainsMono-Regular.ttf").toExternalForm, 12)
+  Font.loadFont(getClass.getResource("/app/logorrr/JetBrainsMono-Regular.ttf").toExternalForm, 16)
 
   def jetBrainsMono(size: Int): String =
     s"""|-fx-font-family: 'JetBrains Mono';
-        |-fx-font-size: ${size.toString} px;
+        |-fx-font-size: ${size.toString} pt;
         |""".stripMargin
 
