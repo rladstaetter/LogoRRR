@@ -1,7 +1,7 @@
 package app.logorrr.views.ops.time
 
+import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAndPosAware}
 import javafx.collections.ObservableList
@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId}
 
 
-object TimeUtil {
+object TimeUtil:
 
 
   /**
@@ -21,48 +21,43 @@ object TimeUtil {
    * @param logEntries list of log entries
    * @return min and max Instant of all log entries
    */
-  def calcTimeInfo(logEntries: ObservableList[LogEntry]): Option[TimeRange] = {
-    if (!logEntries.isEmpty) {
+  def calcTimeInfo(logEntries: ObservableList[LogEntry]): Option[TimeRange] =
+    if !logEntries.isEmpty then
       var minInstant = Instant.MAX
       var maxInstant = Instant.MIN
       logEntries.forEach((e: LogEntry) => {
         e.someInstant match {
           case Some(instant) =>
-            if (instant.isBefore(minInstant)) {
+            if instant.isBefore(minInstant) then {
               minInstant = instant
             }
-            if (instant.isAfter(maxInstant)) {
+            if instant.isAfter(maxInstant) then {
               maxInstant = instant
             }
           case None => // do nothing
         }
       })
-      if (minInstant == Instant.MIN || minInstant == Instant.MAX) {
+      if minInstant == Instant.MIN || minInstant == Instant.MAX then
         None
-      } else if (maxInstant == Instant.MIN || maxInstant == Instant.MAX) {
+      else if maxInstant == Instant.MIN || maxInstant == Instant.MAX then
         None
-      } else if (minInstant.equals(maxInstant)) {
+      else if minInstant.equals(maxInstant) then
         None
-      } else {
+      else
         Option(TimeRange(minInstant, maxInstant))
-      }
-    } else None
-  }
-}
+    else None
 
-object TimerSlider extends UiNodeFileIdAndPosAware {
+object TimerSlider extends UiNodeFileIdAndPosAware:
 
   val Width = 350
 
-  def format(epochMilli: Long, formatter: DateTimeFormatter): String = {
+  def format(epochMilli: Long, formatter: DateTimeFormatter): String =
     val instant = Instant.ofEpochMilli(epochMilli)
     val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault)
     dateTime.format(formatter)
-  }
 
 
   override def uiNode(id: FileId, pos: Pos): UiNode = UiNode(id, pos, classOf[TimerSlider])
-}
 
 class TimerSlider(mutLogFileSettings: MutLogFileSettings
                   , pos: Pos
@@ -78,8 +73,7 @@ class TimerSlider(mutLogFileSettings: MutLogFileSettings
 
   def setInstant(instant: Instant): Unit = setValue(instant.toEpochMilli.doubleValue())
 
-  def setRange(range: TimeRange): Unit = {
+  def setRange(range: TimeRange): Unit =
     setMin(range.start.toEpochMilli.doubleValue)
     setMax(range.end.toEpochMilli.doubleValue())
-  }
 }

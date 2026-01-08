@@ -1,7 +1,7 @@
 package app.logorrr.views.ops.time
 
+import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.ops.PulsatingAnimationTimer
@@ -18,20 +18,19 @@ import org.kordamp.ikonli.javafx.FontIcon
 
 import scala.collection.mutable.ListBuffer
 
-object ReplayStackPane extends UiNodeFileIdAware {
+object ReplayStackPane extends UiNodeFileIdAware:
 
   val availableSpeeds: Seq[Double] = Seq(1.0, 2.0, 4.0, 10.0, 100.0)
 
   val DefaultSpeedIndex: Int = 0
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[ReplayButton])
-}
 
 class ReplayStackPane(mutLogFileSettings: MutLogFileSettings
                       , filteredList: ObservableList[LogEntry]
                       , lowerSlider: TimerSlider
                       , upperSlider: TimerSlider
-                      , logTextView: LogTextView) extends StackPane {
+                      , logTextView: LogTextView) extends StackPane:
 
   val replaySpeedIndexProperty = new SimpleIntegerProperty(ReplayStackPane.DefaultSpeedIndex)
 
@@ -41,11 +40,10 @@ class ReplayStackPane(mutLogFileSettings: MutLogFileSettings
   // set visible only if we have a valid timestamp
   visibleProperty().bind(mutLogFileSettings.hasTimestampSetting)
 
-  val binding: StringBinding = new StringBinding {
+  val binding: StringBinding = new StringBinding:
     bind(replaySpeedIndexProperty)
 
     override def computeValue(): String = ReplayStackPane.availableSpeeds(replaySpeedIndexProperty.get).toInt.toString
-  }
 
   val label = new Label()
   label.setTranslateX(10)
@@ -59,24 +57,22 @@ class ReplayStackPane(mutLogFileSettings: MutLogFileSettings
 
   getChildren.addAll(replayButton, label)
 
-  def reset(): Unit = {
+  def reset(): Unit =
     replaySpeedIndexProperty.set(ReplayStackPane.DefaultSpeedIndex)
     replayButton.stopTimer()
-  }
 
-}
 
 class ReplayButton(filteredList: ObservableList[LogEntry]
                    , lowerSlider: TimerSlider
                    , upperSlider: TimerSlider
                    , replaySpeedIndexProperty: IntegerProperty
-                   , logTextView: LogTextView) extends Button {
+                   , logTextView: LogTextView) extends Button:
 
-  var timeline: Timeline = _
+  var timeline: Timeline = scala.compiletime.uninitialized
   private val icon = new FontIcon(FontAwesomeSolid.PLAY_CIRCLE)
   private val iconLight = new FontIcon(FontAwesomeRegular.PLAY_CIRCLE)
   private val tooltip = new Tooltip("replay log")
-  var animationTimer: PulsatingAnimationTimer = _
+  var animationTimer: PulsatingAnimationTimer = scala.compiletime.uninitialized
 
   setGraphic(icon)
   setTooltip(tooltip)
@@ -90,7 +86,7 @@ class ReplayButton(filteredList: ObservableList[LogEntry]
       case None =>
     }
     val frames = mkFrames()
-    timeline = new Timeline(frames.toList: _*)
+    timeline = new Timeline(frames.toList*)
     timeline.setRate(speedFactor)
     timeline.setCycleCount(Animation.INDEFINITE)
     timeline.play()
@@ -108,20 +104,18 @@ class ReplayButton(filteredList: ObservableList[LogEntry]
     }
   })
 
-  def stopTimer(): Unit = {
+  def stopTimer(): Unit =
     replaySpeedIndexProperty.set(ReplayStackPane.DefaultSpeedIndex)
     animationTimer.stop()
     Option(timeline).foreach(_.stop())
-  }
 
   def sliderEvent(duration: javafx.util.Duration): EventHandler[ActionEvent] = (_: ActionEvent) => {
-    if (upperSlider.getValue < upperSlider.getMax) {
+    if upperSlider.getValue < upperSlider.getMax then
       upperSlider.setValue(upperSlider.getMin + duration.toMillis)
       logTextView.scrollTo(filteredList.size() - 1)
-    }
   }
 
-  def mkFrames(): ListBuffer[KeyFrame] = {
+  def mkFrames(): ListBuffer[KeyFrame] =
     val keyFrames = new ListBuffer[KeyFrame]
     filteredList.forEach((t: LogEntry) => {
       t.someJfxDuration match {
@@ -132,6 +126,4 @@ class ReplayButton(filteredList: ObservableList[LogEntry]
 
     keyFrames.addOne(new KeyFrame(keyFrames.last.getTime.add(javafx.util.Duration.seconds(1)), (_: ActionEvent) => stopTimer()))
     keyFrames
-  }
 
-}

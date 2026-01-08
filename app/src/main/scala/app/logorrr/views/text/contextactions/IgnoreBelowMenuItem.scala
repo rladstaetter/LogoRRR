@@ -13,11 +13,10 @@ import net.ladstatt.util.log.CanLog
  * @param currentEntry current selected log entry
  * @param filteredList filtered log entry list
  */
-class IgnoreBelowMenuItem(currentEntry: LogEntry, filteredList: FilteredList[LogEntry]) extends MenuItem("Ignore entries below") with CanLog {
+class IgnoreBelowMenuItem(currentEntry: LogEntry, filteredList: FilteredList[LogEntry]) extends MenuItem("Ignore entries below") with CanLog:
 
   setOnAction(_ => {
     val currPredicate = filteredList.getPredicate
     filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && entry.lineNumber <= currentEntry.lineNumber)
   })
 
-}

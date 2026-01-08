@@ -1,6 +1,6 @@
 package app.logorrr.views.settings
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.uinodes.SettingsEditor
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.stg.{SearchTermGroup, StgListView}
@@ -8,10 +8,9 @@ import javafx.collections.ObservableList
 import javafx.scene.control.ListView
 
 
-object SettingsStgListView extends UiNodeFileIdAware {
+object SettingsStgListView extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[StgListView])
-}
 
 case class SettingsStgListView(fileId: FileId, entries: ObservableList[SearchTermGroup]) extends ListView[SearchTermGroup] {
   setId(SettingsEditor.SettingsStgListView.value)

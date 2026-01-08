@@ -1,9 +1,9 @@
 package app.logorrr.views.ops
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 
-object IncreaseBlockSizeButton extends UiNodeFileIdAware {
+object IncreaseBlockSizeButton extends UiNodeFileIdAware:
 
   /** size of icon to increase block size */
   val Size = 16
@@ -11,6 +11,5 @@ object IncreaseBlockSizeButton extends UiNodeFileIdAware {
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[IncreaseBlockSizeButton])
 
-}
 
 class IncreaseBlockSizeButton

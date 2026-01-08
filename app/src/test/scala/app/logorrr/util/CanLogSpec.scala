@@ -5,10 +5,8 @@ import org.scalatest.wordspec.AnyWordSpec
 
 import java.util.logging.Level
 
-class CanLogSpec extends AnyWordSpec with CanLog {
+class CanLogSpec extends AnyWordSpec with CanLog:
 
-  "IsLogLevelSet correctly" in {
+  "IsLogLevelSet correctly" in:
     assert(logLevel == Level.INFO)
-  }
 
-}

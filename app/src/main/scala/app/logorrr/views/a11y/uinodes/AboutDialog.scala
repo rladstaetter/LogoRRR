@@ -2,7 +2,7 @@ package app.logorrr.views.a11y.uinodes
 
 import app.logorrr.views.a11y.UiNode
 
-object AboutDialog {
+object AboutDialog:
 
   /** open logorrrs main site */
   val AboutDialogOpenLogorrrMainSite: UiNode = UiNode("about_stage_logorrr_app")
@@ -17,4 +17,3 @@ object AboutDialog {
   val AboutDialogCloseButton: UiNode = UiNode("about_stage_close_button")
 
 
-}

@@ -1,7 +1,6 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.io.FileId
+import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import javafx.stage.{FileChooser, Window}
 
 /**
@@ -9,9 +8,9 @@ import javafx.stage.{FileChooser, Window}
  *
  * @param title title of file dialog (no effect on mac?)
  */
-class LogoRRRFileChooser(title: String) {
+class LogoRRRFileChooser(title: String):
 
-  def performShowAndWait(window: Window): Option[FileId] = {
+  def performShowAndWait(window: Window): Option[FileId] =
     val fc = new FileChooser
     fc.setTitle(title)
     LogoRRRGlobals.getSomeLastUsedDirectory.foreach(d => fc.setInitialDirectory(d.toFile))
@@ -19,6 +18,4 @@ class LogoRRRFileChooser(title: String) {
     LogoRRRGlobals.setSomeLastUsedDirectory(someFileId.map(fileId => fileId.asPath.getParent))
     LogoRRRGlobals.persist()
     someFileId
-  }
 
-}

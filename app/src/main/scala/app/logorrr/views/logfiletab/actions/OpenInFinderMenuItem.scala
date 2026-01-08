@@ -1,30 +1,27 @@
 package app.logorrr.views.logfiletab.actions
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.MenuItem
 import net.ladstatt.util.os.OsUtil
 
 import java.awt.Desktop
 
-object OpenInFinderMenuItem extends UiNodeFileIdAware {
+object OpenInFinderMenuItem extends UiNodeFileIdAware:
 
-  val menuItemText: String = if (OsUtil.isWin) {
+  val menuItemText: String = if OsUtil.isWin then
     "Show File in Explorer"
-  } else if (OsUtil.isMac) {
+  else if OsUtil.isMac then
     "Show File in Finder"
-  } else {
+  else
     "Show File ..."
-  }
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[OpenInFinderMenuItem])
 
-}
 
-class OpenInFinderMenuItem(fileId: FileId) extends MenuItem(OpenInFinderMenuItem.menuItemText) {
+class OpenInFinderMenuItem(fileId: FileId) extends MenuItem(OpenInFinderMenuItem.menuItemText):
   setId(OpenInFinderMenuItem.uiNode(fileId).value)
   setOnAction(_ => {
     new Thread(() => Desktop.getDesktop.open(fileId.asPath.getParent.toFile)).start()
   })
 
-}

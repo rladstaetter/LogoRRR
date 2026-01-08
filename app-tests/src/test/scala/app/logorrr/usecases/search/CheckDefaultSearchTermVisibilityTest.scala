@@ -9,14 +9,11 @@ import org.junit.jupiter.api.Test
 /**
  * on startup/opening a file, certain filters should be visible per default
  * */
-class CheckDefaultSearchTermVisibilityTest extends SingleFileApplicationTest(TestFiles.simpleLog1) {
+class CheckDefaultSearchTermVisibilityTest extends SingleFileApplicationTest(TestFiles.simpleLog1):
 
-  @Test def checkIfDefaultFiltersAreActive(): Unit = {
+  @Test def checkIfDefaultFiltersAreActive(): Unit =
     openFile(fileId)
 
-    MutableSearchTerm.DefaultSearchTerms.foreach {
+    MutableSearchTerm.DefaultSearchTerms.foreach:
       f => waitForVisibility(SearchTermButton.uiNode(fileId, f))
-    }
-  }
 
-}

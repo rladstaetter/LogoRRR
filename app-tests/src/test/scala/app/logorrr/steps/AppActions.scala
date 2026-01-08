@@ -8,13 +8,11 @@ import javafx.stage.Stage
 /**
  * Startup LogoRRR
  */
-trait AppActions {
+trait AppActions:
   self: TestFxBaseApplicationTest =>
 
   def services: LogoRRRServices
 
   @throws[Exception]
-  override def start(stage: Stage): Unit = {
+  override def start(stage: Stage): Unit =
     LogoRRRApp.start(stage, services)
-  }
-}

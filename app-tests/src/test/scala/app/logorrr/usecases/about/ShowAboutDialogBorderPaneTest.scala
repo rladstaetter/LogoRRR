@@ -18,15 +18,14 @@ class ShowAboutDialogBorderPaneTest extends TestFxBaseApplicationTest
   // to get a handle to clicked urls
   val mockHostServices = new MockHostServices
 
-  final def services: LogoRRRServices = {
+  final def services: LogoRRRServices =
     LogoRRRServices(Settings.Default
       , mockHostServices
       , new EmptyFileIdService
       , isUnderTest = true)
-  }
 
 
-  @Test def showAboutDialog(): Unit = {
+  @Test def showAboutDialog(): Unit =
     waitAndClickVisibleItem(LogoRRRMenu.Self)
     waitAndClickVisibleItem(LogoRRRMenu.About)
 
@@ -36,6 +35,5 @@ class ShowAboutDialogBorderPaneTest extends TestFxBaseApplicationTest
     waitAndClickVisibleItem(AboutDialog.AboutDialogCloseButton)
 
     assert(AboutDialogBorderPane.links.map(_.url.toString).forall(u => mockHostServices.visitedUrls.contains(u)))
-  }
 
 }

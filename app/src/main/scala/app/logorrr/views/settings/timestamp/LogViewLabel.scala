@@ -1,16 +1,14 @@
 package app.logorrr.views.settings.timestamp
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.UiNode
 import javafx.scene.control.{Label, Tooltip}
 import javafx.scene.input.MouseEvent
 
-object LogViewLabel {
-  def uiNode(id: FileId, lineNumber: Int, col: Int): UiNode = {
+object LogViewLabel:
+  def uiNode(id: FileId, lineNumber: Int, col: Int): UiNode =
     new UiNode(s"${HashUtil.md5Sum(id.value)}${classOf[LogViewLabel].getSimpleName}-${lineNumber.toString}-${col.toString}")
-  }
-}
 
 class LogViewLabel(fileId: FileId
                    , lineNumber: Int

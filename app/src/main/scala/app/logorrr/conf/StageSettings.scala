@@ -1,21 +1,13 @@
 package app.logorrr.conf
 
 import javafx.geometry.Rectangle2D
-import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
-import pureconfig.{ConfigReader, ConfigWriter}
+import upickle.default.*
 
+object StageSettings:
 
-
-object StageSettings {
-
-  implicit val reader: ConfigReader[StageSettings] = deriveReader[StageSettings]
-  implicit val writer: ConfigWriter[StageSettings] = deriveWriter[StageSettings]
-
-  def apply(rectangle2D: Rectangle2D): StageSettings = {
+  def apply(rectangle2D: Rectangle2D): StageSettings =
     StageSettings(rectangle2D.getMinX, rectangle2D.getMinY, rectangle2D.getWidth.toInt, rectangle2D.getHeight.toInt)
-  }
 
-}
 
 /**
  * @param x      upper left x cooordinate for Logorrr
@@ -26,4 +18,4 @@ object StageSettings {
 case class StageSettings(x: Double
                          , y: Double
                          , width: Int
-                         , height: Int)
+                         , height: Int) derives ReadWriter

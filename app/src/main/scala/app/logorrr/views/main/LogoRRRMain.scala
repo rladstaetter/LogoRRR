@@ -1,8 +1,7 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.io.{FileId, IoManager}
-import app.logorrr.model.LogFileSettings
+import app.logorrr.conf.{FileId, LogFileSettings, LogoRRRGlobals}
+import app.logorrr.io.IoManager
 import app.logorrr.services.file.FileIdService
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.logfiletab.LogFileTab
@@ -17,7 +16,7 @@ import scala.concurrent.{Await, Future}
 
 class LogoRRRMain(stage: Stage
                   , logoRRRFileOpenService: FileIdService
-                  , isUnderTest: Boolean) extends BorderPane with CanLog {
+                  , isUnderTest: Boolean) extends BorderPane with CanLog:
 
   val bar = new MainMenuBar(stage, logoRRRFileOpenService, openFile, closeAllLogFiles(), isUnderTest)
 
@@ -25,20 +24,19 @@ class LogoRRRMain(stage: Stage
 
   def getLogFileTabs: mutable.Seq[LogFileTab] = mainTabPane.getLogFileTabs
 
-  def init(stage: Stage): Unit = {
+  def init(stage: Stage): Unit =
     setTop(bar)
     setCenter(mainTabPane)
 
     val entries = LogoRRRGlobals.getOrderedLogFileSettings
     val logFileTabs =
-      if (entries.nonEmpty) {
+      if entries.nonEmpty then
         loadLogFiles(LogoRRRGlobals.getOrderedLogFileSettings)
-      } else {
+      else
         logTrace("No log files loaded.")
         Seq()
-      }
 
-    JfxUtils.execOnUiThread {
+    JfxUtils.execOnUiThread:
       // important to execute this code on jfx thread
       // don't change the ordering of following statements ;-)
       logFileTabs.foreach(t => mainTabPane.addLogFileTab(t))
@@ -51,10 +49,8 @@ class LogoRRRMain(stage: Stage
 
       LogoRRRStage.selectActiveLogFile(this)
 
-    }
-  }
 
-  private def loadLogFiles(settings: Seq[LogFileSettings]): Seq[LogFileTab] = {
+  private def loadLogFiles(settings: Seq[LogFileSettings]): Seq[LogFileTab] =
     val (zipSettings, fileSettings) = settings.partition(p => p.fileId.isZipEntry)
 
     val zipSettingsMap: Map[FileId, LogFileSettings] = zipSettings.map(s => s.fileId -> s).toMap
@@ -63,7 +59,7 @@ class LogoRRRMain(stage: Stage
     // settings. this is necessary as not to lose settings from previous runs
     val zips: Map[FileId, Seq[FileId]] = FileId.reduceZipFiles(zipSettingsMap.keys.toSeq)
 
-    val futures: Future[Seq[Option[LogFileTab]]] = Future.sequence {
+    val futures: Future[Seq[Option[LogFileTab]]] = Future.sequence:
 
       // load zip files also in parallel
       val zipFutures: Seq[Future[Option[LogFileTab]]] =
@@ -73,7 +69,7 @@ class LogoRRRMain(stage: Stage
               // only if settings contains given fileId - user could have removed it by closing the tab - load this file
               case (fileId, entries) =>
                 Future {
-                  if (zipSettingsMap.contains(fileId)) {
+                  if zipSettingsMap.contains(fileId) then {
                     val settingz = zipSettingsMap(fileId)
                     LogoRRRGlobals.registerSettings(settingz)
                     Option(LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), entries))
@@ -92,31 +88,26 @@ class LogoRRRMain(stage: Stage
 
       val res: Seq[Future[Option[LogFileTab]]] = zipFutures ++ fileBasedSettings
       res
-    }
     val logFileTabs: Seq[LogFileTab] = Await.result(futures, Duration.Inf).flatten
     logTrace("Loaded " + logFileTabs.size + " files ... ")
     logFileTabs
 
-  }
 
   def contains(fileId: FileId): Boolean = mainTabPane.contains(fileId)
 
   /** called when 'Open File' from the main menu bar is selected. */
-  def openFile(fileId: FileId): Unit = {
-    if (IoManager.isZip(fileId.asPath)) {
+  def openFile(fileId: FileId): Unit =
+    if IoManager.isZip(fileId.asPath) then
       mainTabPane.openZipFile(fileId.asPath)
-    } else if (contains(fileId)) {
+    else if contains(fileId) then
       mainTabPane.selectFile(fileId).recalculateChunkListViewAndScrollToActiveElement()
-    } else {
+    else
       mainTabPane.addFile(fileId)
-    }
-  }
 
   /** removes all log files */
-  def closeAllLogFiles(): Unit = {
+  def closeAllLogFiles(): Unit =
     shutdown()
     LogoRRRGlobals.clearLogFileSettings()
-  }
 
   def selectLog(fileId: FileId): LogFileTab = mainTabPane.selectFile(fileId)
 
@@ -124,4 +115,3 @@ class LogoRRRMain(stage: Stage
 
   def shutdown(): Unit = mainTabPane.shutdown()
 
-}

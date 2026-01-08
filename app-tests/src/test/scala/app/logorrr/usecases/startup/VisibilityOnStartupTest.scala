@@ -15,9 +15,9 @@ import org.testfx.matcher.base.NodeMatchers
 /**
  * Tests if all major UI elements are visible with default settings on first startup
  */
-class VisibilityOnStartupTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
+class VisibilityOnStartupTest extends SingleFileApplicationTest(TestFiles.simpleLog0):
 
-  @Test def checkIfAllMajorUIElementsAreVisibleWithDefaultSettings(): Unit = {
+  @Test def checkIfAllMajorUIElementsAreVisibleWithDefaultSettings(): Unit =
     openFile(fileId)
     //wait until UI is ready
 
@@ -36,13 +36,10 @@ class VisibilityOnStartupTest extends SingleFileApplicationTest(TestFiles.simple
     )
 
     // check all elements
-    for (uiElement <- elements) {
+    for uiElement <- elements do
       waitForVisibility(uiElement)
       FxAssert.verifyThat(lookup(uiElement.ref), NodeMatchers.isVisible)
-    }
-  }
 
 
-}
 
 

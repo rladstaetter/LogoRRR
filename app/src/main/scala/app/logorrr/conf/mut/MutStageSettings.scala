@@ -9,7 +9,7 @@ import javafx.stage.Window
 /**
  * App wide singleton to store and load global settings.
  */
-object MutStageSettings {
+object MutStageSettings:
 
   val windowListener: ChangeListener[Window] = JfxUtils.onNew[Window](window => {
     // during tests, window reference is null when the second TestFX test is running, not yet clear why
@@ -17,7 +17,6 @@ object MutStageSettings {
     // LogoRRRGlobals.bindWindow(window)
   })
 
-}
 
 
 class MutStageSettings {

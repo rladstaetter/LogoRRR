@@ -1,15 +1,14 @@
 package app.logorrr.views.search.stg
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.GfxElements
 import javafx.beans.binding.ObjectBinding
 import javafx.scene.Node
 import javafx.scene.control.{ToggleButton, Tooltip}
 
-object AddToGlobalSearchTermGroupListButton extends UiNodeFileIdAware {
+object AddToGlobalSearchTermGroupListButton extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[AddToGlobalSearchTermGroupListButton])
-}
 
 case class AddToGlobalSearchTermGroupListButton(fileId: FileId) extends ToggleButton {
   setId(AddToGlobalSearchTermGroupListButton.uiNode(fileId).value)
@@ -18,7 +17,7 @@ case class AddToGlobalSearchTermGroupListButton(fileId: FileId) extends ToggleBu
   graphicProperty().bind(new ObjectBinding[Node] {
     bind(selectedProperty)
     override def computeValue(): Node = {
-      if (isSelected) {
+      if isSelected then {
         GfxElements.heartDarkIcon
       } else {
         GfxElements.heartIcon

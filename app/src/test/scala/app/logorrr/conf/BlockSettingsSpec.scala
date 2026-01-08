@@ -1,10 +1,8 @@
-package app.logorrr.conf.mut
+package app.logorrr.conf
 
-import app.logorrr.conf.BlockSettings
 import org.scalacheck.Gen
 
-object BlockSettingsSpec {
+object BlockSettingsSpec:
 
   val gen: Gen[BlockSettings] = Gen.posNum[Int].map(BlockSettings.apply)
 
-}

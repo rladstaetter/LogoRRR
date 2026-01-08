@@ -1,7 +1,8 @@
 package app.logorrr.views.about
 
-import app.logorrr.meta.AppInfo
-import app.logorrr.util.{HLink, ImageCp, LogoRRRFonts}
+import app.logorrr.conf.AppInfo
+import app.logorrr.cp.ImageCp
+import app.logorrr.util.{HLink, LogoRRRFonts}
 import app.logorrr.views.a11y.uinodes.AboutDialog
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control._
@@ -9,7 +10,7 @@ import javafx.scene.layout.{BorderPane, HBox, VBox}
 import javafx.stage.Stage
 
 
-object AboutDialogBorderPane {
+object AboutDialogBorderPane:
 
   val logo: ImageCp = ImageCp("logorrr-icon-128.png", 128, 128)
 
@@ -18,11 +19,10 @@ object AboutDialogBorderPane {
     , HLink(AboutDialog.AboutDialogOpenDevelopmentBlog, "https://www.logorrr.app/posts/index.html", "Development blog")
     , HLink(AboutDialog.AboutDialogOpenIssuePage, "https://github.com/rladstaetter/LogoRRR/issues/", "Request a feature or report a bug"))
 
-  case class MonoLabel(text: String, size: Int) extends Label(text) {
+  case class MonoLabel(text: String, size: Int) extends Label(text):
     setStyle(LogoRRRFonts.jetBrainsMono(size))
-  }
 
-  class HLinkView(links: Seq[HLink]) extends VBox {
+  class HLinkView(links: Seq[HLink]) extends VBox:
     setAlignment(Pos.CENTER_LEFT)
     setSpacing(10)
     setPrefWidth(400)
@@ -30,19 +30,16 @@ object AboutDialogBorderPane {
 
     links.foreach(l => getChildren.add(l.mkHyperLink()))
 
-  }
-
-}
 
 
-class AboutDialogBorderPane(stage: Stage) extends BorderPane {
 
-  private val closeButton: Button = {
+class AboutDialogBorderPane(stage: Stage) extends BorderPane:
+
+  private val closeButton: Button =
     val b = new Button("", AboutDialogBorderPane.logo.imageView())
     b.setId(AboutDialog.AboutDialogCloseButton.value)
     b.setOnAction(_ => stage.close())
     b
-  }
 
   setPadding(new Insets(10, 10, 10, 10))
   setTop(AboutDialogBorderPane.MonoLabel(AppInfo.fullAppNameWithVersion, 50))
@@ -55,4 +52,3 @@ class AboutDialogBorderPane(stage: Stage) extends BorderPane {
 
   setBottom(hBox)
 
-}

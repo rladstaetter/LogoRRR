@@ -2,7 +2,7 @@ package app.logorrr.clv.color
 
 import javafx.scene.paint.Color
 
-object LColors {
+object LColors:
 
   val defaultBackgroundColor: Int = ColorUtil.toARGB(Color.WHITE)
   private val yellow: Color = Color.YELLOW
@@ -16,4 +16,3 @@ object LColors {
   val color1 = BlockColor(LColors.yb, LColors.ybb, LColors.ybb, LColors.yb, LColors.y)
   val color2 = BlockColor(LColors.yb, LColors.ybb, LColors.ybb, LColors.y, LColors.y)
 
-}

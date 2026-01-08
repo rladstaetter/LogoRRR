@@ -1,20 +1,17 @@
 package app.logorrr.views.text
 
-import app.logorrr.views.search.SearchTerm
+import app.logorrr.conf.SearchTerm
 import javafx.geometry.Insets
 import javafx.scene.control.Label
 import javafx.scene.layout.{Background, BackgroundFill, CornerRadii}
 import javafx.scene.paint.Color
 
-object LogoRRRLabel {
+object LogoRRRLabel:
 
   private def mkBg(color: Color) = new Background(new BackgroundFill(color, new CornerRadii(1.25), Insets.EMPTY))
 
-  def mkL(msg: String, color: Color): Label = {
+  def mkL(msg: String, color: Color): Label =
     val l = new Label(msg)
-    if (color != SearchTerm.Unclassified) {
+    if color != SearchTerm.Unclassified then
       l.setBackground(mkBg(color))
-    }
     l
-  }
-}

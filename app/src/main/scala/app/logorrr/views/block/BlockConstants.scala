@@ -1,6 +1,6 @@
 package app.logorrr.views.block
 
-object BlockConstants {
+object BlockConstants:
 
   /**
    * minimum block size
@@ -14,4 +14,3 @@ object BlockConstants {
   val MaxBlockSize: Int = 100
 
 
-}

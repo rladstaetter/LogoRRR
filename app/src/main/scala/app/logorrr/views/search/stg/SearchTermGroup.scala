@@ -1,6 +1,6 @@
 package app.logorrr.views.search.stg
 
-import app.logorrr.views.search.SearchTerm
+import app.logorrr.conf.SearchTerm
 
 
 object SearchTermGroup {

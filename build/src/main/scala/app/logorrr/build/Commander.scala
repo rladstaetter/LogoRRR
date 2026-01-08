@@ -3,9 +3,9 @@ package app.logorrr.build
 import java.nio.file.Path
 import scala.jdk.CollectionConverters._
 
-object Commander {
+object Commander:
 
-  def execCmd(workingDir: Path, cmds: Seq[String]): Int = {
+  def execCmd(workingDir: Path, cmds: Seq[String]): Int =
     Console.println(cmds.mkString(" "))
     new ProcessBuilder()
       .directory(workingDir.toFile)
@@ -13,6 +13,4 @@ object Commander {
       .command(cmds.asJava)
       .start()
       .waitFor()
-  }
 
-}

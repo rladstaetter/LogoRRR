@@ -1,9 +1,8 @@
 package app.logorrr.views.search.stg
 
+import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.FileId
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.search.SearchTerm
 import javafx.geometry.Insets
 import javafx.scene.Scene
 import javafx.scene.control.{Button, Label}
@@ -17,16 +16,15 @@ object SearchTermGroupEditor {
 class SearchTermGroupEditor(owner: Window
                             , mutLogFileSettings: MutLogFileSettings
                             , fileId: FileId
-                            , activeSearchTerms: Seq[SearchTerm]) extends Stage {
+                            , activeSearchTerms: Seq[SearchTerm]) extends Stage:
   initOwner(owner)
   initModality(Modality.WINDOW_MODAL)
   setTitle("Edit Search Term Groups")
 
-  private val title: Label = {
+  private val title: Label =
     val l = new Label(s"Search Term Groups: ${fileId.fileName}")
     l.setStyle("-fx-font-weight: bold")
     l
-  }
 
   private val createStg = new CreateStgUi(mutLogFileSettings, fileId, activeSearchTerms)
   private val manageExistingSearchTermGroup = ManageStgEditor(fileId)
@@ -44,4 +42,3 @@ class SearchTermGroupEditor(owner: Window
 
   // --- Final Setup ---
   setScene(new Scene(vbox, 800, 600)) // Adjusted size for list view
-}

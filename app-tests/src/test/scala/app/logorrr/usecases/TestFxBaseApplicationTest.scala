@@ -19,18 +19,17 @@ import scala.concurrent.duration.{DurationInt, FiniteDuration}
 class TestFxBaseApplicationTest
   extends ApplicationTest
     with FileMenuActions
-    with LogoRRRAppMenuActions {
+    with LogoRRRAppMenuActions:
 
   @AfterEach
   @throws[Exception]
-  def tearDown(): Unit = {
+  def tearDown(): Unit =
     quitApplication()
     // exit application
     //push(KeyCode.COMMAND, KeyCode.Q)
     FxToolkit.hideStage()
-    release(Array[KeyCode](): _*)
-    release(Array[MouseButton](): _*)
-  }
+    release(Array[KeyCode]()*)
+    release(Array[MouseButton]()*)
 
   def lookup[T <: Node](uiNode: UiNode): T = lookup(uiNode.ref).query[T]
 
@@ -40,19 +39,16 @@ class TestFxBaseApplicationTest
 
   def waitForVisibility(query: String): Unit = waitForVisibility(lookup(query))
 
-  def waitForVisibility(nodeQuery: NodeQuery, timeout: FiniteDuration = 2.seconds): Unit = {
+  def waitForVisibility(nodeQuery: NodeQuery, timeout: FiniteDuration = 2.seconds): Unit =
     WaitForAsyncUtils.waitFor(timeout.toSeconds, TimeUnit.SECONDS, new Callable[java.lang.Boolean] {
       override def call(): java.lang.Boolean = nodeQuery.`match`(NodeQueryUtils.isVisible).tryQuery.isPresent
     })
-  }
 
-  def waitForPredicate[A <: Node](id: UiNode, clazz: Class[A], predicate: A => Boolean, timeout: FiniteDuration = 2.seconds): Unit = {
+  def waitForPredicate[A <: Node](id: UiNode, clazz: Class[A], predicate: A => Boolean, timeout: FiniteDuration = 2.seconds): Unit =
     WaitForAsyncUtils.waitFor(timeout.toSeconds, TimeUnit.SECONDS, new Callable[java.lang.Boolean] {
       override def call(): java.lang.Boolean = {
         predicate(lookup(id.ref).queryAs(clazz))
       }
     })
-  }
 
 
-}

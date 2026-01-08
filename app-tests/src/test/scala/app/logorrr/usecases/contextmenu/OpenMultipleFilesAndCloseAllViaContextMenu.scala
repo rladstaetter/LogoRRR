@@ -13,12 +13,11 @@ import scala.util.Random
 
 class OpenMultipleFilesAndCloseAllViaContextMenu
   extends MultipleFileApplicationTest(TestFiles.seq)
-    with CheckTabPaneActions {
+    with CheckTabPaneActions:
 
-  @Test def openFilesAndCloseAllViaContextMenuItem(): Unit = {
-    TestFiles.seq.foreach {
+  @Test def openFilesAndCloseAllViaContextMenuItem(): Unit =
+    TestFiles.seq.foreach:
       fileId => openFile(fileId)
-    }
     expectCountOfOpenFiles(TestFiles.seq.size)
     val selectedFile = Random.nextInt(TestFiles.seq.size)
 
@@ -31,9 +30,7 @@ class OpenMultipleFilesAndCloseAllViaContextMenu
 
     expectCountOfOpenFiles(0)
 
-  }
 
-}
 
 
 

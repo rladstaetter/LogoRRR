@@ -11,12 +11,11 @@ import org.junit.jupiter.api.Test
 
 class OpenMultipleFilesAndCloseToTheLeft
   extends MultipleFileApplicationTest(TestFiles.seq)
-    with CheckTabPaneActions {
+    with CheckTabPaneActions:
 
-  @Test def openFilesAndActivateLastAndCloseAllToTheLeft(): Unit = {
-    TestFiles.seq.foreach {
+  @Test def openFilesAndActivateLastAndCloseAllToTheLeft(): Unit =
+    TestFiles.seq.foreach:
       p => openFile(p)
-    }
     checkForNonEmptyTabPane()
     val looksi = lookup(UiNodes.LogFileHeaderTabs)
     // activate first tab
@@ -27,6 +26,4 @@ class OpenMultipleFilesAndCloseToTheLeft
 
     expectCountOfOpenFiles(1)
 
-  }
 
-}

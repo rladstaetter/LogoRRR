@@ -5,26 +5,22 @@ import app.logorrr.views.a11y.uinodes.UiNodes
 import javafx.scene.control.TabPane
 
 
-trait CheckTabPaneActions {
+trait CheckTabPaneActions:
   self: TestFxBaseApplicationTest =>
 
-  def expectCountOfOpenFiles(expectedCount: Int): Unit = {
+  def expectCountOfOpenFiles(expectedCount: Int): Unit =
     waitForPredicate[TabPane](UiNodes.MainTabPane, classOf[TabPane], tabPane => {
       tabPane.getTabs.size == expectedCount
     })
-  }
 
-  def checkForEmptyTabPane(): Unit = {
+  def checkForEmptyTabPane(): Unit =
     waitForPredicate[TabPane](UiNodes.MainTabPane, classOf[TabPane], tabPane => {
       tabPane.getTabs.isEmpty
     })
-  }
 
-  def checkForNonEmptyTabPane(): Unit = {
+  def checkForNonEmptyTabPane(): Unit =
     waitForPredicate[TabPane](UiNodes.MainTabPane, classOf[TabPane], tabPane => {
       !tabPane.getTabs.isEmpty
     })
-  }
 
-}
 

@@ -12,7 +12,7 @@ import app.logorrr.steps.AppActions
  */
 class StartEmptyApplicationTest
   extends TestFxBaseApplicationTest
-    with AppActions {
+    with AppActions:
 
   final def services: LogoRRRServices = LogoRRRServices(Settings.Default
     , new MockHostServices
@@ -20,5 +20,4 @@ class StartEmptyApplicationTest
     , isUnderTest = true)
 
 
-}
 

@@ -1,12 +1,9 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.conf.{AppInfo, FileId, LogoRRRGlobals, SearchTerm}
 import app.logorrr.conf.mut.MutStageSettings
-import app.logorrr.io.FileId
-import app.logorrr.meta.AppInfo
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.LogoRRRAccelerators
-import app.logorrr.views.search.SearchTerm
 import javafx.beans.value.ChangeListener
 import javafx.scene.Scene
 import javafx.scene.image.Image
@@ -14,7 +11,7 @@ import javafx.stage.{Stage, WindowEvent}
 import net.ladstatt.util.log.CanLog
 
 
-object LogoRRRStage extends CanLog {
+object LogoRRRStage extends CanLog:
 
   val icon: Image = new Image(getClass.getResourceAsStream("/logorrr-icon-32.png"))
 
@@ -26,7 +23,7 @@ object LogoRRRStage extends CanLog {
     scene.getWindow.setY(y)
   })
 
-  def persistSettings(logorrrMain: LogoRRRMain): Unit = {
+  def persistSettings(logorrrMain: LogoRRRMain): Unit =
     // current global state
     // following code can be removed if filters are bound to
     // global mutable Settings
@@ -34,16 +31,14 @@ object LogoRRRStage extends CanLog {
 
     // to save global filter state
     val activeFilters: Map[FileId, (Seq[SearchTerm], Double)] =
-      (for (logFileTab <- logorrrMain.getLogFileTabs) yield {
+      (for logFileTab <- logorrrMain.getLogFileTabs yield {
         logFileTab.fileId -> (logFileTab.logFileTabContent.activeFilters, logFileTab.logFileTabContent.getDividerPosition)
       }).toMap
 
     val updatedSettings =
-      for ((p, (fltrs, d)) <- activeFilters) yield {
+      for (p, (fltrs, d)) <- activeFilters yield
         p.absolutePathAsString -> settings.fileSettings(p.absolutePathAsString).copy(searchTerms = fltrs, dividerPosition = d)
-      }
     LogoRRRGlobals.persist(settings.copy(fileSettings = updatedSettings))
-  }
 
 
   def shutdown(stage: Stage, logorrrMain: LogoRRRMain): Unit = timeR({
@@ -55,21 +50,18 @@ object LogoRRRStage extends CanLog {
   }, "shutdown")
 
 
-  def selectActiveLogFile(logorrrMain: LogoRRRMain): Unit = {
-    LogoRRRGlobals.getSomeActiveLogFile match {
+  def selectActiveLogFile(logorrrMain: LogoRRRMain): Unit =
+    LogoRRRGlobals.getSomeActiveLogFile match
       case Some(fileId) =>
-        if (logorrrMain.contains(fileId)) {
+        if logorrrMain.contains(fileId) then
           val tab = logorrrMain.selectLog(fileId)
           tab.recalculateChunkListViewAndScrollToActiveElement()
-        } else {
+        else
           logWarn(s"Not found: '${fileId.absolutePathAsString}'")
-        }
       case None =>
         logorrrMain.selectLastLogFile()
-    }
-  }
 
-  def init(stage: Stage, logorrrMain: LogoRRRMain): Unit = {
+  def init(stage: Stage, logorrrMain: LogoRRRMain): Unit =
 
     val (width, height) = (LogoRRRGlobals.getStageWidth, LogoRRRGlobals.getStageHeight)
 
@@ -86,8 +78,6 @@ object LogoRRRStage extends CanLog {
     stage.setOnCloseRequest((_: WindowEvent) => LogoRRRStage.shutdown(stage, logorrrMain))
 
     logorrrMain.init(stage)
-  }
 
-}
 
 

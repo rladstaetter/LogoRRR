@@ -29,7 +29,7 @@ object ClvApp {
     net.ladstatt.app.AppMeta.initApp(appMeta)
 
     System.setProperty("user.language", "en")
-    javafx.application.Application.launch(classOf[ClvApp], args: _*)
+    javafx.application.Application.launch(classOf[ClvApp], args*)
   }
 
 }

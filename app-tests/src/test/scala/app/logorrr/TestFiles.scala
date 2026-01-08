@@ -1,10 +1,9 @@
 package app.logorrr
 
-import app.logorrr.io.FileId
-
+import app.logorrr.conf.FileId
 import java.nio.file.{Path, Paths}
 
-object TestFiles {
+object TestFiles:
 
   val baseDir: Path = Paths.get("src/test/resources/app/logorrr/")
 
@@ -27,4 +26,3 @@ object TestFiles {
     , simpleLog4
     , simpleLog5
   )
-}

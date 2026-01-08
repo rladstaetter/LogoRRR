@@ -1,16 +1,21 @@
-package app.logorrr.views.search
+package app.logorrr.conf
 
 import javafx.scene.paint.Color
-import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
-import pureconfig.{ConfigReader, ConfigWriter}
+import upickle.default.*
 
-object SearchTerm {
+object SearchTerm:
 
-  implicit lazy val colorReader: ConfigReader[Color] = ConfigReader[String].map(s => Color.web(s))
-  implicit lazy val colorWriter: ConfigWriter[Color] = ConfigWriter[String].contramap(c => c.toString)
-
-  implicit lazy val reader: ConfigReader[SearchTerm] = deriveReader[SearchTerm]
-  implicit lazy val writer: ConfigWriter[SearchTerm] = deriveWriter[SearchTerm]
+  // 1. Define the Color mapping (Hex String <-> JavaFX Color)
+  implicit val colorRW: ReadWriter[Color] = readwriter[String].bimap[Color](
+    c => {
+      // Convert Color to Hex String (e.g., 0x112233ff -> "#112233")
+      f"#${(c.getRed * 255).toInt}%02x${(c.getGreen * 255).toInt}%02x${(c.getBlue * 255).toInt}%02x"
+    },
+    s => {
+      // Convert Hex String back to JavaFX Color
+      Color.web(s)
+    }
+  )
 
   val Unclassified: Color = Color.LIGHTGREY
 
@@ -29,14 +34,12 @@ object SearchTerm {
    * @return `true` if `searchTerms` is empty or if no active search term's `value` is
    *         found within the `line`. Returns `false` otherwise.
    */
-  def dontMatch(line: String, searchTerms: Set[SearchTerm]): Boolean = {
+  def dontMatch(line: String, searchTerms: Set[SearchTerm]): Boolean =
     val activeSearchTerms = searchTerms // .filter(_.active)
-    if (activeSearchTerms.isEmpty) {
+    if activeSearchTerms.isEmpty then
       true
-    } else {
+    else
       !activeSearchTerms.exists(s => line.contains(s.value))
-    }
-  }
 
   /**
    * Returns true if the element string contains any of the active search terms.
@@ -51,25 +54,22 @@ object SearchTerm {
    *                    and a `Boolean` flag to activate or deactivate the search string.
    * @return `true` if any active search term is found within the element, `false` otherwise.
    */
-  def matches(element: String, searchTerms: Set[SearchTerm]): Boolean = {
+  def matches(element: String, searchTerms: Set[SearchTerm]): Boolean =
     // Filter for active search terms
     val activeSearchTerms: Set[SearchTerm] = searchTerms.filter(_.active)
 
-    if (activeSearchTerms.isEmpty) {
+    if activeSearchTerms.isEmpty then
       false
-    } else {
+    else
       // Check if the element contains any of the active search terms
       activeSearchTerms.exists { case SearchTerm(searchTerm, _, _) =>
         // Handle the case of an empty search string which matches everything
-        if (searchTerm.isEmpty) {
+        if searchTerm.isEmpty then
           true
-        } else {
+        else
           // Use regex to check for a match
           searchTerm.r.findFirstIn(element).isDefined
-        }
       }
-    }
-  }
 
   /**
    * Given a string 'element', returns an interpolated color based on a set of search strings.
@@ -86,14 +86,14 @@ object SearchTerm {
    * @param searchStrings A set of tuples, where each tuple contains a search string and its associated color.
    * @return A `Color` interpolated from the colors of the matched search strings, or `ColorMatcher.Unclassified`.
    */
-  def calc(element: String, searchStrings: Set[SearchTerm]): Color = {
+  def calc(element: String, searchStrings: Set[SearchTerm]): Color =
     // Filter for active search strings
     val activeSearchStrings = searchStrings.filter(_.active)
 
     // If there are no active search strings, return Unclassified
-    if (element.isEmpty || activeSearchStrings.isEmpty) {
+    if element.isEmpty || activeSearchStrings.isEmpty then
       Unclassified
-    } else {
+    else
       // Map each active search string to its occurrence count
       val counts = activeSearchStrings.map { case SearchTerm(str, color, _) =>
         val count = str.r.findAllIn(element).length
@@ -103,19 +103,18 @@ object SearchTerm {
       // Check if any active search strings were found
       val countsSum = counts.values.sum
 
-      if (countsSum == 0) {
+      if countsSum == 0 then
         Unclassified
-      } else if (countsSum == 1) {
+      else if countsSum == 1 then
         // performance optimisation - most of the time only one search term is found per line
         // no interpolation has to be performed
         counts.filter { case (_, count) => count == 1 }.head._1
-      } else {
+      else
 
         // Calculate the weighted sum of colors
-        val (redSum, greenSum, blueSum) = counts.foldLeft((0.0, 0.0, 0.0)) {
+        val (redSum, greenSum, blueSum) = counts.foldLeft((0.0, 0.0, 0.0)):
           case ((r, g, b), (color, count)) =>
             (r + color.getRed * count, g + color.getGreen * count, b + color.getBlue * count)
-        }
 
         val totalCount = countsSum.toDouble
 
@@ -130,10 +129,6 @@ object SearchTerm {
           interpolatedGreen.max(0).min(1),
           interpolatedBlue.max(0).min(1)
         )
-      }
-    }
-  }
-}
 
 /**
  * Pairs a searchterm to a color.
@@ -146,5 +141,4 @@ object SearchTerm {
  */
 case class SearchTerm(value: String
                       , color: Color
-                      , active: Boolean)
-
+                      , active: Boolean) derives ReadWriter

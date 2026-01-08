@@ -1,6 +1,6 @@
 package app.logorrr.views.logfiletab.actions
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.control.{MenuItem, Tab}
@@ -8,11 +8,10 @@ import javafx.scene.control.{MenuItem, Tab}
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 
-object CloseRightFilesMenuItem extends UiNodeFileIdAware {
+object CloseRightFilesMenuItem extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseRightFilesMenuItem])
 
-}
 
 class CloseRightFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends MenuItem("Close Files to the Right") {
   setId(CloseRightFilesMenuItem.uiNode(fileId).value)
@@ -21,11 +20,11 @@ class CloseRightFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends Me
     var deletethem = false
     val toBeDeleted: Seq[Tab] = {
       tabPane.getTabs.asScala.flatMap { t =>
-        if (t.asInstanceOf[LogFileTab].fileId == fileTab.fileId) {
+        if t.asInstanceOf[LogFileTab].fileId == fileTab.fileId then {
           deletethem = true
           None
         } else {
-          if (deletethem) {
+          if deletethem then {
             t.asInstanceOf[LogFileTab].shutdown()
             Option(t)
           } else {
@@ -34,7 +33,7 @@ class CloseRightFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends Me
         }
       }.toSeq
     }
-    tabPane.getTabs.removeAll(toBeDeleted: _*)
+    tabPane.getTabs.removeAll(toBeDeleted*)
     // reinit context menu since there are no files left on the right side and thus the option should not be shown anymore
     tabPane.getTabs.get(tabPane.getTabs.size() - 1).asInstanceOf[LogFileTab].initContextMenu()
 

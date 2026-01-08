@@ -1,21 +1,16 @@
-package app.logorrr.io
+package app.logorrr.conf
 
-import pureconfig.{ConfigReader, ConfigWriter}
+import upickle.default.*
 
 import java.nio.file.{Path, Paths}
 
-object FileId {
+object FileId:
 
-  implicit lazy val reader: ConfigReader[FileId] = ConfigReader[String].map(s => FileId(s))
-  implicit lazy val writer: ConfigWriter[FileId] = ConfigWriter[String].contramap(c => c.value)
+  given rw: ReadWriter[FileId] = readwriter[String].bimap(_.value, FileId(_))
 
-  def apply(p: Path): FileId = {
-    FileId(p.toAbsolutePath.toString)
-  }
+  def apply(p: Path): FileId = FileId(p.toAbsolutePath.toString)
 
-  def reduceZipFiles(fileIds: Seq[FileId]): Map[FileId, Seq[FileId]] = fileIds.groupBy(fileId => fileId.extractZipFileId)
-
-}
+  def reduceZipFiles(fileIds: Seq[FileId]): Map[FileId, Seq[FileId]] = fileIds.groupBy(_.extractZipFileId)
 
 
 /**
@@ -30,9 +25,8 @@ case class FileId(value: String) {
   def extractZipFileId: FileId = FileId(value.substring(0, value.indexOf(".zip@") + 4)) // get filename of zip file
 
   // if fileId is a zip part, show this relative part
-  def zipEntryPath: String = {
+  def zipEntryPath: String =
     extractZipFileId.fileName + value.substring(value.indexOf(".zip@") + 4, value.length)
-  }
 
   def isZipEntry: Boolean = value.contains(".zip@")
 

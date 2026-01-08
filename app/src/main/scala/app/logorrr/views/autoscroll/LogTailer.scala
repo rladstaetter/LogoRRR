@@ -1,6 +1,6 @@
 package app.logorrr.views.autoscroll
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.model.LogEntry
 import javafx.collections.ObservableList
 import net.ladstatt.util.log.CanLog
@@ -16,7 +16,7 @@ case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) exten
 
   // Use a dedicated, single-threaded scheduler for all polling operations
   private var someScheduler: Option[ScheduledExecutorService] = None
-  private var future: Option[ScheduledFuture[_]] = None
+  private var future: Option[ScheduledFuture[?]] = None
   private var lastPosition: Long = 0L
   private val logFile = fileId.asPath.toFile
   private val pollingDelayMs = 500L // Poll every half-second
@@ -25,70 +25,62 @@ case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) exten
   private var currentCnt: Int = logEntries.size()
 
   /** Reads the file from the last known position to the end. */
-  private def readNewLines(): Unit = {
+  private def readNewLines(): Unit =
     // We synchronize the reading/position update to prevent concurrent issues
-    synchronized {
+    synchronized:
       val currentLength = logFile.length()
       // Handle File Rotation: If the file size has drastically shrunk, clear and reset.
-      if (currentLength < lastPosition) {
+      if currentLength < lastPosition then
         logInfo(s"Log file ${fileId.value} rotated. Clearing entries.")
         currentCnt = 0
         lastPosition = 0L // Reset position to start of the new file
         javafx.application.Platform.runLater(() => logEntries.clear())
-      }
 
       // Read new content only if the file size has increased
-      if (currentLength > lastPosition) {
+      if currentLength > lastPosition then
         var raf: RandomAccessFile = null
-        try {
+        try
           raf = new RandomAccessFile(logFile, "r")
           raf.seek(lastPosition)
 
           var lineBytes: String = null
 
           // Use raf.readLine() which reads a line and advances the file pointer.
-          while ( {
+          while 
             lineBytes = raf.readLine()
             lineBytes != null
-          }) {
+          do
             // **CRITICAL:** Decode bytes using the correct Charset (e.g., UTF-8)
             // Note: readLine() returns ISO-8859-1 string, which we must correctly re-encode.
             val line = new String(lineBytes.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8)
 
             processLine(line)
-          }
 
           // Update the position for the next poll
           lastPosition = raf.getFilePointer
 
-        } catch {
+        catch
           case e: Exception => logException(s"Error while reading new lines from ${fileId.value}", e)
-        } finally {
-          if (raf != null) raf.close()
-        }
-      }
-    }
-  }
+        finally
+          if raf != null then raf.close()
 
-  private def processLine(line: String): Unit = {
+  private def processLine(line: String): Unit =
     currentCnt = currentCnt + 1
     val e = LogEntry(currentCnt, line, None, None)
     javafx.application.Platform.runLater(() => {
       logEntries.add(e)
     })
-  }
 
   /** Start observing log file for changes */
-  def start(): Unit = synchronized {
-    future match {
+  def start(): Unit = synchronized:
+    future match
       case Some(_) => logWarn("Not starting new LogTailer, already one in progress ...")
       case None =>
         // 1. Set initial position to the end of the file (TailFromEnd behavior)
         lastPosition = logFile.length()
 
-        val r = new Runnable {
+        val r = new Runnable:
           override def run(): Unit = readNewLines()
-        }
         // 2. Schedule the polling task
         //val runnable: Runnable = () => readNewLines()
         someScheduler = Option(Executors.newSingleThreadScheduledExecutor())
@@ -98,8 +90,6 @@ case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) exten
           TimeUnit.MILLISECONDS
         ))
         logInfo(s"Started LogTailer for file ${fileId.value} with ${pollingDelayMs}ms delay.")
-    }
-  }
 
   /** Stop observing log file */
   def stop(): Unit = timeR({

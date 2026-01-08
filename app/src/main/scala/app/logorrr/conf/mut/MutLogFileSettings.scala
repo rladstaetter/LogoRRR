@@ -1,14 +1,13 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.clv.color.ColorMatcher
-import app.logorrr.conf.BlockSettings
-import app.logorrr.io.FileId
-import app.logorrr.model.{LogEntry, LogFileSettings, TimestampSettings}
+import app.logorrr.conf.{BlockSettings, FileId, LogFileSettings, SearchTerm, TimestampSettings}
+import app.logorrr.model.LogEntry
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.ops.time.TimeRange
 import app.logorrr.views.search.st.SearchTermButton
 import app.logorrr.views.search.stg.SearchTermGroup
-import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
+import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.{BooleanBinding, ObjectBinding, StringBinding}
 import javafx.beans.property._
 import javafx.collections.transformation.FilteredList
@@ -19,9 +18,9 @@ import java.time.format.DateTimeFormatter
 import scala.jdk.CollectionConverters._
 import scala.util.Try
 
-object MutLogFileSettings {
+object MutLogFileSettings:
 
-  def apply(logFileSettings: LogFileSettings): MutLogFileSettings = {
+  def apply(logFileSettings: LogFileSettings): MutLogFileSettings =
     val s = new MutLogFileSettings
     s.setFileId(logFileSettings.fileId)
     s.setSelectedLineNumber(logFileSettings.selectedLineNumber)
@@ -31,23 +30,19 @@ object MutLogFileSettings {
     s.setDividerPosition(logFileSettings.dividerPosition)
     s.setFilters(logFileSettings.searchTerms.map(f => MutableSearchTerm(f)))
     s.someTimestampSettings.set(logFileSettings.someTimestampSettings)
-    logFileSettings.someTimestampSettings match {
+    logFileSettings.someTimestampSettings match
       case Some(sts) => s.setDateTimeFormatter(sts.dateTimeFormatter)
       case None =>
-    }
     s.setAutoScroll(logFileSettings.autoScroll)
     s.setLowerTimestampValue(logFileSettings.lowerTimestamp)
     s.setUpperTimestampValue(logFileSettings.upperTimestamp)
     s.setSomeSelectedSearchTermGroup(logFileSettings.someSelectedSearchTermGroup)
-    for ((k, terms) <- logFileSettings.searchTermGroups) {
+    for (k, terms) <- logFileSettings.searchTermGroups do
       s.putSearchTerms(k, terms)
-    }
     s
-  }
-}
 
 
-class MutLogFileSettings {
+class MutLogFileSettings:
 
   var someUnclassifiedFilter: Option[(MutableSearchTerm, SearchTermButton)] = None
   var filterButtons: Map[ColorMatcher, SearchTermButton] = Map[ColorMatcher, SearchTermButton]()
@@ -86,22 +81,18 @@ class MutLogFileSettings {
   val searchTermGroupEntries: ObservableList[SearchTermGroup] = mutSearchTermGroupSettings.searchTermGroupEntries
 
 
-
-  private def matchFilter(entry: LogEntry): Boolean = {
+  private def matchFilter(entry: LogEntry): Boolean =
     val matchedFilter = SearchTerm.matches(entry.value, getSearchTerms.toSet)
-    someUnclassifiedFilter match {
+    someUnclassifiedFilter match
       case Some((_, b)) =>
         val dontMatch = SearchTerm.dontMatch(entry.value, getSearchTerms.toSet)
-        if (b.isSelected) {
+        if b.isSelected then
           val res = dontMatch || matchedFilter
           res
-        } else {
+        else
           matchedFilter
-        }
       case _ =>
         matchedFilter
-    }
-  }
 
 
   /**
@@ -109,34 +100,29 @@ class MutLogFileSettings {
    *
    * @param filteredList list to filter
    */
-  def updateActiveFilter(filteredList: FilteredList[LogEntry]): Unit = {
+  def updateActiveFilter(filteredList: FilteredList[LogEntry]): Unit =
     filteredList.setPredicate((entry: LogEntry) =>
       matchTimeRange(entry) && matchFilter(entry))
-  }
 
 
-  private def matchTimeRange(entry: LogEntry): Boolean = {
-    entry.someInstant match {
+  private def matchTimeRange(entry: LogEntry): Boolean =
+    entry.someInstant match
       case None => true // if instant is not set, return true
       case Some(value) =>
         val asMilli = value.toEpochMilli
         getLowerTimestampValue <= asMilli && asMilli <= getUpperTimestampValue
-    }
-  }
 
   def setLowerTimestampValue(lowerValue: Long): Unit = lowerTimestampValueProperty.set(lowerValue)
 
   def getLowerTimestampValue: Long = lowerTimestampValueProperty.get()
 
-  val filteredRangeBinding: ObjectBinding[TimeRange] = new ObjectBinding[TimeRange]() {
+  val filteredRangeBinding: ObjectBinding[TimeRange] = new ObjectBinding[TimeRange]():
     bind(lowerTimestampValueProperty, upperTimestampValueProperty)
 
-    override def computeValue(): TimeRange = {
-      (for {lower <- Option(lowerTimestampValueProperty.get()).map(Instant.ofEpochMilli)
+    override def computeValue(): TimeRange =
+      (for lower <- Option(lowerTimestampValueProperty.get()).map(Instant.ofEpochMilli)
             upper <- Option(upperTimestampValueProperty.get()).map(Instant.ofEpochMilli)
-            } yield Try(TimeRange(lower, upper)).getOrElse(null)).orNull
-    }
-  }
+            yield Try(TimeRange(lower, upper)).getOrElse(null)).orNull
 
   def setUpperTimestampValue(upperValue: Long): Unit = upperTimestampValueProperty.set(upperValue)
 
@@ -148,38 +134,32 @@ class MutLogFileSettings {
 
   def setDateTimeFormatter(dateTimeFormatter: DateTimeFormatter): Unit = dateTimeFormatterProperty.set(dateTimeFormatter)
 
-  def setFilters(filters: Seq[MutableSearchTerm]): Unit = {
+  def setFilters(filters: Seq[MutableSearchTerm]): Unit =
     mutSearchTerms.setAll(filters.asJava)
-  }
 
   def getFilters: ObservableList[MutableSearchTerm] = mutSearchTerms.get()
 
 
-  val hasTimestampSetting: BooleanBinding = new BooleanBinding {
+  val hasTimestampSetting: BooleanBinding = new BooleanBinding:
     bind(someTimestampSettings)
 
-    override def computeValue(): Boolean = {
+    override def computeValue(): Boolean =
       Option(someTimestampSettings.get()).exists(_.isDefined)
-    }
-  }
 
   def setFirstVisibleTextCellIndex(value: Int): Unit = firstVisibleTextCellIndexProperty.set(value)
 
   def setLastVisibleTextCellIndex(value: Int): Unit = lastVisibleTextCellIndexProperty.set(value)
 
-  val fontStyleBinding: StringBinding = new StringBinding {
+  val fontStyleBinding: StringBinding = new StringBinding:
     bind(fontSizeProperty)
 
     override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
-  }
 
-  def setSomeLogEntryInstantFormat(someLef: Option[TimestampSettings]): Unit = {
+  def setSomeLogEntryInstantFormat(someLef: Option[TimestampSettings]): Unit =
     someTimestampSettings.set(someLef)
-    someLef match {
+    someLef match
       case Some(value) => setDateTimeFormatter(value.dateTimeFormatter)
       case None => setDateTimeFormatter(null)
-    }
-  }
 
   def setAutoScroll(autoScroll: Boolean): Unit = autoScrollActiveProperty.set(autoScroll)
 
@@ -205,7 +185,7 @@ class MutLogFileSettings {
 
   def getFirstOpened: Long = firstOpenedProperty.get()
 
-  def mkImmutable(): LogFileSettings = {
+  def mkImmutable(): LogFileSettings =
     val lfs =
       LogFileSettings(fileIdProperty.get()
         , selectedLineNumberProperty.get()
@@ -224,17 +204,13 @@ class MutLogFileSettings {
         , mutSearchTermGroupSettings.mkImmutable()
       )
     lfs
-  }
 
-  def getSearchTerms: Seq[SearchTerm] = {
+  def getSearchTerms: Seq[SearchTerm] =
     getFilters.asScala.toSeq.map(f => SearchTerm(f.getPredicate.description, f.getColor, f.isActive))
-  }
 
-  def setSomeSelectedSearchTermGroup(someSelectedSearchTermGroupId: Option[String]): Unit = {
+  def setSomeSelectedSearchTermGroup(someSelectedSearchTermGroupId: Option[String]): Unit =
     someSelectedSearchTermGroupProperty.set(someSelectedSearchTermGroupId)
-  }
 
   def getSomeSelectedSearchTermGroup: Option[String] = someSelectedSearchTermGroupProperty.get()
 
-}
 

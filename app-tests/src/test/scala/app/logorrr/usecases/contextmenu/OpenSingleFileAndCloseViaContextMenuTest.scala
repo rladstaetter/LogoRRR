@@ -15,19 +15,17 @@ import org.junit.jupiter.api.Test
 class OpenSingleFileAndCloseViaContextMenuTest
   extends SingleFileApplicationTest(TestFiles.simpleLog0)
     with VisibleItemActions
-    with CheckTabPaneActions {
+    with CheckTabPaneActions:
 
   /**
    * checks if an open file creates a new logfiletab with an id matching the file opened.
    */
-  @Test def openAndCloseTab(): Unit = {
+  @Test def openAndCloseTab(): Unit =
     checkForEmptyTabPane()
     openFile(fileId)
     checkForNonEmptyTabPane()
     clickOn(lookup(UiNodes.LogFileHeaderTabs).query[StackPane](), MouseButton.SECONDARY)
     waitAndClickVisibleItem(CloseTabMenuItem.uiNode(fileId))
     checkForEmptyTabPane()
-  }
 
-}
 

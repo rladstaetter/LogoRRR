@@ -1,16 +1,13 @@
 package app.logorrr.conf
 
-import app.logorrr.io.{FileId, IoManager}
-import app.logorrr.model.LogFileSettings
-import app.logorrr.views.search.SearchTerm
+import app.logorrr.io.IoManager
 import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.geometry.Rectangle2D
 import javafx.scene.paint.Color
 import javafx.stage.Screen
-import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
-import pureconfig.{ConfigReader, ConfigWriter}
+import upickle.default.*
 
-import java.nio.file.Path
+import java.nio.file.{Path, Paths}
 
 /**
  * Global settings for LogoRRR
@@ -18,10 +15,13 @@ import java.nio.file.Path
  * LogoRRR tries to remember as much as possible from last run, in order to give user a headstart from where they last
  * left. The idea is that the user doesn't need to fiddle around with settings every time.
  */
-object Settings {
+object Settings:
 
-  implicit lazy val reader: ConfigReader[Settings] = deriveReader[Settings]
-  implicit lazy val writer: ConfigWriter[Settings] = deriveWriter[Settings]
+  // 1. Define how to read/write a single Path
+  implicit val pathRW: ReadWriter[Path] = readwriter[String].bimap[Path](
+    path => path.toString, // How to write: Path -> String
+    str => Paths.get(str) // How to read:  String -> Path
+  )
 
   private val EmptyGroup: SearchTermGroup = SearchTermGroup("empty", Seq())
 
@@ -34,7 +34,7 @@ object Settings {
 
   val DefaultSearchTermGroups: Seq[SearchTermGroup] = Seq(EmptyGroup, JavaLoggingGroup)
 
-  def calcDefaultScreenPosition(): Rectangle2D = {
+  def calcDefaultScreenPosition(): Rectangle2D =
 
     val ps: Rectangle2D = Screen.getPrimary.getVisualBounds
 
@@ -51,7 +51,6 @@ object Settings {
     val newX = originalX + (originalWidth - newWidth) / 2
     val newY = originalY + (originalHeight - newHeight) / 2
     new Rectangle2D(newX, newY, newWidth, newHeight)
-  }
 
   lazy val Default: Settings = Settings(
     StageSettings(calcDefaultScreenPosition())
@@ -61,22 +60,20 @@ object Settings {
     , DefaultSearchTermGroups.map(stg => stg.name -> stg.terms).toMap
   )
 
-}
 
 case class Settings(stageSettings: StageSettings
                     , fileSettings: Map[String, LogFileSettings]
                     , someActive: Option[FileId]
-                    , someLastUsedDirectory: Option[Path]
-                    , searchTermGroups: Map[String, Seq[SearchTerm]]) {
+                    , someLastUsedDirectory: Option[Path] = None
+                    , searchTermGroups: Map[String, Seq[SearchTerm]]) derives ReadWriter {
 
   /** updates recent files with given log setting */
-  def update(logFileSetting: LogFileSettings): Settings = {
+  def update(logFileSetting: LogFileSettings): Settings =
     copy(stageSettings, fileSettings + (logFileSetting.fileId.value -> logFileSetting))
-  }
 
   def filterWithValidPaths(): Settings = copy(fileSettings = fileSettings.filter { case (_, d) =>
     // if entry is part of a zip file, test the path of the zip file
-    if (d.fileId.isZipEntry) {
+    if d.fileId.isZipEntry then {
       IoManager.isPathValid(d.fileId.extractZipFileId.asPath)
     } else {
       IoManager.isPathValid(d.path)
@@ -85,12 +82,3 @@ case class Settings(stageSettings: StageSettings
 
 
 }
-
-
-
-
-
-
-
-
-

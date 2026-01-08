@@ -21,20 +21,19 @@ case class TimerSettingsLogViewLabel(settings: MutLogFileSettings
                                      , maxLength: Int
                                      , startColProperty: ObjectProperty[java.lang.Integer]
                                      , endColProperty: ObjectProperty[java.lang.Integer])
-  extends HBox {
+  extends HBox:
 
   val lineNumberLabel: LineNumberLabel = LineNumberLabel(e.lineNumber, maxLength)
   lineNumberLabel.styleProperty().bind(settings.fontStyleBinding)
   val chars: IndexedSeq[LogViewLabel] =
-    for ((c, i) <- e.value.zipWithIndex) yield new LogViewLabel(settings.getFileId, e.lineNumber, i, c.toString, applyStyleAtPos)
+    for (c, i) <- e.value.zipWithIndex yield new LogViewLabel(settings.getFileId, e.lineNumber, i, c.toString, applyStyleAtPos)
 
-  (Option(startColProperty.get()), Option(endColProperty.get())) match {
+  (Option(startColProperty.get()), Option(endColProperty.get())) match
     case (Some(startCol), Some(endCol)) => paint(startCol, endCol)
     case _ =>
-  }
 
-  private def applyStyleAtPos(pos: Int): Unit = {
-    (Option(startColProperty.get), Option(endColProperty.get)) match {
+  private def applyStyleAtPos(pos: Int): Unit =
+    (Option(startColProperty.get), Option(endColProperty.get)) match
       // if none is set, start with startcol
       case (None, None) =>
         startColProperty.set(pos)
@@ -47,31 +46,24 @@ case class TimerSettingsLogViewLabel(settings: MutLogFileSettings
       // startcol is set already, set endcol
       case (Some(startCol), None) =>
         // if startCol is greater or equal to pos, intpret it as new startcol
-        if (startCol >= pos) {
+        if startCol >= pos then
           startColProperty.set(pos)
           endColProperty.set(null)
           chars.foreach(LabelUtil.resetStyle)
-        } else {
+        else
           endColProperty.set(pos)
           paint(startCol, pos)
-        }
       // not reachable (?)
       case _ =>
         chars.foreach(LabelUtil.resetStyle)
         startColProperty.set(null)
         endColProperty.set(null)
-    }
-  }
 
-  private def paint(startCol: Integer, endCol: Int): Unit = {
-    for (l <- chars) {
+  private def paint(startCol: Integer, endCol: Int): Unit =
+    for l <- chars do
       val labelIndex = l.getUserData.asInstanceOf[Int]
-      if (startCol <= labelIndex && labelIndex < endCol) {
+      if startCol <= labelIndex && labelIndex < endCol then
         l.setBackground(new Background(new BackgroundFill(Color.YELLOWGREEN, null, null)))
-      }
-    }
-  }
 
-  getChildren.addAll(chars: _*)
+  getChildren.addAll(chars*)
 
-}

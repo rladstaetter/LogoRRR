@@ -1,19 +1,12 @@
-package app.logorrr.model
+package app.logorrr.conf
 
-import app.logorrr.conf.{BlockSettings, LogoRRRGlobals, Settings}
-import app.logorrr.io.FileId
 import app.logorrr.views.logfiletab.TextConstants
-import app.logorrr.views.search.SearchTerm
-import pureconfig.generic.semiauto.{deriveReader, deriveWriter}
-import pureconfig.{ConfigReader, ConfigWriter}
+import upickle.default.*
 
 import java.nio.file.Path
-import java.time.Instant
+import java.time.*
 
-object LogFileSettings {
-
-  implicit lazy val reader: ConfigReader[LogFileSettings] = deriveReader[LogFileSettings]
-  implicit lazy val writer: ConfigWriter[LogFileSettings] = deriveWriter[LogFileSettings]
+object LogFileSettings:
 
   private val DefaultSelectedIndex = 0
   private val DefaultDividerPosition = 0.5
@@ -26,7 +19,7 @@ object LogFileSettings {
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
   val DefaultSearchTermGroup = Option(Settings.JavaLoggingGroup.name)
 
-  def apply(fileId: FileId): LogFileSettings = {
+  def mk(fileId: FileId): LogFileSettings =
     val now = Instant.now().toEpochMilli
     LogFileSettings(fileId
       , DefaultSelectedIndex
@@ -43,9 +36,7 @@ object LogFileSettings {
       , now
       , DefaultSearchTermGroup
       , LogoRRRGlobals.getSettings.searchTermGroups)
-  }
 
-}
 
 
 /**
@@ -76,15 +67,14 @@ case class LogFileSettings(fileId: FileId
                            , fontSize: Int
                            , searchTerms: Seq[SearchTerm]
                            , blockSettings: BlockSettings
-                           , someTimestampSettings: Option[TimestampSettings]
+                           , someTimestampSettings: Option[TimestampSettings] = None
                            , autoScroll: Boolean
                            , firstVisibleTextCellIndex: Int
                            , lastVisibleTextCellIndex: Int
                            , lowerTimestamp: Long
                            , upperTimestamp: Long
-                           , someSelectedSearchTermGroup: Option[String]
-                           , searchTermGroups: Map[String, Seq[SearchTerm]]) {
+                           , someSelectedSearchTermGroup: scala.Option[String]
+                           , searchTermGroups: Map[String, Seq[SearchTerm]]) derives ReadWriter:
 
   lazy val path: Path = fileId.asPath.toAbsolutePath
 
-}

@@ -19,7 +19,7 @@ import net.ladstatt.util.log.CanLog
 class IgnoreAboveMenuItem(mutLogFileSettings: MutLogFileSettings
                           , currentEntry: LogEntry
                           , filteredList: FilteredList[LogEntry]
-                          , scrollToActiveLogEntry: () => Unit) extends MenuItem("Ignore entries above") with CanLog {
+                          , scrollToActiveLogEntry: () => Unit) extends MenuItem("Ignore entries above") with CanLog:
   setOnAction(_ => {
     val currPredicate = filteredList.getPredicate
     filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && currentEntry.lineNumber <= entry.lineNumber)
@@ -27,4 +27,3 @@ class IgnoreAboveMenuItem(mutLogFileSettings: MutLogFileSettings
     scrollToActiveLogEntry()
   })
 
-}

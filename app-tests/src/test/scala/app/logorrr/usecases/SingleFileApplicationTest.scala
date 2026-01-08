@@ -1,7 +1,6 @@
 package app.logorrr.usecases
 
-import app.logorrr.conf.Settings
-import app.logorrr.io.FileId
+import app.logorrr.conf.{FileId, Settings}
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.SingleFileIdService
 import app.logorrr.services.hostservices.MockHostServices
@@ -12,17 +11,15 @@ import app.logorrr.steps.AppActions
  */
 class SingleFileApplicationTest(val fileId: FileId)
   extends TestFxBaseApplicationTest
-    with AppActions {
+    with AppActions:
 
   protected lazy val settings: Settings = Settings.Default
 
-  final def services: LogoRRRServices = {
+  final def services: LogoRRRServices =
     LogoRRRServices(settings
       , new MockHostServices
       , new SingleFileIdService(fileId)
       , isUnderTest = true)
-  }
 
 
-}
 

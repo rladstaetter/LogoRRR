@@ -15,7 +15,7 @@ import net.ladstatt.util.log.CanLog
  *
  * Object is accessed directly/globally since it makes life much easier ...
  */
-object LogoRRRAccelerators extends CanLog {
+object LogoRRRAccelerators extends CanLog:
 
   val activeSearchTextField = new SimpleObjectProperty[TextField]()
 
@@ -39,7 +39,7 @@ object LogoRRRAccelerators extends CanLog {
    *
    * For example, if the user switch between different tabs it is expected to set focus on the correct search field.
    * */
-  def initAccelerators(scene: Scene): Unit = {
+  def initAccelerators(scene: Scene): Unit =
 
     scene.getAccelerators.put(shortCutF, () => {
       Option(getActiveSearchTextField) match {
@@ -48,6 +48,4 @@ object LogoRRRAccelerators extends CanLog {
       }
     })
 
-  }
 
-}

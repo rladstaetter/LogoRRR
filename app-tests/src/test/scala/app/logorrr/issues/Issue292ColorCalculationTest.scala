@@ -2,12 +2,11 @@ package app.logorrr.issues
 
 import app.logorrr.TestFiles
 import app.logorrr.conf.Settings.calcDefaultScreenPosition
-import app.logorrr.conf.{BlockSettings, Settings, StageSettings}
-import app.logorrr.model.LogFileSettings
+import app.logorrr.conf.{BlockSettings, LogFileSettings, SearchTerm, Settings, StageSettings}
 import app.logorrr.steps.TestFxListViewActions
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.st.SearchTermButton
-import app.logorrr.views.search.{MutableSearchTerm, SearchTerm}
+import app.logorrr.views.search.MutableSearchTerm
 import javafx.scene.paint.Color
 import org.junit.jupiter.api.Test
 
@@ -21,14 +20,14 @@ import org.junit.jupiter.api.Test
  * - checking color of element of chunklistview
  * */
 abstract class Issue292ColorCalculationSetup(desiredColor: Color, val searchTerms: Seq[SearchTerm]) extends SingleFileApplicationTest(TestFiles.simpleLog5)
-  with TestFxListViewActions {
+  with TestFxListViewActions:
 
 
   /** setup settings such that the issue is triggered and can be inspected visually */
   override lazy val settings: Settings = Settings(
     StageSettings(calcDefaultScreenPosition())
     , Map(TestFiles.simpleLog5.value ->
-      LogFileSettings(TestFiles.simpleLog5)
+      LogFileSettings.mk(TestFiles.simpleLog5)
         .copy(
           searchTerms = searchTerms
           , blockSettings = BlockSettings(50)
@@ -38,13 +37,11 @@ abstract class Issue292ColorCalculationSetup(desiredColor: Color, val searchTerm
     , Map()
   )
 
-  @Test def testIssue292(): Unit = {
+  @Test def testIssue292(): Unit =
     openFile(TestFiles.simpleLog5)
     val color = nthCell(lookupChunkListView(fileId), 0).view.getImage.getPixelReader.getColor(5, 5)
     assert(color == desiredColor, s"${color.toString} != ${desiredColor.toString}")
-  }
 
-}
 
 class Issue292SimpleColorTest extends Issue292ColorCalculationSetup(Color.RED, Seq(SearchTerm("aaaaaa", Color.RED, active = true)))
 
@@ -79,18 +76,16 @@ class Issue292TripleColorWithDeactivationTest extends Issue292ColorCalculationSe
     , SearchTerm("cccccc", Color.BLUE, active = true)
   )) {
 
-  @Test override def testIssue292(): Unit = {
+  @Test override def testIssue292(): Unit =
     openFile(TestFiles.simpleLog5)
 
     val searchTerm = MutableSearchTerm(searchTerms.head)
     clickAndCheckColor(searchTerm, Color.web("0x00407fff"))
     clickAndCheckColor(searchTerm, Color.web("0x552a55ff"))
 
-  }
 
-  private def clickAndCheckColor(searchTerm: MutableSearchTerm, desiredColor: Color): Unit = {
+  private def clickAndCheckColor(searchTerm: MutableSearchTerm, desiredColor: Color): Unit =
     waitAndClickVisibleItem(SearchTermButton.uiNode(fileId, searchTerm))
     val color = nthCell(lookupChunkListView(fileId), 0).view.getImage.getPixelReader.getColor(5, 5)
     assert(color == desiredColor, s"${color.toString} != ${desiredColor.toString}")
-  }
 }

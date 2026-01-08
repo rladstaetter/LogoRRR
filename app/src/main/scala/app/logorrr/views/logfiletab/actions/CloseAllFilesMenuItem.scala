@@ -1,19 +1,18 @@
 package app.logorrr.views.logfiletab.actions
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.control.{MenuItem, Tab}
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
-object CloseAllFilesMenuItem extends UiNodeFileIdAware {
+object CloseAllFilesMenuItem extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseAllFilesMenuItem])
 
-}
 
-class CloseAllFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends MenuItem("Close All Files") {
+class CloseAllFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends MenuItem("Close All Files"):
   setId(CloseAllFilesMenuItem.uiNode(fileId).value)
   private val tabPane = fileTab.getTabPane
   setOnAction(_ => {
@@ -23,7 +22,6 @@ class CloseAllFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends Menu
         Option(t)
       }.toSeq
     }
-    tabPane.getTabs.removeAll(toBeDeleted: _*)
+    tabPane.getTabs.removeAll(toBeDeleted*)
   })
 
-}

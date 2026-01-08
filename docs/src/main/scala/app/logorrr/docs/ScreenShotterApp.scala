@@ -2,7 +2,6 @@ package app.logorrr.docs
 
 import app.logorrr.LogoRRRApp
 import app.logorrr.conf._
-import app.logorrr.meta.AppInfo
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
 import app.logorrr.services.hostservices.NativeHostServices
@@ -27,7 +26,7 @@ object ScreenShotterApp {
   }
 
   def main(args: Array[String]): Unit = {
-    javafx.application.Application.launch(classOf[ScreenShotterApp], args: _*)
+    javafx.application.Application.launch(classOf[ScreenShotterApp], args*)
   }
 }
 

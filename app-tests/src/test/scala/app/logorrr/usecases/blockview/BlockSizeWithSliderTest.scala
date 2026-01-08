@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test
 /**
  * Test if multiple symmetric applications of increase and decrease actions lead to the same result again
  */
-class BlockSizeWithSliderTest extends SingleFileApplicationTest(TestFiles.simpleLog0) {
+class BlockSizeWithSliderTest extends SingleFileApplicationTest(TestFiles.simpleLog0):
 
-  @Test def testBlockSizeChange(): Unit = {
+  @Test def testBlockSizeChange(): Unit =
     openFile(fileId)
     waitForVisibility(BlockSizeSlider.uiNode(fileId))
 
@@ -22,6 +22,4 @@ class BlockSizeWithSliderTest extends SingleFileApplicationTest(TestFiles.simple
     assert(size < LogoRRRGlobals.getLogFileSettings(fileId).getBlockSize)
     movedSlider.moveBy(-200, 0).release(MouseButton.PRIMARY)
     assert(LogoRRRGlobals.getLogFileSettings(fileId).getBlockSize == size)
-  }
 
-}

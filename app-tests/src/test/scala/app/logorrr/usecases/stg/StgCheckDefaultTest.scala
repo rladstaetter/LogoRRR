@@ -6,9 +6,9 @@ import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.stg.StgChoiceBox
 import org.junit.jupiter.api.Test
 
-class StgCheckDefaultTest extends SingleFileApplicationTest(TestFiles.simpleLog0) with StgEditorActions {
+class StgCheckDefaultTest extends SingleFileApplicationTest(TestFiles.simpleLog0) with StgEditorActions:
 
-  @Test def checkChoiceBoxEmptyOnStart(): Unit = {
+  @Test def checkChoiceBoxEmptyOnStart(): Unit =
     // open file such that search term group editor icon appears
     openFile(fileId)
 
@@ -16,5 +16,3 @@ class StgCheckDefaultTest extends SingleFileApplicationTest(TestFiles.simpleLog0
     waitForVisibility(StgChoiceBox.uiNode(fileId))
 
     matchItems[String](StgChoiceBox.uiNode(fileId), Settings.DefaultSearchTermGroups.map(_.name).sorted)
-  }
-}

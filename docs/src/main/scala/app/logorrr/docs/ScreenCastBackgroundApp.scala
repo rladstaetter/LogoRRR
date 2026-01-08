@@ -19,7 +19,7 @@ object ScreenCastBackgroundApp {
   def main(args: Array[String]): Unit = {
     val appMeta = net.ladstatt.app.AppMeta(AppId("ScreenCastBackgroundApp", "screencastbackgroundapp", "screencastbackground.app"), AppMeta.LogFormat)
     net.ladstatt.app.AppMeta.initApp(appMeta)
-    javafx.application.Application.launch(classOf[ScreenCastBackgroundApp], args: _*)
+    javafx.application.Application.launch(classOf[ScreenCastBackgroundApp], args*)
   }
 }
 

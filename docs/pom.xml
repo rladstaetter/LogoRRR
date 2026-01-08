@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
+          <artifactId>scala3-library_3</artifactId>
         </dependency>
         <dependency>
             <groupId>app.logorrr</groupId>

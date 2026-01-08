@@ -10,42 +10,36 @@ import javafx.scene.input.MouseButton
 import javafx.stage.Stage
 import org.junit.jupiter.api.{BeforeAll, Test}
 
-object DndDropFileTest {
+object DndDropFileTest:
 
   @BeforeAll
-  def setUp(): Unit = {
+  def setUp(): Unit =
     // necessary for https://github.com/TestFX/TestFX/issues/33
     System.setProperty("testfx.robot", "awt")
-  }
 
-}
 
 class DndDropFileTest extends StartEmptyApplicationTest
   with VisibleItemActions
-  with CheckTabPaneActions {
+  with CheckTabPaneActions:
 
   @throws[Exception]
-  override def start(stage: Stage): Unit = {
+  override def start(stage: Stage): Unit =
     LogoRRRApp.start(stage, services)
 
     val dndStage = new Stage()
-    val dropBox = new ToolBar(TestFiles.seq.map(p => new DragSourceButton(p)): _*)
+    val dropBox = new ToolBar(TestFiles.seq.map(p => new DragSourceButton(p))*)
     dndStage.setScene(new Scene(dropBox))
     dndStage.show()
 
-  }
 
 
-  @Test def startupEmpty(): Unit = {
+  @Test def startupEmpty(): Unit =
     checkForEmptyTabPane()
-    TestFiles.seq.foreach {
+    TestFiles.seq.foreach:
       fileId => drag(DragSourceButton.uiNode(fileId).ref, MouseButton.PRIMARY).dropTo(UiNodes.MainTabPane.ref)
-    }
     expectCountOfOpenFiles(TestFiles.seq.size)
 
-  }
 
-}
 
 
 

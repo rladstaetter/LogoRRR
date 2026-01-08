@@ -1,30 +1,25 @@
 package app.logorrr.conf
 
-import com.typesafe.config.ConfigRenderOptions
+import app.logorrr.io.SettingsFileIO
 import net.ladstatt.util.log.CanLog
-import pureconfig.ConfigSource
 
 import java.nio.file.Path
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Success}
 
 /**
  * pureconfig provides tools to de/serialize configuration which is in use here.
  * */
-object SettingsIO extends CanLog {
+object SettingsIO extends CanLog:
 
-  /** turn off 'hardcoded value' messages */
-  val renderOptions: ConfigRenderOptions = ConfigRenderOptions.defaults().setOriginComments(false)
-
-  /** read settings from default place and filter all paths which don't exist anymore */
-  def fromFile(settingsFilePath: Path): Settings = timeR({
-    Try(ConfigSource.file(settingsFilePath).loadOrThrow[Settings].filterWithValidPaths()) match {
+  def fromFile(source: Path): Settings = timeR({
+    SettingsFileIO.fromFile(source).map(_.filterWithValidPaths()) match {
       case Failure(_) =>
         logWarn(s"Could not load $settingsFilePath, using default settings ...")
         Settings.Default
       case Success(value) =>
-        logTrace(s"Loaded settings from '$settingsFilePath'.")
+        logInfo(s"Loaded settings from '$settingsFilePath'.")
         value
     }
   }, s"Loading settings from ${settingsFilePath.toAbsolutePath}")
 
-}
+

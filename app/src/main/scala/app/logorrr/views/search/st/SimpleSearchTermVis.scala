@@ -1,24 +1,22 @@
 package app.logorrr.views.search.st
 
 import app.logorrr.clv.color.ColorUtil
-import app.logorrr.views.search.SearchTerm
+import app.logorrr.conf.SearchTerm
 import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty, SimpleStringProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.scene.control.Label
 import javafx.scene.layout.{HBox, Priority, Region, VBox}
 import javafx.scene.paint.Color
 
-object SimpleSearchTermVis {
+object SimpleSearchTermVis:
 
-  def apply(searchTerm: SearchTerm): SimpleSearchTermVis = {
+  def apply(searchTerm: SearchTerm): SimpleSearchTermVis =
     val sstv = new SimpleSearchTermVis
     sstv.textProperty.set(searchTerm.value)
     sstv.colorProperty.set(searchTerm.color)
     sstv
-  }
-}
 
-class SimpleSearchTermVis extends VBox {
+class SimpleSearchTermVis extends VBox:
 
   val hitsProperty = new SimpleIntegerProperty()
   val textProperty = new SimpleStringProperty()
@@ -35,17 +33,15 @@ class SimpleSearchTermVis extends VBox {
   label.textProperty().bind(textProperty)
 
 
-  protected val hbox: HBox = {
+  protected val hbox: HBox =
     val spacer: Region = new Region
     spacer.setMinWidth(30)
     HBox.setHgrow(spacer, Priority.ALWAYS)
     val hb = new HBox(label, spacer)
     hb.setMaxWidth(Double.MaxValue)
     hb
-  }
 
   protected val hitsLabel = new SearchTermHitsLabel
 
 
   getChildren.addAll(hbox, hitsLabel)
-}

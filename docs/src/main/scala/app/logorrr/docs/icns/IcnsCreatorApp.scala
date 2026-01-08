@@ -29,7 +29,7 @@ object IcnsCreatorApp {
     val appMeta = net.ladstatt.app.AppMeta(AppId("icnscreatorapp", "icnscreatorapp", "icnscreator.app"), AppMeta.LogFormat)
     net.ladstatt.app.AppMeta.initApp(appMeta)
     if (checkPrerequisites()) {
-      javafx.application.Application.launch(classOf[IcnsCreatorApp], args: _*)
+      javafx.application.Application.launch(classOf[IcnsCreatorApp], args*)
     } else {
       System.err.println("Could not start IconCreatorApp since prerequisites failed.")
     }

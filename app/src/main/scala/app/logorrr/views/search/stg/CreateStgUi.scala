@@ -1,8 +1,7 @@
 package app.logorrr.views.search.stg
 
+import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.io.FileId
-import app.logorrr.views.search.SearchTerm
 import app.logorrr.views.search.st.SimpleSearchTermVis
 import javafx.scene.control.ToolBar
 import net.ladstatt.util.log.CanLog
@@ -10,7 +9,7 @@ import net.ladstatt.util.log.CanLog
 
 class CreateStgUi(mutLogFileSettings: MutLogFileSettings
                   , fileId: FileId
-                  , activeSearchTerms: Seq[SearchTerm]) extends ToolBar with CanLog {
+                  , activeSearchTerms: Seq[SearchTerm]) extends ToolBar with CanLog:
 
   private val createButton = CreateStgButton(fileId)
   private val nameField = new StgNameTextField(fileId, createButton.fire)
@@ -19,7 +18,7 @@ class CreateStgUi(mutLogFileSettings: MutLogFileSettings
   // --- Event Handling (Create Button) ---
   createButton.setOnAction(_ => {
     val searchTermGroupName = nameField.getText()
-    if (searchTermGroupName.nonEmpty) {
+    if searchTermGroupName.nonEmpty then {
       // addFn(searchTermGroupName)
       mutLogFileSettings.putSearchTerms(searchTermGroupName, activeSearchTerms)
       nameField.clear() // Clear the field after creation
@@ -31,5 +30,4 @@ class CreateStgUi(mutLogFileSettings: MutLogFileSettings
 
   private val searchTermVis: Seq[SimpleToggleButton] = activeSearchTerms.map(s => new SimpleToggleButton(SimpleSearchTermVis(s)))
 
-  getItems.addAll(Seq(createButton, nameField) ++ searchTermVis: _*)
-}
+  getItems.addAll(Seq(createButton, nameField) ++ searchTermVis*)

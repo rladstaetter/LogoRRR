@@ -15,11 +15,10 @@ import java.time.{Duration, Instant}
 case class LogEntry(lineNumber: Int
                     , value: String
                     , someInstant: Option[Instant]
-                    , someDurationSinceFirstInstant: Option[Duration]) {
+                    , someDurationSinceFirstInstant: Option[Duration]):
 
   def someJfxDuration: Option[util.Duration] = someDurationSinceFirstInstant.map(d => javafx.util.Duration.millis(d.toMillis.toDouble))
 
   /** returns a copy of this log entry without timestamp information */
   def withOutTimestamp(): LogEntry = copy(someInstant = None, someDurationSinceFirstInstant = None)
 
-}

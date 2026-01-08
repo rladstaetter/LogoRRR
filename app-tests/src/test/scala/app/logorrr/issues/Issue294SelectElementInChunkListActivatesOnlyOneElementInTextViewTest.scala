@@ -2,9 +2,8 @@ package app.logorrr.issues
 
 import app.logorrr.TestFiles
 import app.logorrr.conf.Settings.calcDefaultScreenPosition
-import app.logorrr.conf.{BlockSettings, Settings, StageSettings}
-import app.logorrr.model.LogFileSettings
-import app.logorrr.steps.{TestFxListViewActions, LogTextViewActions}
+import app.logorrr.conf.{BlockSettings, LogFileSettings, Settings, StageSettings}
+import app.logorrr.steps.{LogTextViewActions, TestFxListViewActions}
 import app.logorrr.usecases.SingleFileApplicationTest
 import org.junit.jupiter.api.Test
 
@@ -18,13 +17,13 @@ import org.junit.jupiter.api.Test
 class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
   extends SingleFileApplicationTest(TestFiles.simpleLog1)
     with LogTextViewActions
-    with TestFxListViewActions {
+    with TestFxListViewActions:
 
   /** setup settings such that the issue is triggered and can be inspected visually */
   override lazy val settings: Settings = Settings(
     StageSettings(calcDefaultScreenPosition())
     , Map(TestFiles.simpleLog1.value ->
-      LogFileSettings(TestFiles.simpleLog1)
+      LogFileSettings.mk(TestFiles.simpleLog1)
         .copy(
           blockSettings = BlockSettings(50)
           , dividerPosition = 0.599))
@@ -35,7 +34,7 @@ class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
 
   // atm this is only a setup test which helps to get LogoRRR in a repeatable, defined state
   // start LogoRRRApp afterwards to tinker around
-  @Test def testIssue294(): Unit = {
+  @Test def testIssue294(): Unit =
 
     val ltv = lookupLogTextView(fileId)
 
@@ -70,6 +69,4 @@ class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
     assert(ltv.getSelectionModel.getSelectedItems.size() == 1)
 
 
-  }
 
-}

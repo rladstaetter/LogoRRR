@@ -6,7 +6,7 @@ import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.input.{KeyCode, KeyEvent}
 
 abstract class SizeButton(node: Node
-                          , tooltipMessage: String) extends Button {
+                          , tooltipMessage: String) extends Button:
 
   val sizeProperty: Property[Number] = new SimpleIntegerProperty()
 
@@ -17,9 +17,8 @@ abstract class SizeButton(node: Node
   setTooltip(new Tooltip(tooltipMessage))
   setGraphic(node)
   setOnKeyPressed((event: KeyEvent) => {
-    if (event.getCode == KeyCode.ENTER) {
+    if event.getCode == KeyCode.ENTER then {
       fire()
     }
   })
 
-}

@@ -6,9 +6,9 @@ import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.stg.StgChoiceBox
 import org.junit.jupiter.api.Test
 
-class StgHelloScenario1 extends SingleFileApplicationTest(TestFiles.simpleLog0) with StgEditorActions {
+class StgHelloScenario1 extends SingleFileApplicationTest(TestFiles.simpleLog0) with StgEditorActions:
 
-  @Test def scenario1(): Unit = {
+  @Test def scenario1(): Unit =
     openFile(fileId)
 
     openStgEditor(fileId)
@@ -24,7 +24,5 @@ class StgHelloScenario1 extends SingleFileApplicationTest(TestFiles.simpleLog0) 
     closeStgEditor(fileId)
 
     matchItems[String](StgChoiceBox.uiNode(fileId), (expected.tail ++ Settings.DefaultSearchTermGroups.map(_.name)).sorted)
-  }
 
 
-}

@@ -1,13 +1,12 @@
 package app.logorrr.views.settings.timestamp
 
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.geometry.Pos
 import javafx.scene.control.Label
 
-object FromLabel extends UiNodeFileIdAware {
+object FromLabel extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[FromLabel])
-}
 
 class FromLabel(id: FileId) extends Label("from column") {
   setId(FromLabel.uiNode(id).value)

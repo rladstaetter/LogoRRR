@@ -1,7 +1,7 @@
 package app.logorrr.views.search.st
 import app.logorrr.clv.JfxUtils
 import app.logorrr.clv.color.ColorUtil
-import app.logorrr.io.FileId
+import app.logorrr.conf.FileId
 import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
 import app.logorrr.views.search.{MutableSearchTerm, MutableSearchTermUnclassified}
@@ -11,11 +11,10 @@ import javafx.scene.paint.Color
 import net.ladstatt.util.log.CanLog
 
 
-object SearchTermButton extends UiNodeSearchTermAware {
+object SearchTermButton extends UiNodeSearchTermAware:
 
   override def uiNode(fileId: FileId, searchTerm: MutableSearchTerm): UiNode = UiNode(classOf[SearchTermButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + searchTerm.getPredicate.description))
 
-}
 
 
 /**
@@ -25,7 +24,7 @@ class SearchTermButton(val fileId: FileId
                        , val searchTerm: MutableSearchTerm
                        , hits: Int
                        , updateActiveSearchTerm: => Unit
-                       , removeSearchTerm: MutableSearchTerm => Unit) extends ToggleButton with CanLog {
+                       , removeSearchTerm: MutableSearchTerm => Unit) extends ToggleButton with CanLog:
 
   val isUnclassified: Boolean = searchTerm.isInstanceOf[MutableSearchTermUnclassified]
 
@@ -33,7 +32,7 @@ class SearchTermButton(val fileId: FileId
     override def invalidated(observable: Observable): Unit = updateActiveSearchTerm
   })
   selectedProperty().addListener(JfxUtils.onNew[java.lang.Boolean](selected => {
-    if (selected) {
+    if selected then {
       setStyle(ColorUtil.mkCssBackgroundString(searchTerm.getColor))
     } else {
       setStyle(ColorUtil.mkCssBackgroundString(Color.WHITESMOKE))
@@ -48,4 +47,3 @@ class SearchTermButton(val fileId: FileId
 
 
 
-}
