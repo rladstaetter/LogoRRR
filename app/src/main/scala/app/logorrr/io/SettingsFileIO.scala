@@ -11,14 +11,14 @@ import scala.util.{Failure, Success, Try}
  * */
 object SettingsFileIO {
 
-  def fromFile(path: Path): Try[Settings] = {
+  def fromFile(path: Path): Try[Settings] = Try {
     val js = Files.readString(path)
     Try(read[Settings](js)) match {
-      case Success(settings) => Try(settings)
+      case Success(settings) => settings
       case Failure(exception) =>
         // retrying with migration if something went wrong
         val migrated = SettingsMigrator.migrate(js) // migrate from old style (pureconfig)
-        Try(read[Settings](migrated))
+        read[Settings](migrated)
     }
   }
 
