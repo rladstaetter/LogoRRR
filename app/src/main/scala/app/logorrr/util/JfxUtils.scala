@@ -8,11 +8,11 @@ import javafx.scene.control.ListView
 import javafx.scene.layout.{HBox, Priority, Region}
 import javafx.scene.paint.Color
 import javafx.stage.{Stage, WindowEvent}
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 import scala.util.Random
 
-object JfxUtils extends CanLog:
+object JfxUtils extends TinyLog:
 
   def mkHgrowFiller(): Region =
     val filler = new Region()

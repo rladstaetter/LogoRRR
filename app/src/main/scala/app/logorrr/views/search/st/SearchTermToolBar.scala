@@ -10,7 +10,7 @@ import javafx.beans.property.SimpleListProperty
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ListChangeListener}
 import javafx.scene.control.ToolBar
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 import scala.jdk.CollectionConverters._
 
@@ -20,7 +20,7 @@ import scala.jdk.CollectionConverters._
  * @param filteredList list of entries which are displayed (can be filtered via buttons)
  */
 class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
-                        , filteredList: FilteredList[LogEntry]) extends ToolBar with CanLog:
+                        , filteredList: FilteredList[LogEntry]) extends ToolBar with TinyLog:
 
   setMaxHeight(Double.PositiveInfinity)
 

@@ -4,12 +4,12 @@ import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.views.search.st.SimpleSearchTermVis
 import javafx.scene.control.ToolBar
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 
 class CreateStgUi(mutLogFileSettings: MutLogFileSettings
                   , fileId: FileId
-                  , activeSearchTerms: Seq[SearchTerm]) extends ToolBar with CanLog:
+                  , activeSearchTerms: Seq[SearchTerm]) extends ToolBar with TinyLog:
 
   private val createButton = CreateStgButton(fileId)
   private val nameField = new StgNameTextField(fileId, createButton.fire)

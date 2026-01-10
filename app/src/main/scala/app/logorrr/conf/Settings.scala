@@ -1,7 +1,6 @@
 package app.logorrr.conf
 
 import app.logorrr.io.IoManager
-import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.geometry.Rectangle2D
 import javafx.scene.paint.Color
 import javafx.stage.Screen

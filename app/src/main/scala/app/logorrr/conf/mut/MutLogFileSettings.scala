@@ -6,7 +6,7 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.ops.time.TimeRange
 import app.logorrr.views.search.st.SearchTermButton
-import app.logorrr.views.search.stg.SearchTermGroup
+import app.logorrr.conf.SearchTermGroup
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.{BooleanBinding, ObjectBinding, StringBinding}
 import javafx.beans.property._

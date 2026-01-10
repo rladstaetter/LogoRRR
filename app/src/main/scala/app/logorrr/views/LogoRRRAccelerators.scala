@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Scene
 import javafx.scene.control.TextField
 import javafx.scene.input.{KeyCode, KeyCodeCombination, KeyCombination}
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 /**
  * LogoRRR supports some keyboard shortcuts to make life easier for the user.
@@ -15,7 +15,7 @@ import net.ladstatt.util.log.CanLog
  *
  * Object is accessed directly/globally since it makes life much easier ...
  */
-object LogoRRRAccelerators extends CanLog:
+object LogoRRRAccelerators extends TinyLog:
 
   val activeSearchTextField = new SimpleObjectProperty[TextField]()
 

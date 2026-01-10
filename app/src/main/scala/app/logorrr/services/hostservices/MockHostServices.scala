@@ -2,9 +2,9 @@ package app.logorrr.services.hostservices
 
 import app.logorrr.views.a11y.UiNode
 import javafx.collections.{FXCollections, ObservableList}
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
-class MockHostServices extends LogoRRRHostServices with CanLog:
+class MockHostServices extends LogoRRRHostServices with TinyLog:
 
   /** used for tests */
   val visitedUrls: ObservableList[String] = FXCollections.observableArrayList[String]()

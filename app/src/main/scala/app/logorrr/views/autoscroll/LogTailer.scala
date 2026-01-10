@@ -3,22 +3,22 @@ package app.logorrr.views.autoscroll
 import app.logorrr.conf.FileId
 import app.logorrr.model.LogEntry
 import javafx.collections.ObservableList
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
-import java.io.RandomAccessFile
+import java.io.{File, RandomAccessFile}
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.{Executors, ScheduledExecutorService, ScheduledFuture, TimeUnit}
 
 /**
  * Monitors the log file for new lines using a scheduled executor and NIO.
  */
-case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) extends CanLog {
+case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) extends TinyLog {
 
   // Use a dedicated, single-threaded scheduler for all polling operations
   private var someScheduler: Option[ScheduledExecutorService] = None
   private var future: Option[ScheduledFuture[?]] = None
   private var lastPosition: Long = 0L
-  private val logFile = fileId.asPath.toFile
+  private val logFile : File = fileId.asPath.toFile
   private val pollingDelayMs = 500L // Poll every half-second
 
   // Current line counter for LogEntry ID

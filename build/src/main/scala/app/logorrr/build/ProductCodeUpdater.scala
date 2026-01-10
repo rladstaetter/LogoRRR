@@ -1,21 +1,18 @@
 package app.logorrr.build
 
-import net.ladstatt.app.{AppId, AppMeta}
-import net.ladstatt.util.io.Fs
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.io.TinyIo
+import net.ladstatt.util.log.TinyLog
 
 import java.nio.file.{Files, Paths}
 import java.util.UUID
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
-object ProductCodeUpdater extends CanLog with Fs:
-
-  val appMeta: AppMeta = net.ladstatt.app.AppMeta(AppId("ProductCodeUpdater", "productcodeupdater", "productcodeupdater.app"), AppMeta.LogFormat)
+object ProductCodeUpdater extends TinyIo with TinyLog:
 
   val needle = """<ROW Property="ProductCode" Value="1033:{aaaaaaaa-bbbb-cccc-dddd-ffffffffffff} " Type="16"/>"""
 
   def main(args: Array[String]): Unit =
-    net.ladstatt.app.AppMeta.initApp(appMeta)
+    TinyLog.init(Paths.get("target/productcodeupdater.log"))
     if args.length != 2 then
       logError(s"Wrong number of arguments, expected 2 but was ${args.length} ")
     else

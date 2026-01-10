@@ -1,9 +1,10 @@
 package app.logorrr.views.settings
 
 import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.conf.SearchTermGroup
 import app.logorrr.views.a11y.uinodes.SettingsEditor
 import app.logorrr.views.search.st.SimpleSearchTermVis
-import app.logorrr.views.search.stg.{DeleteStgButton, SimpleToggleButton, SearchTermGroup}
+import app.logorrr.views.search.stg.{DeleteStgButton, SimpleToggleButton}
 import javafx.scene.control.{Label, ListCell, ToolBar}
 
 

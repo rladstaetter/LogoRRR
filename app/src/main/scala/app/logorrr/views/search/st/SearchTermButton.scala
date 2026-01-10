@@ -8,7 +8,7 @@ import app.logorrr.views.search.{MutableSearchTerm, MutableSearchTermUnclassifie
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.scene.control.ToggleButton
 import javafx.scene.paint.Color
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 
 object SearchTermButton extends UiNodeSearchTermAware:
@@ -24,7 +24,7 @@ class SearchTermButton(val fileId: FileId
                        , val searchTerm: MutableSearchTerm
                        , hits: Int
                        , updateActiveSearchTerm: => Unit
-                       , removeSearchTerm: MutableSearchTerm => Unit) extends ToggleButton with CanLog:
+                       , removeSearchTerm: MutableSearchTerm => Unit) extends ToggleButton with TinyLog:
 
   val isUnclassified: Boolean = searchTerm.isInstanceOf[MutableSearchTermUnclassified]
 

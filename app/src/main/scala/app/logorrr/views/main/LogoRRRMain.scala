@@ -7,7 +7,7 @@ import app.logorrr.util.JfxUtils
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -16,7 +16,7 @@ import scala.concurrent.{Await, Future}
 
 class LogoRRRMain(stage: Stage
                   , logoRRRFileOpenService: FileIdService
-                  , isUnderTest: Boolean) extends BorderPane with CanLog:
+                  , isUnderTest: Boolean) extends BorderPane with TinyLog:
 
   val bar = new MainMenuBar(stage, logoRRRFileOpenService, openFile, closeAllLogFiles(), isUnderTest)
 

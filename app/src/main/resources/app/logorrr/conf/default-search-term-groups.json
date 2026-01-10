@@ -1,0 +1,107 @@
+{
+  "searchTermGroups": {
+    "Java_JUL": [
+      { "value": "SEVERE", "color": "#ff0000", "active": true },
+      { "value": "WARNING", "color": "#ffa500", "active": true },
+      { "value": "INFO", "color": "#008000", "active": true },
+      { "value": "CONFIG", "color": "#20b2aa", "active": true },
+      { "value": "FINE", "color": "#808080", "active": true },
+      { "value": "FINER", "color": "#a9a9a9", "active": true },
+      { "value": "FINEST", "color": "#d3d3d3", "active": true }
+    ],
+    "Java_Log4j_Logback": [
+      { "value": "FATAL", "color": "#8b0000", "active": true },
+      { "value": "ERROR", "color": "#ff0000", "active": true },
+      { "value": "WARN", "color": "#ffa500", "active": true },
+      { "value": "INFO", "color": "#008000", "active": true },
+      { "value": "DEBUG", "color": "#808080", "active": true },
+      { "value": "TRACE", "color": "#d3d3d3", "active": true }
+    ],
+    "Python_Logging": [
+      { "value": "CRITICAL", "color": "#8b0000", "active": true },
+      { "value": "ERROR", "color": "#ff0000", "active": true },
+      { "value": "WARNING", "color": "#ffa500", "active": true },
+      { "value": "INFO", "color": "#008000", "active": true },
+      { "value": "DEBUG", "color": "#808080", "active": true },
+      { "value": "NOTSET", "color": "#d3d3d3", "active": true }
+    ],
+    "CSharp_Serilog": [
+      { "value": "Fatal", "color": "#8b0000", "active": true },
+      { "value": "Error", "color": "#ff0000", "active": true },
+      { "value": "Warning", "color": "#ffa500", "active": true },
+      { "value": "Information", "color": "#008000", "active": true },
+      { "value": "Debug", "color": "#808080", "active": true },
+      { "value": "Verbose", "color": "#d3d3d3", "active": true }
+    ],
+    "CSharp_NLog": [
+      { "value": "Fatal", "color": "#8b0000", "active": true },
+      { "value": "Error", "color": "#ff0000", "active": true },
+      { "value": "Warn", "color": "#ffa500", "active": true },
+      { "value": "Info", "color": "#008000", "active": true },
+      { "value": "Debug", "color": "#808080", "active": true },
+      { "value": "Trace", "color": "#d3d3d3", "active": true }
+    ],
+    "Cpp_Spdlog": [
+      { "value": "critical", "color": "#8b0000", "active": true },
+      { "value": "error", "color": "#ff0000", "active": true },
+      { "value": "warn", "color": "#ffa500", "active": true },
+      { "value": "info", "color": "#008000", "active": true },
+      { "value": "debug", "color": "#808080", "active": true },
+      { "value": "trace", "color": "#d3d3d3", "active": true }
+    ],
+    "JavaScript_Winston": [
+      { "value": "error", "color": "#ff0000", "active": true },
+      { "value": "warn", "color": "#ffa500", "active": true },
+      { "value": "info", "color": "#008000", "active": true },
+      { "value": "http", "color": "#9370db", "active": true },
+      { "value": "verbose", "color": "#20b2aa", "active": true },
+      { "value": "debug", "color": "#808080", "active": true },
+      { "value": "silly", "color": "#d3d3d3", "active": true }
+    ],
+    "JavaScript_Pino": [
+      { "value": "fatal", "color": "#8b0000", "active": true },
+      { "value": "error", "color": "#ff0000", "active": true },
+      { "value": "warn", "color": "#ffa500", "active": true },
+      { "value": "info", "color": "#008000", "active": true },
+      { "value": "debug", "color": "#808080", "active": true },
+      { "value": "trace", "color": "#d3d3d3", "active": true }
+    ],
+    "Go_Slog": [
+      { "value": "LevelError", "color": "#ff0000", "active": true },
+      { "value": "LevelWarn", "color": "#ffa500", "active": true },
+      { "value": "LevelInfo", "color": "#008000", "active": true },
+      { "value": "LevelDebug", "color": "#808080", "active": true }
+    ],
+    "Rust_Tracing": [
+      { "value": "ERROR", "color": "#ff0000", "active": true },
+      { "value": "WARN", "color": "#ffa500", "active": true },
+      { "value": "INFO", "color": "#008000", "active": true },
+      { "value": "DEBUG", "color": "#808080", "active": true },
+      { "value": "TRACE", "color": "#d3d3d3", "active": true }
+    ],
+    "PHP_Monolog": [
+      { "value": "EMERGENCY", "color": "#8b0000", "active": true },
+      { "value": "ALERT", "color": "#ff4500", "active": true },
+      { "value": "CRITICAL", "color": "#ff0000", "active": true },
+      { "value": "ERROR", "color": "#b22222", "active": true },
+      { "value": "WARNING", "color": "#ffa500", "active": true },
+      { "value": "NOTICE", "color": "#4169e1", "active": true },
+      { "value": "INFO", "color": "#008000", "active": true },
+      { "value": "DEBUG", "color": "#808080", "active": true }
+    ],
+    "Swift_AppleLog": [
+      { "value": "fault", "color": "#8b0000", "active": true },
+      { "value": "error", "color": "#ff0000", "active": true },
+      { "value": "default", "color": "#008000", "active": true },
+      { "value": "info", "color": "#4169e1", "active": true },
+      { "value": "debug", "color": "#808080", "active": true }
+    ],
+    "Ruby_Logger": [
+      { "value": "FATAL", "color": "#8b0000", "active": true },
+      { "value": "ERROR", "color": "#ff0000", "active": true },
+      { "value": "WARN", "color": "#ffa500", "active": true },
+      { "value": "INFO", "color": "#008000", "active": true },
+      { "value": "DEBUG", "color": "#808080", "active": true }
+    ]
+  }
+}

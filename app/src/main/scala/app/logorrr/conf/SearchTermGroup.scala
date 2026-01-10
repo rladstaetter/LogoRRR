@@ -1,4 +1,4 @@
-package app.logorrr.views.search.stg
+package app.logorrr.conf
 
 import app.logorrr.conf.SearchTerm
 

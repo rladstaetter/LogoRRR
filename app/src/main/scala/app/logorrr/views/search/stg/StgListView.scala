@@ -1,6 +1,6 @@
 package app.logorrr.views.search.stg
 
-import app.logorrr.conf.{FileId, LogoRRRGlobals}
+import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTermGroup}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.scene.control.ListView
 

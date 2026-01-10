@@ -1,9 +1,10 @@
 package app.logorrr.views.settings
 
 import app.logorrr.conf.FileId
+import app.logorrr.conf.SearchTermGroup
 import app.logorrr.views.a11y.uinodes.SettingsEditor
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.search.stg.{SearchTermGroup, StgListView}
+import app.logorrr.views.search.stg.{StgListView}
 import javafx.collections.ObservableList
 import javafx.scene.control.ListView
 

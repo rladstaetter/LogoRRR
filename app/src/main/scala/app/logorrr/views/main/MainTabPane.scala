@@ -10,7 +10,7 @@ import javafx.beans.value.ChangeListener
 import javafx.collections.ObservableList
 import javafx.scene.control.{Tab, TabPane}
 import javafx.scene.input.{DragEvent, TransferMode}
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 import java.nio.file.{Files, Path}
 import java.util.stream.Collectors
@@ -30,7 +30,7 @@ object MainTabPane:
       |""".stripMargin
 
 
-class MainTabPane extends TabPane with CanLog:
+class MainTabPane extends TabPane with TinyLog:
   // leave here otherwise css rendering breaks
   setStyle(MainTabPane.BackgroundStyle)
   setId(UiNodes.MainTabPane.value)

@@ -1,7 +1,7 @@
 package app.logorrr.views.settings
 
 import app.logorrr.conf.FileId
-import app.logorrr.views.search.stg.SearchTermGroup
+import app.logorrr.conf.SearchTermGroup
 import javafx.collections.ObservableList
 import javafx.scene.control.Label
 import javafx.scene.layout.{Priority, VBox}
