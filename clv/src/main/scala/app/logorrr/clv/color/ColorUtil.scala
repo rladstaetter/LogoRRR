@@ -1,11 +1,23 @@
 package app.logorrr.clv.color
 
-import javafx.scene.paint.Color
+import javafx.geometry.Insets
+import javafx.scene.layout.*
+import javafx.scene.paint.CycleMethod.NO_CYCLE
+import javafx.scene.paint.{Color, LinearGradient, Stop}
 
 /**
  * Utility to manage some operations dealing with color
  */
 object ColorUtil:
+
+  val gradientBackground: Background =
+    val stops = Seq(
+      new Stop(1, Color.web("#ffffff")),
+      new Stop(0, Color.BEIGE)
+    )
+    val backgroundGradient = new LinearGradient(0, 0, 0, 1, true, NO_CYCLE, stops *)
+    new Background(new BackgroundFill(backgroundGradient, CornerRadii.EMPTY, Insets.EMPTY))
+
 
   def toARGB(color: Color): Int =
     (color.getOpacity * 255).toInt << 24 |

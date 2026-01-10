@@ -66,3 +66,4 @@ class AboutDialogBorderPane(stage: Stage) extends BorderPane:
 
   setBottom(hBox)
 
+  setBackground(ColorUtil.gradientBackground)

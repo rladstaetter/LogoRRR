@@ -49,7 +49,6 @@ class LogoRRRMain(stage: Stage
 
       LogoRRRStage.selectActiveLogFile(this)
 
-
   private def loadLogFiles(settings: Seq[LogFileSettings]): Seq[LogFileTab] =
     val (zipSettings, fileSettings) = settings.partition(p => p.fileId.isZipEntry)
 
@@ -91,7 +90,6 @@ class LogoRRRMain(stage: Stage
     val logFileTabs: Seq[LogFileTab] = Await.result(futures, Duration.Inf).flatten
     logTrace("Loaded " + logFileTabs.size + " files ... ")
     logFileTabs
-
 
   def contains(fileId: FileId): Boolean = mainTabPane.contains(fileId)
 
