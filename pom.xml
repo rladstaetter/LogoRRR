@@ -11,6 +11,7 @@
     <properties>
         <revision>26.1.0</revision>
         <scala.version>3.7.4</scala.version>
+        <java.version>24</java.version>
         <openjfx.version>25</openjfx.version>
         <ikonli.version>12.4.0</ikonli.version>
         <!-- no need to change these -->
@@ -339,8 +340,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.14.0</version>
                     <configuration>
-                        <source>25</source>
-                        <target>25</target>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
                     </configuration>
                 </plugin>
                 <plugin>
