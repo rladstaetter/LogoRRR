@@ -1,5 +1,6 @@
 package app.logorrr.views.main
 
+import app.logorrr.clv.color.ColorUtil
 import app.logorrr.conf.{FileId, LogFileSettings, LogoRRRGlobals}
 import app.logorrr.io.IoManager
 import app.logorrr.model.LogEntry
@@ -16,7 +17,7 @@ import java.nio.file.{Files, Path}
 import java.util.stream.Collectors
 import java.{lang, util}
 import scala.collection.mutable
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 object MainTabPane:
 
@@ -25,8 +26,8 @@ object MainTabPane:
       |-fx-background-image: url(/app/logorrr/drop-files-here.png);
       |-fx-background-position: center center;
       |-fx-background-repeat: no-repeat;
-      |-fx-background-color: BEIGE;
-      |-fx-background-size: 100%;
+      |-fx-background-color: linear-gradient(to bottom, #f5f5dc, #d2b48c);
+      |-fx-background-size: keep;
       |""".stripMargin
 
 
