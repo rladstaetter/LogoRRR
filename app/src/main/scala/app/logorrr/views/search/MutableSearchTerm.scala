@@ -8,7 +8,7 @@ import javafx.scene.paint.Color
 
 object MutableSearchTerm:
 
-  val DefaultSearchTerms: Seq[MutableSearchTerm] = LogFileSettings.EmptySearchTermGroup.terms.map(MutableSearchTerm.apply)
+  val DefaultSearchTerms: Seq[MutableSearchTerm] = LogFileSettings.JuLSearchTermGroup.terms.map(MutableSearchTerm.apply)
 
   def apply(searchTerm: SearchTerm): MutableSearchTerm =
     apply(searchTerm.value, searchTerm.color, searchTerm.active)
