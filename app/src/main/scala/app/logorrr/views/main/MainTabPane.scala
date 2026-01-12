@@ -27,7 +27,7 @@ object MainTabPane:
       |-fx-background-position: center center;
       |-fx-background-repeat: no-repeat;
       |-fx-background-color: linear-gradient(to bottom, #f5f5dc, #d2b48c);
-      |-fx-background-size: keep;
+      |-fx-background-size: auto;
       |""".stripMargin
 
 
