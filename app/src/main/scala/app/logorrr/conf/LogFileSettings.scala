@@ -17,7 +17,8 @@ object LogFileSettings:
   private val DefaultLastViewIndex = -1
   val DefaultLowerTimestamp: Int = 0
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
-  val DefaultSearchTermGroup = Option(Settings.JavaLoggingGroup.name)
+  val EmptySearchTermGroup = DefaultSearchTermGroups().empty
+  val JuLSearchTermGroup = DefaultSearchTermGroups().searchTermGroups.tail.head
 
   def mk(fileId: FileId): LogFileSettings =
     val now = Instant.now().toEpochMilli
@@ -26,7 +27,7 @@ object LogFileSettings:
       , now
       , DefaultDividerPosition
       , TextConstants.DefaultFontSize
-      , Settings.JavaLoggingGroup.terms
+      , EmptySearchTermGroup.terms
       , DefaultBlockSettings
       , DefaultLogFormat
       , DefaultAutoScroll
@@ -34,7 +35,7 @@ object LogFileSettings:
       , DefaultLastViewIndex
       , DefaultLowerTimestamp
       , now
-      , DefaultSearchTermGroup
+      , Option(EmptySearchTermGroup.name)
       , LogoRRRGlobals.getSettings.searchTermGroups)
 
 

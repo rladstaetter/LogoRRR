@@ -1890,6 +1890,9 @@
       "glob": "meta.json"
     },
     {
+      "glob": "app/logorrr/conf/default-search-term-groups.json"
+    },
+    {
       "module": "java.base",
       "glob": "jdk/internal/icu/impl/data/icudt76b/ubidi.icu"
     },

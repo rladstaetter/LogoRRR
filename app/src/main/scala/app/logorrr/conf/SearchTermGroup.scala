@@ -1,11 +1,6 @@
 package app.logorrr.conf
 
 import app.logorrr.conf.SearchTerm
+import upickle.default.*
 
-
-object SearchTermGroup {
-
-
-}
-
-case class SearchTermGroup(name: String, terms: Seq[SearchTerm])
+case class SearchTermGroup(name: String, terms: Seq[SearchTerm]) derives ReadWriter

@@ -1,12 +1,22 @@
 package app.logorrr.conf
 
+import app.logorrr.conf
+import app.logorrr.cp.TxtCp
 import app.logorrr.io.IoManager
 import javafx.geometry.Rectangle2D
 import javafx.scene.paint.Color
 import javafx.stage.Screen
+import net.ladstatt.util.log.TinyLog
 import upickle.default.*
 
 import java.nio.file.{Path, Paths}
+import scala.util.{Failure, Success}
+
+
+
+
+
+
 
 /**
  * Global settings for LogoRRR
@@ -14,7 +24,7 @@ import java.nio.file.{Path, Paths}
  * LogoRRR tries to remember as much as possible from last run, in order to give user a headstart from where they last
  * left. The idea is that the user doesn't need to fiddle around with settings every time.
  */
-object Settings:
+object Settings extends TinyLog:
 
   // 1. Define how to read/write a single Path
   implicit val pathRW: ReadWriter[Path] = readwriter[String].bimap[Path](
@@ -22,16 +32,8 @@ object Settings:
     str => Paths.get(str) // How to read:  String -> Path
   )
 
-  private val EmptyGroup: SearchTermGroup = SearchTermGroup("empty", Seq())
 
-  val JavaLoggingGroup: SearchTermGroup = SearchTermGroup("default", Seq(
-    SearchTerm("FINEST", Color.GREY, active = true)
-    , SearchTerm("INFO", Color.GREEN, active = true)
-    , SearchTerm("WARNING", Color.ORANGE, active = true)
-    , SearchTerm("SEVERE", Color.RED, active = true)
-  ))
-
-  val DefaultSearchTermGroups: Seq[SearchTermGroup] = Seq(EmptyGroup, JavaLoggingGroup)
+  val DefaultSearchTermGroups: Seq[SearchTermGroup] = conf.DefaultSearchTermGroups().searchTermGroups
 
   def calcDefaultScreenPosition(): Rectangle2D =
 

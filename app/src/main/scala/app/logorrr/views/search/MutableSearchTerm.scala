@@ -1,14 +1,14 @@
 package app.logorrr.views.search
 
 import app.logorrr.clv.color.ColorMatcher
-import app.logorrr.conf.{SearchTerm, Settings}
+import app.logorrr.conf.{LogFileSettings, SearchTerm, Settings}
 import app.logorrr.views.search.predicates.{ContainsPredicate, LabelledFunction}
 import javafx.beans.property.{BooleanProperty, SimpleBooleanProperty, SimpleObjectProperty}
 import javafx.scene.paint.Color
 
 object MutableSearchTerm:
 
-  val DefaultSearchTerms: Seq[MutableSearchTerm] = Settings.JavaLoggingGroup.terms.map(MutableSearchTerm.apply)
+  val DefaultSearchTerms: Seq[MutableSearchTerm] = LogFileSettings.EmptySearchTermGroup.terms.map(MutableSearchTerm.apply)
 
   def apply(searchTerm: SearchTerm): MutableSearchTerm =
     apply(searchTerm.value, searchTerm.color, searchTerm.active)
