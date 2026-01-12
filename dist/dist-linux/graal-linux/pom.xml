@@ -82,7 +82,7 @@
                     <outputDirectory>${native.output.dir}</outputDirectory>
                     <mainClass>${main.class}</mainClass>
                     <buildArgs>
-                        <buildArg>-march=native</buildArg>
+                        <buildArg>-march=compatibility</buildArg>
                         <buildArg>-H:ConfigurationFileDirectories=${basedir}/src/main/resources/</buildArg>
                         <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
                         <buildArg>-H:+CompactingOldGen</buildArg>

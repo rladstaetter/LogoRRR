@@ -7,7 +7,7 @@ import scala.util.{Failure, Success}
 
 object AppInfo:
 
-  val meta = TxtCp("meta.json").asString() match
+  val meta = TxtCp("/meta.json").asString() match
     case Success(value) => read[AppInfo](value)
     case Failure(exception) => AppInfo("LogoRRR", "LATEST")
 
