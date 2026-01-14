@@ -14,12 +14,11 @@ import scala.collection.mutable.ListBuffer
  * @param searchTerms  filter containing color and search string
  */
 case class SearchTermCalculator(logEntry: LogEntry
-                                , searchTerms: Seq[? <: MutableSearchTerm]):
+                                , searchTerms: Seq[MutableSearchTerm]):
 
   private val logLine = logEntry.value
 
-  lazy val filteredParts: Seq[Seq[LinePart]] = for f <- searchTerms yield
-    calcParts(f.getPredicate.description, f.getColor)
+  lazy val filteredParts: Seq[Seq[LinePart]] = for f <- searchTerms yield calcParts(f.getSearchTermAsString, f.getColor)
 
   /**
    * For a given [[logLine]], compute the labels and associated colors which make up a displayed log line in the

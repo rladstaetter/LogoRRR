@@ -5,7 +5,7 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.search.stg.{OpenStgEditorButton, StgChoiceBox}
-import app.logorrr.views.search.{MutableSearchTerm, MutableSearchTermUnclassified}
+import app.logorrr.views.search.{MutableSearchTerm, UnclassifiedSearchTerm}
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ListChangeListener}
@@ -59,10 +59,10 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
         updateUnclassified()
 
   private def updateOccurrences(mutableSearchTerm: MutableSearchTerm): Unit =
-    occurrences = occurrences + (mutableSearchTerm -> filteredList.getSource.asScala.count(e => mutableSearchTerm.matches(e.value)))
+    occurrences = occurrences + (mutableSearchTerm -> filteredList.getSource.asScala.count(e => mutableSearchTerm.test(e.value)))
 
   private def updateUnclassified(): Unit =
-    val unclassified = MutableSearchTermUnclassified(mutLogFileSettings.filterButtons.keySet)
+    val unclassified = UnclassifiedSearchTerm(mutLogFileSettings.filterButtons.keySet)
     val searchTermButton: SearchTermButton = updateOccurrencesAndFilter(unclassified)
     mutLogFileSettings.someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
     getItems.add(2, searchTermButton)
@@ -102,7 +102,8 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
           if st.isUnclassified then {
             None
           } else {
-            Option(new SearchTerm(st.searchTerm.getPredicate.description, st.searchTerm.getColor, st.searchTerm.isActive))
+            val searchTerm = st.searchTerm
+            Option(new SearchTerm(searchTerm.getSearchTermAsString, searchTerm.getColor, searchTerm.isActive))
           }
         case _ => None
       }

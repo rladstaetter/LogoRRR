@@ -36,7 +36,7 @@ class SearchTermCalculatorSpec extends LogoRRRSpec:
     "return empty List for empty LogEntry string" in :
       check(Prop.forAll(SearchTermCalculatorSpec.mutSearchTermGen) {
         filter =>
-          val filteredParts = applySingleFilter("", filter.getPredicate.description)
+          val filteredParts = applySingleFilter("", filter.getSearchTermAsString)
           filteredParts.length == 1 && filteredParts.head.isEmpty
       })
 

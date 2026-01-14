@@ -12,7 +12,7 @@ import javafx.scene.paint.Color
 object RemoveSearchTermButton extends UiNodeSearchTermAware:
   val ZeroPadding = "-fx-padding: 0;"
 
-  override def uiNode(fileId: FileId, searchTerm: MutableSearchTerm): UiNode = UiNode(classOf[RemoveSearchTermButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + searchTerm.getPredicate.description))
+  override def uiNode(fileId: FileId, searchTerm: MutableSearchTerm): UiNode = UiNode(classOf[RemoveSearchTermButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + searchTerm.getSearchTermAsString))
 
 class RemoveSearchTermButton extends Button:
 

@@ -3,7 +3,7 @@ package app.logorrr.usecases.search
 import app.logorrr.TestFiles
 import app.logorrr.conf.TestSettings
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.search.{MutableSearchTerm, MutableSearchTermUnclassified}
+import app.logorrr.views.search.{MutableSearchTerm, UnclassifiedSearchTerm}
 import app.logorrr.views.search.st.{RemoveSearchTermButton, SearchTermButton}
 import app.logorrr.views.text.LogTextView
 import org.junit.jupiter.api.Test
@@ -61,7 +61,7 @@ class SearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2):
     checkNumberOfShownElements(lineCount)
 
     // deselect unclassified search term
-    clickFilters(Seq(MutableSearchTermUnclassified(terms.toSet)))
+    clickFilters(Seq(UnclassifiedSearchTerm(terms.toSet)))
     checkNumberOfShownElements(lineCount - 1)
 
     terms.foreach:

@@ -1,6 +1,5 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.clv.color.ColorMatcher
 import app.logorrr.conf.{BlockSettings, FileId, LogFileSettings, SearchTerm, TimestampSettings}
 import app.logorrr.model.LogEntry
 import app.logorrr.util.LogoRRRFonts
@@ -9,13 +8,14 @@ import app.logorrr.views.search.st.SearchTermButton
 import app.logorrr.conf.SearchTermGroup
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.{BooleanBinding, ObjectBinding, StringBinding}
-import javafx.beans.property._
+import javafx.beans.property.*
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ObservableList}
 
 import java.time.Instant
 import java.time.format.DateTimeFormatter
-import scala.jdk.CollectionConverters._
+import java.util.function.Predicate
+import scala.jdk.CollectionConverters.*
 import scala.util.Try
 
 object MutLogFileSettings:
@@ -45,7 +45,7 @@ object MutLogFileSettings:
 class MutLogFileSettings:
 
   var someUnclassifiedFilter: Option[(MutableSearchTerm, SearchTermButton)] = None
-  var filterButtons: Map[ColorMatcher, SearchTermButton] = Map[ColorMatcher, SearchTermButton]()
+  var filterButtons: Map[Predicate[String], SearchTermButton] = Map[Predicate[String], SearchTermButton]()
 
   private val fileIdProperty = new SimpleObjectProperty[FileId]()
   private val firstOpenedProperty = new SimpleLongProperty()
@@ -206,7 +206,7 @@ class MutLogFileSettings:
     lfs
 
   def getSearchTerms: Seq[SearchTerm] =
-    getFilters.asScala.toSeq.map(f => SearchTerm(f.getPredicate.description, f.getColor, f.isActive))
+    getFilters.asScala.toSeq.map(f => SearchTerm(f.getSearchTermAsString, f.getColor, f.isActive))
 
   def setSomeSelectedSearchTermGroup(someSelectedSearchTermGroupId: Option[String]): Unit =
     someSelectedSearchTermGroupProperty.set(someSelectedSearchTermGroupId)

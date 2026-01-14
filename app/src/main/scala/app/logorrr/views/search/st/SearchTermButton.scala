@@ -4,7 +4,7 @@ import app.logorrr.clv.color.ColorUtil
 import app.logorrr.conf.FileId
 import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
-import app.logorrr.views.search.{MutableSearchTerm, MutableSearchTermUnclassified}
+import app.logorrr.views.search.{MutableSearchTerm, UnclassifiedSearchTerm}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.scene.control.ToggleButton
 import javafx.scene.paint.Color
@@ -13,7 +13,7 @@ import net.ladstatt.util.log.TinyLog
 
 object SearchTermButton extends UiNodeSearchTermAware:
 
-  override def uiNode(fileId: FileId, searchTerm: MutableSearchTerm): UiNode = UiNode(classOf[SearchTermButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + searchTerm.getPredicate.description))
+  override def uiNode(fileId: FileId, searchTerm: MutableSearchTerm): UiNode = UiNode(classOf[SearchTermButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + searchTerm.getSearchTermAsString))
 
 
 
@@ -26,7 +26,7 @@ class SearchTermButton(val fileId: FileId
                        , updateActiveSearchTerm: => Unit
                        , removeSearchTerm: MutableSearchTerm => Unit) extends ToggleButton with TinyLog:
 
-  val isUnclassified: Boolean = searchTerm.isInstanceOf[MutableSearchTermUnclassified]
+  val isUnclassified: Boolean = searchTerm.isInstanceOf[UnclassifiedSearchTerm]
 
   selectedProperty().addListener(new InvalidationListener {
     override def invalidated(observable: Observable): Unit = updateActiveSearchTerm
