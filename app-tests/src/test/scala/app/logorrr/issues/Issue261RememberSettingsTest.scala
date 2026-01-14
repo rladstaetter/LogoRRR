@@ -24,7 +24,7 @@ class Issue261RememberSettingsTest extends SingleFileApplicationTest(TestFiles.t
   override protected lazy val settings: Settings = Settings(
     StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map(TestFiles.timedLog.value ->
-      LogFileSettings.mk(TestFiles.timedLog)
+      LogFileSettings.mk(TestFiles.timedLog, DefaultSearchTermGroups())
         .copy(blockSettings = BlockSettings(50)
           , someTimestampSettings = Option(TimestampSettings(SimpleRange(0, 23), "yyyy-MM-dd HH:mm:ss,SSS"))))
     , None

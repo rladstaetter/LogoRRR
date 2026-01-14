@@ -1,7 +1,7 @@
 package app.logorrr.issues
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.{BlockSettings, LogFileSettings, SearchTerm, Settings, StageSettings}
+import app.logorrr.conf.{BlockSettings, DefaultSearchTermGroups, LogFileSettings, SearchTerm, Settings, StageSettings}
 import app.logorrr.steps.TestFxListViewActions
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.util.JfxUtils
@@ -27,7 +27,7 @@ abstract class Issue292ColorCalculationSetup(desiredColor: Color, val searchTerm
   override lazy val settings: Settings = Settings(
     StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map(TestFiles.simpleLog5.value ->
-      LogFileSettings.mk(TestFiles.simpleLog5)
+      LogFileSettings.mk(TestFiles.simpleLog5, DefaultSearchTermGroups())
         .copy(
           searchTerms = searchTerms
           , blockSettings = BlockSettings(50)

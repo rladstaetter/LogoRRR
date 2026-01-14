@@ -9,7 +9,7 @@ import scala.util.{Failure, Success}
 object DefaultSearchTermGroups extends TinyLog:
 
   var cpResource = TxtCp("/app/logorrr/conf/default-search-term-groups.json")
-  
+
   def apply(): DefaultSearchTermGroups = apply(cpResource)
 
   def apply(txtCp: TxtCp): DefaultSearchTermGroups =
@@ -23,6 +23,10 @@ object DefaultSearchTermGroups extends TinyLog:
   def apply(asString: String): DefaultSearchTermGroups =
     read[DefaultSearchTermGroups](asString)
 
+  def apply(stgs: Map[String, Seq[SearchTerm]]): DefaultSearchTermGroups = {
+    new DefaultSearchTermGroups(for ((k, seq) <- stgs.toSeq) yield SearchTermGroup(k, seq))
+  }
+
 /**
  * Container for default settings which are provided as classpath resource
  *
@@ -31,3 +35,4 @@ object DefaultSearchTermGroups extends TinyLog:
 case class DefaultSearchTermGroups(searchTermGroups: Seq[SearchTermGroup]) derives ReadWriter:
   val empty: SearchTermGroup = searchTermGroups.head
   val jul: SearchTermGroup = searchTermGroups.tail.head
+  val asMap: Map[String, Seq[SearchTerm]] = searchTermGroups.map(stg => stg.name -> stg.terms).toMap

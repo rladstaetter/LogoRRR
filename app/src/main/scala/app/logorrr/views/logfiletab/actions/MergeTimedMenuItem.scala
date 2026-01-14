@@ -1,6 +1,6 @@
 package app.logorrr.views.logfiletab.actions
 
-import app.logorrr.conf.FileId
+import app.logorrr.conf.{DefaultSearchTermGroups, FileId, LogoRRRGlobals}
 import app.logorrr.model.LogEntry
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.logfiletab.LogFileTab
@@ -22,7 +22,7 @@ class CombineFileMenuItem(thisFileId: FileId
 
   setOnAction(_ => {
     for thisTab <- mainTabPane.getByFileId(thisFileId)
-         otherTab <- mainTabPane.getByFileId(otherFileId) yield {
+        otherTab <- mainTabPane.getByFileId(otherFileId) yield {
       val list = new util.ArrayList[LogEntry]()
       list.addAll(thisTab.entries)
       list.addAll(otherTab.entries)
@@ -39,10 +39,9 @@ class CombineFileMenuItem(thisFileId: FileId
       val fileName = thisFileId.fileName + "_" + otherFileId.fileName
       val mergedPath = thisFileId.asPath.getParent.resolve(fileName)
       Files.write(mergedPath, lines)
-      mainTabPane.addFile(FileId(mergedPath))
+      mainTabPane.addFile(FileId(mergedPath), DefaultSearchTermGroups(LogoRRRGlobals.getSettings.searchTermGroups))
     }
   })
-
 
 
 class MergeTimedMenuItem(thisFileId: FileId, tabPane: MainTabPane) extends Menu("Merge file with ...") {

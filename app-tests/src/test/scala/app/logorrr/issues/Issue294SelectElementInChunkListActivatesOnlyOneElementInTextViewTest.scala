@@ -1,7 +1,7 @@
 package app.logorrr.issues
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.{BlockSettings, LogFileSettings, Settings, StageSettings}
+import app.logorrr.conf.{BlockSettings, DefaultSearchTermGroups, LogFileSettings, Settings, StageSettings}
 import app.logorrr.steps.{LogTextViewActions, TestFxListViewActions}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.util.JfxUtils
@@ -23,7 +23,7 @@ class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
   override lazy val settings: Settings = Settings(
     StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map(TestFiles.simpleLog1.value ->
-      LogFileSettings.mk(TestFiles.simpleLog1)
+      LogFileSettings.mk(TestFiles.simpleLog1, DefaultSearchTermGroups())
         .copy(
           blockSettings = BlockSettings(50)
           , dividerPosition = 0.599))

@@ -1,6 +1,6 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.conf.FileId
+import app.logorrr.conf.{DefaultSearchTermGroups, FileId}
 import app.logorrr.services.file.FileIdService
 import javafx.scene.control.{Menu, MenuItem}
 import net.ladstatt.util.log.TinyLog

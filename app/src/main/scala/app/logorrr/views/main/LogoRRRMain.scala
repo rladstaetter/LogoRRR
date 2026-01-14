@@ -1,6 +1,6 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{FileId, LogFileSettings, LogoRRRGlobals}
+import app.logorrr.conf.{DefaultSearchTermGroups, FileId, LogFileSettings, LogoRRRGlobals}
 import app.logorrr.io.IoManager
 import app.logorrr.services.file.FileIdService
 import app.logorrr.util.JfxUtils
@@ -96,11 +96,11 @@ class LogoRRRMain(stage: Stage
   /** called when 'Open File' from the main menu bar is selected. */
   def openFile(fileId: FileId): Unit =
     if IoManager.isZip(fileId.asPath) then
-      mainTabPane.openZipFile(fileId.asPath)
+      mainTabPane.openZipFile(fileId.asPath, DefaultSearchTermGroups(LogoRRRGlobals.getSettings.searchTermGroups))
     else if contains(fileId) then
       mainTabPane.selectFile(fileId).recalculateChunkListViewAndScrollToActiveElement()
     else
-      mainTabPane.addFile(fileId)
+      mainTabPane.addFile(fileId, DefaultSearchTermGroups(LogoRRRGlobals.getSettings.searchTermGroups))
 
   /** removes all log files */
   def closeAllLogFiles(): Unit =
