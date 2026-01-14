@@ -6,7 +6,7 @@ import javafx.beans.binding.StringBinding
 import javafx.beans.property.IntegerProperty
 import javafx.geometry.Pos
 import javafx.scene.control.Label
-import javafx.scene.layout._
+import javafx.scene.layout.*
 import javafx.scene.paint.Color
 
 /**
@@ -14,13 +14,15 @@ import javafx.scene.paint.Color
  *
  * A line consist of a line number to the left and the line contents to the right.
  */
-case class LogTextViewLabel(e: LogEntry
-                            , maxLength: Int
-                            , filters: Seq[? <: MutableSearchTerm]
-                            , fontStyleBinding: StringBinding
-                            , fontSizeProperty: IntegerProperty
-                           ) extends HBox:
+class LogTextViewLabel(e: LogEntry
+                       , maxLength: Int
+                       , filters: Seq[? <: MutableSearchTerm]
+                       , fontStyleBinding: StringBinding
+                       , fontSizeProperty: IntegerProperty
+                      ) extends HBox:
 
+
+  
   setHeight(fontSizeProperty.get())
   setAlignment(Pos.CENTER_LEFT)
 
@@ -48,7 +50,7 @@ case class LogTextViewLabel(e: LogEntry
     duration => getChildren.add(LineTimerLabel(duration))
   )
   */
-  getChildren.addAll(labels*)
+  getChildren.addAll(labels *)
 
-
+  def getLogEntry: LogEntry = e
 

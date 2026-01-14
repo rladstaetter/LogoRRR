@@ -11,7 +11,7 @@ object CreateStgButton extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CreateStgButton])
 
-case class CreateStgButton(fileId: FileId) extends Button("") {
+class CreateStgButton(fileId: FileId) extends Button("") {
   setId(CreateStgButton.uiNode(fileId).value)
   setGraphic(new FontIcon(FontAwesomeRegular.PLUS_SQUARE))
 }

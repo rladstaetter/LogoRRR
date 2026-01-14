@@ -241,7 +241,7 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
              , entries: java.util.List[A]
              , blockSize: Int
             ): Unit =
-    if shape.width > blockSize then
+    if shape.getWidth > blockSize then
       // do this once for all paint operations
       elementColorPicker.init()
       if blockSize > 1 then
@@ -265,7 +265,7 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
         // we bailout with an exception.
         Try(entries.get(o)).toOption match
           case Some(e) =>
-            ChunkListCell.paintBlock(pb, i, elementColorPicker.calc(e), blockSize, shape.width, logEntryVizor.isSelected(e), logEntryVizor.isFirstVisible(e), logEntryVizor.isLastVisible(e), logEntryVizor.isVisibleInTextView(e))
+            ChunkListCell.paintBlock(pb, i, elementColorPicker.calc(e), blockSize, shape.getWidth, logEntryVizor.isSelected(e), logEntryVizor.isFirstVisible(e), logEntryVizor.isLastVisible(e), logEntryVizor.isVisibleInTextView(e))
             i = i + 1
           case None => // logWarn("Concurrent change of entries detected")
     shape

@@ -1,21 +1,14 @@
 package app.logorrr.conf
 
 import app.logorrr.conf
-import app.logorrr.cp.TxtCp
 import app.logorrr.io.IoManager
+import app.logorrr.util.JfxUtils
 import javafx.geometry.Rectangle2D
-import javafx.scene.paint.Color
 import javafx.stage.Screen
 import net.ladstatt.util.log.TinyLog
 import upickle.default.*
 
 import java.nio.file.{Path, Paths}
-import scala.util.{Failure, Success}
-
-
-
-
-
 
 
 /**
@@ -32,29 +25,11 @@ object Settings extends TinyLog:
     str => Paths.get(str) // How to read:  String -> Path
   )
 
-
   val DefaultSearchTermGroups: Seq[SearchTermGroup] = conf.DefaultSearchTermGroups().searchTermGroups
 
-  def calcDefaultScreenPosition(): Rectangle2D =
-
-    val ps: Rectangle2D = Screen.getPrimary.getVisualBounds
-
-    val originalX = ps.getMinX
-    val originalY = ps.getMinY
-    val originalWidth = ps.getWidth
-    val originalHeight = ps.getHeight
-
-    // Calculate the dimensions of the new rectangle (80% of original)
-    val newWidth = originalWidth * 0.8
-    val newHeight = originalHeight * 0.8
-
-    // Calculate the new coordinates
-    val newX = originalX + (originalWidth - newWidth) / 2
-    val newY = originalY + (originalHeight - newHeight) / 2
-    new Rectangle2D(newX, newY, newWidth, newHeight)
 
   lazy val Default: Settings = Settings(
-    StageSettings(calcDefaultScreenPosition())
+    StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map()
     , None
     , None

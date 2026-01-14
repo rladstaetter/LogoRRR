@@ -11,7 +11,7 @@ import javafx.scene.control.{Label, ListCell, ToolBar}
 class SettingsStgListViewCell extends ListCell[SearchTermGroup]:
   setId(SettingsEditor.SettingsStgListView.value)
 
-  val deleteButton = DeleteStgButton(SettingsEditor.SettingsStgListViewDelete)
+  val deleteButton = new DeleteStgButton(SettingsEditor.SettingsStgListViewDelete)
 
   override def updateItem(item: SearchTermGroup, empty: Boolean): Unit =
     super.updateItem(item, empty)

@@ -1,5 +1,7 @@
 package app.logorrr
 
+import app.logorrr.conf.TimestampSettings
+
 import java.nio.file.{Files, Path, Paths, StandardOpenOption}
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -8,7 +10,7 @@ import java.util.Scanner
 
 case class SimpleWriter(path: Path) extends Runnable:
   var running = true
-  val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss A")
+  val dtf: DateTimeFormatter = TimestampSettings.DefaultFormatter
 
   def stop(): Unit = running = false
 

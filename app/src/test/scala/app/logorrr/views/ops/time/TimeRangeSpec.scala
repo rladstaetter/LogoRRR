@@ -5,7 +5,6 @@ import org.scalatest.wordspec.AnyWordSpec
 
 import java.time.{Duration, Instant}
 
-// Unit test for the TimeRange case class
 class TimeRangeSpec extends AnyWordSpec with Matchers {
 
   "TimeRange" should:

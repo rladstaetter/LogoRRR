@@ -1,10 +1,10 @@
 package app.logorrr.issues
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.Settings.calcDefaultScreenPosition
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.conf._
+import app.logorrr.conf.*
 import app.logorrr.usecases.SingleFileApplicationTest
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.ops.time.{SliderVBox, TimerSlider}
 import javafx.geometry.Pos
 import javafx.scene.input.MouseButton
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test
 class Issue261RememberSettingsTest extends SingleFileApplicationTest(TestFiles.timedLog):
 
   override protected lazy val settings: Settings = Settings(
-    StageSettings(calcDefaultScreenPosition())
+    StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map(TestFiles.timedLog.value ->
       LogFileSettings.mk(TestFiles.timedLog)
         .copy(blockSettings = BlockSettings(50)

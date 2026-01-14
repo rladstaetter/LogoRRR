@@ -73,7 +73,6 @@ object LogoRRRGlobals extends TinyLog :
 
     setHostServices(hostServices)
 
-  /** a case class representing current setting state */
   def getSettings: Settings = mutSettings.mkImmutable()
 
   def setSomeActiveLogFile(sActive: Option[FileId]): Unit = mutSettings.setSomeActive(sActive)

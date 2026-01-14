@@ -11,6 +11,11 @@ trait ChoiceBoxActions:
 
   def matchItems[T](uiNode: UiNode, expectedItems: Seq[T]): Unit =
     waitForPredicate[ChoiceBox[T]](uiNode, classOf[ChoiceBox[T]], cb => {
-      cb.getItems.asScala.toSeq == expectedItems
+      val origSeq = cb.getItems.asScala.toSeq
+      val ret = origSeq == expectedItems
+      if (!ret) {
+        System.err.println(origSeq.mkString(",") + " didn't match " + expectedItems.mkString(","))
+      }
+      ret
     })
 

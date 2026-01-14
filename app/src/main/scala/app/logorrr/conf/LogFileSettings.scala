@@ -17,8 +17,8 @@ object LogFileSettings:
   private val DefaultLastViewIndex = -1
   val DefaultLowerTimestamp: Int = 0
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
-  val EmptySearchTermGroup = DefaultSearchTermGroups().empty
-  val JuLSearchTermGroup = DefaultSearchTermGroups().searchTermGroups.tail.head
+  val EmptySearchTermGroup: SearchTermGroup = DefaultSearchTermGroups().empty
+  val JuLSearchTermGroup: SearchTermGroup = DefaultSearchTermGroups().jul
 
   def mk(fileId: FileId): LogFileSettings =
     val now = Instant.now().toEpochMilli
@@ -74,7 +74,7 @@ case class LogFileSettings(fileId: FileId
                            , lastVisibleTextCellIndex: Int
                            , lowerTimestamp: Long
                            , upperTimestamp: Long
-                           , someSelectedSearchTermGroup: scala.Option[String]
+                           , someSelectedSearchTermGroup: Option[String]
                            , searchTermGroups: Map[String, Seq[SearchTerm]]) derives ReadWriter:
 
   lazy val path: Path = fileId.asPath.toAbsolutePath
