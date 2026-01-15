@@ -3,7 +3,7 @@
 --copyright "Copyright 2021-${currentYear} Robert Ladstätter"
 --description "explore logs effortlessly"
 --dest classes
---icon icons/logorrr-icon-256.png
+--icon icons/logorrr-icon-256.ico
 --input libs
 --java-options --enable-native-access=javafx.graphics,ALL-UNNAMED
 --java-options -Djava.library.path=$APPDIR/.

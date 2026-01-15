@@ -86,7 +86,7 @@
                             <outputDirectory>${project.build.directory}/icons</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
-                            <includes>**/logorrr-icon-256.png</includes>
+                            <includes>**/logorrr-icon-256.ico</includes>
                         </configuration>
                     </execution>
                     <execution>
