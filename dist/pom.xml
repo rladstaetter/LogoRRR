@@ -22,7 +22,7 @@
                 </os>
             </activation>
             <modules>
-                <module>dist-win</module>
+                <module>win</module>
             </modules>
         </profile>
         <profile>
