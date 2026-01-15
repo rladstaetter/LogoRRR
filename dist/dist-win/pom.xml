@@ -15,7 +15,7 @@
     <description>Distribution bundle for windows</description>
 
     <modules>
-        <module>installer-win-jre</module>
+        <module>installer</module>
     </modules>
 
 </project>
