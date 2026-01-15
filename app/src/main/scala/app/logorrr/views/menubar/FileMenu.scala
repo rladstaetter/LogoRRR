@@ -1,9 +1,9 @@
 package app.logorrr.views.menubar
 
-import app.logorrr.conf.FileId
+import app.logorrr.conf.{DefaultSearchTermGroups, FileId}
 import app.logorrr.services.file.FileIdService
 import javafx.scene.control.{Menu, MenuItem}
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 
 object FileMenu:
@@ -16,7 +16,7 @@ object FileMenu:
    */
   class OpenFileMenuItem(fileIdService: FileIdService
                          , openFile: FileId => Unit)
-    extends MenuItem("Open...") with CanLog:
+    extends MenuItem("Open...") with TinyLog:
     setId(app.logorrr.views.a11y.uinodes.FileMenu.OpenFile.value)
     setOnAction(_ => {
       fileIdService.provideFileId match {

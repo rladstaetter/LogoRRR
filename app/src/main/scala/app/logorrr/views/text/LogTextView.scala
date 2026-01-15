@@ -8,7 +8,7 @@ import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.text.contextactions.{CopyEntriesMenuItem, IgnoreAboveMenuItem, IgnoreBelowMenuItem}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control._
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 import scala.jdk.CollectionConverters._
 
@@ -21,7 +21,7 @@ object LogTextView extends UiNodeFileIdAware:
 class LogTextView(mutLogFileSettings: MutLogFileSettings
                   , filteredList: FilteredList[LogEntry])
   extends ListView[LogEntry]
-    with CanLog:
+    with TinyLog:
 
   setId(LogTextView.uiNode(mutLogFileSettings.getFileId).value)
   getSelectionModel.setSelectionMode(SelectionMode.MULTIPLE)

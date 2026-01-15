@@ -1,54 +1,41 @@
 package app.logorrr.views.search
 
-import app.logorrr.clv.color.ColorMatcher
-import app.logorrr.conf.{SearchTerm, Settings}
-import app.logorrr.views.search.predicates.{ContainsPredicate, LabelledFunction}
-import javafx.beans.property.{BooleanProperty, SimpleBooleanProperty, SimpleObjectProperty}
+import app.logorrr.conf.SearchTerm
+import javafx.beans.property.{BooleanProperty, SimpleBooleanProperty, SimpleObjectProperty, SimpleStringProperty}
 import javafx.scene.paint.Color
 
-object MutableSearchTerm:
+import java.util.function.Predicate
 
-  val DefaultSearchTerms: Seq[MutableSearchTerm] = Settings.JavaLoggingGroup.terms.map(MutableSearchTerm.apply)
+object MutableSearchTerm:
 
   def apply(searchTerm: SearchTerm): MutableSearchTerm =
     apply(searchTerm.value, searchTerm.color, searchTerm.active)
 
-  private def apply(pattern: String
-                    , color: Color
-                    , active: Boolean): MutableSearchTerm =
-    apply(ContainsPredicate(pattern), color, active)
-
-  private def apply(predicate: LabelledFunction
-                    , color: Color
-                    , active: Boolean): MutableSearchTerm =
+  def apply(searchTermAsString: String
+            , color: Color
+            , active: Boolean): MutableSearchTerm =
     val filter = new MutableSearchTerm()
-    filter.init(predicate, color, active)
+    filter.setSearchTermAsString(searchTermAsString)
+    filter.setColor(color)
+    filter.setActive(active)
     filter
 
 
+class MutableSearchTerm extends Predicate[String]:
 
-class MutableSearchTerm extends ColorMatcher:
-
-  val predicateProperty: SimpleObjectProperty[LabelledFunction] = new SimpleObjectProperty[LabelledFunction]()
+  val searchTermAsStringProperty: SimpleStringProperty = new SimpleStringProperty()
   val colorProperty: SimpleObjectProperty[Color] = new SimpleObjectProperty[Color]()
   val activeProperty: SimpleBooleanProperty = new SimpleBooleanProperty()
 
-  def init(predicate: LabelledFunction
-           , color: Color
-           , active: Boolean): Unit =
-    setPredicate(predicate)
-    setColor(color)
-    setActive(active)
-
-  def matches(searchTerm: String): Boolean = Option(predicateProperty.get()).exists(p => p.apply(searchTerm))
+  override def test(logLine: String): Boolean = Option(searchTermAsStringProperty.get()).exists(p => logLine.contains(p))
 
   def unbind(): Unit = activeProperty.unbind()
 
   def bind(activeProperty: BooleanProperty): Unit = this.activeProperty.bind(activeProperty)
 
-  def getPredicate: LabelledFunction = predicateProperty.get()
+  def getSearchTermAsString: String = searchTermAsStringProperty.get()
 
-  def setPredicate(predicate: LabelledFunction): Unit = predicateProperty.set(predicate)
+  def setSearchTermAsString(searchTerm: String): Unit = searchTermAsStringProperty.set(searchTerm)
 
   def getColor: Color = colorProperty.get()
 
@@ -57,12 +44,4 @@ class MutableSearchTerm extends ColorMatcher:
   def setActive(active: Boolean): Unit = activeProperty.set(active)
 
   def isActive: Boolean = activeProperty.get()
-
-
-
-
-
-
-
-
 

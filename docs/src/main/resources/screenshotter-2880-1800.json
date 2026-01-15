@@ -1,18 +1,18 @@
 {
-    "file-settings" : {
+    "fileSettings" : {
         "/Users/lad/gh/LogoRRR/docs/src/main/resources/example.log" : {
-            "auto-scroll" : false,
-            "block-settings" : {
-                "size" : 22
+            "autoScroll" : false,
+            "blockSettings" : {
+                "size" : 18
             },
-            "divider-position" : 0.5,
-            "file-id" : "/Users/lad/gh/LogoRRR/docs/src/main/resources/example.log",
-            "first-opened" : 1755636563633,
-            "first-visible-text-cell-index" : 0,
-            "font-size" : 12,
-            "last-visible-text-cell-index" : 0,
-            "lower-timestamp" : 0,
-            "search-term-groups" : {
+            "dividerPosition" : 0.30346385542168675,
+            "fileId" : "/Users/lad/gh/LogoRRR/docs/src/main/resources/example.log",
+            "firstOpened" : 1755636563633,
+            "firstVisibleTextCellIndex" : 0,
+            "fontSize" : 12,
+            "lastVisibleTextCellIndex" : 0,
+            "lowerTimestamp" : 0,
+            "searchTermGroups" : {
                 "default" : [
                     {
                         "active" : true,
@@ -37,7 +37,7 @@
                 ],
                 "empty" : []
             },
-            "search-terms" : [
+            "searchTerms" : [
                 {
                     "active" : true,
                     "color" : "0x00ff00ff",
@@ -57,19 +57,14 @@
                     "active" : true,
                     "color" : "0xff0000ff",
                     "value" : "Exception"
-                },
-                {
-                    "active" : true,
-                    "color" : "0xff6666ff",
-                    "value" : "at "
                 }
             ],
-            "selected-line-number" : 0,
-            "some-selected-search-term-group" : "default",
-            "upper-timestamp" : 1730045438927
+            "selectedLineNumber" : 0,
+            "someSelectedSearchTermGroup" : "default",
+            "upperTimestamp" : 1730045438927
         }
     },
-    "search-term-groups" : {
+    "searchTermGroups" : {
         "default" : [
             {
                 "active" : true,
@@ -94,10 +89,10 @@
         ],
         "empty" : []
     },
-    "some-active" : "/Users/lad/gh/LogoRRR/docs/src/main/resources/example.log",
-    "stage-settings" : {
-        "height" : 900,
-        "width" : 1440,
+    "someActive" : "/Users/lad/gh/LogoRRR/docs/src/main/resources/example.log",
+    "stageSettings" : {
+        "height" : 1800,
+        "width" : 2880,
         "x" : 100.0,
         "y" : 100.0
     }

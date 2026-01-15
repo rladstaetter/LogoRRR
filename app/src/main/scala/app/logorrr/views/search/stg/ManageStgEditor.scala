@@ -4,7 +4,7 @@ import app.logorrr.conf.FileId
 import javafx.scene.layout.{Priority, VBox}
 
 
-case class ManageStgEditor(fileId: FileId) extends VBox(10):
+class ManageStgEditor(fileId: FileId) extends VBox(10):
   VBox.setVgrow(this, Priority.ALWAYS)
 
   val groupsListView = new StgListView(fileId)

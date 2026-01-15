@@ -8,10 +8,10 @@ import javafx.beans.value.ChangeListener
 import javafx.scene.Scene
 import javafx.scene.image.Image
 import javafx.stage.{Stage, WindowEvent}
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 
-object LogoRRRStage extends CanLog:
+object LogoRRRStage extends TinyLog:
 
   val icon: Image = new Image(getClass.getResourceAsStream("/logorrr-icon-32.png"))
 

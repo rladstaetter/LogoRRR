@@ -1,17 +1,29 @@
 package app.logorrr.io
 
 import app.logorrr.conf.{Settings, SettingsMigrator}
+import net.ladstatt.util.log.TinyLog
 import upickle.default.{read, write}
 
 import java.nio.file.{Files, Path}
+import java.util.logging.Level
 import scala.util.{Failure, Success, Try}
 
 /**
- * supersimple file io for settings
+ * FileIO for settings
  * */
-object SettingsFileIO:
+object SettingsFileIO extends TinyLog:
 
-  def fromFile(path: Path): Try[Settings] = Try:
+  def fromFile(source: Path): Settings =
+    SettingsFileIO.from(source).map(_.filterWithValidPaths()) match {
+      case Failure(_) =>
+        logWarn(s"Could not load settingsFile '${source.toAbsolutePath}', using default settings ...")
+        Settings.Default
+      case Success(value) =>
+        logConfig(s"Loaded settings from '${source.toAbsolutePath}'.")
+        value
+    }
+
+  def from(path: Path): Try[Settings] = Try:
     val js = Files.readString(path)
     Try(read[Settings](js)) match
       case Success(settings) => settings

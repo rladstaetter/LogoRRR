@@ -1,19 +1,19 @@
 package app.logorrr.views.menubar
 
+import app.logorrr.LogoRRRApp
 import app.logorrr.conf.FileId
 import app.logorrr.views.about.AboutMenuItem
 import app.logorrr.views.menubar.HelpMenu.LogMenuItem
 import javafx.scene.control.{Menu, MenuItem}
 import javafx.stage.Stage
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
-object HelpMenu extends CanLog:
+object HelpMenu:
 
   class LogMenuItem(openLogFile: FileId => Unit) extends MenuItem("Open LogoRRRs log"):
     setId(app.logorrr.views.a11y.uinodes.HelpMenu.OpenLogorrLog.value)
-    setOnAction(_ => openLogFile(FileId(logFilePath)))
-
+    setOnAction(_ => openLogFile(FileId(LogoRRRApp.paths.logFile)))
 
 
 class HelpMenu(stage: Stage, openFile: FileId => Unit) extends Menu("Help"):
@@ -26,5 +26,5 @@ class HelpMenu(stage: Stage, openFile: FileId => Unit) extends Menu("Help"):
       } else {
         Seq()
       })
-  getItems.addAll(items*)
+  getItems.addAll(items *)
 

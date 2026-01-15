@@ -24,7 +24,7 @@ object SearchTermVis:
     vis.searchTermProperty.set(searchTerm)
     vis.fileIdProperty.set(fileId)
     vis.hitsProperty.set(hits)
-    vis.textProperty.set(searchTerm.getPredicate.description)
+    vis.textProperty.set(searchTerm.getSearchTermAsString)
     vis
 
 

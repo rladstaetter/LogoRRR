@@ -37,7 +37,7 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
     } else {
       mutLogFileSettings.setSomeLogEntryInstantFormat(Option(leif))
     }
-    LogoRRRGlobals.persist()
+    LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
     // we have to deactivate this listener otherwise to many invalidationevents are triggered
     chunkListView.removeInvalidationListener()
     var someFirstEntryTimestamp: Option[Instant] = None

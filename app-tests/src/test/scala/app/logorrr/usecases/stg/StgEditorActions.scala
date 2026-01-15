@@ -1,9 +1,9 @@
 package app.logorrr.usecases.stg
 
-import app.logorrr.conf.{FileId, Settings}
+import app.logorrr.conf.{FileId, Settings, TestSettings}
 import app.logorrr.steps.ChoiceBoxActions
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.views.search.stg._
+import app.logorrr.views.search.stg.*
 import org.testfx.api.FxRobotInterface
 
 trait StgEditorActions extends ChoiceBoxActions {
@@ -11,22 +11,15 @@ trait StgEditorActions extends ChoiceBoxActions {
 
   def addGroup(newGroupName: String): Unit =
     openFile(fileId)
-
     openStgEditor(fileId)
-
     createGroup(fileId, newGroupName)
-
     closeStgEditor(fileId)
-
-    matchItems[String](StgChoiceBox.uiNode(fileId), (Settings.DefaultSearchTermGroups.map(_.name) ++ Seq[String](newGroupName)).sorted)
+    matchItems[String](StgChoiceBox.uiNode(fileId), (settings.searchTermGroups.keySet.toSeq ++ Seq[String](newGroupName)).sorted)
 
   def addExistingGroupToGlobalGroup(groupToAdd: String): Unit =
     openFile(fileId)
-
     openStgEditor(fileId)
-
     val listView = lookupStgListView(fileId)
-
     // find appropriate cell and click on 'like'
     for i <- 0 to listView.getItems.size yield {
       val cell = nthCell(listView, i)
@@ -34,9 +27,7 @@ trait StgEditorActions extends ChoiceBoxActions {
         case Some(item) if item.name == groupToAdd => Option(cell)
         case _ => None
     }.foreach(c => clickOn(c.globalStgButton))
-
     closeStgEditor(fileId)
-
 
 
   def lookupStgListView(fileId: FileId): StgListView = lookup[StgListView](StgListView.uiNode(fileId))
@@ -55,7 +46,6 @@ trait StgEditorActions extends ChoiceBoxActions {
   def openStgEditor(fileId: FileId): Unit =
     waitForVisibility(OpenStgEditorButton.uiNode(fileId))
     clickOn(OpenStgEditorButton.uiNode(fileId))
-
     waitForVisibility(StgNameTextField.uiNode(fileId))
     waitForVisibility(CreateStgButton.uiNode(fileId))
 

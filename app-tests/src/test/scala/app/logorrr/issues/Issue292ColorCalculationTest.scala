@@ -1,10 +1,10 @@
 package app.logorrr.issues
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.Settings.calcDefaultScreenPosition
-import app.logorrr.conf.{BlockSettings, LogFileSettings, SearchTerm, Settings, StageSettings}
+import app.logorrr.conf.{BlockSettings, DefaultSearchTermGroups, LogFileSettings, SearchTerm, Settings, StageSettings}
 import app.logorrr.steps.TestFxListViewActions
 import app.logorrr.usecases.SingleFileApplicationTest
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.search.st.SearchTermButton
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.scene.paint.Color
@@ -25,9 +25,9 @@ abstract class Issue292ColorCalculationSetup(desiredColor: Color, val searchTerm
 
   /** setup settings such that the issue is triggered and can be inspected visually */
   override lazy val settings: Settings = Settings(
-    StageSettings(calcDefaultScreenPosition())
+    StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map(TestFiles.simpleLog5.value ->
-      LogFileSettings.mk(TestFiles.simpleLog5)
+      LogFileSettings.mk(TestFiles.simpleLog5, DefaultSearchTermGroups())
         .copy(
           searchTerms = searchTerms
           , blockSettings = BlockSettings(50)

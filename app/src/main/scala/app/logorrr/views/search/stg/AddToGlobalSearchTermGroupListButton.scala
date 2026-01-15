@@ -10,7 +10,7 @@ import javafx.scene.control.{ToggleButton, Tooltip}
 object AddToGlobalSearchTermGroupListButton extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[AddToGlobalSearchTermGroupListButton])
 
-case class AddToGlobalSearchTermGroupListButton(fileId: FileId) extends ToggleButton {
+class AddToGlobalSearchTermGroupListButton(fileId: FileId) extends ToggleButton {
   setId(AddToGlobalSearchTermGroupListButton.uiNode(fileId).value)
   setTooltip(new Tooltip("share globally"))
 

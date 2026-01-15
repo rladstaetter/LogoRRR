@@ -9,7 +9,7 @@ import javafx.collections.ObservableList
 import javafx.geometry.Orientation
 import javafx.scene.control.skin.VirtualFlow
 import javafx.scene.control.{ListView, ScrollBar, Skin, SkinBase}
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 import java.lang
 import scala.jdk.CollectionConverters.CollectionHasAsScala
@@ -53,7 +53,7 @@ class ChunkListView[A](val elements: ObservableList[A]
                        , logEntryVizor: Vizor[A]
                        , elementColorPicker: ColorPicker[A]
                        , logEntrySelector: ElementSelector[A])
-  extends ListView[Chunk[A]] with CanLog:
+  extends ListView[Chunk[A]] with TinyLog:
 
   // width of Scrollbars
   val scrollBarWidthProperty = new SimpleIntegerProperty(ChunkListView.DefaultScrollBarWidth)

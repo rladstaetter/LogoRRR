@@ -16,6 +16,6 @@ class LogoRRRFileChooser(title: String):
     LogoRRRGlobals.getSomeLastUsedDirectory.foreach(d => fc.setInitialDirectory(d.toFile))
     val someFileId: Option[FileId] = Option(fc.showOpenDialog(window)).map(f => FileId(f.toPath))
     LogoRRRGlobals.setSomeLastUsedDirectory(someFileId.map(fileId => fileId.asPath.getParent))
-    LogoRRRGlobals.persist()
+    LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
     someFileId
 

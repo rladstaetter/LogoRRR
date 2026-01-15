@@ -3,7 +3,7 @@ package app.logorrr.views.text.contextactions
 import app.logorrr.model.LogEntry
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.MenuItem
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 /**
  * Cuts away all entries following the current log entry.
@@ -13,7 +13,7 @@ import net.ladstatt.util.log.CanLog
  * @param currentEntry current selected log entry
  * @param filteredList filtered log entry list
  */
-class IgnoreBelowMenuItem(currentEntry: LogEntry, filteredList: FilteredList[LogEntry]) extends MenuItem("Ignore entries below") with CanLog:
+class IgnoreBelowMenuItem(currentEntry: LogEntry, filteredList: FilteredList[LogEntry]) extends MenuItem("Ignore entries below") with TinyLog:
 
   setOnAction(_ => {
     val currPredicate = filteredList.getPredicate

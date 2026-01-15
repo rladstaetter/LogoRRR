@@ -21,7 +21,7 @@ object AboutDialogBorderPane:
     , HLink(AboutDialog.AboutDialogOpenDevelopmentBlog, "https://www.logorrr.app/posts/index.html", "Development blog")
     , HLink(AboutDialog.AboutDialogOpenIssuePage, "https://github.com/rladstaetter/LogoRRR/issues/", "Request a feature or report a bug"))
 
-  case class MonoLabel(text: String, size: Int) extends Label(text):
+  class MonoLabel(text: String, size: Int) extends Label(text):
     setStyle(LogoRRRFonts.jetBrainsMono(size))
 
   class HLinkView(links: Seq[HLink]) extends VBox:

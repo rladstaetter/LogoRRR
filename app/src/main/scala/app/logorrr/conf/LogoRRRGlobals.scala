@@ -1,14 +1,13 @@
 package app.logorrr.conf
 
+import app.logorrr.LogoRRRApp
 import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
 import app.logorrr.io.{OsxBridgeHelper, SettingsFileIO}
 import app.logorrr.services.hostservices.LogoRRRHostServices
-import app.logorrr.views.search.stg.SearchTermGroup
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import javafx.stage.Window
-import net.ladstatt.util.io.Fs
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
 import java.nio.file.Path
@@ -18,19 +17,15 @@ import java.nio.file.Path
  *
  * The user can change certain values via interacting or explicitly setting values in the preferences dialog.
  */
-object LogoRRRGlobals extends CanLog with Fs:
+object LogoRRRGlobals extends TinyLog :
 
   private val mutSettings = new MutSettings
-
 
   private val hostServicesProperty = new SimpleObjectProperty[LogoRRRHostServices]()
 
   def searchTermGroupNames: ObservableList[String] = mutSettings.searchTermGroupNames
 
-  def persist(): Unit = SettingsFileIO.toFile(LogoRRRGlobals.getSettings, settingsFilePath)
-
-  def persist(settings: Settings): Unit =
-    SettingsFileIO.toFile(settings, settingsFilePath)
+  def persist(settings: Settings): Unit = SettingsFileIO.toFile(settings, LogoRRRApp.paths.settingsFile)
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings
 
@@ -78,7 +73,6 @@ object LogoRRRGlobals extends CanLog with Fs:
 
     setHostServices(hostServices)
 
-  /** a case class representing current setting state */
   def getSettings: Settings = mutSettings.mkImmutable()
 
   def setSomeActiveLogFile(sActive: Option[FileId]): Unit = mutSettings.setSomeActive(sActive)
