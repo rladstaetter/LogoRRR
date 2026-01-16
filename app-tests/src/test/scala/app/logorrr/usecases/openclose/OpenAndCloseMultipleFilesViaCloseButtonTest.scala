@@ -18,8 +18,7 @@ class OpenAndCloseMultipleFilesViaCloseButtonTest
     with CheckTabPaneActions:
 
   @Test def openFilesAndCloseOneByOneViaTabCloseButton(): Unit =
-    TestFiles.seq.foreach:
-      p => openFile(p)
+    files.foreach(openFile)
 
     val tabCards = lookup(UiNodes.LogFileHeaderTabs).queryAll[StackPane]().asScala
 

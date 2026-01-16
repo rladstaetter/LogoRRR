@@ -14,15 +14,15 @@ class OpenMultipleFilesAndCloseToTheLeft
     with CheckTabPaneActions:
 
   @Test def openFilesAndActivateLastAndCloseAllToTheLeft(): Unit =
-    TestFiles.seq.foreach:
-      p => openFile(p)
+    files.foreach(openFile)
+
     checkForNonEmptyTabPane()
     val looksi = lookup(UiNodes.LogFileHeaderTabs)
     // activate first tab
-    val lastNodeQuery = looksi.nth(TestFiles.seq.size - 1)
+    val lastNodeQuery = looksi.nth(files.size - 1)
     clickOn(lastNodeQuery.query[StackPane]())
     clickOn(lastNodeQuery.query[StackPane](), MouseButton.SECONDARY)
-    waitAndClickVisibleItem(CloseLeftFilesMenuItem.uiNode(TestFiles.seq.last))
+    waitAndClickVisibleItem(CloseLeftFilesMenuItem.uiNode(files.last))
 
     expectCountOfOpenFiles(1)
 

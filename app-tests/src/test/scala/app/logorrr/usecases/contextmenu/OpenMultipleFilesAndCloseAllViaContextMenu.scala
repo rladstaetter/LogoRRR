@@ -16,9 +16,10 @@ class OpenMultipleFilesAndCloseAllViaContextMenu
     with CheckTabPaneActions:
 
   @Test def openFilesAndCloseAllViaContextMenuItem(): Unit =
-    TestFiles.seq.foreach:
-      fileId => openFile(fileId)
+    files.foreach(openFile)
+
     expectCountOfOpenFiles(TestFiles.seq.size)
+
     val selectedFile = Random.nextInt(TestFiles.seq.size)
 
     val looksi = lookup(UiNodes.LogFileHeaderTabs)

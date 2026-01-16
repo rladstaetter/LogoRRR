@@ -16,17 +16,17 @@ class OpenMultipleFilesAndCloseOthersViaContextMenu
     with CheckTabPaneActions:
 
   @Test def openFilesAndCloseAllViaContextMenuItem(): Unit =
-    TestFiles.seq.foreach:
-      p => openFile(p)
-    expectCountOfOpenFiles(TestFiles.seq.size)
-    val selectedFile = Random.nextInt(TestFiles.seq.size)
+    files.foreach(openFile)
+      
+    expectCountOfOpenFiles(files.size)
+    val selectedFile = Random.nextInt(files.size)
 
     val looksi = lookup(UiNodes.LogFileHeaderTabs)
     // activate random tab
     val lastNodeQuery = looksi.nth(selectedFile)
     clickOn(lastNodeQuery.query[StackPane]())
     clickOn(lastNodeQuery.query[StackPane](), MouseButton.SECONDARY)
-    waitAndClickVisibleItem(CloseOtherFilesMenuItem.uiNode(TestFiles.seq(selectedFile)))
+    waitAndClickVisibleItem(CloseOtherFilesMenuItem.uiNode(files(selectedFile)))
 
     expectCountOfOpenFiles(1)
 
