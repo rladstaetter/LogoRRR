@@ -5,7 +5,7 @@ import app.logorrr.conf.{BlockSettings, DefaultSearchTermGroups, LogFileSettings
 import app.logorrr.steps.TestFxListViewActions
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.search.st.SearchTermButton
+import app.logorrr.views.search.st.SearchTermToggleButton
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.scene.paint.Color
 import org.junit.jupiter.api.Test
@@ -85,7 +85,7 @@ class Issue292TripleColorWithDeactivationTest extends Issue292ColorCalculationSe
 
 
   private def clickAndCheckColor(searchTerm: MutableSearchTerm, desiredColor: Color): Unit =
-    waitAndClickVisibleItem(SearchTermButton.uiNode(fileId, searchTerm))
+    waitAndClickVisibleItem(SearchTermToggleButton.uiNode(fileId, searchTerm.getValue))
     val color = nthCell(lookupChunkListView(fileId), 0).view.getImage.getPixelReader.getColor(5, 5)
     assert(color == desiredColor, s"${color.toString} != ${desiredColor.toString}")
 }

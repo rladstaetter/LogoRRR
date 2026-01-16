@@ -18,7 +18,7 @@ case class SearchTermCalculator(logEntry: LogEntry
 
   private val logLine = logEntry.value
 
-  lazy val filteredParts: Seq[Seq[LinePart]] = for f <- searchTerms yield calcParts(f.getSearchTermAsString, f.getColor)
+  lazy val filteredParts: Seq[Seq[LinePart]] = for f <- searchTerms yield calcParts(f.getValue, f.getColor)
 
   /**
    * For a given [[logLine]], compute the labels and associated colors which make up a displayed log line in the
@@ -64,7 +64,7 @@ case class SearchTermCalculator(logEntry: LogEntry
     val value = logEntry.value
     // if there are no filters, it is easy - just return the whole string with special color
     if filteredParts.isEmpty then
-      Seq((value, SearchTerm.Unclassified))
+      Seq((value, MutableSearchTerm.UnclassifiedColor))
     else
       // brute force:
       // for all filters, calculate if there is a hit or not.
@@ -104,7 +104,7 @@ case class SearchTermCalculator(logEntry: LogEntry
           val curColor =
             someCol match {
               case Some(value) => value
-              case None => SearchTerm.Unclassified
+              case None => MutableSearchTerm.UnclassifiedColor
             }
           // handle special case for first element
           if acc.isEmpty then {

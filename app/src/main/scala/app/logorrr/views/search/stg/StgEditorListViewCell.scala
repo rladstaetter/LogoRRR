@@ -1,7 +1,6 @@
 package app.logorrr.views.search.stg
 
 import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTermGroup}
-import app.logorrr.views.search.st.SimpleSearchTermVis
 import javafx.scene.control._
 
 
@@ -45,7 +44,7 @@ class StgEditorListViewCell(fileId: FileId) extends ListCell[SearchTermGroup]:
       })
 
       // Use a region to push the button to the right
-      val vis: Seq[SimpleToggleButton] = item.terms.map(t => new SimpleToggleButton(SimpleSearchTermVis(t)))
+      val vis: Seq[SearchTermLabel] = item.terms.map(t => SearchTermLabel(t))
 
       val toolBar = new ToolBar
       toolBar.getItems.addAll(deleteButton, globalStgButton, label)

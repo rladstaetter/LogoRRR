@@ -8,5 +8,5 @@ import app.logorrr.views.search.MutableSearchTerm
  */
 trait UiNodeSearchTermAware:
 
-  def uiNode(fileId: FileId, searchTerm: MutableSearchTerm): UiNode
+  def uiNode(fileId: FileId, searchTerm: String): UiNode
 
