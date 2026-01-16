@@ -7,10 +7,10 @@ import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.text.contextactions.{CopyEntriesMenuItem, IgnoreAboveMenuItem, IgnoreBelowMenuItem}
 import javafx.collections.transformation.FilteredList
-import javafx.scene.control._
+import javafx.scene.control.*
 import net.ladstatt.util.log.TinyLog
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 
 object LogTextView extends UiNodeFileIdAware:
@@ -70,10 +70,6 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
             // to trigger ChunkListView scrollTo and repaint
             mutLogFileSettings.setSelectedLineNumber(selectedEntry.lineNumber)
           case None => // do nothing
-      else
-        logTrace(s"NOT scrollToActiveLogEntry: no active element was set, not changing scroll position.")
-    else
-      logTrace(s"NOT scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
 
 
   def init(): Unit =
@@ -86,7 +82,6 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
     skinProperty.addListener(skinListener)
 
     setItems(filteredList)
-
 
 
   /** clean up listeners */
