@@ -1,6 +1,7 @@
 package app.logorrr.views
 
 import app.logorrr.conf.SearchTerm
+import app.logorrr.views.search.MutableSearchTerm
 import javafx.scene.paint.Color
 import org.scalacheck.Prop.propBoolean
 import org.scalacheck.{Arbitrary, Gen}
@@ -14,18 +15,18 @@ class SearchTermSpec extends AnyWordSpec with Matchers with Checkers {
 
     "return Unclassified if the element string is empty" in:
       val searchStrings = Set(SearchTerm("hello", Color.RED, active = true))
-      SearchTerm.calc("", searchStrings) should be(SearchTerm.Unclassified)
+      SearchTerm.calc("", searchStrings) should be(MutableSearchTerm.UnclassifiedColor)
 
     "return Unclassified if the searchStrings set is empty" in:
-      SearchTerm.calc("test", Set()) should be(SearchTerm.Unclassified)
+      SearchTerm.calc("test", Set()) should be(MutableSearchTerm.UnclassifiedColor)
 
     "return Unclassified if no search strings are found in the element" in:
       val searchStrings = Set(SearchTerm("apple", Color.RED, active = true), SearchTerm("banana", Color.BLUE, active = true))
-      SearchTerm.calc("orange juice", searchStrings) should be(SearchTerm.Unclassified)
+      SearchTerm.calc("orange juice", searchStrings) should be(MutableSearchTerm.UnclassifiedColor)
 
     "return Unclassified if all search strings are inactive" in:
       val searchStrings = Set(SearchTerm("apple", Color.RED, active = false), SearchTerm("banana", Color.BLUE, active = false))
-      SearchTerm.calc("apple banana", searchStrings) should be(SearchTerm.Unclassified)
+      SearchTerm.calc("apple banana", searchStrings) should be(MutableSearchTerm.UnclassifiedColor)
 
     "return the exact color for a single active match, ignoring an inactive one" in:
       val searchStrings = Set(
@@ -73,7 +74,7 @@ class SearchTermSpec extends AnyWordSpec with Matchers with Checkers {
 
     "be case-sensitive by default for search strings, even if active" in:
       val searchStrings = Set(SearchTerm("apple", Color.RED, active = true))
-      SearchTerm.calc("Apple", searchStrings) should be(SearchTerm.Unclassified)
+      SearchTerm.calc("Apple", searchStrings) should be(MutableSearchTerm.UnclassifiedColor)
 
     "handle overlapping search strings correctly (regex counts distinct matches)" in:
       val searchStrings = Set(
@@ -91,7 +92,7 @@ class SearchTermSpec extends AnyWordSpec with Matchers with Checkers {
 
     "be case-sensitive by default for search strings" in:
       val searchStrings = Set(SearchTerm("apple", Color.RED, active = true))
-      SearchTerm.calc("Apple", searchStrings) should be(SearchTerm.Unclassified)
+      SearchTerm.calc("Apple", searchStrings) should be(MutableSearchTerm.UnclassifiedColor)
 
     "handle colors with different alpha values (interpolation should only affect RGB)" in:
       val c1 = Color.rgb(255, 0, 0, 0.5) // Semi-transparent Red
@@ -113,7 +114,7 @@ class SearchTermSpec extends AnyWordSpec with Matchers with Checkers {
 
     "return Unclassified if search strings are provided but none match" in:
       val searchStrings = Set(SearchTerm("alpha", Color.RED, active = true), SearchTerm("beta", Color.BLUE, active = true))
-      SearchTerm.calc("gamma delta", searchStrings) should be(SearchTerm.Unclassified)
+      SearchTerm.calc("gamma delta", searchStrings) should be(MutableSearchTerm.UnclassifiedColor)
 
     "handle empty search string within the set (should not count unless element is empty)" in:
       val searchStrings = Set(SearchTerm("", Color.RED, active = true), SearchTerm("test", Color.BLUE, active = true))
@@ -157,7 +158,7 @@ class SearchTermSpec extends AnyWordSpec with Matchers with Checkers {
 
     "handle case where count sum is 0 (no matches for any string)" in:
       val searchStrings = Set(SearchTerm("a", Color.RED, active = true), SearchTerm("b", Color.BLUE, active = true))
-      SearchTerm.calc("xyz", searchStrings) should be(SearchTerm.Unclassified)
+      SearchTerm.calc("xyz", searchStrings) should be(MutableSearchTerm.UnclassifiedColor)
 
     "ensure color components are clamped between 0 and 1 (though not strictly necessary with normalized sum)" in:
       // This scenario won't directly result in values outside 0-1 if initial colors are valid.
@@ -181,7 +182,7 @@ class SearchTermSpec extends AnyWordSpec with Matchers with Checkers {
         SearchTerm("alpha", Color.RED, active = true),
         SearchTerm("beta", Color.BLUE, active = false) // Inactive
       )
-      SearchTerm.calc("gamma delta", searchStrings) should be(SearchTerm.Unclassified)
+      SearchTerm.calc("gamma delta", searchStrings) should be(MutableSearchTerm.UnclassifiedColor)
 
 
   // A generator for a single SearchTerm

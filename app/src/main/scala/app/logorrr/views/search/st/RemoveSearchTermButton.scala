@@ -12,19 +12,16 @@ import javafx.scene.paint.Color
 object RemoveSearchTermButton extends UiNodeSearchTermAware:
   val ZeroPadding = "-fx-padding: 0;"
 
-  override def uiNode(fileId: FileId, searchTerm: MutableSearchTerm): UiNode = UiNode(classOf[RemoveSearchTermButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + searchTerm.getSearchTermAsString))
+  override def uiNode(fileId: FileId, searchTerm: String): UiNode = UiNode(classOf[RemoveSearchTermButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + searchTerm))
 
 class RemoveSearchTermButton extends Button:
-
   setGraphic(GfxElements.closeWindowIcon)
   setTooltip(GfxElements.mkRemoveTooltip)
+//  useParentBackgroundColor()
+//  setOnMouseEntered(_ => getCurrentBackground.foreach(color => setStyle(RemoveSearchTermButton.ZeroPadding + ColorUtil.mkCssBackgroundString(color.darker()))))
+//   setOnMouseExited(_ => useParentBackgroundColor())
 
-  useParentBackgroundColor()
-
-  setOnMouseEntered(_ => getCurrentBackground.foreach(color => setStyle(RemoveSearchTermButton.ZeroPadding + ColorUtil.mkCssBackgroundString(color.darker()))))
-  setOnMouseExited(_ => useParentBackgroundColor())
-
-  private def useParentBackgroundColor(): Unit = setStyle(RemoveSearchTermButton.ZeroPadding + "-fx-background-color: inherit;")
+  private def useParentBackgroundColor(): Unit = setStyle(RemoveSearchTermButton.ZeroPadding  + "-fx-background-color: inherit;")
 
   private def getCurrentBackground: Option[Color] =
     if getBackground != null && !getBackground.getFills.isEmpty then

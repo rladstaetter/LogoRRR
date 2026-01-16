@@ -48,7 +48,6 @@ class OpsToolBar(fileId: FileId
 
   setMaxHeight(Double.PositiveInfinity)
 
-  // TODO fix this; not really elegant
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
   val w = 380
   private val macWidth: Int = w

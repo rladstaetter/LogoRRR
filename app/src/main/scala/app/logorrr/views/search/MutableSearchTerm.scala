@@ -1,47 +1,54 @@
 package app.logorrr.views.search
 
+import app.logorrr.clv.color.ColorUtil
 import app.logorrr.conf.SearchTerm
-import javafx.beans.property.{BooleanProperty, SimpleBooleanProperty, SimpleObjectProperty, SimpleStringProperty}
+import app.logorrr.views.util.CssBindingUtil
+import javafx.beans.binding.Bindings
+import javafx.beans.property.*
 import javafx.scene.paint.Color
 
 import java.util.function.Predicate
 
 object MutableSearchTerm:
 
+  val UnclassifiedColor: Color = Color.LIGHTGREY
+  val UnclassifiedText = "Unclassified"
+
   def apply(searchTerm: SearchTerm): MutableSearchTerm =
     apply(searchTerm.value, searchTerm.color, searchTerm.active)
+
+  def mkUnclassified(otherPredicates: Set[Predicate[String]]): MutableSearchTerm = {
+    val st = new MutableSearchTerm()
+    st.setValue(UnclassifiedText)
+    st.setColor(UnclassifiedColor)
+    st.setActive(true)
+    st.setPredicate(s => !otherPredicates.foldRight(false)((p, acc) => acc || p.test(s)))
+    st.setUnclassified(true)
+    st
+  }
 
   def apply(searchTermAsString: String
             , color: Color
             , active: Boolean): MutableSearchTerm =
-    val filter = new MutableSearchTerm()
-    filter.setSearchTermAsString(searchTermAsString)
-    filter.setColor(color)
-    filter.setActive(active)
-    filter
+    val st = new MutableSearchTerm()
+    st.setValue(searchTermAsString)
+    st.setColor(color)
+    st.setActive(active)
+    st.setPredicate(s => Option(st.valueProperty.get()).exists(p => s.contains(p)))
+    st.setUnclassified(false)
+    st
 
 
-class MutableSearchTerm extends Predicate[String]:
+class MutableSearchTerm extends BaseSearchTermModel
+  with Predicate[String]:
 
-  val searchTermAsStringProperty: SimpleStringProperty = new SimpleStringProperty()
-  val colorProperty: SimpleObjectProperty[Color] = new SimpleObjectProperty[Color]()
-  val activeProperty: SimpleBooleanProperty = new SimpleBooleanProperty()
+  private val predicateProperty: SimpleObjectProperty[Predicate[String]] = new SimpleObjectProperty[Predicate[String]]()
 
-  override def test(logLine: String): Boolean = Option(searchTermAsStringProperty.get()).exists(p => logLine.contains(p))
+  def setPredicate(p: Predicate[String]): Unit = predicateProperty.set(p)
 
-  def unbind(): Unit = activeProperty.unbind()
+  override def test(logLine: String): Boolean = predicateProperty.get().test(logLine)
 
-  def bind(activeProperty: BooleanProperty): Unit = this.activeProperty.bind(activeProperty)
 
-  def getSearchTermAsString: String = searchTermAsStringProperty.get()
 
-  def setSearchTermAsString(searchTerm: String): Unit = searchTermAsStringProperty.set(searchTerm)
 
-  def getColor: Color = colorProperty.get()
-
-  def setColor(color: Color): Unit = colorProperty.set(color)
-
-  def setActive(active: Boolean): Unit = activeProperty.set(active)
-
-  def isActive: Boolean = activeProperty.get()
 

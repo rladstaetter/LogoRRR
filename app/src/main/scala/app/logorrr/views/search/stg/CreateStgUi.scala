@@ -2,7 +2,6 @@ package app.logorrr.views.search.stg
 
 import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.views.search.st.SimpleSearchTermVis
 import javafx.scene.control.ToolBar
 import net.ladstatt.util.log.TinyLog
 
@@ -28,6 +27,6 @@ class CreateStgUi(mutLogFileSettings: MutLogFileSettings
     }
   })
 
-  private val searchTermVis: Seq[SimpleToggleButton] = activeSearchTerms.map(s => new SimpleToggleButton(SimpleSearchTermVis(s)))
+  private val searchTermVis: Seq[SearchTermLabel] = activeSearchTerms.map(s => SearchTermLabel(s))
 
   getItems.addAll(Seq(createButton, nameField) ++ searchTermVis*)
