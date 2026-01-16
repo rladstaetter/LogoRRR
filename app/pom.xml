@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
-          <artifactId>scala3-library_3</artifactId>
+            <artifactId>scala3-library_3</artifactId>
         </dependency>
 
         <!-- uncomment if atlantafx is needed for enhancing css

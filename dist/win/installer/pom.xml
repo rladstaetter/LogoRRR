@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>app.logorrr.dist</groupId>
-        <artifactId>dist-win</artifactId>
+        <groupId>app.logorrr.dist.win</groupId>
+        <artifactId>win</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
 
-    <artifactId>installer-win-jre</artifactId>
-    <name>app.logorrr.dist.win-jre.installer</name>
-    <description>Installer project using Advanced Installer technology to install LogoRRR with its own dedicated jre</description>
+    <artifactId>installer</artifactId>
+    <name>app.logorrr.dist.win:installer</name>
+    <description>Windows installer using Advanced Installer</description>
 
     <dependencies>
         <dependency>

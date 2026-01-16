@@ -9,13 +9,15 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dist-win</artifactId>
+    <groupId>app.logorrr.dist.win</groupId>
+    <artifactId>win</artifactId>
     <name>app.logorrr.dist.win</name>
     <packaging>pom</packaging>
     <description>Distribution bundle for windows</description>
 
     <modules>
-        <module>installer-win-jre</module>
+        <module>app-image</module>
+        <module>installer</module>
     </modules>
 
 </project>
