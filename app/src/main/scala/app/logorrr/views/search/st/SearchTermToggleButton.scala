@@ -15,7 +15,12 @@ import javafx.scene.paint.Color
 
 
 object SearchTermToggleButton extends UiNodeSearchTermAware:
-  override def uiNode(fileId: FileId, searchTerm: String): UiNode = UiNode(classOf[SearchTermToggleButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + searchTerm))
+  override def uiNode(fileId: FileId, searchTerm: String): UiNode = {
+    Option(fileId) match {
+      case Some(value) => UiNode(classOf[SearchTermToggleButton].getSimpleName + "-" + HashUtil.md5Sum(value.absolutePathAsString + ":" + searchTerm))
+      case None => UiNode(classOf[SearchTermToggleButton].getSimpleName + "-" + HashUtil.md5Sum(":" + searchTerm))
+    }
+  }
 
   def apply(fileId: FileId
             , searchTerm: MutableSearchTerm
@@ -34,6 +39,7 @@ object SearchTermToggleButton extends UiNodeSearchTermAware:
         removeSearchTerm(searchTerm)
       })
 
+    b.setUnclassified(searchTerm.isUnclassified)
     b.setMutableSearchTerm(searchTerm)
     b.setFileId(fileId)
     b.setHits(hits)
@@ -82,6 +88,7 @@ class SearchTermToggleButton(updateSearchTerm: => Unit) extends ToggleButton
     p
 
   private lazy val textStyleBinding: StringBinding = CssBindingUtil.mkTextStyleBinding(contrastColorProperty)
+  private lazy val removeSearchTermStyleBinding: StringBinding = CssBindingUtil.mkRemoveSearchTermStyleBinding(contrastColorProperty)
 
   val vBox = new VBox()
 
@@ -105,6 +112,9 @@ class SearchTermToggleButton(updateSearchTerm: => Unit) extends ToggleButton
              searchTerm <- Option(getValue)
         yield RemoveSearchTermButton.uiNode(fileId, searchTerm).value).getOrElse(""),
       fileIdProperty, valueProperty))
+//    rstb.icon.iconColorProperty().bind(contrastColorProperty)
+    rstb.icon.iconColorProperty().unbind()
+    rstb.icon.iconColorProperty.bind(Bindings.createObjectBinding(() => contrastColorProperty.get(), contrastColorProperty))
     rstb.setStyle(
       """
         |-fx-padding: 0;
@@ -132,18 +142,6 @@ class SearchTermToggleButton(updateSearchTerm: => Unit) extends ToggleButton
 
   setGraphic(vBox)
 
-  // private val vis = SearchTermUiComponent(fileId, hits, searchTerm, removeSearchTerm)
-
-  // depending on the toggle status update search results in textview and chunklistview
-
-  /*
-  selectedProperty().addListener:
-    new InvalidationListener:
-      override def invalidated(observable: Observable): Unit =
-        println("Update?")
-        updateSearchTerm
-*/
-
   /** contrast color is used for label text */
 
   selectedProperty().addListener:
@@ -158,16 +156,6 @@ class SearchTermToggleButton(updateSearchTerm: => Unit) extends ToggleButton
         updateSearchTerm
       }
 
-  // styleProperty.bind(CssBindingUtil.mkGradientStyleBinding(colorProperty))
-  // update visual appearance depending if selected or not
-  /*
-
-  */
-
   styleProperty().bind(CssBindingUtil.mkGradientStyleBinding(colorProperty))
 
-//setGraphic(vis)
-
-//selectedProperty.bind(searchTerm.activeProperty)
-// setSelected(searchTerm.isSelected) // fire selected property if active (see above)
 

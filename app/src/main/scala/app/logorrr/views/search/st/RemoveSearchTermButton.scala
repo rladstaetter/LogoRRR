@@ -15,7 +15,8 @@ object RemoveSearchTermButton extends UiNodeSearchTermAware:
   override def uiNode(fileId: FileId, searchTerm: String): UiNode = UiNode(classOf[RemoveSearchTermButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + searchTerm))
 
 class RemoveSearchTermButton extends Button:
-  setGraphic(GfxElements.closeWindowIcon)
+  val icon = GfxElements.closeWindowIcon
+  setGraphic(icon)
   setTooltip(GfxElements.mkRemoveTooltip)
 //  useParentBackgroundColor()
 //  setOnMouseEntered(_ => getCurrentBackground.foreach(color => setStyle(RemoveSearchTermButton.ZeroPadding + ColorUtil.mkCssBackgroundString(color.darker()))))

@@ -10,19 +10,47 @@ import java.util.concurrent.Callable
 
 object CssBindingUtil:
 
-  def mkTextStyleCallable(colorProperty: ObjectPropertyBase[Color]): Callable[String] = () =>
-    s"""
-       |-fx-font-weight: bold;
-       |-fx-text-fill: ${ColorUtil.hexString(colorProperty.get)};
-       |""".stripMargin
+  def mkTextStyleCallable(colorProperty: ObjectPropertyBase[Color]): Callable[String] =
+    () =>
+      Option(colorProperty.get()) match
+        case Some(color) =>
+          s"""
+             |-fx-font-weight: bold;
+             |-fx-text-fill: ${ColorUtil.hexString(color)};
+             |""".stripMargin
+        case None =>
+          ""
 
-  def gradientStyle(colorProperty: ObjectPropertyBase[Color]): Callable[String] = () =>
-    s"""
-       |-fx-background-color: ${cssLinearGradient(colorProperty.get, colorProperty.get.darker)}
-       |""".stripMargin
+  def mkRemoveSearchTermStyleCallable(colorProperty: ObjectPropertyBase[Color]): Callable[String] =
+    () =>
+      Option(colorProperty.get()) match
+        case Some(color) =>
+          s"""
+             |-fx-padding: 0;
+             |-fx-background-color: inherit;
+             |-fx-text-fill: ${ColorUtil.hexString(color)};
+             |""".stripMargin
+        case None =>
+          ""
+
+
+
+
+  def gradientStyle(colorProperty: ObjectPropertyBase[Color]): Callable[String] =
+    () =>
+      Option(colorProperty.get()) match
+        case Some(color) =>
+          s"""
+             |-fx-background-color: ${cssLinearGradient(color, color.darker)}
+             |""".stripMargin
+        case None =>
+          ""
 
   def mkTextStyleBinding(colorProperty: ObjectPropertyBase[Color]): StringBinding =
     Bindings.createStringBinding(mkTextStyleCallable(colorProperty), colorProperty)
+
+  def mkRemoveSearchTermStyleBinding(colorProperty: ObjectPropertyBase[Color]): StringBinding =
+    Bindings.createStringBinding(mkRemoveSearchTermStyleCallable(colorProperty), colorProperty)
 
   def mkGradientStyleBinding(colorProperty: ObjectPropertyBase[Color]): StringBinding =
     Bindings.createStringBinding(gradientStyle(colorProperty), colorProperty)
@@ -31,7 +59,7 @@ object CssBindingUtil:
   def mkContrastPropertyBinding(colorProperty: ObjectPropertyBase[Color]): ObjectBinding[Color] = Bindings.createObjectBinding(
     () =>
       Option(colorProperty.get()) match
-        case Some(value) => ColorUtil.getContrastColor(colorProperty.get())
+        case Some(value) => ColorUtil.getContrastColor(value)
         case None => Color.WHITE
     , colorProperty
   )
