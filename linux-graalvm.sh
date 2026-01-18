@@ -1,4 +1,4 @@
 #!/bin/bash
 
 source "$(dirname "$0")/scripts/common.sh"
-build app.logorrr.dist.linux:graal-linux
+build package app.logorrr.dist.linux:graal-linux

@@ -13,7 +13,7 @@ if ! flatpak uninstall  --delete-data --user -y app.logorrr.LogoRRR 2>/dev/null;
 fi
 
 # build everything on linux
-build app.logorrr.dist.linux:app-image,app.logorrr.dist.linux:deb,app.logorrr.dist.linux.flatpak:flatpak-package,app.logorrr.dist.linux:graal-linux
+build package app.logorrr.dist.linux:app-image,app.logorrr.dist.linux:deb,app.logorrr.dist.linux.flatpak:flatpak-package,app.logorrr.dist.linux:graal-linux
 
 # Install the appropriate .deb
 DEB_PATH="./dist/dist-linux/deb/target/installer/logorrr_${PROJECTVERSION}_${DEB_ARCH}.deb"

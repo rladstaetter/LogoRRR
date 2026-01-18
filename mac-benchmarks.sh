@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source "$(dirname "$0")/scripts/common.sh"
-build app.logorrr:benchmarks
+build package app.logorrr:benchmarks
 
 java --sun-misc-unsafe-memory-access=allow -jar benchmarks/target/benchmarks.jar -rf json -rff benchmarks/target/results.json
 

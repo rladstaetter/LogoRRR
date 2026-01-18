@@ -25,7 +25,8 @@ export DEB_ARCH
 
 
 build() {
-    local TARGET=$1
+    local PHASE=$1
+    local TARGET=$2
 
     # Check if an argument was provided
     if [[ -z "$TARGET" ]]; then
@@ -34,10 +35,10 @@ build() {
     fi
 
     echo "----------------------------------------------------"
-    echo "Building Target: $TARGET"
+    echo "Building $PHASE for target: $TARGET"
     echo "----------------------------------------------------"
 
     # Execute Maven
     # Use -B (Batch Mode) for cleaner script logs
-    time ./mvnw clean package -pl "$TARGET" -am -B
+    time ./mvnw clean $PHASE -pl "$TARGET" -am -B
 }
