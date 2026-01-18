@@ -10,7 +10,7 @@
     <artifactId>benchmarks</artifactId>
     <packaging>jar</packaging>
 
-    <name>app.logorrr.benchmarks</name>
+    <name>${groupId}:${artifactId}</name>
 
     <dependencies>
         <dependency>

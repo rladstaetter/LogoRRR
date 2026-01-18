@@ -10,7 +10,7 @@
     </parent>
     <groupId>app.logorrr.dist.osx</groupId>
     <artifactId>dist-osx</artifactId>
-    <name>app.logorrr.dist.osx</name>
+    <name>${groupId}:${artifactId}</name>
     <description>Distribution bundle for MacOsX</description>
     <packaging>pom</packaging>
 

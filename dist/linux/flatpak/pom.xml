@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>app.logorrr.dist.linux</groupId>
-        <artifactId>dist-linux</artifactId>
+        <artifactId>linux</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -12,7 +12,7 @@
     <groupId>app.logorrr.dist.linux.flatpak</groupId>
     <artifactId>flatpak</artifactId>
 
-    <name>app.logorrr.dist.linux.flatpak</name>
+    <name>${groupId}:${artifactId}</name>
     <description>Flatpak build for linux</description>
     <packaging>pom</packaging>
 

@@ -13,10 +13,10 @@ if ! flatpak uninstall  --delete-data --user -y app.logorrr.LogoRRR 2>/dev/null;
 fi
 
 # build everything on linux
-build app.logorrr.dist.linux:app-image,app.logorrr.dist.linux:deb,app.logorrr.dist.linux.flatpak:flatpak-package,app.logorrr.dist.linux:graal-linux
+build package app.logorrr.dist.linux:app-image,app.logorrr.dist.linux:deb,app.logorrr.dist.linux.flatpak:flatpak-package,app.logorrr.dist.linux:graal-linux
 
 # Install the appropriate .deb
-DEB_PATH="./dist/dist-linux/deb/target/installer/logorrr_${PROJECTVERSION}_${DEB_ARCH}.deb"
+DEB_PATH="./dist/linux/deb/target/installer/logorrr_${PROJECTVERSION}_${DEB_ARCH}.deb"
 
 if [[ ! -f "$DEB_PATH" ]]; then
   echo "Error: .deb file not found at $DEB_PATH"
@@ -35,7 +35,7 @@ echo "Starting LogoRRR in flatpak container ... "
 flatpak run app.logorrr.LogoRRR
 
 echo "Running GraalVM variant"
-./dist/dist-linux/graal-linux/target/native/logorrr
+./dist/linux/graal-linux/target/native/logorrr
 
 echo "Congrats, you've got all variants of logorrr running"
 

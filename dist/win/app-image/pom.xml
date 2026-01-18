@@ -12,7 +12,7 @@
     <packaging>pom</packaging>
 
     <artifactId>app-image</artifactId>
-    <name>app.logorrr.dist.win:app-image</name>
+    <name>${groupId}:${artifactId}</name>
     <description>Windows app image distribution</description>
 
     <dependencies>

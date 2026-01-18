@@ -17,7 +17,7 @@
         <checksum.amd64.filename>flatpak-package-${project.version}-amd64.tar.gz.properties</checksum.amd64.filename>
     </properties>
 
-    <name>app.logorrr.dist.linux.flatpak.dist</name>
+    <name>${groupId}:${artifactId}</name>
 
     <build>
         <plugins>

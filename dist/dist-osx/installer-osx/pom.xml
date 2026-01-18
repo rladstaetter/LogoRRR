@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>installer-osx</artifactId>
-    <name>app.logorrr.dist.osx.installer</name>
+    <name>${groupId}:${artifactId}</name>
 
     <dependencies>
         <dependency>

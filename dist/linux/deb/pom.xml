@@ -6,12 +6,13 @@
 
     <parent>
         <groupId>app.logorrr.dist.linux</groupId>
-        <artifactId>dist-linux</artifactId>
+        <artifactId>linux</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
 
-    <artifactId>app-image</artifactId>
-    <name>app.logorrr.dist.linux.app-image</name>
+    <artifactId>deb</artifactId>
+    <name>${groupId}:${artifactId}</name>
+
     <dependencies>
         <dependency>
             <groupId>app.logorrr</groupId>
@@ -42,23 +43,6 @@
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <delete dir="${project.build.outputDirectory}/LogoRRR" />
-                            </target>
                         </configuration>
                     </execution>
                 </executions>
@@ -102,7 +86,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>create-app-image</id>
+                        <id>create-deb</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>exec</goal>
@@ -113,6 +97,28 @@
                             <arguments>
                                 <argument>@jpackage.options</argument>
                             </arguments>
+                            <useMavenLogger>true</useMavenLogger>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>sftp-upload</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>bash</executable>
+                            <arguments>
+                                <argument>${basedir}/../upload.sh</argument>
+                                <argument>${app.logorrr.dist.linux.uploadserver}</argument>
+                                <argument>${app.logorrr.dist.linux.username}</argument>
+                                <argument>
+                                    ${project.build.directory}/installer/logorrr_${project.version}_${deb.os.arch}.deb
+                                </argument>
+                                <argument>public_html/downloads/${project.version}</argument>
+                                <argument>${app.logorrr.dist.linux.privatekey}</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}</workingDirectory>
                             <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>

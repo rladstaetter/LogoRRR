@@ -11,6 +11,6 @@
     <packaging>jar</packaging>
     <artifactId>flatpak-yml</artifactId>
 
-    <name>app.logorrr.dist.linux.flatpak.yml</name>
+    <name>${groupId}:${artifactId}</name>
 
 </project>

@@ -5,7 +5,7 @@
     <groupId>app.logorrr</groupId>
     <artifactId>logorrr</artifactId>
     <version>${revision}${changelist}</version>
-    <name>app.logorrr</name>
+    <name>${groupId}:${artifactId}</name>
     <description>LogoRRR - logfiles at a glance.</description>
     <packaging>pom</packaging>
     <properties>
