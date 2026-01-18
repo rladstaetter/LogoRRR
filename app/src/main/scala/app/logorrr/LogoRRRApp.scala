@@ -1,9 +1,8 @@
 package app.logorrr
 
 import app.logorrr
-import app.logorrr.io.AppPaths
 import app.logorrr.conf.{AppInfo, LogoRRRGlobals}
-import app.logorrr.io.SettingsFileIO
+import app.logorrr.io.{AppPaths, SettingsFileIO}
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
 import app.logorrr.services.hostservices.{MacNativeHostService, NativeHostServices}
@@ -23,7 +22,11 @@ object LogoRRRApp extends TinyLog:
 
   val Name = "LogoRRR"
   val paths = AppPaths("logorrr", "app.logorrr")
-  TinyLog.init(paths.logFile)
+  // 1 log file, constrain it to 100 MB
+  TinyLog.init(
+    logFilePath = paths.logFile
+    , limit = 1024 * 1024 * 100
+    , count = 1)
 
   def main(args: Array[String]): Unit =
     javafx.application.Application.launch(classOf[LogoRRRApp], args *)
@@ -49,7 +52,7 @@ object LogoRRRApp extends TinyLog:
 
 class LogoRRRApp extends javafx.application.Application with TinyIo with TinyLog:
 
-  val paths = LogoRRRApp.paths
+  private val paths = LogoRRRApp.paths
 
   def start(stage: Stage): Unit =
     val hostServices =
