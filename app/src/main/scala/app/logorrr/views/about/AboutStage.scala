@@ -9,7 +9,7 @@ class AboutStage(owner: Window) extends Stage:
   initModality(Modality.WINDOW_MODAL)
   setTitle(s"About ${AppInfo.fullAppNameWithVersion}")
   setOnCloseRequest(_ => this.close())
-  private val width = 470
+  private val width = 530
   private val height = 300
   private val scene = new Scene(new AboutDialogBorderPane(this), width, height)
   setScene(scene)
