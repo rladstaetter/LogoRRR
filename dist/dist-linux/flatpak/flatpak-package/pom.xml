@@ -11,7 +11,7 @@
 
     <artifactId>flatpak-package</artifactId>
 
-    <name>app.logorrr.dist.linux.flatpak.package</name>
+    <name>${groupId}:${artifactId}</name>
     <description>Build flatpak package</description>
 
     <dependencies>

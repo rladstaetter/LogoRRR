@@ -10,7 +10,7 @@
     </parent>
     <groupId>app.logorrr.dist</groupId>
     <artifactId>dist</artifactId>
-    <name>app.logorrr.dist</name>
+    <name>${groupId}:${artifactId}</name>
     <packaging>pom</packaging>
 
     <profiles>

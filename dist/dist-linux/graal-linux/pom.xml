@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>graal-linux</artifactId>
-    <name>app.logorrr.dist.linux.graal</name>
+    <name>${groupId}:${artifactId}</name>
     <packaging>pom</packaging>
 
     <properties>

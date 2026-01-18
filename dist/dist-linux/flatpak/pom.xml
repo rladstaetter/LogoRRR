@@ -12,7 +12,7 @@
     <groupId>app.logorrr.dist.linux.flatpak</groupId>
     <artifactId>flatpak</artifactId>
 
-    <name>app.logorrr.dist.linux.flatpak</name>
+    <name>${groupId}:${artifactId}</name>
     <description>Flatpak build for linux</description>
     <packaging>pom</packaging>
 

@@ -11,7 +11,7 @@
     <artifactId>app</artifactId>
     <description>Main application code for LogoRRR</description>
     <inceptionYear>2021</inceptionYear>
-    <name>app.logorrr.app</name>
+    <name>${groupId}:${artifactId}</name>
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>

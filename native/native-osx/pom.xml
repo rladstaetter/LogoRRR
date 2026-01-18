@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>native-osx</artifactId>
-    <name>app.logorrr.native.osx</name>
+    <name>${groupId}:${artifactId}</name>
     <packaging>pom</packaging>
 
     <build>

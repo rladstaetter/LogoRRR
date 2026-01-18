@@ -10,7 +10,7 @@
     </parent>
     <groupId>app.logorrr.native</groupId>
     <artifactId>native</artifactId>
-    <name>app.logorrr.native</name>
+    <name>${groupId}:${artifactId}</name>
     <packaging>pom</packaging>
 
     <profiles>

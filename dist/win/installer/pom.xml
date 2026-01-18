@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>installer</artifactId>
-    <name>app.logorrr.dist.win:installer</name>
+    <name>${groupId}:${artifactId}</name>
     <description>Windows installer using Advanced Installer</description>
 
     <dependencies>
