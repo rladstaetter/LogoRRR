@@ -3,7 +3,7 @@ package app.logorrr.views.util
 import app.logorrr.clv.color.ColorUtil
 import app.logorrr.clv.color.ColorUtil.cssLinearGradient
 import javafx.beans.binding.{Bindings, ObjectBinding, StringBinding}
-import javafx.beans.property.{ObjectPropertyBase, SimpleObjectProperty}
+import javafx.beans.property.ObjectPropertyBase
 import javafx.scene.paint.Color
 
 import java.util.concurrent.Callable
@@ -34,14 +34,16 @@ object CssBindingUtil:
           ""
 
 
-
-
   def gradientStyle(colorProperty: ObjectPropertyBase[Color]): Callable[String] =
     () =>
       Option(colorProperty.get()) match
         case Some(color) =>
           s"""
-             |-fx-background-color: ${cssLinearGradient(color, color.darker)}
+             |-fx-border-width: 1pt;
+             |-fx-border-radius: 5pt;
+             |-fx-background-radius: 5pt;
+             |-fx-border-color: ${cssLinearGradient("to bottom right", color.darker, color)};
+             |-fx-background-color: ${cssLinearGradient("to bottom right", color, color.darker)};
              |""".stripMargin
         case None =>
           ""

@@ -51,12 +51,8 @@ object ColorUtil:
     // The format is "#RRGGBB"
     String.format("#%02X%02X%02X", (color.getRed * 255).asInstanceOf[Int], (color.getGreen * 255).asInstanceOf[Int], (color.getBlue * 255).asInstanceOf[Int])
 
-  def cssLinearGradient(from: Color, to: Color): String =
-    s"""linear-gradient(to bottom, ${hexString(from)}, ${hexString(to)})"""
+  def cssLinearGradient(direction: String, from: Color, to: Color): String =
+    s"""linear-gradient($direction, ${hexString(from)}, ${hexString(to)})"""
 
-  def mkCssBackgroundString(color: Color): String = {
-    //"-fx-background-color: " + ColorUtil.toCssString(color) + ";"
-    s"""-fx-background-color: ${cssLinearGradient(color, color.darker)};""".stripMargin
-  }
 
 
