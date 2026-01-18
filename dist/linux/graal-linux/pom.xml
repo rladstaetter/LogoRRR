@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>app.logorrr.dist.linux</groupId>
-        <artifactId>dist-linux</artifactId>
+        <artifactId>linux</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
 

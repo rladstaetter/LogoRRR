@@ -46,7 +46,7 @@
                 </os>
             </activation>
             <modules>
-                <module>dist-linux</module>
+                <module>linux</module>
             </modules>
         </profile>
     </profiles>

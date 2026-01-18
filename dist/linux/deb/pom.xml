@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>app.logorrr.dist.linux</groupId>
-        <artifactId>dist-linux</artifactId>
+        <artifactId>linux</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
 

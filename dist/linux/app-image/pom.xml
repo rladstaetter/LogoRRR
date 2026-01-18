@@ -6,12 +6,14 @@
 
     <parent>
         <groupId>app.logorrr.dist.linux</groupId>
-        <artifactId>dist-linux</artifactId>
+        <artifactId>linux</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
 
     <artifactId>app-image</artifactId>
     <name>${groupId}:${artifactId}</name>
+    <description>Builds LogoRRRs linux app image</description>
+
     <dependencies>
         <dependency>
             <groupId>app.logorrr</groupId>

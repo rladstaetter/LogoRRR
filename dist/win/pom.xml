@@ -13,7 +13,7 @@
     <artifactId>win</artifactId>
     <name>${groupId}:${artifactId}</name>
     <packaging>pom</packaging>
-    <description>Distribution bundle for windows</description>
+    <description>Distribution bundle for Windows</description>
 
     <modules>
         <module>app-image</module>

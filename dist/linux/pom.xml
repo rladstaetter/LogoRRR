@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>app.logorrr.dist.linux</groupId>
-    <artifactId>dist-linux</artifactId>
+    <artifactId>linux</artifactId>
 
     <name>${groupId}:${artifactId}</name>
     <packaging>pom</packaging>
