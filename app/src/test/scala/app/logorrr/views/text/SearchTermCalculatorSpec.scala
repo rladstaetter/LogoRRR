@@ -26,6 +26,26 @@ class SearchTermCalculatorSpec extends LogoRRRSpec:
   def applySingleFilter(logEntry: String, pattern: String): Seq[Seq[LinePart]] =
     SearchTermCalculator(LogEntry(0, logEntry, None, None), Seq(MutableSearchTerm(SearchTerm(pattern, Color.RED, active = true)))).filteredParts
 
+  "fine/finest" in :
+    val line = "FINEST"
+    val searchTerms: Seq[(String, Color)] = Seq("FINE" -> Color.RED, "FINEST" -> Color.BLUE)
+    val pairs = SearchTermCalculator(line, searchTerms).stringColorPairs
+    assert(pairs.size == 2)
+    assert(pairs(0)._2 != Color.RED)
+    assert(pairs(1)._2 == Color.BLUE)
+
+  /** inactive searchterms are rendered with 'unclassfied' color */
+  "inactive searchterms are not calculated" in :
+    val logEntry = LogEntry(0, "FINEST", None, None)
+    val fine = MutableSearchTerm(SearchTerm("FINE", Color.BLUE, true))
+    val finest = MutableSearchTerm(SearchTerm("FINEST", Color.RED, false))
+    val pairs: Seq[(String, Color)] = SearchTermCalculator(logEntry, Seq(fine, finest)).stringColorPairs
+    assert(pairs.size == 2)
+    assert(pairs(0)._1 == "FINE")
+    assert(pairs(0)._2 == Color.BLUE)
+    assert(pairs(1)._1 == "ST")
+    assert(pairs(1)._2 == MutableSearchTerm.UnclassifiedColor)
+
   "calcParts" should :
     "return empty List for empty search string" in :
       check(Prop.forAll(LogEntrySpec.gen) {
