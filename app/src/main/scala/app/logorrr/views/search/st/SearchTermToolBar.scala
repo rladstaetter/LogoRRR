@@ -64,7 +64,11 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
   private def updateUnclassified(): Unit =
     val unclassified = MutableSearchTerm.mkUnclassified(mutLogFileSettings.filterButtons.keySet)
     val searchTermButton: SearchTermToggleButton = updateOccurrencesAndFilter(unclassified)
-    mutLogFileSettings.someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
+    mutLogFileSettings.someUnclassifiedFilter.foreach(ftb => {
+      val btn = ftb._2
+      btn.unbind()
+      getItems.remove(btn)
+    })
     getItems.add(2, searchTermButton)
     mutLogFileSettings.someUnclassifiedFilter = Option((unclassified, searchTermButton))
     mutLogFileSettings.updateActiveFilter(filteredList)
@@ -85,7 +89,8 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
 
   private def removeSearchTermButton(filter: MutableSearchTerm): Unit =
     try
-      val button = mutLogFileSettings.filterButtons(filter)
+      val button: SearchTermToggleButton = mutLogFileSettings.filterButtons(filter)
+      button.unbind()
       getItems.remove(button)
     catch
       case e: Throwable => logException("Could not find or remove button", e)
@@ -100,7 +105,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
           if st.isUnclassified then {
             None
           } else {
-            Option(st.getMutableSearchTerm().asSearchTerm)
+            Option(st.getMutableSearchTerm.asSearchTerm)
           }
         case _ => None
       }

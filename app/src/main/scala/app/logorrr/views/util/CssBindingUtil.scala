@@ -21,19 +21,6 @@ object CssBindingUtil:
         case None =>
           ""
 
-  def mkRemoveSearchTermStyleCallable(colorProperty: ObjectPropertyBase[Color]): Callable[String] =
-    () =>
-      Option(colorProperty.get()) match
-        case Some(color) =>
-          s"""
-             |-fx-padding: 0;
-             |-fx-background-color: inherit;
-             |-fx-text-fill: ${ColorUtil.hexString(color)};
-             |""".stripMargin
-        case None =>
-          ""
-
-
   def gradientStyle(colorProperty: ObjectPropertyBase[Color]): Callable[String] =
     () =>
       Option(colorProperty.get()) match
@@ -50,9 +37,6 @@ object CssBindingUtil:
 
   def mkTextStyleBinding(colorProperty: ObjectPropertyBase[Color]): StringBinding =
     Bindings.createStringBinding(mkTextStyleCallable(colorProperty), colorProperty)
-
-  def mkRemoveSearchTermStyleBinding(colorProperty: ObjectPropertyBase[Color]): StringBinding =
-    Bindings.createStringBinding(mkRemoveSearchTermStyleCallable(colorProperty), colorProperty)
 
   def mkGradientStyleBinding(colorProperty: ObjectPropertyBase[Color]): StringBinding =
     Bindings.createStringBinding(gradientStyle(colorProperty), colorProperty)
