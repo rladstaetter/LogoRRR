@@ -1,17 +1,17 @@
 package app.logorrr.conf
 
-import app.logorrr.TestUtil
 import org.scalacheck.Gen
 
-
 object LogFileSettingsSpec:
+
+  val searchTermGen: Gen[SearchTerm] = for f <- Gen.oneOf(DefaultSearchTermGroups().jul.terms) yield f
 
   val gen: Gen[LogFileSettings] = for
     fileId <- Gen.identifier.map(FileId.apply)
     selectedIndex <- Gen.posNum[Int]
     firstOpened <- Gen.posNum[Long]
     dPos <- Gen.posNum[Double]
-    filters <- Gen.listOf(TestUtil.searchTermGen)
+    filters <- Gen.listOf(searchTermGen)
     leif <- TimestampSettingsSpec.gen
     someLogEntryInstantFormat <- Gen.oneOf(None, Option(leif))
     blockSettings <- BlockSettingsSpec.gen

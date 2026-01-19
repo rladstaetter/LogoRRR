@@ -3,10 +3,12 @@ package app.logorrr.io
 import app.logorrr.conf.{FileId, TimestampSettings}
 import app.logorrr.model.LogEntry
 import javafx.collections.{FXCollections, ObservableList}
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.io.TinyIo
+import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
-import java.io._
+import java.io.*
+import java.nio.charset.Charset
 import java.nio.file.{Files, Path}
 import java.time.{Duration, Instant}
 import java.util
@@ -14,7 +16,7 @@ import java.util.zip.{ZipEntry, ZipInputStream}
 import scala.util.{Failure, Success, Try}
 
 
-object IoManager extends CanLog:
+object IoManager extends TinyIo with TinyLog:
 
   private def mkReader(path: Path): BufferedReader =
     val encoding = FEncoding(path)
@@ -137,6 +139,6 @@ object IoManager extends CanLog:
       case e: IOException => logException("I/O error during unzip", e)
     resultMap
 
-
   def isZip(path: Path): Boolean = path.getFileName.toString.endsWith(".zip")
+
 

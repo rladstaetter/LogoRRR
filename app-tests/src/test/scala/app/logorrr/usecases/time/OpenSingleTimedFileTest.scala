@@ -42,17 +42,19 @@ class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedL
 
   @Test def setPositionAndFormatTest(): Unit =
     openFile(fileId)
-    clickOn(TimestampSettingsButton.uiNode(fileId))
+    waitAndClickVisibleItem(TimestampSettingsButton.uiNode(fileId))
 
-    // set position
+
+    // set position twice (?!)
+    waitAndClickVisibleItem(LogViewLabel.uiNode(fileId, 1, 0))
     clickOn(LogViewLabel.uiNode(fileId, 1, 0))
     clickOn(LogViewLabel.uiNode(fileId, 1, 23))
 
     // set format for this log file (delete the default format)
-    clickOn(TimeFormatTextField.uiNode(fileId)).eraseText(23).write("yyyy-MM-dd HH:mm:ss,SSS")
+    waitAndClickVisibleItem(TimeFormatTextField.uiNode(fileId)).eraseText(4).write(",SSS")
 
     // set format and close stage
-    clickOn(TimestampFormatSetButton.uiNode(fileId))
+    waitAndClickVisibleItem(TimestampFormatSetButton.uiNode(fileId))
 
     assert(LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.get())
 

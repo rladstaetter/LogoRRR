@@ -9,7 +9,7 @@
         <version>${revision}${changelist}</version>
     </parent>
     <artifactId>clv</artifactId>
-    <name>app.logorrr.clv</name>
+    <name>${groupId}:${artifactId}</name>
     <description>Provides a class named ChunkListView to visualize elements in a listview for JavaFX</description>
     <inceptionYear>2025</inceptionYear>
 

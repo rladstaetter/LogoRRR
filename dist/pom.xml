@@ -10,7 +10,7 @@
     </parent>
     <groupId>app.logorrr.dist</groupId>
     <artifactId>dist</artifactId>
-    <name>app.logorrr.dist</name>
+    <name>${groupId}:${artifactId}</name>
     <packaging>pom</packaging>
 
     <profiles>
@@ -22,7 +22,7 @@
                 </os>
             </activation>
             <modules>
-                <module>dist-win</module>
+                <module>win</module>
             </modules>
         </profile>
         <profile>
@@ -46,7 +46,7 @@
                 </os>
             </activation>
             <modules>
-                <module>dist-linux</module>
+                <module>linux</module>
             </modules>
         </profile>
     </profiles>

@@ -2,7 +2,7 @@ package app.logorrr.conf
 
 import app.logorrr.cp.TxtCp
 import app.logorrr.io.SettingsFileIO
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 import org.scalacheck.Gen
 import org.scalatest.wordspec.AnyWordSpec
 import upickle.default.*
@@ -17,7 +17,7 @@ object SettingsSpec:
   yield Settings(stageSettings, Map(), None, None, Map())
 
 
-class SettingsSpec extends AnyWordSpec with CanLog {
+class SettingsSpec extends AnyWordSpec with TinyLog {
 
   val cpResource = "/app/logorrr/conf/app.logorrr.conf"
 

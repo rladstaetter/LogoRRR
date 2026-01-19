@@ -23,6 +23,6 @@ class StgHelloScenario1 extends SingleFileApplicationTest(TestFiles.simpleLog0) 
 
     closeStgEditor(fileId)
 
-    matchItems[String](StgChoiceBox.uiNode(fileId), (expected.tail ++ Settings.DefaultSearchTermGroups.map(_.name)).sorted)
+    matchItems[String](StgChoiceBox.uiNode(fileId), Settings.DefaultSearchTermGroups.map(_.name).sorted.tail ++ expected)
 
 

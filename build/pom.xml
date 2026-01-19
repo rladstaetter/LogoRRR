@@ -9,7 +9,7 @@
         <version>${revision}${changelist}</version>
     </parent>
     <artifactId>build</artifactId>
-    <name>app.logorrr.build</name>
+    <name>${groupId}:${artifactId}</name>
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>

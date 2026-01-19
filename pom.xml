@@ -5,12 +5,13 @@
     <groupId>app.logorrr</groupId>
     <artifactId>logorrr</artifactId>
     <version>${revision}${changelist}</version>
-    <name>app.logorrr</name>
+    <name>${groupId}:${artifactId}</name>
     <description>LogoRRR - logfiles at a glance.</description>
     <packaging>pom</packaging>
     <properties>
         <revision>26.1.0</revision>
         <scala.version>3.7.4</scala.version>
+        <java.version>24</java.version>
         <openjfx.version>25</openjfx.version>
         <jre.src.version>11</jre.src.version>
         <jre.classes.output.version>11</jre.classes.output.version>
@@ -165,7 +166,7 @@
             <dependency>
                 <groupId>net.ladstatt.core</groupId>
                 <artifactId>core</artifactId>
-                <version>0.0.2</version>
+                <version>0.0.5</version>
             </dependency>
             <dependency>
                 <groupId>de.jangassen</groupId>
@@ -346,8 +347,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.14.0</version>
                     <configuration>
-                        <source>${jre.src.version}</source>
-                        <target>${jre.classes.output.version}</target>
+                        <release>${java.version}</release>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -512,7 +512,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.9.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>

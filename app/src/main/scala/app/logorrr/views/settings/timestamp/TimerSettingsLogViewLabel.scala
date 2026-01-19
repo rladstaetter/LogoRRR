@@ -13,14 +13,12 @@ object TimerSettingsLogViewLabel {
 }
 
 
-/**
- * "Creative" solution for not having a decent RichTextArea ..
- */
-case class TimerSettingsLogViewLabel(settings: MutLogFileSettings
-                                     , e: LogEntry
-                                     , maxLength: Int
-                                     , startColProperty: ObjectProperty[java.lang.Integer]
-                                     , endColProperty: ObjectProperty[java.lang.Integer])
+// TODO use RichTextArea from jfx.incubator
+class TimerSettingsLogViewLabel(settings: MutLogFileSettings
+                                , e: LogEntry
+                                , maxLength: Int
+                                , startColProperty: ObjectProperty[java.lang.Integer]
+                                , endColProperty: ObjectProperty[java.lang.Integer])
   extends HBox:
 
   val lineNumberLabel: LineNumberLabel = LineNumberLabel(e.lineNumber, maxLength)
@@ -65,5 +63,5 @@ case class TimerSettingsLogViewLabel(settings: MutLogFileSettings
       if startCol <= labelIndex && labelIndex < endCol then
         l.setBackground(new Background(new BackgroundFill(Color.YELLOWGREEN, null, null)))
 
-  getChildren.addAll(chars*)
+  getChildren.addAll(chars *)
 

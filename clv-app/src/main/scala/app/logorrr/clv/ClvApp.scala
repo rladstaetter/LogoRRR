@@ -6,37 +6,33 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.collections.FXCollections
 import javafx.geometry.Orientation
 import javafx.scene.Scene
-import javafx.scene.control._
+import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
 import javafx.stage.Stage
-import net.ladstatt.app.{AppId, AppMeta}
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
+import java.nio.file.Paths
 import java.util
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 
 /**
  * App to test block list view
  */
-object ClvApp {
+object ClvApp:
 
   def mkCLTElems(nr: Int): java.util.List[ClvElem] = List.fill(nr)(new ClvElem).asJava
 
-  def main(args: Array[String]): Unit = {
-    val appMeta = net.ladstatt.app.AppMeta(AppId("ChunkListTestApp", "chunklisttestapp", "chunklisttest.app"), AppMeta.LogFormat)
-    net.ladstatt.app.AppMeta.initApp(appMeta)
-
+  def main(args: Array[String]): Unit =
+    TinyLog.init(Paths.get("target/clv.log"))
     System.setProperty("user.language", "en")
     javafx.application.Application.launch(classOf[ClvApp], args*)
-  }
 
-}
 
 class ClvElem
 
-class ClvApp extends Application with CanLog {
+class ClvApp extends Application with TinyLog:
 
   private val elems = FXCollections.observableArrayList(0, 1, 10, 100, 1000 * 1000, 1000 * 1000 * 10)
 
@@ -44,8 +40,8 @@ class ClvApp extends Application with CanLog {
   // private val elements = FXCollections.observableArrayList(ClvApp.mkCLTElems(DefaultElemCount))
   private val elements = FXCollections.observableArrayList(new util.ArrayList[ClvElem]())
 
-  def start(stage: Stage): Unit = {
-
+  def start(stage: Stage): Unit =
+    TinyLog.init(Paths.get("target/clv.log"))
     val width = 1000
     val height = 1000
     val blockSize = 10
@@ -53,10 +49,10 @@ class ClvApp extends Application with CanLog {
 
     val bp = new BorderPane()
 
-    val elemSelector = new ElementSelector[ClvElem] {
+    val elemSelector = new ElementSelector[ClvElem]:
       override def select(a: ClvElem): Unit = ()
-    }
-    val vizor = new Vizor[ClvElem] {
+
+    val vizor = new Vizor[ClvElem] :
       /** returns true if entry is active (= selected) - typically this entry is highlighted in some form */
       override def isSelected(a: ClvElem): Boolean = false
 
@@ -68,12 +64,12 @@ class ClvApp extends Application with CanLog {
 
       /** element is visible in the text view */
       override def isVisibleInTextView(a: ClvElem): Boolean = true
-    }
-    val colorPicker = new ColorPicker[ClvElem] {
+
+    val colorPicker = new ColorPicker[ClvElem] :
       override def calc(a: ClvElem): Color = Color.GREY
 
       override def init(): Unit = ()
-    }
+
     val clv = new ChunkListView[ClvElem](elements
       , new SimpleIntegerProperty(selectedLineNumber)
       , new SimpleIntegerProperty(blockSize)
@@ -131,6 +127,6 @@ class ClvApp extends Application with CanLog {
 
     stage.show()
 
-  }
 
-}
+
+

@@ -42,7 +42,7 @@ class SettingsEditor(owner: Stage, fileId: FileId) extends Stage:
   contentLayout.getChildren.addAll(manageExistingSearchTermGroup, hBox)
 
   // --- Final Setup ---
-  setScene(new Scene(contentLayout, 800, 600)) // Adjusted size for list view
+  setScene(new Scene(contentLayout, 960, 720)) // Adjusted size for list view
 
 object CloseSettingsEditorButton extends UiNodeFileIdAware:
 

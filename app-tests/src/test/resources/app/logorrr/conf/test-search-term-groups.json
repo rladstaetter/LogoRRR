@@ -1,0 +1,48 @@
+{
+  "searchTermGroups": [
+    {
+      "name": "EMPTY",
+      "terms": []
+    },
+    {
+      "name": "Java_JUL",
+      "terms": [
+        {
+          "value": "SEVERE",
+          "color": "#ff0000",
+          "active": true
+        },
+        {
+          "value": "WARNING",
+          "color": "#ffa500",
+          "active": true
+        },
+        {
+          "value": "INFO",
+          "color": "#008000",
+          "active": true
+        },
+        {
+          "value": "CONFIG",
+          "color": "#20b2aa",
+          "active": true
+        },
+        {
+          "value": "FINE",
+          "color": "#808080",
+          "active": true
+        },
+        {
+          "value": "FINER",
+          "color": "#a9a9a9",
+          "active": true
+        },
+        {
+          "value": "FINEST",
+          "color": "#d3d3d3",
+          "active": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 package app.logorrr.conf
 
+import app.logorrr.views.search.MutableSearchTerm
 import javafx.scene.paint.Color
 import upickle.default.*
 
@@ -17,7 +18,6 @@ object SearchTerm:
     }
   )
 
-  val Unclassified: Color = Color.LIGHTGREY
 
   /**
    * Determines if a given line should be filtered out based on a set of search terms.
@@ -39,7 +39,7 @@ object SearchTerm:
     if activeSearchTerms.isEmpty then
       true
     else
-      !activeSearchTerms.exists(s => line.contains(s.value))
+      !activeSearchTerms.filter(s => Option(s.value).isDefined).exists(v => line.contains(v.value))
 
   /**
    * Returns true if the element string contains any of the active search terms.
@@ -92,7 +92,7 @@ object SearchTerm:
 
     // If there are no active search strings, return Unclassified
     if element.isEmpty || activeSearchStrings.isEmpty then
-      Unclassified
+      MutableSearchTerm.UnclassifiedColor
     else
       // Map each active search string to its occurrence count
       val counts = activeSearchStrings.map { case SearchTerm(str, color, _) =>
@@ -104,7 +104,7 @@ object SearchTerm:
       val countsSum = counts.values.sum
 
       if countsSum == 0 then
-        Unclassified
+        MutableSearchTerm.UnclassifiedColor
       else if countsSum == 1 then
         // performance optimisation - most of the time only one search term is found per line
         // no interpolation has to be performed

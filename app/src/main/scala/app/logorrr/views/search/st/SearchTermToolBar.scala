@@ -4,15 +4,15 @@ import app.logorrr.conf.SearchTerm
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
+import app.logorrr.views.search.MutableSearchTerm
 import app.logorrr.views.search.stg.{OpenStgEditorButton, StgChoiceBox}
-import app.logorrr.views.search.{MutableSearchTerm, MutableSearchTermUnclassified}
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ListChangeListener}
 import javafx.scene.control.ToolBar
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 /**
  * Depending on buttons pressed, filteredList will be mutated to show only selected items.
@@ -20,7 +20,7 @@ import scala.jdk.CollectionConverters._
  * @param filteredList list of entries which are displayed (can be filtered via buttons)
  */
 class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
-                        , filteredList: FilteredList[LogEntry]) extends ToolBar with CanLog:
+                        , filteredList: FilteredList[LogEntry]) extends ToolBar with TinyLog:
 
   setMaxHeight(Double.PositiveInfinity)
 
@@ -59,50 +59,53 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
         updateUnclassified()
 
   private def updateOccurrences(mutableSearchTerm: MutableSearchTerm): Unit =
-    occurrences = occurrences + (mutableSearchTerm -> filteredList.getSource.asScala.count(e => mutableSearchTerm.matches(e.value)))
+    occurrences = occurrences + (mutableSearchTerm -> filteredList.getSource.asScala.count(e => mutableSearchTerm.test(e.value)))
 
   private def updateUnclassified(): Unit =
-    val unclassified = MutableSearchTermUnclassified(mutLogFileSettings.filterButtons.keySet)
-    val searchTermButton: SearchTermButton = updateOccurrencesAndFilter(unclassified)
-    mutLogFileSettings.someUnclassifiedFilter.foreach(ftb => getItems.remove(ftb._2))
+    val unclassified = MutableSearchTerm.mkUnclassified(mutLogFileSettings.filterButtons.keySet)
+    val searchTermButton: SearchTermToggleButton = updateOccurrencesAndFilter(unclassified)
+    mutLogFileSettings.someUnclassifiedFilter.foreach(ftb => {
+      val btn = ftb._2
+      btn.unbind()
+      getItems.remove(btn)
+    })
     getItems.add(2, searchTermButton)
     mutLogFileSettings.someUnclassifiedFilter = Option((unclassified, searchTermButton))
     mutLogFileSettings.updateActiveFilter(filteredList)
 
   private def addSearchTermButton(filter: MutableSearchTerm): Unit =
     val filterButton = updateOccurrencesAndFilter(filter)
-    filter.bind(filterButton.selectedProperty())
-    filter.activeProperty.bind(filterButton.selectedProperty())
     getItems.add(filterButton)
     mutLogFileSettings.filterButtons = mutLogFileSettings.filterButtons.updated(filter, filterButton)
 
-  private def updateOccurrencesAndFilter(searchTerm: MutableSearchTerm): SearchTermButton =
+  private def updateOccurrencesAndFilter(searchTerm: MutableSearchTerm): SearchTermToggleButton =
     updateOccurrences(searchTerm)
-    new SearchTermButton(
+    SearchTermToggleButton(
       mutLogFileSettings.getFileId
       , searchTerm
       , occurrences(searchTerm)
       , mutLogFileSettings.updateActiveFilter(filteredList)
-      , mutLogFileSettings.mutSearchTerms.remove(_))
+      , mutLogFileSettings.mutSearchTerms.remove)
 
   private def removeSearchTermButton(filter: MutableSearchTerm): Unit =
     try
-      val button = mutLogFileSettings.filterButtons(filter)
+      val button: SearchTermToggleButton = mutLogFileSettings.filterButtons(filter)
+      button.unbind()
       getItems.remove(button)
     catch
       case e: Throwable => logException("Could not find or remove button", e)
     finally
-      filter.unbind()
+      filter.unbindActiveProperty()
     mutLogFileSettings.filterButtons = mutLogFileSettings.filterButtons.removed(filter)
 
   def activeSearchTerms(): Seq[SearchTerm] =
     (for i <- getItems.asScala yield {
       i match {
-        case st: SearchTermButton =>
+        case st: SearchTermToggleButton =>
           if st.isUnclassified then {
             None
           } else {
-            Option(new SearchTerm(st.searchTerm.getPredicate.description, st.searchTerm.getColor, st.searchTerm.isActive))
+            Option(st.getMutableSearchTerm.asSearchTerm)
           }
         case _ => None
       }

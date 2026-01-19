@@ -1,21 +1,21 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.clv.color.ColorMatcher
 import app.logorrr.conf.{BlockSettings, FileId, LogFileSettings, SearchTerm, TimestampSettings}
 import app.logorrr.model.LogEntry
 import app.logorrr.util.LogoRRRFonts
 import app.logorrr.views.ops.time.TimeRange
-import app.logorrr.views.search.st.SearchTermButton
-import app.logorrr.views.search.stg.SearchTermGroup
+import app.logorrr.views.search.st.SearchTermToggleButton
+import app.logorrr.conf.SearchTermGroup
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.{BooleanBinding, ObjectBinding, StringBinding}
-import javafx.beans.property._
+import javafx.beans.property.*
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ObservableList}
 
 import java.time.Instant
 import java.time.format.DateTimeFormatter
-import scala.jdk.CollectionConverters._
+import java.util.function.Predicate
+import scala.jdk.CollectionConverters.*
 import scala.util.Try
 
 object MutLogFileSettings:
@@ -44,8 +44,8 @@ object MutLogFileSettings:
 
 class MutLogFileSettings:
 
-  var someUnclassifiedFilter: Option[(MutableSearchTerm, SearchTermButton)] = None
-  var filterButtons: Map[ColorMatcher, SearchTermButton] = Map[ColorMatcher, SearchTermButton]()
+  var someUnclassifiedFilter: Option[(MutableSearchTerm, SearchTermToggleButton)] = None
+  var filterButtons: Map[Predicate[String], SearchTermToggleButton] = Map[Predicate[String], SearchTermToggleButton]()
 
   private val fileIdProperty = new SimpleObjectProperty[FileId]()
   private val firstOpenedProperty = new SimpleLongProperty()
@@ -67,7 +67,7 @@ class MutLogFileSettings:
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
   val mutSearchTerms: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm](FXCollections.observableArrayList())
-
+  
   private val mutSearchTermGroupSettings = new MutSearchTermGroupSettings
 
   def putSearchTerms(groupName: String, searchTerms: Seq[SearchTerm]): Unit = mutSearchTermGroupSettings.put(groupName, searchTerms)
@@ -206,7 +206,7 @@ class MutLogFileSettings:
     lfs
 
   def getSearchTerms: Seq[SearchTerm] =
-    getFilters.asScala.toSeq.map(f => SearchTerm(f.getPredicate.description, f.getColor, f.isActive))
+    getFilters.asScala.toSeq.map(f => SearchTerm(f.getValue, f.getColor, f.isActive))
 
   def setSomeSelectedSearchTermGroup(someSelectedSearchTermGroupId: Option[String]): Unit =
     someSelectedSearchTermGroupProperty.set(someSelectedSearchTermGroupId)

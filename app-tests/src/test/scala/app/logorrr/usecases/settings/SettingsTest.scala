@@ -31,6 +31,7 @@ class SettingsTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
    * check that there is the newly added group in the list
    * click on 'set to factory defaults'
    * check that there is the old list there
+   *
    * */
   @Test
   def addANewGroupAndVerifyFactoryDefaults(): Unit =
@@ -41,7 +42,7 @@ class SettingsTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
     var found = false
     openSettingsEditorAndPerform(
       settingsListView => {
-        settingsListView.entries.forEach(g => {
+        settingsListView.getSearchTermGroups.forEach(g => {
           if g.name == newGroup then {
             found = true
           }
@@ -53,7 +54,7 @@ class SettingsTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
     // check that settings are reset to default
     withOpenedSettingsEditor:
       waitAndClickVisibleItem(SettingsEditor.ResetToDefaultButton)
-      assert(lookupListView().getItems.size() == Settings.Default.searchTermGroups.size)
+      assert(lookupListView().getItems.size() == settings.searchTermGroups.size)
 
 
   /**

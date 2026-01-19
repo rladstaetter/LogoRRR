@@ -19,7 +19,7 @@ object LogTextView extends UiNodeFileIdAware:
 
 
 class LogTextView(mutLogFileSettings: MutLogFileSettings
-                  ,filteredList: FilteredList[LogEntry]) extends CodeArea with CanLog:
+                  ,filteredList: FilteredList[LogEntry]) extends CodeArea with TinyLog:
 
   setId(LogTextView.uiNode(mutLogFileSettings.getFileId).value)
   private val elementInvalidationListener = JfxUtils.mkInvalidationListener(_ => updateLogTextView)

@@ -1,13 +1,13 @@
 package app.logorrr.conf
 
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 import upickle.default.*
 
 import java.time.format.DateTimeFormatter
 import java.time._
 import scala.util.{Failure, Success, Try}
 
-object TimestampSettings extends CanLog:
+object TimestampSettings extends TinyLog:
 
   val DefaultPattern = "yyyy-MM-dd HH:mm:ss.SSS"
 

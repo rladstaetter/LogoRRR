@@ -4,7 +4,7 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.MenuItem
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 /**
  * Filters out all entries before the given current log entry and updates the current position.
@@ -19,7 +19,7 @@ import net.ladstatt.util.log.CanLog
 class IgnoreAboveMenuItem(mutLogFileSettings: MutLogFileSettings
                           , currentEntry: LogEntry
                           , filteredList: FilteredList[LogEntry]
-                          , scrollToActiveLogEntry: () => Unit) extends MenuItem("Ignore entries above") with CanLog:
+                          , scrollToActiveLogEntry: () => Unit) extends MenuItem("Ignore entries above") with TinyLog:
   setOnAction(_ => {
     val currPredicate = filteredList.getPredicate
     filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && currentEntry.lineNumber <= entry.lineNumber)

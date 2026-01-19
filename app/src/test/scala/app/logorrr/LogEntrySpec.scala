@@ -1,5 +1,6 @@
 package app.logorrr
 
+import app.logorrr.conf.TimestampSettings
 import app.logorrr.model.LogEntry
 import javafx.scene.paint.Color
 import org.scalacheck.Gen
@@ -31,7 +32,7 @@ class LogEntrySpec extends AnyWordSpecLike:
   "LogEntry" should:
     "show datetimeformatter usage" in:
       // see https://stackoverflow.com/questions/25229124/unsupportedtemporaltypeexception-when-formatting-instant-to-string
-      val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+      val dtf: DateTimeFormatter = TimestampSettings.DefaultFormatter
         .withZone(ZoneId.of("+1"))
       //.withZone(ZoneId.systemDefault())
       val i: Instant = LocalDateTime.parse("""2022-02-15 16:37:14.374""", dtf).toInstant(ZoneOffset.of("+1"))

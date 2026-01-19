@@ -14,13 +14,13 @@ class OpenMultipleFilesAndCloseToTheRight
     with CheckTabPaneActions:
 
   @Test def openFilesAndActivateFirstAndCloseAllToTheRight(): Unit =
-    TestFiles.seq.foreach:
-      p => openFile(p)
+    files.foreach(openFile)
+
     checkForNonEmptyTabPane()
     // activate first tab
     clickOn(lookup(UiNodes.LogFileHeaderTabs).query[StackPane]())
     clickOn(lookup(UiNodes.LogFileHeaderTabs).query[StackPane](), MouseButton.SECONDARY)
-    waitAndClickVisibleItem(CloseRightFilesMenuItem.uiNode(TestFiles.seq.head))
+    waitAndClickVisibleItem(CloseRightFilesMenuItem.uiNode(files.head))
 
     expectCountOfOpenFiles(1)
 

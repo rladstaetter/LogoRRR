@@ -1,6 +1,6 @@
 package app.logorrr.usecases
 
-import app.logorrr.conf.{FileId, Settings}
+import app.logorrr.conf.{FileId, Settings, TestSettings}
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.MockFileIdService
 import app.logorrr.services.hostservices.MockHostServices
@@ -16,7 +16,7 @@ class MultipleFileApplicationTest(val files: Seq[FileId])
     with AppActions
     with VisibleItemActions:
 
-  lazy val services: LogoRRRServices = LogoRRRServices(Settings.Default
+  lazy val services: LogoRRRServices = LogoRRRServices(TestSettings.Default
     , new MockHostServices
     , new MockFileIdService(files)
     , isUnderTest = true)

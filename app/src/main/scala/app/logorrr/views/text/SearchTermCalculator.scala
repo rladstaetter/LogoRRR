@@ -1,25 +1,31 @@
 package app.logorrr.views.text
 
-import app.logorrr.conf.SearchTerm
 import app.logorrr.model.LogEntry
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.scene.paint.Color
 
 import scala.collection.mutable.ListBuffer
 
+object SearchTermCalculator:
+
+  def apply(logEntry: LogEntry
+            , searchTerms: Seq[MutableSearchTerm]): SearchTermCalculator =
+    val logLine = logEntry.value
+    val filters: Seq[(String, Color)] = searchTerms.filter(_.isActive).map(s => (s.getValue, s.getColor))
+    SearchTermCalculator(logLine, filters)
+
+
 /**
  * For each log entry, calculate correct colors for each char displayed and also the mean color for this entry
  *
- * @param logEntry a log entry containing a log line
- * @param searchTerms  filter containing color and search string
+ * @param logLine     string to colorize
+ * @param searchTerms filter containing color and search string
  */
-case class SearchTermCalculator(logEntry: LogEntry
-                                , searchTerms: Seq[? <: MutableSearchTerm]):
+case class SearchTermCalculator(logLine: String
+                                , searchTerms: Seq[(String, Color)]):
 
-  private val logLine = logEntry.value
 
-  lazy val filteredParts: Seq[Seq[LinePart]] = for f <- searchTerms yield
-    calcParts(f.getPredicate.description, f.getColor)
+  lazy val filteredParts: Seq[Seq[LinePart]] = searchTerms.map((v, c) => calcParts(v, c))
 
   /**
    * For a given [[logLine]], compute the labels and associated colors which make up a displayed log line in the
@@ -43,29 +49,28 @@ case class SearchTermCalculator(logEntry: LogEntry
                         , color: Color): Seq[LinePart] =
     if searchPattern.isEmpty || logLine.isEmpty then
       Seq()
+    else if logLine.length < searchPattern.length then
+      Seq()
     else
-      if logLine.length < searchPattern.length then
-        Seq()
-      else
-        var currentIndex = 0
-        val bf = new ListBuffer[LinePart]
-        while currentIndex <= (logLine.length - searchPattern.length) do
-          val lSearch = logLine.substring(currentIndex, logLine.length)
-          val o = lSearch.indexOf(searchPattern)
-          if o != -1 then
-            val part = LinePart(searchPattern, currentIndex + o, color)
-            bf.append(part)
-            currentIndex = currentIndex + o + searchPattern.length
-          else
-            // end while loop
-            currentIndex = logLine.length
-        bf.toSeq
+      var currentIndex = 0
+      val bf = new ListBuffer[LinePart]
+      while currentIndex <= (logLine.length - searchPattern.length) do
+        val lSearch = logLine.substring(currentIndex, logLine.length)
+        val o = lSearch.indexOf(searchPattern)
+        if o != -1 then
+          val part = LinePart(searchPattern, currentIndex + o, color)
+          bf.append(part)
+          currentIndex = currentIndex + o + searchPattern.length
+        else
+          // end while loop
+          currentIndex = logLine.length
+      bf.toSeq
 
   private def calcStringColorPairs: Seq[(String, Color)] =
-    val value = logEntry.value
+    val value = logLine
     // if there are no filters, it is easy - just return the whole string with special color
     if filteredParts.isEmpty then
-      Seq((value, SearchTerm.Unclassified))
+      Seq((value, MutableSearchTerm.UnclassifiedColor))
     else
       // brute force:
       // for all filters, calculate if there is a hit or not.
@@ -105,7 +110,7 @@ case class SearchTermCalculator(logEntry: LogEntry
           val curColor =
             someCol match {
               case Some(value) => value
-              case None => SearchTerm.Unclassified
+              case None => MutableSearchTerm.UnclassifiedColor
             }
           // handle special case for first element
           if acc.isEmpty then {

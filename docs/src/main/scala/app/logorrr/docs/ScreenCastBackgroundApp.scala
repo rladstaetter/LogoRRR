@@ -1,7 +1,7 @@
 package app.logorrr.docs
 
-import app.logorrr.docs.Area._
-import net.ladstatt.util.log.CanLog
+import app.logorrr.docs.Area.*
+import net.ladstatt.util.log.TinyLog
 import javafx.application.Application
 import javafx.geometry.Insets
 import javafx.scene.Scene
@@ -9,7 +9,8 @@ import javafx.scene.layout.{Background, BackgroundFill, BorderPane}
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.stage.Stage
-import net.ladstatt.app.{AppId, AppMeta}
+
+import java.nio.file.Paths
 
 /**
  * White background for screencasts
@@ -17,13 +18,12 @@ import net.ladstatt.app.{AppId, AppMeta}
 object ScreenCastBackgroundApp {
 
   def main(args: Array[String]): Unit = {
-    val appMeta = net.ladstatt.app.AppMeta(AppId("ScreenCastBackgroundApp", "screencastbackgroundapp", "screencastbackground.app"), AppMeta.LogFormat)
-    net.ladstatt.app.AppMeta.initApp(appMeta)
+    TinyLog.init(Paths.get("target/backgroundapp.log"))
     javafx.application.Application.launch(classOf[ScreenCastBackgroundApp], args*)
   }
 }
 
-class ScreenCastBackgroundApp extends javafx.application.Application with CanLog {
+class ScreenCastBackgroundApp extends javafx.application.Application with TinyLog {
 
   def start(stage: Stage): Unit = {
     Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")

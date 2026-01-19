@@ -1,8 +1,8 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.FileId
+import app.logorrr.conf.{DefaultSearchTermGroups, FileId}
 import app.logorrr.services.file.FileIdService
-import app.logorrr.views.menubar.{FileMenu, HelpMenu, AppMenuBuilder}
+import app.logorrr.views.menubar.{AppMenuBuilder, FileMenu, HelpMenu}
 import de.jangassen.MenuToolkit
 import de.jangassen.model.AppearanceMode
 import javafx.scene.control.{Menu, MenuBar}

@@ -13,7 +13,7 @@ import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.event.Event
 import javafx.scene.control._
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
 import java.lang
@@ -67,7 +67,7 @@ class LogFileTab(val fileId: FileId
                  , val mutLogFileSettings: MutLogFileSettings
                  , val entries: ObservableList[LogEntry]) extends Tab
   with TimerCode
-  with CanLog:
+  with TinyLog:
 
   setId(LogFileTab.uiNode(fileId).value)
 
@@ -101,8 +101,7 @@ class LogFileTab(val fileId: FileId
 
     def handleSearchTermChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit =
       while change.next() do
-        Future:
-          LogoRRRGlobals.persist()
+        Future(LogoRRRGlobals.persist(LogoRRRGlobals.getSettings))
 
     JfxUtils.mkListChangeListener[MutableSearchTerm](handleSearchTermChange)
 

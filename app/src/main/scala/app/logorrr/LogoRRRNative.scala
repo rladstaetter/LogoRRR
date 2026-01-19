@@ -1,10 +1,10 @@
 package app.logorrr
 
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
 
-object LogoRRRNative extends CanLog:
+object LogoRRRNative extends TinyLog:
 
   def loadNativeLibraries(): Unit =
     if OsUtil.enableSecurityBookmarks then

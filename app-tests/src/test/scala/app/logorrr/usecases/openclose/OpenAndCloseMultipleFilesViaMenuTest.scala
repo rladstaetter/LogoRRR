@@ -14,13 +14,11 @@ class OpenAndCloseMultipleFilesViaMenuTest
     with CheckTabPaneActions:
 
   @Test def openFilesAndCloseAllViaMenu(): Unit =
-    TestFiles.seq.foreach:
-      p => openFile(p)
+    files.foreach(openFile)
+
     // now close them all again
     clickOn(FileMenu.Self)
-
-    waitForVisibility(FileMenu.CloseAll)
-    clickOn(FileMenu.CloseAll)
+    waitAndClickVisibleItem(FileMenu.CloseAll)
 
     checkForEmptyTabPane()
 

@@ -9,7 +9,7 @@ import javafx.scene.control.ListCell
 import javafx.scene.image.{ImageView, PixelBuffer, PixelFormat, WritableImage}
 import javafx.scene.input.{MouseButton, MouseEvent}
 import javafx.scene.paint.Color
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 import java.nio.IntBuffer
 import scala.util.Try
@@ -18,7 +18,7 @@ import scala.util.Try
 /**
  * Paint directly into a byte array for performant image manipulations.
  */
-object ChunkListCell extends CanLog:
+object ChunkListCell extends TinyLog:
 
   // assuming we have a grid of rectangles, and x and y give the coordinate of a mouse click
   // this function should return the correct index for the surrounding rectangle
@@ -153,7 +153,7 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
                        , elementColorPicker: ColorPicker[A]
                        , elementSelector: ElementSelector[A]
                        , chunkListViewWidthBinding: IntegerBinding
-                      ) extends ListCell[Chunk[A]] with CanLog:
+                      ) extends ListCell[Chunk[A]] with TinyLog:
 
   val view = new ImageView()
 
@@ -241,7 +241,7 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
              , entries: java.util.List[A]
              , blockSize: Int
             ): Unit =
-    if shape.width > blockSize then
+    if shape.getWidth > blockSize then
       // do this once for all paint operations
       elementColorPicker.init()
       if blockSize > 1 then
@@ -265,7 +265,7 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
         // we bailout with an exception.
         Try(entries.get(o)).toOption match
           case Some(e) =>
-            ChunkListCell.paintBlock(pb, i, elementColorPicker.calc(e), blockSize, shape.width, logEntryVizor.isSelected(e), logEntryVizor.isFirstVisible(e), logEntryVizor.isLastVisible(e), logEntryVizor.isVisibleInTextView(e))
+            ChunkListCell.paintBlock(pb, i, elementColorPicker.calc(e), blockSize, shape.getWidth, logEntryVizor.isSelected(e), logEntryVizor.isFirstVisible(e), logEntryVizor.isLastVisible(e), logEntryVizor.isVisibleInTextView(e))
             i = i + 1
           case None => // logWarn("Concurrent change of entries detected")
     shape

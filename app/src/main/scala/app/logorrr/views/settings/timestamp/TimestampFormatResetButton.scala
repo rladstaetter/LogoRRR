@@ -26,7 +26,7 @@ class TimestampFormatResetButton(mutLogFileSettings: MutLogFileSettings
   setPrefWidth(180)
   setOnAction(_ => {
     mutLogFileSettings.setSomeLogEntryInstantFormat(None)
-    LogoRRRGlobals.persist()
+    LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
     // we have to deactivate this listener otherwise
     chunkListView.removeInvalidationListener()
     val tempList = new util.ArrayList[LogEntry]()

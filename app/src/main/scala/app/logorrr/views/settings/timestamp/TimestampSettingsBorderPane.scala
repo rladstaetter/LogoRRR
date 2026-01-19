@@ -13,7 +13,7 @@ import javafx.collections.{FXCollections, ObservableList}
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control._
 import javafx.scene.layout.{BorderPane, HBox, VBox}
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 
 class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
@@ -21,7 +21,7 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
                                   , chunkListView: ChunkListView[LogEntry]
                                   , opsToolBar: OpsToolBar
                                   , closeStage: => Unit)
-  extends BorderPane with CanLog:
+  extends BorderPane with TinyLog:
 
   private val fromTextField = new FromTextField(mutLogFileSettings.getFileId)
   private val toTextField = new ToTextField(mutLogFileSettings.getFileId)

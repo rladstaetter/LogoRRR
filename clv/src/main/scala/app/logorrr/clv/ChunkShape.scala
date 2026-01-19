@@ -17,7 +17,7 @@ object ChunkShape:
  * @param width  width of given shape
  * @param height height of given shape.
  */
-case class ChunkShape(width: Int, height: Int) extends Rectangle2D(0.0, 0.0, width, height):
+class ChunkShape(width: Int, height: Int) extends Rectangle2D(0.0, 0.0, width, height):
   // checks in order not to overshoot the boundaries of underlying restrictions of the hardware accelerated api
   assert(width <= ChunkShape.MaxWidth, s"width was $width which exceeds ${ChunkShape.MaxWidth}.")
   assert(height <= ChunkShape.MaxHeight, s"height was $height which exceeds ${ChunkShape.MaxHeight}.")
