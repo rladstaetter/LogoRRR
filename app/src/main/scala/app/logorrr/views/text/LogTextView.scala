@@ -8,10 +8,36 @@ import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.control.MultipleSelectionModel
-import jfx.incubator.scene.control.richtext.CodeArea
-import jfx.incubator.scene.control.richtext.model.CodeTextModel
+import jfx.incubator.scene.control.richtext.model.{CodeTextModel, RichParagraph}
+import jfx.incubator.scene.control.richtext.{CodeArea, SyntaxDecorator, TextPos}
 import net.ladstatt.util.log.TinyLog
 
+import scala.collection.mutable.ListBuffer
+
+
+class SimpleSyntaxDecorator extends SyntaxDecorator {
+  val paragraphs = new ListBuffer[RichParagraph]()
+
+  override def createRichParagraph(model: CodeTextModel, index: Int): RichParagraph =
+    if (paragraphs.isEmpty || index >= paragraphs.size) return RichParagraph.builder.build
+    paragraphs(index)
+
+  override def handleChange(m: CodeTextModel, start: TextPos, end: TextPos, charsTop: Int, linesAdded: Int, charsBottom: Int): Unit = {
+    val text = getPlainText(m)
+    println(text)
+  }
+
+  protected def getPlainText(model: CodeTextModel): String = {
+    val sb = new StringBuilder
+    var newLine = false
+    for (i <- 0 until model.size) {
+      if (newLine) sb.append('\n')
+      else newLine = true
+      sb.append(model.getPlainText(i))
+    }
+    sb.toString
+  }
+}
 
 object LogTextView extends UiNodeFileIdAware:
 
@@ -19,7 +45,7 @@ object LogTextView extends UiNodeFileIdAware:
 
 
 class LogTextView(mutLogFileSettings: MutLogFileSettings
-                  ,filteredList: FilteredList[LogEntry])
+                  , filteredList: FilteredList[LogEntry])
   extends CodeArea with TinyLog:
 
   setLineNumbersEnabled(true)
@@ -39,6 +65,8 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
   def removeListeners(): Unit =
     filteredList.removeListener(elementInvalidationListener)
     styleProperty.unbind()
+
+  setSyntaxDecorator(new SimpleSyntaxDecorator())
 
   def getSelectionModel: MultipleSelectionModel[LogEntry] = new MultipleSelectionModel[LogEntry] {
     override def getSelectedIndices: ObservableList[Integer] = ???
