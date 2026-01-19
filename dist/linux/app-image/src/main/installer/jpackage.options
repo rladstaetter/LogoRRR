@@ -1,4 +1,4 @@
---add-modules javafx.controls,jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported
+--add-modules javafx.controls,jdk.crypto.ec,jdk.localedata,java.base,java.desktop,jdk.jfr,java.logging,jdk.unsupported,jfx.incubator.richtext
 --app-version ${project.version}
 --copyright "Copyright 2021-${currentYear} Robert Ladstätter"
 --description "explore logs effortlessly"
