@@ -152,7 +152,6 @@ class MutLogFileSettings:
 
   val fontStyleBinding: StringBinding = new StringBinding:
     bind(fontSizeProperty)
-
     override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
 
   def setSomeLogEntryInstantFormat(someLef: Option[TimestampSettings]): Unit =

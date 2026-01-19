@@ -26,9 +26,6 @@ object LogoRRRGlobals extends TinyLog :
   def searchTermGroupNames: ObservableList[String] = mutSettings.searchTermGroupNames
 
   def persist(settings: Settings): Unit = SettingsFileIO.toFile(settings, LogoRRRApp.paths.settingsFile)
-  def persist(settings: Settings): Unit = SettingsFileIO.toFile(settings, settingsFilePath)
-
-  def persist(): Unit = SettingsFileIO.toFile(getSettings, settingsFilePath)
 
 
   def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings

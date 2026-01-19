@@ -1,30 +1,11 @@
-.list-view {
-    -fx-border-width: 0px;
+/* Target the decorator node itself */
+.line-number-decorator {
+    -fx-background-color: beige;
+    -fx-padding: 0 10 0 10;
 }
 
-.list-cell {
-    -fx-text-fill: -color-cell-fg;
-    -fx-padding: 0;
-    -fx-border-width: 0;
-    -fx-border-color: transparent;
-    -fx-selection-bar: transparent;
-    -fx-background-color: transparent;
-}
-
-.list-cell:odd {
-    -fx-background-color: transparent;
-}
-
-.list-cell:even {
-    -fx-background-color: transparent;
-}
-
-.list-cell:filled:selected {
-    -color-cell-fg: -color-cell-fg-selected-focused;
-    -fx-background-color: -color-logorrr-selected;
-}
-
-.list-cell:filled:selected {
-    -color-cell-fg: -color-cell-fg-selected-focused;
-    -fx-background-color: -color-logorrr-selected;
+/* Optional: Style the text inside the decorator */
+.line-number-decorator .text {
+    -fx-fill: #555555;
+    -fx-font-family: "Monospaced";
 }

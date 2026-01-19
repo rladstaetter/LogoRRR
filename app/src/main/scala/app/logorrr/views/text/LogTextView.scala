@@ -10,7 +10,7 @@ import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.control.MultipleSelectionModel
 import jfx.incubator.scene.control.richtext.CodeArea
 import jfx.incubator.scene.control.richtext.model.CodeTextModel
-import net.ladstatt.util.log.CanLog
+import net.ladstatt.util.log.TinyLog
 
 
 object LogTextView extends UiNodeFileIdAware:
@@ -19,12 +19,16 @@ object LogTextView extends UiNodeFileIdAware:
 
 
 class LogTextView(mutLogFileSettings: MutLogFileSettings
-                  ,filteredList: FilteredList[LogEntry]) extends CodeArea with TinyLog:
+                  ,filteredList: FilteredList[LogEntry])
+  extends CodeArea with TinyLog:
+
+  setLineNumbersEnabled(true)
 
   setId(LogTextView.uiNode(mutLogFileSettings.getFileId).value)
   private val elementInvalidationListener = JfxUtils.mkInvalidationListener(_ => updateLogTextView)
 
   def init(): Unit =
+    getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
     styleProperty.bind(mutLogFileSettings.fontStyleBinding)
     filteredList.addListener(elementInvalidationListener)
     updateLogTextView
