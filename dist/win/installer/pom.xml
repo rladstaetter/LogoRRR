@@ -141,6 +141,52 @@
                             <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>upload-exe-to-server</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>powershell.exe</executable>
+                            <arguments>
+                                <argument>-ExecutionPolicy</argument>
+                                <argument>Bypass</argument>
+                                <argument>-File</argument>
+                                <argument>${basedir}/../upload.ps1</argument>
+                                <argument>${app.logorrr.dist.win.uploadserver}</argument>
+                                <argument>${app.logorrr.dist.win.username}</argument>
+                                <argument>${project.build.directory}/installer/LogoRRR-${project.version}-installer.exe</argument>
+                                <argument>public_html/downloads/${project.version}</argument>
+                                <argument>${app.logorrr.dist.win.privatekey}</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <useMavenLogger>true</useMavenLogger>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>upload-msi-to-server</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>powershell.exe</executable>
+                            <arguments>
+                                <argument>-ExecutionPolicy</argument>
+                                <argument>Bypass</argument>
+                                <argument>-File</argument>
+                                <argument>${basedir}/../upload.ps1</argument>
+                                <argument>${app.logorrr.dist.win.uploadserver}</argument>
+                                <argument>${app.logorrr.dist.win.username}</argument>
+                                <argument>${project.build.directory}/installer/LogoRRR-${project.version}-installer.msi</argument>
+                                <argument>public_html/downloads/${project.version}</argument>
+                                <argument>${app.logorrr.dist.win.privatekey}</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <useMavenLogger>true</useMavenLogger>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

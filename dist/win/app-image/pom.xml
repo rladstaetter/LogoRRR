@@ -138,7 +138,7 @@
                                 <argument>${basedir}/../upload.ps1</argument>
                                 <argument>${app.logorrr.dist.win.uploadserver}</argument>
                                 <argument>${app.logorrr.dist.win.username}</argument>
-                                <argument>${project.build.directory}/LogoRRR-windows-${project.version}.zip</argument>
+                                <argument>${project.build.directory}/LogoRRR-${project.version}.zip</argument>
                                 <argument>public_html/downloads/${project.version}</argument>
                                 <argument>${app.logorrr.dist.win.privatekey}</argument>
                             </arguments>
@@ -153,7 +153,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
-                    <finalName>LogoRRR-windows-${project.version}</finalName>
+                    <finalName>LogoRRR-${project.version}</finalName>
                     <descriptors>
                         <descriptor>src/main/assembly/zip.xml</descriptor>
                     </descriptors>

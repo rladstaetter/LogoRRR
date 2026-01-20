@@ -12,7 +12,7 @@ object ProductCodeUpdater extends TinyIo with TinyLog:
   val needle = """<ROW Property="ProductCode" Value="1033:{aaaaaaaa-bbbb-cccc-dddd-ffffffffffff} " Type="16"/>"""
 
   def main(args: Array[String]): Unit =
-    TinyLog.init(Paths.get("target/productcodeupdater.log"))
+    TinyLog.init(Paths.get("target/productcodeupdater.log"), limit = 1024 * 1024 * 100,count = 1)
     if args.length != 2 then
       logError(s"Wrong number of arguments, expected 2 but was ${args.length} ")
     else

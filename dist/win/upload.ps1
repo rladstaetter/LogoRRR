@@ -20,12 +20,12 @@ icacls "$PrivateKeyPath" /c /t /grant:r "${currentUser}:F" | Out-Null
 
 # 3. Execute the Upload
 # We use -o StrictHostKeyChecking=no to prevent the build from hanging on a "Trust this host?" prompt
-Write-Host "🚀 Uploading $LocalFile to $RemoteHost..."
+Write-Host "Uploading $LocalFile to $RemoteHost..."
 scp -i "$PrivateKeyPath" -o "StrictHostKeyChecking=no" "$LocalFile" "${RemoteUser}@${RemoteHost}:${RemoteDir}"
 
 # 4. Return the exit code to Maven
 if ($LASTEXITCODE -ne 0) {
-    Write-Error "❌ SCP Upload failed."
+    Write-Error "SCP Upload failed."
     exit $LASTEXITCODE
 }
 
