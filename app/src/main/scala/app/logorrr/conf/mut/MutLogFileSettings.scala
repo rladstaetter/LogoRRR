@@ -155,9 +155,9 @@ class MutLogFileSettings:
 
     override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
 
-  def setSomeLogEntryInstantFormat(someLef: Option[TimestampSettings]): Unit =
-    someTimestampSettings.set(someLef)
-    someLef match
+  def setSomeLogEntryInstantFormat(timestampSettings: Option[TimestampSettings]): Unit =
+    someTimestampSettings.set(timestampSettings)
+    timestampSettings match
       case Some(value) => setDateTimeFormatter(value.dateTimeFormatter)
       case None => setDateTimeFormatter(null)
 

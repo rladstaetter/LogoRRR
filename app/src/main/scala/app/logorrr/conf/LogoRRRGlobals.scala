@@ -63,14 +63,13 @@ object LogoRRRGlobals extends TinyLog :
     mutSettings.setLogFileSettings(settings.fileSettings)
     mutSettings.setSomeActive(settings.someActive)
     mutSettings.setSomeLastUsedDirectory(settings.someLastUsedDirectory)
+    mutSettings.timestampSettings.set(settings.timestampSettings)
 
     // populate either from saved file or use default values.
     // if values are saved in the .conf file, those should be used
     val searchTermGroupsToUse = settings.searchTermGroups
-
     for (k, v) <- searchTermGroupsToUse do
       mutSettings.mutSearchTermGroupSettings.put(k, v)
-
     setHostServices(hostServices)
 
   def getSettings: Settings = mutSettings.mkImmutable()
@@ -114,4 +113,4 @@ object LogoRRRGlobals extends TinyLog :
 
   val searchTermGroupEntries: ObservableList[SearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
 
-
+  val timestampSettings = mutSettings.timestampSettings

@@ -2,7 +2,8 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.{LogoRRRGlobals, StageSettings}
 import app.logorrr.util.JfxUtils
-import javafx.beans.property.{SimpleDoubleProperty, SimpleIntegerProperty}
+import javafx.beans.binding.{DoubleBinding, DoubleExpression}
+import javafx.beans.property.{DoublePropertyBase, IntegerPropertyBase, ReadOnlyDoubleProperty, SimpleDoubleProperty, SimpleIntegerProperty}
 import javafx.beans.value.ChangeListener
 import javafx.stage.Window
 
@@ -11,38 +12,30 @@ import javafx.stage.Window
  */
 object MutStageSettings:
 
-  val windowListener: ChangeListener[Window] = JfxUtils.onNew[Window](window => {
-    // during tests, window reference is null when the second TestFX test is running, not yet clear why
-    Option(window).foreach(LogoRRRGlobals.bindWindow)
-    // LogoRRRGlobals.bindWindow(window)
-  })
+  val windowListener: ChangeListener[Window] = JfxUtils.onNew[Window]:
+    window =>
+      Option(window).foreach(LogoRRRGlobals.bindWindow)
 
 
+class MutStageSettings
+  extends XHolder with YHolder
+    with WidthHolder with HeightHolder:
 
-class MutStageSettings {
+  def bind(xBinding: DoubleExpression
+           , yBinding: DoubleExpression
+           , widthBinding: DoubleExpression
+           , heightBinding: DoubleExpression): Unit = {
+    bindXProperty(xBinding)
+    bindYProperty(yBinding)
+    bindWidthProperty(widthBinding)
+    bindHeightProperty(heightBinding)
+  }
 
-  val xProperty = new SimpleDoubleProperty()
+  def unbind(): Unit =
+    unbindXProperty()
+    unbindYProperty()
+    unbindWidthProperty()
+    unbindHeightProperty()
 
-  val yProperty = new SimpleDoubleProperty()
+  def mkImmutable(): StageSettings = StageSettings(getX, getY, getWidth, getHeight)
 
-  val widthProperty = new SimpleIntegerProperty()
-
-  val heightProperty = new SimpleIntegerProperty()
-
-  def setX(x: Double): Unit = xProperty.set(x)
-
-  def setY(y: Double): Unit = yProperty.set(y)
-
-  def setWidth(width: Int): Unit = widthProperty.set(width)
-
-  def getWidth: Int = widthProperty.get()
-
-  def setHeight(height: Int): Unit = heightProperty.set(height)
-
-  def mkImmutable(): StageSettings =
-    StageSettings(xProperty.get()
-      , yProperty.get()
-      , widthProperty.get()
-      , heightProperty.get())
-
-}

@@ -1,7 +1,6 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.conf.{FileId, LogFileSettings, Settings, StageSettings}
-import app.logorrr.conf.SearchTermGroup
+import app.logorrr.conf.*
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.stage.Window
@@ -9,7 +8,7 @@ import net.ladstatt.util.os.OsUtil
 
 import java.nio.file.Path
 import java.util
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 object MutSettings:
 
@@ -26,6 +25,8 @@ object MutSettings:
 
 
 class MutSettings {
+
+  val timestampSettings: MutTimestampSettings = new MutTimestampSettings
 
   /** global container for search term groups */
   val mutSearchTermGroupSettings = new MutSearchTermGroupSettings
@@ -81,7 +82,8 @@ class MutSettings {
       , logFileSettings
       , getSomeActiveLogFile
       , getSomeLastUsedDirectory
-      , mutSearchTermGroupSettings.mkImmutable())
+      , mutSearchTermGroupSettings.mkImmutable()
+      , timestampSettings.mkImmutable())
 
   def setStageSettings(stageSettings: StageSettings): Unit =
     mutStageSettings.setX(stageSettings.x)
@@ -94,22 +96,21 @@ class MutSettings {
     setSomeActive(None)
 
   def bindWindowProperties(window: Window): Unit =
-    mutStageSettings.widthProperty.bind(window.getScene.widthProperty())
-    mutStageSettings.heightProperty.bind(window.getScene.heightProperty().add(MutSettings.WindowHeightHack))
-    mutStageSettings.xProperty.bind(window.xProperty())
-    mutStageSettings.yProperty.bind(window.yProperty())
+    mutStageSettings.bind(
+      window.xProperty()
+      , window.yProperty()
+      , window.getScene.widthProperty()
+      , window.getScene.heightProperty().add(MutSettings.WindowHeightHack)
+    )
 
   def unbindWindow(): Unit =
-    mutStageSettings.widthProperty.unbind()
-    mutStageSettings.heightProperty.unbind()
-    mutStageSettings.xProperty.unbind()
-    mutStageSettings.yProperty.unbind()
+    mutStageSettings.unbind()
 
-  def getStageY: Double = mutStageSettings.yProperty.get()
+  def getStageY: Double = mutStageSettings.getY
 
-  def getStageX: Double = mutStageSettings.xProperty.get()
+  def getStageX: Double = mutStageSettings.getX
 
-  def getStageHeight: Int = mutStageSettings.heightProperty.get()
+  def getStageHeight: Int = mutStageSettings.getHeight
 
   def getStageWidth: Int = mutStageSettings.getWidth
 
