@@ -123,31 +123,6 @@
                             <useMavenLogger>true</useMavenLogger>
                         </configuration>
                     </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <descriptors>
-                        <descriptor>src/main/assembly/zip.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
                     <execution>
                         <id>upload-to-server</id>
                         <phase>install</phase>
@@ -163,13 +138,33 @@
                                 <argument>${basedir}/../upload.ps1</argument>
                                 <argument>${app.logorrr.dist.win.uploadserver}</argument>
                                 <argument>${app.logorrr.dist.win.username}</argument>
-                                <argument>${project.build.directory}/changeme.zip</argument>
+                                <argument>${project.build.directory}/LogoRRR-windows-${project.version}.zip</argument>
                                 <argument>public_html/downloads/${project.version}</argument>
                                 <argument>${app.logorrr.dist.win.privatekey}</argument>
                             </arguments>
                             <workingDirectory>${project.basedir}</workingDirectory>
                             <useMavenLogger>true</useMavenLogger>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <finalName>LogoRRR-windows-${project.version}</finalName>
+                    <descriptors>
+                        <descriptor>src/main/assembly/zip.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
