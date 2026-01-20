@@ -144,6 +144,35 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>upload-to-server</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>powershell.exe</executable>
+                            <arguments>
+                                <argument>-ExecutionPolicy</argument>
+                                <argument>Bypass</argument>
+                                <argument>-File</argument>
+                                <argument>${basedir}/../upload.ps1</argument>
+                                <argument>${app.logorrr.dist.win.uploadserver}</argument>
+                                <argument>${app.logorrr.dist.win.username}</argument>
+                                <argument>${project.build.directory}/changeme.zip</argument>
+                                <argument>public_html/downloads/${project.version}</argument>
+                                <argument>${app.logorrr.dist.win.privatekey}</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <useMavenLogger>true</useMavenLogger>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
