@@ -190,8 +190,5 @@ class ChunkListView[A](val elements: ObservableList[A]
         Chunk.updateChunks[A](getItems, elements, blockSizeProperty.get(), chunkListWidthProperty.get(), heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
         recalculateScheduled = false
       })
-    else {
-      // println(s"NOT recalculating ($ctx)> (width: ${widthProperty().get()}, blockSize: ${blockSizeProperty.get()}, height: ${heightProperty().get()})")
-    }
-
+    
 

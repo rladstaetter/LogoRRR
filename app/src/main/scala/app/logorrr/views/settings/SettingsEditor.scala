@@ -1,6 +1,6 @@
 package app.logorrr.views.settings
 
-import app.logorrr.conf.{FileId, LogoRRRGlobals, Settings}
+import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTermGroup, Settings}
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.uinodes.SettingsEditor
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
@@ -16,6 +16,8 @@ class SettingsEditor(owner: Stage, fileId: FileId) extends Stage:
   initModality(Modality.WINDOW_MODAL)
   setTitle("Settings")
 
+  private val timeSettingsEditor = TimestampSettingsEditor(LogoRRRGlobals.getTimestampSettings)
+
   // Layout for existing groups (including list and close button)
   private val manageExistingSearchTermGroup =
     SettingsManageStgEditor(fileId, LogoRRRGlobals.searchTermGroupEntries)
@@ -27,7 +29,9 @@ class SettingsEditor(owner: Stage, fileId: FileId) extends Stage:
   resetButton.setId(SettingsEditor.ResetToDefaultButton.value)
   resetButton.setOnAction(_ => {
     LogoRRRGlobals.clearSearchTermGroups()
-    Settings.DefaultSearchTermGroups.map(LogoRRRGlobals.putSearchTermGroup)
+    Settings.DefaultSearchTermGroups.foreach(LogoRRRGlobals.putSearchTermGroup)
+    LogoRRRGlobals.setTimestampSettings(null)
+    timeSettingsEditor.updateSettings(Option(null))
   })
 
   private val closeButton: Button = new CloseSettingsEditorButton(this)
@@ -38,8 +42,7 @@ class SettingsEditor(owner: Stage, fileId: FileId) extends Stage:
     h.getChildren.addAll(resetButton, filler, closeButton)
     h
 
-
-  contentLayout.getChildren.addAll(manageExistingSearchTermGroup, hBox)
+  contentLayout.getChildren.addAll(manageExistingSearchTermGroup, timeSettingsEditor, hBox)
 
   // --- Final Setup ---
   setScene(new Scene(contentLayout, 960, 720)) // Adjusted size for list view

@@ -4,20 +4,21 @@ import org.scalacheck.Gen
 import org.scalatest.wordspec.AnyWordSpec
 
 import java.time.Instant
-import scala.util.Try
+import scala.util.{Random, Try}
 
 object TimestampSettingsSpec:
   val gen: Gen[TimestampSettings] = for
-    sr <- SimpleRangeSpec.gen
+    start <- Gen.posNum[Int]
+    end <- Gen.chooseNum(start, Random.nextInt(start + 100) + start)
     dtp <- Gen.const(TimestampSettings.DefaultPattern)
-  yield TimestampSettings(sr, dtp)
+  yield TimestampSettings(start, end, dtp)
 
 
 class TimestampSettingsSpec extends AnyWordSpec:
 
-  "Log Format Tests" should:
-    "parse valid timestamp" in:
-      val t: Option[Instant] = TimestampSettings.parseInstant("2024-08-11 12:38:00", TimestampSettings(SimpleRange(0, 19), "yyyy-MM-dd HH:mm:ss"))
+  "Log Format Tests" should :
+    "parse valid timestamp" in :
+      val t: Option[Instant] = TimestampSettings.parseInstant("2024-08-11 12:38:00", TimestampSettings(0, 19, "yyyy-MM-dd HH:mm:ss"))
       assert(t.isDefined)
       assert(t.exists(_.toEpochMilli == 1723372680000L))
     "Instant.MIN.toEpocMilli throws exception" in assert(Try(Instant.MIN.toEpochMilli).isFailure)

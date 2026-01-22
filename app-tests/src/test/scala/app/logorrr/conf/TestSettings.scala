@@ -18,6 +18,7 @@ object TestSettings {
     , None
     , None
     , groups.searchTermGroups.map(stg => stg.name -> stg.terms).toMap
+    , None
   )
 
 

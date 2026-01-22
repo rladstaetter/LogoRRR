@@ -12,7 +12,7 @@ import javafx.stage.{Modality, Stage, Window}
 object TimestampSettingStage:
 
   val width = 1100
-  val height = 300
+  val height = 600
 
 
 class TimestampSettingStage(owner: Window
@@ -23,14 +23,17 @@ class TimestampSettingStage(owner: Window
 
   initOwner(owner)
   initModality(Modality.WINDOW_MODAL)
-  setTitle(s"Specify timestamp range (from - to columns) and time pattern for ${settings.getFileId.fileName}")
+  setTitle(s"Specifiy timestamp pattern and position")
 
-  val scene = new Scene(
+  private val timeStampSettingsBorderPane =
     new TimestampSettingsBorderPane(settings
       , logEntries
       , chunkListView
       , opsToolBar
       , JfxUtils.closeStage(this))
+
+  val scene = new Scene(
+    timeStampSettingsBorderPane
     , TimestampSettingStage.width
     , TimestampSettingStage.height)
 

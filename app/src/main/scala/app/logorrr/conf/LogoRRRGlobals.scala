@@ -1,7 +1,7 @@
 package app.logorrr.conf
 
 import app.logorrr.LogoRRRApp
-import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings}
+import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings, MutTimestampSettings}
 import app.logorrr.io.{OsxBridgeHelper, SettingsFileIO}
 import app.logorrr.services.hostservices.LogoRRRHostServices
 import javafx.beans.property.SimpleObjectProperty
@@ -63,14 +63,20 @@ object LogoRRRGlobals extends TinyLog :
     mutSettings.setLogFileSettings(settings.fileSettings)
     mutSettings.setSomeActive(settings.someActive)
     mutSettings.setSomeLastUsedDirectory(settings.someLastUsedDirectory)
+    settings.someTimestampSettings match {
+      case Some(timestampSettings) =>
+        logTrace(s"Using timestamp settings ${timestampSettings}")
+        setTimestampSettings(MutTimestampSettings(timestampSettings))
+      case None =>
+        logTrace("No timestamp settings found.")
+        setTimestampSettings(null)
+    }
 
     // populate either from saved file or use default values.
     // if values are saved in the .conf file, those should be used
     val searchTermGroupsToUse = settings.searchTermGroups
-
     for (k, v) <- searchTermGroupsToUse do
       mutSettings.mutSearchTermGroupSettings.put(k, v)
-
     setHostServices(hostServices)
 
   def getSettings: Settings = mutSettings.mkImmutable()
@@ -114,4 +120,6 @@ object LogoRRRGlobals extends TinyLog :
 
   val searchTermGroupEntries: ObservableList[SearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
 
+  def getTimestampSettings: Option[MutTimestampSettings] = Option(mutSettings.getTimestampSettings())
 
+  def setTimestampSettings(timestampSettings: MutTimestampSettings) = mutSettings.setTimestampSettings(timestampSettings)

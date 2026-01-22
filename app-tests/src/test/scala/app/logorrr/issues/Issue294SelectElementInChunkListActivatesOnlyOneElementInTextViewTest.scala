@@ -30,6 +30,7 @@ class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
     , None
     , None
     , Map()
+    , None
   )
 
   // atm this is only a setup test which helps to get LogoRRR in a repeatable, defined state

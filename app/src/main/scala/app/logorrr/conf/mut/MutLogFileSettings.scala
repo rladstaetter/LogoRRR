@@ -63,7 +63,6 @@ class MutLogFileSettings:
 
   private val someSelectedSearchTermGroupProperty = new SimpleObjectProperty[Option[String]](None)
 
-
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
   val mutSearchTerms: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm](FXCollections.observableArrayList())
@@ -155,9 +154,9 @@ class MutLogFileSettings:
 
     override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
 
-  def setSomeLogEntryInstantFormat(someLef: Option[TimestampSettings]): Unit =
-    someTimestampSettings.set(someLef)
-    someLef match
+  def setSomeLogEntryInstantFormat(timestampSettings: Option[TimestampSettings]): Unit =
+    someTimestampSettings.set(timestampSettings)
+    timestampSettings match
       case Some(value) => setDateTimeFormatter(value.dateTimeFormatter)
       case None => setDateTimeFormatter(null)
 

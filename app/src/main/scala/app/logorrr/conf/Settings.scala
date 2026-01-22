@@ -3,8 +3,6 @@ package app.logorrr.conf
 import app.logorrr.conf
 import app.logorrr.io.IoManager
 import app.logorrr.util.JfxUtils
-import javafx.geometry.Rectangle2D
-import javafx.stage.Screen
 import net.ladstatt.util.log.TinyLog
 import upickle.default.*
 
@@ -27,21 +25,32 @@ object Settings extends TinyLog:
 
   val DefaultSearchTermGroups: Seq[SearchTermGroup] = conf.DefaultSearchTermGroups().searchTermGroups
 
-
   lazy val Default: Settings = Settings(
     StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map()
     , None
     , None
     , DefaultSearchTermGroups.map(stg => stg.name -> stg.terms).toMap
+    , None
   )
 
 
+/**
+ * Settings for Logorrr which are persisted in the applications configuration folder (logorrr.json)
+ *
+ * @param stageSettings         settings regarding stage (width, height ...)
+ * @param fileSettings          contains settings specific for a given log file
+ * @param someActive            which logfile is active (or none)
+ * @param someLastUsedDirectory which directory was last accessed (for open file ...)
+ * @param searchTermGroups      global search term groups
+ * @param someTimestampSettings global defaults for timestamp settings
+ */
 case class Settings(stageSettings: StageSettings
                     , fileSettings: Map[String, LogFileSettings]
                     , someActive: Option[FileId]
                     , someLastUsedDirectory: Option[Path] = None
-                    , searchTermGroups: Map[String, Seq[SearchTerm]]) derives ReadWriter {
+                    , searchTermGroups: Map[String, Seq[SearchTerm]]
+                    , someTimestampSettings: Option[TimestampSettings] = None) derives ReadWriter {
 
   /** updates recent files with given log setting */
   def update(logFileSetting: LogFileSettings): Settings =

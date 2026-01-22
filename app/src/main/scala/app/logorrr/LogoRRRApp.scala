@@ -31,8 +31,7 @@ object LogoRRRApp extends TinyLog:
   def main(args: Array[String]): Unit =
     javafx.application.Application.launch(classOf[LogoRRRApp], args *)
 
-  def start(stage: Stage
-            , services: LogoRRRServices): LogoRRRMain =
+  def start(stage: Stage, services: LogoRRRServices): LogoRRRMain =
     System.setProperty("user.language", "en")
     LogoRRRNative.loadNativeLibraries()
     // make sure to set css before anything is initialized otherwise the rules won't apply

@@ -18,6 +18,6 @@ object UiNode:
 
 
 case class UiNode(value: String):
-
+  require(!value.contains("."), "value may not contain a '.' - it interferes with lookup logic in testfx")
   lazy val ref: String = "#" + value
 

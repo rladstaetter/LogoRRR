@@ -1,20 +1,25 @@
 package app.logorrr.conf
 
+import app.logorrr.util.HLink
+import app.logorrr.views.a11y.uinodes.UiNodes
 import net.ladstatt.util.log.TinyLog
 import upickle.default.*
 
+import java.time.*
 import java.time.format.DateTimeFormatter
-import java.time._
 import scala.util.{Failure, Success, Try}
 
 object TimestampSettings extends TinyLog:
 
   val DefaultPattern = "yyyy-MM-dd HH:mm:ss.SSS"
+  val DefaultStartCol = 1
+  val DefaultEndCol = 24
+
+  val dateFormatterHLink = HLink(UiNodes.OpenDateFormatterSite, "https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/format/DateTimeFormatter.html", "pattern documentation")
 
   val DefaultFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(DefaultPattern)
 
-  val Default: TimestampSettings = TimestampSettings(SimpleRange(1, 24), DefaultPattern)
-
+  val Default: TimestampSettings = TimestampSettings(DefaultStartCol, DefaultEndCol, DefaultPattern)
 
   /**
    * Assumes that line contains a timestamp which encodes year/month/day hour/minute/second ... which hits
@@ -40,17 +45,12 @@ object TimestampSettings extends TinyLog:
           match
             case Success(value) => Option(value)
             case Failure(exception) =>
-              logTrace(s"Could not be parsed: '$dateTimeAsString' at pos (${leif.startCol}/${leif.endCol}) using pattern '${leif.dateTimePattern}': ${exception.getMessage}")
+              logWarn(s"Could not be parsed: '$dateTimeAsString' at pos (${leif.startCol}/${leif.endCol}) using pattern '${leif.dateTimePattern}': ${exception.getMessage}")
               None
-    else
-      None
+    else None
 
 
-
-case class TimestampSettings(range: SimpleRange, dateTimePattern: String) derives ReadWriter {
-  val startCol: Int = range.start
-  val endCol: Int = range.end
+case class TimestampSettings(startCol: Int, endCol: Int, dateTimePattern: String) derives ReadWriter:
   val dateTimeFormatter: DateTimeFormatter =
     // if we can't parse the provided pattern, fallback to default - even if we can't parse timestamps then
     Try(DateTimeFormatter.ofPattern(dateTimePattern).withZone(ZoneId.systemDefault)).toOption.getOrElse(TimestampSettings.DefaultFormatter)
-}

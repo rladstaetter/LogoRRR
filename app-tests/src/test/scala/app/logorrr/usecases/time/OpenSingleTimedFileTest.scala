@@ -1,7 +1,8 @@
 package app.logorrr.usecases.time
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.{FileId, LogoRRRGlobals}
+import app.logorrr.conf.mut.MutTimestampSettings
+import app.logorrr.conf.{FileId, LogoRRRGlobals, TimestampSettings}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.ops.time.{SliderVBox, TimerSlider, TimestampSettingsButton}
 import app.logorrr.views.settings.timestamp.{LogViewLabel, TimeFormatTextField, TimestampFormatResetButton, TimestampFormatSetButton}
@@ -25,33 +26,39 @@ class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedL
    * checks if an open file creates a new logfiletab with an id matching the file opened.
    */
   @Test def openTimestampSettingsTest(): Unit =
-    openFile(fileId)
-    clickOn(TimestampSettingsButton.uiNode(fileId))
+    openFileAndTimestampDialogue()
+
     clickOn(TimestampFormatResetButton.uiNode(fileId))
     // settings aren't set after click on reset button
     assert(LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.not.get())
 
   // just click on the setFormat button, no position given
-  @Test def setFormatTest(): Unit =
-    openFile(fileId)
-    clickOn(TimestampSettingsButton.uiNode(fileId))
-    clickOn(TimestampFormatSetButton.uiNode(fileId))
+  // this test shows that "nothing happens" if user doesn't choose region or text
+  @Test def justClickOnSetFormatTest(): Unit =
+    openFileAndTimestampDialogue()
+    clickOnSetFormatButton()
 
     // settings aren't set after click on set button with invalid settings
     assert(!LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.get())
 
+  /**
+   * this test sets the columns correctly but doesn't specify the format.
+   * Expected behavior is that the timestamp settings is not specified (None).
+   * */
+  @Test def setPositionCorrectlyAndClickOnSetFormatTest(): Unit =
+    setCorrectStartAndEndColumns()
+    clickOnSetFormatButton()
+
+    // settings aren't set after click on set button with invalid settings
+    assert(!LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.get())
+
+
+
   @Test def setPositionAndFormatTest(): Unit =
-    openFile(fileId)
-    waitAndClickVisibleItem(TimestampSettingsButton.uiNode(fileId))
+    setCorrectStartAndEndColumns()
 
-
-    // set position twice (?!)
-    waitAndClickVisibleItem(LogViewLabel.uiNode(fileId, 1, 0))
-    clickOn(LogViewLabel.uiNode(fileId, 1, 0))
-    clickOn(LogViewLabel.uiNode(fileId, 1, 23))
-
-    // set format for this log file (delete the default format)
-    waitAndClickVisibleItem(TimeFormatTextField.uiNode(fileId)).eraseText(4).write(",SSS")
+    // set format for this log file - it differs to the default setting a little bit
+    waitAndClickVisibleItem(TimeFormatTextField.uiNode(fileId)).write(TimestampSettings.DefaultPattern).eraseText(4).write(",SSS")
 
     // set format and close stage
     waitAndClickVisibleItem(TimestampFormatSetButton.uiNode(fileId))
@@ -76,6 +83,26 @@ class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedL
     // drag lower slider to highest point
     drag(SliderVBox.uiNode(fileId, Pos.CENTER_LEFT).ref).moveBy(TimerSlider.Width / 2, 0).release(MouseButton.PRIMARY)
     expectLabelText(fileId, Pos.CENTER_LEFT, latestTimestamp)
+
+
+  // --- functions which define user action steps
+  private def clickOnSetFormatButton(): Unit = {
+    clickOn(TimestampFormatSetButton.uiNode(fileId))
+  }
+
+  /** open a file and the timestamp settings dialog */
+  private def openFileAndTimestampDialogue(): Unit = {
+    openFile(fileId)
+    waitAndClickVisibleItem(TimestampSettingsButton.uiNode(fileId))
+  }
+
+  /** sets correct start and end columns which contains a timestamp */
+  private def setCorrectStartAndEndColumns() =
+    openFileAndTimestampDialogue()
+    // set position twice (?!) - this is a bug but atm the best implementation available.
+    waitAndClickVisibleItem(LogViewLabel.uiNode(fileId, 1, 0))
+    clickOn(LogViewLabel.uiNode(fileId, 1, 0))
+    clickOn(LogViewLabel.uiNode(fileId, 1, 23))
 
 
   def expectLabelText(fileId: FileId, pos: Pos, expectedText: String): Unit =

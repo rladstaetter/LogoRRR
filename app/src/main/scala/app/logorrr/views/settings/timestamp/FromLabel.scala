@@ -11,5 +11,5 @@ object FromLabel extends UiNodeFileIdAware:
 class FromLabel(id: FileId) extends Label("from column") {
   setId(FromLabel.uiNode(id).value)
   setPrefWidth(100)
-  setAlignment(Pos.CENTER_RIGHT)
+  setAlignment(Pos.CENTER_LEFT)
 }
