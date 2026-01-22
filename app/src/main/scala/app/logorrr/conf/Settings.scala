@@ -31,16 +31,26 @@ object Settings extends TinyLog:
     , None
     , None
     , DefaultSearchTermGroups.map(stg => stg.name -> stg.terms).toMap
-    , TimestampSettings.Default
+    , None
   )
 
 
+/**
+ * Settings for Logorrr which are persisted in the applications configuration folder (logorrr.json)
+ *
+ * @param stageSettings         settings regarding stage (width, height ...)
+ * @param fileSettings          contains settings specific for a given log file
+ * @param someActive            which logfile is active (or none)
+ * @param someLastUsedDirectory which directory was last accessed (for open file ...)
+ * @param searchTermGroups      global search term groups
+ * @param someTimestampSettings global defaults for timestamp settings
+ */
 case class Settings(stageSettings: StageSettings
                     , fileSettings: Map[String, LogFileSettings]
                     , someActive: Option[FileId]
                     , someLastUsedDirectory: Option[Path] = None
                     , searchTermGroups: Map[String, Seq[SearchTerm]]
-                    , timestampSettings: TimestampSettings) derives ReadWriter {
+                    , someTimestampSettings: Option[TimestampSettings] = None) derives ReadWriter {
 
   /** updates recent files with given log setting */
   def update(logFileSetting: LogFileSettings): Settings =

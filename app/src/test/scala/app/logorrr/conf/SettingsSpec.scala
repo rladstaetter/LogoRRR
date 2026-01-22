@@ -14,7 +14,7 @@ object SettingsSpec:
 
   val gen: Gen[Settings] = for
     stageSettings <- StageSettingsSpec.gen
-  yield Settings(stageSettings, Map(), None, None, Map())
+  yield Settings(stageSettings, Map(), None, None, Map(), None)
 
 
 class SettingsSpec extends AnyWordSpec with TinyLog {
@@ -27,7 +27,7 @@ class SettingsSpec extends AnyWordSpec with TinyLog {
       case Success(value) =>
         val migrated = SettingsMigrator.migrate(value)
         val settings = read[Settings](migrated)
-        assert(settings.stageSettings.x == 192.0) // check one attribute, doesn't matter much
+        assert(settings.stageSettings.x == 192.0)
         val path = Paths.get("target/test.json")
         SettingsFileIO.toFile(settings, path)
         assert(Files.exists(path))

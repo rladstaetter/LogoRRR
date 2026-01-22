@@ -26,10 +26,11 @@ class Issue261RememberSettingsTest extends SingleFileApplicationTest(TestFiles.t
     , Map(TestFiles.timedLog.value ->
       LogFileSettings.mk(TestFiles.timedLog, DefaultSearchTermGroups())
         .copy(blockSettings = BlockSettings(50)
-          , someTimestampSettings = Option(TimestampSettings(SimpleRange(0, 23), "yyyy-MM-dd HH:mm:ss,SSS"))))
+          , someTimestampSettings = Option(TimestampSettings(0, 23, "yyyy-MM-dd HH:mm:ss,SSS"))))
     , None
     , None
     , Map()
+    , None
   )
 
   @Test def checkVisibilityOfSlidersAndLabelText(): Unit =

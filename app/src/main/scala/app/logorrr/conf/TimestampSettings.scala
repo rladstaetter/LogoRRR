@@ -41,7 +41,7 @@ object TimestampSettings extends TinyLog:
           match
             case Success(value) => Option(value)
             case Failure(exception) =>
-              logTrace(s"Could not be parsed: '$dateTimeAsString' at pos (${leif.startCol}/${leif.endCol}) using pattern '${leif.dateTimePattern}': ${exception.getMessage}")
+              logWarn(s"Could not be parsed: '$dateTimeAsString' at pos (${leif.startCol}/${leif.endCol}) using pattern '${leif.dateTimePattern}': ${exception.getMessage}")
               None
     else None
 

@@ -26,7 +26,12 @@ object MutSettings:
 
 class MutSettings {
 
-  val timestampSettings: MutTimestampSettings = new MutTimestampSettings
+  /** settings can be either all undefined (None) or have some value */
+  private val timeStampSettingsProperty = new SimpleObjectProperty[MutTimestampSettings]()
+
+  def setTimestampSettings(settings: MutTimestampSettings) = timeStampSettingsProperty.set(settings)
+
+  def getTimestampSettings(): MutTimestampSettings = timeStampSettingsProperty.get()
 
   /** global container for search term groups */
   val mutSearchTermGroupSettings = new MutSearchTermGroupSettings
@@ -83,7 +88,7 @@ class MutSettings {
       , getSomeActiveLogFile
       , getSomeLastUsedDirectory
       , mutSearchTermGroupSettings.mkImmutable()
-      , timestampSettings.mkImmutable())
+      , Option(getTimestampSettings()).map(_.mkImmutable()))
 
   def setStageSettings(stageSettings: StageSettings): Unit =
     mutStageSettings.setX(stageSettings.x)

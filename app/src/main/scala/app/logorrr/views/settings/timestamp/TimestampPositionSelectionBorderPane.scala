@@ -1,6 +1,6 @@
 package app.logorrr.views.settings.timestamp
 
-import app.logorrr.conf.FileId
+import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
@@ -27,6 +27,13 @@ class TimestampPositionSelectionBorderPane(mutLogFileSettings: MutLogFileSetting
       setStartCol(s.startCol)
       setEndCol(s.endCol)
     case None =>
+      // check if we have a global defined start/end col
+      LogoRRRGlobals.getTimestampSettings match {
+        case Some(timestampSettings) =>
+          setStartCol(timestampSettings.getStartCol)
+          setEndCol(timestampSettings.getEndCol)
+        case None => 
+      }
 
   /** 'pragmatic way' to determine width of max elems in this view */
   val maxLength: Int = logEntries.size().toString.length

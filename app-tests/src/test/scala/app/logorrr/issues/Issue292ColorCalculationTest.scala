@@ -35,6 +35,7 @@ abstract class Issue292ColorCalculationSetup(desiredColor: Color, val searchTerm
     , None
     , None
     , Map()
+    , None
   )
 
   @Test def testIssue292(): Unit =

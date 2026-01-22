@@ -21,7 +21,7 @@ object TimestampFormatSetButton extends UiNodeFileIdAware:
  * definition will be updated
  * */
 class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
-                               , getRange: => SimpleRange
+                               , range: => Option[(Int, Int)]
                                , timeFormatTf: TextField
                                , chunkListView: ChunkListView[LogEntry]
                                , logEntries: ObservableList[LogEntry]
@@ -31,37 +31,42 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
   setPrefWidth(350)
   setAlignment(Pos.CENTER)
   setOnAction(_ => {
-    val leif: TimestampSettings = TimestampSettings(getRange, timeFormatTf.getText.trim)
-    if getRange.length == 0 then {
-      mutLogFileSettings.setSomeLogEntryInstantFormat(None)
-    } else {
-      mutLogFileSettings.setSomeLogEntryInstantFormat(Option(leif))
+    range match {
+      // startcol has to be smaller than endCol (and also of a certain size)
+      // and the timeFormat is set to something
+      case Some((startCol, endCol)) if startCol < endCol && timeFormatTf.getText.nonEmpty=>
+        val timestampSettings: TimestampSettings = TimestampSettings(startCol, endCol, timeFormatTf.getText.trim)
+        mutLogFileSettings.setSomeLogEntryInstantFormat(Option(timestampSettings))
+        LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
+
+        chunkListView.removeInvalidationListener()
+        var someFirstEntryTimestamp: Option[Instant] = None
+
+        val tempList = new util.ArrayList[LogEntry]()
+        for i <- 0 until logEntries.size() do {
+          val e = logEntries.get(i)
+          val someInstant = TimestampSettings.parseInstant(e.value, timestampSettings)
+          if someFirstEntryTimestamp.isEmpty then {
+            someFirstEntryTimestamp = someInstant
+          }
+
+          val someDiffFromStart: Option[Duration] = for
+            firstEntry <- someFirstEntryTimestamp
+            instant <- someInstant
+          yield Duration.between(firstEntry, instant)
+
+          tempList.add(e.copy(someInstant = someInstant, someDurationSinceFirstInstant = someDiffFromStart))
+        }
+        logEntries.setAll(tempList)
+        // activate listener again
+        chunkListView.addInvalidationListener()
+        // update slider boundaries
+        opsToolBar.initializeRanges()
+      // on any other case just return None
+      case _ =>
+        mutLogFileSettings.setSomeLogEntryInstantFormat(None)
     }
-    LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
-    // we have to deactivate this listener otherwise to many invalidationevents are triggered
-    chunkListView.removeInvalidationListener()
-    var someFirstEntryTimestamp: Option[Instant] = None
 
-    val tempList = new util.ArrayList[LogEntry]()
-    for i <- 0 until logEntries.size() do {
-      val e = logEntries.get(i)
-      val someInstant = TimestampSettings.parseInstant(e.value, leif)
-      if someFirstEntryTimestamp.isEmpty then {
-        someFirstEntryTimestamp = someInstant
-      }
-
-      val someDiffFromStart: Option[Duration] = for
-        firstEntry <- someFirstEntryTimestamp
-        instant <- someInstant
-      yield Duration.between(firstEntry, instant)
-
-      tempList.add(e.copy(someInstant = someInstant, someDurationSinceFirstInstant = someDiffFromStart))
-    }
-    logEntries.setAll(tempList)
-    // activate listener again
-    chunkListView.addInvalidationListener()
-    // update slider boundaries
-    opsToolBar.initializeRanges()
     closeStage
   })
 

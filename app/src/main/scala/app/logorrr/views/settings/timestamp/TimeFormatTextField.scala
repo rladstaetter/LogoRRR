@@ -7,8 +7,8 @@ import javafx.scene.control.TextField
 object TimeFormatTextField extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[TimeFormatTextField])
 
-class TimeFormatTextField(fileId: FileId) extends TextField:
+class TimeFormatTextField(fileId: FileId, pattern : String) extends TextField:
   setId(TimeFormatTextField.uiNode(fileId).value)
   setPromptText("<enter time format>")
-  setText(TimestampSettings.DefaultPattern)
+  setText(pattern)
   setPrefColumnCount(30)

@@ -3,6 +3,14 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.{SimpleRange, TimestampSettings}
 import javafx.beans.property.{IntegerPropertyBase, StringPropertyBase}
 
+object MutTimestampSettings:
+
+  def apply(ts : TimestampSettings) : MutTimestampSettings =
+    val mt = new MutTimestampSettings
+    mt.set(ts)
+    mt
+
+
 class MutTimestampSettings extends DateTimePatternHolder
   with StartColHolder
   with EndColHolder:

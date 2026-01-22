@@ -63,7 +63,6 @@ class MutLogFileSettings:
 
   private val someSelectedSearchTermGroupProperty = new SimpleObjectProperty[Option[String]](None)
 
-
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
   val mutSearchTerms: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm](FXCollections.observableArrayList())

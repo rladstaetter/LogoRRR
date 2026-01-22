@@ -9,7 +9,7 @@ object ToLabel extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[ToLabel])
 
 class ToLabel(id: FileId) extends Label("to column:") {
-  setId(FromLabel.uiNode(id).value)
+  setId(ToLabel.uiNode(id).value)
   setPrefWidth(100)
   setAlignment(Pos.CENTER_RIGHT)
 }
