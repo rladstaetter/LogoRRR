@@ -47,7 +47,7 @@ class MutLogFileSettings:
   var someUnclassifiedFilter: Option[(MutableSearchTerm, SearchTermToggleButton)] = None
   var filterButtons: Map[Predicate[String], SearchTermToggleButton] = Map[Predicate[String], SearchTermToggleButton]()
 
-  private val fileIdProperty = new SimpleObjectProperty[FileId]()
+  val fileIdProperty = new SimpleObjectProperty[FileId]()
   private val firstOpenedProperty = new SimpleLongProperty()
   private val dateTimeFormatterProperty = new SimpleObjectProperty[DateTimeFormatter](TimestampSettings.DefaultFormatter)
 

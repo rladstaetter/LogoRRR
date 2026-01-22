@@ -1,14 +1,14 @@
 package app.logorrr.views.logfiletab
 
-import app.logorrr.conf.{LogoRRRGlobals, SearchTerm}
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.conf.{LogoRRRGlobals, SearchTerm}
 import app.logorrr.model.LogEntry
 import app.logorrr.util.*
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.block.BlockConstants
 import app.logorrr.views.ops.*
-import app.logorrr.views.search.{MutableSearchTerm, OpsToolBar}
 import app.logorrr.views.search.st.SearchTermToolBar
+import app.logorrr.views.search.{MutableSearchTerm, OpsToolBar}
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.Property
@@ -59,7 +59,7 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
     JfxUtils.mkListChangeListener[MutableSearchTerm](handleSearchTermChange)
 
   /** if autoscroll checkbox is enabled, monitor given log file for changes. if there are any, this will be reflected in the ui */
-  val autoScrollSubscription =
+  private val autoScrollSubscription =
     mutLogFileSettings.autoScrollActiveProperty.subscribe((old: java.lang.Boolean, newVal: java.lang.Boolean) => enableAutoscroll(newVal))
 
   private lazy val logTailer = LogTailer(mutLogFileSettings.getFileId, entries)
@@ -131,12 +131,8 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
 
   def getDividerPosition: Double = divider.getPosition
 
-  /**
-   * Called if a tab is selected
-   */
-  def recalculateChunkListView(): Unit = chunkListView.recalculateAndUpdateItems()
-
-  def scrollToActiveElement(): Unit =
+  def refreshUi(): Unit =
+    chunkListView.recalculateAndUpdateItems()
     chunkListView.scrollToActiveChunk()
     logTextView.scrollToActiveLogEntry()
 

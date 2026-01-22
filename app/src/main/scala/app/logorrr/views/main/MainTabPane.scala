@@ -41,7 +41,7 @@ class MainTabPane extends TabPane with TinyLog:
       event.acceptTransferModes(TransferMode.ANY *)
     }
   })
-  
+
   def dstg = DefaultSearchTermGroups(LogoRRRGlobals.getSettings.searchTermGroups)
 
   /** try to interpret dropped element as log file, activate view */
@@ -60,8 +60,8 @@ class MainTabPane extends TabPane with TinyLog:
 
   private val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew:
     case logFileTab: LogFileTab =>
-      logTrace(s"Selected: '${logFileTab.fileId.value}'")
-      LogoRRRGlobals.setSomeActiveLogFile(Option(logFileTab.fileId))
+      logTrace(s"Selected: '${logFileTab.getFileId.value}'")
+      LogoRRRGlobals.setSomeActiveLogFile(Option(logFileTab.getFileId))
       // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
       getSelectionModel.select(logFileTab)
     case _ => getSelectionModel.select(null)
@@ -98,10 +98,9 @@ class MainTabPane extends TabPane with TinyLog:
   def initSelectionListener(): Unit =
     getSelectionModel.selectedItemProperty().addListener(selectedTabListener)
 
-  def contains(p: FileId): Boolean =
-    getLogFileTabs.exists(lr => lr.fileId == p)
+  def contains(p: FileId): Boolean = getLogFileTabs.exists(lr => lr.getFileId == p)
 
-  def getByFileId(fileId: FileId): Option[LogFileTab] = getLogFileTabs.find(_.fileId == fileId)
+  def getByFileId(fileId: FileId): Option[LogFileTab] = getLogFileTabs.find(_.getFileId == fileId)
 
   def getLogFileTabs: mutable.Seq[LogFileTab] = getTabs.asScala.flatMap:
     case l: LogFileTab => Option(l)
@@ -114,7 +113,7 @@ class MainTabPane extends TabPane with TinyLog:
     getTabs.clear()
 
   def selectFile(fileId: FileId): LogFileTab =
-    getLogFileTabs.find(_.fileId == fileId) match
+    getByFileId(fileId) match
       case Some(logFileTab) =>
         logTrace(s"Activated tab for '${fileId.value}'.")
         getSelectionModel.select(logFileTab)

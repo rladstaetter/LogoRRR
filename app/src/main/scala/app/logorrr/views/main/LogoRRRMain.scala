@@ -98,7 +98,7 @@ class LogoRRRMain(stage: Stage
     if IoManager.isZip(fileId.asPath) then
       mainTabPane.openZipFile(fileId.asPath, DefaultSearchTermGroups(LogoRRRGlobals.getSettings.searchTermGroups))
     else if contains(fileId) then
-      mainTabPane.selectFile(fileId).recalculateChunkListViewAndScrollToActiveElement()
+      mainTabPane.selectFile(fileId).refreshUi()
     else
       mainTabPane.addFile(fileId, DefaultSearchTermGroups(LogoRRRGlobals.getSettings.searchTermGroups))
 

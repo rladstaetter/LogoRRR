@@ -32,7 +32,7 @@ object LogoRRRStage extends TinyLog:
     // to save global filter state
     val activeFilters: Map[FileId, (Seq[SearchTerm], Double)] =
       (for logFileTab <- logorrrMain.getLogFileTabs yield {
-        logFileTab.fileId -> (logFileTab.logPane.activeFilters, logFileTab.logPane.getDividerPosition)
+        logFileTab.getFileId -> (logFileTab.logPane.activeFilters, logFileTab.logPane.getDividerPosition)
       }).toMap
 
     val updatedSettings =
@@ -55,7 +55,7 @@ object LogoRRRStage extends TinyLog:
       case Some(fileId) =>
         if logorrrMain.contains(fileId) then
           val tab = logorrrMain.selectLog(fileId)
-          tab.recalculateChunkListViewAndScrollToActiveElement()
+          tab.refreshUi()
         else
           logWarn(s"Not found: '${fileId.absolutePathAsString}'")
       case None =>
