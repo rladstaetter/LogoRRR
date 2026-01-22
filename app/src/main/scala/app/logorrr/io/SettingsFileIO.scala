@@ -5,7 +5,6 @@ import net.ladstatt.util.log.TinyLog
 import upickle.default.{read, write}
 
 import java.nio.file.{Files, Path}
-import java.util.logging.Level
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -33,5 +32,5 @@ object SettingsFileIO extends TinyLog:
         read[Settings](migrated)
 
   def toFile(settings: Settings, target: Path): Try[Unit] =
-    Try(Files.writeString(target, write(settings, indent = 2)))
+    timeR(Try(Files.writeString(target, write(settings, indent = 2))), s"Writing ${target.toAbsolutePath}")
 

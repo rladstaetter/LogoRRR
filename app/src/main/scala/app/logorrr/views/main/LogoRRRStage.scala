@@ -1,7 +1,7 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{AppInfo, FileId, LogoRRRGlobals, SearchTerm}
 import app.logorrr.conf.mut.MutStageSettings
+import app.logorrr.conf.{AppInfo, FileId, LogoRRRGlobals, SearchTerm}
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.LogoRRRAccelerators
 import javafx.beans.value.ChangeListener
@@ -32,7 +32,7 @@ object LogoRRRStage extends TinyLog:
     // to save global filter state
     val activeFilters: Map[FileId, (Seq[SearchTerm], Double)] =
       (for logFileTab <- logorrrMain.getLogFileTabs yield {
-        logFileTab.fileId -> (logFileTab.logFileTabContent.activeFilters, logFileTab.logFileTabContent.getDividerPosition)
+        logFileTab.fileId -> (logFileTab.logPane.activeFilters, logFileTab.logPane.getDividerPosition)
       }).toMap
 
     val updatedSettings =

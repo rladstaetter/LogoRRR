@@ -1,9 +1,6 @@
 package app.logorrr.views.search
 
-import app.logorrr.clv.color.ColorUtil
 import app.logorrr.conf.SearchTerm
-import app.logorrr.views.util.CssBindingUtil
-import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 import javafx.scene.paint.Color
 
@@ -39,8 +36,7 @@ object MutableSearchTerm:
     st
 
 
-class MutableSearchTerm extends BaseSearchTermModel
-  with Predicate[String]:
+class MutableSearchTerm extends BaseSearchTermModel with Predicate[String]:
 
   private val predicateProperty: SimpleObjectProperty[Predicate[String]] = new SimpleObjectProperty[Predicate[String]]()
 

@@ -1,28 +1,32 @@
 package app.logorrr.views.logfiletab
 
-import app.logorrr.conf.SearchTerm
+import app.logorrr.conf.{LogoRRRGlobals, SearchTerm}
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
+import app.logorrr.util.*
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.block.BlockConstants
 import app.logorrr.views.ops.*
-import app.logorrr.views.search.OpsToolBar
+import app.logorrr.views.search.{MutableSearchTerm, OpsToolBar}
 import app.logorrr.views.search.st.SearchTermToolBar
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.Property
 import javafx.beans.{InvalidationListener, Observable}
-import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
+import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.{ListView, Slider, SplitPane}
 import javafx.scene.layout.{BorderPane, HBox, Priority, VBox}
 import javafx.scene.paint.Color
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
 case class PaneDefinition(jfxId: String, graphic: Node, step: Int, boundary: Int)
 
-object LogFileTabContent:
+object LogFilePane:
 
   /** wire pane and slider together */
   private def mkPane(listView: ListView[?]
@@ -43,10 +47,18 @@ object LogFileTabContent:
     bBp
 
 
-class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
-                        , val entries: ObservableList[LogEntry]) extends BorderPane:
+class LogFilePane(mutLogFileSettings: MutLogFileSettings
+                  , val entries: ObservableList[LogEntry]) extends BorderPane:
 
+  /** if a search term is added or removed this will be saved to disc */
+  private val searchTermChangeListener: ListChangeListener[MutableSearchTerm] =
+    def handleSearchTermChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit =
+      while change.next() do
+        Future(LogoRRRGlobals.persist(LogoRRRGlobals.getSettings))
 
+    JfxUtils.mkListChangeListener[MutableSearchTerm](handleSearchTermChange)
+
+  /** if autoscroll checkbox is enabled, monitor given log file for changes. if there are any, this will be reflected in the ui */
   val autoScrollSubscription =
     mutLogFileSettings.autoScrollActiveProperty.subscribe((old: java.lang.Boolean, newVal: java.lang.Boolean) => enableAutoscroll(newVal))
 
@@ -68,7 +80,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   private val searchTermToolBar = new SearchTermToolBar(mutLogFileSettings, filteredEntries)
 
-  private val textPane = LogFileTabContent.mkPane(
+  private val textPane = LogFilePane.mkPane(
     logTextView
     , new TextSizeSlider(mutLogFileSettings.getFileId)
     , PaneDefinition(IncreaseTextSizeButton.uiNode(mutLogFileSettings.getFileId).value, TextSizeButton.mkLabel(12), TextConstants.fontSizeStep, TextConstants.MaxFontSize)
@@ -76,7 +88,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     , mutLogFileSettings.fontSizeProperty
   )
 
-  private val chunkPane = LogFileTabContent.mkPane(
+  private val chunkPane = LogFilePane.mkPane(
     chunkListView
     , new BlockSizeSlider(mutLogFileSettings.getFileId)
     , PaneDefinition(IncreaseBlockSizeButton.uiNode(mutLogFileSettings.getFileId).value, RectButton.mkR(IncreaseBlockSizeButton.Size, IncreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MaxBlockSize)
@@ -112,6 +124,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     logTextView.init()
     chunkListView.init()
     enableAutoscroll(mutLogFileSettings.isAutoScrollActive)
+    mutLogFileSettings.mutSearchTerms.addListener(searchTermChangeListener)
 
 
   private def divider: SplitPane.Divider = pane.getDividers.get(0)
@@ -131,6 +144,7 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     logTextView.removeListeners()
     chunkListView.removeListeners()
     autoScrollSubscription.unsubscribe()
+    mutLogFileSettings.mutSearchTerms.removeListener(searchTermChangeListener)
 
 
 

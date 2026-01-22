@@ -7,18 +7,14 @@ import app.logorrr.util.*
 import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.logfiletab.actions.*
-import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.Bindings
-import javafx.collections.{ListChangeListener, ObservableList}
+import javafx.collections.ObservableList
 import javafx.event.Event
 import javafx.scene.control.*
 import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
 import java.lang
-import java.util.function.BiConsumer
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 
 object LogFileTab extends UiNodeFileIdAware:
@@ -47,12 +43,6 @@ object LogFileTab extends UiNodeFileIdAware:
        |-fx-border-width: 1px 1px 1px 0px;
        |-fx-border-color: lightgrey""".stripMargin
 
-  def apply(mutLogFileSettings: MutLogFileSettings
-            , entries: ObservableList[LogEntry]): LogFileTab =
-    new LogFileTab(mutLogFileSettings.getFileId
-      , mutLogFileSettings
-      , entries)
-
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogFileTab])
 
 
@@ -63,10 +53,11 @@ object LogFileTab extends UiNodeFileIdAware:
  *
  * @param entries report instance holding information of log file to be analyzed
  * */
-class LogFileTab(val fileId: FileId
-                 , val mutLogFileSettings: MutLogFileSettings
+class LogFileTab(val mutLogFileSettings: MutLogFileSettings
                  , val entries: ObservableList[LogEntry]) extends Tab
   with TimerCode with TinyLog:
+
+  val fileId = mutLogFileSettings.getFileId
 
   setId(LogFileTab.uiNode(fileId).value)
 
@@ -75,15 +66,9 @@ class LogFileTab(val fileId: FileId
   else
     setStyle(LogFileTab.BackgroundStyle)
 
-  assert(fileId == mutLogFileSettings.getFileId)
 
-  val logFileTabContent = new LogFileTabContent(mutLogFileSettings, entries)
+  val logPane = new LogFilePane(mutLogFileSettings, entries)
 
-  private val searchTermChangeListener: ListChangeListener[MutableSearchTerm] =
-    def handleSearchTermChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit =
-      while change.next() do
-        Future(LogoRRRGlobals.persist(LogoRRRGlobals.getSettings))
-    JfxUtils.mkListChangeListener[MutableSearchTerm](handleSearchTermChange)
 
   private val selectedListener = JfxUtils.onNew[lang.Boolean](b => {
     if b then {
@@ -94,7 +79,7 @@ class LogFileTab(val fileId: FileId
       }
 
       /* change active text field depending on visible tab */
-      LogoRRRAccelerators.setActiveSearchTextField(logFileTabContent.opsToolBar.searchTextField)
+      LogoRRRAccelerators.setActiveSearchTextField(logPane.opsToolBar.searchTextField)
       recalculateChunkListViewAndScrollToActiveElement()
     } else {
       if fileId.isZipEntry then {
@@ -107,20 +92,20 @@ class LogFileTab(val fileId: FileId
 
 
   def recalculateChunkListViewAndScrollToActiveElement(): Unit =
-    logFileTabContent.recalculateChunkListView()
-    logFileTabContent.scrollToActiveElement()
+    logPane.recalculateChunkListView()
+    logPane.scrollToActiveElement()
 
   def init(): Unit = timeR({
     setTooltip(new LogFileTabToolTip(fileId, entries))
     initBindings()
     addListeners()
-    logFileTabContent.init()
+    logPane.init()
 
     /** don't monitor file anymore if tab is closed, free listeners */
     setOnCloseRequest((_: Event) => shutdown())
 
     /** top component for log view */
-    setContent(logFileTabContent)
+    setContent(logPane)
 
     // we have to set the context menu in relation to the visibility of the tab itself
     // otherwise those context menu actions can be performed without selecting the tab
@@ -179,7 +164,6 @@ class LogFileTab(val fileId: FileId
 
   private def addListeners(): Unit =
     selectedProperty().addListener(selectedListener)
-    mutLogFileSettings.mutSearchTerms.addListener(searchTermChangeListener)
 
   private def initBindings(): Unit =
     if fileId.isZipEntry then
@@ -190,11 +174,11 @@ class LogFileTab(val fileId: FileId
 
   def shutdown(): Unit =
     if mutLogFileSettings.isAutoScrollActive then
-      logFileTabContent.enableAutoscroll(false)
+      logPane.enableAutoscroll(false)
 
     selectedProperty().removeListener(selectedListener)
-    logFileTabContent.shutdown()
-    mutLogFileSettings.mutSearchTerms.removeListener(searchTermChangeListener)
+    logPane.shutdown()
+
 
     LogoRRRGlobals.removeLogFile(fileId)
 
