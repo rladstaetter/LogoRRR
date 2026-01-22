@@ -1,11 +1,9 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.clv.ChunkListView
-import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.conf.{LogoRRRGlobals, TimestampSettings}
 import app.logorrr.model.LogEntry
-import app.logorrr.util.HLink
-import app.logorrr.views.a11y.uinodes.UiNodes
 import app.logorrr.views.search.OpsToolBar
 import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property.SimpleObjectProperty
@@ -77,21 +75,20 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
 
   // binding is just here to trigger refresh on timerSettingsLogTextView
   // has to be assigned to a val otherwise this won't get executed
+/*
   val binding: ObjectBinding[String] =
     Bindings.createObjectBinding(() => s"$getStartCol $getEndCol", startColProperty, endColProperty)
-
-  // if either startCol or endCol is changed, refresh listview
   binding.addListener((_, _, _) => {
     timerSettingsLogTextView.listView.refresh()
-  })
+  })*/
 
   private val hyperlink: Hyperlink =
-    val hl = HLink(UiNodes.OpenDateFormatterSite, "https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/time/format/DateTimeFormatter.html", "time pattern").mkHyperLink()
+    val hl = TimestampSettings.dateFormatterHLink.mkHyperLink()
     hl.setAlignment(Pos.CENTER)
-    hl.setPrefWidth(83)
+    hl.setPrefWidth(150)
     hl
 
-  private val ShowMax = 100 // how many rows should be shown in the TimeStamp Settings Dialog at max
+  private val ShowMax = 26 // how many rows should be shown in the TimeStamp Settings Dialog at max
   private lazy val showThisManyRows = if logEntries.size() > ShowMax then ShowMax else logEntries.size()
   private val firstVisible = Option(mutLogFileSettings.firstVisibleTextCellIndexProperty.get()).getOrElse(0)
   private val lastVisible = Option(mutLogFileSettings.lastVisibleTextCellIndexProperty.get()).getOrElse(logEntries.size())
@@ -109,30 +106,54 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
 
   private val spacer = new AlwaysGrowHorizontalRegion
 
-  private val timeFormatBar = new ToolBar(hyperlink, timeFormatTf, setTimestampFormatButton, spacer, resetTimestampFormatButton)
+  private val timeFormatBar = new ToolBar(hyperlink, timeFormatTf, spacer, setTimestampFormatButton, resetTimestampFormatButton)
 
-  init()
+  newInit()
 
-  def init(): Unit =
-    val rangeLabel = new Label("select range")
-    val leftVBox = new VBox(rangeLabel)
-    leftVBox.setAlignment(Pos.CENTER); // Center the label vertically
-    leftVBox.setPadding(new Insets(10))
-    setLeft(leftVBox)
+  def newInit(): Unit =
+    // Left Sidebar for Column Inputs (The "Selection" phase)
+    val selectionSettings = new VBox(15)
+    selectionSettings.setPadding(new Insets(15))
+    selectionSettings.setPrefWidth(200)
+    selectionSettings.setStyle("-fx-background-color: #f4f4f4; -fx-border-color: #ddd; -fx-border-width: 0 1 0 0;")
 
-    val fromRow = new HBox(10, startColLabel, startColTextField) // Spacing between label and text field is 10
-    fromRow.setAlignment(Pos.CENTER_LEFT)
-    val toRow = new HBox(10, endColLabel, endColTextField) // Spacing between label and text field is 10
+    val rangeLabel = new Label("1. Define Column Range")
+    rangeLabel.setStyle("-fx-font-weight: bold;")
 
-    toRow.setAlignment(Pos.CENTER_LEFT)
-    val vbox = new VBox(10, fromRow, toRow) // Spacing between rows is 10
+    val fromBox = new VBox(5, startColLabel, startColTextField)
+    val toBox = new VBox(5, endColLabel, endColTextField)
 
-    vbox.setAlignment(Pos.CENTER) // Center the elements in the VBox
-    vbox.setPadding(new Insets(10)) // Padding around the VBox
+    val description = new Label("Click on the preview text\nto select columns.")
+    selectionSettings.getChildren.addAll(rangeLabel, fromBox, toBox, description)
+    setLeft(selectionSettings)
 
-    setRight(vbox)
+    // 3. Center stays as the Visual Selection view
     setCenter(timerSettingsLogTextView)
-    setBottom(timeFormatBar)
+
+    // 4. Bottom for Format and Actions (The "Finalization" phase)
+    val footer = new VBox(10)
+    footer.setPadding(new Insets(15))
+    footer.setStyle("-fx-background-color: #eee; -fx-border-color: #ccc; -fx-border-width: 1 0 0 0;")
+
+    val formatLabel = new Label("2. Define Time Pattern")
+    formatLabel.setStyle("-fx-font-weight: bold;")
+
+    val formatInputRow = new HBox(10)
+    formatInputRow.setAlignment(Pos.CENTER_LEFT)
+    // Make TextField expand to fill space
+    HBox.setHgrow(timeFormatTf, javafx.scene.layout.Priority.ALWAYS)
+    timeFormatTf.setPromptText("e.g. yyyy-MM-dd HH:mm:ss.SSS")
+
+    formatInputRow.getChildren.addAll(timeFormatTf, hyperlink)
+
+    val actionRow = new HBox(10)
+    actionRow.setAlignment(Pos.CENTER_RIGHT)
+    actionRow.getChildren.addAll(resetTimestampFormatButton, spacer, setTimestampFormatButton)
+
+    footer.getChildren.addAll(formatLabel, formatInputRow, actionRow)
+    setBottom(footer)
+    timerSettingsLogTextView.listView.requestFocus()
+
 
 
   def setStartCol(startCol: Int): Unit = startColProperty.set(startCol)

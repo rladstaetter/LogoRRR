@@ -16,7 +16,7 @@ class SettingsEditor(owner: Stage, fileId: FileId) extends Stage:
   initModality(Modality.WINDOW_MODAL)
   setTitle("Settings")
 
-  private val timeSettingsEditor = TimeSettingsEditor(LogoRRRGlobals.getTimestampSettings)
+  private val timeSettingsEditor = TimestampSettingsEditor(LogoRRRGlobals.getTimestampSettings)
 
   // Layout for existing groups (including list and close button)
   private val manageExistingSearchTermGroup =

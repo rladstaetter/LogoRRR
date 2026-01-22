@@ -9,6 +9,6 @@ object TimeFormatTextField extends UiNodeFileIdAware:
 
 class TimeFormatTextField(fileId: FileId, pattern : String) extends TextField:
   setId(TimeFormatTextField.uiNode(fileId).value)
-  setPromptText("<enter time format>")
+  setPromptText(s"enter time format pattern, e.g: ${TimestampSettings.DefaultPattern}")
   setText(pattern)
   setPrefColumnCount(30)

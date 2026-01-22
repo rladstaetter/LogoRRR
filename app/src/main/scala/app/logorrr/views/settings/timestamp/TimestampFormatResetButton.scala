@@ -22,8 +22,8 @@ class TimestampFormatResetButton(mutLogFileSettings: MutLogFileSettings
                                  , opsToolBar: OpsToolBar
                                  , closeStage: => Unit) extends Button("reset"):
   setId(TimestampFormatResetButton.uiNode(mutLogFileSettings.getFileId).value)
-  setAlignment(Pos.CENTER_RIGHT)
-  setPrefWidth(180)
+  setAlignment(Pos.CENTER)
+  setPrefWidth(100)
   setOnAction(_ => {
     mutLogFileSettings.setSomeLogEntryInstantFormat(None)
     LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)

@@ -26,9 +26,9 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
                                , chunkListView: ChunkListView[LogEntry]
                                , logEntries: ObservableList[LogEntry]
                                , opsToolBar: OpsToolBar
-                               , closeStage: => Unit) extends Button("set format"):
+                               , closeStage: => Unit) extends Button("use settings for current log file"):
   setId(TimestampFormatSetButton.uiNode(mutLogFileSettings.getFileId).value)
-  setPrefWidth(350)
+  setPrefWidth(300)
   setAlignment(Pos.CENTER)
   setOnAction(_ => {
     range match {

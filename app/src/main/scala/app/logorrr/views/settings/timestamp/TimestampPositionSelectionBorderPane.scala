@@ -6,7 +6,7 @@ import app.logorrr.model.LogEntry
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.property.{ObjectProperty, SimpleObjectProperty}
 import javafx.collections.ObservableList
-import javafx.scene.control.{ListCell, ListView}
+import javafx.scene.control.{ListCell, ListView, SelectionMode}
 import javafx.scene.layout.BorderPane
 
 object TimestampPositionSelectionBorderPane extends UiNodeFileIdAware:
@@ -32,7 +32,7 @@ class TimestampPositionSelectionBorderPane(mutLogFileSettings: MutLogFileSetting
         case Some(timestampSettings) =>
           setStartCol(timestampSettings.getStartCol)
           setEndCol(timestampSettings.getEndCol)
-        case None => 
+        case None =>
       }
 
   /** 'pragmatic way' to determine width of max elems in this view */
@@ -45,7 +45,6 @@ class TimestampPositionSelectionBorderPane(mutLogFileSettings: MutLogFileSetting
     lv
 
   listView.setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
-
   setCenter(listView)
 
   def setStartCol(i: Int): Unit = startColProperty.set(i)
@@ -61,7 +60,7 @@ class TimestampPositionSelectionBorderPane(mutLogFileSettings: MutLogFileSetting
       Option(t) match
         case Some(e) =>
           setText(null)
-          setGraphic(TimerSettingsLogViewLabel(mutLogFileSettings
+          setGraphic(TimerSettingsLogViewLabel(listView,mutLogFileSettings
             , e
             , maxLength
             , startColProperty

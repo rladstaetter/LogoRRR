@@ -1,25 +1,37 @@
 package app.logorrr.views.settings
 
-import app.logorrr.conf.{LogoRRRGlobals, TimestampSettings}
 import app.logorrr.conf.mut.MutTimestampSettings
-import javafx.geometry.Pos
-import javafx.scene.control.{Button, Label, TextField}
-import javafx.scene.layout.{GridPane, Priority, StackPane, VBox}
-import javafx.util.converter.NumberStringConverter
-import javafx.scene.layout.{GridPane, Priority, StackPane, VBox}
-import javafx.scene.control.{Button, Label, TextField}
-import javafx.geometry.Pos
-import javafx.util.converter.NumberStringConverter
+import app.logorrr.conf.{LogoRRRGlobals, TimestampSettings}
+import app.logorrr.views.a11y.UiNode
 import javafx.beans.binding.Bindings
+import javafx.geometry.Pos
+import javafx.scene.control.{Button, Label, TextField}
+import javafx.scene.layout.{GridPane, Priority, StackPane, VBox}
+import javafx.util.converter.NumberStringConverter
 
-class TimeSettingsEditor(someTimestampSettings: Option[MutTimestampSettings]) extends StackPane {
+object TimestampSettingsEditor:
+  val EnableInitalizeButton = UiNode("TimestampSettingsEditor_EnableInitializeButton")
+  val PatternTextField = UiNode("TimestampSettingsEditor_PatternTextField")
+  val StartColTextField = UiNode("TimestampSettingsEditor_StartColTextField")
+  val EndColTextField = UiNode("TimestampSettingsEditor_EndColTextField")
+
+class TimestampSettingsEditor(someTimestampSettings: Option[MutTimestampSettings]) extends StackPane {
 
   private val converter = new NumberStringConverter()
 
   // --- 1. The Editor UI ---
-  private val patternField = new TextField()
-  private val startColField = new TextField() { setPrefWidth(100) }
-  private val endColField = new TextField() { setPrefWidth(100) }
+  private val patternField = new TextField():
+    setId(TimestampSettingsEditor.PatternTextField.value)
+    setPrefWidth(300)
+
+  private val patternHyperlink = TimestampSettings.dateFormatterHLink.mkHyperLink()
+
+  private val startColField = new TextField():
+    setId(TimestampSettingsEditor.StartColTextField.value)
+    setPrefWidth(100)
+  private val endColField = new TextField():
+    setId(TimestampSettingsEditor.EndColTextField.value)
+    setPrefWidth(100)
 
   private val editorView: VBox = new VBox(10) {
     VBox.setVgrow(this, Priority.ALWAYS)
@@ -34,6 +46,7 @@ class TimeSettingsEditor(someTimestampSettings: Option[MutTimestampSettings]) ex
 
     grid.add(new Label("Date Pattern:"), 0, 0)
     grid.add(patternField, 1, 0)
+    grid.add(patternHyperlink, 2, 0)
     grid.add(new Label("Start Column:"), 0, 1)
     grid.add(startColField, 1, 1)
     grid.add(new Label("End Column:"), 0, 2)
@@ -48,14 +61,14 @@ class TimeSettingsEditor(someTimestampSettings: Option[MutTimestampSettings]) ex
     // Styling to make it look "empty" or "disabled"
     setStyle("-fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-style: dashed;")
 
-    val msg = new Label("No timestamp settings available.")
-    val enableBtn = new Button("Enable & Initialize")
+    private val msg = new Label("No timestamp settings available.")
+    private val enableBtn = new Button("Enable & Initialize"):
+      setId(TimestampSettingsEditor.EnableInitalizeButton.value)
 
     getChildren.addAll(msg, enableBtn)
 
     // Action to handle enabling (This would usually call a parent method)
     enableBtn.setOnAction(_ => {
-      println("Button clicked: Logic to provide MutTimestampSettings should go here.")
       val settings = MutTimestampSettings(TimestampSettings.Default)
       LogoRRRGlobals.setTimestampSettings(settings)
       updateSettings(Option(settings))
