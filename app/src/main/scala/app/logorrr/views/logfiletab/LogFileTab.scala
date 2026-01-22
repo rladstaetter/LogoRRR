@@ -16,6 +16,7 @@ import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
 import java.lang
+import java.util.function.BiConsumer
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -78,15 +79,10 @@ class LogFileTab(val fileId: FileId
 
   val logFileTabContent = new LogFileTabContent(mutLogFileSettings, entries)
 
-  /** start / stop tailer */
-  private val autoScrollListener = JfxUtils.onNew[lang.Boolean](b => logFileTabContent.enableAutoscroll(b))
-
   private val searchTermChangeListener: ListChangeListener[MutableSearchTerm] =
-
     def handleSearchTermChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit =
       while change.next() do
         Future(LogoRRRGlobals.persist(LogoRRRGlobals.getSettings))
-
     JfxUtils.mkListChangeListener[MutableSearchTerm](handleSearchTermChange)
 
   private val selectedListener = JfxUtils.onNew[lang.Boolean](b => {
@@ -183,8 +179,6 @@ class LogFileTab(val fileId: FileId
 
   private def addListeners(): Unit =
     selectedProperty().addListener(selectedListener)
-
-    mutLogFileSettings.autoScrollActiveProperty.addListener(autoScrollListener)
     mutLogFileSettings.mutSearchTerms.addListener(searchTermChangeListener)
 
   private def initBindings(): Unit =
@@ -194,17 +188,14 @@ class LogFileTab(val fileId: FileId
       textProperty.bind(Bindings.concat(fileId.fileName))
 
 
-  private def removeListeners(): Unit =
-    selectedProperty().removeListener(selectedListener)
-
-    logFileTabContent.removeListeners()
-    mutLogFileSettings.autoScrollActiveProperty.removeListener(autoScrollListener)
-    mutLogFileSettings.mutSearchTerms.removeListener(searchTermChangeListener)
-
   def shutdown(): Unit =
     if mutLogFileSettings.isAutoScrollActive then
       logFileTabContent.enableAutoscroll(false)
-    removeListeners()
+
+    selectedProperty().removeListener(selectedListener)
+    logFileTabContent.shutdown()
+    mutLogFileSettings.mutSearchTerms.removeListener(searchTermChangeListener)
+
     LogoRRRGlobals.removeLogFile(fileId)
 
 

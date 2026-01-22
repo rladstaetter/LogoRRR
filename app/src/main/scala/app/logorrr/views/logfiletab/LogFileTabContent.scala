@@ -47,6 +47,9 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
                         , val entries: ObservableList[LogEntry]) extends BorderPane:
 
 
+  val autoScrollSubscription =
+    mutLogFileSettings.autoScrollActiveProperty.subscribe((old: java.lang.Boolean, newVal: java.lang.Boolean) => enableAutoscroll(newVal))
+
   private lazy val logTailer = LogTailer(mutLogFileSettings.getFileId, entries)
 
   // make sure we have a white background for our tabs - see https://github.com/rladstaetter/LogoRRR/issues/188
@@ -115,10 +118,6 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   def getDividerPosition: Double = divider.getPosition
 
-  def removeListeners(): Unit =
-    logTextView.removeListeners()
-    chunkListView.removeListeners()
-
   /**
    * Called if a tab is selected
    */
@@ -128,6 +127,10 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     chunkListView.scrollToActiveChunk()
     logTextView.scrollToActiveLogEntry()
 
+  def shutdown(): Unit =
+    logTextView.removeListeners()
+    chunkListView.removeListeners()
+    autoScrollSubscription.unsubscribe()
 
 
 
