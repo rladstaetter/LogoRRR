@@ -1,18 +1,17 @@
 package app.logorrr.views.logfiletab
 
-import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.model.LogEntry
-import app.logorrr.util._
+import app.logorrr.util.*
 import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.autoscroll.LogTailer
-import app.logorrr.views.logfiletab.actions._
+import app.logorrr.views.logfiletab.actions.*
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.Bindings
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.event.Event
-import javafx.scene.control._
+import javafx.scene.control.*
 import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
@@ -66,8 +65,7 @@ object LogFileTab extends UiNodeFileIdAware:
 class LogFileTab(val fileId: FileId
                  , val mutLogFileSettings: MutLogFileSettings
                  , val entries: ObservableList[LogEntry]) extends Tab
-  with TimerCode
-  with TinyLog:
+  with TimerCode with TinyLog:
 
   setId(LogFileTab.uiNode(fileId).value)
 
@@ -78,24 +76,10 @@ class LogFileTab(val fileId: FileId
 
   assert(fileId == mutLogFileSettings.getFileId)
 
-  private lazy val logTailer = LogTailer(fileId, entries)
-
   val logFileTabContent = new LogFileTabContent(mutLogFileSettings, entries)
 
-  private def startTailer(): Unit =
-    logFileTabContent.addTailerListener()
-    logTailer.start()
-
-  private def stopTailer(): Unit =
-    logFileTabContent.removeTailerListener()
-    logTailer.stop()
-
-  private val autoScrollListener = JfxUtils.onNew[lang.Boolean]:
-    b =>
-      if b then
-        startTailer()
-      else
-        stopTailer()
+  /** start / stop tailer */
+  private val autoScrollListener = JfxUtils.onNew[lang.Boolean](b => logFileTabContent.enableAutoscroll(b))
 
   private val searchTermChangeListener: ListChangeListener[MutableSearchTerm] =
 
@@ -132,19 +116,12 @@ class LogFileTab(val fileId: FileId
 
   def init(): Unit = timeR({
     setTooltip(new LogFileTabToolTip(fileId, entries))
-
     initBindings()
-
     addListeners()
-
     logFileTabContent.init()
 
     /** don't monitor file anymore if tab is closed, free listeners */
     setOnCloseRequest((_: Event) => shutdown())
-
-    if mutLogFileSettings.isAutoScrollActive then {
-      startTailer()
-    }
 
     /** top component for log view */
     setContent(logFileTabContent)
@@ -163,7 +140,6 @@ class LogFileTab(val fileId: FileId
 
   def initContextMenu(): Unit = setContextMenu(mkContextMenu())
 
-
   private def mkContextMenu(): ContextMenu =
     val closeMenuItem = new CloseTabMenuItem(fileId, this)
     val openInFinderMenuItem = new OpenInFinderMenuItem(fileId)
@@ -175,13 +151,13 @@ class LogFileTab(val fileId: FileId
     val leftRightCloser =
       if getTabPane.getTabs.size() == 1 then
         Seq()
-        // current tab is the first one, show only 'right'
+      // current tab is the first one, show only 'right'
       else if getTabPane.getTabs.indexOf(this) == 0 then
         Seq(new CloseRightFilesMenuItem(fileId, this))
-        // we are at the end of the list
+      // we are at the end of the list
       else if getTabPane.getTabs.indexOf(this) == getTabPane.getTabs.size - 1 then
         Seq(new CloseLeftFilesMenuItem(fileId, this))
-        // we are somewhere in between, show both options
+      // we are somewhere in between, show both options
       else
         Seq(new CloseLeftFilesMenuItem(fileId, this), new CloseRightFilesMenuItem(fileId, this))
 
@@ -202,10 +178,8 @@ class LogFileTab(val fileId: FileId
             Seq()
           else
             Seq(openInFinderMenuItem)
-          // ++ Seq(mergeTimedMenuItem)
         }
-
-    new ContextMenu(items*)
+    new ContextMenu(items *)
 
   private def addListeners(): Unit =
     selectedProperty().addListener(selectedListener)
@@ -229,7 +203,7 @@ class LogFileTab(val fileId: FileId
 
   def shutdown(): Unit =
     if mutLogFileSettings.isAutoScrollActive then
-      stopTailer()
+      logFileTabContent.enableAutoscroll(false)
     removeListeners()
     LogoRRRGlobals.removeLogFile(fileId)
 

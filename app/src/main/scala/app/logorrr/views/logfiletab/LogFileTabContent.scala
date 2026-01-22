@@ -3,10 +3,11 @@ package app.logorrr.views.logfiletab
 import app.logorrr.conf.SearchTerm
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
+import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.block.BlockConstants
-import app.logorrr.views.ops._
-import app.logorrr.views.search.st.SearchTermToolBar
+import app.logorrr.views.ops.*
 import app.logorrr.views.search.OpsToolBar
+import app.logorrr.views.search.st.SearchTermToolBar
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.Property
@@ -45,6 +46,9 @@ object LogFileTabContent:
 class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
                         , val entries: ObservableList[LogEntry]) extends BorderPane:
 
+
+  private lazy val logTailer = LogTailer(mutLogFileSettings.getFileId, entries)
+
   // make sure we have a white background for our tabs - see https://github.com/rladstaetter/LogoRRR/issues/188
   setStyle("-fx-background-color: white;")
 
@@ -77,17 +81,21 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
     , mutLogFileSettings.blockSizeProperty)
 
 
-  // start listener declarations
-  private lazy val scrollToEndEventListener: InvalidationListener = (_: Observable) => {
+  // if active scroll automatically to the end of the list
+  private lazy val autoScrollEventListener: InvalidationListener = (_: Observable) => {
     chunkListView.scrollTo(chunkListView.getItems.size())
     logTextView.scrollTo(logTextView.getItems.size)
   }
 
   def activeFilters: Seq[SearchTerm] = searchTermToolBar.activeSearchTerms()
 
-  def addTailerListener(): Unit = filteredEntries.addListener(scrollToEndEventListener)
-
-  def removeTailerListener(): Unit = filteredEntries.removeListener(scrollToEndEventListener)
+  def enableAutoscroll(enabled: Boolean): Unit =
+    if enabled then
+      filteredEntries.addListener(autoScrollEventListener)
+      logTailer.start()
+    else
+      filteredEntries.removeListener(autoScrollEventListener)
+      logTailer.stop()
 
 
   private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, searchTermToolBar)
@@ -96,13 +104,11 @@ class LogFileTabContent(mutLogFileSettings: MutLogFileSettings
 
   def init(): Unit =
     divider.setPosition(mutLogFileSettings.getDividerPosition)
-
     setTop(opsRegion)
     setCenter(pane)
-
     logTextView.init()
     chunkListView.init()
-
+    enableAutoscroll(mutLogFileSettings.isAutoScrollActive)
 
 
   private def divider: SplitPane.Divider = pane.getDividers.get(0)
