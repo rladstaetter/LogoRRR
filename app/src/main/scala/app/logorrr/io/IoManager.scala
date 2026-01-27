@@ -8,7 +8,6 @@ import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
 import java.io.*
-import java.nio.charset.Charset
 import java.nio.file.{Files, Path}
 import java.time.{Duration, Instant}
 import java.util
@@ -89,10 +88,9 @@ object IoManager extends TinyIo with TinyLog:
     })
     FXCollections.observableList(arraylist)
 
-  def readEntries(path: Path
-                  , someLogEntryInstantFormat: Option[TimestampSettings]): ObservableList[LogEntry] =
+  def readEntries(path: Path, someTimestampSettings: Option[TimestampSettings]): ObservableList[LogEntry] =
     if isPathValid(path) then
-      Try(someLogEntryInstantFormat match {
+      Try(someTimestampSettings match {
         case None => IoManager.from(path)
         case Some(instantFormat) => from(path, instantFormat)
       }) match

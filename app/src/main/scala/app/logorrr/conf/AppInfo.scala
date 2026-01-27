@@ -1,19 +1,16 @@
 package app.logorrr.conf
 
-import app.logorrr.cp.TxtCp
-import upickle.default.*
-
-import scala.util.{Failure, Success}
+import app.logorrr.BuildProps
 
 object AppInfo:
 
-  val meta = TxtCp("/meta.json").asString() match
-    case Success(value) => read[AppInfo](value)
-    case Failure(exception) => AppInfo("LogoRRR", "LATEST")
-
-  val fullAppName = s"${meta.appName}"
-  val fullAppNameWithVersion = s"${meta.appName} ${meta.appVersion}"
-  val appVersion: String = meta.appVersion
+  def apply(appName: String, buildProps: BuildProps): AppInfo =
+    AppInfo(appName, buildProps.revision, buildProps.version, buildProps.formattedTimestamp)
 
 
-case class AppInfo(appName: String, appVersion: String) derives ReadWriter
+case class AppInfo(appName: String
+                   , revision: String
+                   , version: String
+                   , timestamp: String):
+  val nameAndVersion = s"$appName $version"
+  val asString = s"$appName $version $revision $timestamp"

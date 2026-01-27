@@ -1,16 +1,16 @@
 package app.logorrr.views.about
 
+import app.logorrr.{BuildProps, LogoRRRApp}
 import app.logorrr.clv.color.ColorUtil
-import app.logorrr.conf.{AppInfo, LogoRRRGlobals}
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.cp.ImageCp
 import app.logorrr.util.{HLink, LogoRRRFonts}
 import app.logorrr.views.a11y.uinodes.AboutDialog
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control.*
 import javafx.scene.layout.*
-import javafx.scene.paint.CycleMethod.NO_CYCLE
-import javafx.scene.paint.{Color, LinearGradient, Stop}
 import javafx.stage.Stage
+
 
 object AboutDialogBorderPane:
 
@@ -53,13 +53,13 @@ class AboutDialogBorderPane(stage: Stage) extends BorderPane:
 
 
   setPadding(new Insets(10, 10, 10, 10))
-  setTop(AboutDialogBorderPane.MonoLabel(AppInfo.fullAppNameWithVersion, 50))
+  setTop(AboutDialogBorderPane.MonoLabel(s"${LogoRRRApp.appInfo.appName} ${LogoRRRApp.appInfo.version}", 50))
   setLeft(showLogoButton)
   setRight(new AboutDialogBorderPane.HLinkView(AboutDialogBorderPane.links))
 
   val hBox = new HBox()
   hBox.setAlignment(Pos.CENTER_LEFT)
-  private val label = new Label(BuildProps.Instance.timestamp + " " + BuildProps.Instance.githash)
+  private val label = new Label(s"${BuildProps.Instance.formattedTimestamp} ${BuildProps.Instance.revision}")
   val spacer: Region = new Region
   spacer.setMinWidth(10)
   hBox.getChildren.addAll(label, spacer, closeButton)

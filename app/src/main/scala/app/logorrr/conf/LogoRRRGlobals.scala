@@ -19,7 +19,7 @@ import java.nio.file.Path
  */
 object LogoRRRGlobals extends TinyLog :
 
-  private val mutSettings = new MutSettings
+  val mutSettings = new MutSettings
 
   private val hostServicesProperty = new SimpleObjectProperty[LogoRRRHostServices]()
 
@@ -61,7 +61,6 @@ object LogoRRRGlobals extends TinyLog :
   def set(settings: Settings, hostServices: LogoRRRHostServices): Unit =
     mutSettings.setStageSettings(settings.stageSettings)
     mutSettings.setLogFileSettings(settings.fileSettings)
-    mutSettings.setSomeActive(settings.someActive)
     mutSettings.setSomeLastUsedDirectory(settings.someLastUsedDirectory)
     settings.someTimestampSettings match {
       case Some(timestampSettings) =>
@@ -81,8 +80,6 @@ object LogoRRRGlobals extends TinyLog :
 
   def getSettings: Settings = mutSettings.mkImmutable()
 
-  def setSomeActiveLogFile(sActive: Option[FileId]): Unit = mutSettings.setSomeActive(sActive)
-
   def getSomeActiveLogFile: Option[FileId] = mutSettings.getSomeActiveLogFile
 
   def getSomeLastUsedDirectory: Option[Path] = mutSettings.getSomeLastUsedDirectory
@@ -91,10 +88,6 @@ object LogoRRRGlobals extends TinyLog :
 
   def removeLogFile(fileId: FileId): Unit = timeR({
     mutSettings.removeLogFileSetting(fileId)
-    mutSettings.setSomeActive(mutSettings.getSomeActiveLogFile match {
-      case Some(value) if value == fileId => None
-      case x => x
-    })
 
     if OsUtil.enableSecurityBookmarks then {
       if fileId.isZipEntry then {
@@ -110,7 +103,7 @@ object LogoRRRGlobals extends TinyLog :
       }
     }
 
-  }, s"Removed file $fileId ...")
+  }, s"Removed file ${fileId.asPath} ...")
 
   def clearLogFileSettings(): Unit = mutSettings.clearLogFileSettings()
 

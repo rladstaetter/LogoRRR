@@ -1,5 +1,6 @@
 package app.logorrr.views.main
 
+import app.logorrr.LogoRRRApp
 import app.logorrr.conf.mut.MutStageSettings
 import app.logorrr.conf.{AppInfo, FileId, LogoRRRGlobals, SearchTerm}
 import app.logorrr.util.JfxUtils
@@ -40,26 +41,12 @@ object LogoRRRStage extends TinyLog:
         p.absolutePathAsString -> settings.fileSettings(p.absolutePathAsString).copy(searchTerms = fltrs, dividerPosition = d)
     LogoRRRGlobals.persist(settings.copy(fileSettings = updatedSettings))
 
-
-  def shutdown(stage: Stage, logorrrMain: LogoRRRMain): Unit = timeR({
+  def shutdown(stage: Stage, logorrrMain: LogoRRRMain): Unit =
     LogoRRRStage.persistSettings(logorrrMain)
     logorrrMain.shutdown()
     LogoRRRGlobals.unbindWindow()
     stage.sceneProperty.removeListener(LogoRRRStage.sceneListener)
-    logInfo(s"Stopped ${AppInfo.fullAppNameWithVersion}")
-  }, "shutdown")
-
-
-  def selectActiveLogFile(logorrrMain: LogoRRRMain): Unit =
-    LogoRRRGlobals.getSomeActiveLogFile match
-      case Some(fileId) =>
-        if logorrrMain.contains(fileId) then
-          val tab = logorrrMain.selectLog(fileId)
-          tab.refreshUi()
-        else
-          logWarn(s"Not found: '${fileId.absolutePathAsString}'")
-      case None =>
-        logorrrMain.selectLastLogFile()
+    logInfo(s"Stopped ${LogoRRRApp.appInfo.nameAndVersion}")
 
   def init(stage: Stage, logorrrMain: LogoRRRMain): Unit =
 
@@ -72,7 +59,7 @@ object LogoRRRStage extends TinyLog:
     // bind stage properties (they are initially set and constantly overwritten during execution)
     scene.windowProperty().addListener(MutStageSettings.windowListener)
     stage.sceneProperty().addListener(LogoRRRStage.sceneListener)
-    stage.setTitle(AppInfo.fullAppName)
+    stage.setTitle(LogoRRRApp.appInfo.nameAndVersion)
     stage.getIcons.add(LogoRRRStage.icon)
     stage.setScene(scene)
     stage.setOnCloseRequest((_: WindowEvent) => LogoRRRStage.shutdown(stage, logorrrMain))

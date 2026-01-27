@@ -26,41 +26,46 @@ object MutSettings:
 
 class MutSettings {
 
+  /** contains mutable information for the application stage */
+  private val mutStageSettings = new MutStageSettings
+
+  /** tracks which log file is active */
+  val someActiveLogProperty: SimpleObjectProperty[Option[FileId]] = new SimpleObjectProperty[Option[FileId]](None)
+
   /** settings can be either all undefined (None) or have some value */
   private val timeStampSettingsProperty = new SimpleObjectProperty[MutTimestampSettings]()
+
+  /** global container for search term groups */
+  val mutSearchTermGroupSettings = new MutSearchTermGroupSettings
+
+  /** remembers last opened directory for the next execution */
+  val lastUsedDirectoryProperty = new SimpleObjectProperty[Option[Path]](None)
+
+  /** contains mutable state information for all log files */
+  private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
+
+  def getSomeActiveLogFile: Option[FileId] = someActiveLogProperty.get()
 
   def setTimestampSettings(settings: MutTimestampSettings) = timeStampSettingsProperty.set(settings)
 
   def getTimestampSettings(): MutTimestampSettings = timeStampSettingsProperty.get()
 
-  /** global container for search term groups */
-  val mutSearchTermGroupSettings = new MutSearchTermGroupSettings
 
   def searchTermGroupNames: ObservableList[String] = mutSearchTermGroupSettings.searchTermGroupNames
 
-  /** remembers last opened directory for the next execution */
-  val lastUsedDirectoryProperty = new SimpleObjectProperty[Option[Path]](None)
 
   def getSomeLastUsedDirectory: Option[Path] = lastUsedDirectoryProperty.get()
 
   def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit =
     lastUsedDirectoryProperty.set(someDirectory)
 
-  /** contains mutable information for the application stage */
-  private val mutStageSettings = new MutStageSettings
 
-
-  /** contains mutable state information for all log files */
-  private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
 
   def putSearchTermGroup(stg: SearchTermGroup): Unit = mutSearchTermGroupSettings.put(stg.name, stg.terms)
 
   def clearSearchTermGroups(): Unit = mutSearchTermGroupSettings.clear()
 
   def removeSearchTermGroup(name: String): Unit = mutSearchTermGroupSettings.remove(name)
-
-  /** tracks which log file is active */
-  private val someActiveLogProperty = new SimpleObjectProperty[Option[FileId]](None)
 
   def getMutLogFileSetting(key: FileId): MutLogFileSettings =
     mutLogFileSettingsMapProperty.get(key)
@@ -70,9 +75,6 @@ class MutSettings {
 
   def removeLogFileSetting(fileId: FileId): Unit = mutLogFileSettingsMapProperty.remove(fileId)
 
-  def setSomeActive(path: Option[FileId]): Unit = someActiveLogProperty.set(path)
-
-  def getSomeActiveLogFile: Option[FileId] = someActiveLogProperty.get()
 
   def setLogFileSettings(logFileSettings: Map[String, LogFileSettings]): Unit =
     val m = for (k, settings) <- logFileSettings yield
@@ -96,9 +98,7 @@ class MutSettings {
     mutStageSettings.setHeight(stageSettings.height)
     mutStageSettings.setWidth(stageSettings.width)
 
-  def clearLogFileSettings(): Unit =
-    mutLogFileSettingsMapProperty.clear()
-    setSomeActive(None)
+  def clearLogFileSettings(): Unit = mutLogFileSettingsMapProperty.clear()
 
   def bindWindowProperties(window: Window): Unit =
     mutStageSettings.bind(

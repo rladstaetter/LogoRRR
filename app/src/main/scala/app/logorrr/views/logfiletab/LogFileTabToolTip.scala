@@ -12,5 +12,5 @@ import javafx.util.Duration
  */
 class LogFileTabToolTip(fileId: FileId
                         , logEntries: ObservableList[LogEntry]) extends Tooltip:
-  this.setShowDelay(Duration.millis(100))
+  this.setShowDelay(Duration.millis(300))
   this.textProperty.bind(Bindings.concat(fileId.absolutePathAsString, "\n", Bindings.size(logEntries).asString, " lines"))

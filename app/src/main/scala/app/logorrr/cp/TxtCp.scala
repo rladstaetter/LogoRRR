@@ -6,11 +6,7 @@ import scala.util.{Try, Using}
 case class TxtCp(classPathResource: String) extends CpResource:
 
   def asString(): Try[String] =
-    Using(getClass.getResourceAsStream(classPathResource)) { inputStream =>
-      if inputStream == null then
-        throw new RuntimeException(s"Resource not found: $classPathResource")
-
-      // Convert stream to String
-      Source.fromInputStream(inputStream).mkString
-    }
+    Option(getClass.getResourceAsStream(classPathResource)) match
+      case Some(inputStream) => Using(inputStream)(Source.fromInputStream(_).mkString)
+      case None => throw new RuntimeException(s"Classpath resource not found: '$classPathResource'")
 

@@ -17,7 +17,6 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala3-library_3</artifactId>
         </dependency>
-
         <!-- uncomment if atlantafx is needed for enhancing css
         <dependency>
             <groupId>io.github.mkpaz</groupId>
@@ -54,13 +53,6 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
         </dependency>
-        <!-- needed if you want to use scenic view analyse the scenegraph -->
-        <!--
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-swing</artifactId>
-        </dependency>
-        -->
         <dependency>
             <groupId>app.logorrr</groupId>
             <artifactId>clv</artifactId>
@@ -87,17 +79,9 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>app/**</include>
+                    <include>**</include>
                 </includes>
                 <filtering>false</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>application.json</include>
-                    <include>meta.json</include>
-                </includes>
-                <filtering>true</filtering>
             </resource>
         </resources>
         <plugins>

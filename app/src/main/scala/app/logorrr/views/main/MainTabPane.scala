@@ -3,13 +3,13 @@ package app.logorrr.views.main
 import app.logorrr.conf.{DefaultSearchTermGroups, FileId, LogFileSettings, LogoRRRGlobals}
 import app.logorrr.io.IoManager
 import app.logorrr.model.LogEntry
-import app.logorrr.util.JfxUtils
+import app.logorrr.util.DndUtil
 import app.logorrr.views.a11y.uinodes.UiNodes
 import app.logorrr.views.logfiletab.LogFileTab
-import javafx.beans.value.ChangeListener
+import javafx.beans.binding.Bindings
 import javafx.collections.ObservableList
-import javafx.scene.control.{Tab, TabPane}
-import javafx.scene.input.{DragEvent, TransferMode}
+import javafx.scene.control.TabPane
+import javafx.scene.input.DragEvent
 import net.ladstatt.util.log.TinyLog
 
 import java.nio.file.{Files, Path}
@@ -31,41 +31,49 @@ object MainTabPane:
 
 
 class MainTabPane extends TabPane with TinyLog:
-  // leave here otherwise css rendering breaks
-  setStyle(MainTabPane.BackgroundStyle)
-  setId(UiNodes.MainTabPane.value)
 
-  // setup DnD
-  setOnDragOver((event: DragEvent) => {
-    if event.getDragboard.hasFiles then {
-      event.acceptTransferModes(TransferMode.ANY *)
+  // -- bindings
+  styleProperty().bind(Bindings.createStringBinding(() => MainTabPane.BackgroundStyle))
+  idProperty().bind(Bindings.createStringBinding(() => UiNodes.MainTabPane.value))
+
+  LogoRRRGlobals.mutSettings.someActiveLogProperty.bind(Bindings.createObjectBinding[Option[FileId]](() => {
+    getSelectionModel.getSelectedItem match {
+      case tab: LogFileTab => Option(tab.getFileId)
+      case _ => None
     }
-  })
+  }, getSelectionModel.selectedItemProperty()))
 
-  def dstg = DefaultSearchTermGroups(LogoRRRGlobals.getSettings.searchTermGroups)
 
-  /** try to interpret dropped element as log file, activate view */
-  setOnDragDropped((event: DragEvent) => {
+  /** register actions which are to be executed on a drop */
+  def onDragDropped(event: DragEvent): Unit =
     for f <- event.getDragboard.getFiles.asScala do {
       val path = f.toPath
       if Files.isDirectory(path) then {
-        dropDirectory(path, dstg)
+        processDirectory(path, dstg)
       } else if IoManager.isZip(path) then {
         openZipFile(path, dstg)
       } else {
-        openFile(FileId(path), dstg)
+        openRegularFile(path, dstg)
       }
     }
-  })
 
-  private val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew:
-    case logFileTab: LogFileTab =>
-      logTrace(s"Selected: '${logFileTab.getFileId.value}'")
-      LogoRRRGlobals.setSomeActiveLogFile(Option(logFileTab.getFileId))
-      // to set 'selected' property in Tab and to trigger repaint correctly (see issue #9)
-      getSelectionModel.select(logFileTab)
-    case _ => getSelectionModel.select(null)
 
+  def dstg = DefaultSearchTermGroups(LogoRRRGlobals.getSettings.searchTermGroups)
+
+  /** setup drag'n drop for all modes */
+  setOnDragOver(DndUtil.onDragAcceptAll)
+
+  /** try to interpret dropped element as log file, activate view */
+  setOnDragDropped(onDragDropped)
+
+  /*
+    private val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew:
+      case logFileTab: LogFileTab =>
+        logTrace(s"Selected: '${logFileTab.getFileId.value}'")
+        LogoRRRGlobals.setSomeActiveLogFile(Option(logFileTab.getFileId))
+        getSelectionModel.select(logFileTab)
+      case _ => getSelectionModel.select(null)
+  */
 
   /**
    * Unzips given path, interprets contents as log files and adds them to the GUI
@@ -85,19 +93,21 @@ class MainTabPane extends TabPane with TinyLog:
     else
       logWarn(s"Tried to open file as zip, but filename was: '${path.toAbsolutePath.toString}'.")
 
-  private def dropDirectory(path: Path, dstg: DefaultSearchTermGroups): Unit =
+  /** open all regular files in a directory, do not recurse */
+  private def processDirectory(path: Path, dstg: DefaultSearchTermGroups): Unit =
     val files = Files.list(path).filter((p: Path) => Files.isRegularFile(p))
     // diff between regular files and zip files, try to open zip files as container
     val collectorResults: util.Map[lang.Boolean, util.List[Path]] = files.collect(Collectors.partitioningBy((p: Path) => p.getFileName.toString.endsWith(".zip")))
-    collectorResults.get(false).forEach(p => openFile(FileId(p), dstg))
+    collectorResults.get(false).forEach(p => openRegularFile(p, dstg))
     collectorResults.get(true).forEach(p => openZipFile(p, dstg))
 
   /**
    * Defines what should happen when a tab is selected
    * */
+  /*
   def initSelectionListener(): Unit =
     getSelectionModel.selectedItemProperty().addListener(selectedTabListener)
-
+*/
   def contains(p: FileId): Boolean = getLogFileTabs.exists(lr => lr.getFileId == p)
 
   def getByFileId(fileId: FileId): Option[LogFileTab] = getLogFileTabs.find(_.getFileId == fileId)
@@ -106,11 +116,6 @@ class MainTabPane extends TabPane with TinyLog:
     case l: LogFileTab => Option(l)
     case _ => None
 
-  /** shutdown all tabs */
-  def shutdown(): Unit =
-    getSelectionModel.selectedItemProperty().removeListener(selectedTabListener)
-    getLogFileTabs.foreach(_.shutdown())
-    getTabs.clear()
 
   def selectFile(fileId: FileId): LogFileTab =
     getByFileId(fileId) match
@@ -125,15 +130,16 @@ class MainTabPane extends TabPane with TinyLog:
 
   def selectLastLogFile(): Unit = getSelectionModel.selectLast()
 
-  private def openFile(fileId: FileId, dstg: DefaultSearchTermGroups): Unit =
-    if Files.exists(fileId.asPath) then
+  private def openRegularFile(path: Path, dstg: DefaultSearchTermGroups): Unit =
+    val fileId = FileId(path)
+    if Files.exists(path) then
       if !contains(fileId) then
         addFile(fileId, dstg)
       else
         logTrace(s"${fileId.absolutePathAsString} is already opened, selecting tab ...")
         selectFile(fileId)
-    else
-      logWarn(s"${fileId.absolutePathAsString} does not exist.")
+    else logWarn(s"${fileId.absolutePathAsString} does not exist.")
+
 
   def addFile(fileId: FileId, dstg: DefaultSearchTermGroups): Unit =
     val logFileSettings = LogFileSettings.mk(fileId, dstg)
@@ -154,4 +160,12 @@ class MainTabPane extends TabPane with TinyLog:
     tab.init()
     getTabs.add(tab)
     tab.initContextMenu()
+
+  def shutdown(): Unit =
+    LogoRRRGlobals.mutSettings.someActiveLogProperty.unbind()
+    styleProperty().unbind()
+    idProperty().unbind()
+    //  getSelectionModel.selectedItemProperty().removeListener(selectedTabListener)
+    getLogFileTabs.foreach(_.shutdown())
+    getTabs.clear()
 

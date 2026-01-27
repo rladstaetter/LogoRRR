@@ -16,13 +16,13 @@ import scala.concurrent.{Await, Future}
 
 class LogoRRRMain(stage: Stage
                   , logoRRRFileOpenService: FileIdService
-                  , isUnderTest: Boolean) extends BorderPane with TinyLog:
+                  , isUnderTest: Boolean
+                  , someActiveFile: Option[FileId]) extends BorderPane with TinyLog:
 
   val bar = new MainMenuBar(stage, logoRRRFileOpenService, openFile, closeAllLogFiles(), isUnderTest)
 
   private val mainTabPane = new MainTabPane
 
-  def getLogFileTabs: mutable.Seq[LogFileTab] = mainTabPane.getLogFileTabs
 
   def init(stage: Stage): Unit =
     setTop(bar)
@@ -43,11 +43,11 @@ class LogoRRRMain(stage: Stage
       stage.show()
       stage.toFront()
 
-      // only after loading all files we initialize the 'add' listener
-      // otherwise we would overwrite the active log everytime
-      mainTabPane.initSelectionListener()
+      someActiveFile match {
+        case Some(value) if contains(value) => selectLog(value)
+        case _ => selectLastLogFile()
+      }
 
-      LogoRRRStage.selectActiveLogFile(this)
 
   private def loadLogFiles(settings: Seq[LogFileSettings]): Seq[LogFileTab] =
     val (zipSettings, fileSettings) = settings.partition(p => p.fileId.isZipEntry)
@@ -91,7 +91,6 @@ class LogoRRRMain(stage: Stage
     logTrace("Loaded " + logFileTabs.size + " files ... ")
     logFileTabs
 
-  def contains(fileId: FileId): Boolean = mainTabPane.contains(fileId)
 
   /** called when 'Open File' from the main menu bar is selected. */
   def openFile(fileId: FileId): Unit =
@@ -107,9 +106,13 @@ class LogoRRRMain(stage: Stage
     shutdown()
     LogoRRRGlobals.clearLogFileSettings()
 
+  def contains(fileId: FileId): Boolean = mainTabPane.contains(fileId)
+
   def selectLog(fileId: FileId): LogFileTab = mainTabPane.selectFile(fileId)
 
   def selectLastLogFile(): Unit = mainTabPane.selectLastLogFile()
+
+  def getLogFileTabs: mutable.Seq[LogFileTab] = mainTabPane.getLogFileTabs
 
   def shutdown(): Unit = mainTabPane.shutdown()
 

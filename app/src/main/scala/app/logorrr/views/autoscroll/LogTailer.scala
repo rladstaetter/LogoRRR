@@ -18,7 +18,7 @@ case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) exten
   private var someScheduler: Option[ScheduledExecutorService] = None
   private var future: Option[ScheduledFuture[?]] = None
   private var lastPosition: Long = 0L
-  private val logFile : File = fileId.asPath.toFile
+  private val logFile: File = fileId.asPath.toFile
   private val pollingDelayMs = 500L // Poll every half-second
 
   // Current line counter for LogEntry ID
@@ -46,7 +46,7 @@ case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) exten
           var lineBytes: String = null
 
           // Use raf.readLine() which reads a line and advances the file pointer.
-          while 
+          while
             lineBytes = raf.readLine()
             lineBytes != null
           do
@@ -92,10 +92,16 @@ case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) exten
         logInfo(s"Started LogTailer for file ${fileId.value} with ${pollingDelayMs}ms delay.")
 
   /** Stop observing log file */
-  def stop(): Unit = timeR({
-    future.foreach(_.cancel(true))
-    someScheduler.foreach(_.shutdown())
-    someScheduler = None
-    future = None
-  }, s"Stopped LogTailer for file $fileId")
+  def stop(): Unit = {
+    if (future.isEmpty && someScheduler.isEmpty) {
+      logTrace(s"LogTailer inactive for ${fileId.asPath}.")
+    } else
+      timeR({
+        future.foreach(_.cancel(true))
+        someScheduler.foreach(_.shutdown())
+        someScheduler = None
+        future = None
+      }, s"Stopped LogTailer for file ${fileId.asPath}")
+  }
+
 }

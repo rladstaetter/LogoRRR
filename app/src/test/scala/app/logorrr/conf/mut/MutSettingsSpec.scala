@@ -11,7 +11,6 @@ class MutSettingsSpec extends LogoRRRSpec:
     val s = new MutSettings
     s.setStageSettings(settings.stageSettings)
     s.setLogFileSettings(settings.fileSettings)
-    s.setSomeActive(settings.someActive)
     s
 
   "MutSettings" should:

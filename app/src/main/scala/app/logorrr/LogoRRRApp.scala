@@ -21,6 +21,9 @@ import java.nio.file.{Files, Path, Paths}
 object LogoRRRApp extends TinyLog:
 
   val Name = "LogoRRR"
+
+  val appInfo = AppInfo(Name, BuildProps.Instance)
+
   val paths = AppPaths("logorrr", "app.logorrr")
   // 1 log file, constrain it to 100 MB
   TinyLog.init(
@@ -38,10 +41,14 @@ object LogoRRRApp extends TinyLog:
     Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
 
     LogoRRRGlobals.set(services.settings, services.hostServices)
-    val logoRRRMain = new LogoRRRMain(stage, services.fileIdService, services.isUnderTest)
+    
+    val logoRRRMain = new LogoRRRMain(stage
+      , services.fileIdService
+      , services.isUnderTest
+      , services.settings.someActive)
     LogoRRRStage.init(stage, logoRRRMain)
 
-    logInfo(s"            Started: ${AppInfo.fullAppNameWithVersion}")
+    logInfo(s"            Started: ${appInfo.asString}")
     logConfig(s"Working directory: '${Paths.get("").toAbsolutePath.toString}'")
     logConfig(s"     Program data: '${paths.appDataDirectory.toAbsolutePath.toString}'")
     logConfig(s"    Configuration: '${paths.settingsFile}'")

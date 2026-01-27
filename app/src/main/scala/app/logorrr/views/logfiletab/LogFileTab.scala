@@ -82,7 +82,6 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
     selectedProperty.subscribe(new Consumer[java.lang.Boolean] {
       def accept(newVal: java.lang.Boolean): Unit =
         if (newVal) {
-          // Option(getTabPane).foreach(_ => setContextMenu(mkContextMenu()))
           initContextMenu()
           LogoRRRAccelerators.setActiveSearchTextField(logPane.opsToolBar.searchTextField)
           refreshUi()
@@ -95,19 +94,12 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
 
   def refreshUi(): Unit = logPane.refreshUi()
 
-  def init(): Unit = timeR({
+  def init(): Unit =
     setTooltip(new LogFileTabToolTip(fileId, entries))
-    // selectedProperty().addListener(selectedListener)
     logPane.init()
-
-    /** top component for log view */
     setContent(logPane)
-
-    /** don't monitor file anymore if tab is closed, free listeners */
     setOnCloseRequest((_: Event) => shutdown())
 
-
-  }, s"Init '${fileId.value}'")
 
   def initContextMenu(): Unit = {
     Option(getTabPane) match {
