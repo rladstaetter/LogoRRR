@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>installer</artifactId>
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>Windows installer using Advanced Installer</description>
 
     <dependencies>

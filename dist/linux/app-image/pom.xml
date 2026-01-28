@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>app-image</artifactId>
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>Builds LogoRRRs linux app image</description>
 
     <dependencies>

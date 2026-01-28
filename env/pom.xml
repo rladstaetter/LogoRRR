@@ -9,7 +9,7 @@
         <version>${revision}${changelist}</version>
     </parent>
     <artifactId>env</artifactId>
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
     <description>Downloads and provides openjfx sdk (needed for intellij run configurations)</description>
     <properties>

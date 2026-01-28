@@ -12,7 +12,7 @@
     <packaging>pom</packaging>
 
     <artifactId>app-image</artifactId>
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>Windows app image distribution</description>
 
     <dependencies>

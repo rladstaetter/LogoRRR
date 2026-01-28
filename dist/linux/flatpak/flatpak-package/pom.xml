@@ -11,7 +11,7 @@
 
     <artifactId>flatpak-package</artifactId>
 
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>Build flatpak package</description>
 
     <dependencies>

@@ -11,7 +11,7 @@
     <artifactId>app-icons</artifactId>
     <description>Contains app icons for LogoRRR</description>
     <inceptionYear>2026</inceptionYear>
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <packaging>jar</packaging>
     <build>
         <resources>
