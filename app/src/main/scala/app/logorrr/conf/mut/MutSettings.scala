@@ -46,9 +46,9 @@ class MutSettings {
 
   def getSomeActiveLogFile: Option[FileId] = someActiveLogProperty.get()
 
-  def setTimestampSettings(settings: MutTimestampSettings) = timeStampSettingsProperty.set(settings)
+  def setTimestampSettings(settings: MutTimestampSettings): Unit = timeStampSettingsProperty.set(settings)
 
-  def getTimestampSettings(): MutTimestampSettings = timeStampSettingsProperty.get()
+  def getTimestampSettings: MutTimestampSettings = timeStampSettingsProperty.get()
 
 
   def searchTermGroupNames: ObservableList[String] = mutSearchTermGroupSettings.searchTermGroupNames
@@ -90,7 +90,7 @@ class MutSettings {
       , getSomeActiveLogFile
       , getSomeLastUsedDirectory
       , mutSearchTermGroupSettings.mkImmutable()
-      , Option(getTimestampSettings()).map(_.mkImmutable()))
+      , Option(getTimestampSettings).map(_.mkImmutable()))
 
   def setStageSettings(stageSettings: StageSettings): Unit =
     mutStageSettings.setX(stageSettings.x)

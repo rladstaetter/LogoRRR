@@ -14,7 +14,6 @@ import net.ladstatt.util.log.TinyLog
 import java.util.function.Consumer
 
 
-
 object LogFileTab extends UiNodeFileIdAware:
 
   /** background for file log tabs */
@@ -43,7 +42,7 @@ object LogFileTab extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogFileTab])
 
-  def apply(model : LogorrrModel) : LogFileTab =
+  def apply(model: LogorrrModel): LogFileTab =
     new LogFileTab(model.mutLogFileSettings, model.entries)
 
 /**
@@ -73,29 +72,23 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
     }
   }, mutLogFileSettings.fileIdProperty, selectedProperty()))
 
-  textProperty().bind(Bindings.createStringBinding(() => {
-    if getFileId.isZipEntry then
-      fileId.zipEntryPath
-    else fileId.fileName
-  }, mutLogFileSettings.fileIdProperty))
+  textProperty().bind(Bindings.createStringBinding(
+    () => if getFileId.isZipEntry then fileId.zipEntryPath else fileId.fileName
+    , mutLogFileSettings.fileIdProperty))
   // setup bindings end ----
 
-  // subscriptions
   private val selectedSubscription =
     selectedProperty.subscribe(new Consumer[java.lang.Boolean] {
       def accept(newVal: java.lang.Boolean): Unit =
-        if (newVal) {
+        if newVal then {
           initContextMenu()
           LogoRRRAccelerators.setActiveSearchTextField(logPane.opsToolBar.searchTextField)
-          refreshUi()
         } else {
           setContextMenu(null)
         }
     })
 
   val logPane = new LogFilePane(mutLogFileSettings, entries)
-
-  def refreshUi(): Unit = logPane.refreshUi()
 
   def init(): Unit =
     setTooltip(new LogFileTabToolTip(fileId, entries))

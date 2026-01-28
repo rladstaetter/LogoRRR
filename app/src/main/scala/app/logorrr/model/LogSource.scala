@@ -2,24 +2,34 @@ package app.logorrr.model
 
 import app.logorrr.conf.{DefaultSearchTermGroups, FileId, LogFileSettings, LogoRRRGlobals}
 import app.logorrr.io.IoManager
+import app.logorrr.util.DndUtil
 import javafx.collections.ObservableList
+import javafx.scene.input.DragEvent
 import net.ladstatt.util.log.TinyLog
 
+import java.nio.file.{Files, Path}
+import java.util.stream.Collectors
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
+import scala.jdk.CollectionConverters.*
 
-class LogSource(defaultSearchTermGroups: DefaultSearchTermGroups) extends TinyLog:
+class LogSource(dstg: DefaultSearchTermGroups
+                , settings: Seq[LogFileSettings]
+                , someActiveFile: Option[FileId]
+                , val ui: UiTarget) extends TinyLog:
 
-  def loadLogFiles(settings: Seq[LogFileSettings]): Seq[LogorrrModel] =
+  /** setup Drag'n drop */
+  ui.setOnDragOver(DndUtil.onDragAcceptAll)
+  ui.setOnDragDropped(onDragDropped)
+
+  def loadLogFiles(): Unit =
     if (settings.isEmpty)
-      Seq()
+      ()
     else
       val (zipSettings, fileSettings) = settings.partition(p => p.fileId.isZipEntry)
       val zipSettingsMap: Map[FileId, LogFileSettings] = zipSettings.map(s => s.fileId -> s).toMap
 
-      // zips is a map which contains fileIds as keys which have to be loaded, and as values their corresponding
-      // settings. this is necessary as not to lose settings from previous runs
       val zips: Map[FileId, Seq[FileId]] = FileId.reduceZipFiles(zipSettingsMap.keys.toSeq)
 
       val futures: Future[Seq[Option[LogorrrModel]]] = Future.sequence:
@@ -52,4 +62,66 @@ class LogSource(defaultSearchTermGroups: DefaultSearchTermGroups) extends TinyLo
         val res: Seq[Future[Option[LogorrrModel]]] = zipFutures ++ fileBasedSettings
         res
 
-      Await.result(futures, Duration.Inf).flatten
+      val models = Await.result(futures, Duration.Inf).flatten
+
+      models.foreach(model => ui.addData(LogorrrModel(model.mutLogFileSettings, model.entries)))
+      someActiveFile match {
+        case Some(value) if ui.contains(value) => ui.selectFile(value)
+        case _ => ui.selectLastLogFile()
+      }
+
+  private def onDragDropped(event: DragEvent): Unit =
+    for f <- event.getDragboard.getFiles.asScala do {
+      val path = f.toPath
+      if Files.isDirectory(path) then {
+        addDirectory(path)
+      } else if IoManager.isZip(path) then {
+        addZip(path)
+      } else {
+        addFile(path)
+      }
+    }
+
+  def openFile(fileId: FileId): Unit = {
+    if (ui.contains(fileId)) {
+      ui.selectFile(fileId)
+    } else if (!IoManager.isZip(fileId.asPath)) {
+      addFileId(fileId)
+    } else {
+      addZip(fileId.asPath)
+    }
+  }
+
+  def addDirectory(path: Path): Unit =
+    val files = Files.list(path).filter((p: Path) => Files.isRegularFile(p))
+    val collectorResults: java.util.Map[java.lang.Boolean, java.util.List[Path]] = files.collect(Collectors.partitioningBy((p: Path) => IoManager.isZip(p)))
+    collectorResults.get(false).forEach(p => addFile(p))
+    collectorResults.get(true).forEach(p => addZip(p))
+
+  def addZip(path: Path): Unit =
+    IoManager.unzip(path).foreach:
+      case (fileId, entries) =>
+        if !ui.contains(fileId) then
+          val settings = LogFileSettings.mk(fileId, dstg)
+          addEntries(settings, entries)
+        else ui.selectFile(fileId)
+
+  def addFile(path: Path): Unit =
+    val fileId = FileId(path)
+    if !ui.contains(fileId) then addFileId(fileId)
+    else ui.selectFile(fileId)
+
+  def addFileId(fileId: FileId): Unit =
+    val settings = LogFileSettings.mk(fileId, dstg)
+    val entries = IoManager.readEntries(settings.path, settings.someTimestampSettings)
+    addEntries(settings, entries)
+
+  private def addEntries(settings: LogFileSettings, entries: ObservableList[LogEntry]): Unit =
+    val fileId = settings.fileId
+    LogoRRRGlobals.registerSettings(settings)
+    ui.addData(LogorrrModel(LogoRRRGlobals.getLogFileSettings(fileId), entries))
+    ui.selectFile(fileId)
+
+  def closeAllLogFiles(): Unit =
+    ui.shutdown()
+    LogoRRRGlobals.clearLogFileSettings()

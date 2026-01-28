@@ -62,12 +62,8 @@ object LogoRRRGlobals extends TinyLog :
     mutSettings.setLogFileSettings(settings.fileSettings)
     mutSettings.setSomeLastUsedDirectory(settings.someLastUsedDirectory)
     settings.someTimestampSettings match {
-      case Some(timestampSettings) =>
-        logTrace(s"Using timestamp settings ${timestampSettings}")
-        setTimestampSettings(MutTimestampSettings(timestampSettings))
-      case None =>
-        logTrace("No timestamp settings found.")
-        setTimestampSettings(null)
+      case Some(timestampSettings) => setTimestampSettings(MutTimestampSettings(timestampSettings))
+      case None => setTimestampSettings(null)
     }
 
     // populate either from saved file or use default values.
@@ -112,6 +108,6 @@ object LogoRRRGlobals extends TinyLog :
 
   val searchTermGroupEntries: ObservableList[SearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
 
-  def getTimestampSettings: Option[MutTimestampSettings] = Option(mutSettings.getTimestampSettings())
+  def getTimestampSettings: Option[MutTimestampSettings] = Option(mutSettings.getTimestampSettings)
 
-  def setTimestampSettings(timestampSettings: MutTimestampSettings) = mutSettings.setTimestampSettings(timestampSettings)
+  def setTimestampSettings(timestampSettings: MutTimestampSettings): Unit = mutSettings.setTimestampSettings(timestampSettings)

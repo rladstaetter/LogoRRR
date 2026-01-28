@@ -126,15 +126,16 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
     enableAutoscroll(mutLogFileSettings.isAutoScrollActive)
     mutLogFileSettings.mutSearchTerms.addListener(searchTermChangeListener)
 
-
   private def divider: SplitPane.Divider = pane.getDividers.get(0)
 
   def getDividerPosition: Double = divider.getPosition
 
+  /*
   def refreshUi(): Unit =
     chunkListView.recalculateAndUpdateItems()
     chunkListView.scrollToActiveChunk()
     logTextView.scrollToActiveLogEntry()
+*/
 
   def shutdown(): Unit =
     logTextView.removeListeners()

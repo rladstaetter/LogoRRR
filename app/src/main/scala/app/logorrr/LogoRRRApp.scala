@@ -3,10 +3,11 @@ package app.logorrr
 import app.logorrr
 import app.logorrr.conf.{AppInfo, DefaultSearchTermGroups, LogoRRRGlobals}
 import app.logorrr.io.{AppPaths, SettingsFileIO}
+import app.logorrr.model.LogSource
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
 import app.logorrr.services.hostservices.{MacNativeHostService, NativeHostServices}
-import app.logorrr.views.main.{LogoRRRMain, LogoRRRStage}
+import app.logorrr.views.main.{LogoRRRMain, LogoRRRStage, MainTabPane}
 import javafx.application.Application
 import javafx.stage.Stage
 import net.ladstatt.util.io.TinyIo
@@ -44,13 +45,14 @@ object LogoRRRApp extends TinyLog:
 
     val groups: DefaultSearchTermGroups = DefaultSearchTermGroups(services.settings.searchTermGroups)
 
+    val logSource = new LogSource(groups, LogoRRRGlobals.getOrderedLogFileSettings, services.settings.someActive, new MainTabPane(groups))
+
     val logoRRRMain = new LogoRRRMain(stage
       , services.fileIdService
       , services.isUnderTest
-      , groups)
+      , logSource)
     val (width, height) = (LogoRRRGlobals.getStageWidth, LogoRRRGlobals.getStageHeight)
-
-    LogoRRRStage.init(stage, logoRRRMain, services.settings.someActive, width, height)
+    LogoRRRStage.init(stage, logoRRRMain, width, height)
 
     logInfo(s"            Started: ${appInfo.asString}")
     logConfig(s"Working directory: '${Paths.get("").toAbsolutePath.toString}'")

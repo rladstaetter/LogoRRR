@@ -2,8 +2,8 @@ package app.logorrr.views.main
 
 import app.logorrr.LogoRRRApp
 import app.logorrr.conf.mut.MutStageSettings
-import app.logorrr.conf.{FileId, LogFileSettings, LogoRRRGlobals, SearchTerm}
-import app.logorrr.model.{LogSource, LogorrrModel}
+import app.logorrr.conf.{FileId, LogFileSettings, LogoRRRGlobals}
+import app.logorrr.model.{FileIdDividerSearchTerm, LogSource}
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.LogoRRRAccelerators
 import javafx.beans.value.ChangeListener
@@ -25,26 +25,21 @@ object LogoRRRStage extends TinyLog:
     scene.getWindow.setY(y)
   })
 
-  def persistSettings(logorrrMain: LogoRRRMain): Unit =
+  def persistSettings(logSource: LogSource): Unit =
     // current global state
     // following code can be removed if filters are bound to
     // global mutable Settings
     val settings = LogoRRRGlobals.getSettings
 
-    // to save global filter state
-    val activeSearchTerms: Map[FileId, (Seq[SearchTerm], Double)] =
-      (for logFileTab <- logorrrMain.getLogFileTabs yield {
-        logFileTab.getFileId -> (logFileTab.logPane.activeSearchTerms, logFileTab.logPane.getDividerPosition)
-      }).toMap
 
     val updatedSettings: Map[String, LogFileSettings] =
-      for (p, (sTerms, dPos)) <- activeSearchTerms yield
-        p.absolutePathAsString -> settings.fileSettings(p.absolutePathAsString).copy(searchTerms = sTerms, dividerPosition = dPos)
+      (for (FileIdDividerSearchTerm(p, sTerms, dPos) <- logSource.ui.getInfos) yield
+        p.absolutePathAsString -> settings.fileSettings(p.absolutePathAsString).copy(searchTerms = sTerms, dividerPosition = dPos)).toMap
     LogoRRRGlobals.persist(settings.copy(fileSettings = updatedSettings))
 
-  def shutdown(stage: Stage, logorrrMain: LogoRRRMain): Unit =
-    LogoRRRStage.persistSettings(logorrrMain)
-    logorrrMain.shutdown()
+  def shutdown(stage: Stage, logSource: LogSource): Unit =
+    LogoRRRStage.persistSettings(logSource)
+    logSource.ui.shutdown()
     LogoRRRGlobals.unbindWindow()
     stage.getScene.windowProperty().removeListener(MutStageSettings.windowListener)
     stage.sceneProperty.removeListener(LogoRRRStage.sceneListener)
@@ -52,7 +47,6 @@ object LogoRRRStage extends TinyLog:
 
   def init(stage: Stage
            , logorrrMain: LogoRRRMain
-           , someActiveFile: Option[FileId]
            , width: Int
            , height: Int): Unit =
 
@@ -66,16 +60,16 @@ object LogoRRRStage extends TinyLog:
     stage.setTitle(LogoRRRApp.appInfo.nameAndVersion)
     stage.getIcons.add(LogoRRRStage.icon)
     stage.setScene(scene)
-    stage.setOnCloseRequest((_: WindowEvent) => {
-      scene.getAccelerators.clear()
-      LogoRRRStage.shutdown(stage, logorrrMain)
-    })
+    stage.setOnCloseRequest:
+      (_: WindowEvent) =>
+        scene.getAccelerators.clear()
+        LogoRRRStage.shutdown(stage, logorrrMain.logSource)
 
-    val logSource = new LogSource(logorrrMain.groups)
+    JfxUtils.execOnUiThread:
+      stage.show()
+      stage.toFront()
 
-    val models: Seq[LogorrrModel] = logSource.loadLogFiles(LogoRRRGlobals.getOrderedLogFileSettings)
-
-    logorrrMain.init(stage, models, someActiveFile)
+    logorrrMain.init()
 
 
 
