@@ -61,7 +61,7 @@ class LogTextView(mutLogFileSettings: MutLogFileSettings
 
   def scrollToActiveLogEntry(): Unit =
     if getHeight != 0 then
-      logTrace(s"scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
+      // logTrace(s"scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
       val candidates = filteredList.filtered(l => l.lineNumber == mutLogFileSettings.selectedLineNumberProperty.get())
       if !candidates.isEmpty then
         Option(candidates.get(0)) match

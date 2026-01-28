@@ -1,7 +1,7 @@
 package app.logorrr.issues
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.{BlockSettings, DefaultSearchTermGroups, LogFileSettings, SearchTerm, Settings, StageSettings}
+import app.logorrr.conf.{BlockSettings, DefaultSearchTermGroups, LogFileSettings, SearchTerm, Settings, StageSettings, TestSettings}
 import app.logorrr.steps.TestFxListViewActions
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.util.JfxUtils
@@ -34,7 +34,7 @@ abstract class Issue292ColorCalculationSetup(desiredColor: Color, val searchTerm
           , dividerPosition = 0.599))
     , None
     , None
-    , Map()
+    , TestSettings.DefaultGroupsAsMap
     , None
   )
 

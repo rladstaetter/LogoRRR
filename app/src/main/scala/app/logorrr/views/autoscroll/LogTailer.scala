@@ -93,15 +93,12 @@ case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) exten
 
   /** Stop observing log file */
   def stop(): Unit = {
-    if (future.isEmpty && someScheduler.isEmpty) {
-      logTrace(s"LogTailer inactive for ${fileId.asPath}.")
-    } else
-      timeR({
-        future.foreach(_.cancel(true))
-        someScheduler.foreach(_.shutdown())
-        someScheduler = None
-        future = None
-      }, s"Stopped LogTailer for file ${fileId.asPath}")
+    if (future.isDefined || someScheduler.isDefined) {
+      future.foreach(_.cancel(true))
+      someScheduler.foreach(_.shutdown())
+      someScheduler = None
+      future = None
+    }
   }
 
 }

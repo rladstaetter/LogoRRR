@@ -34,5 +34,6 @@ object DefaultSearchTermGroups extends TinyLog:
  */
 case class DefaultSearchTermGroups(searchTermGroups: Seq[SearchTermGroup]) derives ReadWriter:
   val empty: SearchTermGroup = searchTermGroups.head
-  val jul: SearchTermGroup = searchTermGroups.tail.head
   val asMap: Map[String, Seq[SearchTerm]] = searchTermGroups.map(stg => stg.name -> stg.terms).toMap
+
+  def getTerms(searchTermGroup : String): Option[Seq[SearchTerm]] = asMap.get(searchTermGroup)

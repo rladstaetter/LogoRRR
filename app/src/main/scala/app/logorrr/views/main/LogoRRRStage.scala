@@ -2,7 +2,8 @@ package app.logorrr.views.main
 
 import app.logorrr.LogoRRRApp
 import app.logorrr.conf.mut.MutStageSettings
-import app.logorrr.conf.{AppInfo, FileId, LogoRRRGlobals, SearchTerm}
+import app.logorrr.conf.{FileId, LogFileSettings, LogoRRRGlobals, SearchTerm}
+import app.logorrr.model.{LogSource, LogorrrModel}
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.LogoRRRAccelerators
 import javafx.beans.value.ChangeListener
@@ -31,26 +32,29 @@ object LogoRRRStage extends TinyLog:
     val settings = LogoRRRGlobals.getSettings
 
     // to save global filter state
-    val activeFilters: Map[FileId, (Seq[SearchTerm], Double)] =
+    val activeSearchTerms: Map[FileId, (Seq[SearchTerm], Double)] =
       (for logFileTab <- logorrrMain.getLogFileTabs yield {
-        logFileTab.getFileId -> (logFileTab.logPane.activeFilters, logFileTab.logPane.getDividerPosition)
+        logFileTab.getFileId -> (logFileTab.logPane.activeSearchTerms, logFileTab.logPane.getDividerPosition)
       }).toMap
 
-    val updatedSettings =
-      for (p, (fltrs, d)) <- activeFilters yield
-        p.absolutePathAsString -> settings.fileSettings(p.absolutePathAsString).copy(searchTerms = fltrs, dividerPosition = d)
+    val updatedSettings: Map[String, LogFileSettings] =
+      for (p, (sTerms, dPos)) <- activeSearchTerms yield
+        p.absolutePathAsString -> settings.fileSettings(p.absolutePathAsString).copy(searchTerms = sTerms, dividerPosition = dPos)
     LogoRRRGlobals.persist(settings.copy(fileSettings = updatedSettings))
 
   def shutdown(stage: Stage, logorrrMain: LogoRRRMain): Unit =
     LogoRRRStage.persistSettings(logorrrMain)
     logorrrMain.shutdown()
     LogoRRRGlobals.unbindWindow()
+    stage.getScene.windowProperty().removeListener(MutStageSettings.windowListener)
     stage.sceneProperty.removeListener(LogoRRRStage.sceneListener)
     logInfo(s"Stopped ${LogoRRRApp.appInfo.nameAndVersion}")
 
-  def init(stage: Stage, logorrrMain: LogoRRRMain): Unit =
-
-    val (width, height) = (LogoRRRGlobals.getStageWidth, LogoRRRGlobals.getStageHeight)
+  def init(stage: Stage
+           , logorrrMain: LogoRRRMain
+           , someActiveFile: Option[FileId]
+           , width: Int
+           , height: Int): Unit =
 
     val scene = new Scene(logorrrMain, width, height)
 
@@ -62,9 +66,16 @@ object LogoRRRStage extends TinyLog:
     stage.setTitle(LogoRRRApp.appInfo.nameAndVersion)
     stage.getIcons.add(LogoRRRStage.icon)
     stage.setScene(scene)
-    stage.setOnCloseRequest((_: WindowEvent) => LogoRRRStage.shutdown(stage, logorrrMain))
+    stage.setOnCloseRequest((_: WindowEvent) => {
+      scene.getAccelerators.clear()
+      LogoRRRStage.shutdown(stage, logorrrMain)
+    })
 
-    logorrrMain.init(stage)
+    val logSource = new LogSource(logorrrMain.groups)
+
+    val models: Seq[LogorrrModel] = logSource.loadLogFiles(LogoRRRGlobals.getOrderedLogFileSettings)
+
+    logorrrMain.init(stage, models, someActiveFile)
 
 
 

@@ -19,3 +19,11 @@ trait ChoiceBoxActions:
       ret
     })
 
+  /**
+   * Given a choicebox, select an entry by given value
+   *
+   * @param choiceBox the choicebox to choose
+   * @param value     the value to select
+   */
+  def selectChoiceBoxByValue(choiceBox: UiNode)(value: String): Unit =
+    clickOn(choiceBox).clickOn(value)

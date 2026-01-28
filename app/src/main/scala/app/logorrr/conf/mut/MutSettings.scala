@@ -101,15 +101,14 @@ class MutSettings {
   def clearLogFileSettings(): Unit = mutLogFileSettingsMapProperty.clear()
 
   def bindWindowProperties(window: Window): Unit =
-    mutStageSettings.bind(
+    mutStageSettings.bindWindowProperties(
       window.xProperty()
       , window.yProperty()
       , window.getScene.widthProperty()
       , window.getScene.heightProperty().add(MutSettings.WindowHeightHack)
     )
 
-  def unbindWindow(): Unit =
-    mutStageSettings.unbind()
+  def unbindWindow(): Unit = mutStageSettings.unbindWindowProperties()
 
   def getStageY: Double = mutStageSettings.getY
 

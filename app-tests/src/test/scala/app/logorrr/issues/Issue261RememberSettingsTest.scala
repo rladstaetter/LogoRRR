@@ -17,19 +17,18 @@ import org.junit.jupiter.api.Test
  * - the positions are set correctly
  * - labels display the correct information
  *
- * See also OpenSingleF´TimedFileTest
  */
 class Issue261RememberSettingsTest extends SingleFileApplicationTest(TestFiles.timedLog):
 
   override protected lazy val settings: Settings = Settings(
     StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map(TestFiles.timedLog.value ->
-      LogFileSettings.mk(TestFiles.timedLog, DefaultSearchTermGroups())
+      LogFileSettings.mk(TestFiles.timedLog, TestSettings.DefaultGroups)
         .copy(blockSettings = BlockSettings(50)
           , someTimestampSettings = Option(TimestampSettings(0, 23, "yyyy-MM-dd HH:mm:ss,SSS"))))
     , None
     , None
-    , Map()
+    , TestSettings.DefaultGroupsAsMap
     , None
   )
 

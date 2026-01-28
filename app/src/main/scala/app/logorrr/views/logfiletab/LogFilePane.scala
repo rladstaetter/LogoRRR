@@ -102,7 +102,7 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
     logTextView.scrollTo(logTextView.getItems.size)
   }
 
-  def activeFilters: Seq[SearchTerm] = searchTermToolBar.activeSearchTerms()
+  def activeSearchTerms: Seq[SearchTerm] = searchTermToolBar.activeSearchTerms()
 
   def enableAutoscroll(enabled: Boolean): Unit =
     if enabled then

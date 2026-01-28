@@ -2,8 +2,7 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.{LogoRRRGlobals, StageSettings}
 import app.logorrr.util.JfxUtils
-import javafx.beans.binding.{DoubleBinding, DoubleExpression}
-import javafx.beans.property.{DoublePropertyBase, IntegerPropertyBase, ReadOnlyDoubleProperty, SimpleDoubleProperty, SimpleIntegerProperty}
+import javafx.beans.binding.DoubleExpression
 import javafx.beans.value.ChangeListener
 import javafx.stage.Window
 
@@ -13,25 +12,24 @@ import javafx.stage.Window
 object MutStageSettings:
 
   val windowListener: ChangeListener[Window] = JfxUtils.onNew[Window]:
-    window =>
-      Option(window).foreach(LogoRRRGlobals.bindWindow)
+    window => Option(window).foreach(LogoRRRGlobals.bindWindow)
 
 
 class MutStageSettings
   extends XHolder with YHolder
     with WidthHolder with HeightHolder:
 
-  def bind(xBinding: DoubleExpression
-           , yBinding: DoubleExpression
-           , widthBinding: DoubleExpression
-           , heightBinding: DoubleExpression): Unit = {
+  def bindWindowProperties(xBinding: DoubleExpression
+                           , yBinding: DoubleExpression
+                           , widthBinding: DoubleExpression
+                           , heightBinding: DoubleExpression): Unit = {
     bindXProperty(xBinding)
     bindYProperty(yBinding)
     bindWidthProperty(widthBinding)
     bindHeightProperty(heightBinding)
   }
 
-  def unbind(): Unit =
+  def unbindWindowProperties(): Unit =
     unbindXProperty()
     unbindYProperty()
     unbindWidthProperty()

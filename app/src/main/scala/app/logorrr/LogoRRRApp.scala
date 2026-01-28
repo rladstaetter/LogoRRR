@@ -1,7 +1,7 @@
 package app.logorrr
 
 import app.logorrr
-import app.logorrr.conf.{AppInfo, LogoRRRGlobals}
+import app.logorrr.conf.{AppInfo, DefaultSearchTermGroups, LogoRRRGlobals}
 import app.logorrr.io.{AppPaths, SettingsFileIO}
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
@@ -41,12 +41,16 @@ object LogoRRRApp extends TinyLog:
     Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
 
     LogoRRRGlobals.set(services.settings, services.hostServices)
-    
+
+    val groups: DefaultSearchTermGroups = DefaultSearchTermGroups(services.settings.searchTermGroups)
+
     val logoRRRMain = new LogoRRRMain(stage
       , services.fileIdService
       , services.isUnderTest
-      , services.settings.someActive)
-    LogoRRRStage.init(stage, logoRRRMain)
+      , groups)
+    val (width, height) = (LogoRRRGlobals.getStageWidth, LogoRRRGlobals.getStageHeight)
+
+    LogoRRRStage.init(stage, logoRRRMain, services.settings.someActive, width, height)
 
     logInfo(s"            Started: ${appInfo.asString}")
     logConfig(s"Working directory: '${Paths.get("").toAbsolutePath.toString}'")

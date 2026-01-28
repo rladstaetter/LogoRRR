@@ -2,7 +2,7 @@ package app.logorrr.views.main
 
 import app.logorrr.conf.{DefaultSearchTermGroups, FileId, LogFileSettings, LogoRRRGlobals}
 import app.logorrr.io.IoManager
-import app.logorrr.model.LogEntry
+import app.logorrr.model.{LogEntry, LogorrrModel}
 import app.logorrr.util.DndUtil
 import app.logorrr.views.a11y.uinodes.UiNodes
 import app.logorrr.views.logfiletab.LogFileTab
@@ -30,7 +30,7 @@ object MainTabPane:
       |""".stripMargin
 
 
-class MainTabPane extends TabPane with TinyLog:
+class MainTabPane(dstg: DefaultSearchTermGroups) extends TabPane with TinyLog:
 
   // -- bindings
   styleProperty().bind(Bindings.createStringBinding(() => MainTabPane.BackgroundStyle))
@@ -58,22 +58,11 @@ class MainTabPane extends TabPane with TinyLog:
     }
 
 
-  def dstg = DefaultSearchTermGroups(LogoRRRGlobals.getSettings.searchTermGroups)
-
   /** setup drag'n drop for all modes */
   setOnDragOver(DndUtil.onDragAcceptAll)
 
   /** try to interpret dropped element as log file, activate view */
   setOnDragDropped(onDragDropped)
-
-  /*
-    private val selectedTabListener: ChangeListener[Tab] = JfxUtils.onNew:
-      case logFileTab: LogFileTab =>
-        logTrace(s"Selected: '${logFileTab.getFileId.value}'")
-        LogoRRRGlobals.setSomeActiveLogFile(Option(logFileTab.getFileId))
-        getSelectionModel.select(logFileTab)
-      case _ => getSelectionModel.select(null)
-  */
 
   /**
    * Unzips given path, interprets contents as log files and adds them to the GUI
@@ -85,13 +74,9 @@ class MainTabPane extends TabPane with TinyLog:
       IoManager.unzip(path).foreach:
         case (fileId, entries) =>
           if !contains(fileId) then
-            addEntriesFromZip(LogFileSettings.mk(fileId, dstg), entries)
-            selectFile(fileId)
-          else
-            logTrace(s"${fileId.absolutePathAsString} is already opened, selecting tab ...")
-            selectFile(fileId)
-    else
-      logWarn(s"Tried to open file as zip, but filename was: '${path.toAbsolutePath.toString}'.")
+            addEntries(fileId, LogFileSettings.mk(fileId, dstg), entries)
+          else selectFile(fileId)
+    else logWarn(s"Tried to open file as zip, but filename was: '${path.toAbsolutePath.toString}'.")
 
   /** open all regular files in a directory, do not recurse */
   private def processDirectory(path: Path, dstg: DefaultSearchTermGroups): Unit =
@@ -104,10 +89,7 @@ class MainTabPane extends TabPane with TinyLog:
   /**
    * Defines what should happen when a tab is selected
    * */
-  /*
-  def initSelectionListener(): Unit =
-    getSelectionModel.selectedItemProperty().addListener(selectedTabListener)
-*/
+
   def contains(p: FileId): Boolean = getLogFileTabs.exists(lr => lr.getFileId == p)
 
   def getByFileId(fileId: FileId): Option[LogFileTab] = getLogFileTabs.find(_.getFileId == fileId)
@@ -116,11 +98,9 @@ class MainTabPane extends TabPane with TinyLog:
     case l: LogFileTab => Option(l)
     case _ => None
 
-
   def selectFile(fileId: FileId): LogFileTab =
     getByFileId(fileId) match
       case Some(logFileTab) =>
-        logTrace(s"Activated tab for '${fileId.value}'.")
         getSelectionModel.select(logFileTab)
         logFileTab
       case None =>
@@ -140,23 +120,20 @@ class MainTabPane extends TabPane with TinyLog:
         selectFile(fileId)
     else logWarn(s"${fileId.absolutePathAsString} does not exist.")
 
-
   def addFile(fileId: FileId, dstg: DefaultSearchTermGroups): Unit =
     val logFileSettings = LogFileSettings.mk(fileId, dstg)
-    LogoRRRGlobals.registerSettings(logFileSettings)
     val entries = IoManager.readEntries(logFileSettings.path, logFileSettings.someTimestampSettings)
-    addLogFileTab(LogFileTab(LogoRRRGlobals.getLogFileSettings(fileId), entries))
+    addEntries(fileId, logFileSettings, entries)
+
+  private def addEntries(fileId: FileId, logFileSettings: LogFileSettings, entries: ObservableList[LogEntry]): LogFileTab =
+    LogoRRRGlobals.registerSettings(logFileSettings)
+    val model = LogorrrModel(LogoRRRGlobals.getLogFileSettings(fileId), entries)
+    addData(model)
     selectFile(fileId)
 
-  private def addEntriesFromZip(logFileSettings: LogFileSettings, entries: ObservableList[LogEntry]): LogFileTab = timeR({
-    LogoRRRGlobals.registerSettings(logFileSettings)
-    val tab = LogFileTab(LogoRRRGlobals.getLogFileSettings(logFileSettings.fileId), entries)
-    addLogFileTab(tab)
-    tab
-  }, s"Added ${logFileSettings.fileId.absolutePathAsString} to TabPane")
-
   /** Adds a new logfile to display and initializes bindings and listeners */
-  def addLogFileTab(tab: LogFileTab): Unit =
+  def addData(model: LogorrrModel): Unit =
+    val tab = LogFileTab(model)
     tab.init()
     getTabs.add(tab)
     tab.initContextMenu()

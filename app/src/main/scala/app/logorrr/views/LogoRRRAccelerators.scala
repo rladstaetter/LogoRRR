@@ -40,7 +40,6 @@ object LogoRRRAccelerators extends TinyLog:
    * For example, if the user switch between different tabs it is expected to set focus on the correct search field.
    * */
   def initAccelerators(scene: Scene): Unit =
-
     scene.getAccelerators.put(shortCutF, () => {
       Option(getActiveSearchTextField) match {
         case Some(tf) => tf.requestFocus()

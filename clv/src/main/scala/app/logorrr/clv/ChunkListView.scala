@@ -31,8 +31,6 @@ object ChunkListView:
     Option(flow.getChildrenUnmodifiable.toArray.collectFirst { case sb: ScrollBar if sb.getOrientation == orientation => sb }.orNull)
 
 
-
-
 /**
  * Each ListCell contains one or more Logentries - those regions are called 'Chunks'.
  *
@@ -86,9 +84,9 @@ class ChunkListView[A](val elements: ObservableList[A]
   // needed to get access to the scrollbar
   private val chunkListViewSkinListener: ChangeListener[Skin[?]] = (_: ObservableValue[? <: Skin[?]], _: Skin[?], currentSkin: Skin[?]) => {
     for skin <- Option(currentSkin)
-         flow <- ChunkListView.lookupVirtualFlow(skin)
-         horizontalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.HORIZONTAL)
-         verticalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.VERTICAL) do
+        flow <- ChunkListView.lookupVirtualFlow(skin)
+        horizontalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.HORIZONTAL)
+        verticalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.VERTICAL) do
       horizontalScrollbar.setVisible(false)
       verticalScrollbar.visibleProperty().addListener(scrollBarVisibilityListener)
   }
@@ -139,8 +137,6 @@ class ChunkListView[A](val elements: ObservableList[A]
             getSelectionModel.select(relativeIndex)
             JfxUtils.scrollTo[Chunk[A]](this, chunk.height, relativeIndex)
           case None =>
-    else
-      logTrace("ListView[Chunk] is empty, not scrolling to active chunk.")
 
   /** invalidation listener has to be disabled when manipulating log entries (needed for setting the timestamp for example) */
   def addInvalidationListener(): Unit = elements.addListener(elementInvalidationListener)
@@ -173,8 +169,8 @@ class ChunkListView[A](val elements: ObservableList[A]
     anyPropProperty.removeListener(anyRp)
 
     for skin <- Option(getSkin)
-         flow <- ChunkListView.lookupVirtualFlow(skin)
-         verticalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.VERTICAL) do
+        flow <- ChunkListView.lookupVirtualFlow(skin)
+        verticalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.VERTICAL) do
       verticalScrollbar.visibleProperty().removeListener(scrollBarVisibilityListener)
 
     skinProperty().removeListener(chunkListViewSkinListener)

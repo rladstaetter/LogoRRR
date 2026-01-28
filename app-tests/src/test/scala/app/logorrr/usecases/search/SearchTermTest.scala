@@ -2,9 +2,11 @@ package app.logorrr.usecases.search
 
 import app.logorrr.TestFiles
 import app.logorrr.conf.TestSettings
+import app.logorrr.steps.ChoiceBoxActions
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.MutableSearchTerm
 import app.logorrr.views.search.st.{RemoveSearchTermButton, SearchTermToggleButton}
+import app.logorrr.views.search.stg.StgChoiceBox
 import app.logorrr.views.text.LogTextView
 import org.junit.jupiter.api.Test
 
@@ -15,7 +17,8 @@ import org.junit.jupiter.api.Test
  * hits at least one log line (some - FINE,FINER,FINEST) hit more than once which is perfectly ok.
  *
  **/
-class SearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2):
+class SearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2)
+  with ChoiceBoxActions:
 
   // use default search terms
   val terms: Seq[MutableSearchTerm] = TestSettings.DefaultSearchTerms
@@ -27,6 +30,9 @@ class SearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2):
     // file has 8 entries - one for each log filter + 1 line "unclassified"
     // some log lines are matched by more than one filter (FINE, FINER)
     openFile(fileId)
+
+    // select the right search term group for this test
+    selectChoiceBoxByValue(StgChoiceBox.uiNode(fileId))(TestSettings.Java_JUL)
 
     // check visibility of all search term buttons
     terms.foreach:

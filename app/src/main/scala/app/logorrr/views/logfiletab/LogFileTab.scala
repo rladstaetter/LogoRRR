@@ -2,7 +2,7 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, LogoRRRGlobals}
-import app.logorrr.model.LogEntry
+import app.logorrr.model.{LogEntry, LogorrrModel}
 import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
@@ -12,6 +12,7 @@ import javafx.scene.control.*
 import net.ladstatt.util.log.TinyLog
 
 import java.util.function.Consumer
+
 
 
 object LogFileTab extends UiNodeFileIdAware:
@@ -42,6 +43,8 @@ object LogFileTab extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogFileTab])
 
+  def apply(model : LogorrrModel) : LogFileTab =
+    new LogFileTab(model.mutLogFileSettings, model.entries)
 
 /**
  * Represents a single 'document' UI approach for a log file.
@@ -104,7 +107,7 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
   def initContextMenu(): Unit = {
     Option(getTabPane) match {
       case Some(value) => setContextMenu(new LogFileTabContextMenu(getFileId, value, this))
-      case None => logWarn("getTabPane() was null.")
+      case None =>
     }
   }
 

@@ -13,7 +13,7 @@ import net.ladstatt.util.os.OsUtil
 import java.nio.file.Path
 
 /**
- * Place LogoRRR's settings.
+ * LogoRRR's settings.
  *
  * The user can change certain values via interacting or explicitly setting values in the preferences dialog.
  */
@@ -34,7 +34,6 @@ object LogoRRRGlobals extends TinyLog :
     window.setY(LogoRRRGlobals.getStageY)
     window.setWidth(LogoRRRGlobals.getStageWidth)
     window.setHeight(LogoRRRGlobals.getStageHeight)
-
     mutSettings.bindWindowProperties(window)
 
 
@@ -86,7 +85,7 @@ object LogoRRRGlobals extends TinyLog :
 
   def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit = mutSettings.setSomeLastUsedDirectory(someDirectory)
 
-  def removeLogFile(fileId: FileId): Unit = timeR({
+  def removeLogFile(fileId: FileId): Unit = {
     mutSettings.removeLogFileSetting(fileId)
 
     if OsUtil.enableSecurityBookmarks then {
@@ -103,7 +102,7 @@ object LogoRRRGlobals extends TinyLog :
       }
     }
 
-  }, s"Removed file ${fileId.asPath} ...")
+  }
 
   def clearLogFileSettings(): Unit = mutSettings.clearLogFileSettings()
 
