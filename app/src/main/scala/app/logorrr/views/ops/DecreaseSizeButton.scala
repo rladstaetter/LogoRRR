@@ -1,33 +1,12 @@
 package app.logorrr.views.ops
 
-import javafx.beans.property.Property
+import app.logorrr.conf.FileId
+import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Node
 
-object DecreaseSizeButton:
-
-  def apply(jfxId: String
-            , graphic: Node
-            , step: Int
-            , min: Int
-            , sizeProperty: Property[Number]): DecreaseSizeButton =
-    val btn = new DecreaseSizeButton(jfxId, step, min, graphic)
-    btn.sizeProperty.bindBidirectional(sizeProperty)
-    btn
-
-class DecreaseSizeButton(jfxId: String
+class DecreaseSizeButton(calcId: SimpleObjectProperty[FileId] => String
+                         , graphic: Node
                          , step: Int
-                         , minSize: Int
-                         , graphic: Node) extends SizeButton(graphic, "-"):
-
-  setId(jfxId)
-  setOnAction(_ => {
-    val nextSize = getSize.intValue() - step
-    if nextSize > minSize then {
-      setSize(nextSize)
-    } else {
-      setSize(minSize)
-    }
-  })
-
+                         , boundary: Int) extends SizeButton(calcId, graphic, step, boundary, _ - _, _ > _, "-")
 
 

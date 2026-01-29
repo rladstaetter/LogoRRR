@@ -1,13 +1,12 @@
 package app.logorrr.views.logfiletab
 
+import app.logorrr.conf.FileId
 import app.logorrr.views.ops.{DecreaseSizeButton, IncreaseSizeButton}
-import javafx.beans.property.Property
+import javafx.beans.property.{Property, SimpleObjectProperty}
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.{ListView, Slider}
 import javafx.scene.layout.{BorderPane, HBox, Priority, VBox}
-
-case class PaneDefinition(jfxId: String, graphic: Node, step: Int, boundary: Int)
 
 
 class LogPartPane(listView: ListView[?]
@@ -16,8 +15,8 @@ class LogPartPane(listView: ListView[?]
                   , dec: PaneDefinition
                   , boundProp: Property[Number]) extends BorderPane:
 
-  val increaseButton = IncreaseSizeButton(inc.jfxId, inc.graphic, inc.step, inc.boundary, boundProp)
-  val decreaseButton = DecreaseSizeButton(dec.jfxId, dec.graphic, dec.step, dec.boundary, boundProp)
+  val increaseButton = IncreaseSizeButton(inc.calcId, inc.graphic, inc.step, inc.boundary)
+  val decreaseButton = DecreaseSizeButton(dec.calcId, dec.graphic, dec.step, dec.boundary)
   val hbox = new HBox(slider, decreaseButton, increaseButton)
   HBox.setHgrow(slider, Priority.ALWAYS)
   hbox.setAlignment(Pos.CENTER)
@@ -27,8 +26,14 @@ class LogPartPane(listView: ListView[?]
   setTop(hbox)
   setCenter(listView)
 
-  def bind() : Unit =
+  def bind(fileProperty: SimpleObjectProperty[FileId], boundProp: Property[Number]): Unit = {
+    increaseButton.bind(fileProperty, boundProp)
+    decreaseButton.bind(fileProperty, boundProp)
     slider.valueProperty().bindBidirectional(boundProp)
+  }
 
-  def unbind() : Unit =
+  def unbind(): Unit = {
+    increaseButton.unbind(boundProp)
+    decreaseButton.unbind(boundProp)
     slider.valueProperty().unbindBidirectional(boundProp)
+  }

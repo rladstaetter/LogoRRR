@@ -76,16 +76,16 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   private val textPane: LogPartPane = new LogPartPane(
     logTextView
     , textSizeSlider
-    , PaneDefinition(IncreaseTextSizeButton.uiNode(getFileId).value, TextSizeButton.mkLabel(12), TextConstants.fontSizeStep, TextConstants.MaxFontSize)
-    , PaneDefinition(DecreaseTextSizeButton.uiNode(getFileId).value, TextSizeButton.mkLabel(8), TextConstants.fontSizeStep, TextConstants.MinFontSize)
+    , PaneDefinition(prop => IncreaseTextSizeButton.uiNode(prop.get).value, TextSizeButton.mkLabel(12), TextConstants.fontSizeStep, TextConstants.MaxFontSize)
+    , PaneDefinition(prop => DecreaseTextSizeButton.uiNode(prop.get).value, TextSizeButton.mkLabel(8), TextConstants.fontSizeStep, TextConstants.MinFontSize)
     , mutLogFileSettings.fontSizeProperty
   )
 
   private val chunkPane: LogPartPane = new LogPartPane(
     chunkListView
     , blockSizeSlider
-    , PaneDefinition(IncreaseBlockSizeButton.uiNode(getFileId).value, RectButton.mkR(IncreaseBlockSizeButton.Size, IncreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MaxBlockSize)
-    , PaneDefinition(DecreaseBlockSizeButton.uiNode(getFileId).value, RectButton.mkR(DecreaseBlockSizeButton.Size, DecreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MinBlockSize)
+    , PaneDefinition(prop => IncreaseBlockSizeButton.uiNode(prop.get).value, RectButton.mkR(IncreaseBlockSizeButton.Size, IncreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MaxBlockSize)
+    , PaneDefinition(prop => DecreaseBlockSizeButton.uiNode(prop.get).value, RectButton.mkR(DecreaseBlockSizeButton.Size, DecreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MinBlockSize)
     , mutLogFileSettings.blockSizeProperty)
 
 
@@ -111,8 +111,8 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   private val pane = new SplitPane(chunkPane, textPane)
 
   def init(): Unit =
-    textPane.bind()
-    chunkPane.bind()
+    textPane.bind(mutLogFileSettings.fileIdProperty, mutLogFileSettings.fontSizeProperty)
+    chunkPane.bind(mutLogFileSettings.fileIdProperty, mutLogFileSettings.blockSizeProperty)
     textSizeSlider.bind(mutLogFileSettings.fileIdProperty)
     blockSizeSlider.bind(mutLogFileSettings.fileIdProperty)
     autoScrollActiveProperty.bind(mutLogFileSettings.autoScrollActiveProperty)
