@@ -45,7 +45,7 @@ object LogoRRRApp extends TinyLog:
 
     val groups: DefaultSearchTermGroups = DefaultSearchTermGroups(services.settings.searchTermGroups)
 
-    val logSource = new LogSource(groups, LogoRRRGlobals.getOrderedLogFileSettings, services.settings.someActive, new MainTabPane(groups))
+    val logSource = new LogSource(groups, LogoRRRGlobals.getOrderedLogFileSettings, services.settings.someActive, new MainTabPane)
 
     val logoRRRMain = new LogoRRRMain(stage
       , services.fileIdService

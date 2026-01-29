@@ -11,11 +11,6 @@ object IncreaseSizeButton:
     btn
 
 
-
-
-
-
-
 class IncreaseSizeButton(jfxId: String
                          , step: Int
                          , maxSize: Int

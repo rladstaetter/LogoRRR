@@ -1,8 +1,7 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{DefaultSearchTermGroups, FileId, LogoRRRGlobals}
+import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.model.{FileIdDividerSearchTerm, LogorrrModel, UiTarget}
-import app.logorrr.util.DndUtil
 import app.logorrr.views.a11y.uinodes.UiNodes
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.beans.binding.Bindings
@@ -24,8 +23,7 @@ object MainTabPane:
       |""".stripMargin
 
 
-class MainTabPane(dstg: DefaultSearchTermGroups) extends TabPane
-  with UiTarget with TinyLog:
+class MainTabPane extends TabPane with UiTarget with TinyLog:
 
   // -- bindings
   styleProperty().bind(Bindings.createStringBinding(() => MainTabPane.BackgroundStyle))
@@ -45,14 +43,7 @@ class MainTabPane(dstg: DefaultSearchTermGroups) extends TabPane
 
   private def getByFileId(fileId: FileId): Option[LogFileTab] = getLogFileTabs.find(_.getFileId == fileId)
 
-  override def getInfos: Seq[FileIdDividerSearchTerm] = {
-    val res: mutable.Seq[FileIdDividerSearchTerm] =
-      getLogFileTabs.map {
-        logFileTab => FileIdDividerSearchTerm(logFileTab.getFileId, logFileTab.logPane.activeSearchTerms, logFileTab.logPane.getDividerPosition)
-      }
-    res.toSeq
-  }
-
+  override def getInfos: Seq[FileIdDividerSearchTerm] = getLogFileTabs.map(_.getInfo).toSeq
 
   override def selectLastLogFile(): Unit = getSelectionModel.selectLast()
 
@@ -60,7 +51,6 @@ class MainTabPane(dstg: DefaultSearchTermGroups) extends TabPane
     getByFileId(fileId) match
       case Some(logFileTab) => getSelectionModel.select(logFileTab)
       case None => selectLastLogFile()
-
 
   override def contains(p: FileId): Boolean = getLogFileTabs.exists(lr => lr.getFileId == p)
 

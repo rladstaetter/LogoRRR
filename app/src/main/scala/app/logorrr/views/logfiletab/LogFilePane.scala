@@ -1,8 +1,8 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.conf.{LogoRRRGlobals, SearchTerm}
-import app.logorrr.model.LogEntry
+import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTerm}
+import app.logorrr.model.{FileIdDividerSearchTerm, LogEntry, LogorrrModel, UiTarget}
 import app.logorrr.util.*
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.block.BlockConstants
@@ -11,44 +11,38 @@ import app.logorrr.views.search.st.SearchTermToolBar
 import app.logorrr.views.search.{MutableSearchTerm, OpsToolBar}
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
-import javafx.beans.property.Property
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{ListChangeListener, ObservableList}
-import javafx.geometry.Pos
-import javafx.scene.Node
-import javafx.scene.control.{ListView, Slider, SplitPane}
-import javafx.scene.layout.{BorderPane, HBox, Priority, VBox}
+import javafx.scene.control.SplitPane
+import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
+import javafx.util.Subscription
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-case class PaneDefinition(jfxId: String, graphic: Node, step: Int, boundary: Int)
 
-object LogFilePane:
 
-  /** wire pane and slider together */
-  private def mkPane(listView: ListView[?]
-                     , slider: Slider
-                     , inc: PaneDefinition
-                     , dec: PaneDefinition
-                     , boundProp: Property[Number]): BorderPane =
-    val increaseButton = IncreaseSizeButton(inc.jfxId, inc.graphic, inc.step, inc.boundary, boundProp)
-    val decreaseButton = DecreaseSizeButton(dec.jfxId, dec.graphic, dec.step, dec.boundary, boundProp)
-    val hbox = new HBox(slider, decreaseButton, increaseButton)
-    HBox.setHgrow(slider, Priority.ALWAYS)
-    hbox.setAlignment(Pos.CENTER)
-    hbox.setPrefWidth(java.lang.Double.MAX_VALUE)
-    val bBp = new BorderPane(listView, hbox, null, null, null)
-    slider.valueProperty().bindBidirectional(boundProp)
-    VBox.setVgrow(bBp, Priority.ALWAYS)
-    bBp.setMaxHeight(java.lang.Double.MAX_VALUE)
-    bBp
 
+
+
+//class LogFilePane(mutLogFileSettings: MutLogFileSettings
+//                  , val entries: ObservableList[LogEntry]) extends BorderPane with UiTarget:
 
 class LogFilePane(mutLogFileSettings: MutLogFileSettings
-                  , val entries: ObservableList[LogEntry]) extends BorderPane:
+                  , val entries: ObservableList[LogEntry]) extends BorderPane with UiTarget:
+
+  setStyle("-fx-background-color: white;")
+
+  /** provides a tool to observe log files */
+  private val logTailer = new LogTailer
+
+  val autoScrollActiveProperty = new SimpleBooleanProperty()
+
+  def getFileId: FileId = mutLogFileSettings.getFileId
+
 
   /** if a search term is added or removed this will be saved to disc */
   private val searchTermChangeListener: ListChangeListener[MutableSearchTerm] =
@@ -59,13 +53,9 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
     JfxUtils.mkListChangeListener[MutableSearchTerm](handleSearchTermChange)
 
   /** if autoscroll checkbox is enabled, monitor given log file for changes. if there are any, this will be reflected in the ui */
-  private val autoScrollSubscription =
-    mutLogFileSettings.autoScrollActiveProperty.subscribe((old: java.lang.Boolean, newVal: java.lang.Boolean) => enableAutoscroll(newVal))
+  private val autoScrollSubscription: Subscription =
+    autoScrollActiveProperty.subscribe((old: java.lang.Boolean, newVal: java.lang.Boolean) => enableAutoscroll(newVal))
 
-  private lazy val logTailer = LogTailer(mutLogFileSettings.getFileId, entries)
-
-  // make sure we have a white background for our tabs - see https://github.com/rladstaetter/LogoRRR/issues/188
-  setStyle("-fx-background-color: white;")
 
   /** list which holds all entries, default to display all (can be changed via buttons) */
   private val filteredEntries = new FilteredList[LogEntry](entries)
@@ -80,19 +70,22 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
 
   private val searchTermToolBar = new SearchTermToolBar(mutLogFileSettings, filteredEntries)
 
-  private val textPane = LogFilePane.mkPane(
+  val textSizeSlider = new TextSizeSlider
+  val blockSizeSlider = new BlockSizeSlider
+
+  private val textPane: LogPartPane = new LogPartPane(
     logTextView
-    , new TextSizeSlider(mutLogFileSettings.getFileId)
-    , PaneDefinition(IncreaseTextSizeButton.uiNode(mutLogFileSettings.getFileId).value, TextSizeButton.mkLabel(12), TextConstants.fontSizeStep, TextConstants.MaxFontSize)
-    , PaneDefinition(DecreaseTextSizeButton.uiNode(mutLogFileSettings.getFileId).value, TextSizeButton.mkLabel(8), TextConstants.fontSizeStep, TextConstants.MinFontSize)
+    , textSizeSlider
+    , PaneDefinition(IncreaseTextSizeButton.uiNode(getFileId).value, TextSizeButton.mkLabel(12), TextConstants.fontSizeStep, TextConstants.MaxFontSize)
+    , PaneDefinition(DecreaseTextSizeButton.uiNode(getFileId).value, TextSizeButton.mkLabel(8), TextConstants.fontSizeStep, TextConstants.MinFontSize)
     , mutLogFileSettings.fontSizeProperty
   )
 
-  private val chunkPane = LogFilePane.mkPane(
+  private val chunkPane: LogPartPane = new LogPartPane(
     chunkListView
-    , new BlockSizeSlider(mutLogFileSettings.getFileId)
-    , PaneDefinition(IncreaseBlockSizeButton.uiNode(mutLogFileSettings.getFileId).value, RectButton.mkR(IncreaseBlockSizeButton.Size, IncreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MaxBlockSize)
-    , PaneDefinition(DecreaseBlockSizeButton.uiNode(mutLogFileSettings.getFileId).value, RectButton.mkR(DecreaseBlockSizeButton.Size, DecreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MinBlockSize)
+    , blockSizeSlider
+    , PaneDefinition(IncreaseBlockSizeButton.uiNode(getFileId).value, RectButton.mkR(IncreaseBlockSizeButton.Size, IncreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MaxBlockSize)
+    , PaneDefinition(DecreaseBlockSizeButton.uiNode(getFileId).value, RectButton.mkR(DecreaseBlockSizeButton.Size, DecreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MinBlockSize)
     , mutLogFileSettings.blockSizeProperty)
 
 
@@ -118,6 +111,13 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   private val pane = new SplitPane(chunkPane, textPane)
 
   def init(): Unit =
+    textPane.bind()
+    chunkPane.bind()
+    textSizeSlider.bind(mutLogFileSettings.fileIdProperty)
+    blockSizeSlider.bind(mutLogFileSettings.fileIdProperty)
+    autoScrollActiveProperty.bind(mutLogFileSettings.autoScrollActiveProperty)
+
+    logTailer.init(mutLogFileSettings.fileIdProperty, entries)
     divider.setPosition(mutLogFileSettings.getDividerPosition)
     setTop(opsRegion)
     setCenter(pane)
@@ -130,18 +130,29 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
 
   def getDividerPosition: Double = divider.getPosition
 
-  /*
-  def refreshUi(): Unit =
-    chunkListView.recalculateAndUpdateItems()
-    chunkListView.scrollToActiveChunk()
-    logTextView.scrollToActiveLogEntry()
-*/
-
   def shutdown(): Unit =
+    textPane.unbind()
+    chunkPane.unbind()
+    textSizeSlider.unbind()
+    blockSizeSlider.unbind()
+    autoScrollActiveProperty.unbind()
+    logTailer.shutdown(mutLogFileSettings.fileIdProperty, entries)
+    if mutLogFileSettings.isAutoScrollActive then enableAutoscroll(false)
     logTextView.removeListeners()
     chunkListView.removeListeners()
     autoScrollSubscription.unsubscribe()
     mutLogFileSettings.mutSearchTerms.removeListener(searchTermChangeListener)
+    LogoRRRGlobals.removeLogFile(getFileId)
+
+  override def addData(model: LogorrrModel): Unit = () // TOOD IMPLEMENT ME
+
+  override def contains(fileId: FileId): Boolean = fileId.equals(getFileId)
+
+  override def selectFile(fileId: FileId): Unit = ()
+
+  override def selectLastLogFile(): Unit = ()
+
+  override def getInfos: Seq[FileIdDividerSearchTerm] = Seq(FileIdDividerSearchTerm(getFileId, activeSearchTerms, getDividerPosition))
 
 
 

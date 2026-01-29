@@ -2,7 +2,7 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, LogoRRRGlobals}
-import app.logorrr.model.{LogEntry, LogorrrModel}
+import app.logorrr.model.{FileIdDividerSearchTerm, LogEntry, LogorrrModel}
 import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
@@ -55,28 +55,6 @@ object LogFileTab extends UiNodeFileIdAware:
  * */
 class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList[LogEntry]) extends Tab with TinyLog:
 
-  private val fileId = mutLogFileSettings.getFileId
-
-  // setup bindings ----
-  idProperty().bind(Bindings.createStringBinding(() => {
-    LogFileTab.uiNode(mutLogFileSettings.getFileId).value
-  }, mutLogFileSettings.fileIdProperty))
-
-  // set style depending on type and selected status
-  styleProperty().bind(Bindings.createStringBinding(() => {
-    (getFileId.isZipEntry, isSelected) match {
-      case (true, true) => LogFileTab.ZipBackgroundSelectedStyle
-      case (true, false) => LogFileTab.ZipBackgroundStyle
-      case (false, true) => LogFileTab.BackgroundSelectedStyle
-      case (false, false) => LogFileTab.BackgroundStyle
-    }
-  }, mutLogFileSettings.fileIdProperty, selectedProperty()))
-
-  textProperty().bind(Bindings.createStringBinding(
-    () => if getFileId.isZipEntry then fileId.zipEntryPath else fileId.fileName
-    , mutLogFileSettings.fileIdProperty))
-  // setup bindings end ----
-
   private val selectedSubscription =
     selectedProperty.subscribe(new Consumer[java.lang.Boolean] {
       def accept(newVal: java.lang.Boolean): Unit =
@@ -89,9 +67,33 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
     })
 
   val logPane = new LogFilePane(mutLogFileSettings, entries)
+  val logFileTabToolTip = new LogFileTabToolTip
 
   def init(): Unit =
-    setTooltip(new LogFileTabToolTip(fileId, entries))
+    // setup bindings ----
+    idProperty().bind(Bindings.createStringBinding(() => {
+      LogFileTab.uiNode(mutLogFileSettings.getFileId).value
+    }, mutLogFileSettings.fileIdProperty))
+
+    // set style depending on type and selected status
+    styleProperty().bind(Bindings.createStringBinding(() => {
+      (getFileId.isZipEntry, isSelected) match {
+        case (true, true) => LogFileTab.ZipBackgroundSelectedStyle
+        case (true, false) => LogFileTab.ZipBackgroundStyle
+        case (false, true) => LogFileTab.BackgroundSelectedStyle
+        case (false, false) => LogFileTab.BackgroundStyle
+      }
+    }, mutLogFileSettings.fileIdProperty, selectedProperty()))
+
+    textProperty().bind(Bindings.createStringBinding(
+      () => if getFileId.isZipEntry then getFileId.zipEntryPath else getFileId.fileName
+      , mutLogFileSettings.fileIdProperty))
+    // setup bindings end ----
+
+    logFileTabToolTip.init(mutLogFileSettings.fileIdProperty, entries)
+
+
+    setTooltip(logFileTabToolTip)
     logPane.init()
     setContent(logPane)
     setOnCloseRequest((_: Event) => shutdown())
@@ -107,10 +109,9 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
   def getFileId: FileId = mutLogFileSettings.getFileId
 
   def shutdown(): Unit =
-    // disable autoscroll
-    if mutLogFileSettings.isAutoScrollActive then
-      logPane.enableAutoscroll(false)
+    logFileTabToolTip.unbind()
 
+    // disable autoscroll
     // unbind bindings
     idProperty().unbind()
     textProperty().unbind()
@@ -120,9 +121,9 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
     selectedSubscription.unsubscribe()
     // shutdown pane
     logPane.shutdown()
-    LogoRRRGlobals.removeLogFile(fileId)
 
 
+  def getInfo = FileIdDividerSearchTerm(getFileId, logPane.activeSearchTerms, logPane.getDividerPosition)
 
 
 

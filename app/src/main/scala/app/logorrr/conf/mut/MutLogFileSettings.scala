@@ -212,4 +212,59 @@ class MutLogFileSettings:
 
   def getSomeSelectedSearchTermGroup: Option[String] = someSelectedSearchTermGroupProperty.get()
 
+  /*
+  def bind(other: MutLogFileSettings): Unit = {
+    // Simple Object/Primitive Properties
+    this.fileIdProperty.bindBidirectional(other.fileIdProperty)
+    this.fontSizeProperty.bindBidirectional(other.fontSizeProperty)
+    this.blockSizeProperty.bindBidirectional(other.blockSizeProperty)
+    this.selectedLineNumberProperty.bindBidirectional(other.selectedLineNumberProperty)
+    this.firstVisibleTextCellIndexProperty.bindBidirectional(other.firstVisibleTextCellIndexProperty)
+    this.lastVisibleTextCellIndexProperty.bindBidirectional(other.lastVisibleTextCellIndexProperty)
+    this.dividerPositionProperty.bindBidirectional(other.dividerPositionProperty)
+    this.autoScrollActiveProperty.bindBidirectional(other.autoScrollActiveProperty)
 
+    // Timestamp related properties
+    this.dateTimeFormatterProperty.bindBidirectional(other.dateTimeFormatterProperty)
+    this.someTimestampSettings.bindBidirectional(other.someTimestampSettings)
+    this.lowerTimestampValueProperty.bindBidirectional(other.lowerTimestampValueProperty)
+    this.upperTimestampValueProperty.bindBidirectional(other.upperTimestampValueProperty)
+    this.firstOpenedProperty.bindBidirectional(other.firstOpenedProperty)
+
+    // Search and Group properties
+    this.someSelectedSearchTermGroupProperty.bindBidirectional(other.someSelectedSearchTermGroupProperty)
+
+    // For ListProperties, we bind the content of the list
+    // so that adding/removing items in one reflects in the other
+    this.mutSearchTerms.bindContentBidirectional(other.mutSearchTerms)
+
+    // Note: Since mutSearchTermGroupSettings is an internal object,
+    // you may need a similar bind method inside MutSearchTermGroupSettings
+    // or expose its internal properties/lists to bind them here.
+  }
+
+  def unbind(other: MutLogFileSettings): Unit = {
+    // Unbind Simple Object/Primitive Properties
+    this.fileIdProperty.unbindBidirectional(other.fileIdProperty)
+    this.fontSizeProperty.unbindBidirectional(other.fontSizeProperty)
+    this.blockSizeProperty.unbindBidirectional(other.blockSizeProperty)
+    this.selectedLineNumberProperty.unbindBidirectional(other.selectedLineNumberProperty)
+    this.firstVisibleTextCellIndexProperty.unbindBidirectional(other.firstVisibleTextCellIndexProperty)
+    this.lastVisibleTextCellIndexProperty.unbindBidirectional(other.lastVisibleTextCellIndexProperty)
+    this.dividerPositionProperty.unbindBidirectional(other.dividerPositionProperty)
+    this.autoScrollActiveProperty.unbindBidirectional(other.autoScrollActiveProperty)
+
+    // Unbind Timestamp related properties
+    this.dateTimeFormatterProperty.unbindBidirectional(other.dateTimeFormatterProperty)
+    this.someTimestampSettings.unbindBidirectional(other.someTimestampSettings)
+    this.lowerTimestampValueProperty.unbindBidirectional(other.lowerTimestampValueProperty)
+    this.upperTimestampValueProperty.unbindBidirectional(other.upperTimestampValueProperty)
+    this.firstOpenedProperty.unbindBidirectional(other.firstOpenedProperty)
+
+    // Unbind Search and Group properties
+    this.someSelectedSearchTermGroupProperty.unbindBidirectional(other.someSelectedSearchTermGroupProperty)
+
+    // Unbind ListProperty content
+    this.mutSearchTerms.unbindContentBidirectional(other.mutSearchTerms)
+  }
+*/

@@ -2,7 +2,9 @@ package app.logorrr.views.autoscroll
 
 import app.logorrr.conf.FileId
 import app.logorrr.model.LogEntry
-import javafx.collections.ObservableList
+import app.logorrr.views.search.FileIdPropertyHolder
+import javafx.beans.property.{SimpleListProperty, SimpleObjectProperty}
+import javafx.collections.{FXCollections, ObservableList}
 import net.ladstatt.util.log.TinyLog
 
 import java.io.{File, RandomAccessFile}
@@ -12,17 +14,31 @@ import java.util.concurrent.{Executors, ScheduledExecutorService, ScheduledFutur
 /**
  * Monitors the log file for new lines using a scheduled executor and NIO.
  */
-case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) extends TinyLog {
+class LogTailer extends TinyLog {
 
   // Use a dedicated, single-threaded scheduler for all polling operations
   private var someScheduler: Option[ScheduledExecutorService] = None
   private var future: Option[ScheduledFuture[?]] = None
   private var lastPosition: Long = 0L
-  private val logFile: File = fileId.asPath.toFile
   private val pollingDelayMs = 500L // Poll every half-second
 
-  // Current line counter for LogEntry ID
-  private var currentCnt: Int = logEntries.size()
+  val fileIdProperty = new SimpleObjectProperty[FileId]()
+
+  val entriesProperty = new SimpleListProperty[LogEntry](FXCollections.observableArrayList())
+
+  def getFileId: FileId = fileIdProperty.get()
+
+  def logFile: File = Option(fileIdProperty.get()).map(_.asPath.toFile).orNull
+
+  def init(fileIdProperty: SimpleObjectProperty[FileId], entries: ObservableList[LogEntry]): Unit = {
+    this.fileIdProperty.bindBidirectional(fileIdProperty)
+    this.entriesProperty.bindContentBidirectional(entries)
+  }
+
+  def shutdown(fileIdProperty: SimpleObjectProperty[FileId], entries: ObservableList[LogEntry]): Unit = {
+    this.fileIdProperty.unbindBidirectional(fileIdProperty)
+    this.entriesProperty.unbindContentBidirectional(entries)
+  }
 
   /** Reads the file from the last known position to the end. */
   private def readNewLines(): Unit =
@@ -31,10 +47,9 @@ case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) exten
       val currentLength = logFile.length()
       // Handle File Rotation: If the file size has drastically shrunk, clear and reset.
       if currentLength < lastPosition then
-        logInfo(s"Log file ${fileId.value} rotated. Clearing entries.")
-        currentCnt = 0
+        logInfo(s"Log file ${getFileId.value} rotated. Clearing entries.")
         lastPosition = 0L // Reset position to start of the new file
-        javafx.application.Platform.runLater(() => logEntries.clear())
+        javafx.application.Platform.runLater(() => entriesProperty.clear())
 
       // Read new content only if the file size has increased
       if currentLength > lastPosition then
@@ -60,15 +75,13 @@ case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) exten
           lastPosition = raf.getFilePointer
 
         catch
-          case e: Exception => logException(s"Error while reading new lines from ${fileId.value}", e)
+          case e: Exception => logException(s"Error while reading new lines from ${getFileId.value}", e)
         finally
           if raf != null then raf.close()
 
   private def processLine(line: String): Unit =
-    currentCnt = currentCnt + 1
-    val e = LogEntry(currentCnt, line, None, None)
     javafx.application.Platform.runLater(() => {
-      logEntries.add(e)
+      entriesProperty.add(LogEntry(entriesProperty.size() + 1, line, None, None))
     })
 
   /** Start observing log file for changes */
@@ -89,7 +102,7 @@ case class LogTailer(fileId: FileId, logEntries: ObservableList[LogEntry]) exten
           pollingDelayMs,
           TimeUnit.MILLISECONDS
         ))
-        logInfo(s"Started LogTailer for file ${fileId.value} with ${pollingDelayMs}ms delay.")
+        logInfo(s"Started LogTailer for file ${getFileId.value} with ${pollingDelayMs}ms delay.")
 
   /** Stop observing log file */
   def stop(): Unit = {
