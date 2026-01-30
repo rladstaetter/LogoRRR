@@ -23,14 +23,6 @@ import javafx.util.Subscription
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-
-
-
-
-
-//class LogFilePane(mutLogFileSettings: MutLogFileSettings
-//                  , val entries: ObservableList[LogEntry]) extends BorderPane with UiTarget:
-
 class LogFilePane(mutLogFileSettings: MutLogFileSettings
                   , val entries: ObservableList[LogEntry]) extends BorderPane with UiTarget:
 
@@ -61,10 +53,10 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   private val filteredEntries = new FilteredList[LogEntry](entries)
 
   // display text to the right
-  private val logTextView = new LogTextView(mutLogFileSettings, filteredEntries)
+  private val logTextView = new LogTextView(filteredEntries)
 
   // graphical display to the left
-  private val chunkListView = LogoRRRChunkListView(filteredEntries, mutLogFileSettings, logTextView.scrollToItem, widthProperty)
+  private val chunkListView = LogoRRRChunkListView(mutLogFileSettings, filteredEntries, logTextView.scrollToItem, widthProperty)
 
   val opsToolBar = OpsToolBar(mutLogFileSettings, chunkListView, entries, filteredEntries)
 
@@ -78,7 +70,7 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
     , textSizeSlider
     , PaneDefinition(prop => IncreaseTextSizeButton.uiNode(prop.get).value, TextSizeButton.mkLabel(12), TextConstants.fontSizeStep, TextConstants.MaxFontSize)
     , PaneDefinition(prop => DecreaseTextSizeButton.uiNode(prop.get).value, TextSizeButton.mkLabel(8), TextConstants.fontSizeStep, TextConstants.MinFontSize)
-    , mutLogFileSettings.fontSizeProperty
+
   )
 
   private val chunkPane: LogPartPane = new LogPartPane(
@@ -86,7 +78,7 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
     , blockSizeSlider
     , PaneDefinition(prop => IncreaseBlockSizeButton.uiNode(prop.get).value, RectButton.mkR(IncreaseBlockSizeButton.Size, IncreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MaxBlockSize)
     , PaneDefinition(prop => DecreaseBlockSizeButton.uiNode(prop.get).value, RectButton.mkR(DecreaseBlockSizeButton.Size, DecreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MinBlockSize)
-    , mutLogFileSettings.blockSizeProperty)
+  )
 
 
   // if active scroll automatically to the end of the list
@@ -121,7 +113,13 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
     divider.setPosition(mutLogFileSettings.getDividerPosition)
     setTop(opsRegion)
     setCenter(pane)
-    logTextView.init()
+    logTextView.init(mutLogFileSettings.fileIdProperty
+      , mutLogFileSettings.selectedLineNumberProperty
+      , mutLogFileSettings.fontSizeProperty
+      , mutLogFileSettings.firstVisibleTextCellIndexProperty
+      , mutLogFileSettings.lastVisibleTextCellIndexProperty
+      , mutLogFileSettings.mutSearchTerms
+    )
     chunkListView.init()
     enableAutoscroll(mutLogFileSettings.isAutoScrollActive)
     mutLogFileSettings.mutSearchTerms.addListener(searchTermChangeListener)
@@ -131,15 +129,15 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   def getDividerPosition: Double = divider.getPosition
 
   def shutdown(): Unit =
-    textPane.unbind()
-    chunkPane.unbind()
+    textPane.unbind(mutLogFileSettings.fontSizeProperty)
+    chunkPane.unbind(mutLogFileSettings.blockSizeProperty)
     textSizeSlider.unbind()
     blockSizeSlider.unbind()
     autoScrollActiveProperty.unbind()
     logTailer.shutdown(mutLogFileSettings.fileIdProperty, entries)
     if mutLogFileSettings.isAutoScrollActive then enableAutoscroll(false)
-    logTextView.removeListeners()
-    chunkListView.removeListeners()
+    logTextView.shutdown(mutLogFileSettings.selectedLineNumberProperty, mutLogFileSettings.firstVisibleTextCellIndexProperty, mutLogFileSettings.lastVisibleTextCellIndexProperty)
+    chunkListView.shutdown()
     autoScrollSubscription.unsubscribe()
     mutLogFileSettings.mutSearchTerms.removeListener(searchTermChangeListener)
     LogoRRRGlobals.removeLogFile(getFileId)

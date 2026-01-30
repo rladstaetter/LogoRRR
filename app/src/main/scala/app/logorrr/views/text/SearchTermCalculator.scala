@@ -2,18 +2,10 @@ package app.logorrr.views.text
 
 import app.logorrr.model.LogEntry
 import app.logorrr.views.search.MutableSearchTerm
+import javafx.collections.ObservableList
 import javafx.scene.paint.Color
 
 import scala.collection.mutable.ListBuffer
-
-object SearchTermCalculator:
-
-  def apply(logEntry: LogEntry
-            , searchTerms: Seq[MutableSearchTerm]): SearchTermCalculator =
-    val logLine = logEntry.value
-    val filters: Seq[(String, Color)] = searchTerms.filter(_.isActive).map(s => (s.getValue, s.getColor))
-    SearchTermCalculator(logLine, filters)
-
 
 /**
  * For each log entry, calculate correct colors for each char displayed and also the mean color for this entry
@@ -23,7 +15,6 @@ object SearchTermCalculator:
  */
 case class SearchTermCalculator(logLine: String
                                 , searchTerms: Seq[(String, Color)]):
-
 
   lazy val filteredParts: Seq[Seq[LinePart]] = searchTerms.map((v, c) => calcParts(v, c))
 

@@ -2,7 +2,7 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.{BlockSettings, FileId, LogFileSettings, SearchTerm, TimestampSettings}
 import app.logorrr.model.LogEntry
-import app.logorrr.util.LogoRRRFonts
+import app.logorrr.util.{JetbrainsMonoFontStyleBinding, LogoRRRFonts}
 import app.logorrr.views.ops.time.TimeRange
 import app.logorrr.views.search.st.SearchTermToggleButton
 import app.logorrr.conf.SearchTermGroup
@@ -149,10 +149,7 @@ class MutLogFileSettings:
 
   def setLastVisibleTextCellIndex(value: Int): Unit = lastVisibleTextCellIndexProperty.set(value)
 
-  val fontStyleBinding: StringBinding = new StringBinding:
-    bind(fontSizeProperty)
-
-    override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.get())
+  val fontStyleBinding: StringBinding = new JetbrainsMonoFontStyleBinding(fontSizeProperty)
 
   def setSomeLogEntryInstantFormat(timestampSettings: Option[TimestampSettings]): Unit =
     someTimestampSettings.set(timestampSettings)

@@ -12,8 +12,7 @@ import javafx.scene.layout.{BorderPane, HBox, Priority, VBox}
 class LogPartPane(listView: ListView[?]
                   , slider: Slider
                   , inc: PaneDefinition
-                  , dec: PaneDefinition
-                  , boundProp: Property[Number]) extends BorderPane:
+                  , dec: PaneDefinition) extends BorderPane:
 
   val increaseButton = IncreaseSizeButton(inc.calcId, inc.graphic, inc.step, inc.boundary)
   val decreaseButton = DecreaseSizeButton(dec.calcId, dec.graphic, dec.step, dec.boundary)
@@ -32,7 +31,7 @@ class LogPartPane(listView: ListView[?]
     slider.valueProperty().bindBidirectional(boundProp)
   }
 
-  def unbind(): Unit = {
+  def unbind(boundProp : Property[Number]): Unit = {
     increaseButton.unbind(boundProp)
     decreaseButton.unbind(boundProp)
     slider.valueProperty().unbindBidirectional(boundProp)

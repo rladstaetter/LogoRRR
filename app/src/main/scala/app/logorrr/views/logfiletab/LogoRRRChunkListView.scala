@@ -12,8 +12,8 @@ import javafx.collections.ObservableList
 
 object LogoRRRChunkListView extends UiNodeFileIdAware:
 
-  def apply(entries: ObservableList[LogEntry]
-            , mutLogFileSettings: MutLogFileSettings
+  def apply(mutLogFileSettings: MutLogFileSettings
+            , entries: ObservableList[LogEntry]
             , selectInTextView: LogEntry => Unit
             , widthProperty: ReadOnlyDoubleProperty
            ): ChunkListView[LogEntry] =

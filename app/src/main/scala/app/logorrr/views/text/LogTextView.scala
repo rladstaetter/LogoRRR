@@ -1,132 +1,171 @@
 package app.logorrr.views.text
 
 import app.logorrr.conf.FileId
-import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.util.JfxUtils
+import app.logorrr.util.{JetbrainsMonoFontStyleBinding, JfxUtils}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.search.MutableSearchTerm
 import app.logorrr.views.text.contextactions.{CopyEntriesMenuItem, IgnoreAboveMenuItem, IgnoreBelowMenuItem}
+import javafx.beans.binding.Bindings
+import javafx.beans.property.{Property, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.*
+import javafx.scene.paint.Color
+import javafx.util.Subscription
 import net.ladstatt.util.log.TinyLog
 
 import scala.jdk.CollectionConverters.*
-
 
 object LogTextView extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogTextView])
 
 
-class LogTextView(mutLogFileSettings: MutLogFileSettings
-                  , filteredList: FilteredList[LogEntry])
+class LogTextView(filteredList: FilteredList[LogEntry])
   extends ListView[LogEntry]
     with TinyLog:
 
-  setId(LogTextView.uiNode(mutLogFileSettings.getFileId).value)
-  getSelectionModel.setSelectionMode(SelectionMode.MULTIPLE)
+  // property which contains selected line number, bidirectionally bound to MutLogFileSettings
+  private val selectedLineNumberProperty = new SimpleIntegerProperty()
+  private val selectedItemSubscription: Subscription =
+    getSelectionModel.selectedItemProperty().subscribe(e => {
+      Option(e) match {
+        case Some(value) => selectedLineNumberProperty.set(value.lineNumber)
+        case None =>
+      }
+    })
 
-  private lazy val selectedLineNumberListener = JfxUtils.onNew[LogEntry](e => {
-    Option(e) match {
-      case Some(value) =>
-        // implicitly sets active element in chunkview via global settings binding
-        mutLogFileSettings.setSelectedLineNumber(value.lineNumber)
-      case None => logTrace("Selected item was null")
-    }
-  })
+  private val fontsizeProperty = new SimpleIntegerProperty()
+  private val fontsizeSubscription: Subscription = fontsizeProperty.subscribe(_ => refresh())
+  private val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty()
+  private val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
+  private var scrollBarSubscription: Option[Subscription] = None
 
-  // when changing font size, repaint
-  // otherwise listview is not repainted correctly since calculation of the cellheight is broken atm
-  private lazy val refreshListener = JfxUtils.onNew[Number](_ => refresh())
-
-  private lazy val scrollBarListener = JfxUtils.onNew[Number](_ => {
-    val (first, last) = ListViewHelper.getVisibleRange(this)
-    mutLogFileSettings.setFirstVisibleTextCellIndex(first)
-    mutLogFileSettings.setLastVisibleTextCellIndex(last)
-  })
+  /** recalculated if searchterms change */
+  val searchTerms: SimpleListProperty[(String, Color)] = SimpleListProperty[(String, Color)]()
 
   /**
    * to observe the visible text and mark it in the boxview
    */
-  private lazy val skinListener = JfxUtils.onNew[Skin[?]](_ => {
-    ListViewHelper.findScrollBar(this).foreach(_.valueProperty.addListener(scrollBarListener))
+  private val skinSubscriber = skinProperty.subscribe(_ => {
+    scrollBarSubscription =
+      ListViewHelper.findScrollBar(this).map(_.valueProperty.subscribe(_ => {
+        val (first, last) = ListViewHelper.getVisibleRange(this)
+        firstVisibleTextCellIndexProperty.set(first)
+        lastVisibleTextCellIndexProperty.set(last)
+      }))
   })
 
+  /** contains number of digits of max size of filtered list */
+  private val maxSizeProperty: SimpleIntegerProperty = new SimpleIntegerProperty() {
+    this.bind(Bindings.createIntegerBinding(() => filteredList.size.toString.length, filteredList))
+  }
 
   def scrollToItem(item: LogEntry): Unit =
     val relativeIndex = getItems.indexOf(item)
     getSelectionModel.clearAndSelect(relativeIndex)
-    val cellHeight = mutLogFileSettings.getFontSize
+    val cellHeight = fontsizeProperty.get()
     JfxUtils.scrollTo[LogEntry](this, cellHeight, relativeIndex)
 
   def scrollToActiveLogEntry(): Unit =
     if getHeight != 0 then
-      // logTrace(s"scrollToActiveLogEntry: LogTextView.getHeight: $getHeight")
-      val candidates = filteredList.filtered(l => l.lineNumber == mutLogFileSettings.selectedLineNumberProperty.get())
+      val candidates = filteredList.filtered(l => l.lineNumber == selectedLineNumberProperty.get())
       if !candidates.isEmpty then
         Option(candidates.get(0)) match
           case Some(selectedEntry) =>
             scrollToItem(selectedEntry)
             // to trigger ChunkListView scrollTo and repaint
-            mutLogFileSettings.setSelectedLineNumber(selectedEntry.lineNumber)
+            selectedLineNumberProperty.set(selectedEntry.lineNumber)
           case None => // do nothing
 
-
-  def init(): Unit =
+  def init(fileIdProperty: SimpleObjectProperty[FileId]
+           , selectedLineNumberProperty: Property[Number]
+           , fontsizeProperty: Property[Number]
+           , firstVisibleTextCellIndexProperty: Property[Number]
+           , lastVisibleTextCellIndexProperty: Property[Number]
+           , mutSearchTerms: SimpleListProperty[MutableSearchTerm]
+          ): Unit =
+    bind(fileIdProperty
+      , selectedLineNumberProperty
+      , fontsizeProperty
+      , firstVisibleTextCellIndexProperty
+      , lastVisibleTextCellIndexProperty)
     getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
-    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell())
-
-    getSelectionModel.selectedItemProperty().addListener(selectedLineNumberListener)
-    mutLogFileSettings.fontSizeProperty.addListener(refreshListener)
-
-    skinProperty.addListener(skinListener)
-
+    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell(fontsizeProperty))
     setItems(filteredList)
-
+    getSelectionModel.setSelectionMode(SelectionMode.MULTIPLE)
+    searchTerms.bind(new MutSearchTermBinding(mutSearchTerms))
 
   /** clean up listeners */
-  def removeListeners(): Unit =
-    getSelectionModel.selectedItemProperty().removeListener(selectedLineNumberListener)
-    mutLogFileSettings.fontSizeProperty.removeListener(refreshListener)
-    skinProperty.removeListener(skinListener)
-    ListViewHelper.findScrollBar(this).foreach(_.valueProperty.removeListener(scrollBarListener))
+  def shutdown(selectedLineNumberProperty: Property[Number]
+               , firstVisibleTextCellIndexProperty: Property[Number]
+               , lastVisibleTextCellIndexProperty: Property[Number]
+              ): Unit =
+    selectedItemSubscription.unsubscribe()
+    fontsizeSubscription.unsubscribe()
+    unbind(selectedLineNumberProperty, firstVisibleTextCellIndexProperty, lastVisibleTextCellIndexProperty)
+    skinSubscriber.unsubscribe()
+    scrollBarSubscription.foreach(_.unsubscribe())
+    searchTerms.unbind()
+    maxSizeProperty.unbind()
 
-  /** determine width of max elems in this view */
-  def maxLength: Int = filteredList.size().toString.length
-
-  class LogEntryListCell extends ListCell[LogEntry]:
-    styleProperty().bind(mutLogFileSettings.fontStyleBinding)
+  class LogEntryListCell(fontSizeProperty: Property[Number]) extends ListCell[LogEntry]:
     setGraphic(null)
 
     override def updateItem(t: LogEntry, b: Boolean): Unit =
       super.updateItem(t, b)
-
+      styleProperty().unbind()
       Option(t) match
-        case Some(e) => calculateLabel(e)
+        case Some(e) =>
+          styleProperty().bind(new JetbrainsMonoFontStyleBinding(fontSizeProperty))
+          val entry = LogTextViewLabel(e
+            , maxSizeProperty.get()
+            , searchTerms.asScala.toSeq
+            , fontSizeProperty)
+          setGraphic(entry)
+
+          val copySelectionMenuItem = new CopyEntriesMenuItem(getSelectionModel)
+          val ignoreAboveMenuItem = new IgnoreAboveMenuItem(selectedLineNumberProperty
+            , e
+            , filteredList
+            , scrollToActiveLogEntry)
+          val ignoreBelowMenuItem = new IgnoreBelowMenuItem(e, filteredList)
+          val menu = new ContextMenu(copySelectionMenuItem, ignoreAboveMenuItem, ignoreBelowMenuItem)
+          setContextMenu(menu)
         case None =>
+          styleProperty().unbind()
+          Option(getGraphic) match {
+            case Some(label: LogTextViewLabel) => LogTextViewLabel.unbind(label)
+            case _ =>
+          }
           setGraphic(null)
           setContextMenu(null)
 
-    private def calculateLabel(e: LogEntry): Unit =
-      val entry = LogTextViewLabel(e
-        , maxLength
-        , mutLogFileSettings.mutSearchTerms.get().asScala.toSeq
-        , mutLogFileSettings.fontStyleBinding
-        , mutLogFileSettings.fontSizeProperty)
 
-      setGraphic(entry)
-
-      val copySelectionMenuItem = new CopyEntriesMenuItem(getSelectionModel)
-
-      val ignoreAboveMenuItem = new IgnoreAboveMenuItem(mutLogFileSettings
-        , e
-        , filteredList
-        , scrollToActiveLogEntry)
-      val ignoreBelowMenuItem = new IgnoreBelowMenuItem(e, filteredList)
-
-      setContextMenu(new ContextMenu(copySelectionMenuItem, ignoreAboveMenuItem, ignoreBelowMenuItem))
+  def bind(fileIdProperty: SimpleObjectProperty[FileId]
+           , selectedLineNumberProperty: Property[Number]
+           , fontSizeProperty: Property[Number]
+           , firstVisibleTextCellIndexProperty: Property[Number]
+           , lastVisibleTextCellIndexProperty: Property[Number]
+          ): Unit = {
+    idProperty().bind(Bindings.createStringBinding(() => LogTextView.uiNode(fileIdProperty.get).value, fileIdProperty))
+    this.selectedLineNumberProperty.bindBidirectional(selectedLineNumberProperty)
+    this.fontsizeProperty.bind(fontSizeProperty)
+    this.firstVisibleTextCellIndexProperty.bindBidirectional(firstVisibleTextCellIndexProperty)
+    this.lastVisibleTextCellIndexProperty.bindBidirectional(lastVisibleTextCellIndexProperty)
 
 
+  }
 
-
+  def unbind(selectedLineNumberProperty: Property[Number]
+             , firstVisibleTextCellIndexProperty: Property[Number]
+             , lastVisibleTextCellIndexProperty: Property[Number]
+            ): Unit = {
+    idProperty.unbind()
+    this.selectedLineNumberProperty.unbindBidirectional(selectedLineNumberProperty)
+    this.fontsizeProperty.unbind()
+    this.firstVisibleTextCellIndexProperty.unbindBidirectional(firstVisibleTextCellIndexProperty)
+    this.lastVisibleTextCellIndexProperty.unbindBidirectional(lastVisibleTextCellIndexProperty)
+  }
+  
 

@@ -19,7 +19,7 @@ object ChunkListView:
 
   val DefaultScrollBarWidth = 18
 
-  def lookupVirtualFlow(skin: Skin[?]): Option[VirtualFlow[ChunkListCell[?]]] =
+  private def lookupVirtualFlow(skin: Skin[?]): Option[VirtualFlow[ChunkListCell[?]]] =
     Option(skin match {
       case skinBase: SkinBase[_] =>
         skinBase.getChildren.asScala.find(_.getStyleClass.contains("virtual-flow")).orNull.asInstanceOf[VirtualFlow[ChunkListCell[?]]]
@@ -27,7 +27,7 @@ object ChunkListView:
         null
     })
 
-  def lookupScrollBar(flow: VirtualFlow[ChunkListCell[?]], orientation: Orientation): Option[ScrollBar] =
+  private def lookupScrollBar(flow: VirtualFlow[ChunkListCell[?]], orientation: Orientation): Option[ScrollBar] =
     Option(flow.getChildrenUnmodifiable.toArray.collectFirst { case sb: ScrollBar if sb.getOrientation == orientation => sb }.orNull)
 
 
@@ -164,7 +164,7 @@ class ChunkListView[A](val elements: ObservableList[A]
     skinProperty().addListener(chunkListViewSkinListener)
 
 
-  def removeListeners(): Unit =
+  def shutdown(): Unit =
     removeInvalidationListener()
     anyPropProperty.removeListener(anyRp)
 
