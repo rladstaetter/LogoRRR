@@ -65,7 +65,6 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
     LogoRRRGlobals.mutSettings.someActiveLogProperty.unbind()
     styleProperty().unbind()
     idProperty().unbind()
-    //  getSelectionModel.selectedItemProperty().removeListener(selectedTabListener)
     getLogFileTabs.foreach(_.shutdown())
     getTabs.clear()
 

@@ -3,10 +3,10 @@ package app.logorrr.views.settings.timestamp
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{LogoRRRGlobals, TimestampSettings}
-import app.logorrr.model.LogEntry
-import app.logorrr.views.search.{OpsToolBar, TimestampSettingsRegion}
-import javafx.beans.binding.{Bindings, ObjectBinding}
-import javafx.beans.property.SimpleObjectProperty
+import app.logorrr.model.{BoundFileId, LogEntry}
+import app.logorrr.views.search.TimestampSettingsRegion
+import javafx.beans.binding.Bindings
+import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control.*
@@ -21,66 +21,42 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
                                   , closeStage: => Unit)
   extends BorderPane with TinyLog:
 
-  private val startColLabel = new FromLabel(mutLogFileSettings.getFileId)
-  private val startColTextField = new FromTextField(mutLogFileSettings.getFileId)
+  private val startColLabel = new FromLabel
+  private val startColTf = new FromTextField
 
-  private val endColLabel = new ToLabel(mutLogFileSettings.getFileId)
-  private val endColTextField = new ToTextField(mutLogFileSettings.getFileId)
+  private val endColLabel = new ToLabel
+  private val endColTf = new ToTextField
 
-  def getSomeRange: Option[(Int, Int)] = {
+  private val boundFileIdControls: Seq[? <: BoundFileId] =
+    Seq(startColLabel, startColTf, endColLabel, endColTf)
+
+  private def getSomeRange: Option[(Int, Int)] = {
     (getStartCol, getEndCol) match
       case (a, b) if a <= b => Option((a, b))
       case _ => None
   }
 
-  /*
-   * those properties exist since it is easier to use from the call sites.
-   **/
-  private val (startColProperty, endColProperty) =
-    mutLogFileSettings.getSomeTimestampSettings match
-      case Some(value) => (new SimpleObjectProperty[java.lang.Integer](value.startCol), new SimpleObjectProperty[java.lang.Integer](value.endCol))
-      case None =>
-        LogoRRRGlobals.getTimestampSettings match
-          case Some(globalSettings) =>
-            (new SimpleObjectProperty[java.lang.Integer](globalSettings.getStartCol), new SimpleObjectProperty[java.lang.Integer](globalSettings.getEndCol))
-          case None =>
-            (new SimpleObjectProperty[java.lang.Integer](), new SimpleObjectProperty[java.lang.Integer]())
+  private val startColProperty = new SimpleIntegerProperty()
+  private val endColProperty = new SimpleIntegerProperty()
+  private val timeFormatTf = new TimeFormatTextField(mutLogFileSettings.getFileId, "")
 
-
-  startColTextField.textProperty().bind(Bindings.createStringBinding(() => {
+  startColTf.textProperty().bind(Bindings.createStringBinding(() => {
     Option(getStartCol) match {
       case Some(value) => value.toString
       case None => ""
     }
   }, startColProperty))
 
-  endColTextField.textProperty().bind(Bindings.createStringBinding(() => {
+  endColTf.textProperty().bind(Bindings.createStringBinding(() => {
     Option(getEndCol) match {
       case Some(value) => value.toString
       case None => ""
     }
   }, endColProperty))
 
-  private val timeFormatTf =
-    mutLogFileSettings.getSomeTimestampSettings match {
-      case Some(value) => new TimeFormatTextField(mutLogFileSettings.getFileId, value.dateTimePattern)
-      case None => LogoRRRGlobals.getTimestampSettings match {
-        case Some(value) => new TimeFormatTextField(mutLogFileSettings.getFileId, value.getDateTimePatternCol)
-        case None => new TimeFormatTextField(mutLogFileSettings.getFileId, "")
-      }
-    }
 
-  private val setTimestampFormatButton = new TimestampFormatSetButton(mutLogFileSettings, getSomeRange, timeFormatTf, chunkListView, logEntries, tsRegion, closeStage)
   private val resetTimestampFormatButton = new TimestampFormatResetButton(mutLogFileSettings, chunkListView, logEntries, tsRegion, closeStage)
-
-  // binding is just here to trigger refresh on timerSettingsLogTextView
-  // has to be assigned to a val otherwise this won't get executed
-/*
-  val binding: ObjectBinding[String] =
-    Bindings.createObjectBinding(() => s"$getStartCol $getEndCol", startColProperty, endColProperty)
-  binding.addListener((_, _, _) => {
-    timerSettingsLogTextView.listView.refresh()
-  })*/
+  private val applyAndCloseButton = new TimestampFormatSetButton(mutLogFileSettings, getSomeRange, timeFormatTf, chunkListView, logEntries, tsRegion, closeStage)
 
   private val hyperlink: Hyperlink =
     val hl = TimestampSettings.dateFormatterHLink.mkHyperLink()
@@ -89,14 +65,16 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
     hl
 
   private val ShowMax = 26 // how many rows should be shown in the TimeStamp Settings Dialog at max
-  private lazy val showThisManyRows = if logEntries.size() > ShowMax then ShowMax else logEntries.size()
+  private val showThisManyRows = if logEntries.size() > ShowMax then ShowMax else logEntries.size()
   private val firstVisible = Option(mutLogFileSettings.firstVisibleTextCellIndexProperty.get()).getOrElse(0)
   private val lastVisible = Option(mutLogFileSettings.lastVisibleTextCellIndexProperty.get()).getOrElse(logEntries.size())
-  private val l =
-    if firstVisible == lastVisible && lastVisible == 0 then // if first/last visible was not yet set
-      FXCollections.observableArrayList((for i <- firstVisible until showThisManyRows yield logEntries.get(i)) *)
+  private val l: ObservableList[LogEntry] =
+    if firstVisible == lastVisible && lastVisible <= 0 || firstVisible > lastVisible then // filter out nonsensical values
+      val entries = for i <- 0 until showThisManyRows yield logEntries.get(i)
+      FXCollections.observableArrayList(entries *)
     else
-      FXCollections.observableArrayList((for i <- firstVisible until lastVisible yield logEntries.get(i)) *)
+      val entries = for i <- firstVisible until lastVisible yield logEntries.get(i)
+      FXCollections.observableArrayList(entries *)
 
   private val timerSettingsLogTextView =
     val tslv = new TimestampPositionSelectionBorderPane(mutLogFileSettings, l)
@@ -106,11 +84,28 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
 
   private val spacer = new AlwaysGrowHorizontalRegion
 
-  private val timeFormatBar = new ToolBar(hyperlink, timeFormatTf, spacer, setTimestampFormatButton, resetTimestampFormatButton)
+  private val timeFormatBar = new ToolBar(hyperlink, timeFormatTf, spacer, applyAndCloseButton, resetTimestampFormatButton)
 
-  newInit()
+  def updateSettings(settings: TimestampSettings): Unit = {
+    timerSettingsLogTextView.startColProperty.set(settings.startCol)
+    timerSettingsLogTextView.endColProperty.set(settings.endCol)
+    timeFormatTf.setText(settings.dateTimePattern)
+  }
 
-  def newInit(): Unit =
+  private def initSettings(globalSettings: Option[TimestampSettings]
+                           , localSettings: Option[TimestampSettings]): Unit = {
+    (globalSettings, localSettings) match {
+      case (_, Some(s)) => updateSettings(s)
+      case (Some(s), _) => updateSettings(s)
+      case _ =>
+    }
+  }
+
+
+  def init(globalSettings: Option[TimestampSettings]
+           , localSettings: Option[TimestampSettings]): Unit =
+    initBindings()
+    initSettings(globalSettings, localSettings)
     // Left Sidebar for Column Inputs (The "Selection" phase)
     val selectionSettings = new VBox(15)
     selectionSettings.setPadding(new Insets(15))
@@ -120,8 +115,8 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
     val rangeLabel = new Label("1. Define Column Range")
     rangeLabel.setStyle("-fx-font-weight: bold;")
 
-    val fromBox = new VBox(5, startColLabel, startColTextField)
-    val toBox = new VBox(5, endColLabel, endColTextField)
+    val fromBox = new VBox(5, startColLabel, startColTf)
+    val toBox = new VBox(5, endColLabel, endColTf)
 
     val description = new Label("Click on the preview text\nto select columns.")
     selectionSettings.getChildren.addAll(rangeLabel, fromBox, toBox, description)
@@ -148,12 +143,11 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
 
     val actionRow = new HBox(10)
     actionRow.setAlignment(Pos.CENTER_RIGHT)
-    actionRow.getChildren.addAll(resetTimestampFormatButton, spacer, setTimestampFormatButton)
+    actionRow.getChildren.addAll(resetTimestampFormatButton, spacer, applyAndCloseButton)
 
     footer.getChildren.addAll(formatLabel, formatInputRow, actionRow)
     setBottom(footer)
     timerSettingsLogTextView.listView.requestFocus()
-
 
 
   def setStartCol(startCol: Int): Unit = startColProperty.set(startCol)
@@ -164,6 +158,9 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
 
   def getEndCol: java.lang.Integer = endColProperty.get()
 
+  def initBindings(): Unit =
+    boundFileIdControls.foreach(_.bindIdProperty(mutLogFileSettings.fileIdProperty))
 
+  def unbind(): Unit = boundFileIdControls.foreach(_.unbindIdProperty())
 
 

@@ -26,7 +26,7 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
                                , chunkListView: ChunkListView[LogEntry]
                                , logEntries: ObservableList[LogEntry]
                                , tsRegion: TimestampSettingsRegion
-                               , closeStage: => Unit) extends Button("use settings for current log file"):
+                               , closeStage: => Unit) extends Button("Apply & close"):
   setId(TimestampFormatSetButton.uiNode(mutLogFileSettings.getFileId).value)
   setPrefWidth(300)
   setAlignment(Pos.CENTER)

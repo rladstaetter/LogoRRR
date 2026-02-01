@@ -58,6 +58,7 @@ class MutLogFileSettings:
   val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
 
   private val someTimestampSettings = new SimpleObjectProperty[Option[TimestampSettings]](None)
+  
   private val lowerTimestampValueProperty = new SimpleLongProperty()
   private val upperTimestampValueProperty = new SimpleLongProperty()
 

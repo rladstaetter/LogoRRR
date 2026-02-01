@@ -47,7 +47,10 @@ class TimestampSettingsButton(settings: MutLogFileSettings
         |""".stripMargin)
     btn.setGraphic(new FontIcon(FontAwesomeRegular.CLOCK))
     btn.setTooltip(new Tooltip("configure time format"))
-    btn.setOnAction(_ => new TimestampSettingStage(getScene.getWindow, settings, chunkListView, logEntries, tsRegion).showAndWait())
+    btn.setOnAction:
+      _ =>
+        val stage = new TimestampSettingStage(settings, getScene.getWindow, chunkListView, logEntries, tsRegion)
+        stage.showAndWait()
     btn
 
   private val fontIcon =

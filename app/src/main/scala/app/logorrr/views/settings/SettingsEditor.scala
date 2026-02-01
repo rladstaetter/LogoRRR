@@ -51,7 +51,7 @@ object CloseSettingsEditorButton extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseSettingsEditorButton])
 
-class CloseSettingsEditorButton(stage: Stage) extends Button("Close") {
+class CloseSettingsEditorButton(stage: Stage) extends Button("Apply & close") {
   setId(SettingsEditor.CloseButton.value)
   setOnAction(_ => stage.close())
 }

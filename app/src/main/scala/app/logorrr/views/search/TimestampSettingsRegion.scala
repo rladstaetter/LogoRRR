@@ -23,7 +23,6 @@ class TimestampSettingsRegion(mutLogFileSettings: MutLogFileSettings
    */
   private val timestampSettingsButton = new TimestampSettingsButton(mutLogFileSettings, chunkListView, logEntries, this)
 
-
   private lazy val lowerSliderVBox = new SliderVBox(mutLogFileSettings, Pos.CENTER_LEFT, "Configure earliest timestamp to be displayed", timeRange)
   private lazy val upperSliderVBox = new SliderVBox(mutLogFileSettings, Pos.CENTER_RIGHT, "Configure latest timestamp to be displayed", timeRange)
 
@@ -34,7 +33,6 @@ class TimestampSettingsRegion(mutLogFileSettings: MutLogFileSettings
 
   lowerSlider.valueProperty.addListener((_, _, newValue) => updateLowerTimestampSlider(newValue))
   upperSlider.valueProperty.addListener((_, _, newValue) => updateUpperTimestampSlider(newValue))
-
 
   def timeRange: TimeRange = TimeUtil.calcTimeInfo(logEntries).getOrElse(TimeRange.defaultTimeRange)
 

@@ -13,8 +13,8 @@ object LogFileSettings:
   private val DefaultBlockSettings = BlockSettings(10)
   private val DefaultLogFormat: Option[TimestampSettings] = None
   private val DefaultAutoScroll = false
-  private val DefaultFirstViewIndex = -1
-  private val DefaultLastViewIndex = -1
+  private val DefaultFirstViewIndex = 0
+  private val DefaultLastViewIndex = 0
   val DefaultLowerTimestamp: Int = 0
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
 

@@ -10,7 +10,7 @@ object CloseStgEditorButton extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseStgEditorButton])
 
-class CloseStgEditorButton(fileId: FileId, stage: Stage) extends Button("Close") {
+class CloseStgEditorButton(fileId: FileId, stage: Stage) extends Button("Apply & close") {
   setId(CloseStgEditorButton.uiNode(fileId).value)
   setOnAction(_ => stage.close())
 }

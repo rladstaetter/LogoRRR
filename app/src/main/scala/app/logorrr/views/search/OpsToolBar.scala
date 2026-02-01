@@ -41,23 +41,15 @@ class OpsToolBar(fileId: FileId
                  , logEntries: ObservableList[LogEntry]
                  , filteredList: FilteredList[LogEntry]) extends ToolBar:
 
+  // layout
   setMaxHeight(Double.PositiveInfinity)
-
   setStyle("""-fx-padding: 0px 0px 0px 4px;""")
   val w = 380
-  private val macWidth: Int = w
-  private val winWidth: Int = w + 2
-  private val linuxWidth: Int = w + 2
-  val width: Int = OsUtil.osFun(winWidth, macWidth, linuxWidth) // different layouts (may be dependent on font size renderings?)
-  setMinWidth(width)
-
+  setMinWidth(OsUtil.osFun(w + 2, w, w + 2))
 
   val searchRegion = new SearchRegion(fileId, addFilterFn)
-
   val otherItemsRegion = new OtherItemsRegion(fileId, logEntries, filteredList)
-
   val timestampSettingsRegion = new TimestampSettingsRegion(mutLogFileSettings, chunkListView, logEntries, filteredList)
-
 
   getItems.addAll(searchRegion.items ++ otherItemsRegion.items ++ timestampSettingsRegion.items *)
 
