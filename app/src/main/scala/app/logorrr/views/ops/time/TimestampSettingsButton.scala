@@ -5,7 +5,7 @@ import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.search.OpsToolBar
+import app.logorrr.views.search.TimestampSettingsRegion
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
 import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
@@ -31,7 +31,7 @@ object TimestampSettingsButton extends UiNodeFileIdAware:
 class TimestampSettingsButton(settings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
-                              , opsToolBar: OpsToolBar) extends StackPane:
+                              , tsRegion: TimestampSettingsRegion) extends StackPane:
 
   setId(TimestampSettingsButton.uiNode(settings.getFileId).value)
 
@@ -47,7 +47,7 @@ class TimestampSettingsButton(settings: MutLogFileSettings
         |""".stripMargin)
     btn.setGraphic(new FontIcon(FontAwesomeRegular.CLOCK))
     btn.setTooltip(new Tooltip("configure time format"))
-    btn.setOnAction(_ => new TimestampSettingStage(getScene.getWindow, settings, chunkListView, logEntries, opsToolBar).showAndWait())
+    btn.setOnAction(_ => new TimestampSettingStage(getScene.getWindow, settings, chunkListView, logEntries, tsRegion).showAndWait())
     btn
 
   private val fontIcon =

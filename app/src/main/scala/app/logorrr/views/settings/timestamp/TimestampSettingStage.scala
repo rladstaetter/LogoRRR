@@ -4,7 +4,7 @@ import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.search.OpsToolBar
+import app.logorrr.views.search.{OpsToolBar, TimestampSettingsRegion}
 import javafx.collections.ObservableList
 import javafx.scene.Scene
 import javafx.stage.{Modality, Stage, Window}
@@ -19,7 +19,7 @@ class TimestampSettingStage(owner: Window
                             , settings: MutLogFileSettings
                             , chunkListView: ChunkListView[LogEntry]
                             , logEntries: ObservableList[LogEntry]
-                            , opsToolBar: OpsToolBar) extends Stage:
+                            , tsRegion: TimestampSettingsRegion) extends Stage:
 
   initOwner(owner)
   initModality(Modality.WINDOW_MODAL)
@@ -29,7 +29,7 @@ class TimestampSettingStage(owner: Window
     new TimestampSettingsBorderPane(settings
       , logEntries
       , chunkListView
-      , opsToolBar
+      , tsRegion
       , JfxUtils.closeStage(this))
 
   val scene = new Scene(

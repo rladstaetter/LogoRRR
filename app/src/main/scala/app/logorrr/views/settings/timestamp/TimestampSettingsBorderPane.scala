@@ -4,7 +4,7 @@ import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{LogoRRRGlobals, TimestampSettings}
 import app.logorrr.model.LogEntry
-import app.logorrr.views.search.OpsToolBar
+import app.logorrr.views.search.{OpsToolBar, TimestampSettingsRegion}
 import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.{FXCollections, ObservableList}
@@ -17,7 +17,7 @@ import net.ladstatt.util.log.TinyLog
 class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
                                   , logEntries: ObservableList[LogEntry]
                                   , chunkListView: ChunkListView[LogEntry]
-                                  , opsToolBar: OpsToolBar
+                                  , tsRegion: TimestampSettingsRegion
                                   , closeStage: => Unit)
   extends BorderPane with TinyLog:
 
@@ -70,8 +70,8 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
       }
     }
 
-  private val setTimestampFormatButton = new TimestampFormatSetButton(mutLogFileSettings, getSomeRange, timeFormatTf, chunkListView, logEntries, opsToolBar, closeStage)
-  private val resetTimestampFormatButton = new TimestampFormatResetButton(mutLogFileSettings, chunkListView, logEntries, opsToolBar, closeStage)
+  private val setTimestampFormatButton = new TimestampFormatSetButton(mutLogFileSettings, getSomeRange, timeFormatTf, chunkListView, logEntries, tsRegion, closeStage)
+  private val resetTimestampFormatButton = new TimestampFormatResetButton(mutLogFileSettings, chunkListView, logEntries, tsRegion, closeStage)
 
   // binding is just here to trigger refresh on timerSettingsLogTextView
   // has to be assigned to a val otherwise this won't get executed

@@ -1,7 +1,7 @@
 package app.logorrr.views.ops
 
 import app.logorrr.conf.FileId
-import javafx.beans.binding.Bindings
+import javafx.beans.binding.{Bindings, StringBinding}
 import javafx.beans.property.{Property, SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.scene.Node
 import javafx.scene.control.{Button, Tooltip}
@@ -36,8 +36,10 @@ abstract class SizeButton(calcId: SimpleObjectProperty[FileId] => String
 
 
   def bind(fileIdProperty: SimpleObjectProperty[FileId], sizeProperty: Property[Number]): Unit =
-    idProperty().bind(Bindings.createStringBinding(() => calcId(fileIdProperty), fileIdProperty))
+    val binding: StringBinding = Bindings.createStringBinding(() => calcId(fileIdProperty), fileIdProperty)
+    idProperty().bind(binding)
     this.sizeProperty.bindBidirectional(sizeProperty)
+
 
   def unbind(sizeProperty: Property[Number]): Unit =
     idProperty.unbind()

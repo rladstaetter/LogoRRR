@@ -24,7 +24,6 @@ object LogoRRRAccelerators extends TinyLog:
   def setActiveSearchTextField(textField: TextField): Unit = activeSearchTextField.set(textField)
 
 
-
   /**
    * CTRL-F (windows) or META/COMMAND-F (mac)
    *

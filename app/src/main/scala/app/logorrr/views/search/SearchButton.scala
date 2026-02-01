@@ -22,15 +22,14 @@ class SearchButton(fileId: FileId
   setTooltip(new Tooltip("search"))
   setMaxWidth(40)
 
-  setOnAction(_ => {
-    if searchTextField.getText.nonEmpty then {
-      val term = SearchTerm(searchTextField.getText, colorPicker.getValue, active = true)
-      addFilterFn(MutableSearchTerm(term))
-      resetColorPickerAndSearchField()
-    }
-  })
+  setOnAction:
+    _ =>
+      if searchTextField.getText.nonEmpty then
+        val term = SearchTerm(searchTextField.getText, colorPicker.getValue, active = true)
+        addFilterFn(MutableSearchTerm(term))
+        resetColorPickerAndSearchField()
+
 
   private def resetColorPickerAndSearchField(): Unit =
-    // select a random color for next search
     colorPicker.setValue(JfxUtils.randColor)
     searchTextField.clear()

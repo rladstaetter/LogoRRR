@@ -60,7 +60,7 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
       def accept(newVal: java.lang.Boolean): Unit =
         if newVal then {
           initContextMenu()
-          LogoRRRAccelerators.setActiveSearchTextField(logPane.opsToolBar.searchTextField)
+          LogoRRRAccelerators.setActiveSearchTextField(logPane.opsToolBar.searchRegion.searchTextField)
         } else {
           setContextMenu(null)
         }

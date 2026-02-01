@@ -5,7 +5,7 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, LogoRRRGlobals, SimpleRange, TimestampSettings}
 import app.logorrr.model.LogEntry
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.search.OpsToolBar
+import app.logorrr.views.search.{OpsToolBar, TimestampSettingsRegion}
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
 import javafx.scene.control.{Button, TextField}
@@ -25,7 +25,7 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
                                , timeFormatTf: TextField
                                , chunkListView: ChunkListView[LogEntry]
                                , logEntries: ObservableList[LogEntry]
-                               , opsToolBar: OpsToolBar
+                               , tsRegion: TimestampSettingsRegion
                                , closeStage: => Unit) extends Button("use settings for current log file"):
   setId(TimestampFormatSetButton.uiNode(mutLogFileSettings.getFileId).value)
   setPrefWidth(300)
@@ -34,7 +34,7 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
     range match {
       // startcol has to be smaller than endCol (and also of a certain size)
       // and the timeFormat is set to something
-      case Some((startCol, endCol)) if startCol < endCol && timeFormatTf.getText.nonEmpty=>
+      case Some((startCol, endCol)) if startCol < endCol && timeFormatTf.getText.nonEmpty =>
         val timestampSettings: TimestampSettings = TimestampSettings(startCol, endCol, timeFormatTf.getText.trim)
         mutLogFileSettings.setSomeLogEntryInstantFormat(Option(timestampSettings))
         LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
@@ -61,7 +61,7 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
         // activate listener again
         chunkListView.addInvalidationListener()
         // update slider boundaries
-        opsToolBar.initializeRanges()
+        tsRegion.initializeRanges()
       // on any other case just return None
       case _ =>
         mutLogFileSettings.setSomeLogEntryInstantFormat(None)
