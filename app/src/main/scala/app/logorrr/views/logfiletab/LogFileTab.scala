@@ -9,6 +9,7 @@ import javafx.beans.binding.Bindings
 import javafx.collections.ObservableList
 import javafx.event.Event
 import javafx.scene.control.*
+import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 
 import java.util.function.Consumer
@@ -69,7 +70,7 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
   val logPane = new LogFilePane(mutLogFileSettings, entries)
   val logFileTabToolTip = new LogFileTabToolTip
 
-  def init(): Unit =
+  def init(window : Window): Unit =
     // setup bindings ----
     idProperty().bind(Bindings.createStringBinding(() => {
       LogFileTab.uiNode(mutLogFileSettings.getFileId).value
@@ -94,7 +95,7 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
 
 
     setTooltip(logFileTabToolTip)
-    logPane.init()
+    logPane.init(window)
     setContent(logPane)
     setOnCloseRequest((_: Event) => shutdown())
 

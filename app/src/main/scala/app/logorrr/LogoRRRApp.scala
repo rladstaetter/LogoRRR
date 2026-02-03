@@ -45,7 +45,11 @@ object LogoRRRApp extends TinyLog:
 
     val groups: DefaultSearchTermGroups = DefaultSearchTermGroups(services.settings.searchTermGroups)
 
-    val logSource = new LogSource(groups, LogoRRRGlobals.getOrderedLogFileSettings, services.settings.someActive, new MainTabPane)
+    val logSource = new LogSource(
+       groups
+      , LogoRRRGlobals.getOrderedLogFileSettings
+      , services.settings.someActive
+      , new MainTabPane)
 
     val logoRRRMain = new LogoRRRMain(stage
       , services.fileIdService
@@ -66,7 +70,7 @@ class LogoRRRApp extends javafx.application.Application with TinyIo with TinyLog
 
   private val paths = LogoRRRApp.paths
 
-  def start(stage: Stage): Unit =
+  def start(primaryStage: Stage): Unit =
     val hostServices =
       if OsUtil.isMac then
         new MacNativeHostService
@@ -89,8 +93,8 @@ class LogoRRRApp extends javafx.application.Application with TinyIo with TinyLog
     val services = logorrr.services.LogoRRRServices(
       settings
       , hostServices
-      , new DefaultFileIdService(() => stage.getScene.getWindow)
+      , new DefaultFileIdService(() => primaryStage.getScene.getWindow)
       , isUnderTest = false)
 
-    LogoRRRApp.start(stage, services)
+    LogoRRRApp.start(primaryStage, services)
 

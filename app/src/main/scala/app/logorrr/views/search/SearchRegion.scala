@@ -1,24 +1,38 @@
 package app.logorrr.views.search
 
 import app.logorrr.conf.FileId
+import javafx.beans.property.{ObjectPropertyBase, SimpleListProperty}
 import javafx.scene.control.Control
 import javafx.scene.input.{KeyCode, KeyEvent}
 
-class SearchRegion(fileId: FileId, addFilterFn: MutableSearchTerm => Unit):
+class SearchRegion:
 
   /** textfield to enter search queries */
-  val searchTextField = new SearchTextField(fileId)
+  val searchTextField: SearchTextField = new SearchTextField
 
   /** control which enables selecting color for a search term */
-  private val colorPicker = new SearchColorPicker(fileId)
+  private val colorPicker = new SearchColorPicker
 
-  private val searchButton = new SearchButton(fileId, searchTextField, colorPicker, addFilterFn)
+  private val searchButton = new SearchButton
 
   def execSearchOnHitEnter(event: KeyEvent): Unit =
     if event.getCode == KeyCode.ENTER then
       searchButton.fire()
 
-  searchTextField.setOnKeyPressed(execSearchOnHitEnter)
-  colorPicker.setOnKeyPressed(execSearchOnHitEnter)
 
   val items: Seq[Control] = Seq[Control](searchTextField, colorPicker, searchButton)
+
+  def init(fileIdProperty: ObjectPropertyBase[FileId]
+           , searchTerms: SimpleListProperty[MutableSearchTerm]): Unit =
+    searchTextField.init(fileIdProperty)
+    colorPicker.init(fileIdProperty)
+    searchButton.init(fileIdProperty, searchTextField.textProperty, colorPicker.valueProperty(), searchTerms)
+    searchTextField.setOnKeyPressed(execSearchOnHitEnter)
+    colorPicker.setOnKeyPressed(execSearchOnHitEnter)
+
+  def shutdown(searchTerms: SimpleListProperty[MutableSearchTerm]): Unit =
+    searchTextField.shutdown()
+    colorPicker.shutdown()
+    searchButton.shutdown(searchTextField.textProperty, colorPicker.valueProperty(), searchTerms)
+
+

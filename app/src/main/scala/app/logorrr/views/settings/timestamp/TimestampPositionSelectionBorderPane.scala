@@ -1,12 +1,12 @@
 package app.logorrr.views.settings.timestamp
 
-import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.model.LogEntry
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import javafx.beans.property.{ObjectProperty, SimpleObjectProperty}
+import javafx.beans.property.{ObjectProperty, SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.collections.ObservableList
-import javafx.scene.control.{ListCell, ListView, SelectionMode}
+import javafx.scene.control.{ListCell, ListView}
 import javafx.scene.layout.BorderPane
 
 object TimestampPositionSelectionBorderPane extends UiNodeFileIdAware:
@@ -51,6 +51,16 @@ class TimestampPositionSelectionBorderPane(mutLogFileSettings: MutLogFileSetting
 
   def setEndCol(i: Int): Unit = endColProperty.set(i)
 
+  def bind(startColProperty: SimpleIntegerProperty, endColProperty: SimpleIntegerProperty): Unit =
+    startColProperty.bind(this.startColProperty)
+    endColProperty.bind(this.endColProperty)
+
+  def unbind(startColProperty: SimpleIntegerProperty
+             , endColProperty: SimpleIntegerProperty): Unit = {
+    startColProperty.unbind()
+    endColProperty.unbind()
+  }
+
   class LogEntryListCell extends ListCell[LogEntry]:
     styleProperty().bind(mutLogFileSettings.fontStyleBinding)
     setGraphic(null)
@@ -60,7 +70,7 @@ class TimestampPositionSelectionBorderPane(mutLogFileSettings: MutLogFileSetting
       Option(t) match
         case Some(e) =>
           setText(null)
-          setGraphic(TimerSettingsLogViewLabel(listView,mutLogFileSettings
+          setGraphic(TimerSettingsLogViewLabel(listView, mutLogFileSettings
             , e
             , maxLength
             , startColProperty

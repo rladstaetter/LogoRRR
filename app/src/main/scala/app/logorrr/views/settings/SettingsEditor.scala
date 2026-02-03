@@ -25,7 +25,7 @@ class SettingsEditor(owner: Stage, fileId: FileId) extends Stage:
   private val contentLayout = new VBox(10)
   VBox.setVgrow(contentLayout, Priority.ALWAYS)
   contentLayout.setPadding(new Insets(10))
-  val resetButton = new Button("Reset to factory defaults")
+  val resetButton = new Button("reset to factory defaults")
   resetButton.setId(SettingsEditor.ResetToDefaultButton.value)
   resetButton.setOnAction(_ => {
     LogoRRRGlobals.clearSearchTermGroups()
@@ -51,7 +51,7 @@ object CloseSettingsEditorButton extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseSettingsEditorButton])
 
-class CloseSettingsEditorButton(stage: Stage) extends Button("Apply & close") {
+class CloseSettingsEditorButton(stage: Stage) extends Button("apply & close") {
   setId(SettingsEditor.CloseButton.value)
   setOnAction(_ => stage.close())
 }

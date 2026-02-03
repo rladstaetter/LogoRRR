@@ -5,6 +5,7 @@ import app.logorrr.io.IoManager
 import app.logorrr.util.DndUtil
 import javafx.collections.ObservableList
 import javafx.scene.input.DragEvent
+import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 
 import java.nio.file.{Files, Path}

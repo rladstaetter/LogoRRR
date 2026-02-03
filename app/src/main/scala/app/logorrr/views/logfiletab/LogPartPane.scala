@@ -2,7 +2,7 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.FileId
 import app.logorrr.views.ops.{DecreaseSizeButton, IncreaseSizeButton}
-import javafx.beans.property.{Property, SimpleObjectProperty}
+import javafx.beans.property.{ObjectPropertyBase, Property, SimpleObjectProperty}
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.{ListView, Slider}
@@ -25,13 +25,13 @@ class LogPartPane(listView: ListView[?]
   setTop(hbox)
   setCenter(listView)
 
-  def bind(fileProperty: SimpleObjectProperty[FileId], boundProp: Property[Number]): Unit = {
+  def init(fileProperty: ObjectPropertyBase[FileId], boundProp: Property[Number]): Unit = {
     increaseButton.bind(fileProperty, boundProp)
     decreaseButton.bind(fileProperty, boundProp)
     slider.valueProperty().bindBidirectional(boundProp)
   }
 
-  def unbind(boundProp : Property[Number]): Unit = {
+  def shutdown(boundProp : Property[Number]): Unit = {
     increaseButton.unbind(boundProp)
     decreaseButton.unbind(boundProp)
     slider.valueProperty().unbindBidirectional(boundProp)

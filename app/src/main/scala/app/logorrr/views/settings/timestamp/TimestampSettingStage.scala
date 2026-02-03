@@ -1,7 +1,7 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.clv.ChunkListView
-import app.logorrr.conf.LogoRRRGlobals
+import app.logorrr.conf.TimestampSettings
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
@@ -17,35 +17,30 @@ object TimestampSettingStage:
 
 
 class TimestampSettingStage(settings: MutLogFileSettings,
-                            owner: Window,
                             chunkListView: ChunkListView[LogEntry],
                             logEntries: ObservableList[LogEntry],
                             tsRegion: TimestampSettingsRegion) extends Stage:
 
-  initOwner(owner)
   initModality(Modality.WINDOW_MODAL)
   setTitle(s"Specifiy timestamp pattern and position")
-  private val timeStampSettingsBorderPane =
-    new TimestampSettingsBorderPane(settings
-      , logEntries
-      , chunkListView
-      , tsRegion
-      , JfxUtils.closeStage(this)) {
-      init(LogoRRRGlobals.getTimestampSettings.map(_.mkImmutable()), settings.getSomeTimestampSettings)
-    }
 
-
-  val scene = new Scene(
-    timeStampSettingsBorderPane
-    , TimestampSettingStage.width
-    , TimestampSettingStage.height)
-
-
-  setScene(scene)
+  private val timeStampSettingsBorderPane = new TimestampSettingsBorderPane(settings
+    , logEntries
+    , chunkListView
+    , tsRegion
+    , JfxUtils.closeStage(this))
 
   setOnCloseRequest:
     _ =>
-      unbind()
+      shutdown()
       this.close()
 
-  def unbind(): Unit = timeStampSettingsBorderPane.unbind()
+  def init(someGlobalTimestampSettings: Option[TimestampSettings]
+           , someLocalTimestampSettings: Option[TimestampSettings]
+           , owner: Window): Unit =
+    initOwner(owner)
+    timeStampSettingsBorderPane.init(someGlobalTimestampSettings, someLocalTimestampSettings)
+    setScene(new Scene(timeStampSettingsBorderPane, TimestampSettingStage.width, TimestampSettingStage.height))
+
+  def shutdown(): Unit =
+    timeStampSettingsBorderPane.unbind()

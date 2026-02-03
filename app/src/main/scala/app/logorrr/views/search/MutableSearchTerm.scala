@@ -11,6 +11,9 @@ object MutableSearchTerm:
   val UnclassifiedColor: Color = Color.LIGHTGREY
   val UnclassifiedText = "Unclassified"
 
+  def apply(value: String, color: Color): MutableSearchTerm =
+    apply(SearchTerm(value, color, true))
+
   def apply(searchTerm: SearchTerm): MutableSearchTerm =
     apply(searchTerm.value, searchTerm.color, searchTerm.active)
 

@@ -1,9 +1,9 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.clv.ChunkListView
+import app.logorrr.conf.TimestampSettings
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.conf.{LogoRRRGlobals, TimestampSettings}
-import app.logorrr.model.{BoundFileId, LogEntry}
+import app.logorrr.model.{BoundFileId, IntStringBinding, LogEntry}
 import app.logorrr.views.search.TimestampSettingsRegion
 import javafx.beans.binding.Bindings
 import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty}
@@ -30,33 +30,13 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
   private val boundFileIdControls: Seq[? <: BoundFileId] =
     Seq(startColLabel, startColTf, endColLabel, endColTf)
 
-  private def getSomeRange: Option[(Int, Int)] = {
-    (getStartCol, getEndCol) match
-      case (a, b) if a <= b => Option((a, b))
-      case _ => None
-  }
-
+  private val rangeProperty = new SimpleObjectProperty[(Int, Int)]()
   private val startColProperty = new SimpleIntegerProperty()
   private val endColProperty = new SimpleIntegerProperty()
   private val timeFormatTf = new TimeFormatTextField(mutLogFileSettings.getFileId, "")
 
-  startColTf.textProperty().bind(Bindings.createStringBinding(() => {
-    Option(getStartCol) match {
-      case Some(value) => value.toString
-      case None => ""
-    }
-  }, startColProperty))
-
-  endColTf.textProperty().bind(Bindings.createStringBinding(() => {
-    Option(getEndCol) match {
-      case Some(value) => value.toString
-      case None => ""
-    }
-  }, endColProperty))
-
-
   private val resetTimestampFormatButton = new TimestampFormatResetButton(mutLogFileSettings, chunkListView, logEntries, tsRegion, closeStage)
-  private val applyAndCloseButton = new TimestampFormatSetButton(mutLogFileSettings, getSomeRange, timeFormatTf, chunkListView, logEntries, tsRegion, closeStage)
+  private val applyAndCloseButton = new TimestampFormatSetButton(mutLogFileSettings, rangeProperty, timeFormatTf, chunkListView, logEntries, tsRegion, closeStage)
 
   private val hyperlink: Hyperlink =
     val hl = TimestampSettings.dateFormatterHLink.mkHyperLink()
@@ -76,11 +56,7 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
       val entries = for i <- firstVisible until lastVisible yield logEntries.get(i)
       FXCollections.observableArrayList(entries *)
 
-  private val timerSettingsLogTextView =
-    val tslv = new TimestampPositionSelectionBorderPane(mutLogFileSettings, l)
-    startColProperty.bind(tslv.startColProperty)
-    endColProperty.bind(tslv.endColProperty)
-    tslv
+  private val timerSettingsLogTextView =new TimestampPositionSelectionBorderPane(mutLogFileSettings, l)
 
   private val spacer = new AlwaysGrowHorizontalRegion
 
@@ -101,6 +77,23 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
     }
   }
 
+
+  def initBindings(): Unit =
+    timerSettingsLogTextView.bind(startColProperty, endColProperty)
+
+    applyAndCloseButton.bindIdProperty(mutLogFileSettings.fileIdProperty)
+    boundFileIdControls.foreach(_.bindIdProperty(mutLogFileSettings.fileIdProperty))
+    startColTf.textProperty().bind(new IntStringBinding(startColProperty))
+    endColTf.textProperty().bind(new IntStringBinding(endColProperty))
+    rangeProperty.bind(Bindings.createObjectBinding(
+      () => {
+        (Option(startColProperty.get), Option(endColProperty.get)) match
+          case (Some(startCol), Some(endCol)) => (startCol, endCol)
+          case _ => null
+      }
+      , startColProperty
+      , endColProperty
+    ))
 
   def init(globalSettings: Option[TimestampSettings]
            , localSettings: Option[TimestampSettings]): Unit =
@@ -158,9 +151,13 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
 
   def getEndCol: java.lang.Integer = endColProperty.get()
 
-  def initBindings(): Unit =
-    boundFileIdControls.foreach(_.bindIdProperty(mutLogFileSettings.fileIdProperty))
 
-  def unbind(): Unit = boundFileIdControls.foreach(_.unbindIdProperty())
+  def unbind(): Unit =
+    timerSettingsLogTextView.unbind(startColProperty, endColProperty)
+    applyAndCloseButton.unbindIdProperty()
+    boundFileIdControls.foreach(_.unbindIdProperty())
+    startColTf.textProperty.unbind()
+    endColTf.textProperty.unbind()
+    rangeProperty.unbind()
 
 

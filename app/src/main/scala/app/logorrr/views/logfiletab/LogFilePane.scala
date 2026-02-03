@@ -15,9 +15,11 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{ListChangeListener, ObservableList}
+import javafx.scene.Scene
 import javafx.scene.control.SplitPane
 import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
+import javafx.stage.Window
 import javafx.util.Subscription
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -58,7 +60,7 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   // graphical display to the left
   private val chunkListView = LogoRRRChunkListView(mutLogFileSettings, filteredEntries, logTextView.scrollToItem, widthProperty)
 
-  val opsToolBar = OpsToolBar(mutLogFileSettings, chunkListView, entries, filteredEntries)
+  val opsToolBar = new OpsToolBar(mutLogFileSettings, chunkListView, entries, filteredEntries)
 
   private val searchTermToolBar = new SearchTermToolBar(mutLogFileSettings, filteredEntries)
 
@@ -102,9 +104,15 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
 
   private val pane = new SplitPane(chunkPane, textPane)
 
-  def init(): Unit =
-    textPane.bind(mutLogFileSettings.fileIdProperty, mutLogFileSettings.fontSizeProperty)
-    chunkPane.bind(mutLogFileSettings.fileIdProperty, mutLogFileSettings.blockSizeProperty)
+  def init(window: Window): Unit =
+    opsToolBar.init(window
+      , mutLogFileSettings.fileIdProperty
+      , mutLogFileSettings.autoScrollActiveProperty
+      , mutLogFileSettings.mutSearchTerms
+      , filteredEntries
+    )
+    textPane.init(mutLogFileSettings.fileIdProperty, mutLogFileSettings.fontSizeProperty)
+    chunkPane.init(mutLogFileSettings.fileIdProperty, mutLogFileSettings.blockSizeProperty)
     textSizeSlider.bind(mutLogFileSettings.fileIdProperty)
     blockSizeSlider.bind(mutLogFileSettings.fileIdProperty)
     autoScrollActiveProperty.bind(mutLogFileSettings.autoScrollActiveProperty)
@@ -129,8 +137,9 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   def getDividerPosition: Double = divider.getPosition
 
   def shutdown(): Unit =
-    textPane.unbind(mutLogFileSettings.fontSizeProperty)
-    chunkPane.unbind(mutLogFileSettings.blockSizeProperty)
+    opsToolBar.shutdown(mutLogFileSettings.autoScrollActiveProperty, mutLogFileSettings.mutSearchTerms, filteredEntries)
+    textPane.shutdown(mutLogFileSettings.fontSizeProperty)
+    chunkPane.shutdown(mutLogFileSettings.blockSizeProperty)
     textSizeSlider.unbind()
     blockSizeSlider.unbind()
     autoScrollActiveProperty.unbind()

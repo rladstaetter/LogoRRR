@@ -20,7 +20,7 @@ class TimestampFormatResetButton(mutLogFileSettings: MutLogFileSettings
                                  , chunkListView: ChunkListView[LogEntry]
                                  , logEntries: ObservableList[LogEntry]
                                  , tsRegion: TimestampSettingsRegion
-                                 , closeStage: => Unit) extends Button("reset"):
+                                 , closeStage: => Unit) extends Button("reset & close"):
   setId(TimestampFormatResetButton.uiNode(mutLogFileSettings.getFileId).value)
   setAlignment(Pos.CENTER)
   setPrefWidth(100)

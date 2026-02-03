@@ -3,9 +3,10 @@ package app.logorrr.views.settings.timestamp
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, LogoRRRGlobals, SimpleRange, TimestampSettings}
-import app.logorrr.model.LogEntry
+import app.logorrr.model.{BoundFileId, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.{OpsToolBar, TimestampSettingsRegion}
+import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
 import javafx.scene.control.{Button, TextField}
@@ -21,21 +22,20 @@ object TimestampFormatSetButton extends UiNodeFileIdAware:
  * definition will be updated
  * */
 class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
-                               , range: => Option[(Int, Int)]
+                               , rangeProperty: SimpleObjectProperty[(Int, Int)]
                                , timeFormatTf: TextField
                                , chunkListView: ChunkListView[LogEntry]
                                , logEntries: ObservableList[LogEntry]
                                , tsRegion: TimestampSettingsRegion
-                               , closeStage: => Unit) extends Button("Apply & close"):
-  setId(TimestampFormatSetButton.uiNode(mutLogFileSettings.getFileId).value)
+                               , closeStage: => Unit) extends Button("apply & close") with BoundFileId(TimestampFormatSetButton.uiNode(_).value):
   setPrefWidth(300)
   setAlignment(Pos.CENTER)
   setOnAction(_ => {
-    range match {
+    Option(rangeProperty.get(), timeFormatTf.getText.trim) match {
       // startcol has to be smaller than endCol (and also of a certain size)
       // and the timeFormat is set to something
-      case Some((startCol, endCol)) if startCol < endCol && timeFormatTf.getText.nonEmpty =>
-        val timestampSettings: TimestampSettings = TimestampSettings(startCol, endCol, timeFormatTf.getText.trim)
+      case Some((startCol, endCol), timeFormat) if startCol < endCol && timeFormat.nonEmpty =>
+        val timestampSettings: TimestampSettings = TimestampSettings(startCol, endCol, timeFormat)
         mutLogFileSettings.setSomeLogEntryInstantFormat(Option(timestampSettings))
         LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
 

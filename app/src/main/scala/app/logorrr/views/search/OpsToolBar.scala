@@ -4,52 +4,55 @@ import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.views.ops.time.{SliderVBox, TimeRange, TimeUtil, TimestampSettingsButton}
+import javafx.beans.property.{ObjectPropertyBase, Property, SimpleListProperty}
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
-import javafx.geometry.Pos
-import javafx.scene.Node
 import javafx.scene.control.*
+import javafx.stage.Window
 import net.ladstatt.util.os.OsUtil
 
 
 object OpsToolBar:
 
-  def apply(mutLogFileSettings: MutLogFileSettings
-            , chunkListView: ChunkListView[LogEntry]
-            , entries: ObservableList[LogEntry]
-            , filteredList: FilteredList[LogEntry]): OpsToolBar =
+  val w = 380
 
-    new OpsToolBar(mutLogFileSettings.getFileId
-      , mutLogFileSettings
-      , chunkListView
-      , mutLogFileSettings.mutSearchTerms.add(_)
-      , entries
-      , filteredList)
-
+  val width: Int = OsUtil.osFun(w + 2, w, w + 2)
 
 
 /**
  * Groups search ui widgets together.
- *
- * @param addFilterFn filter function which results from user interaction with SearchToolbar
  */
-class OpsToolBar(fileId: FileId
-                 , mutLogFileSettings: MutLogFileSettings
+class OpsToolBar(mutLogFileSettings: MutLogFileSettings
                  , chunkListView: ChunkListView[LogEntry]
-                 , addFilterFn: MutableSearchTerm => Unit
                  , logEntries: ObservableList[LogEntry]
                  , filteredList: FilteredList[LogEntry]) extends ToolBar:
 
   // layout
   setMaxHeight(Double.PositiveInfinity)
-  setStyle("""-fx-padding: 0px 0px 0px 4px;""")
-  val w = 380
-  setMinWidth(OsUtil.osFun(w + 2, w, w + 2))
+  setStyle("-fx-padding: 0px 0px 0px 4px;")
 
-  val searchRegion = new SearchRegion(fileId, addFilterFn)
-  val otherItemsRegion = new OtherItemsRegion(fileId, logEntries, filteredList)
-  val timestampSettingsRegion = new TimestampSettingsRegion(mutLogFileSettings, chunkListView, logEntries, filteredList)
+  setMinWidth(OpsToolBar.width)
+
+  val searchRegion = new SearchRegion
+  private val otherItemsRegion = new OtherItemsRegion
+  private val timestampSettingsRegion = new TimestampSettingsRegion(mutLogFileSettings, chunkListView, logEntries, filteredList)
 
   getItems.addAll(searchRegion.items ++ otherItemsRegion.items ++ timestampSettingsRegion.items *)
 
+  def init(window: Window
+           , fileIdProperty: ObjectPropertyBase[FileId]
+           , autoScrollProperty: Property[java.lang.Boolean]
+           , searchTerms: SimpleListProperty[MutableSearchTerm]
+           , filteredList: ObservableList[LogEntry]): Unit = {
+    searchRegion.init(fileIdProperty, searchTerms)
+    otherItemsRegion.init(fileIdProperty, autoScrollProperty, logEntries, filteredList)
+    timestampSettingsRegion.init(window)
+  }
+
+  def shutdown(autoScrollProperty: Property[java.lang.Boolean]
+               , searchTerms: SimpleListProperty[MutableSearchTerm]
+               , filteredList: ObservableList[LogEntry]): Unit = {
+    searchRegion.shutdown(searchTerms)
+    otherItemsRegion.shutdown(autoScrollProperty, logEntries, filteredList)
+    timestampSettingsRegion.shutdown()
+  }

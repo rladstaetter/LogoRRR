@@ -6,6 +6,7 @@ import app.logorrr.views.a11y.uinodes.UiNodes
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.beans.binding.Bindings
 import javafx.scene.control.TabPane
+import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 
 import scala.collection.mutable
@@ -57,7 +58,7 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
   /** Adds a new logfile to display and initializes bindings and listeners */
   override def addData(model: LogorrrModel): Unit =
     val tab = LogFileTab(model)
-    tab.init()
+    tab.init(getScene.getWindow)
     getTabs.add(tab)
     tab.initContextMenu()
 

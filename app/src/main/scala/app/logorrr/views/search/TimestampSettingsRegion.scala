@@ -1,7 +1,7 @@
 package app.logorrr.views.search
 
 import app.logorrr.clv.ChunkListView
-import app.logorrr.conf.FileId
+import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.views.ops.time.{SliderVBox, TimeRange, TimeUtil, TimestampSettingsButton}
@@ -9,8 +9,9 @@ import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
 import javafx.geometry.Pos
 import javafx.scene.Node
-import javafx.scene.control.*
-import net.ladstatt.util.os.OsUtil
+import javafx.stage.Window
+
+import scala.language.postfixOps
 
 
 class TimestampSettingsRegion(mutLogFileSettings: MutLogFileSettings
@@ -60,3 +61,14 @@ class TimestampSettingsRegion(mutLogFileSettings: MutLogFileSettings
 
 
   val items: Seq[Node] = Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox)
+
+  def init(owner: Window): Unit =
+    timestampSettingsButton.init(
+      mutLogFileSettings.fileIdProperty
+      , mutLogFileSettings.hasTimestampSetting
+      , LogoRRRGlobals.getTimestampSettings.map(_.mkImmutable())
+      , mutLogFileSettings.getSomeTimestampSettings
+      , owner)
+
+  def shutdown(): Unit =
+    timestampSettingsButton.unbind()

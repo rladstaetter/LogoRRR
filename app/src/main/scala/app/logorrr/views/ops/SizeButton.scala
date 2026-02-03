@@ -2,12 +2,12 @@ package app.logorrr.views.ops
 
 import app.logorrr.conf.FileId
 import javafx.beans.binding.{Bindings, StringBinding}
-import javafx.beans.property.{Property, SimpleIntegerProperty, SimpleObjectProperty}
+import javafx.beans.property.{ObjectPropertyBase, Property, SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.scene.Node
 import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.input.{KeyCode, KeyEvent}
 
-abstract class SizeButton(calcId: SimpleObjectProperty[FileId] => String
+abstract class SizeButton(calcId: ObjectPropertyBase[FileId] => String
                           , node: Node
                           , step: Int
                           , boundary: Int
@@ -35,7 +35,7 @@ abstract class SizeButton(calcId: SimpleObjectProperty[FileId] => String
       if cmp(nextSize, boundary) then setSize(nextSize) else setSize(boundary)
 
 
-  def bind(fileIdProperty: SimpleObjectProperty[FileId], sizeProperty: Property[Number]): Unit =
+  def bind(fileIdProperty: ObjectPropertyBase[FileId], sizeProperty: Property[Number]): Unit =
     val binding: StringBinding = Bindings.createStringBinding(() => calcId(fileIdProperty), fileIdProperty)
     idProperty().bind(binding)
     this.sizeProperty.bindBidirectional(sizeProperty)

@@ -52,9 +52,13 @@ object TimerSlider extends UiNodeFileIdAndPosAware:
   val Width = 350
 
   def format(epochMilli: Long, formatter: DateTimeFormatter): String =
-    val instant = Instant.ofEpochMilli(epochMilli)
-    val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault)
-    dateTime.format(formatter)
+    Option(formatter) match {
+      case Some(value) =>
+        val instant = Instant.ofEpochMilli(epochMilli)
+        val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault)
+        dateTime.format(value)
+      case None => ""
+    }
 
 
   override def uiNode(id: FileId, pos: Pos): UiNode = UiNode(id, pos, classOf[TimerSlider])

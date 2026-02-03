@@ -1,22 +1,28 @@
 package app.logorrr.views.ops.time
 
 import app.logorrr.clv.ChunkListView
-import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.model.LogEntry
+import app.logorrr.conf.{FileId, TimestampSettings}
+import app.logorrr.model.{BoundFileId, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.TimestampSettingsRegion
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
+import javafx.beans.binding.BooleanBinding
+import javafx.beans.property.ObjectPropertyBase
 import javafx.collections.ObservableList
-import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.layout.StackPane
-import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
+import javafx.stage.Window
 import org.kordamp.ikonli.javafx.FontIcon
 
 object TimestampSettingsButton extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[TimestampSettingsButton])
 
+
+class ExclamationCircleFontIcon extends FontIcon:
+  setStyle("-fx-icon-code:fas-exclamation-circle;-fx-icon-color:rgba(255, 0, 0, 1);-fx-icon-size:8;")
+  setTranslateX(10)
+  setTranslateY(-10)
 
 /**
  * Displays a clock in the ops tool bar, with a red exclamation mark if there is no setting for the
@@ -31,37 +37,24 @@ object TimestampSettingsButton extends UiNodeFileIdAware:
 class TimestampSettingsButton(settings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
-                              , tsRegion: TimestampSettingsRegion) extends StackPane:
+                              , tsRegion: TimestampSettingsRegion)
+  extends StackPane with BoundFileId(TimestampSettingsButton.uiNode(_).value):
 
-  setId(TimestampSettingsButton.uiNode(settings.getFileId).value)
-
-  // since timerbutton is a stackpane, this css commands are necessary to have the same effect as
-  // defined in primer-light.css
-  val button: Button =
-    val btn = new Button()
-    btn.setBackground(null)
-    btn.setStyle(
-      """
-        |-color-button-bg: -color-bg-subtle;
-        |-fx-background-insets: 0;
-        |""".stripMargin)
-    btn.setGraphic(new FontIcon(FontAwesomeRegular.CLOCK))
-    btn.setTooltip(new Tooltip("configure time format"))
-    btn.setOnAction:
-      _ =>
-        val stage = new TimestampSettingStage(settings, getScene.getWindow, chunkListView, logEntries, tsRegion)
-        stage.showAndWait()
-    btn
-
-  private val fontIcon =
-    val icon = new FontIcon()
-    icon.setStyle("-fx-icon-code:fas-exclamation-circle;-fx-icon-color:rgba(255, 0, 0, 1);-fx-icon-size:8;")
-    icon.setTranslateX(10)
-    icon.setTranslateY(-10)
-
-    /** red exclamation mark is only visible if there is no timestamp setting for a given log file */
-    icon.visibleProperty().bind(settings.hasTimestampSetting.not())
-    icon
+  private val button: ClockButton = new ClockButton(new TimestampSettingStage(settings, chunkListView, logEntries, tsRegion))
+  private val fontIcon = new ExclamationCircleFontIcon
 
   getChildren.addAll(button, fontIcon)
 
+  def init(fileIdProperty: ObjectPropertyBase[FileId]
+           , hasTimestampSetting: BooleanBinding
+           , someGlobalTimestampSettings: Option[TimestampSettings]
+           , someLocalTimestampSettings: Option[TimestampSettings]
+           , owner: Window): Unit =
+    button.init(someGlobalTimestampSettings, someLocalTimestampSettings, owner)
+    bindIdProperty(fileIdProperty)
+    fontIcon.visibleProperty().bind(hasTimestampSetting.not())
+
+  def unbind(): Unit =
+    button.shutdown()
+    unbindIdProperty()
+    fontIcon.visibleProperty().unbind()

@@ -1,7 +1,8 @@
 package app.logorrr.model
 
 import app.logorrr.conf.FileId
-import javafx.scene.Node
+import javafx.scene.{Node, Scene}
+import javafx.stage.Window
 
 trait UiTarget extends Node:
 

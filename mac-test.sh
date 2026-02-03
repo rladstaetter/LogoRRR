@@ -1,4 +1,4 @@
 #!/bin/bash
 
 source "$(dirname "$0")/scripts/common.sh"
-build package app.logorrr:app-tests
+build install app.logorrr:app-tests

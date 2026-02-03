@@ -1,7 +1,7 @@
 package app.logorrr.views.text
 
 import app.logorrr.conf.FileId
-import app.logorrr.model.LogEntry
+import app.logorrr.model.{BoundFileId, LogEntry}
 import app.logorrr.util.{JetbrainsMonoFontStyleBinding, JfxUtils}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.MutableSearchTerm
@@ -23,7 +23,7 @@ object LogTextView extends UiNodeFileIdAware:
 
 class LogTextView(filteredList: FilteredList[LogEntry])
   extends ListView[LogEntry]
-    with TinyLog:
+    with TinyLog with BoundFileId(LogTextView.uiNode(_).value):
 
   // property which contains selected line number, bidirectionally bound to MutLogFileSettings
   private val selectedLineNumberProperty = new SimpleIntegerProperty()
@@ -148,7 +148,7 @@ class LogTextView(filteredList: FilteredList[LogEntry])
            , firstVisibleTextCellIndexProperty: Property[Number]
            , lastVisibleTextCellIndexProperty: Property[Number]
           ): Unit = {
-    idProperty().bind(Bindings.createStringBinding(() => LogTextView.uiNode(fileIdProperty.get).value, fileIdProperty))
+    bindIdProperty(fileIdProperty)
     this.selectedLineNumberProperty.bindBidirectional(selectedLineNumberProperty)
     this.fontsizeProperty.bind(fontSizeProperty)
     this.firstVisibleTextCellIndexProperty.bindBidirectional(firstVisibleTextCellIndexProperty)
@@ -161,7 +161,7 @@ class LogTextView(filteredList: FilteredList[LogEntry])
              , firstVisibleTextCellIndexProperty: Property[Number]
              , lastVisibleTextCellIndexProperty: Property[Number]
             ): Unit = {
-    idProperty.unbind()
+    unbindIdProperty()
     this.selectedLineNumberProperty.unbindBidirectional(selectedLineNumberProperty)
     this.fontsizeProperty.unbind()
     this.firstVisibleTextCellIndexProperty.unbindBidirectional(firstVisibleTextCellIndexProperty)

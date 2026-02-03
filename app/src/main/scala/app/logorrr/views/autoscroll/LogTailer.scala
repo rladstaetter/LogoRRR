@@ -3,7 +3,7 @@ package app.logorrr.views.autoscroll
 import app.logorrr.conf.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.views.search.FileIdPropertyHolder
-import javafx.beans.property.{SimpleListProperty, SimpleObjectProperty}
+import javafx.beans.property.{ObjectPropertyBase, SimpleListProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, ObservableList}
 import net.ladstatt.util.log.TinyLog
 
@@ -30,12 +30,12 @@ class LogTailer extends TinyLog {
 
   def logFile: File = Option(fileIdProperty.get()).map(_.asPath.toFile).orNull
 
-  def init(fileIdProperty: SimpleObjectProperty[FileId], entries: ObservableList[LogEntry]): Unit = {
+  def init(fileIdProperty: ObjectPropertyBase[FileId], entries: ObservableList[LogEntry]): Unit = {
     this.fileIdProperty.bindBidirectional(fileIdProperty)
     this.entriesProperty.bindContentBidirectional(entries)
   }
 
-  def shutdown(fileIdProperty: SimpleObjectProperty[FileId], entries: ObservableList[LogEntry]): Unit = {
+  def shutdown(fileIdProperty: ObjectPropertyBase[FileId], entries: ObservableList[LogEntry]): Unit = {
     this.fileIdProperty.unbindBidirectional(fileIdProperty)
     this.entriesProperty.unbindContentBidirectional(entries)
   }
