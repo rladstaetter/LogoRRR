@@ -2,10 +2,10 @@ package app.logorrr.views.settings.timestamp
 
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.conf.{FileId, LogoRRRGlobals, SimpleRange, TimestampSettings}
+import app.logorrr.conf.{FileId, LogoRRRGlobals, TimestampSettings}
 import app.logorrr.model.{BoundFileId, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.search.{OpsToolBar, TimestampSettingsRegion}
+import app.logorrr.views.search.TimestampSettingsRegion
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
@@ -30,44 +30,44 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
                                , closeStage: => Unit) extends Button("apply & close") with BoundFileId(TimestampFormatSetButton.uiNode(_).value):
   setPrefWidth(300)
   setAlignment(Pos.CENTER)
-  setOnAction(_ => {
-    Option(rangeProperty.get(), timeFormatTf.getText.trim) match {
-      // startcol has to be smaller than endCol (and also of a certain size)
-      // and the timeFormat is set to something
-      case Some((startCol, endCol), timeFormat) if startCol < endCol && timeFormat.nonEmpty =>
-        val timestampSettings: TimestampSettings = TimestampSettings(startCol, endCol, timeFormat)
-        mutLogFileSettings.setSomeLogEntryInstantFormat(Option(timestampSettings))
-        LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
+  setOnAction:
+    _ =>
+      Option(rangeProperty.get(), timeFormatTf.getText.trim) match {
+        // startcol has to be smaller than endCol (and also of a certain size)
+        // and the timeFormat is set to something
+        case Some((startCol, endCol), timeFormat) if startCol < endCol && timeFormat.nonEmpty =>
+          val timestampSettings: TimestampSettings = TimestampSettings(startCol, endCol, timeFormat)
+          mutLogFileSettings.setSomeTimestampSettings(Option(timestampSettings))
+          LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
 
-        chunkListView.removeInvalidationListener()
-        var someFirstEntryTimestamp: Option[Instant] = None
+          chunkListView.removeInvalidationListener()
+          var someFirstEntryTimestamp: Option[Instant] = None
 
-        val tempList = new util.ArrayList[LogEntry]()
-        for i <- 0 until logEntries.size() do {
-          val e = logEntries.get(i)
-          val someInstant = TimestampSettings.parseInstant(e.value, timestampSettings)
-          if someFirstEntryTimestamp.isEmpty then {
-            someFirstEntryTimestamp = someInstant
+          val tempList = new util.ArrayList[LogEntry]()
+          for i <- 0 until logEntries.size() do {
+            val e = logEntries.get(i)
+            val someInstant = TimestampSettings.parseInstant(e.value, timestampSettings)
+            if someFirstEntryTimestamp.isEmpty then {
+              someFirstEntryTimestamp = someInstant
+            }
+
+            val someDiffFromStart: Option[Duration] = for
+              firstEntry <- someFirstEntryTimestamp
+              instant <- someInstant
+            yield Duration.between(firstEntry, instant)
+
+            tempList.add(e.copy(someInstant = someInstant, someDurationSinceFirstInstant = someDiffFromStart))
           }
-
-          val someDiffFromStart: Option[Duration] = for
-            firstEntry <- someFirstEntryTimestamp
-            instant <- someInstant
-          yield Duration.between(firstEntry, instant)
-
-          tempList.add(e.copy(someInstant = someInstant, someDurationSinceFirstInstant = someDiffFromStart))
-        }
-        logEntries.setAll(tempList)
-        // activate listener again
-        chunkListView.addInvalidationListener()
-        // update slider boundaries
-        tsRegion.initializeRanges()
-      // on any other case just return None
-      case _ =>
-        mutLogFileSettings.setSomeLogEntryInstantFormat(None)
-    }
-
-    closeStage
-  })
+          logEntries.setAll(tempList)
+          // activate listener again
+          chunkListView.addInvalidationListener()
+          // update slider boundaries
+          //tsRegion.initializeRanges()
+          println("initialize range")
+        // on any other case just return None
+        case _ =>
+          mutLogFileSettings.setSomeTimestampSettings(None)
+      }
+      closeStage
 
 

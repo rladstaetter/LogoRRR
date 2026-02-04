@@ -49,7 +49,7 @@ class MutLogFileSettings:
 
   val fileIdProperty = new SimpleObjectProperty[FileId]()
   private val firstOpenedProperty = new SimpleLongProperty()
-  private val dateTimeFormatterProperty = new SimpleObjectProperty[DateTimeFormatter](TimestampSettings.DefaultFormatter)
+  val dateTimeFormatterProperty = new SimpleObjectProperty[DateTimeFormatter](TimestampSettings.DefaultFormatter)
 
   val fontSizeProperty = new SimpleIntegerProperty()
   val blockSizeProperty = new SimpleIntegerProperty()
@@ -101,8 +101,7 @@ class MutLogFileSettings:
    * @param filteredList list to filter
    */
   def updateActiveFilter(filteredList: FilteredList[LogEntry]): Unit =
-    filteredList.setPredicate((entry: LogEntry) =>
-      matchTimeRange(entry) && matchFilter(entry))
+    filteredList.setPredicate((entry: LogEntry) => matchTimeRange(entry) && matchFilter(entry))
 
 
   private def matchTimeRange(entry: LogEntry): Boolean =
@@ -152,7 +151,7 @@ class MutLogFileSettings:
 
   val fontStyleBinding: StringBinding = new JetbrainsMonoFontStyleBinding(fontSizeProperty)
 
-  def setSomeLogEntryInstantFormat(timestampSettings: Option[TimestampSettings]): Unit =
+  def setSomeTimestampSettings(timestampSettings: Option[TimestampSettings]): Unit =
     someTimestampSettings.set(timestampSettings)
     timestampSettings match
       case Some(value) => setDateTimeFormatter(value.dateTimeFormatter)

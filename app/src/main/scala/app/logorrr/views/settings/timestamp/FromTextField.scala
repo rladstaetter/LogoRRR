@@ -9,7 +9,7 @@ object FromTextField extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[FromTextField])
 
-class FromTextField extends TextField
-  with BoundFileId(f => FromTextField.uiNode(f).value):
-  setPrefWidth(60)
-  setEditable(false)
+class FromTextField extends ATextField(FromTextField.uiNode(_).value)
+
+
+

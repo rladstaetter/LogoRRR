@@ -1,17 +1,18 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.clv.ChunkListView
-import app.logorrr.conf.TimestampSettings
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.conf.{FileId, LogoRRRGlobals, TimestampSettings}
 import app.logorrr.model.{BoundFileId, IntStringBinding, LogEntry}
 import app.logorrr.views.search.TimestampSettingsRegion
 import javafx.beans.binding.Bindings
-import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty}
+import javafx.beans.property.*
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.geometry.{Insets, Pos}
 import javafx.scene.control.*
 import javafx.scene.layout.{BorderPane, HBox, VBox}
 import net.ladstatt.util.log.TinyLog
+
 
 
 class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
@@ -21,28 +22,11 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
                                   , closeStage: => Unit)
   extends BorderPane with TinyLog:
 
-  private val startColLabel = new FromLabel
-  private val startColTf = new FromTextField
+  val sideBar = new SideBar
 
-  private val endColLabel = new ToLabel
-  private val endColTf = new ToTextField
+  private val startColProperty = new SimpleObjectProperty[java.lang.Integer]()
+  private val endColProperty = new SimpleObjectProperty[java.lang.Integer]()
 
-  private val boundFileIdControls: Seq[? <: BoundFileId] =
-    Seq(startColLabel, startColTf, endColLabel, endColTf)
-
-  private val rangeProperty = new SimpleObjectProperty[(Int, Int)]()
-  private val startColProperty = new SimpleIntegerProperty()
-  private val endColProperty = new SimpleIntegerProperty()
-  private val timeFormatTf = new TimeFormatTextField(mutLogFileSettings.getFileId, "")
-
-  private val resetTimestampFormatButton = new TimestampFormatResetButton(mutLogFileSettings, chunkListView, logEntries, tsRegion, closeStage)
-  private val applyAndCloseButton = new TimestampFormatSetButton(mutLogFileSettings, rangeProperty, timeFormatTf, chunkListView, logEntries, tsRegion, closeStage)
-
-  private val hyperlink: Hyperlink =
-    val hl = TimestampSettings.dateFormatterHLink.mkHyperLink()
-    hl.setAlignment(Pos.CENTER)
-    hl.setPrefWidth(150)
-    hl
 
   private val ShowMax = 26 // how many rows should be shown in the TimeStamp Settings Dialog at max
   private val showThisManyRows = if logEntries.size() > ShowMax then ShowMax else logEntries.size()
@@ -56,16 +40,15 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
       val entries = for i <- firstVisible until lastVisible yield logEntries.get(i)
       FXCollections.observableArrayList(entries *)
 
-  private val timerSettingsLogTextView =new TimestampPositionSelectionBorderPane(mutLogFileSettings, l)
+  /** dialog where start and end column are to be defined via mouseclick */
+  private val timerSettingsLogTextView = new TsStartEndColDialog(mutLogFileSettings, l)
 
-  private val spacer = new AlwaysGrowHorizontalRegion
-
-  private val timeFormatBar = new ToolBar(hyperlink, timeFormatTf, spacer, applyAndCloseButton, resetTimestampFormatButton)
+  private val footer = new TimeSettingsFooter(mutLogFileSettings, logEntries, chunkListView, tsRegion, closeStage)
 
   def updateSettings(settings: TimestampSettings): Unit = {
     timerSettingsLogTextView.startColProperty.set(settings.startCol)
     timerSettingsLogTextView.endColProperty.set(settings.endCol)
-    timeFormatTf.setText(settings.dateTimePattern)
+    footer.initDateTimePattern(settings.dateTimePattern)
   }
 
   private def initSettings(globalSettings: Option[TimestampSettings]
@@ -77,87 +60,28 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
     }
   }
 
-
   def initBindings(): Unit =
-    timerSettingsLogTextView.bind(startColProperty, endColProperty)
-
-    applyAndCloseButton.bindIdProperty(mutLogFileSettings.fileIdProperty)
-    boundFileIdControls.foreach(_.bindIdProperty(mutLogFileSettings.fileIdProperty))
-    startColTf.textProperty().bind(new IntStringBinding(startColProperty))
-    endColTf.textProperty().bind(new IntStringBinding(endColProperty))
-    rangeProperty.bind(Bindings.createObjectBinding(
-      () => {
-        (Option(startColProperty.get), Option(endColProperty.get)) match
-          case (Some(startCol), Some(endCol)) => (startCol, endCol)
-          case _ => null
-      }
+    sideBar.init(mutLogFileSettings.fileIdProperty, startColProperty, endColProperty)
+    timerSettingsLogTextView.init(mutLogFileSettings.fileIdProperty
+      , mutLogFileSettings.getSomeTimestampSettings
+      , LogoRRRGlobals.getTimestampSettings.map(_.mkImmutable())
       , startColProperty
-      , endColProperty
-    ))
+      , endColProperty)
+    footer.init(startColProperty, endColProperty)
 
   def init(globalSettings: Option[TimestampSettings]
            , localSettings: Option[TimestampSettings]): Unit =
     initBindings()
     initSettings(globalSettings, localSettings)
-    // Left Sidebar for Column Inputs (The "Selection" phase)
-    val selectionSettings = new VBox(15)
-    selectionSettings.setPadding(new Insets(15))
-    selectionSettings.setPrefWidth(200)
-    selectionSettings.setStyle("-fx-background-color: #f4f4f4; -fx-border-color: #ddd; -fx-border-width: 0 1 0 0;")
-
-    val rangeLabel = new Label("1. Define Column Range")
-    rangeLabel.setStyle("-fx-font-weight: bold;")
-
-    val fromBox = new VBox(5, startColLabel, startColTf)
-    val toBox = new VBox(5, endColLabel, endColTf)
-
-    val description = new Label("Click on the preview text\nto select columns.")
-    selectionSettings.getChildren.addAll(rangeLabel, fromBox, toBox, description)
-    setLeft(selectionSettings)
-
-    // 3. Center stays as the Visual Selection view
+    setLeft(sideBar)
     setCenter(timerSettingsLogTextView)
-
-    // 4. Bottom for Format and Actions (The "Finalization" phase)
-    val footer = new VBox(10)
-    footer.setPadding(new Insets(15))
-    footer.setStyle("-fx-background-color: #eee; -fx-border-color: #ccc; -fx-border-width: 1 0 0 0;")
-
-    val formatLabel = new Label("2. Define Time Pattern")
-    formatLabel.setStyle("-fx-font-weight: bold;")
-
-    val formatInputRow = new HBox(10)
-    formatInputRow.setAlignment(Pos.CENTER_LEFT)
-    // Make TextField expand to fill space
-    HBox.setHgrow(timeFormatTf, javafx.scene.layout.Priority.ALWAYS)
-    timeFormatTf.setPromptText("e.g. yyyy-MM-dd HH:mm:ss.SSS")
-
-    formatInputRow.getChildren.addAll(timeFormatTf, hyperlink)
-
-    val actionRow = new HBox(10)
-    actionRow.setAlignment(Pos.CENTER_RIGHT)
-    actionRow.getChildren.addAll(resetTimestampFormatButton, spacer, applyAndCloseButton)
-
-    footer.getChildren.addAll(formatLabel, formatInputRow, actionRow)
     setBottom(footer)
     timerSettingsLogTextView.listView.requestFocus()
 
 
-  def setStartCol(startCol: Int): Unit = startColProperty.set(startCol)
-
-  def setEndCol(endCol: Int): Unit = endColProperty.set(endCol)
-
-  def getStartCol: java.lang.Integer = startColProperty.get()
-
-  def getEndCol: java.lang.Integer = endColProperty.get()
-
-
-  def unbind(): Unit =
-    timerSettingsLogTextView.unbind(startColProperty, endColProperty)
-    applyAndCloseButton.unbindIdProperty()
-    boundFileIdControls.foreach(_.unbindIdProperty())
-    startColTf.textProperty.unbind()
-    endColTf.textProperty.unbind()
-    rangeProperty.unbind()
+  def shutdown(): Unit =
+    sideBar.shutdown()
+    timerSettingsLogTextView.shutdown(startColProperty, endColProperty)
+    footer.shutdown()
 
 

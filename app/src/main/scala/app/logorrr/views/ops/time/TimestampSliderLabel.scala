@@ -1,14 +1,21 @@
 package app.logorrr.views.ops.time
 
-import app.logorrr.conf.mut.MutLogFileSettings
-import javafx.beans.binding.Bindings
-import javafx.scene.control.{Label, Slider}
+import javafx.beans.binding.BooleanBinding
+import javafx.beans.property.{DoubleProperty, SimpleObjectProperty}
+import javafx.scene.control.Label
 
-class TimestampSliderLabel(mutLogFileSettings: MutLogFileSettings
-                           , slider: Slider) extends Label:
+import java.time.format.DateTimeFormatter
 
-  textProperty().bind(Bindings.createStringBinding(() => {
-    TimerSlider.format(slider.getValue.longValue(), mutLogFileSettings.getDateTimeFormatter)
-  }, slider.valueProperty))
-  visibleProperty().bind(mutLogFileSettings.hasTimestampSetting)
 
+class TimestampSliderLabel extends Label:
+
+  def init(hasTimestampBinding: BooleanBinding
+           , valueProperty: DoubleProperty
+           , dateTimeFormatterProperty: SimpleObjectProperty[DateTimeFormatter]): Unit = {
+    visibleProperty().bind(hasTimestampBinding)
+    textProperty.bind(new DateTimeFormatterBinding(valueProperty, dateTimeFormatterProperty))
+  }
+
+  def shutdown(): Unit =
+    visibleProperty().unbind()
+    textProperty.unbind()

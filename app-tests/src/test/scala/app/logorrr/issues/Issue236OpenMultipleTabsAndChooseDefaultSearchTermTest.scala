@@ -17,8 +17,9 @@ import java.util.function.Predicate
 /**
  * https://github.com/rladstaetter/LogoRRR/issues/236
  *
- * Shows that the default filters are used for a file after the first file was opened and the filter selection
+ * Shows that the default search terms are used for a file after the first file was opened and the it's search term selection
  * was changed.
+ *
  * */
 class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
   extends MultipleFileApplicationTest(TestFiles.seq)

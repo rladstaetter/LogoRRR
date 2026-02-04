@@ -43,4 +43,4 @@ class TimestampSettingStage(settings: MutLogFileSettings,
     setScene(new Scene(timeStampSettingsBorderPane, TimestampSettingStage.width, TimestampSettingStage.height))
 
   def shutdown(): Unit =
-    timeStampSettingsBorderPane.unbind()
+    timeStampSettingsBorderPane.shutdown()
