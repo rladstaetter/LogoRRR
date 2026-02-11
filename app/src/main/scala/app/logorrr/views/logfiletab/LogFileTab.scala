@@ -1,7 +1,7 @@
 package app.logorrr.views.logfiletab
 
+import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.model.{FileIdDividerSearchTerm, LogEntry, LogorrrModel}
 import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
@@ -70,7 +70,7 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
   val logPane = new LogFilePane(mutLogFileSettings, entries)
   val logFileTabToolTip = new LogFileTabToolTip
 
-  def init(window : Window): Unit =
+  def init(window: Window): Unit =
     // setup bindings ----
     idProperty().bind(Bindings.createStringBinding(() => {
       LogFileTab.uiNode(mutLogFileSettings.getFileId).value
@@ -95,7 +95,7 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
 
 
     setTooltip(logFileTabToolTip)
-    logPane.init(window)
+    logPane.init(window, mutLogFileSettings.fileIdProperty)
     setContent(logPane)
     setOnCloseRequest((_: Event) => shutdown())
 

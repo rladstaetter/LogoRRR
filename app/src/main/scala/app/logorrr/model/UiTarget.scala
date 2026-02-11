@@ -1,6 +1,7 @@
 package app.logorrr.model
 
 import app.logorrr.conf.FileId
+import javafx.beans.property.ObjectPropertyBase
 import javafx.scene.{Node, Scene}
 import javafx.stage.Window
 

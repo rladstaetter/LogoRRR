@@ -2,8 +2,9 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTerm}
-import app.logorrr.model.{FileIdDividerSearchTerm, LogEntry, LogorrrModel, UiTarget}
+import app.logorrr.model.*
 import app.logorrr.util.*
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.block.BlockConstants
 import app.logorrr.views.ops.*
@@ -11,7 +12,7 @@ import app.logorrr.views.search.st.SearchTermToolBar
 import app.logorrr.views.search.{MutableSearchTerm, OpsToolBar}
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
-import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.{ObjectPropertyBase, SimpleBooleanProperty}
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{ListChangeListener, ObservableList}
@@ -24,11 +25,16 @@ import javafx.util.Subscription
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+object LogFilePane extends UiNodeFileIdAware:
+
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogFilePane])
+
+
 class LogFilePane(mutLogFileSettings: MutLogFileSettings
-                  , val entries: ObservableList[LogEntry]) extends BorderPane with UiTarget:
+                  , val entries: ObservableList[LogEntry])
+  extends BorderPane with UiTarget with BoundFileId(LogFilePane.uiNode(_).value):
 
   setStyle("-fx-background-color: white;")
-
   /** provides a tool to observe log files */
   private val logTailer = new LogTailer
 
@@ -104,26 +110,28 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
 
   private val pane = new SplitPane(chunkPane, textPane)
 
-  def init(window: Window): Unit =
+  def init(window: Window
+           , fileIdProperty: ObjectPropertyBase[FileId]): Unit =
 
+    bindIdProperty(fileIdProperty)
     searchTermToolBar.init()
     opsToolBar.init(window
-      , mutLogFileSettings.fileIdProperty
+      , fileIdProperty
       , mutLogFileSettings.autoScrollActiveProperty
       , mutLogFileSettings.mutSearchTerms
       , filteredEntries
     )
-    textPane.init(mutLogFileSettings.fileIdProperty, mutLogFileSettings.fontSizeProperty)
-    chunkPane.init(mutLogFileSettings.fileIdProperty, mutLogFileSettings.blockSizeProperty)
-    textSizeSlider.bind(mutLogFileSettings.fileIdProperty)
-    blockSizeSlider.bind(mutLogFileSettings.fileIdProperty)
+    textPane.init(fileIdProperty, mutLogFileSettings.fontSizeProperty)
+    chunkPane.init(fileIdProperty, mutLogFileSettings.blockSizeProperty)
+    textSizeSlider.bindIdProperty(fileIdProperty)
+    blockSizeSlider.bindIdProperty(fileIdProperty)
     autoScrollActiveProperty.bind(mutLogFileSettings.autoScrollActiveProperty)
 
-    logTailer.init(mutLogFileSettings.fileIdProperty, entries)
+    logTailer.init(fileIdProperty, entries)
     divider.setPosition(mutLogFileSettings.getDividerPosition)
     setTop(opsRegion)
     setCenter(pane)
-    logTextView.init(mutLogFileSettings.fileIdProperty
+    logTextView.init(fileIdProperty
       , mutLogFileSettings.selectedLineNumberProperty
       , mutLogFileSettings.fontSizeProperty
       , mutLogFileSettings.firstVisibleTextCellIndexProperty
@@ -139,12 +147,13 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   def getDividerPosition: Double = divider.getPosition
 
   def shutdown(): Unit =
+    unbindIdProperty()
     searchTermToolBar.shutdown()
     opsToolBar.shutdown(mutLogFileSettings.autoScrollActiveProperty, mutLogFileSettings.mutSearchTerms, filteredEntries)
     textPane.shutdown(mutLogFileSettings.fontSizeProperty)
     chunkPane.shutdown(mutLogFileSettings.blockSizeProperty)
-    textSizeSlider.unbind()
-    blockSizeSlider.unbind()
+    textSizeSlider.unbindIdProperty()
+    blockSizeSlider.unbindIdProperty()
     autoScrollActiveProperty.unbind()
     logTailer.shutdown(mutLogFileSettings.fileIdProperty, entries)
     if mutLogFileSettings.isAutoScrollActive then enableAutoscroll(false)

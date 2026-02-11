@@ -6,7 +6,7 @@ import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.Bindings
-import javafx.beans.property.{Property, SimpleIntegerProperty, SimpleObjectProperty}
+import javafx.beans.property.{ObjectPropertyBase, Property, SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
 import javafx.scene.control.*
@@ -81,7 +81,7 @@ class LogTextView(filteredList: FilteredList[LogEntry])
             selectedLineNumberProperty.set(selectedEntry.lineNumber)
           case None => // do nothing
 
-  def init(fileIdProperty: SimpleObjectProperty[FileId]
+  def init(fileIdProperty: ObjectPropertyBase[FileId]
            , selectedLineNumberProperty: Property[Number]
            , fontsizeProperty: Property[Number]
            , firstVisibleTextCellIndexProperty: Property[Number]
@@ -122,7 +122,6 @@ class LogTextView(filteredList: FilteredList[LogEntry])
     this.lastVisibleTextCellIndexProperty.unbindBidirectional(lastVisibleTextCellIndexProperty)
     this.skinSubscriber.unsubscribe()
     this.someScrollBarSubscription.foreach(_.unsubscribe())
-    //    this.searchTermsAndColors.unbind()
     this.maxSizeProperty.unbind()
 
 
