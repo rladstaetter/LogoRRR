@@ -16,11 +16,11 @@ object ListViewHelper:
     val flow = skin.getChildren.get(0).asInstanceOf[VirtualFlow[? <: IndexedCell[LogEntry]]]
     val firstVisibleIndex =
       (for fvc <- Option(flow.getFirstVisibleCell)
-            g <- Option(fvc.getGraphic) yield g.asInstanceOf[LogTextViewLabel].getLogEntry.lineNumber).getOrElse(-1)
+            g <- Option(fvc.getGraphic) yield g.asInstanceOf[LogTextViewLabel].lineNumber).getOrElse(-1)
 
     val lastVisibleIndex =
       (for lvc <- Option(flow.getLastVisibleCell)
-            g <- Option(lvc.getGraphic) yield g.asInstanceOf[LogTextViewLabel].getLogEntry.lineNumber).getOrElse(-1)
+            g <- Option(lvc.getGraphic) yield g.asInstanceOf[LogTextViewLabel].lineNumber).getOrElse(-1)
 
     (firstVisibleIndex, lastVisibleIndex)
 

@@ -1,12 +1,11 @@
 package app.logorrr.conf.mut
 
-import app.logorrr.conf.{BlockSettings, FileId, LogFileSettings, SearchTerm, TimestampSettings}
+import app.logorrr.conf.*
 import app.logorrr.model.LogEntry
-import app.logorrr.util.{JetbrainsMonoFontStyleBinding, LogoRRRFonts}
+import app.logorrr.util.JetbrainsMonoFontStyleBinding
 import app.logorrr.views.ops.time.TimeRange
-import app.logorrr.views.search.st.SearchTermToggleButton
-import app.logorrr.conf.SearchTermGroup
 import app.logorrr.views.search.MutableSearchTerm
+import app.logorrr.views.search.st.SearchTermToggleButton
 import javafx.beans.binding.{BooleanBinding, ObjectBinding, StringBinding}
 import javafx.beans.property.*
 import javafx.collections.transformation.FilteredList
@@ -58,7 +57,7 @@ class MutLogFileSettings:
   val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
 
   private val someTimestampSettings = new SimpleObjectProperty[Option[TimestampSettings]](None)
-  
+
   private val lowerTimestampValueProperty = new SimpleLongProperty()
   private val upperTimestampValueProperty = new SimpleLongProperty()
 
@@ -66,8 +65,9 @@ class MutLogFileSettings:
 
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
-  val mutSearchTerms: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm](FXCollections.observableArrayList())
-  
+  val mutSearchTerms: ObservableList[MutableSearchTerm] =
+    FXCollections.observableArrayList[MutableSearchTerm](MutableSearchTerm.extractor)
+
   private val mutSearchTermGroupSettings = new MutSearchTermGroupSettings
 
   def putSearchTerms(groupName: String, searchTerms: Seq[SearchTerm]): Unit = mutSearchTermGroupSettings.put(groupName, searchTerms)
@@ -120,8 +120,8 @@ class MutLogFileSettings:
 
     override def computeValue(): TimeRange =
       (for lower <- Option(lowerTimestampValueProperty.get()).map(Instant.ofEpochMilli)
-            upper <- Option(upperTimestampValueProperty.get()).map(Instant.ofEpochMilli)
-            yield Try(TimeRange(lower, upper)).getOrElse(null)).orNull
+           upper <- Option(upperTimestampValueProperty.get()).map(Instant.ofEpochMilli)
+      yield Try(TimeRange(lower, upper)).getOrElse(null)).orNull
 
   def setUpperTimestampValue(upperValue: Long): Unit = upperTimestampValueProperty.set(upperValue)
 
@@ -135,8 +135,6 @@ class MutLogFileSettings:
 
   def setFilters(filters: Seq[MutableSearchTerm]): Unit =
     mutSearchTerms.setAll(filters.asJava)
-
-  def getFilters: ObservableList[MutableSearchTerm] = mutSearchTerms.get()
 
 
   val hasTimestampSetting: BooleanBinding = new BooleanBinding:
@@ -182,13 +180,14 @@ class MutLogFileSettings:
   def getFirstOpened: Long = firstOpenedProperty.get()
 
   def mkImmutable(): LogFileSettings =
+    val st = getSearchTerms
     val lfs =
       LogFileSettings(fileIdProperty.get()
         , selectedLineNumberProperty.get()
         , firstOpenedProperty.get()
         , dividerPositionProperty.get()
         , fontSizeProperty.get()
-        , getSearchTerms
+        , st
         , BlockSettings(blockSizeProperty.get())
         , someTimestampSettings.get()
         , autoScrollActiveProperty.get()
@@ -202,66 +201,66 @@ class MutLogFileSettings:
     lfs
 
   def getSearchTerms: Seq[SearchTerm] =
-    getFilters.asScala.toSeq.map(f => SearchTerm(f.getValue, f.getColor, f.isActive))
+    mutSearchTerms.asScala.toSeq.map(f => SearchTerm(f.getValue, f.getColor, f.isActive))
 
   def setSomeSelectedSearchTermGroup(someSelectedSearchTermGroupId: Option[String]): Unit =
     someSelectedSearchTermGroupProperty.set(someSelectedSearchTermGroupId)
 
   def getSomeSelectedSearchTermGroup: Option[String] = someSelectedSearchTermGroupProperty.get()
 
-  /*
-  def bind(other: MutLogFileSettings): Unit = {
-    // Simple Object/Primitive Properties
-    this.fileIdProperty.bindBidirectional(other.fileIdProperty)
-    this.fontSizeProperty.bindBidirectional(other.fontSizeProperty)
-    this.blockSizeProperty.bindBidirectional(other.blockSizeProperty)
-    this.selectedLineNumberProperty.bindBidirectional(other.selectedLineNumberProperty)
-    this.firstVisibleTextCellIndexProperty.bindBidirectional(other.firstVisibleTextCellIndexProperty)
-    this.lastVisibleTextCellIndexProperty.bindBidirectional(other.lastVisibleTextCellIndexProperty)
-    this.dividerPositionProperty.bindBidirectional(other.dividerPositionProperty)
-    this.autoScrollActiveProperty.bindBidirectional(other.autoScrollActiveProperty)
+/*
+def bind(other: MutLogFileSettings): Unit = {
+  // Simple Object/Primitive Properties
+  this.fileIdProperty.bindBidirectional(other.fileIdProperty)
+  this.fontSizeProperty.bindBidirectional(other.fontSizeProperty)
+  this.blockSizeProperty.bindBidirectional(other.blockSizeProperty)
+  this.selectedLineNumberProperty.bindBidirectional(other.selectedLineNumberProperty)
+  this.firstVisibleTextCellIndexProperty.bindBidirectional(other.firstVisibleTextCellIndexProperty)
+  this.lastVisibleTextCellIndexProperty.bindBidirectional(other.lastVisibleTextCellIndexProperty)
+  this.dividerPositionProperty.bindBidirectional(other.dividerPositionProperty)
+  this.autoScrollActiveProperty.bindBidirectional(other.autoScrollActiveProperty)
 
-    // Timestamp related properties
-    this.dateTimeFormatterProperty.bindBidirectional(other.dateTimeFormatterProperty)
-    this.someTimestampSettings.bindBidirectional(other.someTimestampSettings)
-    this.lowerTimestampValueProperty.bindBidirectional(other.lowerTimestampValueProperty)
-    this.upperTimestampValueProperty.bindBidirectional(other.upperTimestampValueProperty)
-    this.firstOpenedProperty.bindBidirectional(other.firstOpenedProperty)
+  // Timestamp related properties
+  this.dateTimeFormatterProperty.bindBidirectional(other.dateTimeFormatterProperty)
+  this.someTimestampSettings.bindBidirectional(other.someTimestampSettings)
+  this.lowerTimestampValueProperty.bindBidirectional(other.lowerTimestampValueProperty)
+  this.upperTimestampValueProperty.bindBidirectional(other.upperTimestampValueProperty)
+  this.firstOpenedProperty.bindBidirectional(other.firstOpenedProperty)
 
-    // Search and Group properties
-    this.someSelectedSearchTermGroupProperty.bindBidirectional(other.someSelectedSearchTermGroupProperty)
+  // Search and Group properties
+  this.someSelectedSearchTermGroupProperty.bindBidirectional(other.someSelectedSearchTermGroupProperty)
 
-    // For ListProperties, we bind the content of the list
-    // so that adding/removing items in one reflects in the other
-    this.mutSearchTerms.bindContentBidirectional(other.mutSearchTerms)
+  // For ListProperties, we bind the content of the list
+  // so that adding/removing items in one reflects in the other
+  this.mutSearchTerms.bindContentBidirectional(other.mutSearchTerms)
 
-    // Note: Since mutSearchTermGroupSettings is an internal object,
-    // you may need a similar bind method inside MutSearchTermGroupSettings
-    // or expose its internal properties/lists to bind them here.
-  }
+  // Note: Since mutSearchTermGroupSettings is an internal object,
+  // you may need a similar bind method inside MutSearchTermGroupSettings
+  // or expose its internal properties/lists to bind them here.
+}
 
-  def unbind(other: MutLogFileSettings): Unit = {
-    // Unbind Simple Object/Primitive Properties
-    this.fileIdProperty.unbindBidirectional(other.fileIdProperty)
-    this.fontSizeProperty.unbindBidirectional(other.fontSizeProperty)
-    this.blockSizeProperty.unbindBidirectional(other.blockSizeProperty)
-    this.selectedLineNumberProperty.unbindBidirectional(other.selectedLineNumberProperty)
-    this.firstVisibleTextCellIndexProperty.unbindBidirectional(other.firstVisibleTextCellIndexProperty)
-    this.lastVisibleTextCellIndexProperty.unbindBidirectional(other.lastVisibleTextCellIndexProperty)
-    this.dividerPositionProperty.unbindBidirectional(other.dividerPositionProperty)
-    this.autoScrollActiveProperty.unbindBidirectional(other.autoScrollActiveProperty)
+def unbind(other: MutLogFileSettings): Unit = {
+  // Unbind Simple Object/Primitive Properties
+  this.fileIdProperty.unbindBidirectional(other.fileIdProperty)
+  this.fontSizeProperty.unbindBidirectional(other.fontSizeProperty)
+  this.blockSizeProperty.unbindBidirectional(other.blockSizeProperty)
+  this.selectedLineNumberProperty.unbindBidirectional(other.selectedLineNumberProperty)
+  this.firstVisibleTextCellIndexProperty.unbindBidirectional(other.firstVisibleTextCellIndexProperty)
+  this.lastVisibleTextCellIndexProperty.unbindBidirectional(other.lastVisibleTextCellIndexProperty)
+  this.dividerPositionProperty.unbindBidirectional(other.dividerPositionProperty)
+  this.autoScrollActiveProperty.unbindBidirectional(other.autoScrollActiveProperty)
 
-    // Unbind Timestamp related properties
-    this.dateTimeFormatterProperty.unbindBidirectional(other.dateTimeFormatterProperty)
-    this.someTimestampSettings.unbindBidirectional(other.someTimestampSettings)
-    this.lowerTimestampValueProperty.unbindBidirectional(other.lowerTimestampValueProperty)
-    this.upperTimestampValueProperty.unbindBidirectional(other.upperTimestampValueProperty)
-    this.firstOpenedProperty.unbindBidirectional(other.firstOpenedProperty)
+  // Unbind Timestamp related properties
+  this.dateTimeFormatterProperty.unbindBidirectional(other.dateTimeFormatterProperty)
+  this.someTimestampSettings.unbindBidirectional(other.someTimestampSettings)
+  this.lowerTimestampValueProperty.unbindBidirectional(other.lowerTimestampValueProperty)
+  this.upperTimestampValueProperty.unbindBidirectional(other.upperTimestampValueProperty)
+  this.firstOpenedProperty.unbindBidirectional(other.firstOpenedProperty)
 
-    // Unbind Search and Group properties
-    this.someSelectedSearchTermGroupProperty.unbindBidirectional(other.someSelectedSearchTermGroupProperty)
+  // Unbind Search and Group properties
+  this.someSelectedSearchTermGroupProperty.unbindBidirectional(other.someSelectedSearchTermGroupProperty)
 
-    // Unbind ListProperty content
-    this.mutSearchTerms.unbindContentBidirectional(other.mutSearchTerms)
-  }
+  // Unbind ListProperty content
+  this.mutSearchTerms.unbindContentBidirectional(other.mutSearchTerms)
+}
 */

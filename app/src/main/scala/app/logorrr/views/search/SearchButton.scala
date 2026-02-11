@@ -4,7 +4,9 @@ import app.logorrr.conf.FileId
 import app.logorrr.model.BoundFileId
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import javafx.beans.binding.Bindings
 import javafx.beans.property.*
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.paint.Color
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid
@@ -23,7 +25,7 @@ class SearchButton extends Button with BoundFileId(SearchButton.uiNode(_).value)
 
   private val searchTextProperty = new SimpleStringProperty()
   private val colorProperty = new SimpleObjectProperty[Color]()
-  private val searchTerms: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm]()
+  private val searchTerms: ObservableList[MutableSearchTerm] = FXCollections.observableArrayList[MutableSearchTerm]()
 
   setOnAction:
     _ =>
@@ -31,25 +33,24 @@ class SearchButton extends Button with BoundFileId(SearchButton.uiNode(_).value)
       if searchText.nonEmpty then
         searchTerms.add(MutableSearchTerm(searchText, colorProperty.get()))
         colorProperty.setValue(JfxUtils.randColor)
-        // searchTextField.clear()
         searchTextProperty.setValue("")
 
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , searchTextProperty: Property[String]
            , colorProperty: Property[Color]
-           , searchTerms: SimpleListProperty[MutableSearchTerm]): Unit = {
+           , mutSearchTerms: ObservableList[MutableSearchTerm]): Unit = {
     bindIdProperty(fileIdProperty)
     this.searchTextProperty.bindBidirectional(searchTextProperty)
     this.colorProperty.bindBidirectional(colorProperty)
-    this.searchTerms.bindBidirectional(searchTerms)
+    Bindings.bindContentBidirectional(this.searchTerms, mutSearchTerms)
   }
 
   def shutdown(searchTextProperty: Property[String]
                , colorProperty: Property[Color]
-               , searchTerms: SimpleListProperty[MutableSearchTerm]): Unit = {
+               , mutSearchTerms: ObservableList[MutableSearchTerm]): Unit = {
     unbindIdProperty()
     this.searchTextProperty.unbindBidirectional(searchTextProperty)
     this.colorProperty.unbindBidirectional(colorProperty)
-    this.searchTerms.unbindBidirectional(searchTerms)
+    Bindings.unbindContentBidirectional(this.searchTerms, mutSearchTerms)
   }

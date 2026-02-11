@@ -19,12 +19,12 @@ object SearchTermCalculatorSpec:
       e <- LogEntrySpec.gen
       maxLength <- Gen.posNum[Int]
       searchTerms <- Gen.listOf(mutSearchTermGen.map(st => (st.getValue, st.getColor)))
-    yield LogTextViewLabel(e, maxLength, searchTerms, new SimpleIntegerProperty())
+    yield LogTextViewLabel(e.lineNumber, e.value, maxLength, searchTerms, new SimpleIntegerProperty())
 
 class SearchTermCalculatorSpec extends LogoRRRSpec:
 
   def applySingleFilter(logEntry: String, pattern: String): Seq[Seq[LinePart]] =
-    SearchTermCalculator( logEntry, Seq((pattern, Color.RED))).filteredParts
+    SearchTermCalculator(logEntry, Seq((pattern, Color.RED))).filteredParts
 
   "fine/finest" in :
     val line = "FINEST"
@@ -97,7 +97,7 @@ class SearchTermCalculatorSpec extends LogoRRRSpec:
 
   "filteredParts" should :
     val filters = Seq(
-        ("a", Color.RED)
+      ("a", Color.RED)
       , ("b", Color.BLUE)
       , ("t", Color.YELLOW)
     )

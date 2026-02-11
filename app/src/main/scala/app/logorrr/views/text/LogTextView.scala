@@ -2,22 +2,22 @@ package app.logorrr.views.text
 
 import app.logorrr.conf.FileId
 import app.logorrr.model.{BoundFileId, LogEntry}
-import app.logorrr.util.{JetbrainsMonoFontStyleBinding, JfxUtils}
+import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.MutableSearchTerm
-import app.logorrr.views.text.contextactions.{CopyEntriesMenuItem, IgnoreAboveMenuItem, IgnoreBelowMenuItem}
 import javafx.beans.binding.Bindings
-import javafx.beans.property.{Property, SimpleIntegerProperty, SimpleListProperty, SimpleObjectProperty}
+import javafx.beans.property.{Property, SimpleIntegerProperty, SimpleObjectProperty}
 import javafx.collections.transformation.FilteredList
+import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
 import javafx.scene.control.*
 import javafx.scene.paint.Color
 import javafx.util.Subscription
 import net.ladstatt.util.log.TinyLog
 
-import scala.jdk.CollectionConverters.*
+import java.util.function.Predicate
+import scala.compiletime.uninitialized
 
 object LogTextView extends UiNodeFileIdAware:
-
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogTextView])
 
 
@@ -39,17 +39,20 @@ class LogTextView(filteredList: FilteredList[LogEntry])
   private val fontsizeSubscription: Subscription = fontsizeProperty.subscribe(_ => refresh())
   private val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty()
   private val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
-  private var scrollBarSubscription: Option[Subscription] = None
+  private var someScrollBarSubscription: Option[Subscription] = None
+
+
+  var searchTermChangeListener: MutableSearchTermListener = uninitialized
 
   /** recalculated if searchterms change */
-  val searchTerms: SimpleListProperty[(String, Color)] = SimpleListProperty[(String, Color)]()
+  val searchTermsAndColors: ObservableList[(String, Color)] = FXCollections.observableArrayList[(String, Color)]()
 
   /**
    * to observe the visible text and mark it in the boxview
    */
   private val skinSubscriber = skinProperty.subscribe(_ => {
-    scrollBarSubscription =
-      ListViewHelper.findScrollBar(this).map(_.valueProperty.subscribe(_ => {
+    someScrollBarSubscription =
+      ListViewHelper.findScrollBar(this).map(scrollBar => scrollBar.valueProperty.subscribe(_ => {
         val (first, last) = ListViewHelper.getVisibleRange(this)
         firstVisibleTextCellIndexProperty.set(first)
         lastVisibleTextCellIndexProperty.set(last)
@@ -57,7 +60,7 @@ class LogTextView(filteredList: FilteredList[LogEntry])
   })
 
   /** contains number of digits of max size of filtered list */
-  private val maxSizeProperty: SimpleIntegerProperty = new SimpleIntegerProperty() {
+  val maxSizeProperty: SimpleIntegerProperty = new SimpleIntegerProperty() {
     this.bind(Bindings.createIntegerBinding(() => filteredList.size.toString.length, filteredList))
   }
 
@@ -83,89 +86,44 @@ class LogTextView(filteredList: FilteredList[LogEntry])
            , fontsizeProperty: Property[Number]
            , firstVisibleTextCellIndexProperty: Property[Number]
            , lastVisibleTextCellIndexProperty: Property[Number]
-           , mutSearchTerms: SimpleListProperty[MutableSearchTerm]
+           , mutSearchTerms: ObservableList[MutableSearchTerm]
           ): Unit =
-    bind(fileIdProperty
-      , selectedLineNumberProperty
-      , fontsizeProperty
-      , firstVisibleTextCellIndexProperty
-      , lastVisibleTextCellIndexProperty)
-    getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
-    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell(fontsizeProperty))
+    bindIdProperty(fileIdProperty)
+    val activeSearchTerms = new FilteredList[MutableSearchTerm](mutSearchTerms, _.isActive)
+    activeSearchTerms.forEach(st => searchTermsAndColors.add((st.getValue,st.getColor)))
+
+    this.searchTermChangeListener = new MutableSearchTermListener(activeSearchTerms, searchTermsAndColors, this)
+    mutSearchTerms.addListener(searchTermChangeListener)
+    // this.searchTermsAndColors.bind(new MutSearchTermBinding(mutSearchTerms))
+    this.selectedLineNumberProperty.bindBidirectional(selectedLineNumberProperty)
+    this.fontsizeProperty.bind(fontsizeProperty)
+    this.firstVisibleTextCellIndexProperty.bindBidirectional(firstVisibleTextCellIndexProperty)
+    this.lastVisibleTextCellIndexProperty.bindBidirectional(lastVisibleTextCellIndexProperty)
+    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell(filteredList, this.searchTermsAndColors, this.selectedLineNumberProperty, scrollToActiveLogEntry, this.fontsizeProperty, this.maxSizeProperty))
     setItems(filteredList)
     getSelectionModel.setSelectionMode(SelectionMode.MULTIPLE)
-    searchTerms.bind(new MutSearchTermBinding(mutSearchTerms))
+    getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
+
 
   /** clean up listeners */
   def shutdown(selectedLineNumberProperty: Property[Number]
                , firstVisibleTextCellIndexProperty: Property[Number]
                , lastVisibleTextCellIndexProperty: Property[Number]
+               , mutableSearchTerms: ObservableList[MutableSearchTerm]
               ): Unit =
-    selectedItemSubscription.unsubscribe()
-    fontsizeSubscription.unsubscribe()
-    unbind(selectedLineNumberProperty, firstVisibleTextCellIndexProperty, lastVisibleTextCellIndexProperty)
-    skinSubscriber.unsubscribe()
-    scrollBarSubscription.foreach(_.unsubscribe())
-    searchTerms.unbind()
-    maxSizeProperty.unbind()
-
-  class LogEntryListCell(fontSizeProperty: Property[Number]) extends ListCell[LogEntry]:
-    setGraphic(null)
-
-    override def updateItem(t: LogEntry, b: Boolean): Unit =
-      super.updateItem(t, b)
-      styleProperty().unbind()
-      Option(t) match
-        case Some(e) =>
-          styleProperty().bind(new JetbrainsMonoFontStyleBinding(fontSizeProperty))
-          val entry = LogTextViewLabel(e
-            , maxSizeProperty.get()
-            , searchTerms.asScala.toSeq
-            , fontSizeProperty)
-          setGraphic(entry)
-
-          val copySelectionMenuItem = new CopyEntriesMenuItem(getSelectionModel)
-          val ignoreAboveMenuItem = new IgnoreAboveMenuItem(selectedLineNumberProperty
-            , e
-            , filteredList
-            , scrollToActiveLogEntry)
-          val ignoreBelowMenuItem = new IgnoreBelowMenuItem(e, filteredList)
-          val menu = new ContextMenu(copySelectionMenuItem, ignoreAboveMenuItem, ignoreBelowMenuItem)
-          setContextMenu(menu)
-        case None =>
-          styleProperty().unbind()
-          Option(getGraphic) match {
-            case Some(label: LogTextViewLabel) => LogTextViewLabel.unbind(label)
-            case _ =>
-          }
-          setGraphic(null)
-          setContextMenu(null)
-
-
-  def bind(fileIdProperty: SimpleObjectProperty[FileId]
-           , selectedLineNumberProperty: Property[Number]
-           , fontSizeProperty: Property[Number]
-           , firstVisibleTextCellIndexProperty: Property[Number]
-           , lastVisibleTextCellIndexProperty: Property[Number]
-          ): Unit = {
-    bindIdProperty(fileIdProperty)
-    this.selectedLineNumberProperty.bindBidirectional(selectedLineNumberProperty)
-    this.fontsizeProperty.bind(fontSizeProperty)
-    this.firstVisibleTextCellIndexProperty.bindBidirectional(firstVisibleTextCellIndexProperty)
-    this.lastVisibleTextCellIndexProperty.bindBidirectional(lastVisibleTextCellIndexProperty)
-
-
-  }
-
-  def unbind(selectedLineNumberProperty: Property[Number]
-             , firstVisibleTextCellIndexProperty: Property[Number]
-             , lastVisibleTextCellIndexProperty: Property[Number]
-            ): Unit = {
     unbindIdProperty()
+
+    mutableSearchTerms.removeListener(searchTermChangeListener)
+    this.selectedItemSubscription.unsubscribe()
+    this.fontsizeSubscription.unsubscribe()
     this.selectedLineNumberProperty.unbindBidirectional(selectedLineNumberProperty)
     this.fontsizeProperty.unbind()
     this.firstVisibleTextCellIndexProperty.unbindBidirectional(firstVisibleTextCellIndexProperty)
     this.lastVisibleTextCellIndexProperty.unbindBidirectional(lastVisibleTextCellIndexProperty)
-  }
-  
+    this.skinSubscriber.unsubscribe()
+    this.someScrollBarSubscription.foreach(_.unsubscribe())
+    //    this.searchTermsAndColors.unbind()
+    this.maxSizeProperty.unbind()
+
+
 

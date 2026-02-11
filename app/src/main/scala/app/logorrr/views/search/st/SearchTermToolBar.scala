@@ -6,9 +6,10 @@ import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.search.MutableSearchTerm
 import app.logorrr.views.search.stg.{OpenStgEditorButton, StgChoiceBox}
+import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.transformation.FilteredList
-import javafx.collections.{FXCollections, ListChangeListener}
+import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
 import javafx.scene.control.ToolBar
 import net.ladstatt.util.log.TinyLog
 
@@ -27,10 +28,10 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
   var occurrences: Map[MutableSearchTerm, Int] = Map().withDefaultValue(0)
 
   /** will be bound to the current active filter list */
-  val searchTermsProperty: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm](FXCollections.observableArrayList())
+  val mutSearchTerms: ObservableList[MutableSearchTerm] = FXCollections.observableArrayList()
 
   private val groupChoiceBox: StgChoiceBox =
-    val gcb = new StgChoiceBox(mutLogFileSettings, searchTermsProperty)
+    val gcb = new StgChoiceBox(mutLogFileSettings, mutSearchTerms)
     gcb.itemsProperty.set(mutLogFileSettings.searchTermGroupNames)
     mutLogFileSettings.getSomeSelectedSearchTermGroup.foreach(gcb.setValue)
     gcb
@@ -39,14 +40,15 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     , mutLogFileSettings.getFileId
     , activeSearchTerms)
 
-  init()
-
-  private def init(): Unit =
+  def init(): Unit =
     getItems.addAll(groupChoiceBox, openStgEditor)
-    searchTermsProperty.addListener(JfxUtils.mkListChangeListener[MutableSearchTerm](processFiltersChange))
+    mutSearchTerms.addListener(JfxUtils.mkListChangeListener[MutableSearchTerm](processFiltersChange))
     updateUnclassified()
-    searchTermsProperty.bind(mutLogFileSettings.mutSearchTerms)
+    Bindings.bindContentBidirectional(this.mutSearchTerms, mutLogFileSettings.mutSearchTerms)
 
+
+  def shutdown(): Unit =
+    Bindings.unbindContentBidirectional(this.mutSearchTerms, mutLogFileSettings.mutSearchTerms)
 
   /** if filter list is changed in any way, react to this event and either add or remove filter from UI */
   private def processFiltersChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit =

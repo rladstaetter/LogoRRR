@@ -15,7 +15,6 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.{InvalidationListener, Observable}
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{ListChangeListener, ObservableList}
-import javafx.scene.Scene
 import javafx.scene.control.SplitPane
 import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
@@ -40,9 +39,10 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
 
   /** if a search term is added or removed this will be saved to disc */
   private val searchTermChangeListener: ListChangeListener[MutableSearchTerm] =
-    def handleSearchTermChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit =
+    def handleSearchTermChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit = {
       while change.next() do
         Future(LogoRRRGlobals.persist(LogoRRRGlobals.getSettings))
+    }
 
     JfxUtils.mkListChangeListener[MutableSearchTerm](handleSearchTermChange)
 
@@ -105,6 +105,8 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   private val pane = new SplitPane(chunkPane, textPane)
 
   def init(window: Window): Unit =
+
+    searchTermToolBar.init()
     opsToolBar.init(window
       , mutLogFileSettings.fileIdProperty
       , mutLogFileSettings.autoScrollActiveProperty
@@ -137,6 +139,7 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   def getDividerPosition: Double = divider.getPosition
 
   def shutdown(): Unit =
+    searchTermToolBar.shutdown()
     opsToolBar.shutdown(mutLogFileSettings.autoScrollActiveProperty, mutLogFileSettings.mutSearchTerms, filteredEntries)
     textPane.shutdown(mutLogFileSettings.fontSizeProperty)
     chunkPane.shutdown(mutLogFileSettings.blockSizeProperty)
@@ -145,7 +148,11 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
     autoScrollActiveProperty.unbind()
     logTailer.shutdown(mutLogFileSettings.fileIdProperty, entries)
     if mutLogFileSettings.isAutoScrollActive then enableAutoscroll(false)
-    logTextView.shutdown(mutLogFileSettings.selectedLineNumberProperty, mutLogFileSettings.firstVisibleTextCellIndexProperty, mutLogFileSettings.lastVisibleTextCellIndexProperty)
+    logTextView.shutdown(
+      mutLogFileSettings.selectedLineNumberProperty
+      , mutLogFileSettings.firstVisibleTextCellIndexProperty
+      , mutLogFileSettings.lastVisibleTextCellIndexProperty
+      , mutLogFileSettings.mutSearchTerms)
     chunkListView.shutdown()
     autoScrollSubscription.unsubscribe()
     mutLogFileSettings.mutSearchTerms.removeListener(searchTermChangeListener)

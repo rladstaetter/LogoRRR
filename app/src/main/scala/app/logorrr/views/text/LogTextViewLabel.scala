@@ -34,7 +34,8 @@ object LogTextViewLabel:
  *
  * A line consist of a line number to the left and the line contents to the right.
  */
-class LogTextViewLabel(e: LogEntry
+class LogTextViewLabel(val lineNumber: Int
+                       , value: String
                        , maxLength: Int
                        , searchTerms: Seq[(String, Color)]
                        , fontSizeProperty: Property[Number]
@@ -43,10 +44,10 @@ class LogTextViewLabel(e: LogEntry
   setHeight(fontSizeProperty.getValue.intValue())
   setAlignment(Pos.CENTER_LEFT)
 
-  val stringsAndColor: Seq[(String, Color)] = SearchTermCalculator(e.value, searchTerms).stringColorPairs
+  val stringsAndColor: Seq[(String, Color)] = SearchTermCalculator(value, searchTerms).stringColorPairs
 
   val lineNumberLabel: LineNumberLabel =
-    val l = LineNumberLabel(e.lineNumber, maxLength)
+    val l = LineNumberLabel(lineNumber, maxLength)
     LogTextViewLabel.bindProperties(l, heightProperty, fontSizeProperty)
     l
 
@@ -56,8 +57,8 @@ class LogTextViewLabel(e: LogEntry
       LogTextViewLabel.bindProperties(l, heightProperty, fontSizeProperty)
       l
 
+
   getChildren.add(lineNumberLabel)
   getChildren.addAll(labels *)
 
-  def getLogEntry: LogEntry = e
 

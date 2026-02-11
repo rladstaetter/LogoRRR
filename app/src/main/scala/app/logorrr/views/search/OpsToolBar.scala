@@ -42,15 +42,15 @@ class OpsToolBar(mutLogFileSettings: MutLogFileSettings
   def init(window: Window
            , fileIdProperty: ObjectPropertyBase[FileId]
            , autoScrollProperty: Property[java.lang.Boolean]
-           , searchTerms: SimpleListProperty[MutableSearchTerm]
+           , mutSearchTerms: ObservableList[MutableSearchTerm]
            , filteredList: ObservableList[LogEntry]): Unit = {
-    searchRegion.init(fileIdProperty, searchTerms)
+    searchRegion.init(fileIdProperty, mutSearchTerms)
     otherItemsRegion.init(fileIdProperty, autoScrollProperty, logEntries, filteredList)
     timestampSettingsRegion.init(window)
   }
 
   def shutdown(autoScrollProperty: Property[java.lang.Boolean]
-               , searchTerms: SimpleListProperty[MutableSearchTerm]
+               , searchTerms: ObservableList[MutableSearchTerm]
                , filteredList: ObservableList[LogEntry]): Unit = {
     searchRegion.shutdown(searchTerms)
     otherItemsRegion.shutdown(autoScrollProperty, logEntries, filteredList)

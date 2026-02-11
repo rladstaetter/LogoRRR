@@ -10,8 +10,8 @@ object LogoRRRLabel:
 
   private def mkBg(color: Color) = new Background(new BackgroundFill(color, null, Insets.EMPTY))
 
-  def mkL(msg: String, color: Color): Label =
-    val l = new Label(msg)
+  def mkL(text: String, color: Color): Label =
+    val l = new Label(text)
     if color != MutableSearchTerm.UnclassifiedColor then
       l.setBackground(mkBg(color))
     l

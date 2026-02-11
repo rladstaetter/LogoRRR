@@ -56,12 +56,11 @@ class LogSource(dstg: DefaultSearchTermGroups
         val fileBasedSettings: Seq[Future[Option[LogorrrModel]]] = fileSettings.map(lfs => Future {
           timeR({
             val entries: ObservableList[LogEntry] = IoManager.readEntries(lfs.path, lfs.someTimestampSettings)
-            Option(LogorrrModel(LogoRRRGlobals.getLogFileSettings(lfs.fileId), entries))
+            val mutLogFileSettings = LogoRRRGlobals.getLogFileSettings(lfs.fileId)
+            Option(LogorrrModel(mutLogFileSettings, entries))
           }, s"Loaded '${lfs.fileId.absolutePathAsString}' from filesystem ...")
         })
-
-        val res: Seq[Future[Option[LogorrrModel]]] = zipFutures ++ fileBasedSettings
-        res
+        zipFutures ++ fileBasedSettings
 
       val models = Await.result(futures, Duration.Inf).flatten
 

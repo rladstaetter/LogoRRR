@@ -6,6 +6,7 @@ import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.property.SimpleListProperty
+import javafx.collections.ObservableList
 import javafx.scene.control.{ChoiceBox, Tooltip}
 
 object StgChoiceBox extends UiNodeFileIdAware:
@@ -14,7 +15,8 @@ object StgChoiceBox extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[StgChoiceBox])
 
 
-class StgChoiceBox(mutLogFileSettings: MutLogFileSettings, searchTerms: SimpleListProperty[MutableSearchTerm]) extends ChoiceBox[String]:
+class StgChoiceBox(mutLogFileSettings: MutLogFileSettings
+                   , mutSearchTerms: ObservableList[MutableSearchTerm]) extends ChoiceBox[String]:
   setId(StgChoiceBox.uiNode(mutLogFileSettings.getFileId).value)
   setStyle(StgChoiceBox.style)
   setTooltip(new Tooltip("shows search term groups"))
@@ -22,8 +24,8 @@ class StgChoiceBox(mutLogFileSettings: MutLogFileSettings, searchTerms: SimpleLi
   getSelectionModel.selectedItemProperty.addListener(JfxUtils.onNew[String](groupName => {
     mutLogFileSettings.getSearchTerms(groupName) match {
       case Some(selectedTerms) =>
-        searchTerms.clear()
-        searchTerms.addAll(selectedTerms.map(MutableSearchTerm.apply)*)
+        mutSearchTerms.clear()
+        mutSearchTerms.addAll(selectedTerms.map(MutableSearchTerm.apply)*)
         mutLogFileSettings.setSomeSelectedSearchTermGroup(Option(groupName))
       case None =>
         mutLogFileSettings.setSomeSelectedSearchTermGroup(None)
