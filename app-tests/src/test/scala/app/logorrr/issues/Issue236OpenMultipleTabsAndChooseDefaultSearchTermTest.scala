@@ -1,11 +1,10 @@
 package app.logorrr.issues
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.TestSettings
+import app.logorrr.conf.{FileId, TestSettings}
 import app.logorrr.steps.{CheckTabPaneActions, ChoiceBoxActions}
 import app.logorrr.usecases.MultipleFileApplicationTest
 import app.logorrr.views.a11y.UiNode
-import app.logorrr.views.search.MutableSearchTerm
 import app.logorrr.views.search.st.SearchTermToggleButton
 import app.logorrr.views.search.stg.StgChoiceBox
 import javafx.scene.control.ToggleButton
@@ -25,13 +24,15 @@ class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
   extends MultipleFileApplicationTest(TestFiles.seq)
     with CheckTabPaneActions with ChoiceBoxActions:
 
+  def activate(fileId: FileId, searchTermGroupName: String): Unit =
+    openFile(fileId)
+    selectChoiceBoxByValue(StgChoiceBox.uiNode(fileId))(searchTermGroupName)
+
+
   @Test def testIssue236(): Unit =
     // open first file
     val firstFile = TestFiles.simpleLog0
-    openFile(firstFile)
-
-    // create a function to use search term choicebox easily
-    selectChoiceBoxByValue(StgChoiceBox.uiNode(firstFile))(TestSettings.Java_JUL)
+    activate(firstFile, TestSettings.Java_JUL)
 
 
     // change filters to a non default configuration
@@ -45,10 +46,7 @@ class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
 
     // open second file
     val secondFile = TestFiles.simpleLog1
-
-    openFile(secondFile)
-    waitForVisibility(StgChoiceBox.uiNode(secondFile))
-    selectChoiceBoxByValue(StgChoiceBox.uiNode(secondFile))(TestSettings.Java_JUL)
+    activate(secondFile, TestSettings.Java_JUL)
 
     // test that second file has the default filter configuration
     val firstFilterTab2: UiNode = SearchTermToggleButton.uiNode(secondFile, TestSettings.DefaultSearchTerms.head.getValue)
