@@ -39,7 +39,7 @@
         },
         {
           "value": "FINEST",
-          "color": "#d3d3d3",
+          "color": "#e2e2e2",
           "active": true
         }
       ]
@@ -74,7 +74,7 @@
         },
         {
           "value": "TRACE",
-          "color": "#d3d3d3",
+          "color": "#e2e2e2",
           "active": true
         }
       ]
@@ -109,7 +109,7 @@
         },
         {
           "value": "NOTSET",
-          "color": "#d3d3d3",
+          "color": "#e2e2e2",
           "active": true
         }
       ]
@@ -144,7 +144,7 @@
         },
         {
           "value": "Verbose",
-          "color": "#d3d3d3",
+          "color": "#e2e2e2",
           "active": true
         }
       ]
@@ -179,7 +179,7 @@
         },
         {
           "value": "Trace",
-          "color": "#d3d3d3",
+          "color": "#e2e2e2",
           "active": true
         }
       ]
@@ -214,7 +214,7 @@
         },
         {
           "value": "trace",
-          "color": "#d3d3d3",
+          "color": "#e2e2e2",
           "active": true
         }
       ]
@@ -254,7 +254,7 @@
         },
         {
           "value": "silly",
-          "color": "#d3d3d3",
+          "color": "#e2e2e2",
           "active": true
         }
       ]
@@ -289,7 +289,7 @@
         },
         {
           "value": "trace",
-          "color": "#d3d3d3",
+          "color": "#e2e2e2",
           "active": true
         }
       ]
@@ -344,7 +344,7 @@
         },
         {
           "value": "TRACE",
-          "color": "#d3d3d3",
+          "color": "#e2e2e2",
           "active": true
         }
       ]
@@ -714,7 +714,7 @@
         },
         {
           "value": "DEBUG",
-          "color": "#d3d3d3",
+          "color": "#e2e2e2",
           "active": true
         }
       ]
