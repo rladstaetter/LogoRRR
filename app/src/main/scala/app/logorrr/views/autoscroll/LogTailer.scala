@@ -2,7 +2,6 @@ package app.logorrr.views.autoscroll
 
 import app.logorrr.conf.FileId
 import app.logorrr.model.LogEntry
-import app.logorrr.views.search.FileIdPropertyHolder
 import javafx.beans.property.{ObjectPropertyBase, SimpleListProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, ObservableList}
 import net.ladstatt.util.log.TinyLog

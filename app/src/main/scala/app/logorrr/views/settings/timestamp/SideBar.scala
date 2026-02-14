@@ -1,7 +1,7 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.conf.FileId
-import app.logorrr.model.{BoundFileId, IntStringBinding}
+import app.logorrr.model.{BoundId, IntStringBinding}
 import javafx.beans.property.{ObjectProperty, ObjectPropertyBase}
 import javafx.geometry.Insets
 import javafx.scene.control.Label
@@ -14,7 +14,7 @@ class SideBar extends VBox(15):
   private val endColLabel = new ToLabel
   private val endColTf = new ToTextField
 
-  private val boundFileIdControls: Seq[? <: BoundFileId] =
+  private val boundIdControls: Seq[? <: BoundId] =
     Seq(startColLabel, startColTf, endColLabel, endColTf)
 
   private val rangeLabel =
@@ -36,7 +36,7 @@ class SideBar extends VBox(15):
            , startColProperty: ObjectProperty[java.lang.Integer]
            , endColProperty: ObjectProperty[java.lang.Integer]
           ): Unit =
-    boundFileIdControls.foreach(_.bindIdProperty(fileIdProperty))
+    boundIdControls.foreach(_.bindIdProperty(fileIdProperty))
     startColTf.textProperty().bind(new IntStringBinding(startColProperty))
     endColTf.textProperty().bind(new IntStringBinding(endColProperty))
 
@@ -44,5 +44,5 @@ class SideBar extends VBox(15):
   def shutdown(): Unit =
     startColTf.textProperty.unbind()
     endColTf.textProperty.unbind()
-    boundFileIdControls.foreach(_.unbindIdProperty())
+    boundIdControls.foreach(_.unbindIdProperty())
 

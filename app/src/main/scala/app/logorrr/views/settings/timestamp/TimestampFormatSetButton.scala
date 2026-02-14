@@ -3,7 +3,7 @@ package app.logorrr.views.settings.timestamp
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, LogoRRRGlobals, TimestampSettings}
-import app.logorrr.model.{BoundFileId, LogEntry}
+import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.TimestampSettingsRegion
 import javafx.beans.property.SimpleObjectProperty
@@ -27,7 +27,7 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
                                , chunkListView: ChunkListView[LogEntry]
                                , logEntries: ObservableList[LogEntry]
                                , tsRegion: TimestampSettingsRegion
-                               , closeStage: => Unit) extends Button("apply & close") with BoundFileId(TimestampFormatSetButton.uiNode(_).value):
+                               , closeStage: => Unit) extends Button("apply & close") with BoundId(TimestampFormatSetButton.uiNode(_).value):
   setPrefWidth(300)
   setAlignment(Pos.CENTER)
   setOnAction:

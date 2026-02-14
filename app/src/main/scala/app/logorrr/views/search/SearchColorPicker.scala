@@ -1,7 +1,7 @@
 package app.logorrr.views.search
 
 import app.logorrr.conf.FileId
-import app.logorrr.model.BoundFileId
+import app.logorrr.model.BoundId
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.property.ObjectPropertyBase
@@ -11,7 +11,7 @@ object SearchColorPicker extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchColorPicker])
 
-class SearchColorPicker extends ColorPicker with BoundFileId(SearchColorPicker.uiNode(_).value):
+class SearchColorPicker extends ColorPicker with BoundId(SearchColorPicker.uiNode(_).value):
 
   setValue(JfxUtils.randColor)
   setMaxWidth(46)

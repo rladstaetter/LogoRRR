@@ -19,9 +19,9 @@ import org.junit.jupiter.api.Test
  * - using three searchterms with given colors (via settings)
  * - checking color of element of chunklistview
  * */
-abstract class Issue292ColorCalculationSetup(desiredColor: Color, val searchTerms: Seq[SearchTerm]) extends SingleFileApplicationTest(TestFiles.simpleLog5)
-  with TestFxListViewActions:
-
+abstract class Issue292ColorCalculationSetup(desiredColor: Color
+                                             , val searchTerms: Seq[SearchTerm])
+  extends SingleFileApplicationTest(TestFiles.simpleLog5) with TestFxListViewActions:
 
   /** setup settings such that the issue is triggered and can be inspected visually */
   override lazy val settings: Settings = Settings(

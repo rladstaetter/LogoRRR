@@ -1,7 +1,7 @@
 package app.logorrr.views.ops.time
 
 import app.logorrr.conf.FileId
-import app.logorrr.model.{BoundFileId, LogEntry}
+import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAndPosAware}
 import javafx.beans.binding.BooleanBinding
 import javafx.beans.property.{ObjectPropertyBase, SimpleObjectProperty}
@@ -59,7 +59,7 @@ object TimerSlider extends UiNodeFileIdAndPosAware:
   override def uiNode(id: FileId, pos: Pos): UiNode = UiNode(id, pos, classOf[TimerSlider])
 
 class TimerSlider(pos: Pos, tooltipText: String)
-  extends Slider with BoundFileId(TimerSlider.uiNode(_, pos).value):
+  extends Slider with BoundId(TimerSlider.uiNode(_, pos).value):
 
   setPrefWidth(TimerSlider.Width)
   setTooltip(new Tooltip(tooltipText))

@@ -1,6 +1,7 @@
 package app.logorrr.views.search.st
 
 import app.logorrr.conf.FileId
+import app.logorrr.model.FileIdPropertyHolder
 import app.logorrr.util.{HashUtil, JfxUtils}
 import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
 import app.logorrr.views.search.*

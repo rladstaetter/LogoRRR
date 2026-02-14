@@ -3,7 +3,7 @@ package app.logorrr.views.settings.timestamp
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, LogoRRRGlobals}
-import app.logorrr.model.{BoundFileId, LogEntry}
+import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.TimestampSettingsRegion
 import javafx.collections.ObservableList
@@ -21,7 +21,7 @@ class TimestampFormatResetButton(mutLogFileSettings: MutLogFileSettings
                                  , logEntries: ObservableList[LogEntry]
                                  , tsRegion: TimestampSettingsRegion
                                  , closeStage: => Unit)
-  extends Button("reset & close") with BoundFileId(TimestampFormatResetButton.uiNode(_).value):
+  extends Button("reset & close") with BoundId(TimestampFormatResetButton.uiNode(_).value):
 
   setAlignment(Pos.CENTER)
   setPrefWidth(100)

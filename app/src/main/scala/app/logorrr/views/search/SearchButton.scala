@@ -1,7 +1,7 @@
 package app.logorrr.views.search
 
 import app.logorrr.conf.FileId
-import app.logorrr.model.BoundFileId
+import app.logorrr.model.BoundId
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
@@ -17,7 +17,7 @@ object SearchButton extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchButton])
 
 
-class SearchButton extends Button with BoundFileId(SearchButton.uiNode(_).value):
+class SearchButton extends Button with BoundId(SearchButton.uiNode(_).value):
 
   setGraphic(new FontIcon(FontAwesomeSolid.SEARCH))
   setTooltip(new Tooltip("search"))
@@ -25,13 +25,13 @@ class SearchButton extends Button with BoundFileId(SearchButton.uiNode(_).value)
 
   private val searchTextProperty = new SimpleStringProperty()
   private val colorProperty = new SimpleObjectProperty[Color]()
-  private val searchTerms: ObservableList[MutableSearchTerm] = FXCollections.observableArrayList[MutableSearchTerm]()
+  private val mutSearchTerms: ObservableList[MutableSearchTerm] = FXCollections.observableArrayList[MutableSearchTerm]()
 
   setOnAction:
     _ =>
       val searchText = searchTextProperty.get()
       if searchText.nonEmpty then
-        searchTerms.add(MutableSearchTerm(searchText, colorProperty.get()))
+        mutSearchTerms.add(MutableSearchTerm(searchText, colorProperty.get()))
         colorProperty.setValue(JfxUtils.randColor)
         searchTextProperty.setValue("")
 
@@ -43,7 +43,7 @@ class SearchButton extends Button with BoundFileId(SearchButton.uiNode(_).value)
     bindIdProperty(fileIdProperty)
     this.searchTextProperty.bindBidirectional(searchTextProperty)
     this.colorProperty.bindBidirectional(colorProperty)
-    Bindings.bindContentBidirectional(this.searchTerms, mutSearchTerms)
+    Bindings.bindContentBidirectional(this.mutSearchTerms, mutSearchTerms)
   }
 
   def shutdown(searchTextProperty: Property[String]
@@ -52,5 +52,5 @@ class SearchButton extends Button with BoundFileId(SearchButton.uiNode(_).value)
     unbindIdProperty()
     this.searchTextProperty.unbindBidirectional(searchTextProperty)
     this.colorProperty.unbindBidirectional(colorProperty)
-    Bindings.unbindContentBidirectional(this.searchTerms, mutSearchTerms)
+    Bindings.unbindContentBidirectional(this.mutSearchTerms, mutSearchTerms)
   }

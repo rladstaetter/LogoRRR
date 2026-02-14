@@ -1,7 +1,7 @@
 package app.logorrr.views.text
 
 import app.logorrr.conf.FileId
-import app.logorrr.model.{BoundFileId, LogEntry}
+import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.MutableSearchTerm
@@ -23,7 +23,7 @@ object LogTextView extends UiNodeFileIdAware:
 
 class LogTextView(filteredList: FilteredList[LogEntry])
   extends ListView[LogEntry]
-    with TinyLog with BoundFileId(LogTextView.uiNode(_).value):
+    with TinyLog with BoundId(LogTextView.uiNode(_).value):
 
   // property which contains selected line number, bidirectionally bound to MutLogFileSettings
   private val selectedLineNumberProperty = new SimpleIntegerProperty()

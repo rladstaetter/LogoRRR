@@ -7,10 +7,10 @@ import app.logorrr.util.JfxUtils
 import app.logorrr.views.search.MutableSearchTerm
 import app.logorrr.views.search.stg.{OpenStgEditorButton, StgChoiceBox}
 import javafx.beans.binding.Bindings
-import javafx.beans.property.SimpleListProperty
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
 import javafx.scene.control.ToolBar
+import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 
 import scala.jdk.CollectionConverters.*
@@ -40,7 +40,9 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     , mutLogFileSettings.getFileId
     , activeSearchTerms)
 
-  def init(): Unit =
+  def init(window: Window): Unit =
+    groupChoiceBox.init(mutLogFileSettings.fileIdProperty)
+    openStgEditor.init(window, mutLogFileSettings.fileIdProperty)
     getItems.addAll(groupChoiceBox, openStgEditor)
     mutSearchTerms.addListener(JfxUtils.mkListChangeListener[MutableSearchTerm](processFiltersChange))
     updateUnclassified()
@@ -48,7 +50,10 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
 
 
   def shutdown(): Unit =
+    groupChoiceBox.shutdown()
+    openStgEditor.shutdown()
     Bindings.unbindContentBidirectional(this.mutSearchTerms, mutLogFileSettings.mutSearchTerms)
+
 
   /** if filter list is changed in any way, react to this event and either add or remove filter from UI */
   private def processFiltersChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit =

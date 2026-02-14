@@ -2,10 +2,12 @@ package app.logorrr.views.search.stg
 
 import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.model.BoundId
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.MutableSearchTerm
-import javafx.beans.property.SimpleListProperty
+import javafx.beans.property.ObjectPropertyBase
+import javafx.beans.value.ChangeListener
 import javafx.collections.ObservableList
 import javafx.scene.control.{ChoiceBox, Tooltip}
 
@@ -16,25 +18,33 @@ object StgChoiceBox extends UiNodeFileIdAware:
 
 
 class StgChoiceBox(mutLogFileSettings: MutLogFileSettings
-                   , mutSearchTerms: ObservableList[MutableSearchTerm]) extends ChoiceBox[String]:
-  setId(StgChoiceBox.uiNode(mutLogFileSettings.getFileId).value)
+                   , mutSearchTerms: ObservableList[MutableSearchTerm])
+  extends ChoiceBox[String] with BoundId(StgChoiceBox.uiNode(_).value):
+
   setStyle(StgChoiceBox.style)
   setTooltip(new Tooltip("shows search term groups"))
 
-  getSelectionModel.selectedItemProperty.addListener(JfxUtils.onNew[String](groupName => {
+  
+  private val listener: ChangeListener[String] = JfxUtils.onNew[String](groupName => {
     mutLogFileSettings.getSearchTerms(groupName) match {
       case Some(selectedTerms) =>
         mutSearchTerms.clear()
-        mutSearchTerms.addAll(selectedTerms.map(MutableSearchTerm.apply)*)
+        mutSearchTerms.addAll(selectedTerms.map(MutableSearchTerm.apply) *)
         mutLogFileSettings.setSomeSelectedSearchTermGroup(Option(groupName))
       case None =>
         mutLogFileSettings.setSomeSelectedSearchTermGroup(None)
     }
+  })
 
-  }))
+  def add(searchTermGroup: String): Unit = getItems.add(searchTermGroup)
 
-  def add(searchTermGroup: String): Unit =
-    getItems.add(searchTermGroup)
+  def init(fileIdProperty: ObjectPropertyBase[FileId]): Unit = {
+    bindIdProperty(fileIdProperty)
+    getSelectionModel.selectedItemProperty.addListener(listener)
+  }
 
-
+  def shutdown(): Unit = {
+    unbindIdProperty()
+    getSelectionModel.selectedItemProperty.removeListener(listener)
+  }
 

@@ -32,7 +32,7 @@ object LogFilePane extends UiNodeFileIdAware:
 
 class LogFilePane(mutLogFileSettings: MutLogFileSettings
                   , val entries: ObservableList[LogEntry])
-  extends BorderPane with UiTarget with BoundFileId(LogFilePane.uiNode(_).value):
+  extends BorderPane with UiTarget with BoundId(LogFilePane.uiNode(_).value):
 
   setStyle("-fx-background-color: white;")
   /** provides a tool to observe log files */
@@ -55,7 +55,6 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   /** if autoscroll checkbox is enabled, monitor given log file for changes. if there are any, this will be reflected in the ui */
   private val autoScrollSubscription: Subscription =
     autoScrollActiveProperty.subscribe((old: java.lang.Boolean, newVal: java.lang.Boolean) => enableAutoscroll(newVal))
-
 
   /** list which holds all entries, default to display all (can be changed via buttons) */
   private val filteredEntries = new FilteredList[LogEntry](entries)
@@ -114,7 +113,7 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
            , fileIdProperty: ObjectPropertyBase[FileId]): Unit =
 
     bindIdProperty(fileIdProperty)
-    searchTermToolBar.init()
+    searchTermToolBar.init(window)
     opsToolBar.init(window
       , fileIdProperty
       , mutLogFileSettings.autoScrollActiveProperty

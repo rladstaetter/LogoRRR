@@ -1,22 +1,9 @@
 package app.logorrr.usecases.settings
 
-import app.logorrr.TestFiles
-import app.logorrr.conf.Settings
-import app.logorrr.usecases.{SingleFileApplicationTest, TestFxBaseApplicationTest}
-import app.logorrr.usecases.stg.StgEditorActions
-import app.logorrr.views.a11y.uinodes.{LogoRRRMenu, SettingsEditor}
-import app.logorrr.views.settings.{SettingsStgListView, TimestampSettingsEditor}
+import app.logorrr.views.a11y.uinodes.SettingsEditor
 import org.junit.jupiter.api.Test
 
-
-/**
- * Tests settings dialogue
- */
-class SettingsTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
-  with StgEditorActions
-  with SettingsEditorTestActions:
-
-  def lookupListView(): SettingsStgListView = lookup[SettingsStgListView](SettingsEditor.SettingsStgListView)
+class AddNewGroupAndVerifyFactoryDefaults extends ASettingsTest:
 
   /**
    * -- add a new option to the global settings
@@ -59,20 +46,3 @@ class SettingsTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
     withOpenedSettingsEditor:
       waitAndClickVisibleItem(SettingsEditor.ResetToDefaultButton)
       assert(lookupListView().getItems.size() == settings.searchTermGroups.size)
-
-  /**
-   * Opens settings dialog, checks if the number of shown items for search term groups match the default settings.
-   */
-  @Test def showEmptySettingsEditor(): Unit =
-    openSettingsEditorAndPerform(
-      settingsListView => {
-        assert(settingsListView.getItems.size() == Settings.Default.searchTermGroups.size)
-      }
-    )
-
-
-
-  private def openSettingsEditorAndPerform(fn: SettingsStgListView => Unit): Unit =
-    withOpenedSettingsEditor(fn(lookupListView()))
-
-

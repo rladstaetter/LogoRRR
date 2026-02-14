@@ -1,7 +1,7 @@
 package app.logorrr.views.search
 
 import app.logorrr.conf.FileId
-import app.logorrr.model.BoundFileId
+import app.logorrr.model.BoundId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.property.ObjectPropertyBase
 import javafx.scene.control.{TextField, Tooltip}
@@ -15,7 +15,7 @@ object SearchTextField extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchTextField])
 
 
-class SearchTextField extends TextField with BoundFileId(SearchTextField.uiNode(_).value):
+class SearchTextField extends TextField with BoundId(SearchTextField.uiNode(_).value):
 
   setPrefWidth(200)
   setMaxWidth(200)

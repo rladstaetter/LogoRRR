@@ -3,7 +3,7 @@ package app.logorrr.views.ops.time
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, TimestampSettings}
-import app.logorrr.model.{BoundFileId, LogEntry}
+import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.TimestampSettingsRegion
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
@@ -38,7 +38,7 @@ class TimestampSettingsButton(settings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
                               , tsRegion: TimestampSettingsRegion)
-  extends StackPane with BoundFileId(TimestampSettingsButton.uiNode(_).value):
+  extends StackPane with BoundId(TimestampSettingsButton.uiNode(_).value):
 
   private val button: ClockButton = new ClockButton(new TimestampSettingStage(settings, chunkListView, logEntries, tsRegion))
   private val fontIcon = new ExclamationCircleFontIcon

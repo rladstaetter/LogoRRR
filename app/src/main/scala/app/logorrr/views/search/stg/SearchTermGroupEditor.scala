@@ -1,36 +1,59 @@
 package app.logorrr.views.search.stg
 
-import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTerm}
+import app.logorrr.model.FileIdPropertyHolder
 import app.logorrr.util.JfxUtils
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import javafx.beans.binding.{Bindings, StringBinding}
+import javafx.beans.property.ObjectPropertyBase
 import javafx.geometry.Insets
 import javafx.scene.Scene
 import javafx.scene.control.{Button, Label}
 import javafx.scene.layout.{HBox, Priority, VBox}
 import javafx.stage.{Modality, Stage, Window}
 
-class SearchTermGroupEditor(owner: Window
-                            , mutLogFileSettings: MutLogFileSettings
+object SearchTermGroupEditor extends UiNodeFileIdAware:
+
+  def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchTermGroupEditor])
+
+  def mkScene(createStg: CreateStgUi
+              , manageExistingSearchTermGroup: ManageStgEditor
+              , closeButton: CloseStgEditorButton
+              , titleBinding: StringBinding): Scene =
+    val title: Label = new Label():
+      setStyle("-fx-font-weight: bold")
+      textProperty().bind(titleBinding)
+
+    val hBox = new HBox(JfxUtils.mkHgrowFiller(), closeButton)
+    val vbox = new VBox(10):
+      VBox.setVgrow(this, Priority.ALWAYS)
+      setPadding(new Insets(10))
+      getChildren.addAll(title, createStg, manageExistingSearchTermGroup, hBox)
+    new Scene(vbox, 960, 720)
+
+class SearchTermGroupEditor(mutLogFileSettings: MutLogFileSettings
                             , fileId: FileId
-                            , activeSearchTerms: Seq[SearchTerm]) extends Stage:
-  initOwner(owner)
+                            , activeSearchTerms: Seq[SearchTerm])
+  extends Stage with FileIdPropertyHolder:
+
   initModality(Modality.WINDOW_MODAL)
   setTitle("Edit Search Term Groups")
 
-  private val title: Label =
-    val l = new Label(s"Search Term Groups: ${fileId.fileName}")
-    l.setStyle("-fx-font-weight: bold")
-    l
+  lazy val createStg: CreateStgUi = new CreateStgUi(mutLogFileSettings, fileId, activeSearchTerms)
+  lazy val manageExistingSearchTermGroup: ManageStgEditor = new ManageStgEditor(fileId)
+  lazy val closeButton: CloseStgEditorButton = new CloseStgEditorButton(fileId, this)
 
-  private val createStg = new CreateStgUi(mutLogFileSettings, fileId, activeSearchTerms)
-  private val manageExistingSearchTermGroup = new ManageStgEditor(fileId)
+  def init(window: Window, fileIdProperty: ObjectPropertyBase[FileId]): Unit =
+    initOwner(window)
+     bindFileIdProperty(fileIdProperty)
+    manageExistingSearchTermGroup.init(fileIdProperty, LogoRRRGlobals.getLogFileSettings(fileId).searchTermGroupEntries)
+    createStg.init(fileIdProperty)
+    val binding: StringBinding = Bindings.createStringBinding(() => "Search Term Groups " + getFileId.fileName, fileIdProperty)
+    setScene(SearchTermGroupEditor.mkScene(createStg, manageExistingSearchTermGroup, closeButton, binding))
 
-  private val closeButton: Button = new CloseStgEditorButton(fileId, this)
-  private val hBox = new HBox(JfxUtils.mkHgrowFiller(), closeButton)
-
-  private val vbox = new VBox(10)
-  VBox.setVgrow(vbox, Priority.ALWAYS)
-  vbox.setPadding(new Insets(10))
-  vbox.getChildren.addAll(title, createStg, manageExistingSearchTermGroup, hBox)
-
-  setScene(new Scene(vbox, 960, 720)) // Adjusted size for list view
+  def shutdown(): Unit = {
+    manageExistingSearchTermGroup.shutdown()
+    unbindFileIdProperty()
+    createStg.shutdown()
+  }

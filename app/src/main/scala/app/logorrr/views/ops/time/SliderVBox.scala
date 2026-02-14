@@ -2,7 +2,7 @@ package app.logorrr.views.ops.time
 
 import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.model.BoundFileId
+import app.logorrr.model.BoundId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAndPosAware}
 import javafx.beans.binding.BooleanBinding
 import javafx.beans.property.{ObjectPropertyBase, SimpleObjectProperty}
@@ -19,7 +19,7 @@ object SliderVBox extends UiNodeFileIdAndPosAware:
 
 class SliderVBox(mutLogFileSettings: MutLogFileSettings
                  , pos: Pos
-                 , tooltipText: String) extends VBox with BoundFileId(SliderVBox.uiNode(_, pos).value):
+                 , tooltipText: String) extends VBox with BoundId(SliderVBox.uiNode(_, pos).value):
 
   val slider = new TimerSlider(pos, tooltipText)
   val label = new TimestampSliderLabel

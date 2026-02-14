@@ -1,7 +1,7 @@
 package app.logorrr.views.ops
 
 import app.logorrr.conf.FileId
-import app.logorrr.model.{BoundFileId, LogEntry}
+import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.util.ClipBoardUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.property.{ObjectPropertyBase, SimpleListProperty}
@@ -21,7 +21,7 @@ object CopyLogButton extends UiNodeFileIdAware:
 /**
  * Copy current contents to clipboard.
  */
-class CopyLogButton extends Button with BoundFileId(CopyLogButton.uiNode(_).value):
+class CopyLogButton extends Button with BoundId(CopyLogButton.uiNode(_).value):
 
   private val icon = new FontIcon(FontAwesomeSolid.COPY)
   private val iconLight = new FontIcon(FontAwesomeRegular.COPY)

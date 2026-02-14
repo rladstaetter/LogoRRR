@@ -3,7 +3,7 @@ package app.logorrr.views.settings.timestamp
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, LogoRRRGlobals, TimestampSettings}
-import app.logorrr.model.{BoundFileId, IntStringBinding, LogEntry}
+import app.logorrr.model.{BoundId, IntStringBinding, LogEntry}
 import app.logorrr.views.search.TimestampSettingsRegion
 import javafx.beans.binding.Bindings
 import javafx.beans.property.*

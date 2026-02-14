@@ -10,21 +10,14 @@ import org.junit.jupiter.api.Test
 
 class StgCheckDefaultTest extends SingleFileApplicationTest(TestFiles.simpleLog0) with StgEditorActions:
 
-  @Test def checkChoiceBoxEmptyOnStart(): Unit =
-    // open file such that search term group editor icon appears
-    openFile(fileId)
-
-    // wait for visibility
-    waitForVisibility(StgChoiceBox.uiNode(fileId))
-
-    matchItems[String](StgChoiceBox.uiNode(fileId), settings.searchTermGroups.keySet.toSeq.sorted)
-
   /** traverse all search term groups and select them via the choice box, check visibility */
   @Test def selectDifferentSearchTermGroups(): Unit =
     openFile(fileId)
 
     // wait for visibility
     waitForVisibility(StgChoiceBox.uiNode(fileId))
+
+    matchItems[String](StgChoiceBox.uiNode(fileId), settings.searchTermGroups.keySet.toSeq.sorted)
 
     // create a function to use search term choicebox easily
     val selectSearchTermGroup = selectChoiceBoxByValue(StgChoiceBox.uiNode(fileId))

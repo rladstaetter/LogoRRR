@@ -2,7 +2,7 @@ package app.logorrr.views.settings.timestamp
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, TimestampSettings}
-import app.logorrr.model.{BoundFileId, LogEntry}
+import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.property.{ObjectProperty, ObjectPropertyBase, SimpleObjectProperty}
 import javafx.collections.ObservableList
@@ -19,7 +19,7 @@ object TsStartEndColDialog extends UiNodeFileIdAware:
  */
 class TsStartEndColDialog(mutLogFileSettings: MutLogFileSettings
                           , logEntries: ObservableList[LogEntry])
-  extends BorderPane with BoundFileId(TsStartEndColDialog.uiNode(_).value):
+  extends BorderPane with BoundId(TsStartEndColDialog.uiNode(_).value):
 
   val startColProperty: ObjectProperty[java.lang.Integer] = new SimpleObjectProperty[java.lang.Integer](null)
   val endColProperty: ObjectProperty[java.lang.Integer] = new SimpleObjectProperty[java.lang.Integer](null)
