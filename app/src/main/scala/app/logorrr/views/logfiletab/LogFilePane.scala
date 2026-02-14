@@ -63,7 +63,8 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   private val logTextView = new LogTextView(filteredEntries)
 
   // graphical display to the left
-  private val chunkListView = LogoRRRChunkListView(mutLogFileSettings, filteredEntries, logTextView.scrollToItem, widthProperty)
+  private val chunkListView: LogoRRRChunkListView = LogoRRRChunkListView(mutLogFileSettings, filteredEntries, logTextView.scrollToItem, widthProperty)
+
 
   val opsToolBar = new OpsToolBar(mutLogFileSettings, chunkListView, entries, filteredEntries)
 
@@ -137,7 +138,7 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
       , mutLogFileSettings.lastVisibleTextCellIndexProperty
       , mutLogFileSettings.mutSearchTerms
     )
-    chunkListView.init()
+    chunkListView.init(mutLogFileSettings.fileIdProperty)
     enableAutoscroll(mutLogFileSettings.isAutoScrollActive)
     mutLogFileSettings.mutSearchTerms.addListener(searchTermChangeListener)
 

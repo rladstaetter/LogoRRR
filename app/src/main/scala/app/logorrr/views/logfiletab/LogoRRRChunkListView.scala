@@ -4,9 +4,9 @@ import app.logorrr.clv.color.ColorPicker
 import app.logorrr.clv.{ChunkListView, ElementSelector, Vizor}
 import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.model.{LogEntry, LogEntryPicker, LogEntrySelector, LogEntryVizor}
+import app.logorrr.model.*
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
+import javafx.beans.property.{ObjectPropertyBase, ReadOnlyDoubleProperty, SimpleIntegerProperty}
 import javafx.collections.ObservableList
 
 
@@ -16,7 +16,7 @@ object LogoRRRChunkListView extends UiNodeFileIdAware:
             , entries: ObservableList[LogEntry]
             , selectInTextView: LogEntry => Unit
             , widthProperty: ReadOnlyDoubleProperty
-           ): ChunkListView[LogEntry] =
+           ): LogoRRRChunkListView =
     val logEntryVizor = LogEntryVizor(
       mutLogFileSettings.selectedLineNumberProperty
       , widthProperty
@@ -33,8 +33,7 @@ object LogoRRRChunkListView extends UiNodeFileIdAware:
       , selectInTextView
       , logEntryVizor
       , new LogEntryPicker(mutLogFileSettings)
-      , logEntrySelector
-      , mutLogFileSettings.getFileId)
+      , logEntrySelector)
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogoRRRChunkListView])
 
@@ -47,14 +46,24 @@ class LogoRRRChunkListView(override val elements: ObservableList[LogEntry]
                            , selectInTextView: LogEntry => Unit
                            , logEntryVizor: Vizor[LogEntry]
                            , logEntryPicker: ColorPicker[LogEntry]
-                           , logEntrySelector: ElementSelector[LogEntry]
-                           , fileId: FileId)
-  extends ChunkListView[LogEntry](elements, selectedLineNumberProperty, blockSizeProperty, firstVisibleTextCellIndexProperty
-    , lastVisibleTextCellIndexProperty, selectInTextView,
-    logEntryVizor, logEntryPicker, logEntrySelector) {
+                           , logEntrySelector: ElementSelector[LogEntry])
+  extends ChunkListView[LogEntry](
+    elements
+    , selectedLineNumberProperty
+    , blockSizeProperty
+    , firstVisibleTextCellIndexProperty
+    , lastVisibleTextCellIndexProperty
+    , selectInTextView
+    , logEntryVizor
+    , logEntryPicker
+    , logEntrySelector) with BoundId(LogoRRRChunkListView.uiNode(_).value):
 
-  // set Id to track it for UI tests
-  setId(LogoRRRChunkListView.uiNode(fileId).value)
+
+  def init(fileIdProperty: ObjectPropertyBase[FileId]): Unit =
+    bindIdProperty(fileIdProperty)
+    init()
 
 
-}
+  override def shutdown(): Unit =
+    super.shutdown()
+    unbindIdProperty()
