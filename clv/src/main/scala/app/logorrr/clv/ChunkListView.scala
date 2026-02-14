@@ -97,7 +97,6 @@ class ChunkListView[A](val elements: ObservableList[A]
   private val elementInvalidationListener = JfxUtils.mkInvalidationListener(_ => recalculateAndUpdateItems())
 
   /** if user selects a new active element, recalculate and implicitly repaint */
-  //private val selectedRp = mkRecalculateAndUpdateItemListener("selected")
   private val anyRp: ChangeListener[java.lang.Boolean] = (_: ObservableValue[? <: java.lang.Boolean], _: java.lang.Boolean, _: java.lang.Boolean) => {
     recalculateAndUpdateItems()
   }
@@ -107,7 +106,6 @@ class ChunkListView[A](val elements: ObservableList[A]
 
   def init(): Unit =
     getStylesheets.add(getClass.getResource("/app/logorrr/clv/ChunkListView.css").toExternalForm)
-
     setCellFactory((_: ListView[Chunk[A]]) => {
       new ChunkListCell(
         blockSizeProperty
@@ -117,26 +115,7 @@ class ChunkListView[A](val elements: ObservableList[A]
         , logEntrySelector
         , chunkListWidthProperty)
     })
-
     addListeners()
-
-  def scrollToActiveChunk(): Unit =
-    if !getItems.isEmpty then
-      val filteredChunks = getItems.filtered(c => {
-        var found = false
-        c.entries.forEach(e => if found then found else {
-          found = logEntryVizor.isSelected(e)
-        })
-        found
-      })
-      if !filteredChunks.isEmpty then
-        Option(filteredChunks.get(0)) match
-          case Some(chunk) =>
-            getSelectionModel.select(chunk)
-            val relativeIndex = getItems.indexOf(chunk)
-            getSelectionModel.select(relativeIndex)
-            JfxUtils.scrollTo[Chunk[A]](this, chunk.height, relativeIndex)
-          case None =>
 
   /** invalidation listener has to be disabled when manipulating log entries (needed for setting the timestamp for example) */
   def addInvalidationListener(): Unit = elements.addListener(elementInvalidationListener)
@@ -167,12 +146,10 @@ class ChunkListView[A](val elements: ObservableList[A]
   def shutdown(): Unit =
     removeInvalidationListener()
     anyPropProperty.removeListener(anyRp)
-
     for skin <- Option(getSkin)
         flow <- ChunkListView.lookupVirtualFlow(skin)
         verticalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.VERTICAL) do
       verticalScrollbar.visibleProperty().removeListener(scrollBarVisibilityListener)
-
     skinProperty().removeListener(chunkListViewSkinListener)
 
 
