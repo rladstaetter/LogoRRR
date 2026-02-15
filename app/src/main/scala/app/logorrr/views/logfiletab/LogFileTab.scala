@@ -2,7 +2,7 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.model.{FileIdDividerSearchTerm, LogEntry, LogorrrModel}
+import app.logorrr.model.{FileIdDividerSearchTerm, FileIdPropertyHolder, LogEntry, LogorrrModel}
 import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
@@ -54,7 +54,10 @@ object LogFileTab extends UiNodeFileIdAware:
  * @param mutLogFileSettings settings for given log file
  * @param entries            report instance holding information of log file to be analyzed
  * */
-class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList[LogEntry]) extends Tab with TinyLog:
+class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList[LogEntry])
+  extends Tab
+    with FileIdPropertyHolder
+    with TinyLog:
 
   private val selectedSubscription =
     selectedProperty.subscribe(new Consumer[java.lang.Boolean] {
@@ -70,11 +73,13 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
   val logPane = new LogFilePane(mutLogFileSettings, entries)
   val logFileTabToolTip = new LogFileTabToolTip
 
-  def init(window: Window): Unit =
-    // setup bindings ----
+  def init(window: Window
+          , mutLogFileSettings: MutLogFileSettings): Unit =
+    bindFileIdProperty(mutLogFileSettings.fileIdProperty)
     idProperty().bind(Bindings.createStringBinding(() => {
-      LogFileTab.uiNode(mutLogFileSettings.getFileId).value
-    }, mutLogFileSettings.fileIdProperty))
+      LogFileTab.uiNode(fileIdProperty.get).value
+    }, fileIdProperty))
+
 
     // set style depending on type and selected status
     styleProperty().bind(Bindings.createStringBinding(() => {
@@ -107,8 +112,6 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
     }
   }
 
-  def getFileId: FileId = mutLogFileSettings.getFileId
-
   def shutdown(): Unit =
     logFileTabToolTip.unbind()
 
@@ -122,7 +125,8 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
     selectedSubscription.unsubscribe()
     // shutdown pane
     logPane.shutdown()
-
+    idProperty.unbind()
+    unbindFileIdProperty()
 
   def getInfo = FileIdDividerSearchTerm(getFileId, logPane.activeSearchTerms, logPane.getDividerPosition)
 

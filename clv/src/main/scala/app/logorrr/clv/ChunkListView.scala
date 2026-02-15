@@ -56,10 +56,9 @@ class ChunkListView[A](val elements: ObservableList[A]
   // width of Scrollbars
   val scrollBarWidthProperty = new SimpleIntegerProperty(ChunkListView.DefaultScrollBarWidth)
 
-  def setScrollBarWidth(width: Int): Unit = scrollBarWidthProperty.set(width)
 
   // returns width - scrollbarwidth if it is > 0, else width
-  val chunkListWidthProperty: IntegerBinding = Bindings.createIntegerBinding(
+  val chunkListWidthBinding: IntegerBinding = Bindings.createIntegerBinding(
     () =>
       (if widthProperty.get() - scrollBarWidthProperty.get() >= 0 then
         widthProperty.get() - scrollBarWidthProperty.get()
@@ -101,27 +100,6 @@ class ChunkListView[A](val elements: ObservableList[A]
     recalculateAndUpdateItems()
   }
 
-  /** performance optimisation to debounce calls to the recalculation / repainting operation */
-  var recalculateScheduled = false
-
-  def init(): Unit =
-    getStylesheets.add(getClass.getResource("/app/logorrr/clv/ChunkListView.css").toExternalForm)
-    setCellFactory((_: ListView[Chunk[A]]) => {
-      new ChunkListCell(
-        blockSizeProperty
-        , selectInTextView
-        , logEntryVizor
-        , elementColorPicker
-        , logEntrySelector
-        , chunkListWidthProperty)
-    })
-    addListeners()
-
-  /** invalidation listener has to be disabled when manipulating log entries (needed for setting the timestamp for example) */
-  def addInvalidationListener(): Unit = elements.addListener(elementInvalidationListener)
-
-  def removeInvalidationListener(): Unit = elements.removeListener(elementInvalidationListener)
-
   /** toggle needed such that change listener fires */
   var toggle = false
 
@@ -137,10 +115,29 @@ class ChunkListView[A](val elements: ObservableList[A]
     , widthProperty
     , heightProperty)
 
-  private def addListeners(): Unit =
+
+  /** performance optimisation to debounce calls to the recalculation / repainting operation */
+  var recalculateScheduled = false
+
+  def init(): Unit =
+    getStylesheets.add(getClass.getResource("/app/logorrr/clv/ChunkListView.css").toExternalForm)
+    setCellFactory((_: ListView[Chunk[A]]) => {
+      new ChunkListCell(
+        blockSizeProperty
+        , selectInTextView
+        , logEntryVizor
+        , elementColorPicker
+        , logEntrySelector
+        , chunkListWidthBinding)
+    })
     addInvalidationListener()
     anyPropProperty.addListener(anyRp)
     skinProperty().addListener(chunkListViewSkinListener)
+
+  /** invalidation listener has to be disabled when manipulating log entries (needed for setting the timestamp for example) */
+  def addInvalidationListener(): Unit = elements.addListener(elementInvalidationListener)
+
+  def removeInvalidationListener(): Unit = elements.removeListener(elementInvalidationListener)
 
 
   def shutdown(): Unit =
@@ -152,7 +149,6 @@ class ChunkListView[A](val elements: ObservableList[A]
       verticalScrollbar.visibleProperty().removeListener(scrollBarVisibilityListener)
     skinProperty().removeListener(chunkListViewSkinListener)
 
-
   /**
    * Recalculates elements of listview depending on width, height and blocksize.
    */
@@ -160,8 +156,9 @@ class ChunkListView[A](val elements: ObservableList[A]
     if !recalculateScheduled && widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0 then
       recalculateScheduled = true
       Platform.runLater(() => {
-        Chunk.updateChunks[A](getItems, elements, blockSizeProperty.get(), chunkListWidthProperty.get(), heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
+        Chunk.updateChunks[A](getItems, elements, blockSizeProperty.get(), chunkListWidthBinding.get(), heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
         recalculateScheduled = false
       })
-    
+
+  def setScrollBarWidth(width: Int): Unit = scrollBarWidthProperty.set(width)
 

@@ -24,7 +24,7 @@ object LogoRRRChunkListView extends UiNodeFileIdAware:
       , mutLogFileSettings.firstVisibleTextCellIndexProperty
       , mutLogFileSettings.lastVisibleTextCellIndexProperty)
     val logEntrySelector = LogEntrySelector(mutLogFileSettings.selectedLineNumberProperty)
-
+    val picker = new LogEntryPicker(mutLogFileSettings)
     new LogoRRRChunkListView(entries
       , mutLogFileSettings.selectedLineNumberProperty
       , mutLogFileSettings.blockSizeProperty
@@ -32,7 +32,7 @@ object LogoRRRChunkListView extends UiNodeFileIdAware:
       , mutLogFileSettings.lastVisibleTextCellIndexProperty
       , selectInTextView
       , logEntryVizor
-      , new LogEntryPicker(mutLogFileSettings)
+      , picker
       , logEntrySelector)
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogoRRRChunkListView])

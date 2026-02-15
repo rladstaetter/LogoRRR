@@ -32,15 +32,15 @@ object LogFilePane extends UiNodeFileIdAware:
 
 class LogFilePane(mutLogFileSettings: MutLogFileSettings
                   , val entries: ObservableList[LogEntry])
-  extends BorderPane with UiTarget with BoundId(LogFilePane.uiNode(_).value):
+  extends BorderPane with UiTarget
+    with FileIdPropertyHolder
+    with BoundId(LogFilePane.uiNode(_).value):
 
   setStyle("-fx-background-color: white;")
   /** provides a tool to observe log files */
   private val logTailer = new LogTailer
 
   val autoScrollActiveProperty = new SimpleBooleanProperty()
-
-  def getFileId: FileId = mutLogFileSettings.getFileId
 
 
   /** if a search term is added or removed this will be saved to disc */
@@ -112,7 +112,7 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
 
   def init(window: Window
            , fileIdProperty: ObjectPropertyBase[FileId]): Unit =
-
+    bindFileIdProperty(fileIdProperty)
     bindIdProperty(fileIdProperty)
     searchTermToolBar.init(window)
     opsToolBar.init(window
@@ -138,7 +138,7 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
       , mutLogFileSettings.lastVisibleTextCellIndexProperty
       , mutLogFileSettings.mutSearchTerms
     )
-    chunkListView.init(mutLogFileSettings.fileIdProperty)
+    chunkListView.init(fileIdProperty)
     enableAutoscroll(mutLogFileSettings.isAutoScrollActive)
     mutLogFileSettings.mutSearchTerms.addListener(searchTermChangeListener)
 
@@ -147,7 +147,6 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   def getDividerPosition: Double = divider.getPosition
 
   def shutdown(): Unit =
-    unbindIdProperty()
     searchTermToolBar.shutdown()
     opsToolBar.shutdown(mutLogFileSettings.autoScrollActiveProperty, mutLogFileSettings.mutSearchTerms, filteredEntries)
     textPane.shutdown(mutLogFileSettings.fontSizeProperty)
@@ -155,7 +154,7 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
     textSizeSlider.unbindIdProperty()
     blockSizeSlider.unbindIdProperty()
     autoScrollActiveProperty.unbind()
-    logTailer.shutdown(mutLogFileSettings.fileIdProperty, entries)
+    logTailer.shutdown(fileIdProperty, entries)
     if mutLogFileSettings.isAutoScrollActive then enableAutoscroll(false)
     logTextView.shutdown(
       mutLogFileSettings.selectedLineNumberProperty
@@ -165,17 +164,19 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
     chunkListView.shutdown()
     autoScrollSubscription.unsubscribe()
     mutLogFileSettings.mutSearchTerms.removeListener(searchTermChangeListener)
-    LogoRRRGlobals.removeLogFile(getFileId)
+    LogoRRRGlobals.removeLogFile(fileIdProperty.get())
+    unbindFileIdProperty()
+    unbindIdProperty()
 
   override def addData(model: LogorrrModel): Unit = () // TOOD IMPLEMENT ME
 
-  override def contains(fileId: FileId): Boolean = fileId.equals(getFileId)
+  override def contains(fileId: FileId): Boolean = fileId.equals(fileIdProperty.get())
 
   override def selectFile(fileId: FileId): Unit = ()
 
   override def selectLastLogFile(): Unit = ()
 
-  override def getInfos: Seq[FileIdDividerSearchTerm] = Seq(FileIdDividerSearchTerm(getFileId, activeSearchTerms, getDividerPosition))
+  override def getInfos: Seq[FileIdDividerSearchTerm] = Seq(FileIdDividerSearchTerm(fileIdProperty.get(), activeSearchTerms, getDividerPosition))
 
 
 

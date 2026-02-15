@@ -27,7 +27,6 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
   private val startColProperty = new SimpleObjectProperty[java.lang.Integer]()
   private val endColProperty = new SimpleObjectProperty[java.lang.Integer]()
 
-
   private val ShowMax = 26 // how many rows should be shown in the TimeStamp Settings Dialog at max
   private val showThisManyRows = if logEntries.size() > ShowMax then ShowMax else logEntries.size()
   private val firstVisible = Option(mutLogFileSettings.firstVisibleTextCellIndexProperty.get()).getOrElse(0)

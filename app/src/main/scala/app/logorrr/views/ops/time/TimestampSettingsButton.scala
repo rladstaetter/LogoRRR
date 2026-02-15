@@ -31,16 +31,17 @@ class ExclamationCircleFontIcon extends FontIcon:
  * Given a time stamp format (for example: YYYY-MM-dd HH:mm:ss.SSS), LogoRRR is able to parse the timestamp
  * and thus has new possibilities to analyse the log file.
  *
- * @param settings   settings for specific log file
+ * @param mutLogFileSettings   settings for specific log file
  * @param logEntries the list of log entries to display in order to configure a time format
  */
-class TimestampSettingsButton(settings: MutLogFileSettings
+class TimestampSettingsButton(mutLogFileSettings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
                               , tsRegion: TimestampSettingsRegion)
   extends StackPane with BoundId(TimestampSettingsButton.uiNode(_).value):
 
-  private val button: ClockButton = new ClockButton(new TimestampSettingStage(settings, chunkListView, logEntries, tsRegion))
+  private val timestampSettingStage = new TimestampSettingStage(mutLogFileSettings, chunkListView, logEntries, tsRegion)
+  private val button: ClockButton = new ClockButton(timestampSettingStage)
   private val fontIcon = new ExclamationCircleFontIcon
 
   getChildren.addAll(button, fontIcon)

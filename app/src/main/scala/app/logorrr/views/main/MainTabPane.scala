@@ -57,8 +57,8 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
 
   /** Adds a new logfile to display and initializes bindings and listeners */
   override def addData(model: LogorrrModel): Unit =
-    val tab = LogFileTab(model)
-    tab.init(getScene.getWindow)
+    val tab =  LogFileTab(model)
+    tab.init(getScene.getWindow, model.mutLogFileSettings)
     getTabs.add(tab)
     tab.initContextMenu()
 

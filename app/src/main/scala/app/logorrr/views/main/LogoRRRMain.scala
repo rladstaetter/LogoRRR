@@ -22,7 +22,5 @@ class LogoRRRMain(stage: Stage
 
   def selectLastLogFile(): Unit = logSource.ui.selectLastLogFile()
 
-  def getInfos: Seq[FileIdDividerSearchTerm] = logSource.ui.getInfos
-
   def shutdown(): Unit = logSource.ui.shutdown()
 
