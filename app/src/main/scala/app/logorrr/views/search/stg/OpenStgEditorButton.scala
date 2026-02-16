@@ -4,6 +4,7 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.model.BoundId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.util.GfxElements
 import javafx.beans.property.ObjectPropertyBase
 import javafx.scene.control.{Button, Tooltip}
 import javafx.stage.Window
@@ -21,8 +22,8 @@ class OpenStgEditorButton(mutLogFileSettings: MutLogFileSettings
                           , activeSearchTerms: () => Seq[SearchTerm])
   extends Button with BoundId(OpenStgEditorButton.uiNode(_).value):
 
-  setGraphic(new FontIcon(FontAwesomeRegular.EDIT))
-  setTooltip(new Tooltip("edit search term groups"))
+  setGraphic(GfxElements.Icons.heart)
+  setTooltip(GfxElements.ToolTips.mkAddToFavorites)
 
   lazy val editor = new SearchTermGroupEditor(mutLogFileSettings, fileId, activeSearchTerms())
 

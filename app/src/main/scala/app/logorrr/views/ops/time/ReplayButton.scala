@@ -4,8 +4,8 @@ import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.ops.PulsatingAnimationTimer
 import app.logorrr.views.text.LogTextView
+import app.logorrr.views.util.{GfxElements, PulsatingAnimationTimer}
 import javafx.animation.{Animation, KeyFrame, Timeline}
 import javafx.beans.binding.StringBinding
 import javafx.beans.property.{IntegerProperty, SimpleIntegerProperty}
@@ -69,12 +69,10 @@ class ReplayButton(filteredList: ObservableList[LogEntry]
                    , logTextView: LogTextView) extends Button:
 
   var timeline: Timeline = scala.compiletime.uninitialized
-  private val icon = new FontIcon(FontAwesomeSolid.PLAY_CIRCLE)
-  private val iconLight = new FontIcon(FontAwesomeRegular.PLAY_CIRCLE)
   private val tooltip = new Tooltip("replay log")
   var animationTimer: PulsatingAnimationTimer = scala.compiletime.uninitialized
 
-  setGraphic(icon)
+  setGraphic(GfxElements.Icons.playCircleDark)
   setTooltip(tooltip)
   setOnAction(_ => {
     // calculate speed
@@ -98,7 +96,7 @@ class ReplayButton(filteredList: ObservableList[LogEntry]
           case Some(value) => value.stop()
           case None =>
         }
-        animationTimer = new PulsatingAnimationTimer(this, iconLight, icon, tooltip, tooltip.getText, timeInfo.duration)
+        animationTimer = new PulsatingAnimationTimer(this, GfxElements.Icons.playCircle, GfxElements.Icons.playCircleDark, tooltip, tooltip.getText, timeInfo.duration)
         animationTimer.start()
       case None =>
     }

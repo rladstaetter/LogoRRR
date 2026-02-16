@@ -4,6 +4,7 @@ import app.logorrr.conf.FileId
 import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.util.ClipBoardUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.util.{GfxElements, PulsatingAnimationTimer}
 import javafx.beans.property.{ObjectPropertyBase, SimpleListProperty}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.collections.transformation.FilteredList
@@ -23,8 +24,6 @@ object CopyLogButton extends UiNodeFileIdAware:
  */
 class CopyLogButton extends Button with BoundId(CopyLogButton.uiNode(_).value):
 
-  private val icon = new FontIcon(FontAwesomeSolid.COPY)
-  private val iconLight = new FontIcon(FontAwesomeRegular.COPY)
   private val defaultToolTip = new Tooltip("copy current selection to clipboard")
   private val entries = new SimpleListProperty[LogEntry](FXCollections.observableArrayList())
 
@@ -38,12 +37,12 @@ class CopyLogButton extends Button with BoundId(CopyLogButton.uiNode(_).value):
       defaultToolTip.show(this, x, y)
       mkTimer().start() // visual response to click
 
-  private def mkTimer() = new PulsatingAnimationTimer(this, iconLight, icon, defaultToolTip, "copy current selection to clipboard", Duration.ofSeconds(1))
+  private def mkTimer() = new PulsatingAnimationTimer(this, GfxElements.Icons.copy, GfxElements.Icons.copyDark, defaultToolTip, "copy current selection to clipboard", Duration.ofSeconds(1))
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , filteredList: ObservableList[LogEntry]): Unit =
     bindIdProperty(fileIdProperty)
-    setGraphic(icon)
+    setGraphic(GfxElements.Icons.copyDark)
     setTooltip(defaultToolTip)
     entries.bindContent(filteredList)
 

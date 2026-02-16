@@ -1,4 +1,4 @@
-package app.logorrr.views.ops
+package app.logorrr.views.util
 
 import javafx.animation.AnimationTimer
 import javafx.scene.Node
@@ -7,8 +7,8 @@ import javafx.scene.control.{Labeled, Tooltip}
 import java.time.Duration
 
 class PulsatingAnimationTimer(labeled: Labeled
-                              , iconLight: Node
                               , icon: Node
+                              , iconDark: Node
                               , tooltip: Tooltip
                               , tooltipText: String
                               , animationDuration: Duration) extends AnimationTimer:
@@ -19,13 +19,13 @@ class PulsatingAnimationTimer(labeled: Labeled
 
   override def stop(): Unit =
     super.stop()
-    labeled.setGraphic(icon)
+    labeled.setGraphic(iconDark)
     labeled.setOpacity(1)
     tooltip.hide()
 
   def handle(now: Long): Unit =
     if startTime < 0 then
-      labeled.setGraphic(iconLight)
+      labeled.setGraphic(icon)
       startTime = now
 
     val elapsedSeconds = (now - startTime) / 1_000_000_000.0
@@ -33,7 +33,7 @@ class PulsatingAnimationTimer(labeled: Labeled
     // Stop the animation after animation duration was reached
     if elapsedSeconds > animationDuration.toSeconds then
       labeled.getGraphic.setOpacity(1) // Ensure it ends at full opacity
-      labeled.setGraphic(icon)
+      labeled.setGraphic(iconDark)
       tooltip.hide()
       tooltip.setText(tooltipText)
       this.stop()

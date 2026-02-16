@@ -3,6 +3,7 @@ package app.logorrr.views.ops
 import app.logorrr.conf.FileId
 import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.util.GfxElements
 import javafx.beans.property.{ObjectPropertyBase, SimpleListProperty}
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.control.{Button, Tooltip}
@@ -15,8 +16,8 @@ object ClearLogButton extends UiNodeFileIdAware:
 
 
 class ClearLogButton extends Button with BoundId(ClearLogButton.uiNode(_).value):
-  private val icon = new FontIcon(FontAwesomeSolid.TRASH)
-  setGraphic(icon)
+  
+  setGraphic(GfxElements.Icons.trash)
   setTooltip(new Tooltip("clear log file"))
   setOnAction(_ => entries.clear())
 

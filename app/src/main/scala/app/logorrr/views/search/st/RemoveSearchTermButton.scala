@@ -4,8 +4,8 @@ import app.logorrr.clv.color.ColorUtil
 import app.logorrr.conf.FileId
 import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
-import app.logorrr.views.search.GfxElements
 import app.logorrr.views.search.st.RemoveSearchTermButton.cssStyle
+import app.logorrr.views.util.GfxElements
 import javafx.scene.control.Button
 import javafx.scene.paint.Color
 
@@ -42,9 +42,9 @@ object RemoveSearchTermButton extends UiNodeSearchTermAware:
  * If clicked, removes a search term group from
  */
 class RemoveSearchTermButton extends Button:
-  val icon = GfxElements.closeWindowIcon
+  val icon = GfxElements.Icons.windowClose
   setGraphic(icon)
-  setTooltip(GfxElements.mkRemoveTooltip)
+  setTooltip(GfxElements.ToolTips.mkRemove)
   setStyle(cssStyle)
   
 

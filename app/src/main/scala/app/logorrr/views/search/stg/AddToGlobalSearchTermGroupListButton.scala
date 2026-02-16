@@ -2,7 +2,7 @@ package app.logorrr.views.search.stg
 
 import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.search.GfxElements
+import app.logorrr.views.util.GfxElements
 import javafx.beans.binding.ObjectBinding
 import javafx.scene.Node
 import javafx.scene.control.{ToggleButton, Tooltip}
@@ -18,9 +18,9 @@ class AddToGlobalSearchTermGroupListButton(fileId: FileId) extends ToggleButton 
     bind(selectedProperty)
     override def computeValue(): Node = {
       if isSelected then {
-        GfxElements.heartDarkIcon
+        GfxElements.Icons.heartDark
       } else {
-        GfxElements.heartIcon
+        GfxElements.Icons.heart
       }
     }
   })

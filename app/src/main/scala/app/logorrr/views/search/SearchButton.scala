@@ -4,6 +4,7 @@ import app.logorrr.conf.FileId
 import app.logorrr.model.BoundId
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.util.GfxElements
 import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 import javafx.collections.{FXCollections, ObservableList}
@@ -19,7 +20,8 @@ object SearchButton extends UiNodeFileIdAware:
 
 class SearchButton extends Button with BoundId(SearchButton.uiNode(_).value):
 
-  setGraphic(new FontIcon(FontAwesomeSolid.SEARCH))
+  
+  setGraphic(GfxElements.Icons.search)
   setTooltip(new Tooltip("search"))
   setMaxWidth(40)
 

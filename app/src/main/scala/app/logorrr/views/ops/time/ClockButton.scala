@@ -2,6 +2,7 @@ package app.logorrr.views.ops.time
 
 import app.logorrr.conf.TimestampSettings
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
+import app.logorrr.views.util.GfxElements
 import javafx.scene.control.{Button, Tooltip}
 import javafx.stage.Window
 import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
@@ -13,7 +14,8 @@ class ClockButton(stage: TimestampSettingStage) extends Button:
     """|-color-button-bg: -color-bg-subtle;
        |-fx-background-insets: 0;
        |""".stripMargin)
-  setGraphic(new FontIcon(FontAwesomeRegular.CLOCK))
+  
+  setGraphic(GfxElements.Icons.clock)
   setTooltip(new Tooltip("configure time format"))
   setOnAction(_ => stage.showAndWait())
 
