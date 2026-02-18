@@ -29,8 +29,8 @@ object CssBindingUtil:
              |-fx-border-width: 1pt;
              |-fx-border-radius: 5pt;
              |-fx-background-radius: 5pt;
-             |-fx-border-color: ${cssLinearGradient("to bottom right", color.darker, color)};
-             |-fx-background-color: ${cssLinearGradient("to bottom right", color, color.darker)};
+             |-fx-border-color: ${cssLinearGradient("to right", color.darker, color)};
+             |-fx-background-color: ${cssLinearGradient("to right", color, color.darker)};
              |""".stripMargin
         case None =>
           ""

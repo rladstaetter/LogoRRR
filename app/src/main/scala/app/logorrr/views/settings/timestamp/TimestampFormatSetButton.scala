@@ -63,7 +63,6 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
           chunkListView.addInvalidationListener()
           // update slider boundaries
           //tsRegion.initializeRanges()
-          println("initialize range")
         // on any other case just return None
         case _ =>
           mutLogFileSettings.setSomeTimestampSettings(None)

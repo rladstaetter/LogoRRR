@@ -11,7 +11,7 @@ import org.scalacheck.{Gen, Prop}
 object SearchTermCalculatorSpec:
 
   val mutSearchTermGen: Gen[MutableSearchTerm] = for
-    f <- Gen.oneOf(DefaultSearchTermGroups().getTerms("Java_JUL").get).map(MutableSearchTerm.apply)
+    f <- Gen.oneOf(DefaultSearchTermGroups().searchTermGroups.tail.head.terms).map(MutableSearchTerm.apply)
   yield f
 
   val gen: Gen[LogTextViewLabel] =

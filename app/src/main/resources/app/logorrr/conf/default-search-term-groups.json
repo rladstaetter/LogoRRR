@@ -1,11 +1,11 @@
 {
   "searchTermGroups": [
     {
-      "name": "EMPTY",
+      "selected": true,
       "terms": []
     },
     {
-      "name": "Java_JUL",
+      "selected": false,
       "terms": [
         {
           "value": "SEVERE",
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "name": "Java_Log4j_Logback",
+      "selected": false,
       "terms": [
         {
           "value": "FATAL",
@@ -80,7 +80,7 @@
       ]
     },
     {
-      "name": "Python_Logging",
+      "selected": false,
       "terms": [
         {
           "value": "CRITICAL",
@@ -115,7 +115,7 @@
       ]
     },
     {
-      "name": "CSharp_Serilog",
+      "selected": false,
       "terms": [
         {
           "value": "Fatal",
@@ -150,7 +150,7 @@
       ]
     },
     {
-      "name": "CSharp_NLog",
+      "selected": false,
       "terms": [
         {
           "value": "Fatal",
@@ -185,7 +185,7 @@
       ]
     },
     {
-      "name": "Cpp_Spdlog",
+      "selected": false,
       "terms": [
         {
           "value": "critical",
@@ -220,7 +220,7 @@
       ]
     },
     {
-      "name": "JavaScript_Winston",
+      "selected": false,
       "terms": [
         {
           "value": "error",
@@ -260,7 +260,7 @@
       ]
     },
     {
-      "name": "JavaScript_Pino",
+      "selected": false,
       "terms": [
         {
           "value": "fatal",
@@ -295,7 +295,7 @@
       ]
     },
     {
-      "name": "Go_Slog",
+      "selected": false,
       "terms": [
         {
           "value": "LevelError",
@@ -320,7 +320,7 @@
       ]
     },
     {
-      "name": "Rust_Tracing",
+      "selected": false,
       "terms": [
         {
           "value": "ERROR",
@@ -350,7 +350,7 @@
       ]
     },
     {
-      "name": "PHP_Monolog",
+      "selected": false,
       "terms": [
         {
           "value": "EMERGENCY",
@@ -395,7 +395,7 @@
       ]
     },
     {
-      "name": "Swift_AppleLog",
+      "selected": false,
       "terms": [
         {
           "value": "fault",
@@ -425,7 +425,7 @@
       ]
     },
     {
-      "name": "Ruby_Logger",
+      "selected": false,
       "terms": [
         {
           "value": "FATAL",
@@ -455,7 +455,7 @@
       ]
     },
     {
-      "name": "Linux_Syslog_RFC5424",
+      "selected": false,
       "terms": [
         {
           "value": "EMERG",
@@ -500,7 +500,7 @@
       ]
     },
     {
-      "name": "Linux_Kernel_KMsg",
+      "selected": false,
       "terms": [
         {
           "value": "kern.emerg",
@@ -545,7 +545,7 @@
       ]
     },
     {
-      "name": "Web_Nginx_Error",
+      "selected": false,
       "terms": [
         {
           "value": "[emerg]",
@@ -590,7 +590,7 @@
       ]
     },
     {
-      "name": "Web_Apache_Error",
+      "selected": false,
       "terms": [
         {
           "value": "emerg",
@@ -635,7 +635,7 @@
       ]
     },
     {
-      "name": "Web_HTTP_Status_Classes",
+      "selected": false,
       "terms": [
         {
           "value": " 500 ",
@@ -675,7 +675,7 @@
       ]
     },
     {
-      "name": "Database_PostgreSQL",
+      "selected": false,
       "terms": [
         {
           "value": "PANIC",
@@ -720,7 +720,7 @@
       ]
     },
     {
-      "name": "Database_MySQL",
+      "selected": false,
       "terms": [
         {
           "value": "[System]",
@@ -745,7 +745,7 @@
       ]
     },
     {
-      "name": "NodeJS_Morgan",
+      "selected": false,
       "terms": [
         {
           "value": "GET",
@@ -775,7 +775,7 @@
       ]
     },
     {
-      "name": "Kubernetes_Events",
+      "selected": false,
       "terms": [
         {
           "value": "Failed",

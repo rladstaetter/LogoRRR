@@ -3,19 +3,16 @@ package app.logorrr.conf.mut
 import app.logorrr.conf.*
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JetbrainsMonoFontStyleBinding
-import app.logorrr.views.ops.time.TimeRange
 import app.logorrr.views.search.MutableSearchTerm
-import app.logorrr.views.search.st.SearchTermToggleButton
-import javafx.beans.binding.{BooleanBinding, ObjectBinding, StringBinding}
+import app.logorrr.views.search.st.ASearchTermToggleButton
+import javafx.beans.binding.{BooleanBinding, StringBinding}
 import javafx.beans.property.*
 import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ObservableList}
 
-import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.util.function.Predicate
 import scala.jdk.CollectionConverters.*
-import scala.util.Try
 
 object MutLogFileSettings:
 
@@ -27,7 +24,7 @@ object MutLogFileSettings:
     s.setBlockSettings(logFileSettings.blockSettings)
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
     s.setDividerPosition(logFileSettings.dividerPosition)
-    s.setFilters(logFileSettings.searchTerms.map(f => MutableSearchTerm(f)))
+    s.setMutableSearchTerms(logFileSettings.searchTerms.map(f => MutableSearchTerm(f)))
     s.someTimestampSettings.set(logFileSettings.someTimestampSettings)
     logFileSettings.someTimestampSettings match
       case Some(sts) => s.setDateTimeFormatter(sts.dateTimeFormatter)
@@ -35,16 +32,13 @@ object MutLogFileSettings:
     s.setAutoScroll(logFileSettings.autoScroll)
     s.setLowerTimestampValue(logFileSettings.lowerTimestamp)
     s.setUpperTimestampValue(logFileSettings.upperTimestamp)
-    s.setSomeSelectedSearchTermGroup(logFileSettings.someSelectedSearchTermGroup)
-    for (k, terms) <- logFileSettings.searchTermGroups do
-      s.putSearchTerms(k, terms)
     s
 
 
 class MutLogFileSettings:
 
-  var someUnclassifiedFilter: Option[(MutableSearchTerm, SearchTermToggleButton)] = None
-  var filterButtons: Map[Predicate[String], SearchTermToggleButton] = Map[Predicate[String], SearchTermToggleButton]()
+  val showPredicate = new LogFilePredicate
+  var someUnclassifiedSearchTerm: Option[ASearchTermToggleButton] = None
 
   val fileIdProperty = new SimpleObjectProperty[FileId]()
   private val firstOpenedProperty = new SimpleLongProperty()
@@ -58,33 +52,18 @@ class MutLogFileSettings:
 
   private val someTimestampSettings = new SimpleObjectProperty[Option[TimestampSettings]](None)
 
-  private val lowerTimestampValueProperty = new SimpleLongProperty()
-  private val upperTimestampValueProperty = new SimpleLongProperty()
-
-  private val someSelectedSearchTermGroupProperty = new SimpleObjectProperty[Option[String]](None)
 
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
-  val mutSearchTerms: ObservableList[MutableSearchTerm] =
-    FXCollections.observableArrayList[MutableSearchTerm](MutableSearchTerm.extractor)
 
-  private val mutSearchTermGroupSettings = new MutSearchTermGroupSettings
-
-  def putSearchTerms(groupName: String, searchTerms: Seq[SearchTerm]): Unit = mutSearchTermGroupSettings.put(groupName, searchTerms)
-
-  def getSearchTerms(groupName: String): Option[Seq[SearchTerm]] = mutSearchTermGroupSettings.get(groupName)
-
-  def removeSearchTermGroup(searchTermGroupName: String): Unit = mutSearchTermGroupSettings.remove(searchTermGroupName)
-
-  val searchTermGroupNames: ObservableList[String] = mutSearchTermGroupSettings.searchTermGroupNames
-
-  val searchTermGroupEntries: ObservableList[SearchTermGroup] = mutSearchTermGroupSettings.searchTermGroupEntries
+  /** with the extractor the changelistener also fires if an element is changed */
+  val mutSearchTerms: ObservableList[MutableSearchTerm] = FXCollections.observableArrayList[MutableSearchTerm](MutableSearchTerm.extractor)
 
 
   private def matchFilter(entry: LogEntry): Boolean =
     val matchedFilter = SearchTerm.matches(entry.value, getSearchTerms.toSet)
-    someUnclassifiedFilter match
-      case Some((_, b)) =>
+    someUnclassifiedSearchTerm match
+      case Some(b) =>
         val dontMatch = SearchTerm.dontMatch(entry.value, getSearchTerms.toSet)
         if b.isSelected then
           val res = dontMatch || matchedFilter
@@ -100,7 +79,7 @@ class MutLogFileSettings:
    *
    * @param filteredList list to filter
    */
-  def updateActiveFilter(filteredList: FilteredList[LogEntry]): Unit =
+  def updateActiveSearchTerms(filteredList: FilteredList[LogEntry]): Unit =
     filteredList.setPredicate((entry: LogEntry) => matchTimeRange(entry) && matchFilter(entry))
 
 
@@ -111,21 +90,13 @@ class MutLogFileSettings:
         val asMilli = value.toEpochMilli
         getLowerTimestampValue <= asMilli && asMilli <= getUpperTimestampValue
 
-  def setLowerTimestampValue(lowerValue: Long): Unit = lowerTimestampValueProperty.set(lowerValue)
+  def setLowerTimestampValue(lowerValue: Long): Unit = showPredicate.lowerTimestampValueProperty.set(lowerValue)
 
-  def getLowerTimestampValue: Long = lowerTimestampValueProperty.get()
+  def getLowerTimestampValue: Long = showPredicate.lowerTimestampValueProperty.get()
 
-  val filteredRangeBinding: ObjectBinding[TimeRange] = new ObjectBinding[TimeRange]():
-    bind(lowerTimestampValueProperty, upperTimestampValueProperty)
+  def setUpperTimestampValue(upperValue: Long): Unit = showPredicate.upperTimestampValueProperty.set(upperValue)
 
-    override def computeValue(): TimeRange =
-      (for lower <- Option(lowerTimestampValueProperty.get()).map(Instant.ofEpochMilli)
-           upper <- Option(upperTimestampValueProperty.get()).map(Instant.ofEpochMilli)
-      yield Try(TimeRange(lower, upper)).getOrElse(null)).orNull
-
-  def setUpperTimestampValue(upperValue: Long): Unit = upperTimestampValueProperty.set(upperValue)
-
-  def getUpperTimestampValue: Long = upperTimestampValueProperty.get()
+  def getUpperTimestampValue: Long = showPredicate.upperTimestampValueProperty.get()
 
   def getSomeTimestampSettings: Option[TimestampSettings] = someTimestampSettings.get()
 
@@ -133,8 +104,8 @@ class MutLogFileSettings:
 
   def setDateTimeFormatter(dateTimeFormatter: DateTimeFormatter): Unit = dateTimeFormatterProperty.set(dateTimeFormatter)
 
-  def setFilters(filters: Seq[MutableSearchTerm]): Unit =
-    mutSearchTerms.setAll(filters.asJava)
+  def setMutableSearchTerms(mutableSearchTerms: Seq[MutableSearchTerm]): Unit =
+    mutSearchTerms.setAll(mutableSearchTerms *)
 
 
   val hasTimestampSetting: BooleanBinding = new BooleanBinding:
@@ -180,87 +151,21 @@ class MutLogFileSettings:
   def getFirstOpened: Long = firstOpenedProperty.get()
 
   def mkImmutable(): LogFileSettings =
-    val st = getSearchTerms
-    val lfs =
-      LogFileSettings(fileIdProperty.get()
-        , selectedLineNumberProperty.get()
-        , firstOpenedProperty.get()
-        , dividerPositionProperty.get()
-        , fontSizeProperty.get()
-        , st
-        , BlockSettings(blockSizeProperty.get())
-        , someTimestampSettings.get()
-        , autoScrollActiveProperty.get()
-        , firstVisibleTextCellIndexProperty.get()
-        , lastVisibleTextCellIndexProperty.get()
-        , lowerTimestampValueProperty.get()
-        , upperTimestampValueProperty.get()
-        , someSelectedSearchTermGroupProperty.get()
-        , mutSearchTermGroupSettings.mkImmutable()
-      )
-    lfs
+    LogFileSettings(fileIdProperty.get()
+      , selectedLineNumberProperty.get()
+      , firstOpenedProperty.get()
+      , dividerPositionProperty.get()
+      , fontSizeProperty.get()
+      , getSearchTerms
+      , BlockSettings(blockSizeProperty.get())
+      , someTimestampSettings.get()
+      , autoScrollActiveProperty.get()
+      , firstVisibleTextCellIndexProperty.get()
+      , lastVisibleTextCellIndexProperty.get()
+      , showPredicate.lowerTimestampValueProperty.get()
+      , showPredicate.upperTimestampValueProperty.get()
+    )
 
   def getSearchTerms: Seq[SearchTerm] =
     mutSearchTerms.asScala.toSeq.map(f => SearchTerm(f.getValue, f.getColor, f.isActive))
 
-  def setSomeSelectedSearchTermGroup(someSelectedSearchTermGroupId: Option[String]): Unit =
-    someSelectedSearchTermGroupProperty.set(someSelectedSearchTermGroupId)
-
-  def getSomeSelectedSearchTermGroup: Option[String] = someSelectedSearchTermGroupProperty.get()
-
-/*
-def bind(other: MutLogFileSettings): Unit = {
-  // Simple Object/Primitive Properties
-  this.fileIdProperty.bindBidirectional(other.fileIdProperty)
-  this.fontSizeProperty.bindBidirectional(other.fontSizeProperty)
-  this.blockSizeProperty.bindBidirectional(other.blockSizeProperty)
-  this.selectedLineNumberProperty.bindBidirectional(other.selectedLineNumberProperty)
-  this.firstVisibleTextCellIndexProperty.bindBidirectional(other.firstVisibleTextCellIndexProperty)
-  this.lastVisibleTextCellIndexProperty.bindBidirectional(other.lastVisibleTextCellIndexProperty)
-  this.dividerPositionProperty.bindBidirectional(other.dividerPositionProperty)
-  this.autoScrollActiveProperty.bindBidirectional(other.autoScrollActiveProperty)
-
-  // Timestamp related properties
-  this.dateTimeFormatterProperty.bindBidirectional(other.dateTimeFormatterProperty)
-  this.someTimestampSettings.bindBidirectional(other.someTimestampSettings)
-  this.lowerTimestampValueProperty.bindBidirectional(other.lowerTimestampValueProperty)
-  this.upperTimestampValueProperty.bindBidirectional(other.upperTimestampValueProperty)
-  this.firstOpenedProperty.bindBidirectional(other.firstOpenedProperty)
-
-  // Search and Group properties
-  this.someSelectedSearchTermGroupProperty.bindBidirectional(other.someSelectedSearchTermGroupProperty)
-
-  // For ListProperties, we bind the content of the list
-  // so that adding/removing items in one reflects in the other
-  this.mutSearchTerms.bindContentBidirectional(other.mutSearchTerms)
-
-  // Note: Since mutSearchTermGroupSettings is an internal object,
-  // you may need a similar bind method inside MutSearchTermGroupSettings
-  // or expose its internal properties/lists to bind them here.
-}
-
-def unbind(other: MutLogFileSettings): Unit = {
-  // Unbind Simple Object/Primitive Properties
-  this.fileIdProperty.unbindBidirectional(other.fileIdProperty)
-  this.fontSizeProperty.unbindBidirectional(other.fontSizeProperty)
-  this.blockSizeProperty.unbindBidirectional(other.blockSizeProperty)
-  this.selectedLineNumberProperty.unbindBidirectional(other.selectedLineNumberProperty)
-  this.firstVisibleTextCellIndexProperty.unbindBidirectional(other.firstVisibleTextCellIndexProperty)
-  this.lastVisibleTextCellIndexProperty.unbindBidirectional(other.lastVisibleTextCellIndexProperty)
-  this.dividerPositionProperty.unbindBidirectional(other.dividerPositionProperty)
-  this.autoScrollActiveProperty.unbindBidirectional(other.autoScrollActiveProperty)
-
-  // Unbind Timestamp related properties
-  this.dateTimeFormatterProperty.unbindBidirectional(other.dateTimeFormatterProperty)
-  this.someTimestampSettings.unbindBidirectional(other.someTimestampSettings)
-  this.lowerTimestampValueProperty.unbindBidirectional(other.lowerTimestampValueProperty)
-  this.upperTimestampValueProperty.unbindBidirectional(other.upperTimestampValueProperty)
-  this.firstOpenedProperty.unbindBidirectional(other.firstOpenedProperty)
-
-  // Unbind Search and Group properties
-  this.someSelectedSearchTermGroupProperty.unbindBidirectional(other.someSelectedSearchTermGroupProperty)
-
-  // Unbind ListProperty content
-  this.mutSearchTerms.unbindContentBidirectional(other.mutSearchTerms)
-}
-*/

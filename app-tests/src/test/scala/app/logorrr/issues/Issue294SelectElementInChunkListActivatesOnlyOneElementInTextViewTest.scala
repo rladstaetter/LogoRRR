@@ -23,13 +23,13 @@ class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
   override lazy val settings: Settings = Settings(
     StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map(TestFiles.simpleLog1.value ->
-      LogFileSettings.mk(TestFiles.simpleLog1, TestSettings.DefaultGroups)
+      LogFileSettings.mk(TestFiles.simpleLog1, TestSettings.DefaultGroups.searchTermGroups.tail.head)
         .copy(
           blockSettings = BlockSettings(50)
           , dividerPosition = 0.599))
     , None
     , None
-    , TestSettings.DefaultGroupsAsMap
+    , TestSettings.Groups
     , None
   )
 

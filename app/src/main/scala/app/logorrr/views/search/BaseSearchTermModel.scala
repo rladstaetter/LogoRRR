@@ -1,9 +1,8 @@
 package app.logorrr.views.search
 
-import app.logorrr.conf.{FileId, SearchTerm}
+import app.logorrr.conf.SearchTerm
 import app.logorrr.model.{ActivePropertyHolder, ColorPropertyHolder, UnclassifiedPropertyHolder, ValuePropertyHolder}
 import javafx.beans.property.*
-import javafx.scene.paint.Color
 
 
 /**
@@ -15,16 +14,18 @@ trait BaseSearchTermModel
     with ActivePropertyHolder
     with UnclassifiedPropertyHolder:
 
-  def bindSearchTerm(mutableSearchTerm: MutableSearchTerm): Unit = {
-    bindValueProperty(mutableSearchTerm.valueProperty)
-    bindColorProperty(mutableSearchTerm.colorProperty)
-    bindActiveProperty(mutableSearchTerm.activeProperty)
+  def bindSearchTerm(other: MutableSearchTerm): Unit = {
+    bindValueProperty(other.valueProperty)
+    bindColorProperty(other.colorProperty)
+    bindBidirectionalActiveProperty(other.activeProperty)
+    bindUnclassifiedProperty(other.unclassifiedProperty)
   }
 
-  def unbindSearchTerm(): Unit = {
+  def unbindSearchTerm(activeProperty: BooleanProperty): Unit = {
     unbindValueProperty()
     unbindColorProperty()
-    unbindActiveProperty()
+    unbindBidirectionalActiveProperty(activeProperty)
+    unbindUnclassfiedProperty()
   }
 
   def asSearchTerm: SearchTerm = SearchTerm(getValue, getColor, isActive)

@@ -5,7 +5,7 @@ import app.logorrr.conf.{BlockSettings, DefaultSearchTermGroups, LogFileSettings
 import app.logorrr.steps.TestFxListViewActions
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.search.st.SearchTermToggleButton
+import app.logorrr.views.search.st.ASearchTermToggleButton
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.scene.paint.Color
 import org.junit.jupiter.api.Test
@@ -27,14 +27,14 @@ abstract class Issue292ColorCalculationSetup(desiredColor: Color
   override lazy val settings: Settings = Settings(
     StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map(TestFiles.simpleLog5.value ->
-      LogFileSettings.mk(TestFiles.simpleLog5, DefaultSearchTermGroups())
+      LogFileSettings.mk(TestFiles.simpleLog5, TestSettings.DefaultGroups.searchTermGroups.tail.head)
         .copy(
           searchTerms = searchTerms
           , blockSettings = BlockSettings(50)
           , dividerPosition = 0.599))
     , None
     , None
-    , TestSettings.DefaultGroupsAsMap
+    , TestSettings.Groups
     , None
   )
 
@@ -86,7 +86,7 @@ class Issue292TripleColorWithDeactivationTest extends Issue292ColorCalculationSe
 
 
   private def clickAndCheckColor(searchTerm: MutableSearchTerm, desiredColor: Color): Unit =
-    waitAndClickVisibleItem(SearchTermToggleButton.uiNode(fileId, searchTerm.getValue))
+    waitAndClickVisibleItem(ASearchTermToggleButton.uiNode(fileId, searchTerm.getValue))
     val color = nthCell(lookupChunkListView(fileId), 0).view.getImage.getPixelReader.getColor(5, 5)
     assert(color == desiredColor, s"${color.toString} != ${desiredColor.toString}")
 }

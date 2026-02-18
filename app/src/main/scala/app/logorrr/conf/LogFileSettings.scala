@@ -18,23 +18,21 @@ object LogFileSettings:
   val DefaultLowerTimestamp: Int = 0
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
 
-  def mk(fileId: FileId, dstg: DefaultSearchTermGroups): LogFileSettings =
+  def mk(fileId: FileId, searchTermGroup: SearchTermGroup): LogFileSettings =
     val now = Instant.now().toEpochMilli
     LogFileSettings(fileId
       , DefaultSelectedIndex
       , now
       , DefaultDividerPosition
       , TextConstants.DefaultFontSize
-      , dstg.empty.terms
+      , searchTermGroup.terms
       , DefaultBlockSettings
       , DefaultLogFormat
       , DefaultAutoScroll
       , DefaultFirstViewIndex
       , DefaultLastViewIndex
       , DefaultLowerTimestamp
-      , now
-      , Option(dstg.empty.name)
-      , dstg.asMap)
+      , now)
 
 
 /**
@@ -70,9 +68,7 @@ case class LogFileSettings(fileId: FileId
                            , firstVisibleTextCellIndex: Int
                            , lastVisibleTextCellIndex: Int
                            , lowerTimestamp: Long
-                           , upperTimestamp: Long
-                           , someSelectedSearchTermGroup: Option[String]
-                           , searchTermGroups: Map[String, Seq[SearchTerm]]) derives ReadWriter:
+                           , upperTimestamp: Long) derives ReadWriter:
 
   lazy val path: Path = fileId.asPath.toAbsolutePath
 

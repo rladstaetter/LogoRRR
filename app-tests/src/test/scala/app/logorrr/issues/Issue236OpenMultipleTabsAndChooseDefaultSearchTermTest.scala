@@ -5,8 +5,7 @@ import app.logorrr.conf.{FileId, TestSettings}
 import app.logorrr.steps.{CheckTabPaneActions, ChoiceBoxActions}
 import app.logorrr.usecases.MultipleFileApplicationTest
 import app.logorrr.views.a11y.UiNode
-import app.logorrr.views.search.st.SearchTermToggleButton
-import app.logorrr.views.search.stg.StgChoiceBox
+import app.logorrr.views.search.st.ASearchTermToggleButton
 import javafx.scene.control.ToggleButton
 import org.junit.jupiter.api.{Disabled, Test}
 import org.testfx.api.FxAssert
@@ -26,17 +25,17 @@ class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
 
   def activate(fileId: FileId, searchTermGroupName: String): Unit =
     openFile(fileId)
-    matchItems[String](StgChoiceBox.uiNode(fileId), settings.searchTermGroups.keySet.toSeq.sorted)
-    selectChoiceBoxByValue(StgChoiceBox.uiNode(fileId))(searchTermGroupName)
+    // matchItems[String](StgChoiceBox.uiNode(fileId), settings.searchTermGroups.keySet.toSeq.sorted)
+    //selectChoiceBoxByValue(StgChoiceBox.uiNode(fileId))(searchTermGroupName)
 
   @Disabled
   @Test def testIssue236(): Unit =
     // open first file
     val firstFile = TestFiles.simpleLog0
-    activate(firstFile, TestSettings.Java_JUL)
+    activate(firstFile, TestSettings.Default)
 
     // change filters to a non default configuration
-    val firstFilterTab1 = SearchTermToggleButton.uiNode(firstFile, TestSettings.DefaultSearchTerms.head.getValue)
+    val firstFilterTab1 = ASearchTermToggleButton.uiNode(firstFile, TestSettings.DefaultSearchTerms.head.getValue)
     waitAndClickVisibleItem(firstFilterTab1)
 
     // check that the toggle button is deselected
@@ -46,10 +45,10 @@ class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
 
     // open second file
     val secondFile = TestFiles.simpleLog1
-    activate(secondFile, TestSettings.Java_JUL)
+    activate(secondFile, TestSettings.Default)
 
     // test that second file has the default filter configuration
-    val firstFilterTab2: UiNode = SearchTermToggleButton.uiNode(secondFile, TestSettings.DefaultSearchTerms.head.getValue)
+    val firstFilterTab2: UiNode = ASearchTermToggleButton.uiNode(secondFile, TestSettings.DefaultSearchTerms.head.getValue)
     waitForVisibility(firstFilterTab2)
 
     FxAssert.verifyThat(lookup(firstFilterTab2.ref), new Predicate[ToggleButton] {

@@ -6,22 +6,22 @@ import app.logorrr.views.search.MutableSearchTerm
 
 object TestSettings {
 
-  val Java_JUL = "Java_JUL"
-  
+  val Default = "Default"
+
   val cpResource = TxtCp("/app/logorrr/conf/test-search-term-groups.json")
 
   val DefaultGroups = DefaultSearchTermGroups(cpResource)
 
-  val DefaultSearchTerms: Seq[MutableSearchTerm] = DefaultGroups.getTerms(Java_JUL).get.map(MutableSearchTerm.apply)
+  val DefaultSearchTerms: Seq[MutableSearchTerm] = DefaultGroups.searchTermGroups(1).terms.map(MutableSearchTerm.apply)
 
-  val DefaultGroupsAsMap: Map[String, Seq[SearchTerm]] = DefaultGroups.searchTermGroups.map(stg => stg.name -> stg.terms).toMap
+  val Groups: Seq[SearchTermGroup] = DefaultGroups.searchTermGroups
 
-  lazy val Default: Settings = Settings(
+  lazy val DefaultSettings: Settings = Settings(
     StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map()
     , None
     , None
-    , DefaultGroupsAsMap
+    , Groups
     , None
   )
 

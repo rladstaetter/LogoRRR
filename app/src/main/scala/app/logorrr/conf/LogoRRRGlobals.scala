@@ -1,7 +1,7 @@
 package app.logorrr.conf
 
 import app.logorrr.LogoRRRApp
-import app.logorrr.conf.mut.{MutLogFileSettings, MutSettings, MutTimestampSettings}
+import app.logorrr.conf.mut.{MutLogFileSettings, MutSearchTermGroup, MutSettings, MutTimestampSettings}
 import app.logorrr.io.{OsxBridgeHelper, SettingsFileIO}
 import app.logorrr.services.hostservices.LogoRRRHostServices
 import javafx.beans.property.SimpleObjectProperty
@@ -11,19 +11,31 @@ import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
 import java.nio.file.Path
+import scala.jdk.CollectionConverters.*
+
 
 /**
  * LogoRRR's settings.
  *
  * The user can change certain values via interacting or explicitly setting values in the preferences dialog.
  */
-object LogoRRRGlobals extends TinyLog :
+object LogoRRRGlobals extends TinyLog:
 
   val mutSettings = new MutSettings
 
   private val hostServicesProperty = new SimpleObjectProperty[LogoRRRHostServices]()
 
-  def searchTermGroupNames: ObservableList[String] = mutSettings.searchTermGroupNames
+  /** * Getter for the default group.
+   *    It searches through the mutable entries to find the one with selected == true.
+   */
+  def getDefaultSearchTermGroup: Option[MutSearchTermGroup] =
+    import scala.jdk.CollectionConverters.*
+    searchTermGroupEntries.asScala.find(_.isSelected)
+
+  /** * Sets the default group by updating the mutable properties of the items.
+   */
+  def setDefaultSearchTermGroup(stg: MutSearchTermGroup): Unit =
+    mutSettings.mutSearchTermGroupSettings.setSelected(stg)
 
   def persist(settings: Settings): Unit = SettingsFileIO.toFile(settings, LogoRRRApp.paths.settingsFile)
 
@@ -36,10 +48,9 @@ object LogoRRRGlobals extends TinyLog :
     window.setHeight(LogoRRRGlobals.getStageHeight)
     mutSettings.bindWindowProperties(window)
 
+  def add(stg: MutSearchTermGroup): Unit = mutSettings.mutSearchTermGroupSettings.add(stg)
 
-  def putSearchTermGroup(stg: SearchTermGroup): Unit = mutSettings.putSearchTermGroup(stg)
-
-  def removeSearchTermGroup(name: String): Unit = mutSettings.removeSearchTermGroup(name)
+  def remove(stg: MutSearchTermGroup): Unit = mutSettings.mutSearchTermGroupSettings.remove(stg)
 
   def clearSearchTermGroups(): Unit = mutSettings.clearSearchTermGroups()
 
@@ -66,11 +77,11 @@ object LogoRRRGlobals extends TinyLog :
       case None => setTimestampSettings(null)
     }
 
-    // populate either from saved file or use default values.
-    // if values are saved in the .conf file, those should be used
-    val searchTermGroupsToUse = settings.searchTermGroups
-    for (k, v) <- searchTermGroupsToUse do
-      mutSettings.mutSearchTermGroupSettings.put(k, v)
+    // Populate from immutable settings into the mutable properties
+    mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries.setAll(
+      settings.searchTermGroups.map(MutSearchTermGroup.apply).asJava
+    )
+
     setHostServices(hostServices)
 
   def getSettings: Settings = mutSettings.mkImmutable()
@@ -83,10 +94,8 @@ object LogoRRRGlobals extends TinyLog :
 
   def removeLogFile(fileId: FileId): Unit = {
     mutSettings.removeLogFileSetting(fileId)
-
     if OsUtil.enableSecurityBookmarks then {
       if fileId.isZipEntry then {
-        // only release path if no other file is opened anymore for this particular zip file
         val zipInQuestion = fileId.extractZipFileId
         if !LogoRRRGlobals.getOrderedLogFileSettings.map(_.fileId.extractZipFileId).contains(zipInQuestion) then {
           val zipPath = fileId.extractZipFileId.asPath
@@ -97,7 +106,6 @@ object LogoRRRGlobals extends TinyLog :
         OsxBridgeHelper.releasePath(filePath)
       }
     }
-
   }
 
   def clearLogFileSettings(): Unit = mutSettings.clearLogFileSettings()
@@ -106,7 +114,7 @@ object LogoRRRGlobals extends TinyLog :
 
   def getLogFileSettings(fileId: FileId): MutLogFileSettings = mutSettings.getMutLogFileSetting(fileId)
 
-  val searchTermGroupEntries: ObservableList[SearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
+  val searchTermGroupEntries: ObservableList[MutSearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
 
   def getTimestampSettings: Option[MutTimestampSettings] = Option(mutSettings.getTimestampSettings)
 

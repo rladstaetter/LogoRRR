@@ -1,11 +1,11 @@
 package app.logorrr.model
 
-import app.logorrr.conf.{DefaultSearchTermGroups, FileId, LogFileSettings, LogoRRRGlobals}
+import app.logorrr.conf.mut.MutSearchTermGroup
+import app.logorrr.conf.{FileId, LogFileSettings, LogoRRRGlobals, SearchTermGroup}
 import app.logorrr.io.IoManager
 import app.logorrr.util.DndUtil
 import javafx.collections.ObservableList
 import javafx.scene.input.DragEvent
-import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 
 import java.nio.file.{Files, Path}
@@ -15,7 +15,7 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 import scala.jdk.CollectionConverters.*
 
-class LogSource(dstg: DefaultSearchTermGroups
+class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
                 , settings: Seq[LogFileSettings]
                 , someActiveFile: Option[FileId]
                 , val ui: UiTarget) extends TinyLog:
@@ -98,11 +98,19 @@ class LogSource(dstg: DefaultSearchTermGroups
     collectorResults.get(false).forEach(p => addFile(p))
     collectorResults.get(true).forEach(p => addZip(p))
 
+  private def mkSearchTermGroup: SearchTermGroup = {
+    val groups = LogoRRRGlobals.searchTermGroupEntries.filtered(_.isSelected)
+    if groups.isEmpty then
+      SearchTermGroup(Seq(), true)
+    else
+      groups.get(0).mkImmutable()
+  }
+
   def addZip(path: Path): Unit =
     IoManager.unzip(path).foreach:
       case (fileId, entries) =>
         if !ui.contains(fileId) then
-          val settings = LogFileSettings.mk(fileId, dstg)
+          val settings = LogFileSettings.mk(fileId, mkSearchTermGroup)
           addEntries(settings, entries)
         else ui.selectFile(fileId)
 
@@ -112,7 +120,7 @@ class LogSource(dstg: DefaultSearchTermGroups
     else ui.selectFile(fileId)
 
   def addFileId(fileId: FileId): Unit =
-    val settings = LogFileSettings.mk(fileId, dstg)
+    val settings = LogFileSettings.mk(fileId, mkSearchTermGroup)
     val entries = IoManager.readEntries(settings.path, settings.someTimestampSettings)
     addEntries(settings, entries)
 

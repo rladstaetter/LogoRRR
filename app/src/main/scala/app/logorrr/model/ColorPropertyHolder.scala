@@ -10,6 +10,6 @@ trait ColorPropertyHolder:
 
   def setColor(color: Color): Unit = colorProperty.set(color)
 
-  def bindColorProperty(colorProperty: ObjectPropertyBase[Color]): Unit = colorProperty.bind(colorProperty)
+  def bindColorProperty(colorProperty: ObjectPropertyBase[Color]): Unit = this.colorProperty.bind(colorProperty)
 
   def unbindColorProperty(): Unit = colorProperty.unbind()

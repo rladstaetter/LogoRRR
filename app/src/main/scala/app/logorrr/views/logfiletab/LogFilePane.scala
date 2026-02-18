@@ -61,14 +61,14 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
 
   // display text to the right
   private val logTextView = new LogTextView(filteredEntries)
+  filteredEntries.setPredicate(mutLogFileSettings.showPredicate)
 
   // graphical display to the left
   private val chunkListView: LogoRRRChunkListView = LogoRRRChunkListView(mutLogFileSettings, filteredEntries, logTextView.scrollToItem, widthProperty)
 
+  val opsToolBar = new OpsToolBar(mutLogFileSettings, chunkListView, entries, filteredEntries.predicateProperty())
 
-  val opsToolBar = new OpsToolBar(mutLogFileSettings, chunkListView, entries, filteredEntries)
-
-  private val searchTermToolBar = new SearchTermToolBar(mutLogFileSettings, filteredEntries)
+  private val searchTermToolBar = new SearchTermToolBar(mutLogFileSettings, entries, filteredEntries.predicateProperty())
 
   val textSizeSlider = new TextSizeSlider
   val blockSizeSlider = new BlockSizeSlider

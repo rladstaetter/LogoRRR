@@ -4,10 +4,14 @@ import app.logorrr.clv.color.ColorUtil
 import app.logorrr.conf.FileId
 import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
-import app.logorrr.views.search.st.RemoveSearchTermButton.cssStyle
+import app.logorrr.views.search.MutableSearchTerm
+import app.logorrr.views.search.st.RemoveSearchTermButton.{buttonCssStyle, cssStyle}
 import app.logorrr.views.util.GfxElements
+import javafx.beans.binding.{Bindings, BooleanBinding}
+import javafx.beans.property.ObjectPropertyBase
+import javafx.collections.ObservableList
 import javafx.scene.control.Button
-import javafx.scene.paint.Color
+import javafx.scene.paint.{Color, Paint}
 
 
 object RemoveSearchTermButton extends UiNodeSearchTermAware:
@@ -46,6 +50,26 @@ class RemoveSearchTermButton extends Button:
   setGraphic(icon)
   setTooltip(GfxElements.ToolTips.mkRemove)
   setStyle(cssStyle)
+
+  def init(fileIdProperty: ObjectPropertyBase[FileId]
+           , visibleBinding: BooleanBinding
+           , mutableSearchTerm: MutableSearchTerm
+           , mutSearchTerms: ObservableList[MutableSearchTerm]): Unit =
+    visibleProperty().bind(visibleBinding)
+    setOnAction(e => mutSearchTerms.remove(mutableSearchTerm))
+    idProperty.bind(Bindings.createStringBinding(
+      () =>
+        (for fileId <- Option(fileIdProperty.get())
+             searchTerm <- Option(mutableSearchTerm.valueProperty.get)
+        yield RemoveSearchTermButton.uiNode(fileId, searchTerm).value).getOrElse(""),
+      fileIdProperty, mutableSearchTerm.valueProperty))
+
+  def shutdown(): Unit = {
+    icon.iconColorProperty().unbind()
+    idProperty().unbind()
+    setOnAction(null)
+    visibleProperty().unbind()
+  }
   
 
 

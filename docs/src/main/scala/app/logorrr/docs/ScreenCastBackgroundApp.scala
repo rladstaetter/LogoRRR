@@ -1,5 +1,6 @@
 package app.logorrr.docs
 
+import app.logorrr.clv.color.ColorUtil
 import app.logorrr.docs.Area.*
 import net.ladstatt.util.log.TinyLog
 import javafx.application.Application
@@ -32,7 +33,7 @@ class ScreenCastBackgroundApp extends javafx.application.Application with TinyLo
     val rectangle = new Rectangle(s0.width,s0.height)
     rectangle.setFill(Color.WHITE)
     val pane = new BorderPane(rectangle)
-    pane.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)))
+    pane.setBackground(ColorUtil.mkBg(Color.WHITE))
     pane.setPadding(new Insets(100, 100, 100, 100))
     val scene = new Scene(pane)
     stage.setScene(scene)

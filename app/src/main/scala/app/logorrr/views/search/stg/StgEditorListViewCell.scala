@@ -1,7 +1,8 @@
 package app.logorrr.views.search.stg
 
+import app.logorrr.conf.mut.MutSearchTermGroup
 import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTermGroup}
-import javafx.scene.control._
+import javafx.scene.control.*
 
 
 class StgEditorListViewCell(fileId: FileId) extends ListCell[SearchTermGroup]:
@@ -15,7 +16,7 @@ class StgEditorListViewCell(fileId: FileId) extends ListCell[SearchTermGroup]:
       setText(null)
       setGraphic(null)
     else
-      val label = new Label(item.name)
+      val label = new Label()
       label.setPrefWidth(100)
 
 
@@ -24,22 +25,20 @@ class StgEditorListViewCell(fileId: FileId) extends ListCell[SearchTermGroup]:
         Option(getItem) match {
           case Some(stg) =>
             getListView.getItems.remove(stg)
-            LogoRRRGlobals.getLogFileSettings(fileId).removeSearchTermGroup(stg.name)
+          // LogoRRRGlobals.getLogFileSettings(fileId).removeSearchTermGroup(stg.name)
           case None =>
         }
       })
 
       // if the list is already contained in the global list, mark it as selected
-      Option(item)
-        .foreach(item => globalStgButton.setSelected(LogoRRRGlobals.searchTermGroupNames.contains(item.name)))
-
+      // Option(item).foreach(item => globalStgButton.setSelected(LogoRRRGlobals.searchTermGroupNames.contains(item.name)))
       // action when 'heart' symbol is clicked
       globalStgButton.setOnAction(_ => {
         // item in list, remove on action
         if globalStgButton.isSelected then {
-          Option(getItem).foreach(i => LogoRRRGlobals.putSearchTermGroup(i))
+          Option(getItem).foreach(i => LogoRRRGlobals.add(MutSearchTermGroup(i)))
         } else {
-          Option(getItem).foreach(i => LogoRRRGlobals.removeSearchTermGroup(i.name))
+          Option(getItem).foreach(i => LogoRRRGlobals.remove(MutSearchTermGroup(i)))
         }
       })
 
@@ -48,7 +47,7 @@ class StgEditorListViewCell(fileId: FileId) extends ListCell[SearchTermGroup]:
 
       val toolBar = new ToolBar
       toolBar.getItems.addAll(deleteButton, globalStgButton, label)
-      toolBar.getItems.addAll(vis*)
+      toolBar.getItems.addAll(vis *)
       setGraphic(toolBar)
 
 

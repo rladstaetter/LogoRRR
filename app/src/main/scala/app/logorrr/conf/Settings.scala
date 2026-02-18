@@ -30,7 +30,7 @@ object Settings extends TinyLog:
     , Map()
     , None
     , None
-    , DefaultSearchTermGroups.map(stg => stg.name -> stg.terms).toMap
+    , DefaultSearchTermGroups
     , None
   )
 
@@ -49,7 +49,7 @@ case class Settings(stageSettings: StageSettings
                     , fileSettings: Map[String, LogFileSettings]
                     , someActive: Option[FileId]
                     , someLastUsedDirectory: Option[Path] = None
-                    , searchTermGroups: Map[String, Seq[SearchTerm]]
+                    , searchTermGroups: Seq[SearchTermGroup]
                     , someTimestampSettings: Option[TimestampSettings] = None) derives ReadWriter {
 
   /** updates recent files with given log setting */

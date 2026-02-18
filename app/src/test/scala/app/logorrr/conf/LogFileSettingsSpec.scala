@@ -4,7 +4,7 @@ import org.scalacheck.Gen
 
 object LogFileSettingsSpec:
 
-  val searchTermGen: Gen[SearchTerm] = for f <- Gen.oneOf(DefaultSearchTermGroups().getTerms("Java_JUL").get) yield f
+  val searchTermGen: Gen[SearchTerm] = for f <- Gen.oneOf(DefaultSearchTermGroups().searchTermGroups.head.terms) yield f
 
   val gen: Gen[LogFileSettings] = for
     fileId <- Gen.identifier.map(FileId.apply)
@@ -17,7 +17,6 @@ object LogFileSettingsSpec:
     blockSettings <- BlockSettingsSpec.gen
     fontSize <- Gen.posNum[Int]
     autoScroll <- CoreGen.booleanGen
-    someSelectedSearchTermGroup <- Gen.option(Gen.identifier)
   yield LogFileSettings(fileId
     , selectedIndex
     , firstOpened
@@ -30,6 +29,4 @@ object LogFileSettingsSpec:
     , 0
     , 10
     , LogFileSettings.DefaultLowerTimestamp
-    , LogFileSettings.DefaultUpperTimestamp
-    , someSelectedSearchTermGroup
-    , Map())
+    , LogFileSettings.DefaultUpperTimestamp)

@@ -1,11 +1,11 @@
 {
   "searchTermGroups": [
     {
-      "name": "EMPTY",
+      "selected": false,
       "terms": []
     },
     {
-      "name": "Java_JUL",
+      "selected": true,
       "terms": [
         {
           "value": "SEVERE",

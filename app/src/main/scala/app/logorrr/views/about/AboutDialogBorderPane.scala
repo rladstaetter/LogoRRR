@@ -63,7 +63,5 @@ class AboutDialogBorderPane(stage: Stage) extends BorderPane:
   val spacer: Region = new Region
   spacer.setMinWidth(10)
   hBox.getChildren.addAll(label, spacer, closeButton)
-
   setBottom(hBox)
-
   setBackground(ColorUtil.gradientBackground)

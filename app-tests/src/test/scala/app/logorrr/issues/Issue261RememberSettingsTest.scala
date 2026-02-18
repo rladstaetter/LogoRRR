@@ -6,6 +6,8 @@ import app.logorrr.conf.*
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.ops.time.{SliderVBox, TimerSlider}
+import app.logorrr.views.search.MutableSearchTerm
+import javafx.collections.FXCollections
 import javafx.geometry.Pos
 import javafx.scene.input.MouseButton
 import org.junit.jupiter.api.Test
@@ -23,12 +25,12 @@ class Issue261RememberSettingsTest extends SingleFileApplicationTest(TestFiles.t
   override protected lazy val settings: Settings = Settings(
     StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map(TestFiles.timedLog.value ->
-      LogFileSettings.mk(TestFiles.timedLog, TestSettings.DefaultGroups)
+      LogFileSettings.mk(TestFiles.timedLog, TestSettings.DefaultGroups.searchTermGroups.tail.head)
         .copy(blockSettings = BlockSettings(50)
           , someTimestampSettings = Option(TimestampSettings(0, 23, "yyyy-MM-dd HH:mm:ss,SSS"))))
     , None
     , None
-    , TestSettings.DefaultGroupsAsMap
+    , TestSettings.Groups
     , None
   )
 

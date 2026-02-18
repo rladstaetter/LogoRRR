@@ -9,6 +9,6 @@ trait ValuePropertyHolder:
 
   def setValue(value: String): Unit = valueProperty.set(value)
 
-  def bindValueProperty(valueProperty: SimpleStringProperty): Unit = valueProperty.bind(valueProperty)
+  def bindValueProperty(valueProperty: SimpleStringProperty): Unit = this.valueProperty.bind(valueProperty)
 
   def unbindValueProperty(): Unit = valueProperty.unbind()

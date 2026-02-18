@@ -10,7 +10,7 @@ import java.util.function.Predicate
 
 object MutableSearchTerm:
 
-  val UnclassifiedColor: Color = Color.WHITESMOKE
+  val UnclassifiedColor: Color = Color.web("#F6F8FA")
   val UnclassifiedText = "Unclassified"
 
   def apply(value: String, color: Color): MutableSearchTerm =
@@ -54,7 +54,6 @@ class MutableSearchTerm extends BaseSearchTermModel with Predicate[String]:
   override def test(logLine: String): Boolean = predicateProperty.get().test(logLine)
 
   def extract(): Array[Observable] = Array[Observable](activeProperty, colorProperty, valueProperty)
-
 
 
 

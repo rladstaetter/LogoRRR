@@ -1,12 +1,11 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{FileId, LogFileSettings, LogoRRRGlobals}
-import app.logorrr.model.{FileIdDividerSearchTerm, LogSource, LogorrrModel}
+import app.logorrr.model.LogSource
 import app.logorrr.services.file.FileIdService
-import app.logorrr.util.JfxUtils
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
 import net.ladstatt.util.log.TinyLog
+import net.ladstatt.util.os.OsUtil
 
 class LogoRRRMain(stage: Stage
                   , fileIdService: FileIdService
@@ -16,7 +15,7 @@ class LogoRRRMain(stage: Stage
   val bar = new MainMenuBar(stage, fileIdService, logSource.openFile, logSource.closeAllLogFiles(), isUnderTest)
 
   def init(): Unit =
-    setTop(bar)
+    if !OsUtil.isMac || isUnderTest then setTop(bar)
     setCenter(logSource.ui)
     logSource.loadLogFiles()
 

@@ -4,12 +4,13 @@ import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import javafx.beans.property.{ObjectPropertyBase, Property, SimpleListProperty}
+import javafx.beans.property.{ObjectProperty, ObjectPropertyBase, Property}
 import javafx.collections.ObservableList
-import javafx.collections.transformation.FilteredList
 import javafx.scene.control.*
 import javafx.stage.Window
 import net.ladstatt.util.os.OsUtil
+
+import java.util.function.Predicate
 
 
 object OpsToolBar:
@@ -25,7 +26,7 @@ object OpsToolBar:
 class OpsToolBar(mutLogFileSettings: MutLogFileSettings
                  , chunkListView: ChunkListView[LogEntry]
                  , logEntries: ObservableList[LogEntry]
-                 , filteredList: FilteredList[LogEntry]) extends ToolBar:
+                 , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]) extends ToolBar:
 
   // layout
   setMaxHeight(Double.PositiveInfinity)
@@ -35,7 +36,7 @@ class OpsToolBar(mutLogFileSettings: MutLogFileSettings
 
   val searchRegion = new SearchRegion
   private val otherItemsRegion = new OtherItemsRegion
-  private val timestampSettingsRegion = new TimestampSettingsRegion(mutLogFileSettings, chunkListView, logEntries, filteredList)
+  private val timestampSettingsRegion = new TimestampSettingsRegion(mutLogFileSettings, chunkListView, logEntries, predicateProperty)
 
   getItems.addAll(searchRegion.items ++ otherItemsRegion.items ++ timestampSettingsRegion.items *)
 

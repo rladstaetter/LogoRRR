@@ -13,9 +13,10 @@ import app.logorrr.steps.{AppActions, VisibleItemActions}
  */
 class MultipleFileApplicationTest(val files: Seq[FileId])
   extends TestFxBaseApplicationTest
-    with AppActions with VisibleItemActions:
+    with AppActions 
+    with VisibleItemActions:
 
-  protected lazy val settings: Settings = TestSettings.Default
+  protected lazy val settings: Settings = TestSettings.DefaultSettings
 
   lazy val services: LogoRRRServices = LogoRRRServices(settings
     , new MockHostServices

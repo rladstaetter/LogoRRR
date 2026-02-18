@@ -1,6 +1,7 @@
 package app.logorrr.views.settings
 
-import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTermGroup, Settings}
+import app.logorrr.conf.*
+import app.logorrr.conf.mut.MutSearchTermGroup
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.uinodes.SettingsEditor
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
@@ -29,7 +30,7 @@ class SettingsEditor(owner: Stage, fileId: FileId) extends Stage:
   resetButton.setId(SettingsEditor.ResetToDefaultButton.value)
   resetButton.setOnAction(_ => {
     LogoRRRGlobals.clearSearchTermGroups()
-    Settings.DefaultSearchTermGroups.foreach(LogoRRRGlobals.putSearchTermGroup)
+    Settings.DefaultSearchTermGroups.map(MutSearchTermGroup.apply).foreach(LogoRRRGlobals.add)
     LogoRRRGlobals.setTimestampSettings(null)
     timeSettingsEditor.updateSettings(Option(null))
   })

@@ -20,7 +20,6 @@ object SearchButton extends UiNodeFileIdAware:
 
 class SearchButton extends Button with BoundId(SearchButton.uiNode(_).value):
 
-  
   setGraphic(GfxElements.Icons.search)
   setTooltip(new Tooltip("search"))
   setMaxWidth(40)

@@ -3,12 +3,15 @@ package app.logorrr.clv.color
 import javafx.geometry.Insets
 import javafx.scene.layout.*
 import javafx.scene.paint.CycleMethod.NO_CYCLE
-import javafx.scene.paint.{Color, LinearGradient, Stop}
+import javafx.scene.paint.{Color, LinearGradient, Paint, Stop}
 
 /**
  * Utility to manage some operations dealing with color
  */
 object ColorUtil:
+
+  /** creates a background with given paint */
+  def mkBg(paint: Paint) = new Background(new BackgroundFill(paint, CornerRadii.EMPTY, Insets.EMPTY))
 
   /**
    * If luminance is high, return a darker color; otherwise, return a brighter one
@@ -30,7 +33,7 @@ object ColorUtil:
       new Stop(0, Color.BEIGE)
     )
     val backgroundGradient = new LinearGradient(0, 0, 0, 1, true, NO_CYCLE, stops *)
-    new Background(new BackgroundFill(backgroundGradient, CornerRadii.EMPTY, Insets.EMPTY))
+    ColorUtil.mkBg(backgroundGradient)
 
 
   def toARGB(color: Color): Int =

@@ -5,7 +5,7 @@ import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.views.ops.time.{SliderVBox, TimeRange, TimeUtil, TimestampSettingsButton}
-import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.{ObjectProperty, SimpleObjectProperty}
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
 import javafx.geometry.Pos
@@ -13,6 +13,7 @@ import javafx.scene.Node
 import javafx.stage.Window
 import javafx.util.Subscription
 
+import java.util.function.Predicate
 import scala.compiletime.uninitialized
 import scala.language.postfixOps
 
@@ -20,7 +21,7 @@ import scala.language.postfixOps
 class TimestampSettingsRegion(mutLogFileSettings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
-                              , filteredList: FilteredList[LogEntry]):
+                              , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]):
 
   /**
    * To configure the logformat of the timestamp used in a logfile
@@ -57,12 +58,16 @@ class TimestampSettingsRegion(mutLogFileSettings: MutLogFileSettings
   private def updateLowerTimestampSlider(newValue: Number): Unit =
     if newValue.doubleValue > upperSlider.getValue then lowerSlider.setValue(upperSlider.getValue)
     mutLogFileSettings.setLowerTimestampValue(newValue.longValue())
-    mutLogFileSettings.updateActiveFilter(filteredList)
+    predicateProperty.set(null)
+    predicateProperty.set(mutLogFileSettings.showPredicate)
+  // mutLogFileSettings.updateActiveSearchTerms(filteredList)
 
   private def updateUpperTimestampSlider(newValue: Number): Unit =
     if newValue.doubleValue < lowerSlider.getValue then upperSlider.setValue(lowerSlider.getValue)
     mutLogFileSettings.setUpperTimestampValue(newValue.longValue())
-    mutLogFileSettings.updateActiveFilter(filteredList)
+    predicateProperty.set(null)
+    predicateProperty.set(mutLogFileSettings.showPredicate)
+  // mutLogFileSettings.updateActiveSearchTerms(filteredList)
 
   val items: Seq[Node] = Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox)
 

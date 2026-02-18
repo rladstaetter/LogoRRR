@@ -51,7 +51,6 @@ class MutSettings {
   def getTimestampSettings: MutTimestampSettings = timeStampSettingsProperty.get()
 
 
-  def searchTermGroupNames: ObservableList[String] = mutSearchTermGroupSettings.searchTermGroupNames
 
 
   def getSomeLastUsedDirectory: Option[Path] = lastUsedDirectoryProperty.get()
@@ -61,11 +60,11 @@ class MutSettings {
 
 
 
-  def putSearchTermGroup(stg: SearchTermGroup): Unit = mutSearchTermGroupSettings.put(stg.name, stg.terms)
+  def add(stg: MutSearchTermGroup): Unit = mutSearchTermGroupSettings.add(stg)
 
   def clearSearchTermGroups(): Unit = mutSearchTermGroupSettings.clear()
 
-  def removeSearchTermGroup(name: String): Unit = mutSearchTermGroupSettings.remove(name)
+  // def removeSearchTermGroup(name: String): Unit = mutSearchTermGroupSettings.remove(name)
 
   def getMutLogFileSetting(key: FileId): MutLogFileSettings =
     mutLogFileSettingsMapProperty.get(key)
