@@ -87,7 +87,10 @@ If you don't want to use app stores, installers are provided also for following 
 
 </table>
 
-Of course you can build it from source if your platform is not listed above.
+## Release Notes 
+
+[Click here](https://github.com/rladstaetter/LogoRRR/releases/tag/26.2.0) to view the [release notes](https://github.com/rladstaetter/LogoRRR/releases/tag/26.2.0) of the latest release.
+
 
 ## Features
 
@@ -101,7 +104,7 @@ Of course you can build it from source if your platform is not listed above.
 - **Export filtered data**: Use LogoRRR to create snippets of your log files and export those snippets to other applications (email, Slack, Teams ...) to share it with your team. 
 - **Remembers settings**: `LogoRRR` smartly recalls your last files and settings on restart.
 
-Have a look at more [Screenshots](Screenshots.md) which are available [here](Screenshots.md).
+More [Screenshots](Screenshots.md).
 
 ## License
 
