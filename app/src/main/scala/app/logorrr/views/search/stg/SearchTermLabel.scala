@@ -9,7 +9,7 @@ import javafx.scene.control.Label
 
 object SearchTermLabel:
 
-  def apply(searchTerm : SearchTerm) : SearchTermLabel =
+  def apply(searchTerm: SearchTerm): SearchTermLabel =
     apply(MutableSearchTerm(searchTerm))
 
   def apply(mutSearchTerm: MutableSearchTerm): SearchTermLabel =
@@ -17,8 +17,8 @@ object SearchTermLabel:
     b.textProperty.bind(mutSearchTerm.valueProperty)
     b.setPadding(new Insets(10, 10, 10, 10))
     if (mutSearchTerm.isActive)
-      b.styleProperty().bind(CssBindingUtil.mkGradientStyleBinding(mutSearchTerm.colorProperty))
-      b.textFillProperty().bind(CssBindingUtil.mkContrastPropertyBinding(mutSearchTerm.colorProperty))
+      b.styleProperty().bind(CssBindingUtil.mkGradientStyleBinding(mutSearchTerm.activeProperty, mutSearchTerm.colorProperty))
+      b.textFillProperty().bind(CssBindingUtil.mkContrastPropertyBinding(mutSearchTerm.activeProperty, mutSearchTerm.colorProperty))
     else
       b.textFillProperty().bind(mutSearchTerm.colorProperty)
     b

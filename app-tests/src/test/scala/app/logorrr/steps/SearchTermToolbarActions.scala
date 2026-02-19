@@ -2,7 +2,7 @@ package app.logorrr.steps
 
 import app.logorrr.conf.FileId
 import app.logorrr.usecases.{FxBaseInterface, SingleFileApplicationTest}
-import app.logorrr.views.search.st.{RemoveSearchTermButton, ASearchTermToggleButton, SearchTermToolBar}
+import app.logorrr.views.search.st.{ASearchTermToggleButton, RemoveSearchTermButton, SearchTermToggleButton, SearchTermToolBar}
 import app.logorrr.views.search.{SearchButton, SearchTextField}
 import javafx.collections.transformation.FilteredList
 import javafx.scene.Node
@@ -22,7 +22,7 @@ trait SearchTermToolbarActions:
 
   def lookupSearchTerms(fileId: FileId): FilteredList[Node] =
     val toolbar: SearchTermToolBar = lookup[SearchTermToolBar](SearchTermToolBar.uiNode(fileId))
-    toolbar.getItems.filtered(n => n.isInstanceOf[ASearchTermToggleButton] && !n.asInstanceOf[ASearchTermToggleButton].removeSearchTermButton.isVisible)
+    toolbar.getItems.filtered(n => n.isInstanceOf[SearchTermToggleButton])
 
 
   // wipes all search terms

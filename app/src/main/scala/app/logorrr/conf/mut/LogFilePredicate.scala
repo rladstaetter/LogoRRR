@@ -8,13 +8,22 @@ import javafx.collections.ObservableList
 import java.util.function.Predicate
 import scala.jdk.CollectionConverters.*
 
+object LogFilePredicate {
+
+  def getSearchTerms(mutSearchTerms: ObservableList[MutableSearchTerm]): Set[String] = mutSearchTerms.asScala.filter(_.isActive).map(_.getValue).toSet
+
+  def containsCondition(logEntry: LogEntry, mutSearchTerms: ObservableList[MutableSearchTerm]): Boolean = {
+    val strings = getSearchTerms(mutSearchTerms)
+    strings.exists(needle => logEntry.value.contains(needle))
+  }
+
+}
+
 class LogFilePredicate(mutSearchTerms: ObservableList[MutableSearchTerm]) extends Predicate[LogEntry] {
 
   val showUnclassifiedProperty = new SimpleBooleanProperty()
   val lowerTimestampValueProperty = new SimpleLongProperty()
   val upperTimestampValueProperty = new SimpleLongProperty()
-
-  def getSearchTerms: Set[String] = mutSearchTerms.asScala.filter(_.isActive).map(_.getValue).toSet
 
   override def test(t: LogEntry): Boolean = {
     val timeCondition =
@@ -23,7 +32,7 @@ class LogFilePredicate(mutSearchTerms: ObservableList[MutableSearchTerm]) extend
           val i = instant.toEpochMilli
           lower <= i && i <= upper
         case _ => true // if one of the conditions is not defined, return true
-    val containsCondition = getSearchTerms.exists(needle => t.value.contains(needle))
+    val containsCondition = LogFilePredicate.containsCondition(t, mutSearchTerms)
     val showUnclassified = showUnclassifiedProperty.get() && !containsCondition
     val res = timeCondition && (showUnclassified || containsCondition)
     // println(timeCondition.toString + " && (" + showUnclassified + "||" + containsCondition + ") " + getSearchTerms + " -> " + res)

@@ -45,21 +45,19 @@ abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]) extend
 
   val origColorProperty = new SimpleObjectProperty[Color]()
   val hitsProperty = new SimpleIntegerProperty()
-  val idBinding = Bindings.createStringBinding(() => ASearchTermToggleButton.uiNode(getFileId, getValue).value, fileIdProperty, valueProperty)
-
   val searchTermLabel: SearchTermLabel = new SearchTermLabel
   val hitsLabel: SearchTermHitsLabel = new SearchTermHitsLabel
 
-  val removeSearchTermButton: RemoveSearchTermButton = new RemoveSearchTermButton
+  private val removeSearchTermButton: RemoveSearchTermButton = new RemoveSearchTermButton
 
   // hack to circumvent warnings in iconli code
-  val colorListener = JfxUtils.onNew[Color](c => removeSearchTermButton.icon.setStyle(buttonCssStyle(c)))
+  private val colorListener = JfxUtils.onNew[Color](c => removeSearchTermButton.icon.setStyle(buttonCssStyle(c)))
 
   lazy val contrastColorProperty: SimpleObjectProperty[Color] = new SimpleObjectProperty[Color]()
 
   var toggle = false
   // fires if one of given properties change -- see update chhange Listener
-  val globalPredicateUpdate = Bindings.createBooleanBinding(
+  private val globalPredicateUpdate = Bindings.createBooleanBinding(
     () =>
       toggle = !toggle
       toggle
@@ -86,19 +84,21 @@ abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]) extend
     globalPredicateUpdate.addListener(updateChangeListener)
     setOrigColor(mutSearchTerm.getColor)
     bindFileIdProperty(fileIdProperty)
-    idProperty.bind(idBinding)
-    styleProperty().bind(CssBindingUtil.mkGradientStyleBinding(colorProperty))
-    valueProperty.bind(mutSearchTerm.valueProperty)
-    searchTermLabel.init(contrastColorProperty, valueProperty)
+    idProperty.bind(Bindings.createStringBinding(() => ASearchTermToggleButton.uiNode(getFileId, getValue).value, fileIdProperty, valueProperty))
+    styleProperty().bind(CssBindingUtil.mkGradientStyleBinding(selectedProperty, colorProperty))
     hitsLabel.init(contrastColorProperty, hitsProperty)
     hitsProperty.bind(Bindings.createLongBinding(() => {
       entries.stream().filter(getPredicate()).count
-    }, entries, valueProperty, selectedProperty, predicateProperty))
+    }, entries, valueProperty, predicateProperty))
+    // }, entries, valueProperty, selectedProperty, predicateProperty))
 
+    valueProperty.bind(mutSearchTerm.valueProperty)
+    searchTermLabel.init(contrastColorProperty, valueProperty)
 
     colorProperty.bind(Bindings.createObjectBinding[Color](() => {
-      if isSelected then getOrigColor else Color.WHITESMOKE
+      if isSelected then getOrigColor else getOrigColor
     }, selectedProperty))
+
     selectedProperty().bindBidirectional(mutSearchTerm.activeProperty)
     removeSearchTermButton.init(
       fileIdProperty
@@ -106,7 +106,7 @@ abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]) extend
       , mutSearchTerm
       , mutSearchTerms)
 
-    contrastColorProperty.bind(CssBindingUtil.mkContrastPropertyBinding(colorProperty))
+    contrastColorProperty.bind(CssBindingUtil.mkContrastPropertyBinding(selectedProperty(),colorProperty))
     contrastColorProperty.addListener(colorListener)
   }
 

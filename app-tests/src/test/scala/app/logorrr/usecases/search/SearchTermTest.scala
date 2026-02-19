@@ -2,10 +2,10 @@ package app.logorrr.usecases.search
 
 import app.logorrr.TestFiles
 import app.logorrr.conf.TestSettings
-import app.logorrr.steps.ChoiceBoxActions
+import app.logorrr.steps.{ChoiceBoxActions, SearchTermToolbarActions}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.MutableSearchTerm
-import app.logorrr.views.search.st.{RemoveSearchTermButton, ASearchTermToggleButton}
+import app.logorrr.views.search.st.{ASearchTermToggleButton, RemoveSearchTermButton}
 import app.logorrr.views.text.LogTextView
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,8 @@ import org.junit.jupiter.api.Test
  *
  **/
 class SearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2)
-  with ChoiceBoxActions:
+  with ChoiceBoxActions
+  with SearchTermToolbarActions:
 
   // use default search terms
   val terms: Seq[MutableSearchTerm] = TestSettings.DefaultSearchTerms
@@ -29,6 +30,8 @@ class SearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2)
     // file has 8 entries - one for each log filter + 1 line "unclassified"
     // some log lines are matched by more than one filter (FINE, FINER)
     openFile(fileId)
+
+    clickFilters(Seq(MutableSearchTerm.mkUnclassified(terms.toSet)))
 
     // check visibility of all search term buttons
     terms.foreach:
@@ -44,30 +47,29 @@ class SearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2)
         // deselect all filters except unclassified
         // clickFilters(terms)
 
-        // now, only 'unclassified' filter is active. since there are no unclassified
-        // entries available, the number of displayed log entries is one
-        checkNumberOfShownElements(1)
+        // all elements are deselected
+        checkNumberOfShownElements(0)
 
-        // select one specific filter- now two lines are shown in total
+        // select one filter
         clickOn(ASearchTermToggleButton.uiNode(fileId, t.getValue))
-        numberOfShownElementsIsAtLeast(2) // because of FINE, FINER and FINEST (FINE matches all three)
+        numberOfShownElementsIsAtLeast(1) // because of FINE, FINER and FINEST (FINE matches all three)
 
         // deselect filter again
         clickOn(ASearchTermToggleButton.uiNode(fileId, t.getValue))
-        // clickFilters(terms)
 
 
-    // finally, deselect all filters
+    // finally, select all filters
     clickFilters(terms)
 
-    // one entry is shown (unclassified)
+    checkNumberOfShownElements(lineCount -1 )
+
+    // select unclassified search term
+    clickFilters(Seq(MutableSearchTerm.mkUnclassified(terms.toSet)))
     checkNumberOfShownElements(lineCount)
 
-    // deselect unclassified search term
-    clickFilters(Seq(MutableSearchTerm.mkUnclassified(terms.toSet)))
-    checkNumberOfShownElements(lineCount - 1)
-
-    terms.foreach(t => waitAndClickVisibleItem(RemoveSearchTermButton.uiNode(fileId, t.getValue)))
+    clearAllSearchTerms(fileId)
+    // remove all filers
+    // terms.foreach(t => waitAndClickVisibleItem(RemoveSearchTermButton.uiNode(fileId, t.getValue)))
 
     // all filters are deleted, unclassified filter is selected -> all log file lines are shown
     checkNumberOfShownElements(lineCount)

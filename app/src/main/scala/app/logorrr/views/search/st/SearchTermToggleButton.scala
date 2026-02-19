@@ -3,7 +3,7 @@ package app.logorrr.views.search.st
 import app.logorrr.conf.mut.LogFilePredicate
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
-import javafx.beans.property.{ObjectProperty, SimpleSetProperty}
+import javafx.beans.property.ObjectProperty
 import javafx.beans.value.ChangeListener
 import javafx.collections.ObservableList
 
@@ -12,7 +12,8 @@ import java.util.function.Predicate
 
 class SearchTermToggleButton(entries: ObservableList[LogEntry]
                              , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]
-                             , logFilePredicate: LogFilePredicate) extends ASearchTermToggleButton(entries):
+                             , logFilePredicate: LogFilePredicate)
+  extends ASearchTermToggleButton(entries):
 
   setPredicate(IsActiveAndContainsPredicate(this))
 

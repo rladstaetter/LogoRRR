@@ -7,23 +7,27 @@ import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.property.{BooleanProperty, ObjectProperty}
 import javafx.beans.value.ChangeListener
 import javafx.collections.ObservableList
-import javafx.collections.transformation.FilteredList
 
 import java.lang
 import java.util.function.Predicate
-import scala.jdk.CollectionConverters.*
+
+class UnclassifiedPredicate(selectedProperty: BooleanProperty, mutSearchTerms: ObservableList[MutableSearchTerm]) extends Predicate[LogEntry] {
+  override def test(t: LogEntry): Boolean =
+    selectedProperty.get() && !LogFilePredicate.containsCondition(t, mutSearchTerms)
+}
+
 
 class UnclassifiedToggleButton(entries: ObservableList[LogEntry]
                                , mutSearchTerms: ObservableList[MutableSearchTerm]
                                , unclassifiedProperty: BooleanProperty
                                , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]
-                               , logFilePredicate: LogFilePredicate) extends ASearchTermToggleButton(entries):
+                               , logFilePredicate: LogFilePredicate)
+  extends ASearchTermToggleButton(entries):
 
-  setPredicate(new Predicate[LogEntry] {
-    override def test(t: LogEntry): Boolean =
-      isSelected && !mutSearchTerms.asScala.filter(_.isActive).map(_.getValue).exists(t.value.contains)
-  })
+  resetPredicate()
 
+  // predicate has to change every time, thats why 'new ...' is used
+  def resetPredicate() : Unit = setPredicate(new UnclassifiedPredicate(selectedProperty, mutSearchTerms))
 
   protected val updateChangeListener: ChangeListener[lang.Boolean] = JfxUtils.onNew[java.lang.Boolean](e => {
     if selectedProperty().get() then
