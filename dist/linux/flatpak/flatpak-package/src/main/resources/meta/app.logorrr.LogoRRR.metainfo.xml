@@ -50,7 +50,7 @@
         </screenshot>
         <screenshot>
             <image>https://www.logorrr.app/images/appstores/flathub/logorrr-searchtermgroups.png</image>
-            <caption>Use search term groups to filter for common events</caption>
+            <caption>Reuse favorites</caption>
         </screenshot>
     </screenshots>
     <branding>
@@ -62,15 +62,35 @@
         <!--
         <release version="${project.version}" date="${currentDate}"></release>
         -->
-        <release version="26.1.0" date="2025-12-26">
+        <release version="26.1.0" date="2026-02-19">
             <description>
-                <p>
-                    This release contains several enhancements and bugfixes.
-                    <ul>
-                        <li>new application icon</li>
-                        <li>Smaller installer package (10% size reduction)</li>
-                    </ul>
+
+                <p>Introduced a Favorites feature allowing users to save and reuse common search terms across different
+                    log files, accessible via a new settings dialog.
                 </p>
+                <p>Added Global default timestamp settings to reduce configuration effort when analyzing logs from
+                    consistent sources, accompanied by a streamlined UI.
+                </p>
+                <p>Redesigned the Blank Page for a more modern aesthetic and updated the "About" view to include a
+                    direct link to the official website.
+                </p>
+                <p>Revamped the LogoRRR icon, which now features a new design and a high-quality SVG version.</p>
+                <p>Modernized the search term and filter menu bar buttons and improved the overall Settings Editor
+                    interface.
+                </p>
+                <p>Expanded distribution to support Snap, allowing Linux users to install LogoRRR directly via Snapcraft
+                    or the terminal.
+                </p>
+                <p>Added Zip file distribution options specifically to assist Windows users and certain portable use
+                    cases.
+                </p>
+                <p>Improved GraalVM compatibility, fixing an issue where the application would not start on some older
+                    CPU architectures.
+                </p>
+                <p>Automated the binary upload process for Windows and Linux to simplify the release workflow on the
+                    official website.
+                </p>
+                <p>Migrated the codebase to Scala 3, adopting the new brace-less syntax for better maintainability.</p>
             </description>
         </release>
         <release version="25.2.0" date="2025-12-23">
