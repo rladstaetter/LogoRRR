@@ -48,7 +48,7 @@ class ScreenShotterApp extends javafx.application.Application with TinyIo with T
 
         LogoRRRApp.start(stage, services)
 
-        val bPath = Paths.get(s"releases/${LogoRRRApp.appInfo.version}/")
+        val bPath = Paths.get(s"docs/releases/${LogoRRRApp.appInfo.version}/")
         createDirectories(bPath)
         val f = bPath.resolve(s"${w}x$h.png")
         ScreenShotterApp.persistNodeState(stage.getScene.getRoot, f)
