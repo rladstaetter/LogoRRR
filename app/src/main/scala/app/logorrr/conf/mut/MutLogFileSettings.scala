@@ -37,7 +37,10 @@ object MutLogFileSettings:
 
 class MutLogFileSettings:
 
-  val showPredicate = new LogFilePredicate
+  /** with the extractor the changelistener also fires if an element is changed */
+  val mutSearchTerms: ObservableList[MutableSearchTerm] = FXCollections.observableArrayList[MutableSearchTerm](MutableSearchTerm.extractor)
+
+  val showPredicate = new LogFilePredicate(mutSearchTerms)
   var someUnclassifiedSearchTerm: Option[ASearchTermToggleButton] = None
 
   val fileIdProperty = new SimpleObjectProperty[FileId]()
@@ -52,43 +55,9 @@ class MutLogFileSettings:
 
   private val someTimestampSettings = new SimpleObjectProperty[Option[TimestampSettings]](None)
 
-
   val dividerPositionProperty = new SimpleDoubleProperty()
   val autoScrollActiveProperty = new SimpleBooleanProperty()
 
-  /** with the extractor the changelistener also fires if an element is changed */
-  val mutSearchTerms: ObservableList[MutableSearchTerm] = FXCollections.observableArrayList[MutableSearchTerm](MutableSearchTerm.extractor)
-
-
-  private def matchFilter(entry: LogEntry): Boolean =
-    val matchedFilter = SearchTerm.matches(entry.value, getSearchTerms.toSet)
-    someUnclassifiedSearchTerm match
-      case Some(b) =>
-        val dontMatch = SearchTerm.dontMatch(entry.value, getSearchTerms.toSet)
-        if b.isSelected then
-          val res = dontMatch || matchedFilter
-          res
-        else
-          matchedFilter
-      case _ =>
-        matchedFilter
-
-
-  /**
-   * Reduce current displayed log entries by applying text filters and consider also the time stamp range.
-   *
-   * @param filteredList list to filter
-   */
-  def updateActiveSearchTerms(filteredList: FilteredList[LogEntry]): Unit =
-    filteredList.setPredicate((entry: LogEntry) => matchTimeRange(entry) && matchFilter(entry))
-
-
-  private def matchTimeRange(entry: LogEntry): Boolean =
-    entry.someInstant match
-      case None => true // if instant is not set, return true
-      case Some(value) =>
-        val asMilli = value.toEpochMilli
-        getLowerTimestampValue <= asMilli && asMilli <= getUpperTimestampValue
 
   def setLowerTimestampValue(lowerValue: Long): Unit = showPredicate.lowerTimestampValueProperty.set(lowerValue)
 

@@ -33,6 +33,8 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
                         , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]])
   extends ToolBar with TinyLog with BoundId(SearchTermToolBar.uiNode(_).value):
 
+  val unclassifiedSearchTerm = MutableSearchTerm.mkUnclassified(Set())
+
   val addToFavoritesButton = new AddToFavoritesButton(activeSearchTerms)
 
   val unclassifiedButton =
@@ -44,11 +46,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     )
 
   val listChangeListener = JfxUtils.mkListChangeListener[MutableSearchTerm](processFiltersChange)
-
-  val unclassifiedNumberProperty = new SimpleIntegerProperty(12)
-
   setMaxHeight(Double.PositiveInfinity)
-
 
   def init(window: Window): Unit =
     bindIdProperty(mutLogFileSettings.fileIdProperty)
@@ -60,7 +58,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     mutLogFileSettings.mutSearchTerms.addListener(listChangeListener)
     unclassifiedButton.init(mutLogFileSettings.fileIdProperty
       , () => false
-      , MutableSearchTerm.mkUnclassified(Set())
+      , unclassifiedSearchTerm
       , mutLogFileSettings.mutSearchTerms)
 
 
@@ -68,6 +66,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     unbindIdProperty()
     addToFavoritesButton.shutdown()
     mutLogFileSettings.mutSearchTerms.removeListener(listChangeListener)
+    unclassifiedButton.shutdown(unclassifiedSearchTerm.activeProperty)
 
   /** if filter list is changed in any way, react to this event and either add or remove filter from UI */
   private def processFiltersChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit =
@@ -88,7 +87,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     }
 
   private def addSearchTermButton(mutSearchTerm: MutableSearchTerm): Unit =
-    val button = new SearchTermToggleButton(entries, mutLogFileSettings.showPredicate.searchtermsProperty, predicateProperty, mutLogFileSettings.showPredicate)
+    val button = new SearchTermToggleButton(entries, predicateProperty, mutLogFileSettings.showPredicate)
     button.init(mutLogFileSettings.fileIdProperty
       , () => true
       , mutSearchTerm
@@ -96,7 +95,10 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
     getItems.add(button)
 
   private def removeSearchTermButton(mutSearchTerm: MutableSearchTerm): Unit =
-    getSearchTermButtons.find(_.getValue == mutSearchTerm.getValue).foreach(b => getItems.remove(b))
+    getSearchTermButtons.find(_.getValue == mutSearchTerm.getValue).foreach(b =>
+      getItems.remove(b)
+      b.shutdown(mutSearchTerm.activeProperty)
+    )
 
   def activeSearchTerms(): Seq[SearchTerm] = getSearchTermButtons.map(_.asSearchTerm)
 

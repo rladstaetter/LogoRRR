@@ -7,11 +7,10 @@ import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
 import app.logorrr.views.search.*
 import app.logorrr.views.search.st.RemoveSearchTermButton.buttonCssStyle
 import app.logorrr.views.util.CssBindingUtil
-import javafx.beans.binding.{Bindings, BooleanBinding, StringBinding}
+import javafx.beans.binding.{Bindings, BooleanBinding}
 import javafx.beans.property.*
 import javafx.beans.value.ChangeListener
-import javafx.collections.transformation.FilteredList
-import javafx.collections.{ObservableList, ObservableSet}
+import javafx.collections.ObservableList
 import javafx.scene.control.ToggleButton
 import javafx.scene.layout.{HBox, Priority, Region, VBox}
 import javafx.scene.paint.Color
@@ -64,7 +63,7 @@ abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]) extend
     () =>
       toggle = !toggle
       toggle
-      , valueProperty, selectedProperty, predicateProperty)
+    , valueProperty, selectedProperty, predicateProperty)
 
   private val hbox: HBox =
     val spacer: Region = new Region
@@ -92,7 +91,9 @@ abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]) extend
     valueProperty.bind(mutSearchTerm.valueProperty)
     searchTermLabel.init(contrastColorProperty, valueProperty)
     hitsLabel.init(contrastColorProperty, hitsProperty)
-    hitsProperty.bind(Bindings.createIntegerBinding(() => new FilteredList[LogEntry](entries, getPredicate()).size, valueProperty, selectedProperty, predicateProperty))
+    hitsProperty.bind(Bindings.createLongBinding(() => {
+      entries.stream().filter(getPredicate()).count
+    }, entries, valueProperty, selectedProperty, predicateProperty))
 
 
     colorProperty.bind(Bindings.createObjectBinding[Color](() => {

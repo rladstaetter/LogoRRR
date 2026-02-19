@@ -21,7 +21,7 @@ class UnclassifiedToggleButton(entries: ObservableList[LogEntry]
 
   setPredicate(new Predicate[LogEntry] {
     override def test(t: LogEntry): Boolean =
-      isSelected && !mutSearchTerms.asScala.map(_.getValue).exists(t.value.contains)
+      isSelected && !mutSearchTerms.asScala.filter(_.isActive).map(_.getValue).exists(t.value.contains)
   })
 
 
