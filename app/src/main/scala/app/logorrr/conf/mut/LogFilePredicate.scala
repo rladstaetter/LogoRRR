@@ -1,10 +1,9 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.model.LogEntry
-import javafx.beans.property.{SimpleBooleanProperty, SimpleLongProperty, SimpleObjectProperty, SimpleSetProperty}
-import javafx.collections.{FXCollections, ObservableSet}
+import javafx.beans.property.{SimpleBooleanProperty, SimpleLongProperty, SimpleSetProperty}
+import javafx.collections.FXCollections
 
-import java.time.Instant
 import java.util.function.Predicate
 import scala.jdk.CollectionConverters.*
 

@@ -43,8 +43,8 @@ object LogFileTab extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogFileTab])
 
-  def apply(model: LogorrrModel): LogFileTab =
-    new LogFileTab(model.mutLogFileSettings, model.entries)
+  def apply(window: Window, model: LogorrrModel): LogFileTab =
+    new LogFileTab(window, model.mutLogFileSettings, model.entries)
 
 /**
  * Represents a single 'document' UI approach for a log file.
@@ -54,7 +54,7 @@ object LogFileTab extends UiNodeFileIdAware:
  * @param mutLogFileSettings settings for given log file
  * @param entries            report instance holding information of log file to be analyzed
  * */
-class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList[LogEntry])
+class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries: ObservableList[LogEntry])
   extends Tab
     with FileIdPropertyHolder
     with TinyLog:
@@ -70,11 +70,11 @@ class LogFileTab(mutLogFileSettings: MutLogFileSettings, entries: ObservableList
         }
     })
 
-  val logPane = new LogFilePane(mutLogFileSettings, entries)
+  val logPane = new LogFilePane(owner, mutLogFileSettings, entries)
   val logFileTabToolTip = new LogFileTabToolTip
 
   def init(window: Window
-          , mutLogFileSettings: MutLogFileSettings): Unit =
+           , mutLogFileSettings: MutLogFileSettings): Unit =
     bindFileIdProperty(mutLogFileSettings.fileIdProperty)
     idProperty().bind(Bindings.createStringBinding(() => {
       LogFileTab.uiNode(fileIdProperty.get).value

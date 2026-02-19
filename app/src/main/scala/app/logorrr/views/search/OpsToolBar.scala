@@ -23,7 +23,8 @@ object OpsToolBar:
 /**
  * Groups search ui widgets together.
  */
-class OpsToolBar(mutLogFileSettings: MutLogFileSettings
+class OpsToolBar(owner: Window
+                 , mutLogFileSettings: MutLogFileSettings
                  , chunkListView: ChunkListView[LogEntry]
                  , logEntries: ObservableList[LogEntry]
                  , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]) extends ToolBar:
@@ -36,18 +37,17 @@ class OpsToolBar(mutLogFileSettings: MutLogFileSettings
 
   val searchRegion = new SearchRegion
   private val otherItemsRegion = new OtherItemsRegion
-  private val timestampSettingsRegion = new TimestampSettingsRegion(mutLogFileSettings, chunkListView, logEntries, predicateProperty)
+  private val timestampSettingsRegion = new TimestampSettingsRegion(owner: Window, mutLogFileSettings, chunkListView, logEntries, predicateProperty)
 
   getItems.addAll(searchRegion.items ++ otherItemsRegion.items ++ timestampSettingsRegion.items *)
 
-  def init(window: Window
-           , fileIdProperty: ObjectPropertyBase[FileId]
+  def init(fileIdProperty: ObjectPropertyBase[FileId]
            , autoScrollProperty: Property[java.lang.Boolean]
            , mutSearchTerms: ObservableList[MutableSearchTerm]
            , filteredList: ObservableList[LogEntry]): Unit = {
     searchRegion.init(fileIdProperty, mutSearchTerms)
     otherItemsRegion.init(fileIdProperty, autoScrollProperty, logEntries, filteredList)
-    timestampSettingsRegion.init(window)
+    timestampSettingsRegion.init()
   }
 
   def shutdown(autoScrollProperty: Property[java.lang.Boolean]

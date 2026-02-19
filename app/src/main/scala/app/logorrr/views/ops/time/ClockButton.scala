@@ -1,28 +1,31 @@
 package app.logorrr.views.ops.time
 
-import app.logorrr.conf.TimestampSettings
+import app.logorrr.clv.ChunkListView
+import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.model.LogEntry
+import app.logorrr.views.search.TimestampSettingsRegion
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
 import app.logorrr.views.util.GfxElements
+import javafx.collections.ObservableList
 import javafx.scene.control.{Button, Tooltip}
 import javafx.stage.Window
-import org.kordamp.ikonli.fontawesome6.FontAwesomeRegular
-import org.kordamp.ikonli.javafx.FontIcon
 
-class ClockButton(stage: TimestampSettingStage) extends Button:
+class ClockButton(owner: Window
+                  , mutLogFileSettings: MutLogFileSettings
+                  , chunkListView: ChunkListView[LogEntry]
+                  , logEntries: ObservableList[LogEntry]
+                  , tsRegion: TimestampSettingsRegion) extends Button:
   setBackground(null)
   setStyle(
     """|-color-button-bg: -color-bg-subtle;
        |-fx-background-insets: 0;
        |""".stripMargin)
-  
+
   setGraphic(GfxElements.Icons.clock)
   setTooltip(new Tooltip("configure time format"))
-  setOnAction(_ => stage.showAndWait())
+  setOnAction(_ => {
+    val stage = new TimestampSettingStage(mutLogFileSettings, chunkListView, logEntries, tsRegion)
+    stage.init(owner)
+    stage.showAndWait()
+  })
 
-  def init(someGlobalTimestampSettings: Option[TimestampSettings]
-           , someLocalTimestampSettings: Option[TimestampSettings]
-           , owner: Window): Unit =
-    stage.init(someGlobalTimestampSettings, someLocalTimestampSettings, owner)
-
-  def shutdown(): Unit =
-    stage.shutdown()

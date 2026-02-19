@@ -1,7 +1,7 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.clv.ChunkListView
-import app.logorrr.conf.TimestampSettings
+import app.logorrr.conf.{LogoRRRGlobals, TimestampSettings}
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
@@ -35,12 +35,9 @@ class TimestampSettingStage(settings: MutLogFileSettings,
       shutdown()
       this.close()
 
-  def init(someGlobalTimestampSettings: Option[TimestampSettings]
-           , someLocalTimestampSettings: Option[TimestampSettings]
-           , owner: Window): Unit =
+  def init(owner : Window): Unit =
     initOwner(owner)
-    timeStampSettingsBorderPane.init(someGlobalTimestampSettings, someLocalTimestampSettings)
+    timeStampSettingsBorderPane.init(LogoRRRGlobals.getTimestampSettings.map(_.mkImmutable()), settings.getSomeTimestampSettings)
     setScene(new Scene(timeStampSettingsBorderPane, TimestampSettingStage.width, TimestampSettingStage.height))
 
-  def shutdown(): Unit =
-    timeStampSettingsBorderPane.shutdown()
+  def shutdown(): Unit = timeStampSettingsBorderPane.shutdown()

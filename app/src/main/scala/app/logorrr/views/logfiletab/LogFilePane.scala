@@ -30,7 +30,8 @@ object LogFilePane extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogFilePane])
 
 
-class LogFilePane(mutLogFileSettings: MutLogFileSettings
+class LogFilePane(owner: Window
+                  , mutLogFileSettings: MutLogFileSettings
                   , val entries: ObservableList[LogEntry])
   extends BorderPane with UiTarget
     with FileIdPropertyHolder
@@ -66,7 +67,7 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
   // graphical display to the left
   private val chunkListView: LogoRRRChunkListView = LogoRRRChunkListView(mutLogFileSettings, filteredEntries, logTextView.scrollToItem, widthProperty)
 
-  val opsToolBar = new OpsToolBar(mutLogFileSettings, chunkListView, entries, filteredEntries.predicateProperty())
+  val opsToolBar = new OpsToolBar(owner, mutLogFileSettings, chunkListView, entries, filteredEntries.predicateProperty())
 
   private val searchTermToolBar = new SearchTermToolBar(mutLogFileSettings, entries, filteredEntries.predicateProperty())
 
@@ -115,8 +116,8 @@ class LogFilePane(mutLogFileSettings: MutLogFileSettings
     bindFileIdProperty(fileIdProperty)
     bindIdProperty(fileIdProperty)
     searchTermToolBar.init(window)
-    opsToolBar.init(window
-      , fileIdProperty
+    opsToolBar.init(
+      fileIdProperty
       , mutLogFileSettings.autoScrollActiveProperty
       , mutLogFileSettings.mutSearchTerms
       , filteredEntries

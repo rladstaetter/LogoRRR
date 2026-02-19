@@ -28,7 +28,6 @@ class SideBar extends VBox(15):
   setPrefWidth(200)
   setStyle("-fx-background-color: #f4f4f4; -fx-border-color: #ddd; -fx-border-width: 0 1 0 0;")
 
-
   val description = new Label("Click on the preview text\nto select columns.")
   getChildren.addAll(rangeLabel, fromBox, toBox, description)
 

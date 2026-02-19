@@ -18,7 +18,8 @@ import scala.compiletime.uninitialized
 import scala.language.postfixOps
 
 
-class TimestampSettingsRegion(mutLogFileSettings: MutLogFileSettings
+class TimestampSettingsRegion(owner: Window
+                              , mutLogFileSettings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
                               , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]):
@@ -26,7 +27,7 @@ class TimestampSettingsRegion(mutLogFileSettings: MutLogFileSettings
   /**
    * To configure the logformat of the timestamp used in a logfile
    */
-  private val timestampSettingsButton = new TimestampSettingsButton(mutLogFileSettings, chunkListView, logEntries, this)
+  private val timestampSettingsButton = new TimestampSettingsButton(owner, mutLogFileSettings, chunkListView, logEntries, this)
 
   private lazy val lowerSliderVBox = new SliderVBox(mutLogFileSettings, Pos.CENTER_LEFT, "Configure earliest timestamp to be displayed")
   private lazy val upperSliderVBox = new SliderVBox(mutLogFileSettings, Pos.CENTER_RIGHT, "Configure latest timestamp to be displayed")
@@ -71,7 +72,7 @@ class TimestampSettingsRegion(mutLogFileSettings: MutLogFileSettings
 
   val items: Seq[Node] = Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox)
 
-  def init(owner: Window): Unit =
+  def init(): Unit =
     timeRangeSubscription =
       logEntries.subscribe(() => timeRangeProperty.set(TimeUtil.calcTimeInfo(logEntries).getOrElse(TimeRange.defaultTimeRange)))
 
@@ -87,9 +88,7 @@ class TimestampSettingsRegion(mutLogFileSettings: MutLogFileSettings
     timestampSettingsButton.init(
       mutLogFileSettings.fileIdProperty
       , mutLogFileSettings.hasTimestampSetting
-      , LogoRRRGlobals.getTimestampSettings.map(_.mkImmutable())
-      , mutLogFileSettings.getSomeTimestampSettings
-      , owner)
+      )
 
     timeRangeProperty.set(initialTimeRange)
     setSliderPositions(initialTimeRange)

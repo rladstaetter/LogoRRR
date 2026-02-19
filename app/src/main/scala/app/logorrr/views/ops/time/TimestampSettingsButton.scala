@@ -31,31 +31,27 @@ class ExclamationCircleFontIcon extends FontIcon:
  * Given a time stamp format (for example: YYYY-MM-dd HH:mm:ss.SSS), LogoRRR is able to parse the timestamp
  * and thus has new possibilities to analyse the log file.
  *
- * @param mutLogFileSettings   settings for specific log file
- * @param logEntries the list of log entries to display in order to configure a time format
+ * @param mutLogFileSettings settings for specific log file
+ * @param logEntries         the list of log entries to display in order to configure a time format
  */
-class TimestampSettingsButton(mutLogFileSettings: MutLogFileSettings
+class TimestampSettingsButton(owner: Window
+                              , mutLogFileSettings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
                               , tsRegion: TimestampSettingsRegion)
   extends StackPane with BoundId(TimestampSettingsButton.uiNode(_).value):
 
-  private val timestampSettingStage = new TimestampSettingStage(mutLogFileSettings, chunkListView, logEntries, tsRegion)
-  private val button: ClockButton = new ClockButton(timestampSettingStage)
+  private val button: ClockButton = new ClockButton(owner, mutLogFileSettings, chunkListView, logEntries, tsRegion)
   private val fontIcon = new ExclamationCircleFontIcon
 
   getChildren.addAll(button, fontIcon)
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , hasTimestampSetting: BooleanBinding
-           , someGlobalTimestampSettings: Option[TimestampSettings]
-           , someLocalTimestampSettings: Option[TimestampSettings]
-           , owner: Window): Unit =
-    button.init(someGlobalTimestampSettings, someLocalTimestampSettings, owner)
+           ): Unit =
     bindIdProperty(fileIdProperty)
     fontIcon.visibleProperty().bind(hasTimestampSetting.not())
 
   def unbind(): Unit =
-    button.shutdown()
     unbindIdProperty()
     fontIcon.visibleProperty().unbind()
