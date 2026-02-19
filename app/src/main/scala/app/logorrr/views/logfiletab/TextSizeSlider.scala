@@ -1,23 +1,16 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.FileId
+import app.logorrr.model.BoundId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import javafx.beans.binding.Bindings
+import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.control.Slider
-
-object TextConstants:
-
-  /** increment / decrement font size */
-  val fontSizeStep: Int = 1
-
-  val DefaultFontSize = 12
-  val MinFontSize = 3
-  val MaxFontSize = 30
 
 object TextSizeSlider extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[TextSizeSlider])
 
-class TextSizeSlider(fileId: FileId) extends Slider {
-  setId(TextSizeSlider.uiNode(fileId).value)
+class TextSizeSlider extends Slider with BoundId(TextSizeSlider.uiNode(_).value):
   setMin(TextConstants.MinFontSize)
   setMax(TextConstants.MaxFontSize)
   setMajorTickUnit(TextConstants.fontSizeStep)
@@ -25,4 +18,4 @@ class TextSizeSlider(fileId: FileId) extends Slider {
   setSnapToTicks(true)
   setShowTickLabels(false)
   setShowTickMarks(false)
-}
+

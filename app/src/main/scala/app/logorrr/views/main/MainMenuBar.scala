@@ -1,6 +1,6 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{DefaultSearchTermGroups, FileId}
+import app.logorrr.conf.FileId
 import app.logorrr.services.file.FileIdService
 import app.logorrr.views.menubar.{AppMenuBuilder, FileMenu, HelpMenu}
 import de.jangassen.MenuToolkit
@@ -18,16 +18,12 @@ class MainMenuBar(stage: Stage
   if OsUtil.isMac then
     val tk: MenuToolkit = MenuToolkit.toolkit
     tk.setAppearanceMode(AppearanceMode.AUTO)
-
-    val appMenu = AppMenuBuilder.mkOsxMenu(stage, tk, isUnderTest)
-    val fileMenu = new FileMenu(fileIdService, openFile, closeAllFiles)
-    val helpMenu = new HelpMenu(stage, openFile)
-    getMenus.addAll(appMenu, fileMenu, helpMenu)
-    if !isUnderTest then
-      tk.setGlobalMenuBar(this)
+    addMenu(AppMenuBuilder.mkOsxMenu(stage, tk, isUnderTest))
+    if !isUnderTest then tk.setGlobalMenuBar(this)
   else
-    val appMenu: Menu = AppMenuBuilder.mkMenu(stage, isUnderTest)
+    addMenu(AppMenuBuilder.mkMenu(stage, isUnderTest))
+
+  private def addMenu(appMenu: Menu): Unit = 
     val fileMenu = new FileMenu(fileIdService, openFile, closeAllFiles)
     val helpMenu = new HelpMenu(stage, openFile)
     getMenus.addAll(appMenu, fileMenu, helpMenu)
-

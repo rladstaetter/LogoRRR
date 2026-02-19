@@ -12,7 +12,7 @@
     <groupId>app.logorrr.dist.linux</groupId>
     <artifactId>linux</artifactId>
 
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
     <description>Distribution bundle for Linux</description>
 

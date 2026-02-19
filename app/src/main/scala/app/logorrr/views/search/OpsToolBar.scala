@@ -4,133 +4,56 @@ import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import app.logorrr.views.autoscroll.AutoScrollCheckBox
-import app.logorrr.views.ops.time.{SliderVBox, TimeRange, TimeUtil, TimestampSettingsButton}
-import app.logorrr.views.ops.{ClearLogButton, CopyLogButton}
-import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.{ObjectProperty, ObjectPropertyBase, Property}
 import javafx.collections.ObservableList
-import javafx.collections.transformation.FilteredList
-import javafx.geometry.Pos
-import javafx.scene.Node
-import javafx.scene.control._
-import javafx.scene.input.{KeyCode, KeyEvent}
+import javafx.scene.control.*
+import javafx.stage.Window
 import net.ladstatt.util.os.OsUtil
+
+import java.util.function.Predicate
 
 
 object OpsToolBar:
 
-  def apply(mutLogFileSettings: MutLogFileSettings
-            , chunkListView: ChunkListView[LogEntry]
-            , entries: ObservableList[LogEntry]
-            , filteredList: FilteredList[LogEntry]): OpsToolBar =
+  val w = 380
 
-    new OpsToolBar(mutLogFileSettings.getFileId
-      , mutLogFileSettings
-      , chunkListView
-      , mutLogFileSettings.mutSearchTerms.add(_)
-      , entries
-      , filteredList
-      , mutLogFileSettings.blockSizeProperty)
+  val width: Int = OsUtil.osFun(w + 2, w, w + 2)
 
 
 /**
  * Groups search ui widgets together.
- *
- * @param addFilterFn filter function which results from user interaction with SearchToolbar
  */
-class OpsToolBar(fileId: FileId
+class OpsToolBar(owner: Window
                  , mutLogFileSettings: MutLogFileSettings
                  , chunkListView: ChunkListView[LogEntry]
-                 , addFilterFn: MutableSearchTerm => Unit
                  , logEntries: ObservableList[LogEntry]
-                 , filteredList: FilteredList[LogEntry]
-                 , val sizeProperty: SimpleIntegerProperty) extends ToolBar:
+                 , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]) extends ToolBar:
 
+  // layout
   setMaxHeight(Double.PositiveInfinity)
+  setStyle("-fx-padding: 0px 0px 0px 4px;")
 
-  setStyle("""-fx-padding: 0px 0px 0px 4px;""")
-  val w = 380
-  private val macWidth: Int = w
-  private val winWidth: Int = w + 2
-  private val linuxWidth: Int = w + 2
-  val width: Int = OsUtil.osFun(winWidth, macWidth, linuxWidth) // different layouts (may be dependent on font size renderings?)
-  setMinWidth(width)
+  setMinWidth(OpsToolBar.width)
 
-  /** control which enables selecting color for a search tag */
-  private val colorPicker = new SearchColorPicker(fileId)
+  val searchRegion = new SearchRegion
+  private val otherItemsRegion = new OtherItemsRegion
+  private val timestampSettingsRegion = new TimestampSettingsRegion(owner: Window, mutLogFileSettings, chunkListView, logEntries, predicateProperty)
 
+  getItems.addAll(searchRegion.items ++ otherItemsRegion.items ++ timestampSettingsRegion.items *)
 
-  /** textfield to enter search queries */
-  val searchTextField = new SearchTextField(fileId)
+  def init(fileIdProperty: ObjectPropertyBase[FileId]
+           , autoScrollProperty: Property[java.lang.Boolean]
+           , mutSearchTerms: ObservableList[MutableSearchTerm]
+           , filteredList: ObservableList[LogEntry]): Unit = {
+    searchRegion.init(fileIdProperty, mutSearchTerms)
+    otherItemsRegion.init(fileIdProperty, autoScrollProperty, logEntries, filteredList)
+    timestampSettingsRegion.init()
+  }
 
-  private val searchButton = new SearchButton(fileId, searchTextField, colorPicker, addFilterFn)
-
-  private val autoScrollCheckBox = new AutoScrollCheckBox(fileId)
-
-  private val clearLogButton = new ClearLogButton(fileId, logEntries)
-
-  private val copySelectionButton = new CopyLogButton(fileId, filteredList)
-
-
-  def execSearchOnHitEnter(event: KeyEvent): Unit =
-    if event.getCode == KeyCode.ENTER then
-      searchButton.fire()
-
-  searchTextField.setOnKeyPressed(execSearchOnHitEnter)
-  colorPicker.setOnKeyPressed(execSearchOnHitEnter)
-
-  val searchItems: Seq[Control] = Seq[Control](searchTextField, colorPicker, searchButton)
-
-  val otherItems: Seq[Node] =
-    Seq(autoScrollCheckBox, clearLogButton, copySelectionButton)
-
-
-  /**
-   * To configure the logformat of the timestamp used in a logfile
-   */
-  private val timestampSettingsButton = new TimestampSettingsButton(mutLogFileSettings, chunkListView, logEntries, this)
-
-  def timeRange: TimeRange = TimeUtil.calcTimeInfo(logEntries).getOrElse(TimeRange.defaultTimeRange)
-
-  private lazy val lowerSliderVBox = new SliderVBox(mutLogFileSettings, Pos.CENTER_LEFT, "Configure earliest timestamp to be displayed", timeRange)
-  private lazy val upperSliderVBox = new SliderVBox(mutLogFileSettings, Pos.CENTER_RIGHT, "Configure latest timestamp to be displayed", timeRange)
-
-  private val lowerSlider = lowerSliderVBox.slider
-  private val upperSlider = upperSliderVBox.slider
-
-  //  private val replayStackPane = new ReplayStackPane(mutLogFileSettings, logEntries, lowerSlider, upperSlider, logTextView)
-  // logTextView == logTextView
-  //  private val stopTimeAnimationButton = new StopTimeAnimationButton(mutLogFileSettings, replayStackPane)
-
-  Option(mutLogFileSettings.filteredRangeBinding.get()).map(setSliderPositions).getOrElse(setSliderPositions(timeRange))
-
-  lowerSlider.valueProperty.addListener((_, _, newValue) => updateLowerTimestampSlider(newValue))
-  upperSlider.valueProperty.addListener((_, _, newValue) => updateUpperTimestampSlider(newValue))
-
-
-  def initializeRanges(): Unit =
-    val range = timeRange
-    lowerSlider.setRange(range)
-    lowerSlider.setInstant(range.start)
-    upperSlider.setRange(range)
-    upperSlider.setInstant(range.end)
-    setSliderPositions(range)
-
-  private def setSliderPositions(filterRange: TimeRange): Unit =
-    lowerSlider.setInstant(filterRange.start)
-    upperSlider.setInstant(filterRange.end)
-
-  private def updateLowerTimestampSlider(newValue: Number): Unit =
-    if newValue.doubleValue > upperSlider.getValue then lowerSlider.setValue(upperSlider.getValue)
-    mutLogFileSettings.setLowerTimestampValue(newValue.longValue())
-    mutLogFileSettings.updateActiveFilter(filteredList)
-
-  private def updateUpperTimestampSlider(newValue: Number): Unit =
-    if newValue.doubleValue < lowerSlider.getValue then upperSlider.setValue(lowerSlider.getValue)
-    mutLogFileSettings.setUpperTimestampValue(newValue.longValue())
-    mutLogFileSettings.updateActiveFilter(filteredList)
-
-  private val nodes: Seq[Node] = Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox)
-
-  getItems.addAll(searchItems ++ otherItems ++ nodes*)
-
+  def shutdown(autoScrollProperty: Property[java.lang.Boolean]
+               , searchTerms: ObservableList[MutableSearchTerm]
+               , filteredList: ObservableList[LogEntry]): Unit = {
+    searchRegion.shutdown(searchTerms)
+    otherItemsRegion.shutdown(autoScrollProperty, logEntries, filteredList)
+    timestampSettingsRegion.shutdown()
+  }

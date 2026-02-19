@@ -1,115 +1,112 @@
 package app.logorrr.views.search.st
 
-import app.logorrr.conf.SearchTerm
-import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.model.LogEntry
+import app.logorrr.conf.mut.{LogFilePredicate, MutLogFileSettings}
+import app.logorrr.conf.{FileId, SearchTerm}
+import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.util.JfxUtils
-import app.logorrr.views.search.MutableSearchTerm
-import app.logorrr.views.search.stg.{OpenStgEditorButton, StgChoiceBox}
-import javafx.beans.property.SimpleListProperty
-import javafx.collections.transformation.FilteredList
-import javafx.collections.{FXCollections, ListChangeListener}
+import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.search.stg.AddToFavoritesButton
+import app.logorrr.views.search.{MutableSearchTerm, st}
+import javafx.beans.binding.BooleanBinding
+import javafx.beans.property.{ObjectProperty, SimpleIntegerProperty}
+import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control.ToolBar
+import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 
+import java.util.function.Predicate
 import scala.jdk.CollectionConverters.*
 
+
+object SearchTermToolBar extends UiNodeFileIdAware:
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchTermToolBar])
+
 /**
- * Depending on buttons pressed, filteredList will be mutated to show only selected items.
+ * Displays unclassfied and search term toggle buttons.
  *
- * @param filteredList list of entries which are displayed (can be filtered via buttons)
+ * Unclassified toggle button is calculated based on the other search terms.
  */
 class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
-                        , filteredList: FilteredList[LogEntry]) extends ToolBar with TinyLog:
+                        , entries: ObservableList[LogEntry]
+                        , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]])
+  extends ToolBar with TinyLog with BoundId(SearchTermToolBar.uiNode(_).value):
+
+  private val unclassifiedSearchTerm = MutableSearchTerm.mkUnclassified(Set())
+
+  private val addToFavoritesButton = new AddToFavoritesButton(activeSearchTerms)
+
+  val unclassifiedButton =
+    new UnclassifiedToggleButton(entries
+      , mutLogFileSettings.mutSearchTerms
+      , mutLogFileSettings.showPredicate.showUnclassifiedProperty
+      , predicateProperty
+      , mutLogFileSettings.showPredicate
+    )
+
+  private val listChangeListener = JfxUtils.mkListChangeListener[MutableSearchTerm](processFiltersChange)
 
   setMaxHeight(Double.PositiveInfinity)
 
-  var occurrences: Map[MutableSearchTerm, Int] = Map().withDefaultValue(0)
+  def init(window: Window): Unit =
+    bindIdProperty(mutLogFileSettings.fileIdProperty)
+    getItems.addAll(addToFavoritesButton, unclassifiedButton)
 
-  /** will be bound to the current active filter list */
-  val searchTermsProperty: SimpleListProperty[MutableSearchTerm] = new SimpleListProperty[MutableSearchTerm](FXCollections.observableArrayList())
+    addToFavoritesButton.init(window, mutLogFileSettings.fileIdProperty)
+    // add all search terms for this file
+    mutLogFileSettings.mutSearchTerms.forEach(addSearchTermButton)
+    mutLogFileSettings.mutSearchTerms.addListener(listChangeListener)
+    unclassifiedButton.init(mutLogFileSettings.fileIdProperty
+      , () => false
+      , unclassifiedSearchTerm
+      , mutLogFileSettings.mutSearchTerms)
 
-  private val groupChoiceBox: StgChoiceBox =
-    val gcb = new StgChoiceBox(mutLogFileSettings, searchTermsProperty)
-    gcb.itemsProperty.set(mutLogFileSettings.searchTermGroupNames)
-    mutLogFileSettings.getSomeSelectedSearchTermGroup.foreach(gcb.setValue)
-    gcb
 
-  val openStgEditor = new OpenStgEditorButton(mutLogFileSettings
-    , mutLogFileSettings.getFileId
-    , activeSearchTerms)
-
-  init()
-
-  private def init(): Unit =
-    getItems.addAll(groupChoiceBox, openStgEditor)
-    searchTermsProperty.addListener(JfxUtils.mkListChangeListener[MutableSearchTerm](processFiltersChange))
-    updateUnclassified()
-    searchTermsProperty.bind(mutLogFileSettings.mutSearchTerms)
-
+  def shutdown(): Unit =
+    unbindIdProperty()
+    addToFavoritesButton.shutdown()
+    mutLogFileSettings.mutSearchTerms.removeListener(listChangeListener)
+    unclassifiedButton.shutdown(unclassifiedSearchTerm.activeProperty)
 
   /** if filter list is changed in any way, react to this event and either add or remove filter from UI */
   private def processFiltersChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit =
-    while change.next() do
-      if change.wasAdded() then
+    while change.next() do {
+      unclassifiedButton.resetPredicate()
+      if change.wasReplaced() then
+        () // println("replaced")
+      else if change.wasPermutated() then
+        () // println("permutated")
+      else if change.wasUpdated() then
+        () // println("updated")
+      else if change.wasAdded() then {
+        // println("added")
         change.getAddedSubList.asScala.foreach(addSearchTermButton)
-        updateUnclassified()
-      else if change.wasRemoved() then
+      } else if change.wasRemoved() then {
+        // println("removed")
         change.getRemoved.asScala.foreach(removeSearchTermButton)
-        updateUnclassified()
-
-  private def updateOccurrences(mutableSearchTerm: MutableSearchTerm): Unit =
-    occurrences = occurrences + (mutableSearchTerm -> filteredList.getSource.asScala.count(e => mutableSearchTerm.test(e.value)))
-
-  private def updateUnclassified(): Unit =
-    val unclassified = MutableSearchTerm.mkUnclassified(mutLogFileSettings.filterButtons.keySet)
-    val searchTermButton: SearchTermToggleButton = updateOccurrencesAndFilter(unclassified)
-    mutLogFileSettings.someUnclassifiedFilter.foreach(ftb => {
-      val btn = ftb._2
-      btn.unbind()
-      getItems.remove(btn)
-    })
-    getItems.add(2, searchTermButton)
-    mutLogFileSettings.someUnclassifiedFilter = Option((unclassified, searchTermButton))
-    mutLogFileSettings.updateActiveFilter(filteredList)
-
-  private def addSearchTermButton(filter: MutableSearchTerm): Unit =
-    val filterButton = updateOccurrencesAndFilter(filter)
-    getItems.add(filterButton)
-    mutLogFileSettings.filterButtons = mutLogFileSettings.filterButtons.updated(filter, filterButton)
-
-  private def updateOccurrencesAndFilter(searchTerm: MutableSearchTerm): SearchTermToggleButton =
-    updateOccurrences(searchTerm)
-    SearchTermToggleButton(
-      mutLogFileSettings.getFileId
-      , searchTerm
-      , occurrences(searchTerm)
-      , mutLogFileSettings.updateActiveFilter(filteredList)
-      , mutLogFileSettings.mutSearchTerms.remove)
-
-  private def removeSearchTermButton(filter: MutableSearchTerm): Unit =
-    try
-      val button: SearchTermToggleButton = mutLogFileSettings.filterButtons(filter)
-      button.unbind()
-      getItems.remove(button)
-    catch
-      case e: Throwable => logException("Could not find or remove button", e)
-    finally
-      filter.unbindActiveProperty()
-    mutLogFileSettings.filterButtons = mutLogFileSettings.filterButtons.removed(filter)
-
-  def activeSearchTerms(): Seq[SearchTerm] =
-    (for i <- getItems.asScala yield {
-      i match {
-        case st: SearchTermToggleButton =>
-          if st.isUnclassified then {
-            None
-          } else {
-            Option(st.getMutableSearchTerm.asSearchTerm)
-          }
-        case _ => None
       }
-    }).flatten.toSeq
+    }
+
+  private def addSearchTermButton(mutSearchTerm: MutableSearchTerm): Unit =
+    val button = new SearchTermToggleButton(entries, predicateProperty, mutLogFileSettings.showPredicate)
+    button.init(mutLogFileSettings.fileIdProperty
+      , () => true
+      , mutSearchTerm
+      , mutLogFileSettings.mutSearchTerms)
+    getItems.add(button)
+
+  private def removeSearchTermButton(mutSearchTerm: MutableSearchTerm): Unit =
+    getSearchTermButtons.find(_.getValue == mutSearchTerm.getValue).foreach(b =>
+      getItems.remove(b)
+      b.shutdown(mutSearchTerm.activeProperty)
+    )
+
+  def activeSearchTerms(): Seq[SearchTerm] = getSearchTermButtons.map(_.asSearchTerm)
+
+  def getSearchTermButtons: Seq[SearchTermToggleButton] =
+    getItems.asScala.drop(2).map {
+      case sb: SearchTermToggleButton => sb
+    }.toSeq
+
 
 
 

@@ -13,8 +13,7 @@ class SingleFileApplicationTest(val fileId: FileId)
   extends TestFxBaseApplicationTest
     with AppActions:
 
-  protected lazy val settings: Settings = TestSettings.Default
-
+  protected lazy val settings: Settings = TestSettings.DefaultSettings
 
   final def services: LogoRRRServices = {
     // overriding default search term groups for tests

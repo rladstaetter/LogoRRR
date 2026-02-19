@@ -11,7 +11,7 @@
     <artifactId>app-tests</artifactId>
     <description>Frontend / Integration tests for LogoRRR</description>
     <inceptionYear>2024</inceptionYear>
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -39,10 +39,6 @@
             <groupId>org.testfx</groupId>
             <artifactId>testfx-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.testfx</groupId>
-            <artifactId>openjfx-monocle</artifactId>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -59,9 +55,13 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <skipTests>false</skipTests>
-                    <!-- see https://github.com/TestFX/TestFX?tab=readme-ov-file for testfx parameters-->
-                    <!--  -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.verbose=true -->
-                    <argLine>-Djava.util.logging.config.file=test-logging.properties --sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED  -Djava.library.path=${basedir}/target/native</argLine>
+                    <!--
+                    <forkCount>1C</forkCount>
+                    <reuseForks>false</reuseForks>
+                    -->
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <!-- add -Dglass.platform=Headless for headless tests -->
+                    <argLine>--sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED -Djava.library.path=${basedir}/target/native</argLine>
                 </configuration>
             </plugin>
         </plugins>

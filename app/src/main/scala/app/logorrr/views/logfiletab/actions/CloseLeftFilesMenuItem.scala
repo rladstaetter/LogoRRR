@@ -19,7 +19,7 @@ class CloseLeftFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends Men
     var deletethem = true
     val toBeDeleted: Seq[Tab] = {
       tabPane.getTabs.asScala.flatMap { t =>
-        if t.asInstanceOf[LogFileTab].fileId == fileTab.fileId then {
+        if t.asInstanceOf[LogFileTab].getFileId == fileTab.getFileId then {
           deletethem = false
           None
         } else {

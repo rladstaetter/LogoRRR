@@ -1,15 +1,18 @@
 package app.logorrr.views.ops.time
 
 import app.logorrr.conf.FileId
-import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.model.LogEntry
+import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAndPosAware}
+import javafx.beans.binding.BooleanBinding
+import javafx.beans.property.{ObjectPropertyBase, SimpleObjectProperty}
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
 import javafx.scene.control.{Slider, Tooltip}
+import javafx.util.Subscription
 
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId}
+import scala.compiletime.uninitialized
 
 
 object TimeUtil:
@@ -51,29 +54,44 @@ object TimerSlider extends UiNodeFileIdAndPosAware:
 
   val Width = 350
 
-  def format(epochMilli: Long, formatter: DateTimeFormatter): String =
-    val instant = Instant.ofEpochMilli(epochMilli)
-    val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault)
-    dateTime.format(formatter)
 
 
   override def uiNode(id: FileId, pos: Pos): UiNode = UiNode(id, pos, classOf[TimerSlider])
 
-class TimerSlider(mutLogFileSettings: MutLogFileSettings
-                  , pos: Pos
-                  , tooltipText: String
-                  , range: TimeRange) extends Slider {
+class TimerSlider(pos: Pos, tooltipText: String)
+  extends Slider with BoundId(TimerSlider.uiNode(_, pos).value):
 
-  setId(TimerSlider.uiNode(mutLogFileSettings.getFileId, pos).value)
   setPrefWidth(TimerSlider.Width)
   setTooltip(new Tooltip(tooltipText))
-  setRange(range)
-  visibleProperty().bind(mutLogFileSettings.hasTimestampSetting)
-  disableProperty().bind(mutLogFileSettings.hasTimestampSetting.not)
+
+  val timeRangeProperty = new SimpleObjectProperty[TimeRange]()
+  var timeRangeSubscription: Subscription = uninitialized
 
   def setInstant(instant: Instant): Unit = setValue(instant.toEpochMilli.doubleValue())
 
   def setRange(range: TimeRange): Unit =
     setMin(range.start.toEpochMilli.doubleValue)
     setMax(range.end.toEpochMilli.doubleValue())
-}
+
+  def init(fileIdProperty: ObjectPropertyBase[FileId]
+           , hasTimestampSetting: BooleanBinding
+           , timeRangeProperty: ObjectPropertyBase[TimeRange]): Unit =
+    bindIdProperty(fileIdProperty)
+    timeRangeSubscription =
+      this.timeRangeProperty.subscribe(r => {
+        Option(r) match {
+          case Some(value) => setRange(value)
+          case None =>
+        }
+
+      })
+    this.timeRangeProperty.bind(timeRangeProperty)
+    visibleProperty().bind(hasTimestampSetting)
+    disableProperty().bind(hasTimestampSetting.not)
+
+  def shutdown(): Unit =
+    timeRangeSubscription.unsubscribe()
+    this.timeRangeProperty.unbind()
+    unbindIdProperty()
+    visibleProperty().unbind()
+    disableProperty().unbind()

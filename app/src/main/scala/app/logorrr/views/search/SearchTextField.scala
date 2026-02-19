@@ -1,21 +1,26 @@
 package app.logorrr.views.search
 
 import app.logorrr.conf.FileId
+import app.logorrr.model.BoundId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import javafx.beans.property.ObjectPropertyBase
 import javafx.scene.control.{TextField, Tooltip}
 import net.ladstatt.util.os.OsUtil
 
 
 object SearchTextField extends UiNodeFileIdAware:
 
+  private val shortCut = s"${OsUtil.osFun("CTRL-F", "COMMAND-F", "CTRL-F")}"
+
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[SearchTextField])
 
 
-class SearchTextField(fileId: FileId) extends TextField:
+class SearchTextField extends TextField with BoundId(SearchTextField.uiNode(_).value):
 
-  setId(SearchTextField.uiNode(fileId).value)
   setPrefWidth(200)
   setMaxWidth(200)
-  setTooltip(new Tooltip(s"enter search pattern\n\nshortcut: ${OsUtil.osFun("CTRL-F", "COMMAND-F", "CTRL-F")}"))
-  setPromptText("<search string>")
+  setTooltip(new Tooltip(s"enter search pattern\n\nshortcut: ${SearchTextField.shortCut}"))
+  setPromptText(s"search (${SearchTextField.shortCut})")
 
+  def init(fileIdProperty : ObjectPropertyBase[FileId]) : Unit = bindIdProperty(fileIdProperty)
+  def shutdown() : Unit = unbindIdProperty()

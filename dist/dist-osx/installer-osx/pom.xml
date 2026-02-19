@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>installer-osx</artifactId>
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
 
     <dependencies>
         <dependency>

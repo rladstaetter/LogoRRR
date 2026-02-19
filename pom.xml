@@ -5,7 +5,7 @@
     <groupId>app.logorrr</groupId>
     <artifactId>logorrr</artifactId>
     <version>${revision}${changelist}</version>
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>LogoRRR - logfiles at a glance.</description>
     <packaging>pom</packaging>
     <properties>
@@ -13,6 +13,9 @@
         <scala.version>3.7.4</scala.version>
         <java.version>24</java.version>
         <openjfx.version>25</openjfx.version>
+       <!--
+        <openjfx.version>26-ea+25</openjfx.version>
+        -->
         <ikonli.version>12.4.0</ikonli.version>
         <!-- no need to change these -->
         <changelist></changelist>
@@ -175,12 +178,6 @@
                 <groupId>org.testfx</groupId>
                 <artifactId>testfx-core</artifactId>
                 <version>4.0.18</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.testfx</groupId>
-                <artifactId>openjfx-monocle</artifactId>
-                <version>21.0.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

@@ -1,5 +1,6 @@
 package app.logorrr.views.about
 
+import app.logorrr.LogoRRRApp
 import app.logorrr.conf.AppInfo
 import javafx.scene.Scene
 import javafx.stage.{Modality, Stage, Window}
@@ -7,7 +8,7 @@ import javafx.stage.{Modality, Stage, Window}
 class AboutStage(owner: Window) extends Stage:
   initOwner(owner)
   initModality(Modality.WINDOW_MODAL)
-  setTitle(s"About ${AppInfo.fullAppNameWithVersion}")
+  setTitle(s"About ${LogoRRRApp.Name}")
   setOnCloseRequest(_ => this.close())
   private val width = 470
   private val height = 300

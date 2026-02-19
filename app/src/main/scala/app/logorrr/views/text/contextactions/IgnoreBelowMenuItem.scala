@@ -15,8 +15,8 @@ import net.ladstatt.util.log.TinyLog
  */
 class IgnoreBelowMenuItem(currentEntry: LogEntry, filteredList: FilteredList[LogEntry]) extends MenuItem("Ignore entries below") with TinyLog:
 
-  setOnAction(_ => {
-    val currPredicate = filteredList.getPredicate
-    filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && entry.lineNumber <= currentEntry.lineNumber)
-  })
+  setOnAction:
+    _ =>
+      val currPredicate = filteredList.getPredicate
+      filteredList.setPredicate((entry: LogEntry) => currPredicate.test(entry) && entry.lineNumber <= currentEntry.lineNumber)
 

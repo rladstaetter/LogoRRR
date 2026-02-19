@@ -1,18 +1,20 @@
 package app.logorrr.views.search
 
-import app.logorrr.clv.color.ColorUtil
 import app.logorrr.conf.SearchTerm
-import app.logorrr.views.util.CssBindingUtil
-import javafx.beans.binding.Bindings
+import javafx.beans.Observable
 import javafx.beans.property.*
 import javafx.scene.paint.Color
+import javafx.util.Callback
 
 import java.util.function.Predicate
 
 object MutableSearchTerm:
 
-  val UnclassifiedColor: Color = Color.LIGHTGREY
+  val UnclassifiedColor: Color = Color.web("#F6F8FA")
   val UnclassifiedText = "Unclassified"
+
+  def apply(value: String, color: Color): MutableSearchTerm =
+    apply(SearchTerm(value, color, true))
 
   def apply(searchTerm: SearchTerm): MutableSearchTerm =
     apply(searchTerm.value, searchTerm.color, searchTerm.active)
@@ -38,9 +40,12 @@ object MutableSearchTerm:
     st.setUnclassified(false)
     st
 
+  val extractor = new Callback[MutableSearchTerm, Array[Observable]] {
+    override def call(st: MutableSearchTerm): Array[Observable] = st.extract()
+  }  
 
-class MutableSearchTerm extends BaseSearchTermModel
-  with Predicate[String]:
+
+class MutableSearchTerm extends BaseSearchTermModel with Predicate[String]:
 
   private val predicateProperty: SimpleObjectProperty[Predicate[String]] = new SimpleObjectProperty[Predicate[String]]()
 
@@ -48,7 +53,7 @@ class MutableSearchTerm extends BaseSearchTermModel
 
   override def test(logLine: String): Boolean = predicateProperty.get().test(logLine)
 
-
+  def extract(): Array[Observable] = Array[Observable](activeProperty, colorProperty, valueProperty)
 
 
 

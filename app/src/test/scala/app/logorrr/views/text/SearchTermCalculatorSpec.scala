@@ -11,20 +11,20 @@ import org.scalacheck.{Gen, Prop}
 object SearchTermCalculatorSpec:
 
   val mutSearchTermGen: Gen[MutableSearchTerm] = for
-    f <- Gen.oneOf(DefaultSearchTermGroups().jul.terms).map(MutableSearchTerm.apply)
+    f <- Gen.oneOf(DefaultSearchTermGroups().searchTermGroups.tail.head.terms).map(MutableSearchTerm.apply)
   yield f
 
   val gen: Gen[LogTextViewLabel] =
     for
       e <- LogEntrySpec.gen
       maxLength <- Gen.posNum[Int]
-      searchTerms <- Gen.listOf(mutSearchTermGen)
-    yield LogTextViewLabel(e, maxLength, searchTerms, () => "", new SimpleIntegerProperty())
+      searchTerms <- Gen.listOf(mutSearchTermGen.map(st => (st.getValue, st.getColor)))
+    yield LogTextViewLabel(e.lineNumber, e.value, maxLength, searchTerms, new SimpleIntegerProperty())
 
 class SearchTermCalculatorSpec extends LogoRRRSpec:
 
   def applySingleFilter(logEntry: String, pattern: String): Seq[Seq[LinePart]] =
-    SearchTermCalculator(LogEntry(0, logEntry, None, None), Seq(MutableSearchTerm(SearchTerm(pattern, Color.RED, active = true)))).filteredParts
+    SearchTermCalculator(logEntry, Seq((pattern, Color.RED))).filteredParts
 
   "fine/finest" in :
     val line = "FINEST"
@@ -37,9 +37,9 @@ class SearchTermCalculatorSpec extends LogoRRRSpec:
   /** inactive searchterms are rendered with 'unclassfied' color */
   "inactive searchterms are not calculated" in :
     val logEntry = LogEntry(0, "FINEST", None, None)
-    val fine = MutableSearchTerm(SearchTerm("FINE", Color.BLUE, true))
-    val finest = MutableSearchTerm(SearchTerm("FINEST", Color.RED, false))
-    val pairs: Seq[(String, Color)] = SearchTermCalculator(logEntry, Seq(fine, finest)).stringColorPairs
+    val fine = ("FINE", Color.BLUE)
+    // val finest = MutableSearchTerm(SearchTerm("FINEST", Color.RED, false))
+    val pairs: Seq[(String, Color)] = SearchTermCalculator("FINEST", Seq(fine)).stringColorPairs
     assert(pairs.size == 2)
     assert(pairs(0)._1 == "FINE")
     assert(pairs(0)._2 == Color.BLUE)
@@ -97,11 +97,11 @@ class SearchTermCalculatorSpec extends LogoRRRSpec:
 
   "filteredParts" should :
     val filters = Seq(
-      MutableSearchTerm(SearchTerm("a", Color.RED, active = true))
-      , MutableSearchTerm(SearchTerm("b", Color.BLUE, active = true))
-      , MutableSearchTerm(SearchTerm("t", Color.YELLOW, active = true))
+      ("a", Color.RED)
+      , ("b", Color.BLUE)
+      , ("t", Color.YELLOW)
     )
-    val entry = LogEntry(0, "test a b c", None, None)
+    val entry = "test a b c"
     val calculator = SearchTermCalculator(entry, filters)
 
     "produce correct amount of matches" in :
@@ -114,4 +114,4 @@ class SearchTermCalculatorSpec extends LogoRRRSpec:
     "produce correct label content" in :
       val stringAndColor: Seq[(String, Color)] = calculator.stringColorPairs
       val jo = stringAndColor.map(_._1).foldLeft("")((acc, s) => s"$acc$s")
-      assert(jo == entry.value)
+      assert(jo == entry)

@@ -11,6 +11,6 @@
     <packaging>jar</packaging>
     <artifactId>flatpak-yml</artifactId>
 
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
 
 </project>

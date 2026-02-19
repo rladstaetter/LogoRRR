@@ -29,12 +29,11 @@
         <option value="app.logorrr.util.OsUtilSpec" />
         <option value="app.logorrr.clv.ChunkSpec" />
         <option value="app.logorrr.issues.Issue139Spec" />
-        <option value="app.logorrr.conf.DefaultSearchTermGroupsSpec" />
-        <option value="app.logorrr.conf.SettingsSpec" />
-        <option value="app.logorrr.conf.TimestampSettingsSpec" />
-        <option value="app.logorrr.conf.mut.MutSettingsSpec" />
         <option value="app.logorrr.io.FileIdSpec" />
         <option value="app.logorrr.io.IoManagerSpec" />
+        <option value="app.logorrr.conf.DefaultSearchTermGroupsSpec" />
+        <option value="app.logorrr.conf.TimestampSettingsSpec" />
+        <option value="app.logorrr.conf.mut.MutSettingsSpec" />
         <option value="app.logorrr.views.SearchTermSpec" />
         <option value="app.logorrr.views.ops.time.TimeRangeSpec" />
         <option value="app.logorrr.views.ops.time.TimerSliderSpec" />

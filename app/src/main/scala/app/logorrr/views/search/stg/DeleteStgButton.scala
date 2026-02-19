@@ -2,7 +2,7 @@ package app.logorrr.views.search.stg
 
 import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.search.GfxElements
+import app.logorrr.views.util.GfxElements
 import javafx.scene.control.Button
 
 
@@ -18,7 +18,7 @@ object DeleteStgButton extends UiNodeFileIdAware:
 
 class DeleteStgButton(uiNode: UiNode) extends Button:
   setId(uiNode.value)
-  setTooltip(GfxElements.mkRemoveTooltip)
-  setGraphic(GfxElements.closeWindowIcon)
+  setTooltip(GfxElements.ToolTips.mkRemove)
+  setGraphic(GfxElements.Icons.windowClose)
 
 

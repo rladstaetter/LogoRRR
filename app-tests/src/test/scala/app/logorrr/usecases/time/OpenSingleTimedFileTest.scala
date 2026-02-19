@@ -1,7 +1,6 @@
 package app.logorrr.usecases.time
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.mut.MutTimestampSettings
 import app.logorrr.conf.{FileId, LogoRRRGlobals, TimestampSettings}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.ops.time.{SliderVBox, TimerSlider, TimestampSettingsButton}
@@ -51,7 +50,6 @@ class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedL
 
     // settings aren't set after click on set button with invalid settings
     assert(!LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.get())
-
 
 
   @Test def setPositionAndFormatTest(): Unit =

@@ -1,12 +1,13 @@
 package app.logorrr
 
 import app.logorrr
-import app.logorrr.conf.{AppInfo, LogoRRRGlobals}
+import app.logorrr.conf.{AppInfo, DefaultSearchTermGroups, LogoRRRGlobals}
 import app.logorrr.io.{AppPaths, SettingsFileIO}
+import app.logorrr.model.LogSource
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
 import app.logorrr.services.hostservices.{MacNativeHostService, NativeHostServices}
-import app.logorrr.views.main.{LogoRRRMain, LogoRRRStage}
+import app.logorrr.views.main.{LogoRRRMain, LogoRRRStage, MainTabPane}
 import javafx.application.Application
 import javafx.stage.Stage
 import net.ladstatt.util.io.TinyIo
@@ -21,6 +22,9 @@ import java.nio.file.{Files, Path, Paths}
 object LogoRRRApp extends TinyLog:
 
   val Name = "LogoRRR"
+
+  val appInfo = AppInfo(Name, BuildProps.Instance)
+
   val paths = AppPaths("logorrr", "app.logorrr")
   // 1 log file, constrain it to 100 MB
   TinyLog.init(
@@ -38,10 +42,23 @@ object LogoRRRApp extends TinyLog:
     Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
 
     LogoRRRGlobals.set(services.settings, services.hostServices)
-    val logoRRRMain = new LogoRRRMain(stage, services.fileIdService, services.isUnderTest)
-    LogoRRRStage.init(stage, logoRRRMain)
 
-    logInfo(s"            Started: ${AppInfo.fullAppNameWithVersion}")
+    val groups: DefaultSearchTermGroups = DefaultSearchTermGroups(services.settings.searchTermGroups)
+
+    val logSource = new LogSource(
+      LogoRRRGlobals.searchTermGroupEntries
+      , LogoRRRGlobals.getOrderedLogFileSettings
+      , services.settings.someActive
+      , new MainTabPane)
+
+    val logoRRRMain = new LogoRRRMain(stage
+      , services.fileIdService
+      , services.isUnderTest
+      , logSource)
+    val (width, height) = (LogoRRRGlobals.getStageWidth, LogoRRRGlobals.getStageHeight)
+    LogoRRRStage.init(stage, logoRRRMain, width, height)
+
+    logInfo(s"            Started: ${appInfo.asString}")
     logConfig(s"Working directory: '${Paths.get("").toAbsolutePath.toString}'")
     logConfig(s"     Program data: '${paths.appDataDirectory.toAbsolutePath.toString}'")
     logConfig(s"    Configuration: '${paths.settingsFile}'")
@@ -53,7 +70,7 @@ class LogoRRRApp extends javafx.application.Application with TinyIo with TinyLog
 
   private val paths = LogoRRRApp.paths
 
-  def start(stage: Stage): Unit =
+  def start(primaryStage: Stage): Unit =
     val hostServices =
       if OsUtil.isMac then
         new MacNativeHostService
@@ -76,8 +93,8 @@ class LogoRRRApp extends javafx.application.Application with TinyIo with TinyLog
     val services = logorrr.services.LogoRRRServices(
       settings
       , hostServices
-      , new DefaultFileIdService(() => stage.getScene.getWindow)
+      , new DefaultFileIdService(() => primaryStage.getScene.getWindow)
       , isUnderTest = false)
 
-    LogoRRRApp.start(stage, services)
+    LogoRRRApp.start(primaryStage, services)
 

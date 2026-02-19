@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>graal-linux</artifactId>
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
 
     <properties>

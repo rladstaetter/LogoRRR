@@ -1,15 +1,17 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.FileId
+import app.logorrr.model.BoundId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.block.BlockConstants
+import javafx.beans.binding.Bindings
+import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.control.Slider
 
 object BlockSizeSlider extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[BlockSizeSlider])
 
-class BlockSizeSlider(fileId: FileId) extends Slider:
-  setId(BlockSizeSlider.uiNode(fileId).value)
+class BlockSizeSlider extends Slider with BoundId(BlockSizeSlider.uiNode(_).value):
   setMin(BlockConstants.MinBlockSize)
   setMax(BlockConstants.MaxBlockSize)
   setMajorTickUnit(BlockConstants.BlockSizeStep)
@@ -17,6 +19,4 @@ class BlockSizeSlider(fileId: FileId) extends Slider:
   setSnapToTicks(true)
   setShowTickLabels(false)
   setShowTickMarks(false)
-
-
 

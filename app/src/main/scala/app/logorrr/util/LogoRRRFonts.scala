@@ -1,5 +1,7 @@
 package app.logorrr.util
 
+import javafx.beans.binding.StringBinding
+import javafx.beans.property.Property
 import javafx.scene.text.Font
 
 object LogoRRRFonts:
@@ -12,3 +14,7 @@ object LogoRRRFonts:
         |-fx-font-size: ${size.toString} px;
         |""".stripMargin
 
+class JetbrainsMonoFontStyleBinding(fontSizeProperty: Property[Number]) extends StringBinding:
+  bind(fontSizeProperty)
+
+  override def computeValue(): String = LogoRRRFonts.jetBrainsMono(fontSizeProperty.getValue.intValue())

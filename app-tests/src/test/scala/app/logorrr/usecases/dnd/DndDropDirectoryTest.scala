@@ -14,9 +14,9 @@ import org.junit.jupiter.api.{BeforeAll, Test}
 object DndDropDirectoryTest:
 
   @BeforeAll
-  def setUp(): Unit =
+  def setUp(): Unit = ()
     // necessary for https://github.com/TestFX/TestFX/issues/33
-    System.setProperty("testfx.robot", "awt")
+    //System.setProperty("testfx.robot", "awt")
 
 
 class DndDropDirectoryTest extends StartEmptyApplicationTest

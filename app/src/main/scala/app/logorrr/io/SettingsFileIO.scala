@@ -1,11 +1,10 @@
 package app.logorrr.io
 
-import app.logorrr.conf.{Settings, SettingsMigrator}
+import app.logorrr.conf.Settings
 import net.ladstatt.util.log.TinyLog
 import upickle.default.{read, write}
 
 import java.nio.file.{Files, Path}
-import java.util.logging.Level
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -23,15 +22,8 @@ object SettingsFileIO extends TinyLog:
         value
     }
 
-  def from(path: Path): Try[Settings] = Try:
-    val js = Files.readString(path)
-    Try(read[Settings](js)) match
-      case Success(settings) => settings
-      case Failure(exception) =>
-        // retrying with migration if something went wrong
-        val migrated = SettingsMigrator.migrate(js) // migrate from old style (pureconfig)
-        read[Settings](migrated)
+  def from(path: Path): Try[Settings] = Try(read[Settings](Files.readString(path)))
 
   def toFile(settings: Settings, target: Path): Try[Unit] =
-    Try(Files.writeString(target, write(settings, indent = 2)))
+    timeR(Try(Files.writeString(target, write(settings, indent = 2))), s"Writing ${target.toAbsolutePath}")
 

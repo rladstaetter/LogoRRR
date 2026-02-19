@@ -1,6 +1,7 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.conf.FileId
+import app.logorrr.model.BoundId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.geometry.Pos
 import javafx.scene.control.Label
@@ -8,8 +9,4 @@ import javafx.scene.control.Label
 object ToLabel extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[ToLabel])
 
-class ToLabel(id: FileId) extends Label("to column") {
-  setId(ToLabel.uiNode(id).value)
-  setPrefWidth(100)
-  setAlignment(Pos.CENTER_LEFT)
-}
+class ToLabel extends ALabel("to column",ToLabel.uiNode(_).value)

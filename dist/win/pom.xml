@@ -11,7 +11,7 @@
 
     <groupId>app.logorrr.dist.win</groupId>
     <artifactId>win</artifactId>
-    <name>${groupId}:${artifactId}</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
     <description>Distribution bundle for Windows</description>
 

@@ -1,6 +1,7 @@
 package app.logorrr.views.settings
 
-import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTermGroup, Settings}
+import app.logorrr.conf.*
+import app.logorrr.conf.mut.MutSearchTermGroup
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.uinodes.SettingsEditor
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
@@ -25,11 +26,11 @@ class SettingsEditor(owner: Stage, fileId: FileId) extends Stage:
   private val contentLayout = new VBox(10)
   VBox.setVgrow(contentLayout, Priority.ALWAYS)
   contentLayout.setPadding(new Insets(10))
-  val resetButton = new Button("Reset to factory defaults")
+  val resetButton = new Button("reset to factory defaults")
   resetButton.setId(SettingsEditor.ResetToDefaultButton.value)
   resetButton.setOnAction(_ => {
     LogoRRRGlobals.clearSearchTermGroups()
-    Settings.DefaultSearchTermGroups.foreach(LogoRRRGlobals.putSearchTermGroup)
+    Settings.DefaultSearchTermGroups.map(MutSearchTermGroup.apply).foreach(LogoRRRGlobals.add)
     LogoRRRGlobals.setTimestampSettings(null)
     timeSettingsEditor.updateSettings(Option(null))
   })
@@ -51,7 +52,7 @@ object CloseSettingsEditorButton extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseSettingsEditorButton])
 
-class CloseSettingsEditorButton(stage: Stage) extends Button("Close") {
+class CloseSettingsEditorButton(stage: Stage) extends Button("apply & close") {
   setId(SettingsEditor.CloseButton.value)
   setOnAction(_ => stage.close())
 }
