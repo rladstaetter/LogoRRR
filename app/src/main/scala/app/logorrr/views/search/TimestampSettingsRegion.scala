@@ -2,7 +2,7 @@ package app.logorrr.views.search
 
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.LogoRRRGlobals
-import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.conf.mut.{LogFilePredicate, MutLogFileSettings}
 import app.logorrr.model.LogEntry
 import app.logorrr.views.ops.time.{SliderVBox, TimeRange, TimeUtil, TimestampSettingsButton}
 import javafx.beans.property.{ObjectProperty, SimpleObjectProperty}
@@ -32,19 +32,19 @@ class TimestampSettingsRegion(owner: Window
   private lazy val lowerSliderVBox = new SliderVBox(mutLogFileSettings, Pos.CENTER_LEFT, "Configure earliest timestamp to be displayed")
   private lazy val upperSliderVBox = new SliderVBox(mutLogFileSettings, Pos.CENTER_RIGHT, "Configure latest timestamp to be displayed")
 
-  private val lowerSlider = lowerSliderVBox.slider
-  private val upperSlider = upperSliderVBox.slider
+  private lazy val lowerSlider = lowerSliderVBox.slider
+  private lazy val upperSlider = upperSliderVBox.slider
 
   val timeRangeProperty = new SimpleObjectProperty[TimeRange]()
   var timeRangeSubscription: Subscription = uninitialized
   var lowerSliderSub: Subscription = uninitialized
   var upperSliderSub: Subscription = uninitialized
 
-  def initialTimeRange: TimeRange = TimeUtil.calcTimeInfo(logEntries).getOrElse(TimeRange.defaultTimeRange)
+  def calcRange: TimeRange = TimeUtil.calcTimeInfo(logEntries).getOrElse(TimeRange.defaultTimeRange)
 
   // replace with property
   def initializeRanges(): Unit =
-    val range = initialTimeRange
+    val range = calcRange
     lowerSlider.setRange(range)
     lowerSlider.setInstant(range.start)
     upperSlider.setRange(range)
@@ -59,22 +59,17 @@ class TimestampSettingsRegion(owner: Window
   private def updateLowerTimestampSlider(newValue: Number): Unit =
     if newValue.doubleValue > upperSlider.getValue then lowerSlider.setValue(upperSlider.getValue)
     mutLogFileSettings.setLowerTimestampValue(newValue.longValue())
-    predicateProperty.set(null)
-    predicateProperty.set(mutLogFileSettings.showPredicate)
-  // mutLogFileSettings.updateActiveSearchTerms(filteredList)
+    LogFilePredicate.update(predicateProperty, mutLogFileSettings.showPredicate)
 
   private def updateUpperTimestampSlider(newValue: Number): Unit =
     if newValue.doubleValue < lowerSlider.getValue then upperSlider.setValue(lowerSlider.getValue)
     mutLogFileSettings.setUpperTimestampValue(newValue.longValue())
-    predicateProperty.set(null)
-    predicateProperty.set(mutLogFileSettings.showPredicate)
-  // mutLogFileSettings.updateActiveSearchTerms(filteredList)
+    LogFilePredicate.update(predicateProperty, mutLogFileSettings.showPredicate)
 
   val items: Seq[Node] = Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox)
 
   def init(): Unit =
-    timeRangeSubscription =
-      logEntries.subscribe(() => timeRangeProperty.set(TimeUtil.calcTimeInfo(logEntries).getOrElse(TimeRange.defaultTimeRange)))
+    timeRangeSubscription = logEntries.subscribe(() => timeRangeProperty.set(calcRange))
 
     lowerSliderVBox.init(mutLogFileSettings.fileIdProperty, mutLogFileSettings.hasTimestampSetting, timeRangeProperty, mutLogFileSettings.dateTimeFormatterProperty)
     upperSliderVBox.init(mutLogFileSettings.fileIdProperty, mutLogFileSettings.hasTimestampSetting, timeRangeProperty, mutLogFileSettings.dateTimeFormatterProperty)
@@ -90,8 +85,8 @@ class TimestampSettingsRegion(owner: Window
       , mutLogFileSettings.hasTimestampSetting
       )
 
-    timeRangeProperty.set(initialTimeRange)
-    setSliderPositions(initialTimeRange)
+    // timeRangeProperty.set(calcRange)
+    // setSliderPositions(initialTimeRange)
 
 
   def shutdown(): Unit =

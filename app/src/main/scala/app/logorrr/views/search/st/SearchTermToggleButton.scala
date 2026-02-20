@@ -18,8 +18,7 @@ class SearchTermToggleButton(entries: ObservableList[LogEntry]
   setPredicate(IsActiveAndContainsPredicate(this))
 
   protected val updateChangeListener: ChangeListener[lang.Boolean] = JfxUtils.onNew[java.lang.Boolean](e => {
-    predicateProperty.set(null)
-    predicateProperty.set(logFilePredicate)
+    LogFilePredicate.update(predicateProperty, logFilePredicate)
   })
 
 

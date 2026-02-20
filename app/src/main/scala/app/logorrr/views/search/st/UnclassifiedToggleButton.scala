@@ -33,6 +33,5 @@ class UnclassifiedToggleButton(entries: ObservableList[LogEntry]
     if selectedProperty().get() then
       unclassifiedProperty.set(true)
     else unclassifiedProperty.set(false)
-    predicateProperty.set(null)
-    predicateProperty.set(logFilePredicate)
+    LogFilePredicate.update(predicateProperty, logFilePredicate)
   })

@@ -2,22 +2,25 @@ package app.logorrr.conf.mut
 
 import app.logorrr.model.LogEntry
 import app.logorrr.views.search.MutableSearchTerm
-import javafx.beans.property.{SimpleBooleanProperty, SimpleLongProperty}
+import javafx.beans.property.{ObjectProperty, SimpleBooleanProperty, SimpleLongProperty}
 import javafx.collections.ObservableList
 
 import java.util.function.Predicate
 import scala.jdk.CollectionConverters.*
 
-object LogFilePredicate {
+object LogFilePredicate:
 
   def getSearchTerms(mutSearchTerms: ObservableList[MutableSearchTerm]): Set[String] = mutSearchTerms.asScala.filter(_.isActive).map(_.getValue).toSet
 
-  def containsCondition(logEntry: LogEntry, mutSearchTerms: ObservableList[MutableSearchTerm]): Boolean = {
+  def containsCondition(logEntry: LogEntry, mutSearchTerms: ObservableList[MutableSearchTerm]): Boolean =
     val strings = getSearchTerms(mutSearchTerms)
     strings.exists(needle => logEntry.value.contains(needle))
-  }
 
-}
+
+  def update(predicateProperty: ObjectProperty[Predicate[? >: LogEntry]], predicate: LogFilePredicate): Unit =
+    predicateProperty.set(null)
+    predicateProperty.set(predicate)
+
 
 class LogFilePredicate(mutSearchTerms: ObservableList[MutableSearchTerm]) extends Predicate[LogEntry] {
 
