@@ -89,7 +89,7 @@ If you don't want to use app stores, installers are provided also for following 
 
 ## Release Notes 
 
-[Click here](https://github.com/rladstaetter/LogoRRR/releases/tag/26.2.0) to view the [release notes](https://github.com/rladstaetter/LogoRRR/releases/tag/26.2.0) of the latest release.
+[Click here](https://github.com/rladstaetter/LogoRRR/releases/tag/26.1.0) to view the [release notes](https://github.com/rladstaetter/LogoRRR/releases/tag/26.1.0) of the latest release.
 
 
 ## Features

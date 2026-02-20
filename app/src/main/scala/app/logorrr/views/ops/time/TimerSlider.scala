@@ -15,47 +15,9 @@ import java.time.{Instant, LocalDateTime, ZoneId}
 import scala.compiletime.uninitialized
 
 
-object TimeUtil:
-
-
-  /**
-   * Given an observable list of log entries, calculate the min and max instant. LogEntries doesn't have to be ordered.
-   *
-   * @param logEntries list of log entries
-   * @return min and max Instant of all log entries
-   */
-  def calcTimeInfo(logEntries: ObservableList[LogEntry]): Option[TimeRange] =
-    if !logEntries.isEmpty then
-      var minInstant = Instant.MAX
-      var maxInstant = Instant.MIN
-      logEntries.forEach((e: LogEntry) => {
-        e.someInstant match {
-          case Some(instant) =>
-            if instant.isBefore(minInstant) then {
-              minInstant = instant
-            }
-            if instant.isAfter(maxInstant) then {
-              maxInstant = instant
-            }
-          case None => // do nothing
-        }
-      })
-      if minInstant == Instant.MIN || minInstant == Instant.MAX then
-        None
-      else if maxInstant == Instant.MIN || maxInstant == Instant.MAX then
-        None
-      else if minInstant.equals(maxInstant) then
-        None
-      else
-        Option(TimeRange(minInstant, maxInstant))
-    else None
-
 object TimerSlider extends UiNodeFileIdAndPosAware:
 
   val Width = 350
-
-
-
   override def uiNode(id: FileId, pos: Pos): UiNode = UiNode(id, pos, classOf[TimerSlider])
 
 class TimerSlider(pos: Pos, tooltipText: String)
@@ -67,11 +29,11 @@ class TimerSlider(pos: Pos, tooltipText: String)
   val timeRangeProperty = new SimpleObjectProperty[TimeRange]()
   var timeRangeSubscription: Subscription = uninitialized
 
-  def setInstant(instant: Instant): Unit = setValue(instant.toEpochMilli.doubleValue())
+  def setInstant(instant: Long): Unit = setValue(instant.doubleValue())
 
   def setRange(range: TimeRange): Unit =
-    setMin(range.start.toEpochMilli.doubleValue)
-    setMax(range.end.toEpochMilli.doubleValue())
+    setMin(range.min.doubleValue)
+    setMax(range.max.doubleValue())
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , hasTimestampSetting: BooleanBinding

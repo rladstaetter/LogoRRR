@@ -94,7 +94,6 @@ class LogTextView(filteredList: FilteredList[LogEntry])
 
     this.searchTermChangeListener = new MutableSearchTermListener(activeSearchTerms, searchTermsAndColors, this)
     mutSearchTerms.addListener(searchTermChangeListener)
-    // this.searchTermsAndColors.bind(new MutSearchTermBinding(mutSearchTerms))
     this.selectedLineNumberProperty.bindBidirectional(selectedLineNumberProperty)
     this.fontsizeProperty.bind(fontsizeProperty)
     this.firstVisibleTextCellIndexProperty.bindBidirectional(firstVisibleTextCellIndexProperty)

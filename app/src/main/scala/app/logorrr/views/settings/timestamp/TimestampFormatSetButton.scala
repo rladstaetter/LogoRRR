@@ -50,19 +50,12 @@ class TimestampFormatSetButton(mutLogFileSettings: MutLogFileSettings
             if someFirstEntryTimestamp.isEmpty then {
               someFirstEntryTimestamp = someInstant
             }
-
-            val someDiffFromStart: Option[Duration] = for
-              firstEntry <- someFirstEntryTimestamp
-              instant <- someInstant
-            yield Duration.between(firstEntry, instant)
-
-            tempList.add(e.copy(someInstant = someInstant, someDurationSinceFirstInstant = someDiffFromStart))
+            tempList.add(e.copy(someEpochMilli = someInstant.map(_.toEpochMilli)))
           }
           logEntries.setAll(tempList)
-          // activate listener again
           chunkListView.addInvalidationListener()
           // update slider boundaries
-          //tsRegion.initializeRanges()
+          tsRegion.initializeRanges()
         // on any other case just return None
         case _ =>
           mutLogFileSettings.setSomeTimestampSettings(None)

@@ -2,22 +2,21 @@ package app.logorrr.conf.mut
 
 import app.logorrr.model.LogEntry
 import app.logorrr.views.search.MutableSearchTerm
-import javafx.beans.property.{SimpleBooleanProperty, SimpleLongProperty}
+import javafx.beans.property.{ObjectProperty, SimpleBooleanProperty, SimpleLongProperty}
 import javafx.collections.ObservableList
 
 import java.util.function.Predicate
 import scala.jdk.CollectionConverters.*
 
-object LogFilePredicate {
+object LogFilePredicate:
 
-  def getSearchTerms(mutSearchTerms: ObservableList[MutableSearchTerm]): Set[String] = mutSearchTerms.asScala.filter(_.isActive).map(_.getValue).toSet
+  def containsCondition(logEntry: LogEntry, mutSearchTerms: ObservableList[MutableSearchTerm]): Boolean =
+    mutSearchTerms.stream.filter(_.isActive).map(_.getValue).anyMatch(needle => logEntry.value.contains(needle))
 
-  def containsCondition(logEntry: LogEntry, mutSearchTerms: ObservableList[MutableSearchTerm]): Boolean = {
-    val strings = getSearchTerms(mutSearchTerms)
-    strings.exists(needle => logEntry.value.contains(needle))
-  }
+  def update(predicateProperty: ObjectProperty[Predicate[? >: LogEntry]], predicate: LogFilePredicate): Unit =
+    predicateProperty.set(null)
+    predicateProperty.set(predicate)
 
-}
 
 class LogFilePredicate(mutSearchTerms: ObservableList[MutableSearchTerm]) extends Predicate[LogEntry] {
 
@@ -25,17 +24,13 @@ class LogFilePredicate(mutSearchTerms: ObservableList[MutableSearchTerm]) extend
   val lowerTimestampValueProperty = new SimpleLongProperty()
   val upperTimestampValueProperty = new SimpleLongProperty()
 
-  override def test(t: LogEntry): Boolean = {
+  override def test(logEntry: LogEntry): Boolean = {
     val timeCondition =
-      (t.someInstant, Option(lowerTimestampValueProperty.get()), Option(upperTimestampValueProperty.get())) match
+      (logEntry.someEpochMilli, Option(lowerTimestampValueProperty.get()), Option(upperTimestampValueProperty.get())) match
         case (Some(instant), Some(lower), Some(upper)) =>
-          val i = instant.toEpochMilli
-          lower <= i && i <= upper
+          lower <= instant && instant <= upper
         case _ => true // if one of the conditions is not defined, return true
-    val containsCondition = LogFilePredicate.containsCondition(t, mutSearchTerms)
-    val showUnclassified = showUnclassifiedProperty.get() && !containsCondition
-    val res = timeCondition && (showUnclassified || containsCondition)
-    // println(timeCondition.toString + " && (" + showUnclassified + "||" + containsCondition + ") " + getSearchTerms + " -> " + res)
+    val res = timeCondition && (showUnclassifiedProperty.get() || LogFilePredicate.containsCondition(logEntry, mutSearchTerms))
     res
   }
 }

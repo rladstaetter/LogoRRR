@@ -1,5 +1,6 @@
 package app.logorrr.views.search.st
 
+import app.logorrr.conf.mut.LogFilePredicate
 import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.model.*
 import app.logorrr.util.{HashUtil, JfxUtils}
@@ -30,23 +31,21 @@ object ASearchTermToggleButton extends UiNodeSearchTermAware:
 /**
  * Displays a search term and triggers displaying the results.
  */
-abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]) extends ToggleButton
+abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]
+                                       , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]
+                                       , logFilePredicate: LogFilePredicate) extends ToggleButton
   with ValuePropertyHolder
   with ColorPropertyHolder
   with FileIdPropertyHolder:
 
-  protected val updateChangeListener: ChangeListener[lang.Boolean]
+  private val updateLogFilePredicate: ChangeListener[lang.Boolean] = JfxUtils.onNew[java.lang.Boolean](e => {
+    LogFilePredicate.update(predicateProperty, logFilePredicate)
+  })
 
-  val predicateProperty = new SimpleObjectProperty[Predicate[LogEntry]]()
-
-  def getPredicate(): Predicate[LogEntry] = predicateProperty.get()
-
-  def setPredicate(p: Predicate[LogEntry]): Unit = predicateProperty.set(p)
-
-  val origColorProperty = new SimpleObjectProperty[Color]()
-  val hitsProperty = new SimpleIntegerProperty()
-  val searchTermLabel: SearchTermLabel = new SearchTermLabel
-  val hitsLabel: SearchTermHitsLabel = new SearchTermHitsLabel
+  private val origColorProperty = new SimpleObjectProperty[Color]()
+  val hitsProperty = new SimpleLongProperty()
+  private val searchTermLabel: SearchTermLabel = new SearchTermLabel
+  private val hitsLabel: SearchTermHitsLabel = new SearchTermHitsLabel
 
   private val removeSearchTermButton: RemoveSearchTermButton = new RemoveSearchTermButton
 
@@ -54,14 +53,6 @@ abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]) extend
   private val colorListener = JfxUtils.onNew[Color](c => removeSearchTermButton.icon.setStyle(buttonCssStyle(c)))
 
   lazy val contrastColorProperty: SimpleObjectProperty[Color] = new SimpleObjectProperty[Color]()
-
-  var toggle = false
-  // fires if one of given properties change -- see update chhange Listener
-  private val globalPredicateUpdate = Bindings.createBooleanBinding(
-    () =>
-      toggle = !toggle
-      toggle
-    , valueProperty, selectedProperty, predicateProperty)
 
   private val hbox: HBox =
     val spacer: Region = new Region
@@ -81,16 +72,13 @@ abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]) extend
            , visibleBinding: BooleanBinding
            , mutSearchTerm: MutableSearchTerm
            , mutSearchTerms: ObservableList[MutableSearchTerm]): Unit = {
-    globalPredicateUpdate.addListener(updateChangeListener)
+    selectedProperty().addListener(updateLogFilePredicate)
     setOrigColor(mutSearchTerm.getColor)
     bindFileIdProperty(fileIdProperty)
     idProperty.bind(Bindings.createStringBinding(() => ASearchTermToggleButton.uiNode(getFileId, getValue).value, fileIdProperty, valueProperty))
     styleProperty().bind(CssBindingUtil.mkGradientStyleBinding(selectedProperty, colorProperty))
     hitsLabel.init(contrastColorProperty, hitsProperty)
-    hitsProperty.bind(Bindings.createLongBinding(() => {
-      entries.stream().filter(getPredicate()).count
-    }, entries, valueProperty, predicateProperty))
-    // }, entries, valueProperty, selectedProperty, predicateProperty))
+
 
     valueProperty.bind(mutSearchTerm.valueProperty)
     searchTermLabel.init(contrastColorProperty, valueProperty)
@@ -106,12 +94,12 @@ abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]) extend
       , mutSearchTerm
       , mutSearchTerms)
 
-    contrastColorProperty.bind(CssBindingUtil.mkContrastPropertyBinding(selectedProperty(),colorProperty))
+    contrastColorProperty.bind(CssBindingUtil.mkContrastPropertyBinding(selectedProperty(), colorProperty))
     contrastColorProperty.addListener(colorListener)
   }
 
   def shutdown(activeProperty: BooleanProperty): Unit = {
-    globalPredicateUpdate.removeListener(updateChangeListener)
+    selectedProperty().removeListener(updateLogFilePredicate)
     contrastColorProperty.unbind()
     contrastColorProperty.removeListener(colorListener)
     removeSearchTermButton.shutdown()

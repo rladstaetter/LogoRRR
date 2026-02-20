@@ -28,10 +28,8 @@ class MutableSearchTermListener(mutableSearchTerms: FilteredList[MutableSearchTe
             list.add((st.getValue, st.getColor))
         })
 
-        // printlnlist.asScala)
         targetPairs.setAll(list)
       } else if (c.wasRemoved()) {
-        // println"removed")
         c.getRemoved.forEach(st => list.add((st.getValue, st.getColor)))
         targetPairs.removeAll(list)
       } else if (c.wasAdded()) {

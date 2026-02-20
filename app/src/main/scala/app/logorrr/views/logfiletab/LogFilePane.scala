@@ -43,7 +43,6 @@ class LogFilePane(owner: Window
 
   val autoScrollActiveProperty = new SimpleBooleanProperty()
 
-
   /** if a search term is added or removed this will be saved to disc */
   private val searchTermChangeListener: ListChangeListener[MutableSearchTerm] =
     def handleSearchTermChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit = {
@@ -58,11 +57,10 @@ class LogFilePane(owner: Window
     autoScrollActiveProperty.subscribe((old: java.lang.Boolean, newVal: java.lang.Boolean) => enableAutoscroll(newVal))
 
   /** list which holds all entries, default to display all (can be changed via buttons) */
-  private val filteredEntries = new FilteredList[LogEntry](entries)
+  private val filteredEntries = new FilteredList[LogEntry](entries, mutLogFileSettings.showPredicate)
 
   // display text to the right
   private val logTextView = new LogTextView(filteredEntries)
-  filteredEntries.setPredicate(mutLogFileSettings.showPredicate)
 
   // graphical display to the left
   private val chunkListView: LogoRRRChunkListView = LogoRRRChunkListView(mutLogFileSettings, filteredEntries, logTextView.scrollToItem, widthProperty)
@@ -79,7 +77,6 @@ class LogFilePane(owner: Window
     , textSizeSlider
     , PaneDefinition(prop => IncreaseTextSizeButton.uiNode(prop.get).value, TextSizeButton.mkLabel(12), TextConstants.fontSizeStep, TextConstants.MaxFontSize)
     , PaneDefinition(prop => DecreaseTextSizeButton.uiNode(prop.get).value, TextSizeButton.mkLabel(8), TextConstants.fontSizeStep, TextConstants.MinFontSize)
-
   )
 
   private val chunkPane: LogPartPane = new LogPartPane(

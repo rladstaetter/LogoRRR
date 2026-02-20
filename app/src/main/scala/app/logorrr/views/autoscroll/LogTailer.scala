@@ -80,7 +80,7 @@ class LogTailer extends TinyLog {
 
   private def processLine(line: String): Unit =
     javafx.application.Platform.runLater(() => {
-      entriesProperty.add(LogEntry(entriesProperty.size() + 1, line, None, None))
+      entriesProperty.add(LogEntry(entriesProperty.size() + 1, line, None))
     })
 
   /** Start observing log file for changes */
