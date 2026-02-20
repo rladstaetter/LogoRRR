@@ -3,7 +3,7 @@
 
 set -e  # Exit on error, except where overridden
 
-export PROJECTVERSION="26.2.0"
+export PROJECTVERSION="26.1.1"
 
 # Detect platform
 ARCH=$(uname -m)
