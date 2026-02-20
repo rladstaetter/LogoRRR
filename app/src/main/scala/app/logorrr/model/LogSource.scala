@@ -119,11 +119,12 @@ class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
     if !ui.contains(fileId) then addFileId(fileId)
     else ui.selectFile(fileId)
 
-  def addFileId(fileId: FileId): Unit =
+  def addFileId(fileId: FileId): Unit = timeR({
     val settings = LogFileSettings.mk(fileId, mkSearchTermGroup)
     val entries = IoManager.readEntries(settings.path, settings.someTimestampSettings)
     addEntries(settings, entries)
-
+  }, s"addFile ${fileId.absolutePathAsString}")
+  
   private def addEntries(settings: LogFileSettings, entries: ObservableList[LogEntry]): Unit =
     val fileId = settings.fileId
     LogoRRRGlobals.registerSettings(settings)
