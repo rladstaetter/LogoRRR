@@ -19,7 +19,8 @@ object SliderVBox extends UiNodeFileIdAndPosAware:
 
 class SliderVBox(mutLogFileSettings: MutLogFileSettings
                  , pos: Pos
-                 , tooltipText: String) extends VBox with BoundId(SliderVBox.uiNode(_, pos).value):
+                 , tooltipText: String) extends VBox
+  with BoundId(SliderVBox.uiNode(_, pos).value):
 
   val slider = new TimerSlider(pos, tooltipText)
   val label = new TimestampSliderLabel
@@ -27,7 +28,7 @@ class SliderVBox(mutLogFileSettings: MutLogFileSettings
   setAlignment(pos)
   getChildren.addAll(slider, label)
 
-  def setInstant(instant: Instant): Unit = slider.setInstant(instant)
+  def setInstant(instant: Long): Unit = slider.setInstant(instant)
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , hasTimestampBinding: BooleanBinding

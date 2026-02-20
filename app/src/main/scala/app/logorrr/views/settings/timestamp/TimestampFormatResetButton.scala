@@ -39,7 +39,6 @@ class TimestampFormatResetButton(mutLogFileSettings: MutLogFileSettings
       logEntries.setAll(tempList)
       // activate listener again
       chunkListView.addInvalidationListener()
-      // tsRegion.initializeRanges()
       tsRegion.initializeRanges()
       closeStage
 

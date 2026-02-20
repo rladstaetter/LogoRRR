@@ -53,7 +53,7 @@ object IoManager extends TinyIo with TinyLog:
     val arraylist = new java.util.ArrayList[LogEntry]()
     toSeq(mkReader(asBytes)).map(l => {
       lineNumber = lineNumber + 1
-      arraylist.add(LogEntry(lineNumber, l, None, None))
+      arraylist.add(LogEntry(lineNumber, l, None))
     })
     FXCollections.observableList(arraylist)
 
@@ -63,7 +63,7 @@ object IoManager extends TinyIo with TinyLog:
     val arraylist = new java.util.ArrayList[LogEntry]()
     fromPathUsingSecurityBookmarks(logFile).map(l => {
       lineNumber = lineNumber + 1
-      arraylist.add(LogEntry(lineNumber, l, None, None))
+      arraylist.add(LogEntry(lineNumber, l, None))
     })
     FXCollections.observableList(arraylist)
 
@@ -83,7 +83,7 @@ object IoManager extends TinyIo with TinyLog:
         firstEntry <- someFirstEntryTimestamp
         instant <- someInstant
       yield Duration.between(firstEntry, instant)
-      val entry = LogEntry(lineNumber, l, someInstant, someDiffFromStart)
+      val entry = LogEntry(lineNumber, l, someInstant.map(_.toEpochMilli))
       arraylist.add(entry)
     })
     FXCollections.observableList(arraylist)

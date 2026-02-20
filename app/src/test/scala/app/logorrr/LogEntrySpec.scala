@@ -23,8 +23,7 @@ object LogEntrySpec:
       l <- Gen.posNum[Int]
       value <- Gen.alphaStr
       someInstant <- Gen.const(None)
-      someDuration <- Gen.const(None)
-    yield LogEntry(l, value, someInstant, someDuration)
+    yield LogEntry(l, value, someInstant)
 
 
 class LogEntrySpec extends AnyWordSpecLike:

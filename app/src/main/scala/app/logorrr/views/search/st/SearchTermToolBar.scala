@@ -1,6 +1,6 @@
 package app.logorrr.views.search.st
 
-import app.logorrr.conf.mut.{LogFilePredicate, MutLogFileSettings}
+import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.util.JfxUtils
@@ -8,7 +8,7 @@ import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.stg.AddToFavoritesButton
 import app.logorrr.views.search.{MutableSearchTerm, st}
 import javafx.beans.binding.BooleanBinding
-import javafx.beans.property.{ObjectProperty, SimpleIntegerProperty}
+import javafx.beans.property.ObjectProperty
 import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control.ToolBar
 import javafx.stage.Window
@@ -70,18 +70,9 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
   /** if filter list is changed in any way, react to this event and either add or remove filter from UI */
   private def processFiltersChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit =
     while change.next() do {
-      unclassifiedButton.resetPredicate()
-      if change.wasReplaced() then
-        () // println("replaced")
-      else if change.wasPermutated() then
-        () // println("permutated")
-      else if change.wasUpdated() then
-        () // println("updated")
-      else if change.wasAdded() then {
-        // println("added")
+      if change.wasAdded() then {
         change.getAddedSubList.asScala.foreach(addSearchTermButton)
       } else if change.wasRemoved() then {
-        // println("removed")
         change.getRemoved.asScala.foreach(removeSearchTermButton)
       }
     }

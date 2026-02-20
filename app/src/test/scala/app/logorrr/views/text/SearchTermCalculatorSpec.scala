@@ -36,7 +36,7 @@ class SearchTermCalculatorSpec extends LogoRRRSpec:
 
   /** inactive searchterms are rendered with 'unclassfied' color */
   "inactive searchterms are not calculated" in :
-    val logEntry = LogEntry(0, "FINEST", None, None)
+    val logEntry = LogEntry(0, "FINEST", None)
     val fine = ("FINE", Color.BLUE)
     // val finest = MutableSearchTerm(SearchTerm("FINEST", Color.RED, false))
     val pairs: Seq[(String, Color)] = SearchTermCalculator("FINEST", Seq(fine)).stringColorPairs

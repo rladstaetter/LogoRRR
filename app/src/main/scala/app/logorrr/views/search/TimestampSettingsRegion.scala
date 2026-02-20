@@ -1,13 +1,11 @@
 package app.logorrr.views.search
 
 import app.logorrr.clv.ChunkListView
-import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.{LogFilePredicate, MutLogFileSettings}
 import app.logorrr.model.LogEntry
 import app.logorrr.views.ops.time.{SliderVBox, TimeRange, TimeUtil, TimestampSettingsButton}
 import javafx.beans.property.{ObjectProperty, SimpleObjectProperty}
 import javafx.collections.ObservableList
-import javafx.collections.transformation.FilteredList
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.stage.Window
@@ -46,15 +44,15 @@ class TimestampSettingsRegion(owner: Window
   def initializeRanges(): Unit =
     val range = calcRange
     lowerSlider.setRange(range)
-    lowerSlider.setInstant(range.start)
+    lowerSlider.setInstant(range.min)
     upperSlider.setRange(range)
-    upperSlider.setInstant(range.end)
+    upperSlider.setInstant(range.max)
     setSliderPositions(range)
 
 
   private def setSliderPositions(filterRange: TimeRange): Unit =
-    lowerSliderVBox.setInstant(filterRange.start)
-    upperSliderVBox.setInstant(filterRange.end)
+    lowerSliderVBox.setInstant(filterRange.min)
+    upperSliderVBox.setInstant(filterRange.max)
 
   private def updateLowerTimestampSlider(newValue: Number): Unit =
     if newValue.doubleValue > upperSlider.getValue then lowerSlider.setValue(upperSlider.getValue)
@@ -74,19 +72,18 @@ class TimestampSettingsRegion(owner: Window
     lowerSliderVBox.init(mutLogFileSettings.fileIdProperty, mutLogFileSettings.hasTimestampSetting, timeRangeProperty, mutLogFileSettings.dateTimeFormatterProperty)
     upperSliderVBox.init(mutLogFileSettings.fileIdProperty, mutLogFileSettings.hasTimestampSetting, timeRangeProperty, mutLogFileSettings.dateTimeFormatterProperty)
 
-    lowerSliderSub =
-      lowerSlider.valueProperty().subscribe((_, newVal) => updateLowerTimestampSlider(newVal))
-
-    upperSliderSub =
-      upperSlider.valueProperty().subscribe((_, newVal) => updateUpperTimestampSlider(newVal))
+    lowerSliderSub = lowerSlider.valueProperty().subscribe((_, newVal) => updateLowerTimestampSlider(newVal))
+    upperSliderSub = upperSlider.valueProperty().subscribe((_, newVal) => updateUpperTimestampSlider(newVal))
 
     timestampSettingsButton.init(
       mutLogFileSettings.fileIdProperty
       , mutLogFileSettings.hasTimestampSetting
-      )
+    )
 
-    // timeRangeProperty.set(calcRange)
-    // setSliderPositions(initialTimeRange)
+    // only set this if we start with timestamp settings enabled for performance reasons
+    if mutLogFileSettings.getSomeTimestampSettings.isDefined then
+      timeRangeProperty.set(calcRange)
+      setSliderPositions(calcRange)
 
 
   def shutdown(): Unit =

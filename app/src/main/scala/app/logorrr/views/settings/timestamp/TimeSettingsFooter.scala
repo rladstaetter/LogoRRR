@@ -77,5 +77,4 @@ class TimeSettingsFooter(mutLogFileSettings: MutLogFileSettings
   def shutdown(): Unit =
     resetTimestampFormatButton.unbindIdProperty()
     applyAndCloseButton.unbindIdProperty()
-
     rangeProperty.unbind()

@@ -15,23 +15,22 @@ object TimeUtil:
    */
   def calcTimeInfo(logEntries: ObservableList[LogEntry]): Option[TimeRange] =
     if !logEntries.isEmpty then
-      var minInstant = Instant.MAX
-      var maxInstant = Instant.MIN
+
+      var minInstant = Long.MaxValue
+      var maxInstant = Long.MinValue
       logEntries.forEach((e: LogEntry) => {
-        e.someInstant match {
+        e.someEpochMilli match {
           case Some(instant) =>
-            if instant.isBefore(minInstant) then {
+            if instant < minInstant then
               minInstant = instant
-            }
-            if instant.isAfter(maxInstant) then {
+            if instant > maxInstant then
               maxInstant = instant
-            }
           case None => // do nothing
         }
       })
-      if minInstant == Instant.MIN || minInstant == Instant.MAX then
+      if minInstant == Long.MinValue || minInstant == Long.MaxValue then
         None
-      else if maxInstant == Instant.MIN || maxInstant == Instant.MAX then
+      else if maxInstant == Long.MinValue || maxInstant == Long.MaxValue then
         None
       else if minInstant.equals(maxInstant) then
         None

@@ -56,6 +56,7 @@ class RemoveSearchTermButton extends Button:
            , mutableSearchTerm: MutableSearchTerm
            , mutSearchTerms: ObservableList[MutableSearchTerm]): Unit =
     visibleProperty().bind(visibleBinding)
+    // TODO implement via bubble event
     setOnAction(e => mutSearchTerms.remove(mutableSearchTerm))
     idProperty.bind(Bindings.createStringBinding(
       () =>

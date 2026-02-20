@@ -29,11 +29,11 @@ class TimerSlider(pos: Pos, tooltipText: String)
   val timeRangeProperty = new SimpleObjectProperty[TimeRange]()
   var timeRangeSubscription: Subscription = uninitialized
 
-  def setInstant(instant: Instant): Unit = setValue(instant.toEpochMilli.doubleValue())
+  def setInstant(instant: Long): Unit = setValue(instant.doubleValue())
 
   def setRange(range: TimeRange): Unit =
-    setMin(range.start.toEpochMilli.doubleValue)
-    setMax(range.end.toEpochMilli.doubleValue())
+    setMin(range.min.doubleValue)
+    setMax(range.max.doubleValue())
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , hasTimestampSetting: BooleanBinding
