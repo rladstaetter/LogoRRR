@@ -71,7 +71,7 @@ class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
       }
 
   private def onDragDropped(event: DragEvent): Unit =
-    for f <- event.getDragboard.getFiles.asScala do {
+    event.getDragboard.getFiles.forEach(f => {
       val path = f.toPath
       if Files.isDirectory(path) then {
         addDirectory(path)
@@ -80,7 +80,7 @@ class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
       } else {
         addFile(path)
       }
-    }
+    })
 
   def openFile(fileId: FileId): Unit = {
     if (ui.contains(fileId)) {
@@ -124,7 +124,7 @@ class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
     val entries = IoManager.readEntries(settings.path, settings.someTimestampSettings)
     addEntries(settings, entries)
   }, s"addFile ${fileId.absolutePathAsString}")
-  
+
   private def addEntries(settings: LogFileSettings, entries: ObservableList[LogEntry]): Unit =
     val fileId = settings.fileId
     LogoRRRGlobals.registerSettings(settings)
