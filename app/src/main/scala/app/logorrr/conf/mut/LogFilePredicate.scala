@@ -20,7 +20,7 @@ object LogFilePredicate:
 
 class LogFilePredicate(mutSearchTerms: ObservableList[MutableSearchTerm]) extends Predicate[LogEntry] {
 
-  val showUnclassifiedProperty = new SimpleBooleanProperty()
+  val showUnclassifiedProperty = new SimpleBooleanProperty(true)
   val lowerTimestampValueProperty = new SimpleLongProperty()
   val upperTimestampValueProperty = new SimpleLongProperty()
 
