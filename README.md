@@ -1,6 +1,6 @@
 # `LogoRRR`
 
-[![Watch a video of LogoRRRs features](docs/releases/26.1.0/1440x900.png)](https://youtu.be/5ogC95PX0Ag)
+[![Watch a video of LogoRRRs features](docs/releases/26.1.1/1440x900.png)](https://youtu.be/5ogC95PX0Ag)
 
 
 <table>
@@ -52,7 +52,7 @@ If you don't want to use app stores, installers are provided also for following 
 <td>Windows</td>
 <td>
 
-[LogoRRR Windows 10+ Installer, x64, msi](https://github.com/rladstaetter/LogoRRR/releases/download/26.1.0/LogoRRR-26.1.0-installer.msi)
+[LogoRRR Windows 10+ Installer, x64, msi](https://github.com/rladstaetter/LogoRRR/releases/download/26.1.1/LogoRRR-26.1.1-installer.msi)
 
 </td>
 </tr>
@@ -61,7 +61,7 @@ If you don't want to use app stores, installers are provided also for following 
 <td>Windows</td>
 <td>
 
-[LogoRRR Windows 10+ Installer, x64, exe](https://github.com/rladstaetter/LogoRRR/releases/download/26.1.0/LogoRRR-26.1.0-installer.exe)
+[LogoRRR Windows 10+ Installer, x64, exe](https://github.com/rladstaetter/LogoRRR/releases/download/26.1.1/LogoRRR-26.1.1-installer.exe)
 
 </td>
 </tr>
@@ -71,7 +71,7 @@ If you don't want to use app stores, installers are provided also for following 
 <td>Linux</td>
 <td>
 
-[LogoRRR x64 Linux Installer, .deb](https://github.com/rladstaetter/LogoRRR/releases/download/26.1.0/logorrr_26.1.0_amd64.deb)
+[LogoRRR x64 Linux Installer, .deb](https://github.com/rladstaetter/LogoRRR/releases/download/26.1.1/logorrr_26.1.1_amd64.deb)
 
 </td>
 </tr>
@@ -80,7 +80,7 @@ If you don't want to use app stores, installers are provided also for following 
 <td>Linux</td>
 <td>
 
-[LogoRRR aarch Linux Installer, .deb](https://github.com/rladstaetter/LogoRRR/releases/download/26.1.0/logorrr_26.1.0_arm64.deb)
+[LogoRRR aarch Linux Installer, .deb](https://github.com/rladstaetter/LogoRRR/releases/download/26.1.1/logorrr_26.1.1_arm64.deb)
 
 </td>
 </tr>
@@ -89,7 +89,7 @@ If you don't want to use app stores, installers are provided also for following 
 
 ## Release Notes 
 
-[Click here](https://github.com/rladstaetter/LogoRRR/releases/tag/26.1.0) to view the [release notes](https://github.com/rladstaetter/LogoRRR/releases/tag/26.1.0) of the latest release.
+[Click here](https://github.com/rladstaetter/LogoRRR/releases/tag/26.1.1) to view the [release notes](https://github.com/rladstaetter/LogoRRR/releases/tag/26.1.1) of the latest release.
 
 
 ## Features
