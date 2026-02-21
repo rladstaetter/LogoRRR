@@ -47,7 +47,7 @@
     <ROW Component="APPDIR" ComponentId="{99BCDB82-5F09-421C-A976-F47DD72C83E1}" Directory_="APPDIR" Attributes="0"/>
     <ROW Component="LogoRRR.exe" ComponentId="{5C3E2C2D-8ABA-4AF6-8D16-21634C619EE5}" Directory_="APPDIR" Attributes="0" KeyPath="LogoRRR.exe"/>
     <ROW Component="ProductInformation" ComponentId="{C27207B5-935E-4050-A66D-1654F364C41C}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
-    <ROW Component="app.logorrr.app24.1.0SNAPSHOT.jar" ComponentId="{A6188203-4548-421B-AC90-11D613580D8C}" Directory_="APPDIR" Attributes="0" KeyPath="app.logorrr.app26.1.1SNAPSHOT.jar" Type="0"/>
+    <ROW Component="app.logorrr.app24.1.0SNAPSHOT.jar" ComponentId="{A6188203-4548-421B-AC90-11D613580D8C}" Directory_="APPDIR" Attributes="0" KeyPath="app.logorrr.app26.2.0SNAPSHOT.jar" Type="0"/>
     <ROW Component="jre64" ComponentId="{3816678E-07F0-40C8-BBD2-D66C4681C0FE}" Directory_="jre64_Dir" Attributes="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
@@ -57,17 +57,17 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
     <ROW File="LogoRRR.exe" Component_="LogoRRR.exe" FileName="LogoRRR.exe" Attributes="0" SourcePath="&lt;AI_STUBS_64&gt;aijclw.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="app.logorrr.app26.1.1SNAPSHOT.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~4.JAR|app.logorrr.app-26.1.1.jar" Attributes="0" SourcePath="programfiles\app.logorrr.app-26.1.1.jar" SelfReg="false"/>
-    <ROW File="app.logorrr.build26.1.1SNAPSHOT.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~5.JAR|app.logorrr.build-26.1.1.jar" Attributes="0" SourcePath="programfiles\app.logorrr.build-26.1.1.jar" SelfReg="false"/>
-    <ROW File="app.logorrr.env26.1.1SNAPSHOT.pom" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~1.POM|app.logorrr.env-26.1.1.pom" Attributes="0" SourcePath="programfiles\app.logorrr.env-26.1.1.pom" SelfReg="false"/>
+    <ROW File="app.logorrr.app26.2.0SNAPSHOT.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~4.JAR|app.logorrr.app-26.2.0.jar" Attributes="0" SourcePath="programfiles\app.logorrr.app-26.2.0.jar" SelfReg="false"/>
+    <ROW File="app.logorrr.build26.2.0SNAPSHOT.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~5.JAR|app.logorrr.build-26.2.0.jar" Attributes="0" SourcePath="programfiles\app.logorrr.build-26.2.0.jar" SelfReg="false"/>
+    <ROW File="app.logorrr.env26.2.0SNAPSHOT.pom" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~1.POM|app.logorrr.env-26.2.0.pom" Attributes="0" SourcePath="programfiles\app.logorrr.env-26.2.0.pom" SelfReg="false"/>
     <ROW File="com.chuusai.shapeless_2.132.3.12.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMCHU~1.JAR|com.chuusai.shapeless_2.13-2.3.12.jar" Attributes="0" SourcePath="programfiles\com.chuusai.shapeless_2.13-2.3.12.jar" SelfReg="false"/>
     <ROW File="com.github.pureconfig.pureconfigcore_2.130.17.7.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~1.JAR|com.github.pureconfig.pureconfig-core_2.13-0.17.7.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-core_2.13-0.17.7.jar" SelfReg="false"/>
     <ROW File="com.github.pureconfig.pureconfiggenericbase_2.130.17.7.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~2.JAR|com.github.pureconfig.pureconfig-generic-base_2.13-0.17.7.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-generic-base_2.13-0.17.7.jar" SelfReg="false"/>
     <ROW File="com.github.pureconfig.pureconfiggeneric_2.130.17.7.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~3.JAR|com.github.pureconfig.pureconfig-generic_2.13-0.17.7.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig-generic_2.13-0.17.7.jar" SelfReg="false"/>
     <ROW File="com.github.pureconfig.pureconfig_2.130.17.7.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMGIT~4.JAR|com.github.pureconfig.pureconfig_2.13-0.17.7.jar" Attributes="0" SourcePath="programfiles\com.github.pureconfig.pureconfig_2.13-0.17.7.jar" SelfReg="false"/>
     <ROW File="com.typesafe.config1.4.3.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="COMTYP~1.JAR|com.typesafe.config-1.4.3.jar" Attributes="0" SourcePath="programfiles\com.typesafe.config-1.4.3.jar" SelfReg="false"/>
-    <ROW File="app.logorrr.appicons26.1.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~1.JAR|app.logorrr.app-icons-26.1.1.jar" Attributes="0" SourcePath="programfiles\app.logorrr.app-icons-26.1.1.jar" SelfReg="false"/>
-    <ROW File="app.logorrr.clv26.1.1.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~2.JAR|app.logorrr.clv-26.1.1.jar" Attributes="0" SourcePath="programfiles\app.logorrr.clv-26.1.1.jar" SelfReg="false"/>
+    <ROW File="app.logorrr.appicons26.2.0.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~1.JAR|app.logorrr.app-icons-26.2.0.jar" Attributes="0" SourcePath="programfiles\app.logorrr.app-icons-26.2.0.jar" SelfReg="false"/>
+    <ROW File="app.logorrr.clv26.2.0.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="APPLOG~2.JAR|app.logorrr.clv-26.2.0.jar" Attributes="0" SourcePath="programfiles\app.logorrr.clv-26.2.0.jar" SelfReg="false"/>
     <ROW File="de.jangassen.jfa1.2.0.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="DEJANG~1.JAR|de.jangassen.jfa-1.2.0.jar" Attributes="0" SourcePath="programfiles\de.jangassen.jfa-1.2.0.jar" SelfReg="false"/>
     <ROW File="de.jangassen.nsmenufx3.1.0.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="DEJANG~2.JAR|de.jangassen.nsmenufx-3.1.0.jar" Attributes="0" SourcePath="programfiles\de.jangassen.nsmenufx-3.1.0.jar" SelfReg="false"/>
     <ROW File="net.java.dev.jna.jna5.7.0jpms.jar" Component_="app.logorrr.app24.1.0SNAPSHOT.jar" FileName="NETJAV~1.JAR|net.java.dev.jna.jna-5.7.0-jpms.jar" Attributes="0" SourcePath="programfiles\net.java.dev.jna.jna-5.7.0-jpms.jar" SelfReg="false"/>
