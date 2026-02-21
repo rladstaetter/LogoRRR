@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
     <properties>
         <revision>26.2.0</revision>
-        <scala.version>3.7.4</scala.version>
+        <scala.version>3.8.1</scala.version>
         <java.version>24</java.version>
         <openjfx.version>25</openjfx.version>
        <!--
