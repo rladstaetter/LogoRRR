@@ -2,6 +2,7 @@ package app.logorrr.views.menubar
 
 import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.uinodes.LogoRRRMenu
+import app.logorrr.views.search.st.FavoritesComboBox
 import app.logorrr.views.settings.SettingsEditor
 import javafx.scene.control.MenuItem
 import javafx.scene.input.{KeyCode, KeyCodeCombination, KeyCombination}

@@ -8,6 +8,7 @@ import app.logorrr.views.util.{GfxElements, PulsatingAnimationTimer}
 import javafx.beans.property.ObjectPropertyBase
 import javafx.scene.control.{Button, Tooltip}
 import javafx.stage.Window
+import org.kordamp.ikonli.javafx.FontIcon
 
 import java.time.Duration
 
@@ -21,19 +22,22 @@ class AddToFavoritesButton(activeSearchTerms: () => Seq[SearchTerm])
   extends Button with BoundId(AddToFavoritesButton.uiNode(_).value):
 
   private val favorites: Tooltip = GfxElements.ToolTips.mkAddToFavorites
-  setGraphic(GfxElements.Icons.heartDark)
+  private val icon: FontIcon = GfxElements.Icons.star
+  private val iconDark: FontIcon = GfxElements.Icons.starDark
+  setGraphic(icon)
   setTooltip(favorites)
 
+
   def mkTimer() = new PulsatingAnimationTimer(this
-    , GfxElements.Icons.heart
-    , GfxElements.Icons.heartDark
+    , icon
+    , iconDark
     , favorites
     , favorites.getText
     , Duration.ofSeconds(1))
 
   setOnAction:
     _ =>
-      LogoRRRGlobals.add(MutSearchTermGroup(SearchTermGroup(activeSearchTerms(), false)))
+      LogoRRRGlobals.add(MutSearchTermGroup(SearchTermGroup("", activeSearchTerms(), false)))
       mkTimer().start()
 
 

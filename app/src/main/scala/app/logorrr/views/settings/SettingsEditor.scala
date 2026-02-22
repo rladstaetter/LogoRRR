@@ -5,14 +5,17 @@ import app.logorrr.conf.mut.MutSearchTermGroup
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.uinodes.SettingsEditor
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.search.MutableSearchTerm
+import app.logorrr.views.search.st.FavoritesComboBox
 import javafx.geometry.Insets
 import javafx.scene.Scene
-import javafx.scene.control.Button
+import javafx.scene.control.{Button, ChoiceBox, ComboBox}
 import javafx.scene.layout.{HBox, Priority, VBox}
 import javafx.stage.{Modality, Stage}
 
 
-class SettingsEditor(owner: Stage, fileId: FileId) extends Stage:
+class SettingsEditor(owner: Stage
+                     , fileId: FileId) extends Stage:
   initOwner(owner)
   initModality(Modality.WINDOW_MODAL)
   setTitle("Settings")
@@ -32,15 +35,15 @@ class SettingsEditor(owner: Stage, fileId: FileId) extends Stage:
     LogoRRRGlobals.clearSearchTermGroups()
     Settings.DefaultSearchTermGroups.map(MutSearchTermGroup.apply).foreach(LogoRRRGlobals.add)
     LogoRRRGlobals.setTimestampSettings(null)
-    timeSettingsEditor.updateSettings(Option(null))
+    timeSettingsEditor.updateSettings(None)
   })
 
-  private val closeButton: Button = new CloseSettingsEditorButton(this)
+  private val applyAndCloseButton: Button = new ApplyAndCloseSettingsEditorButton(this)
 
   private val hBox: HBox =
     val filler = JfxUtils.mkHgrowFiller()
     val h = new HBox()
-    h.getChildren.addAll(resetButton, filler, closeButton)
+    h.getChildren.addAll(resetButton, filler, applyAndCloseButton)
     h
 
   contentLayout.getChildren.addAll(manageExistingSearchTermGroup, timeSettingsEditor, hBox)
@@ -48,11 +51,12 @@ class SettingsEditor(owner: Stage, fileId: FileId) extends Stage:
   // --- Final Setup ---
   setScene(new Scene(contentLayout, 960, 720)) // Adjusted size for list view
 
-object CloseSettingsEditorButton extends UiNodeFileIdAware:
+object ApplyAndCloseSettingsEditorButton extends UiNodeFileIdAware:
 
-  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseSettingsEditorButton])
+  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[ApplyAndCloseSettingsEditorButton])
 
-class CloseSettingsEditorButton(stage: Stage) extends Button("apply & close") {
+class ApplyAndCloseSettingsEditorButton(stage: Stage) extends Button("apply & close") {
   setId(SettingsEditor.CloseButton.value)
-  setOnAction(_ => stage.close())
+  setOnAction(_ =>
+    stage.close())
 }

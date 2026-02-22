@@ -12,7 +12,11 @@ class LogoRRRMain(stage: Stage
                   , isUnderTest: Boolean
                   , val logSource: LogSource) extends BorderPane with TinyLog:
 
-  val bar = new MainMenuBar(stage, fileIdService, logSource.openFile, logSource.closeAllLogFiles(), isUnderTest)
+  val bar = new MainMenuBar(stage
+    , fileIdService
+    , logSource.openFile
+    , logSource.closeAllLogFiles()
+    , isUnderTest)
 
   def init(): Unit =
     if !OsUtil.isMac || isUnderTest then setTop(bar)

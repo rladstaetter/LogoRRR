@@ -4,16 +4,17 @@ import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutSearchTermGroup
 import app.logorrr.views.a11y.uinodes.SettingsEditor
 import app.logorrr.views.search.stg.{DeleteStgButton, SearchTermLabel}
+import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.geometry.Insets
-import javafx.scene.control.{ListCell, RadioButton, ToggleGroup, ToolBar}
+import javafx.scene.control.*
 import javafx.scene.layout.{HBox, Pane, Priority}
 
-import scala.jdk.CollectionConverters.*
+import java.lang
 
 
 object SettingsStgListViewCell:
 
-  val selectedStyle =
+  val selectedStyle: String =
     """
       |-fx-font-weight: bold;
       |-fx-border-color: #cccccc;
@@ -21,9 +22,7 @@ object SettingsStgListViewCell:
       |-fx-border-style: dashed;
       |""".stripMargin
 
-  // setStyle("-fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-style: dashed;")
-
-  val unselectedStyle =
+  val unselectedStyle: String =
     """
       |-fx-background-color: transparent;
       |-fx-font-weight: normal;
@@ -43,6 +42,8 @@ object SettingsStgListViewCell:
  */
 class SettingsStgListViewCell(toggleGroup: ToggleGroup) extends ListCell[MutSearchTermGroup]:
 
+  getStylesheets.add(getClass.getResource("/app/logorrr/SettingsStgListViewCell.css").toExternalForm)
+
   private val radioButton = new RadioButton():
     setPadding(new Insets(0, 10, 0, 10))
 
@@ -50,7 +51,11 @@ class SettingsStgListViewCell(toggleGroup: ToggleGroup) extends ListCell[MutSear
   private val toolBar = new ToolBar()
   private val spacer = new Pane()
 
-  // Setup static layout properties
+  toolBar.setOnMouseClicked(event => {
+    if event.getButton == javafx.scene.input.MouseButton.PRIMARY then
+      Option(getItem).foreach(selectThisItem)
+  })
+
   radioButton.setToggleGroup(toggleGroup)
   HBox.setHgrow(spacer, Priority.ALWAYS)
 
@@ -59,47 +64,55 @@ class SettingsStgListViewCell(toggleGroup: ToggleGroup) extends ListCell[MutSear
       LogoRRRGlobals.setDefaultSearchTermGroup(item)
       getListView.refresh()
 
-  toolBar.setOnMouseClicked(event => {
-    if event.getButton == javafx.scene.input.MouseButton.PRIMARY then
-      Option(getItem).foreach(selectThisItem)
-  })
+  override def updateItem(group: MutSearchTermGroup, empty: Boolean): Unit =
+    super.updateItem(group, empty)
 
 
-  override def updateItem(item: MutSearchTermGroup, empty: Boolean): Unit =
-    super.updateItem(item, empty)
+    val textField = new TextField():
+      setPrefWidth(200)
+      setMaxWidth(200)
+      getStyleClass.add("settings-text-field")
+    
+    // the most reliable way to clear a bidirectional bind
+    // without tracking the old item is to check the current item (?)
+    Option(getItem).foreach(oldGroup => textField.textProperty().unbindBidirectional(oldGroup.nameProperty))
 
-    if empty || item == null then
+    if empty || group == null then
       setText(null)
       setGraphic(null)
       setStyle("")
     else
-      radioButton.setSelected(item.isSelected)
+      textField.textProperty().bindBidirectional(group.nameProperty)
+      radioButton.setSelected(group.isSelected)
 
-      // 1. Handle Visual Styling
-      val currentStyle = if item.isSelected then SettingsStgListViewCell.selectedStyle else SettingsStgListViewCell.unselectedStyle
+      val currentStyle = if group.isSelected then SettingsStgListViewCell.selectedStyle else SettingsStgListViewCell.unselectedStyle
       setStyle(currentStyle)
       toolBar.setStyle(currentStyle)
 
-      // 2. Selection Logic
       radioButton.setOnAction(_ => {
-        LogoRRRGlobals.setDefaultSearchTermGroup(item)
+        LogoRRRGlobals.setDefaultSearchTermGroup(group)
         getListView.refresh()
       })
 
       // 3. Delete Logic
       deleteButton.setOnAction(_ => {
-        LogoRRRGlobals.remove(item)
-        getListView.getItems.remove(item)
+        LogoRRRGlobals.remove(group)
+        getListView.getItems.remove(group)
       })
 
-      // 4. Content Logic: check if list is empty
-      val vis: Seq[SearchTermLabel] = item.termsProperty.asScala.map(t => SearchTermLabel(t)).toSeq
+      // don't edit / delete default element
+      if MutSearchTermGroup.isDefaultElement(group) then {
+        deleteButton.setDisable(true)
+        textField.setDisable(true)
+      } else {
+        deleteButton.setDisable(false)
+        textField.setDisable(false)
+      }
 
+      // 4. Update the ToolBar
       toolBar.getItems.clear()
-      toolBar.getItems.add(radioButton)
-      toolBar.getItems.addAll(vis *)
-      deleteButton.setDisable(false)
-
-      // 5. Assemble remaining items
+      toolBar.getItems.addAll(radioButton, textField)
+      toolBar.getItems.addAll(group.termsProperty.stream().map(t => SearchTermLabel(t)).toList)
       toolBar.getItems.addAll(spacer, deleteButton)
+
       setGraphic(toolBar)

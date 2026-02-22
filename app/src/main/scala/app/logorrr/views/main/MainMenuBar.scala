@@ -3,6 +3,7 @@ package app.logorrr.views.main
 import app.logorrr.conf.FileId
 import app.logorrr.services.file.FileIdService
 import app.logorrr.views.menubar.{AppMenuBuilder, FileMenu, HelpMenu}
+import app.logorrr.views.search.st.FavoritesComboBox
 import de.jangassen.MenuToolkit
 import de.jangassen.model.AppearanceMode
 import javafx.scene.control.{Menu, MenuBar}
@@ -23,7 +24,7 @@ class MainMenuBar(stage: Stage
   else
     addMenu(AppMenuBuilder.mkMenu(stage, isUnderTest))
 
-  private def addMenu(appMenu: Menu): Unit = 
+  private def addMenu(appMenu: Menu): Unit =
     val fileMenu = new FileMenu(fileIdService, openFile, closeAllFiles)
     val helpMenu = new HelpMenu(stage, openFile)
     getMenus.addAll(appMenu, fileMenu, helpMenu)

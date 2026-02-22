@@ -3,6 +3,7 @@ package app.logorrr.views.menubar
 import app.logorrr.LogoRRRApp
 import app.logorrr.views.a11y.uinodes.LogoRRRMenu
 import app.logorrr.views.about.AboutMenuItem
+import app.logorrr.views.search.st.FavoritesComboBox
 import de.jangassen.MenuToolkit
 import javafx.scene.control.{Menu, MenuItem, SeparatorMenuItem}
 import javafx.stage.Stage
@@ -12,13 +13,14 @@ import javafx.stage.Stage
  */
 object AppMenuBuilder:
 
-  def mkMenu(stage: Stage, isUnderTest: Boolean): Menu =
+  def mkMenu(stage: Stage
+             , isUnderTest: Boolean): Menu =
     val closeMenuItem = CloseApplicationMenuItem(new MenuItem("Exit"), stage, isUnderTest)
     val menu = new Menu(LogoRRRApp.Name)
     menu.setId(LogoRRRMenu.Self.value)
     val settingsMenuitem = new SettingsMenuItem(stage)
     menu.getItems.addAll(
-       settingsMenuitem
+      settingsMenuitem
       , new SeparatorMenuItem
       , closeMenuItem)
     menu
