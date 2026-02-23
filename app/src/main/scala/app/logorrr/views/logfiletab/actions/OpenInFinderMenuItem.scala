@@ -2,7 +2,8 @@ package app.logorrr.views.logfiletab.actions
 
 import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import javafx.scene.control.MenuItem
+import app.logorrr.views.logfiletab.TabControlEvent
+import javafx.scene.control.{MenuItem, TabPane}
 import net.ladstatt.util.os.OsUtil
 
 import java.awt.Desktop
@@ -18,10 +19,9 @@ object OpenInFinderMenuItem extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[OpenInFinderMenuItem])
 
-
-class OpenInFinderMenuItem(fileId: FileId) extends MenuItem(OpenInFinderMenuItem.menuItemText):
+class OpenInFinderMenuItem(fileId: FileId, tabPane: TabPane) extends MenuItem(OpenInFinderMenuItem.menuItemText):
   setId(OpenInFinderMenuItem.uiNode(fileId).value)
   setOnAction(_ => {
-    new Thread(() => Desktop.getDesktop.open(fileId.asPath.getParent.toFile)).start()
+    tabPane.fireEvent(new TabControlEvent(TabControlEvent.OpenInFinder))
   })
 
