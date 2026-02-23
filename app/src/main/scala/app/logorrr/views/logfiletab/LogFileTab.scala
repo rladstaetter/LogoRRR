@@ -7,12 +7,24 @@ import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
 import javafx.collections.ObservableList
-import javafx.event.Event
+import javafx.event.{Event, EventType}
 import javafx.scene.control.*
 import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 
 import java.util.function.Consumer
+
+
+class TabControlEvent(eventType: EventType[? <: Event]) extends Event(eventType)
+
+object TabControlEvent {
+  val CloseSelectedTab: EventType[TabControlEvent] = new EventType(Event.ANY, "CLOSE_SELECTED")
+  val CloseOthers: EventType[TabControlEvent] = new EventType(Event.ANY, "CLOSE_OTHERS")
+  val CloseRight: EventType[TabControlEvent] = new EventType(Event.ANY, "CLOSE_RIGHT")
+  val CloseLeft: EventType[TabControlEvent] = new EventType(Event.ANY, "CLOSE_LEFT")
+  val CloseAll: EventType[TabControlEvent] = new EventType(Event.ANY, "CLOSE_ALL")
+  val OpenInFinder: EventType[TabControlEvent] = new EventType(Event.ANY, "OPEN_IN_FINDER")
+}
 
 
 object LogFileTab extends UiNodeFileIdAware:
@@ -67,6 +79,7 @@ class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries:
           LogoRRRAccelerators.setActiveSearchTextField(logPane.opsToolBar.searchRegion.searchTextField)
         } else {
           setContextMenu(null)
+          LogoRRRAccelerators.setActiveSearchTextField(null)
         }
     })
 
@@ -107,15 +120,15 @@ class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries:
 
   def initContextMenu(): Unit = {
     Option(getTabPane) match {
-      case Some(value) => setContextMenu(new LogFileTabContextMenu(getFileId, value, this))
-      case None =>
+      case Some(tabPane) => setContextMenu(new LogFileTabContextMenu(getFileId, tabPane))
+      case None => setContextMenu(null)
     }
   }
 
   def shutdown(): Unit =
     logFileTabToolTip.unbind()
-
-    // disable autoscroll
+    LogoRRRAccelerators.setActiveSearchTextField(null)
+    setContextMenu(null)
     // unbind bindings
     idProperty().unbind()
     textProperty().unbind()

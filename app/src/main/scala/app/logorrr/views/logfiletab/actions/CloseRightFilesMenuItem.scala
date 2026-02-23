@@ -2,8 +2,8 @@ package app.logorrr.views.logfiletab.actions
 
 import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.logfiletab.LogFileTab
-import javafx.scene.control.{MenuItem, Tab}
+import app.logorrr.views.logfiletab.{LogFileTab, TabControlEvent}
+import javafx.scene.control.{MenuItem, Tab, TabPane}
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
@@ -12,7 +12,15 @@ object CloseRightFilesMenuItem extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[CloseRightFilesMenuItem])
 
+class CloseRightFilesMenuItem(fileId: FileId, tabPane: TabPane) extends MenuItem("Close Files to the Right") {
+  setId(CloseRightFilesMenuItem.uiNode(fileId).value)
+  setOnAction(_ => {
+    tabPane.fireEvent(new TabControlEvent(TabControlEvent.CloseRight))
+  })
+}
 
+
+/*
 class CloseRightFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends MenuItem("Close Files to the Right") {
   setId(CloseRightFilesMenuItem.uiNode(fileId).value)
   private val tabPane = fileTab.getTabPane
@@ -39,4 +47,4 @@ class CloseRightFilesMenuItem(fileId: FileId, fileTab: => LogFileTab) extends Me
 
   })
 
-}
+} */
