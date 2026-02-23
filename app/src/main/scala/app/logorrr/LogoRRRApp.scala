@@ -7,6 +7,7 @@ import app.logorrr.model.LogSource
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.DefaultFileIdService
 import app.logorrr.services.hostservices.{MacNativeHostService, NativeHostServices}
+import app.logorrr.util.PersistenceManager
 import app.logorrr.views.main.{LogoRRRMain, LogoRRRStage, MainTabPane}
 import javafx.application.Application
 import javafx.stage.Stage
@@ -32,6 +33,7 @@ object LogoRRRApp extends TinyLog:
     , limit = 1024 * 1024 * 100
     , count = 1)
 
+ 
   def main(args: Array[String]): Unit =
     javafx.application.Application.launch(classOf[LogoRRRApp], args *)
 
@@ -42,7 +44,6 @@ object LogoRRRApp extends TinyLog:
     Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
 
     LogoRRRGlobals.set(services.settings, services.hostServices)
-
     val groups: DefaultSearchTermGroups = DefaultSearchTermGroups(services.settings.searchTermGroups)
 
     val logSource = new LogSource(

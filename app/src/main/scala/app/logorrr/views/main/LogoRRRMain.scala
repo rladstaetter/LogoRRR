@@ -18,8 +18,3 @@ class LogoRRRMain(stage: Stage
     if !OsUtil.isMac || isUnderTest then setTop(bar)
     setCenter(logSource.ui)
     logSource.loadLogFiles()
-
-  def selectLastLogFile(): Unit = logSource.ui.selectLastLogFile()
-
-  def shutdown(): Unit = logSource.ui.shutdown()
-

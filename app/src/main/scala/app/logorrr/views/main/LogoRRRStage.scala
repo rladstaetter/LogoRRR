@@ -4,7 +4,7 @@ import app.logorrr.LogoRRRApp
 import app.logorrr.conf.mut.MutStageSettings
 import app.logorrr.conf.{FileId, LogFileSettings, LogoRRRGlobals}
 import app.logorrr.model.{FileIdDividerSearchTerm, LogSource}
-import app.logorrr.util.JfxUtils
+import app.logorrr.util.{JfxUtils, PersistenceManager}
 import app.logorrr.views.LogoRRRAccelerators
 import javafx.beans.value.ChangeListener
 import javafx.scene.Scene
@@ -16,6 +16,8 @@ import net.ladstatt.util.log.TinyLog
 object LogoRRRStage extends TinyLog:
 
   val icon: Image = new Image(getClass.getResourceAsStream("/logorrr-icon-32.png"))
+
+
 
   /** after scene got initialized and scene was set to stage immediately set position of stage */
   val sceneListener: ChangeListener[Scene] = JfxUtils.onNew[Scene](scene => {
@@ -40,7 +42,7 @@ object LogoRRRStage extends TinyLog:
   def shutdown(stage: Stage, logSource: LogSource): Unit =
     LogoRRRStage.persistSettings(logSource)
     logSource.ui.shutdown()
-    LogoRRRGlobals.unbindWindow()
+    LogoRRRGlobals.shutdown()
     stage.getScene.windowProperty().removeListener(MutStageSettings.windowListener)
     stage.sceneProperty.removeListener(LogoRRRStage.sceneListener)
     logInfo(s"Stopped ${LogoRRRApp.appInfo.nameAndVersion}")
@@ -51,6 +53,7 @@ object LogoRRRStage extends TinyLog:
            , height: Int): Unit =
 
     val scene = new Scene(logorrrMain, width, height)
+    LogoRRRGlobals.persistenceManager.init(LogoRRRGlobals.allProps)
 
     /** only initialize accelerators after a scene is defined */
     LogoRRRAccelerators.initAccelerators(scene)

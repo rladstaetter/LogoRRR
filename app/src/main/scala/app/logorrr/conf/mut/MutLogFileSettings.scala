@@ -1,17 +1,14 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.conf.*
-import app.logorrr.model.LogEntry
 import app.logorrr.util.JetbrainsMonoFontStyleBinding
 import app.logorrr.views.search.MutableSearchTerm
 import app.logorrr.views.search.st.ASearchTermToggleButton
 import javafx.beans.binding.{BooleanBinding, StringBinding}
 import javafx.beans.property.*
-import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ObservableList}
 
 import java.time.format.DateTimeFormatter
-import java.util.function.Predicate
 import scala.jdk.CollectionConverters.*
 
 object MutLogFileSettings:
@@ -138,3 +135,16 @@ class MutLogFileSettings:
   def getSearchTerms: Seq[SearchTerm] =
     mutSearchTerms.asScala.toSeq.map(f => SearchTerm(f.getValue, f.getColor, f.isActive))
 
+  def allProps: Set[Property[?]] =
+    Set(fileIdProperty
+      , selectedLineNumberProperty
+      , firstOpenedProperty
+      , dividerPositionProperty
+      , fontSizeProperty
+      , blockSizeProperty
+      , someTimestampSettings
+      , autoScrollActiveProperty
+      , firstVisibleTextCellIndexProperty
+      , lastVisibleTextCellIndexProperty
+      , showPredicate.lowerTimestampValueProperty
+      , showPredicate.upperTimestampValueProperty)

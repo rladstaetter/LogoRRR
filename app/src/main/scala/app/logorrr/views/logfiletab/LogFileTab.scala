@@ -1,6 +1,6 @@
 package app.logorrr.views.logfiletab
 
-import app.logorrr.conf.FileId
+import app.logorrr.conf.{FileId, LogoRRRGlobals}
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.{FileIdDividerSearchTerm, FileIdPropertyHolder, LogEntry, LogorrrModel}
 import app.logorrr.views.LogoRRRAccelerators
@@ -113,6 +113,7 @@ class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries:
   }
 
   def shutdown(): Unit =
+    LogoRRRGlobals.persistenceManager.shutdown(getFileId)
     logFileTabToolTip.unbind()
 
     // disable autoscroll

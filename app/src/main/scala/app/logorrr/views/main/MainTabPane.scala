@@ -6,7 +6,6 @@ import app.logorrr.views.a11y.uinodes.UiNodes
 import app.logorrr.views.logfiletab.LogFileTab
 import javafx.beans.binding.Bindings
 import javafx.scene.control.TabPane
-import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 
 import scala.collection.mutable
@@ -46,6 +45,8 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
 
   override def getInfos: Seq[FileIdDividerSearchTerm] = getLogFileTabs.map(_.getInfo).toSeq
 
+  override def contains(p: FileId): Boolean = getLogFileTabs.exists(lr => lr.getFileId == p)
+
   override def selectLastLogFile(): Unit = getSelectionModel.selectLast()
 
   override def selectFile(fileId: FileId): Unit =
@@ -53,11 +54,9 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
       case Some(logFileTab) => getSelectionModel.select(logFileTab)
       case None => selectLastLogFile()
 
-  override def contains(p: FileId): Boolean = getLogFileTabs.exists(lr => lr.getFileId == p)
-
   /** Adds a new logfile to display and initializes bindings and listeners */
   override def addData(model: LogorrrModel): Unit =
-    val tab =  LogFileTab(getScene.getWindow,model)
+    val tab = LogFileTab(getScene.getWindow, model)
     tab.init(getScene.getWindow, model.mutLogFileSettings)
     getTabs.add(tab)
     tab.initContextMenu()

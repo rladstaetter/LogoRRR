@@ -4,7 +4,8 @@ import app.logorrr.LogoRRRApp
 import app.logorrr.conf.mut.{MutLogFileSettings, MutSearchTermGroup, MutSettings, MutTimestampSettings}
 import app.logorrr.io.{OsxBridgeHelper, SettingsFileIO}
 import app.logorrr.services.hostservices.LogoRRRHostServices
-import javafx.beans.property.SimpleObjectProperty
+import app.logorrr.util.PersistenceManager
+import javafx.beans.property.{Property, SimpleObjectProperty}
 import javafx.collections.ObservableList
 import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
@@ -21,9 +22,13 @@ import scala.jdk.CollectionConverters.*
  */
 object LogoRRRGlobals extends TinyLog:
 
+  val persistenceManager = new PersistenceManager()
+
   val mutSettings = new MutSettings
 
   private val hostServicesProperty = new SimpleObjectProperty[LogoRRRHostServices]()
+
+  val searchTermGroupEntries: ObservableList[MutSearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
 
   /** * Getter for the default group.
    *    It searches through the mutable entries to find the one with selected == true.
@@ -54,7 +59,9 @@ object LogoRRRGlobals extends TinyLog:
 
   def clearSearchTermGroups(): Unit = mutSettings.clearSearchTermGroups()
 
-  def unbindWindow(): Unit = mutSettings.unbindWindow()
+  def shutdown(): Unit =
+    mutSettings.unbindWindow()
+    persistenceManager.shutdown()
 
   def getStageWidth: Int = mutSettings.getStageWidth
 
@@ -110,12 +117,18 @@ object LogoRRRGlobals extends TinyLog:
 
   def clearLogFileSettings(): Unit = mutSettings.clearLogFileSettings()
 
-  def registerSettings(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
+  def registerSettings(fs: LogFileSettings): Unit = {
+    val settings = MutLogFileSettings(fs)
+    persistenceManager.init(fs.fileId, settings.allProps)
+    mutSettings.putMutLogFileSetting(settings)
+  }
 
   def getLogFileSettings(fileId: FileId): MutLogFileSettings = mutSettings.getMutLogFileSetting(fileId)
 
-  val searchTermGroupEntries: ObservableList[MutSearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
 
   def getTimestampSettings: Option[MutTimestampSettings] = Option(mutSettings.getTimestampSettings)
 
   def setTimestampSettings(timestampSettings: MutTimestampSettings): Unit = mutSettings.setTimestampSettings(timestampSettings)
+
+  val allProps: Set[Property[?]] =
+    mutSettings.allProps
