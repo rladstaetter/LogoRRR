@@ -21,9 +21,9 @@ object JfxUtils extends TinyLog:
     val originalY = ps.getMinY
     val originalWidth = ps.getWidth
     val originalHeight = ps.getHeight
-    // Calculate the dimensions of the new rectangle (80% of original)
-    val newWidth = originalWidth * 0.8
-    val newHeight = originalHeight * 0.8
+    // Calculate the dimensions of the new rectangle (90% of original)
+    val newWidth = originalWidth * 0.9
+    val newHeight = originalHeight * 0.9
     // Calculate the new coordinates
     val newX = originalX + (originalWidth - newWidth) / 2
     val newY = originalY + (originalHeight - newHeight) / 2

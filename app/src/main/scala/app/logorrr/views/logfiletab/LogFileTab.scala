@@ -1,13 +1,14 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.{FileId, LogoRRRGlobals}
+import app.logorrr.conf.{FileId, TimestampSettings}
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.{FileIdDividerSearchTerm, FileIdPropertyHolder, LogEntry, LogorrrModel}
 import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
 import javafx.collections.ObservableList
-import javafx.event.Event
+import javafx.event.{Event, EventType}
 import javafx.scene.control.*
 import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
@@ -67,6 +68,7 @@ class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries:
           LogoRRRAccelerators.setActiveSearchTextField(logPane.opsToolBar.searchRegion.searchTextField)
         } else {
           setContextMenu(null)
+          LogoRRRAccelerators.setActiveSearchTextField(null)
         }
     })
 
@@ -107,16 +109,16 @@ class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries:
 
   def initContextMenu(): Unit = {
     Option(getTabPane) match {
-      case Some(value) => setContextMenu(new LogFileTabContextMenu(getFileId, value, this))
-      case None =>
+      case Some(tabPane) => setContextMenu(new LogFileTabContextMenu(getFileId, tabPane))
+      case None => setContextMenu(null)
     }
   }
 
   def shutdown(): Unit =
     LogoRRRGlobals.persistenceManager.shutdown(getFileId)
     logFileTabToolTip.unbind()
-
-    // disable autoscroll
+    LogoRRRAccelerators.setActiveSearchTextField(null)
+    setContextMenu(null)
     // unbind bindings
     idProperty().unbind()
     textProperty().unbind()
@@ -131,5 +133,6 @@ class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries:
 
   def getInfo = FileIdDividerSearchTerm(getFileId, logPane.activeSearchTerms, logPane.getDividerPosition)
 
-
+  def applyTimeSettings(timestampSettings: TimestampSettings) : Unit =
+    logPane.applyTimeSettings(timestampSettings)
 

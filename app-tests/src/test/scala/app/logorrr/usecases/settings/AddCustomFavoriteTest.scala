@@ -51,7 +51,6 @@ class AddCustomFavoriteTest extends ASettingsTest:
     )
 
     assert(found) // we found the entry and activated it, now open a second file and see if we open a file with new default
-
     val fileId2 = files.tail.head
     openFile(fileId2)
 

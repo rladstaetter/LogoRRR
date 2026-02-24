@@ -1,0 +1,26 @@
+/* Target the TextField inside your custom Cell */
+.settings-text-field {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 4;
+    -fx-border-color: #bbbbbb;
+    -fx-border-radius: 4;
+    -fx-border-width: 1;
+    -fx-padding: 4 8 4 8;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-text-fill: #333333;
+}
+
+/* Make it look "Active" when the user clicks in */
+.settings-text-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #4a90e2; /* Modern blue focus color */
+    -fx-border-width: 2;
+    /* Negative insets prevent the 2px border from "jumping" the layout */
+    -fx-background-insets: -1;
+}
+
+/* Optional: Slight hover effect */
+.settings-text-field:hover {
+    -fx-border-color: #999999;
+}

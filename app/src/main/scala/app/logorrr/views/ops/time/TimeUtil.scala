@@ -3,7 +3,7 @@ package app.logorrr.views.ops.time
 import app.logorrr.model.LogEntry
 import javafx.collections.ObservableList
 
-import java.time.Instant
+import java.util.Optional
 
 object TimeUtil:
 
@@ -13,21 +13,18 @@ object TimeUtil:
    * @param logEntries list of log entries
    * @return min and max Instant of all log entries
    */
-  def calcTimeInfo(logEntries: ObservableList[LogEntry]): Option[TimeRange] =
-    if !logEntries.isEmpty then
+  def calcTimeInfo(logEntries: ObservableList[LogEntry]): Option[TimeRange] = {
 
-      var minInstant = Long.MaxValue
-      var maxInstant = Long.MinValue
-      logEntries.forEach((e: LogEntry) => {
-        e.someEpochMilli match {
-          case Some(instant) =>
-            if instant < minInstant then
-              minInstant = instant
-            if instant > maxInstant then
-              maxInstant = instant
-          case None => // do nothing
-        }
-      })
+    if !logEntries.isEmpty then
+      val first: Optional[LogEntry] = logEntries.stream.dropWhile(e => e.someEpochMilli.isEmpty).findFirst()
+      val last: Optional[LogEntry] = logEntries.reversed().stream.dropWhile(e => e.someEpochMilli.isEmpty).findFirst()
+
+      var (minInstant, maxInstant) =
+        if (first.isPresent && last.isPresent) then
+          (first.get().someEpochMilli.get, last.get().someEpochMilli.get)
+        else
+          (Long.MaxValue, Long.MinValue)
+
       if minInstant == Long.MinValue || minInstant == Long.MaxValue then
         None
       else if maxInstant == Long.MinValue || maxInstant == Long.MaxValue then
@@ -37,3 +34,4 @@ object TimeUtil:
       else
         Option(TimeRange(minInstant, maxInstant))
     else None
+  }

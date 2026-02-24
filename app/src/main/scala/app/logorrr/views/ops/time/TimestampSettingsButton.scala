@@ -5,6 +5,7 @@ import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, TimestampSettings}
 import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import app.logorrr.views.logfiletab.LogFilePane
 import app.logorrr.views.search.TimestampSettingsRegion
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
 import javafx.beans.binding.BooleanBinding
@@ -35,13 +36,14 @@ class ExclamationCircleFontIcon extends FontIcon:
  * @param logEntries         the list of log entries to display in order to configure a time format
  */
 class TimestampSettingsButton(owner: Window
+                              , logFilePane : LogFilePane
                               , mutLogFileSettings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
                               , tsRegion: TimestampSettingsRegion)
   extends StackPane with BoundId(TimestampSettingsButton.uiNode(_).value):
 
-  private val button: ClockButton = new ClockButton(owner, mutLogFileSettings, chunkListView, logEntries, tsRegion)
+  private val button: ClockButton = new ClockButton(owner,logFilePane, mutLogFileSettings, chunkListView, logEntries, tsRegion)
   private val fontIcon = new ExclamationCircleFontIcon
 
   getChildren.addAll(button, fontIcon)

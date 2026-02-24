@@ -1,10 +1,12 @@
 {
   "searchTermGroups": [
     {
-      "selected": true,
-      "terms": []
+      "name": "Default",
+      "terms": [],
+      "selected": true
     },
     {
+      "name": "Java: java.util.logging",
       "selected": false,
       "terms": [
         {
@@ -45,6 +47,7 @@
       ]
     },
     {
+      "name": "Java: Log4j / Logback",
       "selected": false,
       "terms": [
         {
@@ -74,12 +77,13 @@
         },
         {
           "value": "TRACE",
-          "color": "#e2e2e2",
+          "color": "#d3d3d3",
           "active": true
         }
       ]
     },
     {
+      "name": "Python: Standard Logging",
       "selected": false,
       "terms": [
         {
@@ -106,15 +110,11 @@
           "value": "DEBUG",
           "color": "#808080",
           "active": true
-        },
-        {
-          "value": "NOTSET",
-          "color": "#e2e2e2",
-          "active": true
         }
       ]
     },
     {
+      "name": "C#: Serilog",
       "selected": false,
       "terms": [
         {
@@ -144,47 +144,13 @@
         },
         {
           "value": "Verbose",
-          "color": "#e2e2e2",
+          "color": "#d3d3d3",
           "active": true
         }
       ]
     },
     {
-      "selected": false,
-      "terms": [
-        {
-          "value": "Fatal",
-          "color": "#8b0000",
-          "active": true
-        },
-        {
-          "value": "Error",
-          "color": "#ff0000",
-          "active": true
-        },
-        {
-          "value": "Warn",
-          "color": "#ffa500",
-          "active": true
-        },
-        {
-          "value": "Info",
-          "color": "#008000",
-          "active": true
-        },
-        {
-          "value": "Debug",
-          "color": "#808080",
-          "active": true
-        },
-        {
-          "value": "Trace",
-          "color": "#e2e2e2",
-          "active": true
-        }
-      ]
-    },
-    {
+      "name": "C++: spdlog",
       "selected": false,
       "terms": [
         {
@@ -214,12 +180,13 @@
         },
         {
           "value": "trace",
-          "color": "#e2e2e2",
+          "color": "#d3d3d3",
           "active": true
         }
       ]
     },
     {
+      "name": "JavaScript: Winston",
       "selected": false,
       "terms": [
         {
@@ -254,47 +221,13 @@
         },
         {
           "value": "silly",
-          "color": "#e2e2e2",
+          "color": "#d3d3d3",
           "active": true
         }
       ]
     },
     {
-      "selected": false,
-      "terms": [
-        {
-          "value": "fatal",
-          "color": "#8b0000",
-          "active": true
-        },
-        {
-          "value": "error",
-          "color": "#ff0000",
-          "active": true
-        },
-        {
-          "value": "warn",
-          "color": "#ffa500",
-          "active": true
-        },
-        {
-          "value": "info",
-          "color": "#008000",
-          "active": true
-        },
-        {
-          "value": "debug",
-          "color": "#808080",
-          "active": true
-        },
-        {
-          "value": "trace",
-          "color": "#e2e2e2",
-          "active": true
-        }
-      ]
-    },
-    {
+      "name": "Go: slog",
       "selected": false,
       "terms": [
         {
@@ -320,6 +253,7 @@
       ]
     },
     {
+      "name": "Rust: tracing / log",
       "selected": false,
       "terms": [
         {
@@ -344,12 +278,13 @@
         },
         {
           "value": "TRACE",
-          "color": "#e2e2e2",
+          "color": "#d3d3d3",
           "active": true
         }
       ]
     },
     {
+      "name": "PHP: Monolog",
       "selected": false,
       "terms": [
         {
@@ -395,6 +330,7 @@
       ]
     },
     {
+      "name": "Swift: os_log / SwiftLog",
       "selected": false,
       "terms": [
         {
@@ -408,218 +344,8 @@
           "active": true
         },
         {
-          "value": "default",
-          "color": "#008000",
-          "active": true
-        },
-        {
-          "value": "info",
-          "color": "#4169e1",
-          "active": true
-        },
-        {
-          "value": "debug",
-          "color": "#808080",
-          "active": true
-        }
-      ]
-    },
-    {
-      "selected": false,
-      "terms": [
-        {
-          "value": "FATAL",
-          "color": "#8b0000",
-          "active": true
-        },
-        {
-          "value": "ERROR",
-          "color": "#ff0000",
-          "active": true
-        },
-        {
-          "value": "WARN",
+          "value": "warning",
           "color": "#ffa500",
-          "active": true
-        },
-        {
-          "value": "INFO",
-          "color": "#008000",
-          "active": true
-        },
-        {
-          "value": "DEBUG",
-          "color": "#808080",
-          "active": true
-        }
-      ]
-    },
-    {
-      "selected": false,
-      "terms": [
-        {
-          "value": "EMERG",
-          "color": "#8b0000",
-          "active": true
-        },
-        {
-          "value": "ALERT",
-          "color": "#ff4500",
-          "active": true
-        },
-        {
-          "value": "CRIT",
-          "color": "#ff0000",
-          "active": true
-        },
-        {
-          "value": "ERR",
-          "color": "#b22222",
-          "active": true
-        },
-        {
-          "value": "WARNING",
-          "color": "#ffa500",
-          "active": true
-        },
-        {
-          "value": "NOTICE",
-          "color": "#4169e1",
-          "active": true
-        },
-        {
-          "value": "INFO",
-          "color": "#008000",
-          "active": true
-        },
-        {
-          "value": "DEBUG",
-          "color": "#808080",
-          "active": true
-        }
-      ]
-    },
-    {
-      "selected": false,
-      "terms": [
-        {
-          "value": "kern.emerg",
-          "color": "#8b0000",
-          "active": true
-        },
-        {
-          "value": "kern.alert",
-          "color": "#ff4500",
-          "active": true
-        },
-        {
-          "value": "kern.crit",
-          "color": "#ff0000",
-          "active": true
-        },
-        {
-          "value": "kern.err",
-          "color": "#b22222",
-          "active": true
-        },
-        {
-          "value": "kern.warning",
-          "color": "#ffa500",
-          "active": true
-        },
-        {
-          "value": "kern.notice",
-          "color": "#4169e1",
-          "active": true
-        },
-        {
-          "value": "kern.info",
-          "color": "#008000",
-          "active": true
-        },
-        {
-          "value": "kern.debug",
-          "color": "#808080",
-          "active": true
-        }
-      ]
-    },
-    {
-      "selected": false,
-      "terms": [
-        {
-          "value": "[emerg]",
-          "color": "#8b0000",
-          "active": true
-        },
-        {
-          "value": "[alert]",
-          "color": "#ff4500",
-          "active": true
-        },
-        {
-          "value": "[crit]",
-          "color": "#ff0000",
-          "active": true
-        },
-        {
-          "value": "[error]",
-          "color": "#b22222",
-          "active": true
-        },
-        {
-          "value": "[warn]",
-          "color": "#ffa500",
-          "active": true
-        },
-        {
-          "value": "[notice]",
-          "color": "#4169e1",
-          "active": true
-        },
-        {
-          "value": "[info]",
-          "color": "#008000",
-          "active": true
-        },
-        {
-          "value": "[debug]",
-          "color": "#808080",
-          "active": true
-        }
-      ]
-    },
-    {
-      "selected": false,
-      "terms": [
-        {
-          "value": "emerg",
-          "color": "#8b0000",
-          "active": true
-        },
-        {
-          "value": "alert",
-          "color": "#ff4500",
-          "active": true
-        },
-        {
-          "value": "crit",
-          "color": "#ff0000",
-          "active": true
-        },
-        {
-          "value": "error",
-          "color": "#b22222",
-          "active": true
-        },
-        {
-          "value": "warn",
-          "color": "#ffa500",
-          "active": true
-        },
-        {
-          "value": "notice",
-          "color": "#4169e1",
           "active": true
         },
         {
@@ -630,181 +356,6 @@
         {
           "value": "debug",
           "color": "#808080",
-          "active": true
-        }
-      ]
-    },
-    {
-      "selected": false,
-      "terms": [
-        {
-          "value": " 500 ",
-          "color": "#ff0000",
-          "active": true
-        },
-        {
-          "value": " 404 ",
-          "color": "#ffa500",
-          "active": true
-        },
-        {
-          "value": " 403 ",
-          "color": "#ff4500",
-          "active": true
-        },
-        {
-          "value": " 401 ",
-          "color": "#ff8c00",
-          "active": true
-        },
-        {
-          "value": " 200 ",
-          "color": "#008000",
-          "active": true
-        },
-        {
-          "value": " 301 ",
-          "color": "#4169e1",
-          "active": true
-        },
-        {
-          "value": " 304 ",
-          "color": "#20b2aa",
-          "active": true
-        }
-      ]
-    },
-    {
-      "selected": false,
-      "terms": [
-        {
-          "value": "PANIC",
-          "color": "#8b0000",
-          "active": true
-        },
-        {
-          "value": "FATAL",
-          "color": "#ff0000",
-          "active": true
-        },
-        {
-          "value": "ERROR",
-          "color": "#b22222",
-          "active": true
-        },
-        {
-          "value": "WARNING",
-          "color": "#ffa500",
-          "active": true
-        },
-        {
-          "value": "NOTICE",
-          "color": "#4169e1",
-          "active": true
-        },
-        {
-          "value": "INFO",
-          "color": "#008000",
-          "active": true
-        },
-        {
-          "value": "LOG",
-          "color": "#808080",
-          "active": true
-        },
-        {
-          "value": "DEBUG",
-          "color": "#e2e2e2",
-          "active": true
-        }
-      ]
-    },
-    {
-      "selected": false,
-      "terms": [
-        {
-          "value": "[System]",
-          "color": "#008000",
-          "active": true
-        },
-        {
-          "value": "[Error]",
-          "color": "#ff0000",
-          "active": true
-        },
-        {
-          "value": "[Warning]",
-          "color": "#ffa500",
-          "active": true
-        },
-        {
-          "value": "[Note]",
-          "color": "#4169e1",
-          "active": true
-        }
-      ]
-    },
-    {
-      "selected": false,
-      "terms": [
-        {
-          "value": "GET",
-          "color": "#008000",
-          "active": true
-        },
-        {
-          "value": "POST",
-          "color": "#4169e1",
-          "active": true
-        },
-        {
-          "value": "PUT",
-          "color": "#ffa500",
-          "active": true
-        },
-        {
-          "value": "DELETE",
-          "color": "#ff0000",
-          "active": true
-        },
-        {
-          "value": "PATCH",
-          "color": "#9370db",
-          "active": true
-        }
-      ]
-    },
-    {
-      "selected": false,
-      "terms": [
-        {
-          "value": "Failed",
-          "color": "#ff0000",
-          "active": true
-        },
-        {
-          "value": "BackOff",
-          "color": "#ff4500",
-          "active": true
-        },
-        {
-          "value": "Unhealthy",
-          "color": "#ffa500",
-          "active": true
-        },
-        {
-          "value": "Killing",
-          "color": "#808080",
-          "active": true
-        },
-        {
-          "value": "Scheduled",
-          "color": "#008000",
-          "active": true
-        },
-        {
-          "value": "Pulled",
-          "color": "#4169e1",
           "active": true
         }
       ]

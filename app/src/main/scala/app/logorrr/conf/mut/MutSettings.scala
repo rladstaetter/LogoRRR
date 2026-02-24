@@ -1,6 +1,9 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.conf.*
+import app.logorrr.conf.LogoRRRGlobals.{mutSettings, setHostServices, setTimestampSettings}
+import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
+import javafx.collections.FXCollections
 import javafx.beans.property.{Property, SimpleBooleanProperty, SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, MapChangeListener}
 import javafx.stage.Window
@@ -45,13 +48,23 @@ class MutSettings {
   private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
 
   private val mapDirtyPulse = new SimpleBooleanProperty(false)
-  
+
   mutLogFileSettingsMapProperty.addListener(new MapChangeListener[FileId, MutLogFileSettings] {
     override def onChanged(change: MapChangeListener.Change[_ <: FileId, _ <: MutLogFileSettings]): Unit = {
       // If an entry is added, you might want to start listening to its internal properties too (see Step 2)
       mapDirtyPulse.set(!mapDirtyPulse.get())
     }
   })
+
+  def set(settings: Settings): Unit =
+    setStageSettings(settings.stageSettings)
+    setLogFileSettings(settings.fileSettings)
+    setSomeLastUsedDirectory(settings.someLastUsedDirectory)
+    // Populate from immutable settings into the mutable properties
+    mutSearchTermGroupSettings.searchTermGroupEntries.setAll(
+      settings.searchTermGroups.map(MutSearchTermGroup.apply).asJava
+    )
+
 
   def getSomeActiveLogFile: Option[FileId] = someActiveLogProperty.get()
 
@@ -62,7 +75,6 @@ class MutSettings {
   def getSomeLastUsedDirectory: Option[Path] = lastUsedDirectoryProperty.get()
 
   def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit = lastUsedDirectoryProperty.set(someDirectory)
-
   def add(stg: MutSearchTermGroup): Unit = mutSearchTermGroupSettings.add(stg)
 
   def clearSearchTermGroups(): Unit = mutSearchTermGroupSettings.clear()

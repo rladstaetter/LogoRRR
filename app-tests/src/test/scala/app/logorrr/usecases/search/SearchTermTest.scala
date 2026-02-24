@@ -1,11 +1,11 @@
 package app.logorrr.usecases.search
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.TestSettings
+import app.logorrr.conf.{Settings, TestSettings}
 import app.logorrr.steps.{ChoiceBoxActions, SearchTermToolbarActions}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.MutableSearchTerm
-import app.logorrr.views.search.st.{ASearchTermToggleButton, RemoveSearchTermButton}
+import app.logorrr.views.search.st.ASearchTermToggleButton
 import app.logorrr.views.text.LogTextView
 import org.junit.jupiter.api.Test
 
@@ -15,12 +15,16 @@ import org.junit.jupiter.api.Test
  * The selected log file (its log lines) corresponds to the used filters; each filter
  * hits at least one log line (some - FINE,FINER,FINEST) hit more than once which is perfectly ok.
  *
- **/
+ * */
 class SearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2)
   with ChoiceBoxActions
   with SearchTermToolbarActions:
 
+  override protected lazy val settings: Settings =
+    TestSettings.DefaultSettings
+
   // use default search terms
+  // list is truncated to fit on screen
   val terms: Seq[MutableSearchTerm] = TestSettings.DefaultSearchTerms
 
   // each filter has one line + 1 line which is unclassified
@@ -61,7 +65,7 @@ class SearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2)
     // finally, select all filters
     clickFilters(terms)
 
-    checkNumberOfShownElements(lineCount -1 )
+    checkNumberOfShownElements(lineCount - 1)
 
     // select unclassified search term
     clickFilters(Seq(MutableSearchTerm.mkUnclassified(terms.toSet)))

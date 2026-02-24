@@ -6,30 +6,29 @@ import javafx.scene.control.{ContextMenu, MenuItem, TabPane}
 import net.ladstatt.util.os.OsUtil
 
 class LogFileTabContextMenu(fileId: FileId
-                            , getTabPane: => TabPane
-                            , logFileTab: => LogFileTab) extends ContextMenu:
-  val closeMenuItem = new CloseTabMenuItem(fileId, logFileTab)
-  val openInFinderMenuItem = new OpenInFinderMenuItem(fileId)
+                            , tabPane: TabPane) extends ContextMenu:
 
-  val closeOtherFilesMenuItem = new CloseOtherFilesMenuItem(fileId, logFileTab)
-  val closeAllFilesMenuItem = new CloseAllFilesMenuItem(fileId, logFileTab)
-
-  val leftRightCloser =
-    if getTabPane.getTabs.size() == 1 then
+  private val closeMenuItem = new CloseTabMenuItem(fileId, tabPane)
+  private val openInFinderMenuItem = new OpenInFinderMenuItem(fileId, tabPane)
+  private val closeOtherFilesMenuItem = new CloseOtherFilesMenuItem(fileId, tabPane)
+  private val closeAllFilesMenuItem = new CloseAllFilesMenuItem(fileId, tabPane)
+  private val logFileTab = tabPane.getSelectionModel.getSelectedItem
+  private val leftRightCloser =
+    if tabPane.getTabs.size() == 1 then
       Seq()
     // current tab is the first one, show only 'right'
-    else if getTabPane.getTabs.indexOf(logFileTab) == 0 then
-      Seq(new CloseRightFilesMenuItem(fileId, logFileTab))
+    else if tabPane.getTabs.indexOf(logFileTab) == 0 then
+      Seq(new CloseRightFilesMenuItem(fileId, tabPane))
     // we are at the end of the list
-    else if getTabPane.getTabs.indexOf(logFileTab) == getTabPane.getTabs.size - 1 then
-      Seq(new CloseLeftFilesMenuItem(fileId, logFileTab))
+    else if tabPane.getTabs.indexOf(logFileTab) == tabPane.getTabs.size - 1 then
+      Seq(new CloseLeftFilesMenuItem(fileId, tabPane))
     // we are somewhere in between, show both options
     else
-      Seq(new CloseLeftFilesMenuItem(fileId, logFileTab), new CloseRightFilesMenuItem(fileId, logFileTab))
+      Seq(new CloseLeftFilesMenuItem(fileId, tabPane), new CloseRightFilesMenuItem(fileId, tabPane))
 
-  val items: Seq[MenuItem] =
+  private val items: Seq[MenuItem] =
     // special handling if there is only one tab
-    if getTabPane.getTabs.size() == 1 then
+    if tabPane.getTabs.size() == 1 then
       if OsUtil.isMac then
         Seq(closeMenuItem)
       else
@@ -43,4 +42,5 @@ class LogFileTabContextMenu(fileId: FileId
         else
           Seq(openInFinderMenuItem)
       }
+
   getItems.addAll(items *)

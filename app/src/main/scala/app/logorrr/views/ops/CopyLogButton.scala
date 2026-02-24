@@ -26,6 +26,8 @@ class CopyLogButton extends Button with BoundId(CopyLogButton.uiNode(_).value):
 
   private val defaultToolTip = new Tooltip("copy current selection to clipboard")
   private val entries = new SimpleListProperty[LogEntry](FXCollections.observableArrayList())
+  private val icon: FontIcon = GfxElements.Icons.copy
+  private val iconDark: FontIcon = GfxElements.Icons.copyDark
 
   setOnAction:
     _ =>
@@ -37,12 +39,13 @@ class CopyLogButton extends Button with BoundId(CopyLogButton.uiNode(_).value):
       defaultToolTip.show(this, x, y)
       mkTimer().start() // visual response to click
 
-  private def mkTimer() = new PulsatingAnimationTimer(this, GfxElements.Icons.copy, GfxElements.Icons.copyDark, defaultToolTip, "copy current selection to clipboard", Duration.ofSeconds(1))
+
+  private def mkTimer() = new PulsatingAnimationTimer(this, icon, iconDark, defaultToolTip, "copy current selection to clipboard", Duration.ofSeconds(1))
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , filteredList: ObservableList[LogEntry]): Unit =
     bindIdProperty(fileIdProperty)
-    setGraphic(GfxElements.Icons.copyDark)
+    setGraphic(icon)
     setTooltip(defaultToolTip)
     entries.bindContent(filteredList)
 

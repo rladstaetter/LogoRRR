@@ -1,6 +1,6 @@
 package app.logorrr.model
 
-import app.logorrr.conf.FileId
+import app.logorrr.conf.{FileId, TimestampSettings}
 import javafx.beans.property.ObjectPropertyBase
 import javafx.scene.{Node, Scene}
 import javafx.stage.Window
@@ -16,6 +16,8 @@ trait UiTarget extends Node:
   def selectLastLogFile(): Unit
 
   def getInfos: Seq[FileIdDividerSearchTerm]
+
+  def applyTimeSettings(timesettings: TimestampSettings): Unit 
 
   def shutdown(): Unit
 

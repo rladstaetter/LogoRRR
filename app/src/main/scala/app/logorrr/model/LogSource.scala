@@ -101,7 +101,7 @@ class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
   private def mkSearchTermGroup: SearchTermGroup = {
     val groups = LogoRRRGlobals.searchTermGroupEntries.filtered(_.isSelected)
     if groups.isEmpty then
-      SearchTermGroup(Seq(), true)
+      SearchTermGroup("", Seq(), true)
     else
       groups.get(0).mkImmutable()
   }

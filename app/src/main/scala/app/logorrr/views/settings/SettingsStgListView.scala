@@ -4,6 +4,7 @@ import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutSearchTermGroup
 import app.logorrr.views.a11y.uinodes.SettingsEditor
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
+import javafx.beans.property.SimpleListProperty
 import javafx.collections.ObservableList
 import javafx.scene.control.{ListView, ToggleGroup}
 
@@ -15,10 +16,10 @@ object SettingsStgListView extends UiNodeFileIdAware:
  * ListView implementation that holds MutSearchTermGroup items.
  * * @param searchTermGroups the observable list of mutable search term groups.
  */
-class SettingsStgListView(searchTermGroups: ObservableList[MutSearchTermGroup]) extends ListView[MutSearchTermGroup]:
+class SettingsStgListView(searchTermGroups: SimpleListProperty[MutSearchTermGroup]) extends ListView[MutSearchTermGroup]:
 
   setId(SettingsEditor.SettingsStgListView.value)
-  setItems(searchTermGroups)
+  itemsProperty.bind(searchTermGroups)
 
   // A single ToggleGroup shared across all cells ensures
   // only one RadioButton is selected at a time.
@@ -31,3 +32,6 @@ class SettingsStgListView(searchTermGroups: ObservableList[MutSearchTermGroup]) 
    * Accessor for the underlying mutable items.
    */
   def getSearchTermGroups: ObservableList[MutSearchTermGroup] = searchTermGroups
+
+  def shutdown(): Unit =
+    itemsProperty().unbind()
