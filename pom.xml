@@ -6,19 +6,15 @@
     <artifactId>logorrr</artifactId>
     <version>${revision}${changelist}</version>
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>LogoRRR - logfiles at a glance.</description>
+    <description>LogoRRR - explore logs effortlessly.</description>
     <packaging>pom</packaging>
     <properties>
         <revision>26.2.0</revision>
         <scala.version>3.8.1</scala.version>
         <java.version>24</java.version>
         <openjfx.version>25</openjfx.version>
-       <!--
-        <openjfx.version>26-ea+25</openjfx.version>
-        -->
         <ikonli.version>12.4.0</ikonli.version>
-        <!-- no need to change these -->
-        <changelist></changelist>
+        <changelist/>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.class>app.logorrr.LogoRRRApp</main.class>
         <main.launcher.class>app.logorrr.LogoRRRAppLauncher</main.launcher.class>
