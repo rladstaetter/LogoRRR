@@ -50,7 +50,7 @@ class MutSettings {
   private val mapDirtyPulse = new SimpleBooleanProperty(false)
 
   mutLogFileSettingsMapProperty.addListener(new MapChangeListener[FileId, MutLogFileSettings] {
-    override def onChanged(change: MapChangeListener.Change[_ <: FileId, _ <: MutLogFileSettings]): Unit = {
+    override def onChanged(change: MapChangeListener.Change[? <: FileId, ? <: MutLogFileSettings]): Unit = {
       // If an entry is added, you might want to start listening to its internal properties too (see Step 2)
       mapDirtyPulse.set(!mapDirtyPulse.get())
     }

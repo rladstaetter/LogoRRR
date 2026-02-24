@@ -18,7 +18,7 @@ class MutSearchTermGroupSettings:
   private val listDirtyPulse = new SimpleBooleanProperty(false)
 
   searchTermGroupEntries.addListener(new ListChangeListener[MutSearchTermGroup] {
-    override def onChanged(c: ListChangeListener.Change[_ <: MutSearchTermGroup]): Unit = {
+    override def onChanged(c: ListChangeListener.Change[? <: MutSearchTermGroup]): Unit = {
       // Flip the boolean to force an invalidation/change event
       listDirtyPulse.set(!listDirtyPulse.get())
     }

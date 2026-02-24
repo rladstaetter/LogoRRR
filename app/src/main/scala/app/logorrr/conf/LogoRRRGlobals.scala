@@ -29,8 +29,6 @@ object LogoRRRGlobals extends TinyLog:
 
   private val hostServicesProperty = new SimpleObjectProperty[LogoRRRHostServices]()
 
-  val searchTermGroupEntries: ObservableList[MutSearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
-
   /** * Sets the default group by updating the mutable properties of the items.
    */
   def setDefaultSearchTermGroup(stg: MutSearchTermGroup): Unit =
