@@ -1,6 +1,6 @@
 package app.logorrr.views.main
 
-import app.logorrr.model.LogSource
+import app.logorrr.model.{DataModelEvent, DateFilterEvent, LogSource}
 import app.logorrr.services.file.FileIdService
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
@@ -12,7 +12,12 @@ class LogoRRRMain(stage: Stage
                   , isUnderTest: Boolean
                   , val logSource: LogSource) extends BorderPane with TinyLog:
 
-  val bar = new MainMenuBar(stage, fileIdService, logSource.openFile, logSource.closeAllLogFiles(), isUnderTest)
+  val bar = new MainMenuBar(stage
+    , this
+    , fileIdService
+    , logSource.openFile
+    , logSource.closeAllLogFiles()
+    , isUnderTest)
 
   def init(): Unit =
     if !OsUtil.isMac || isUnderTest then setTop(bar)
@@ -23,3 +28,7 @@ class LogoRRRMain(stage: Stage
 
   def shutdown(): Unit = logSource.ui.shutdown()
 
+  addEventHandler(DataModelEvent.AddTimeRangeFilterEvent, (e: DateFilterEvent) => {
+    logSource.ui.applyTimeSettings(e.timestampSettings)
+    e.consume()
+  })

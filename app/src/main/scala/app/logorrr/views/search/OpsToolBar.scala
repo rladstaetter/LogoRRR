@@ -9,7 +9,7 @@ import javafx.collections.ObservableList
 import javafx.scene.control.*
 import javafx.stage.Window
 import net.ladstatt.util.os.OsUtil
-
+import app.logorrr.views.logfiletab.LogFilePane
 import java.util.function.Predicate
 
 
@@ -24,6 +24,7 @@ object OpsToolBar:
  * Groups search ui widgets together.
  */
 class OpsToolBar(owner: Window
+                 , logFilePane: LogFilePane
                  , mutLogFileSettings: MutLogFileSettings
                  , chunkListView: ChunkListView[LogEntry]
                  , logEntries: ObservableList[LogEntry]
@@ -37,7 +38,7 @@ class OpsToolBar(owner: Window
 
   val searchRegion = new SearchRegion
   private val otherItemsRegion = new OtherItemsRegion
-  private val timestampSettingsRegion = new TimestampSettingsRegion(owner: Window, mutLogFileSettings, chunkListView, logEntries, predicateProperty)
+  val timestampSettingsRegion = new TimestampSettingsRegion(owner, logFilePane, mutLogFileSettings, chunkListView, logEntries, predicateProperty)
 
   getItems.addAll(searchRegion.items ++ otherItemsRegion.items ++ timestampSettingsRegion.items *)
 

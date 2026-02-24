@@ -15,9 +15,11 @@ object GfxElements:
   object Icons:
     def edit = new FontIcon(FontAwesomeRegular.EDIT)
 
-    def heart = new FontIcon(FontAwesomeRegular.HEART)
+    def editDark = new FontIcon(FontAwesomeRegular.EDIT)
 
-    def heartDark = new FontIcon(FontAwesomeSolid.HEART)
+    def star = new FontIcon(FontAwesomeRegular.STAR)
+
+    def starDark = new FontIcon(FontAwesomeSolid.STAR)
 
     def copy = new FontIcon(FontAwesomeRegular.COPY)
 

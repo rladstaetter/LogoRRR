@@ -19,7 +19,7 @@ class PulsatingAnimationTimer(labeled: Labeled
 
   override def stop(): Unit =
     super.stop()
-    labeled.setGraphic(iconDark)
+    labeled.setGraphic(icon)
     labeled.setOpacity(1)
     tooltip.hide()
 

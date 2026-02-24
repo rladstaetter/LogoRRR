@@ -3,7 +3,8 @@ package app.logorrr.views.settings
 import app.logorrr.conf.mut.MutTimestampSettings
 import app.logorrr.conf.{LogoRRRGlobals, TimestampSettings}
 import app.logorrr.views.a11y.UiNode
-import javafx.beans.binding.Bindings
+import javafx.beans.binding.{Bindings, ObjectBinding}
+import javafx.beans.property.{SimpleIntegerProperty, SimpleStringProperty}
 import javafx.geometry.Pos
 import javafx.scene.control.{Button, Label, TextField}
 import javafx.scene.layout.{GridPane, Priority, StackPane, VBox}
@@ -19,19 +20,42 @@ class TimestampSettingsEditor(someTimestampSettings: Option[MutTimestampSettings
 
   private val converter = new NumberStringConverter()
 
+  val startColProperty = new SimpleIntegerProperty()
+  val endColProperty = new SimpleIntegerProperty()
+  val patternProperty = new SimpleStringProperty()
+
+  someTimestampSettings.foreach(set)
+
+  def set(timestampSetting : MutTimestampSettings) : Unit =
+    startColProperty.set(timestampSetting.getStartCol)
+    endColProperty.set(timestampSetting.getEndCol)
+    patternProperty.set(timestampSetting.getDateTimePatternCol)
+
+  val timeSettingProperty = new ObjectBinding[TimestampSettings] {
+
+    bind(startColProperty, endColProperty, patternProperty)
+
+    override def computeValue(): TimestampSettings =
+      TimestampSettings(startColProperty.get, endColProperty.get, patternProperty.get)
+  }
+
   // --- 1. The Editor UI ---
   private val patternField = new TextField():
     setId(TimestampSettingsEditor.PatternTextField.value)
     setPrefWidth(300)
+    textProperty().bindBidirectional(patternProperty)
 
   private val patternHyperlink = TimestampSettings.dateFormatterHLink.mkHyperLink()
 
   private val startColField = new TextField():
     setId(TimestampSettingsEditor.StartColTextField.value)
     setPrefWidth(100)
+    textProperty().bindBidirectional(startColProperty, converter)
+
   private val endColField = new TextField():
     setId(TimestampSettingsEditor.EndColTextField.value)
     setPrefWidth(100)
+    textProperty.bindBidirectional(endColProperty, converter)
 
   private val editorView: VBox = new VBox(10) {
     VBox.setVgrow(this, Priority.ALWAYS)
@@ -79,6 +103,14 @@ class TimestampSettingsEditor(someTimestampSettings: Option[MutTimestampSettings
   getChildren.addAll(editorView, placeholderView)
   updateSettings(someTimestampSettings)
 
+  def getTimeSettings(): TimestampSettings = timeSettingProperty.get()
+
+  def shutdown() : Unit = {
+    startColField.textProperty().unbindBidirectional(startColProperty)
+    endColField.textProperty().unbindBidirectional(endColProperty)
+    patternField.textProperty().unbindBidirectional(patternProperty)
+  }
+
   /**
    * Logic to switch between states
    */
@@ -88,25 +120,11 @@ class TimestampSettingsEditor(someTimestampSettings: Option[MutTimestampSettings
         placeholderView.setVisible(false)
         editorView.setVisible(true)
 
-        // JavaFX Bidirectional Bindings
-        patternField.textProperty().bindBidirectional(settings.dateTimePatternProperty)
-
-        // For Doubles, we use the Bindings utility with the converter
-        Bindings.bindBidirectional(startColField.textProperty(), settings.startColProperty, converter)
-        Bindings.bindBidirectional(endColField.textProperty(), settings.endColProperty, converter)
-
       case None =>
         editorView.setVisible(false)
         placeholderView.setVisible(true)
 
-        // Unbind to prevent memory leaks or updating wrong objects
-        patternField.textProperty().unbind()
-        startColField.textProperty().unbind()
-        endColField.textProperty().unbind()
-
-        patternField.setText("")
-        startColField.setText("")
-        endColField.setText("")
+        set(MutTimestampSettings(TimestampSettings.Default))
     }
   }
 }

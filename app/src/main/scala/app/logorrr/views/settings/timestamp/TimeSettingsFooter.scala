@@ -4,6 +4,7 @@ import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.TimestampSettings
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
+import app.logorrr.views.logfiletab.LogFilePane
 import app.logorrr.views.search.TimestampSettingsRegion
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
@@ -12,7 +13,8 @@ import javafx.geometry.{Insets, Pos}
 import javafx.scene.control.{Hyperlink, Label}
 import javafx.scene.layout.{HBox, VBox}
 
-class TimeSettingsFooter(mutLogFileSettings: MutLogFileSettings
+class TimeSettingsFooter(logFilePane: LogFilePane
+                         , mutLogFileSettings: MutLogFileSettings
                          , logEntries: ObservableList[LogEntry]
                          , chunkListView: ChunkListView[LogEntry]
                          , tsRegion: TimestampSettingsRegion
@@ -37,7 +39,7 @@ class TimeSettingsFooter(mutLogFileSettings: MutLogFileSettings
 
   private val resetTimestampFormatButton = new TimestampFormatResetButton(mutLogFileSettings, chunkListView, logEntries, tsRegion, closeStage)
 
-  private val applyAndCloseButton = new TimestampFormatSetButton(mutLogFileSettings, rangeProperty, timeFormatTf, chunkListView, logEntries, tsRegion, closeStage)
+  private val applyAndCloseButton = new TimestampFormatSetButton(logFilePane, mutLogFileSettings, rangeProperty, timeFormatTf, chunkListView, logEntries, tsRegion, closeStage)
 
   private val formatLabel = new Label("2. Define Time Pattern"):
     setStyle("-fx-font-weight: bold;")

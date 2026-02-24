@@ -1,11 +1,12 @@
 {
   "searchTermGroups": [
     {
-      "selected": false,
-      "terms": []
+      "name": "Default",
+      "terms": [],
+      "selected": false
     },
     {
-      "selected": true,
+      "name": "Java: java.util.logging",
       "terms": [
         {
           "value": "SEVERE",
@@ -42,7 +43,8 @@
           "color": "#e2e2e2",
           "active": true
         }
-      ]
+      ],
+      "selected": true
     }
   ]
 }

@@ -11,6 +11,8 @@ class ShowEmptySettingsEditorTest extends ASettingsTest:
   @Test def showEmptySettingsEditor(): Unit =
     openSettingsEditorAndPerform(
       settingsListView => {
-        assert(settingsListView.getItems.size() == Settings.Default.searchTermGroups.count(_.terms.nonEmpty))
+        val listViewSize = settingsListView.getItems.size()
+        val searchTermGroupsSize = settings.searchTermGroups.size
+        assert(listViewSize == searchTermGroupsSize, s"Expected $searchTermGroupsSize but was $listViewSize .")
       }
     )

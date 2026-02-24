@@ -4,7 +4,7 @@ import app.logorrr.LogoRRRApp
 import app.logorrr.conf.mut.{MutLogFileSettings, MutSearchTermGroup, MutSettings, MutTimestampSettings}
 import app.logorrr.io.{OsxBridgeHelper, SettingsFileIO}
 import app.logorrr.services.hostservices.LogoRRRHostServices
-import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.{SimpleListProperty, SimpleObjectProperty}
 import javafx.collections.ObservableList
 import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
@@ -24,13 +24,6 @@ object LogoRRRGlobals extends TinyLog:
   val mutSettings = new MutSettings
 
   private val hostServicesProperty = new SimpleObjectProperty[LogoRRRHostServices]()
-
-  /** * Getter for the default group.
-   *    It searches through the mutable entries to find the one with selected == true.
-   */
-  def getDefaultSearchTermGroup: Option[MutSearchTermGroup] =
-    import scala.jdk.CollectionConverters.*
-    searchTermGroupEntries.asScala.find(_.isSelected)
 
   /** * Sets the default group by updating the mutable properties of the items.
    */
@@ -69,19 +62,11 @@ object LogoRRRGlobals extends TinyLog:
   def getHostServices: LogoRRRHostServices = hostServicesProperty.get()
 
   def set(settings: Settings, hostServices: LogoRRRHostServices): Unit =
-    mutSettings.setStageSettings(settings.stageSettings)
-    mutSettings.setLogFileSettings(settings.fileSettings)
-    mutSettings.setSomeLastUsedDirectory(settings.someLastUsedDirectory)
+    mutSettings.set(settings)
     settings.someTimestampSettings match {
       case Some(timestampSettings) => setTimestampSettings(MutTimestampSettings(timestampSettings))
       case None => setTimestampSettings(null)
     }
-
-    // Populate from immutable settings into the mutable properties
-    mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries.setAll(
-      settings.searchTermGroups.map(MutSearchTermGroup.apply).asJava
-    )
-
     setHostServices(hostServices)
 
   def getSettings: Settings = mutSettings.mkImmutable()
@@ -114,7 +99,7 @@ object LogoRRRGlobals extends TinyLog:
 
   def getLogFileSettings(fileId: FileId): MutLogFileSettings = mutSettings.getMutLogFileSetting(fileId)
 
-  val searchTermGroupEntries: ObservableList[MutSearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
+  val searchTermGroupEntries: SimpleListProperty[MutSearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
 
   def getTimestampSettings: Option[MutTimestampSettings] = Option(mutSettings.getTimestampSettings)
 

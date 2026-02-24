@@ -1,8 +1,9 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.conf.*
+import app.logorrr.conf.LogoRRRGlobals.{mutSettings, setHostServices, setTimestampSettings}
 import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
-import javafx.collections.{FXCollections, ObservableList}
+import javafx.collections.FXCollections
 import javafx.stage.Window
 import net.ladstatt.util.os.OsUtil
 
@@ -44,21 +45,26 @@ class MutSettings {
   /** contains mutable state information for all log files */
   private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
 
+  def set(settings: Settings): Unit =
+    setStageSettings(settings.stageSettings)
+    setLogFileSettings(settings.fileSettings)
+    setSomeLastUsedDirectory(settings.someLastUsedDirectory)
+    // Populate from immutable settings into the mutable properties
+    mutSearchTermGroupSettings.searchTermGroupEntries.setAll(
+      settings.searchTermGroups.map(MutSearchTermGroup.apply).asJava
+    )
+
+
   def getSomeActiveLogFile: Option[FileId] = someActiveLogProperty.get()
 
   def setTimestampSettings(settings: MutTimestampSettings): Unit = timeStampSettingsProperty.set(settings)
 
   def getTimestampSettings: MutTimestampSettings = timeStampSettingsProperty.get()
 
-
-
-
   def getSomeLastUsedDirectory: Option[Path] = lastUsedDirectoryProperty.get()
 
   def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit =
     lastUsedDirectoryProperty.set(someDirectory)
-
-
 
   def add(stg: MutSearchTermGroup): Unit = mutSearchTermGroupSettings.add(stg)
 
@@ -73,7 +79,6 @@ class MutSettings {
     mutLogFileSettingsMapProperty.put(mutLogFileSettings.getFileId, mutLogFileSettings)
 
   def removeLogFileSetting(fileId: FileId): Unit = mutLogFileSettingsMapProperty.remove(fileId)
-
 
   def setLogFileSettings(logFileSettings: Map[String, LogFileSettings]): Unit =
     val m = for (k, settings) <- logFileSettings yield
