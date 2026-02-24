@@ -4,6 +4,7 @@ import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, LogoRRRGlobals, TimestampSettings}
 import app.logorrr.model.{BoundId, IntStringBinding, LogEntry}
+import app.logorrr.views.logfiletab.LogFilePane
 import app.logorrr.views.search.TimestampSettingsRegion
 import javafx.beans.binding.Bindings
 import javafx.beans.property.*
@@ -14,8 +15,8 @@ import javafx.scene.layout.{BorderPane, HBox, VBox}
 import net.ladstatt.util.log.TinyLog
 
 
-
-class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
+class TimestampSettingsBorderPane(logFilePane: LogFilePane
+                                  , mutLogFileSettings: MutLogFileSettings
                                   , logEntries: ObservableList[LogEntry]
                                   , chunkListView: ChunkListView[LogEntry]
                                   , tsRegion: TimestampSettingsRegion
@@ -42,7 +43,7 @@ class TimestampSettingsBorderPane(mutLogFileSettings: MutLogFileSettings
   /** dialog where start and end column are to be defined via mouseclick */
   private val timerSettingsLogTextView = new TsStartEndColDialog(mutLogFileSettings, l)
 
-  private val footer = new TimeSettingsFooter(mutLogFileSettings, logEntries, chunkListView, tsRegion, closeStage)
+  private val footer = new TimeSettingsFooter(logFilePane, mutLogFileSettings, logEntries, chunkListView, tsRegion, closeStage)
 
   def updateSettings(settings: TimestampSettings): Unit = {
     timerSettingsLogTextView.startColProperty.set(settings.startCol)

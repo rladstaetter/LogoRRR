@@ -3,6 +3,7 @@ package app.logorrr.views.ops.time
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
+import app.logorrr.views.logfiletab.LogFilePane
 import app.logorrr.views.search.TimestampSettingsRegion
 import app.logorrr.views.settings.timestamp.TimestampSettingStage
 import app.logorrr.views.util.GfxElements
@@ -11,6 +12,7 @@ import javafx.scene.control.{Button, Tooltip}
 import javafx.stage.Window
 
 class ClockButton(owner: Window
+                 , logFilePane : LogFilePane
                   , mutLogFileSettings: MutLogFileSettings
                   , chunkListView: ChunkListView[LogEntry]
                   , logEntries: ObservableList[LogEntry]
@@ -24,7 +26,7 @@ class ClockButton(owner: Window
   setGraphic(GfxElements.Icons.clock)
   setTooltip(new Tooltip("configure time format"))
   setOnAction(_ => {
-    val stage = new TimestampSettingStage(mutLogFileSettings, chunkListView, logEntries, tsRegion)
+    val stage = new TimestampSettingStage(logFilePane, mutLogFileSettings, chunkListView, logEntries, tsRegion)
     stage.init(owner)
     stage.showAndWait()
   })

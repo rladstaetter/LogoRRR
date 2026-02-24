@@ -18,3 +18,6 @@ class SettingsManageStgEditor(fileId: FileId, entries: SimpleListProperty[MutSea
   VBox.setVgrow(groupsListView, Priority.ALWAYS)
 
   getChildren.addAll(title, groupsListView)
+
+
+  def shutdown() : Unit = groupsListView.shutdown()

@@ -1,6 +1,6 @@
 package app.logorrr.views.logfiletab
 
-import app.logorrr.conf.FileId
+import app.logorrr.conf.{FileId, TimestampSettings}
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.{FileIdDividerSearchTerm, FileIdPropertyHolder, LogEntry, LogorrrModel}
 import app.logorrr.views.LogoRRRAccelerators
@@ -13,18 +13,6 @@ import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 
 import java.util.function.Consumer
-
-
-class TabControlEvent(eventType: EventType[? <: Event]) extends Event(eventType)
-
-object TabControlEvent {
-  val CloseSelectedTab: EventType[TabControlEvent] = new EventType(Event.ANY, "CLOSE_SELECTED")
-  val CloseOthers: EventType[TabControlEvent] = new EventType(Event.ANY, "CLOSE_OTHERS")
-  val CloseRight: EventType[TabControlEvent] = new EventType(Event.ANY, "CLOSE_RIGHT")
-  val CloseLeft: EventType[TabControlEvent] = new EventType(Event.ANY, "CLOSE_LEFT")
-  val CloseAll: EventType[TabControlEvent] = new EventType(Event.ANY, "CLOSE_ALL")
-  val OpenInFinder: EventType[TabControlEvent] = new EventType(Event.ANY, "OPEN_IN_FINDER")
-}
 
 
 object LogFileTab extends UiNodeFileIdAware:
@@ -143,5 +131,6 @@ class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries:
 
   def getInfo = FileIdDividerSearchTerm(getFileId, logPane.activeSearchTerms, logPane.getDividerPosition)
 
-
+  def applyTimeSettings(timestampSettings: TimestampSettings) : Unit =
+    logPane.applyTimeSettings(timestampSettings)
 

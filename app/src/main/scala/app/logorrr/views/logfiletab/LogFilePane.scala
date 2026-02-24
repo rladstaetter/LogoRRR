@@ -1,7 +1,7 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTerm}
+import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTerm, TimestampSettings}
 import app.logorrr.model.*
 import app.logorrr.util.*
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
@@ -10,6 +10,7 @@ import app.logorrr.views.block.BlockConstants
 import app.logorrr.views.ops.*
 import app.logorrr.views.search.st.SearchTermToolBar
 import app.logorrr.views.search.{MutableSearchTerm, OpsToolBar}
+import app.logorrr.views.settings.timestamp.TimestampUtil
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.{ObjectPropertyBase, SimpleBooleanProperty}
@@ -65,7 +66,7 @@ class LogFilePane(owner: Window
   // graphical display to the left
   private val chunkListView: LogoRRRChunkListView = LogoRRRChunkListView(mutLogFileSettings, filteredEntries, logTextView.scrollToItem, widthProperty)
 
-  val opsToolBar = new OpsToolBar(owner, mutLogFileSettings, chunkListView, entries, filteredEntries.predicateProperty())
+  val opsToolBar = new OpsToolBar(owner, this, mutLogFileSettings, chunkListView, entries, filteredEntries.predicateProperty())
 
   private val searchTermToolBar = new SearchTermToolBar(mutLogFileSettings, entries, filteredEntries.predicateProperty())
 
@@ -176,6 +177,14 @@ class LogFilePane(owner: Window
 
   override def getInfos: Seq[FileIdDividerSearchTerm] = Seq(FileIdDividerSearchTerm(fileIdProperty.get(), activeSearchTerms, getDividerPosition))
 
+  def applyTimeSettings(timesettings: TimestampSettings): Unit =
+    TimestampUtil.calculate(mutLogFileSettings, chunkListView, entries, timesettings, opsToolBar.timestampSettingsRegion)
+
+  // sets filter directly from local timestamp settings dialog (as opposed to the global settings dialog)
+  addEventHandler(DataModelEvent.AddTimeRangeFilterEvent, (e: DateFilterEvent) => {
+    applyTimeSettings(e.timestampSettings)
+    e.consume()
+  })
 
 
 

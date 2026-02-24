@@ -3,6 +3,7 @@ package app.logorrr.views.search
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.{LogFilePredicate, MutLogFileSettings}
 import app.logorrr.model.LogEntry
+import app.logorrr.views.logfiletab.LogFilePane
 import app.logorrr.views.ops.time.{SliderVBox, TimeRange, TimeUtil, TimestampSettingsButton}
 import javafx.beans.property.{ObjectProperty, SimpleObjectProperty}
 import javafx.collections.ObservableList
@@ -17,6 +18,7 @@ import scala.language.postfixOps
 
 
 class TimestampSettingsRegion(owner: Window
+                              , logFilePane: LogFilePane
                               , mutLogFileSettings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]
@@ -25,7 +27,7 @@ class TimestampSettingsRegion(owner: Window
   /**
    * To configure the logformat of the timestamp used in a logfile
    */
-  private val timestampSettingsButton = new TimestampSettingsButton(owner, mutLogFileSettings, chunkListView, logEntries, this)
+  private val timestampSettingsButton = new TimestampSettingsButton(owner, logFilePane, mutLogFileSettings, chunkListView, logEntries, this)
 
   private lazy val lowerSliderVBox = new SliderVBox(mutLogFileSettings, Pos.CENTER_LEFT, "Configure earliest timestamp to be displayed")
   private lazy val upperSliderVBox = new SliderVBox(mutLogFileSettings, Pos.CENTER_RIGHT, "Configure latest timestamp to be displayed")

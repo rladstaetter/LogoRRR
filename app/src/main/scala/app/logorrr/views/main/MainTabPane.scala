@@ -1,6 +1,6 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{FileId, LogoRRRGlobals}
+import app.logorrr.conf.{FileId, LogoRRRGlobals, TimestampSettings}
 import app.logorrr.model.{FileIdDividerSearchTerm, LogorrrModel, UiTarget}
 import app.logorrr.views.a11y.uinodes.UiNodes
 import app.logorrr.views.logfiletab.{LogFileTab, TabControlEvent}
@@ -72,6 +72,9 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
     getTabs.clear()
 
   def getSelectedTab: LogFileTab = getSelectionModel.getSelectedItem.asInstanceOf[LogFileTab]
+
+  def applyTimeSettings(timeSettings: TimestampSettings): Unit =
+    getLogFileTabs.foreach(lf => lf.applyTimeSettings(timeSettings))
 
   // --- event handlers ---------------------------------------------------
   // close others action

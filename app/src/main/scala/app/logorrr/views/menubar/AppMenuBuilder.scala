@@ -3,6 +3,7 @@ package app.logorrr.views.menubar
 import app.logorrr.LogoRRRApp
 import app.logorrr.views.a11y.uinodes.LogoRRRMenu
 import app.logorrr.views.about.AboutMenuItem
+import app.logorrr.views.main.LogoRRRMain
 import app.logorrr.views.search.st.FavoritesComboBox
 import de.jangassen.MenuToolkit
 import javafx.scene.control.{Menu, MenuItem, SeparatorMenuItem}
@@ -14,11 +15,12 @@ import javafx.stage.Stage
 object AppMenuBuilder:
 
   def mkMenu(stage: Stage
+             , main: LogoRRRMain
              , isUnderTest: Boolean): Menu =
     val closeMenuItem = CloseApplicationMenuItem(new MenuItem("Exit"), stage, isUnderTest)
     val menu = new Menu(LogoRRRApp.Name)
     menu.setId(LogoRRRMenu.Self.value)
-    val settingsMenuitem = new SettingsMenuItem(stage)
+    val settingsMenuitem = new SettingsMenuItem(stage, main)
     menu.getItems.addAll(
       settingsMenuitem
       , new SeparatorMenuItem
@@ -26,7 +28,10 @@ object AppMenuBuilder:
     menu
 
 
-  def mkOsxMenu(stage: Stage, tk: MenuToolkit, isUnderTest: Boolean): Menu =
+  def mkOsxMenu(stage: Stage
+                , tk: MenuToolkit
+                , main: LogoRRRMain
+                , isUnderTest: Boolean): Menu =
     val aboutMenuItem = AboutMenuItem(tk.createNativeAboutMenuItem(LogoRRRApp.Name), stage)
     val hideMenuItem = tk.createHideMenuItem(LogoRRRApp.Name)
     val hideOthersMenuItem = tk.createHideOthersMenuItem
@@ -34,7 +39,7 @@ object AppMenuBuilder:
     val closeMenuItem = CloseApplicationMenuItem(tk.createQuitMenuItem(LogoRRRApp.Name), stage, isUnderTest)
     val menu = new Menu(LogoRRRApp.Name)
     menu.setId(LogoRRRMenu.Self.value)
-    val settingsMenuitem = new SettingsMenuItem(stage)
+    val settingsMenuitem = new SettingsMenuItem(stage, main)
     menu.getItems.addAll(aboutMenuItem
       , new SeparatorMenuItem
       , settingsMenuitem

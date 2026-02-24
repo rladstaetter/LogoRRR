@@ -4,7 +4,6 @@ import app.logorrr.TestFiles
 import app.logorrr.conf.{LogoRRRGlobals, TimestampSettings}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.settings.TimestampSettingsEditor
-import javafx.geometry.Point2D
 import javafx.scene.control.TextField
 import org.junit.jupiter.api.{Assertions, Test}
 
@@ -25,7 +24,11 @@ class TimestampSettingsEditorTest extends SingleFileApplicationTest(TestFiles.si
    * - check against global settings again
    */
   @Test def checkGeneralTimestampsettingsDialogue(): Unit =
-    withOpenedSettingsEditor:
+    val customPattern = TimestampSettings.DefaultPattern.replace(".", ",")
+    val customStartCol = 22
+    val customEndCol = customStartCol + customPattern.length
+
+    withOpenedSettingsEditor {
       waitAndClickVisibleItem(TimestampSettingsEditor.EnableInitalizeButton)
       waitForVisibility(TimestampSettingsEditor.PatternTextField)
       waitForVisibility(TimestampSettingsEditor.StartColTextField)
@@ -39,18 +42,18 @@ class TimestampSettingsEditorTest extends SingleFileApplicationTest(TestFiles.si
           assert(lookup[TextField](TimestampSettingsEditor.StartColTextField).getText == TimestampSettings.DefaultStartCol.toString)
           assert(lookup[TextField](TimestampSettingsEditor.EndColTextField).getText == TimestampSettings.DefaultEndCol.toString)
 
-          val customPattern = TimestampSettings.DefaultPattern.replace(".", ",")
-          val customStartCol = 22
-          val customEndCol = customStartCol + customPattern.length
 
           replaceText(lookup[TextField](TimestampSettingsEditor.PatternTextField), customPattern)
           waitAndClickVisibleItem(TimestampSettingsEditor.StartColTextField).eraseText(TimestampSettings.DefaultStartCol.toString.length).write(customStartCol.toString)
           waitAndClickVisibleItem(TimestampSettingsEditor.EndColTextField).eraseText(TimestampSettings.DefaultEndCol.toString.length).write(customEndCol.toString)
-          LogoRRRGlobals.getTimestampSettings match {
-            case Some(value) => assert(value.mkImmutable() == TimestampSettings(customStartCol, customEndCol, customPattern))
-            case None => Assertions.fail("should not be None")
-          }
         case None => Assertions.fail("Timestamp settings should be set to default")
       }
+    }
+
+    LogoRRRGlobals.getTimestampSettings match {
+      case Some(value) => assert(value.mkImmutable() == TimestampSettings(customStartCol, customEndCol, customPattern), "Settings don't match")
+      case None => Assertions.fail("should not be None")
+    }
+
 
 

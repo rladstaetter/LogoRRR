@@ -11,6 +11,7 @@ import javafx.stage.Stage
 import net.ladstatt.util.os.OsUtil
 
 class MainMenuBar(stage: Stage
+                  , main: LogoRRRMain
                   , fileIdService: FileIdService
                   , openFile: FileId => Unit
                   , closeAllFiles: => Unit
@@ -19,10 +20,10 @@ class MainMenuBar(stage: Stage
   if OsUtil.isMac then
     val tk: MenuToolkit = MenuToolkit.toolkit
     tk.setAppearanceMode(AppearanceMode.AUTO)
-    addMenu(AppMenuBuilder.mkOsxMenu(stage, tk, isUnderTest))
+    addMenu(AppMenuBuilder.mkOsxMenu(stage, tk, main, isUnderTest))
     if !isUnderTest then tk.setGlobalMenuBar(this)
   else
-    addMenu(AppMenuBuilder.mkMenu(stage, isUnderTest))
+    addMenu(AppMenuBuilder.mkMenu(stage, main, isUnderTest))
 
   private def addMenu(appMenu: Menu): Unit =
     val fileMenu = new FileMenu(fileIdService, openFile, closeAllFiles)
