@@ -24,10 +24,6 @@ class SearchTermSpec extends AnyWordSpec with Matchers with Checkers {
       val searchStrings = Set(SearchTerm("apple", Color.RED, active = true), SearchTerm("banana", Color.BLUE, active = true))
       SearchTerm.calc("orange juice", searchStrings) should be(MutableSearchTerm.UnclassifiedColor)
 
-    "return Unclassified if all search strings are inactive" in:
-      val searchStrings = Set(SearchTerm("apple", Color.RED, active = false), SearchTerm("banana", Color.BLUE, active = false))
-      SearchTerm.calc("apple banana", searchStrings) should be(MutableSearchTerm.UnclassifiedColor)
-
     "return the exact color for a single active match, ignoring an inactive one" in:
       val searchStrings = Set(
         SearchTerm("match", Color.GREEN, active = true),

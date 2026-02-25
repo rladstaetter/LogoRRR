@@ -65,8 +65,7 @@ object LogoRRRGlobals extends TinyLog:
   def getHostServices: LogoRRRHostServices = hostServicesProperty.get()
 
   def set(settings: Settings, hostServices: LogoRRRHostServices): Unit =
-    mutSettings.set(settings)
-    settings.fileSettings.values.foreach(fs => persistenceManager.init(fs.fileId, allProps))
+    mutSettings.set(persistenceManager, settings)
 
     settings.someTimeSettings match {
       case Some(timestampSettings) => setTimeSettings(MutTimeSettings(timestampSettings))

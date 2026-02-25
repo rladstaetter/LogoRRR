@@ -6,9 +6,9 @@ import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.Bindings
-import javafx.beans.property.{ObjectPropertyBase, Property, SimpleIntegerProperty, SimpleObjectProperty}
+import javafx.beans.property.{ObjectPropertyBase, Property, SimpleIntegerProperty}
 import javafx.collections.transformation.FilteredList
-import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.control.*
 import javafx.scene.paint.Color
 import javafx.util.Subscription
@@ -90,7 +90,7 @@ class LogTextView(filteredList: FilteredList[LogEntry])
           ): Unit =
     bindIdProperty(fileIdProperty)
     val activeSearchTerms = new FilteredList[MutableSearchTerm](mutSearchTerms, _.isActive)
-    activeSearchTerms.forEach(st => searchTermsAndColors.add((st.getValue,st.getColor)))
+    activeSearchTerms.forEach(st => searchTermsAndColors.add((st.getValue, st.getColor)))
 
     this.searchTermChangeListener = new MutableSearchTermListener(activeSearchTerms, searchTermsAndColors, this)
     mutSearchTerms.addListener(searchTermChangeListener)
@@ -101,6 +101,7 @@ class LogTextView(filteredList: FilteredList[LogEntry])
     setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell(filteredList, this.searchTermsAndColors, this.selectedLineNumberProperty, scrollToActiveLogEntry, this.fontsizeProperty, this.maxSizeProperty))
     setItems(filteredList)
     getSelectionModel.setSelectionMode(SelectionMode.MULTIPLE)
+    getSelectionModel.select(this.selectedLineNumberProperty.getValue.intValue() - 1)
     getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
 
 

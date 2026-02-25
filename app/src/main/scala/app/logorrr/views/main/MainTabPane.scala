@@ -1,18 +1,16 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.{FileId, LogoRRRGlobals, TimeSettings}
-import app.logorrr.model.{FileIdDividerSearchTerm, LogorrrModel, UiTarget}
+import app.logorrr.model.{LogorrrModel, UiTarget}
 import app.logorrr.views.a11y.uinodes.UiNodes
 import app.logorrr.views.logfiletab.{LogFileTab, TabControlEvent}
 import javafx.beans.binding.Bindings
-import javafx.scene.control.TabPane
 import javafx.scene.control.{Tab, TabPane}
 import net.ladstatt.util.log.TinyLog
 
 import java.awt.Desktop
 import java.util
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 object MainTabPane:
@@ -46,8 +44,6 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
       case _ => None
 
   private def getByFileId(fileId: FileId): Option[LogFileTab] = getLogFileTabs.find(_.getFileId == fileId)
-
-  override def getInfos: Seq[FileIdDividerSearchTerm] = getLogFileTabs.map(_.getInfo).toSeq
 
   override def contains(p: FileId): Boolean = getLogFileTabs.exists(lr => lr.getFileId == p)
 

@@ -43,18 +43,19 @@ object LogFileSettings:
  *
  * Filters define which keywords are relevant for this given log file.
  *
- * @param fileId                      wraps file reference
- * @param selectedLineNumber          which line number was selected
- * @param firstOpened                 used to sort log files in tabs
- * @param dividerPosition             position of divider for this view
- * @param fontSize                    font size to use
- * @param searchTerms                 elements to be searched for, with their coloring and activation
- * @param blockSettings               settings for the left view
- * @param someTimeSettings       used timestamp format
- * @param autoScroll                  true if 'follow mode' is active
- * @param firstVisibleTextCellIndex   which index is the first visible on the screen (depending on resolution, window size ...)
- * @param lastVisibleTextCellIndex    which index is the last visible on the screen (depending on resolution, window size ...)
- * @param someSelectedSearchTermGroup selected search term group, if any
+ * @param fileId                    wraps file reference
+ * @param selectedLineNumber        which line number was selected
+ * @param firstOpened               used to sort log files in tabs
+ * @param dividerPosition           position of divider for this view
+ * @param fontSize                  font size to use
+ * @param searchTerms               elements to be searched for, with their coloring and activation
+ * @param blockSize                 settings for the left view
+ * @param someTimeSettings          used timestamp format
+ * @param autoScroll                true if 'follow mode' is active
+ * @param firstVisibleTextCellIndex which index is the first visible on the screen (depending on resolution, window size ...)
+ * @param lastVisibleTextCellIndex  which index is the last visible on the screen (depending on resolution, window size ...)
+ * @param lowerTimestamp            position of lower slider
+ * @param upperTimestamp            position of upper slider
  */
 case class LogFileSettings(fileId: FileId
                            , selectedLineNumber: Int

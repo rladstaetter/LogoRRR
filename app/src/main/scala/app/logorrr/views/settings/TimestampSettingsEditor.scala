@@ -31,7 +31,7 @@ class TimestampSettingsEditor(timestampSettings: MutTimeSettings) extends StackP
     endColProperty.set(timestampSetting.getEndCol)
     patternProperty.set(timestampSetting.getDateTimePattern)
 
-  val timeSettingProperty = new ObjectBinding[TimeSettings] {
+  private val timeSettingProperty = new ObjectBinding[TimeSettings] {
 
     bind(startColProperty, endColProperty, patternProperty)
 
@@ -118,9 +118,10 @@ class TimestampSettingsEditor(timestampSettings: MutTimeSettings) extends StackP
     if settings.validBinding.get() then
       placeholderView.setVisible(false)
       editorView.setVisible(true)
+      set(settings)
     else
       editorView.setVisible(false)
       placeholderView.setVisible(true)
-      set(MutTimeSettings(TimeSettings.Default))
+      set(MutTimeSettings(TimeSettings.Invalid))
   }
 }

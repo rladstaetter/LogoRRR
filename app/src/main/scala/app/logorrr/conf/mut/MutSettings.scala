@@ -1,6 +1,7 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.conf.*
+import app.logorrr.util.PersistenceManager
 import javafx.beans.property.{Property, SimpleBooleanProperty, SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, MapChangeListener}
 import javafx.stage.Window
@@ -53,9 +54,9 @@ class MutSettings {
     }
   })
 
-  def set(settings: Settings): Unit =
+  def set(persistenceManager: PersistenceManager, settings: Settings): Unit =
     setStageSettings(settings.stageSettings)
-    setLogFileSettings(settings.fileSettings)
+    setLogFileSettings(persistenceManager, settings.fileSettings)
     setSomeLastUsedDirectory(settings.someLastUsedDirectory)
     // Populate from immutable settings into the mutable properties
     mutSearchTermGroupSettings.searchTermGroupEntries.setAll(
@@ -85,9 +86,14 @@ class MutSettings {
 
   def removeLogFileSetting(fileId: FileId): Unit = mutLogFileSettingsMapProperty.remove(fileId)
 
-  def setLogFileSettings(logFileSettings: Map[String, LogFileSettings]): Unit =
-    val m = for (k, settings) <- logFileSettings yield
-      FileId(k) -> MutLogFileSettings(settings)
+  def setLogFileSettings(persistenceManager: PersistenceManager, logFileSettings: Map[String, LogFileSettings]): Unit =
+    val m = for (k, settings) <- logFileSettings yield {
+      val s = MutLogFileSettings(settings)
+      val fileId = FileId(k)
+      persistenceManager.init(fileId, s.allProps)
+      fileId -> s
+    }
+
     mutLogFileSettingsMapProperty.putAll(m.asJava)
 
 

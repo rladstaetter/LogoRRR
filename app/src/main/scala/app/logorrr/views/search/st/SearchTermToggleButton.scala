@@ -13,13 +13,12 @@ import javafx.collections.ObservableList
 import java.lang
 import java.util.function.Predicate
 
-class SearchTermToggleButton(entries: ObservableList[LogEntry]
-                             , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]
-                             , logFilePredicate: LogFilePredicate)
-  extends ASearchTermToggleButton(entries, predicateProperty, logFilePredicate):
+class SearchTermToggleButton(entries: ObservableList[LogEntry]) extends ASearchTermToggleButton:
 
-  override def init(fileIdProperty: ObjectPropertyBase[FileId], visibleBinding: BooleanBinding, mutSearchTerm: MutableSearchTerm, mutSearchTerms: ObservableList[MutableSearchTerm]): Unit = {
-    super.init(fileIdProperty, visibleBinding, mutSearchTerm, mutSearchTerms)
+  override def init(fileIdProperty: ObjectPropertyBase[FileId]
+                    , visibleBinding: BooleanBinding
+                    , mutSearchTerm: MutableSearchTerm): Unit = {
+    super.init(fileIdProperty, visibleBinding, mutSearchTerm)
     hitsProperty.bind(Bindings.createLongBinding(() => entries.stream().filter(t => t.value.contains(getValue)).count, entries))
   }
 

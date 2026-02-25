@@ -31,21 +31,24 @@ object MutLogFileSettings:
 class MutLogFileSettings:
 
   /** with the extractor the changelistener also fires if an element is changed */
-  val autoScrollActiveProperty = new SimpleBooleanProperty()
-  val blockSizeProperty = new SimpleIntegerProperty()
-  val dividerPositionProperty = new SimpleDoubleProperty()
-  val fileIdProperty = new SimpleObjectProperty[FileId]()
-  val firstOpenedProperty = new SimpleLongProperty()
-  val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty()
-  val fontSizeProperty = new SimpleIntegerProperty()
-  val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
+  val autoScrollActiveProperty = new SimpleBooleanProperty(this, "autoScrollActiveProperty")
+  val blockSizeProperty = new SimpleIntegerProperty(this, "blockSizeProperty")
+  val dividerPositionProperty = new SimpleDoubleProperty(this, "dividerProperty")
+  val fileIdProperty = new SimpleObjectProperty[FileId](this, "fileIdProperty")
+  val firstOpenedProperty = new SimpleLongProperty(this, "firstOpenedProperty")
+  val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty(this, "firstVisibleTextCellIndexProperty")
+  val fontSizeProperty = new SimpleIntegerProperty(this, "fontSizeProperty")
+  val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty(this, "lastVisibleTextCellIndexProperty")
   val mutSearchTerms: ObservableList[MutableSearchTerm] = FXCollections.observableArrayList[MutableSearchTerm](MutableSearchTerm.extractor)
-  val selectedLineNumberProperty = new SimpleIntegerProperty()
-  val lowerBoundaryProperty = new SimpleLongProperty()
-  val upperBoundaryProperty = new SimpleLongProperty()
+  val selectedLineNumberProperty = new SimpleIntegerProperty(this, "selectedLineNumberProperty")
+  val lowerBoundaryProperty = new SimpleLongProperty(this, "lowerBoundaryProperty")
+  val upperBoundaryProperty = new SimpleLongProperty(this, "upperBoundaryProperty")
   val mutTimeSettings = new MutTimeSettings
 
-  val activeSearchTermsBinding = new ObjectBinding[Set[SearchTerm]] {
+  /** is reset on various user interface action which should trigger a configuration save action */
+  val repaintProperty = new SimpleBooleanProperty(this, "repaintProperty", false)
+
+  val activeSearchTermsBinding: ObjectBinding[Set[SearchTerm]] = new ObjectBinding[Set[SearchTerm]] {
 
     bind(mutSearchTerms)
 
@@ -108,4 +111,5 @@ class MutLogFileSettings:
       , selectedLineNumberProperty
       , lowerBoundaryProperty
       , upperBoundaryProperty
+      , repaintProperty
     ) ++ mutTimeSettings.allProps

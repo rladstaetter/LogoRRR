@@ -15,9 +15,7 @@ trait UiTarget extends Node:
 
   def selectLastLogFile(): Unit
 
-  def getInfos: Seq[FileIdDividerSearchTerm]
-
-  def applyTimeSettings(timesettings: TimeSettings): Unit 
+  def applyTimeSettings(timesettings: TimeSettings): Unit
 
   def shutdown(): Unit
 

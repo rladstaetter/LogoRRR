@@ -1,6 +1,6 @@
 package app.logorrr.views.logfiletab
 
-import app.logorrr.conf.mut.MutLogFileSettings
+import app.logorrr.conf.mut.{LogFilePredicate, MutLogFileSettings}
 import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTerm, TimeSettings}
 import app.logorrr.model.*
 import app.logorrr.util.*
@@ -21,7 +21,9 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
 import javafx.stage.Window
 import javafx.util.Subscription
+import net.ladstatt.util.log.TinyLog
 
+import java.util
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -35,6 +37,7 @@ class LogFilePane(owner: Window
                   , val entries: ObservableList[LogEntry])
   extends BorderPane with UiTarget
     with FileIdPropertyHolder
+    with TinyLog
     with BoundId(LogFilePane.uiNode(_).value):
 
   setStyle("-fx-background-color: white;")
@@ -44,13 +47,7 @@ class LogFilePane(owner: Window
   private val autoScrollActiveProperty = new SimpleBooleanProperty()
 
   /** if a search term is added or removed this will be saved to disc */
-  private val searchTermChangeListener: ListChangeListener[MutableSearchTerm] =
-    def handleSearchTermChange(change: ListChangeListener.Change[? <: MutableSearchTerm]): Unit = {
-      while change.next() do
-        Future(LogoRRRGlobals.persist(LogoRRRGlobals.getSettings))
-    }
 
-    JfxUtils.mkListChangeListener[MutableSearchTerm](handleSearchTermChange)
 
   /** if autoscroll checkbox is enabled, monitor given log file for changes. if there are any, this will be reflected in the ui */
   private val autoScrollSubscription: Subscription =
@@ -65,7 +62,7 @@ class LogFilePane(owner: Window
   // graphical display to the left
   private val chunkListView: LogoRRRChunkListView = LogoRRRChunkListView(mutLogFileSettings, filteredEntries, logTextView.scrollToItem, widthProperty)
 
-  val opsToolBar = new OpsToolBar(owner, this, mutLogFileSettings, chunkListView, entries, filteredEntries.predicateProperty())
+  val opsToolBar = new OpsToolBar(owner, this, mutLogFileSettings, chunkListView, entries)
 
   private val searchTermToolBar = new SearchTermToolBar(mutLogFileSettings, entries, filteredEntries.predicateProperty())
 
@@ -140,7 +137,6 @@ class LogFilePane(owner: Window
     )
     chunkListView.init(fileIdProperty)
     enableAutoscroll(mutLogFileSettings.isAutoScrollActive)
-    mutLogFileSettings.mutSearchTerms.addListener(searchTermChangeListener)
 
   private def divider: SplitPane.Divider = pane.getDividers.get(0)
 
@@ -166,7 +162,6 @@ class LogFilePane(owner: Window
       , mutLogFileSettings.mutSearchTerms)
     chunkListView.shutdown()
     autoScrollSubscription.unsubscribe()
-    mutLogFileSettings.mutSearchTerms.removeListener(searchTermChangeListener)
     LogoRRRGlobals.removeLogFile(fileIdProperty.get())
     unbindFileIdProperty()
     unbindIdProperty()
@@ -179,21 +174,23 @@ class LogFilePane(owner: Window
 
   override def selectLastLogFile(): Unit = ()
 
-  override def getInfos: Seq[FileIdDividerSearchTerm] =
-    Seq(FileIdDividerSearchTerm(fileIdProperty.get(), activeSearchTerms, getDividerPosition))
-
   def applyTimeSettings(timeSettings: TimeSettings): Unit =
     TimeUtil.calculate(mutLogFileSettings, chunkListView, entries, timeSettings, opsToolBar.timestampSettingsRegion)
 
+  private def updateDisplay(): Unit = {
+    mutLogFileSettings.repaintProperty.set(!mutLogFileSettings.repaintProperty.get())
+    LogFilePredicate.update(filteredEntries.predicateProperty(), mutLogFileSettings.showPredicate)
+  }
+
+  // ---- EVENT HANDLER DEFINITIONS
   // sets filter directly from local timestamp settings dialog (as opposed to the global settings dialog)
   addEventHandler(DataModelEvent.DateFilterEvent, (e: DateFilterEvent) => {
     applyTimeSettings(e.timeSettings)
     e.consume()
   })
 
-  addEventHandler(DataModelEvent.RemoveDateFilterEvent, (e: RemoveDateFilterEvent) => {
+  addEventHandler(DataModelEvent.RemoveDateFilterEvent, (e: RemoveDateFilterEvent) => timeR({
     mutLogFileSettings.setTimeSettings(TimeSettings.Invalid)
-    LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
     // we have to deactivate this listener otherwise
     chunkListView.removeInvalidationListener()
     val tempList = new java.util.ArrayList[LogEntry]()
@@ -203,8 +200,23 @@ class LogFilePane(owner: Window
     entries.setAll(tempList)
     // activate listener again
     chunkListView.addInvalidationListener()
+    updateDisplay()
+    e.consume()
+  }, "updateList"))
+
+  addEventHandler(DataModelEvent.AddSearchTermButtonEvent, (e: AddSearchTermButtonEvent) => {
+    updateDisplay()
     e.consume()
   })
 
+  addEventHandler(DataModelEvent.RemoveSearchTermButtonEvent, (e: RemoveSearchTermButtonEvent) => {
+    mutLogFileSettings.mutSearchTerms.remove(e.mutableSearchTerm)
+    updateDisplay()
+    e.consume()
+  })
 
+  addEventHandler(DataModelEvent.UpdateLogFilePredicate, (e: UpdateLogFilePredicate) =>
+    updateDisplay()
+    e.consume()
+  )
 

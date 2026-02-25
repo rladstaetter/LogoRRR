@@ -2,7 +2,7 @@ package app.logorrr.views.search
 
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.{LogFilePredicate, MutLogFileSettings}
-import app.logorrr.model.LogEntry
+import app.logorrr.model.{LogEntry, UpdateLogFilePredicate}
 import app.logorrr.util.TimeUtil
 import app.logorrr.views.logfiletab.LogFilePane
 import app.logorrr.views.ops.time.{SliderVBox, TimeRange, TimestampSettingsButton}
@@ -22,8 +22,7 @@ class TimestampSettingsRegion(owner: Window
                               , logFilePane: LogFilePane
                               , mutLogFileSettings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
-                              , logEntries: ObservableList[LogEntry]
-                              , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]):
+                              , logEntries: ObservableList[LogEntry]):
 
   /**
    * To configure the logformat of the timestamp used in a logfile
@@ -43,7 +42,6 @@ class TimestampSettingsRegion(owner: Window
 
   // replace with property
   def initializeRanges(min: Long, max: Long): Unit =
-    println(s"minmax:$min $max")
     lowerSlider.setMin(min.toDouble)
     lowerSlider.setMax(max.toDouble)
     upperSlider.setMin(min.toDouble)
@@ -51,17 +49,16 @@ class TimestampSettingsRegion(owner: Window
 
 
   def setSliderPositions(lower: Long, upper: Long): Unit =
-    println(s"SliderPos($lower,$upper)")
     lowerSliderVBox.setInstant(lower)
     upperSliderVBox.setInstant(upper)
 
   private def updateLowerTimestampSlider(newValue: Number): Unit =
     if newValue.doubleValue > upperSlider.getValue then lowerSlider.setValue(upperSlider.getValue)
-    LogFilePredicate.update(predicateProperty, mutLogFileSettings.showPredicate)
+    logFilePane.fireEvent(UpdateLogFilePredicate())
 
   private def updateUpperTimestampSlider(newValue: Number): Unit =
     if newValue.doubleValue < lowerSlider.getValue then upperSlider.setValue(lowerSlider.getValue)
-    LogFilePredicate.update(predicateProperty, mutLogFileSettings.showPredicate)
+    logFilePane.fireEvent(UpdateLogFilePredicate())
 
   val items: Seq[Node] = Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox)
 

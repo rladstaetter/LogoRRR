@@ -18,8 +18,9 @@ class FavoritesComboBox extends ComboBox[MutSearchTermGroup]:
   def init(searchTermGroupEntries: SimpleListProperty[MutSearchTermGroup]
            , mutableSearchTerms: ObservableList[MutableSearchTerm]): Unit = {
     itemsProperty.bind(searchTermGroupEntries)
-    // init combobox with selected element
-    searchTermGroupEntries.stream.filter(_.isSelected).forEach(s => getSelectionModel.select(s))
+    // disabled init combobox with selected element on
+    // startup - local search terms win
+    // searchTermGroupEntries.stream.filter(_.isSelected).forEach(s => getSelectionModel.select(s))
 
     setConverter(new StringConverter[MutSearchTermGroup] {
       override def toString(stg: MutSearchTermGroup): String =

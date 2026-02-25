@@ -2,10 +2,8 @@ package app.logorrr.views.logfiletab.actions
 
 import app.logorrr.conf.FileId
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.logfiletab.{LogFileTab, TabControlEvent}
-import javafx.scene.control.{MenuItem, Tab, TabPane}
-
-import scala.jdk.CollectionConverters.CollectionHasAsScala
+import app.logorrr.views.logfiletab.TabControlEvent
+import javafx.scene.control.{MenuItem, TabPane}
 
 object CloseAllFilesMenuItem extends UiNodeFileIdAware:
 

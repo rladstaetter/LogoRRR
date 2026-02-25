@@ -55,8 +55,6 @@ object TimeUtil extends TinyLog:
                 , timeSettings: TimeSettings
                 , tsRegion: TimestampSettingsRegion): Unit = {
     mutLogFileSettings.setTimeSettings(timeSettings)
-    LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
-
     chunkListView.removeInvalidationListener()
     var someFirstEntryTimestamp: Option[Instant] = None
 
@@ -82,7 +80,7 @@ object TimeUtil extends TinyLog:
 
 
   def calcTimeInfo(logEntries: util.List[LogEntry]): Option[(Long, Long)] =
-    if (logEntries.size > 1) then
+    if logEntries.size > 1 then
       val min = calcMin(logEntries)
       val max = calcMax(logEntries)
       if (min == 0 || max == 0) None else Option((min, max))

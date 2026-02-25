@@ -28,10 +28,10 @@ class UnclassifiedToggleButton(entries: ObservableList[LogEntry]
                                , unclassifiedProperty: BooleanProperty
                                , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]
                                , logFilePredicate: LogFilePredicate)
-  extends ASearchTermToggleButton(entries, predicateProperty, logFilePredicate):
+  extends ASearchTermToggleButton:
 
-  override def init(fileIdProperty: ObjectPropertyBase[FileId], visibleBinding: BooleanBinding, mutSearchTerm: MutableSearchTerm, mutSearchTerms: ObservableList[MutableSearchTerm]): Unit = {
-    super.init(fileIdProperty, visibleBinding, mutSearchTerm, mutSearchTerms)
+  override def init(fileIdProperty: ObjectPropertyBase[FileId], visibleBinding: BooleanBinding, mutSearchTerm: MutableSearchTerm): Unit = {
+    super.init(fileIdProperty, visibleBinding, mutSearchTerm)
     logFilePredicate.showUnclassifiedProperty.bind(selectedProperty())
   }
 

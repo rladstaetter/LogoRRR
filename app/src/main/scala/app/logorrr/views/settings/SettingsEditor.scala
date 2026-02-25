@@ -39,7 +39,7 @@ class SettingsEditor(owner: Stage
   resetButton.setOnAction(_ => {
     LogoRRRGlobals.clearSearchTermGroups()
     Settings.DefaultSearchTermGroups.map(MutSearchTermGroup.apply).foreach(LogoRRRGlobals.add)
-    LogoRRRGlobals.setTimeSettings(MutTimeSettings(TimeSettings.Default))
+    LogoRRRGlobals.setTimeSettings(MutTimeSettings(TimeSettings.Invalid))
     timeSettingsEditor.updateSettings(MutTimeSettings(TimeSettings.Invalid))
   })
 

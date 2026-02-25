@@ -19,8 +19,6 @@ class MutTimeSettings extends DateTimePatternHolder
   with StartColHolder
   with EndColHolder:
 
-  def resetToDefault(): Unit = set(TimeSettings.Default)
-
   def mkImmutable(): TimeSettings =
     TimeSettings(getStartCol, getEndCol, getDateTimePattern)
 

@@ -27,8 +27,7 @@ class OpsToolBar(owner: Window
                  , logFilePane: LogFilePane
                  , mutLogFileSettings: MutLogFileSettings
                  , chunkListView: ChunkListView[LogEntry]
-                 , logEntries: ObservableList[LogEntry]
-                 , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]) extends ToolBar:
+                 , logEntries: ObservableList[LogEntry]) extends ToolBar:
 
   // layout
   setMaxHeight(Double.PositiveInfinity)
@@ -38,7 +37,7 @@ class OpsToolBar(owner: Window
 
   val searchRegion = new SearchRegion
   private val otherItemsRegion = new OtherItemsRegion
-  val timestampSettingsRegion = new TimestampSettingsRegion(owner, logFilePane, mutLogFileSettings, chunkListView, logEntries, predicateProperty)
+  val timestampSettingsRegion = new TimestampSettingsRegion(owner, logFilePane, mutLogFileSettings, chunkListView, logEntries)
 
   getItems.addAll(searchRegion.items ++ otherItemsRegion.items ++ timestampSettingsRegion.items *)
 
