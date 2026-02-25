@@ -9,6 +9,7 @@ import javafx.util.{Duration, Subscription}
 import net.ladstatt.util.log.TinyLog
 
 import java.util
+import scala.compiletime.uninitialized
 
 
 /**
@@ -21,6 +22,9 @@ class PersistenceManager extends TinyLog {
 
   val map: java.util.Map[FileId, Set[Subscription]] = new util.HashMap[FileId, Set[Subscription]]()
 
+  // bindings aren't evaluated if value is not read
+  var value : Any = uninitialized
+
   // provide 2 second cooldown not to persist settings all the time
   private val scheduler = new PauseTransition(Duration.millis(2000))
   scheduler.setOnFinished(_ => persist())
@@ -30,15 +34,14 @@ class PersistenceManager extends TinyLog {
   }
 
   def init(fileId: FileId, obs: Set[Property[?]]): Unit = {
-    println(s"Adding props for : ${fileId.fileName}")
     this.map.put(fileId, subscribe(obs))
   }
 
   private def subscribe(obs: Set[Property[?]]): Set[Subscription] = {
     obs.map(o =>
-      println("Subscribing: " + o)
       o.subscribe(() => {
-        logTrace(s"Property changed ${o.getValue} - resetting timer")
+        value = o.getValue
+        //  logTrace(s"Property changed ${o.getValue} - resetting timer")
         scheduler.playFromStart()
       }))
   }
@@ -50,28 +53,22 @@ class PersistenceManager extends TinyLog {
     map.keySet.forEach(k => shutdown(k))
   }
 
-
   private def persist(): Unit = {
-    // Create a Task for the background work
     val persistTask = new Task[Unit] {
       override def call(): Unit = {
-        // This runs on a background thread
         LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
       }
     }
 
-    // Handle errors or success the "JavaFX way"
     persistTask.setOnFailed(e => {
       val exception = persistTask.getException
-      logError(s"Persistence failed: ${exception.getMessage}")
+      logException(s"Persistence failed", exception)
     })
 
     persistTask.setOnSucceeded(_ => {
-      logTrace("Persistence completed successfully.")
+     //  logTrace("Persistence completed successfully.")
     })
 
-    // Execute the task on a background thread
-    val thread = new Thread(persistTask)
-    thread.start()
+    new Thread(persistTask).start()
   }
 }
