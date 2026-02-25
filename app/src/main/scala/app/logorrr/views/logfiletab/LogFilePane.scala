@@ -145,6 +145,7 @@ class LogFilePane(owner: Window
   }
 
   def shutdown(): Unit =
+    LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
     searchTermToolBar.shutdown()
     opsToolBar.shutdown(mutLogFileSettings.autoScrollActiveProperty, mutLogFileSettings.mutSearchTerms, filteredEntries)
     textPane.shutdown(mutLogFileSettings.fontSizeProperty)

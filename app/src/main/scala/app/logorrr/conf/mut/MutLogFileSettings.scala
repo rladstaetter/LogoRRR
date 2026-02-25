@@ -25,6 +25,7 @@ object MutLogFileSettings:
     s.lowerBoundaryProperty.set(logFileSettings.lowerTimestamp)
     s.upperBoundaryProperty.set(logFileSettings.upperTimestamp)
     logFileSettings.someTimeSettings.foreach(s.mutTimeSettings.set)
+    s.showUnclassifiedProperty.set(logFileSettings.showUnclassified)
     s
 
 
@@ -43,6 +44,7 @@ class MutLogFileSettings:
   val selectedLineNumberProperty = new SimpleIntegerProperty(this, "selectedLineNumberProperty")
   val lowerBoundaryProperty = new SimpleLongProperty(this, "lowerBoundaryProperty")
   val upperBoundaryProperty = new SimpleLongProperty(this, "upperBoundaryProperty")
+  val showUnclassifiedProperty = new SimpleBooleanProperty(true, "showUnclassifiedProperty")
   val mutTimeSettings = new MutTimeSettings
 
   /** is reset on various user interface action which should trigger a configuration save action */
@@ -55,7 +57,10 @@ class MutLogFileSettings:
     override def computeValue(): Set[SearchTerm] = mutSearchTerms.filtered((t: MutableSearchTerm) => t.isActive).asScala.map(_.asSearchTerm).toSet
   }
 
-  val showPredicate = new LogFilePredicate(mutSearchTerms, lowerBoundaryProperty, upperBoundaryProperty)
+  val showPredicate = new LogFilePredicate(mutSearchTerms
+    , showUnclassifiedProperty
+    , lowerBoundaryProperty
+    , upperBoundaryProperty)
 
   def setMutableSearchTerms(mutableSearchTerms: Seq[MutableSearchTerm]): Unit =
     mutSearchTerms.setAll(mutableSearchTerms *)
@@ -92,6 +97,7 @@ class MutLogFileSettings:
       , lastVisibleTextCellIndexProperty.get()
       , lowerBoundaryProperty.get()
       , upperBoundaryProperty.get()
+      , showUnclassifiedProperty.get()
     )
 
 
@@ -111,5 +117,6 @@ class MutLogFileSettings:
       , selectedLineNumberProperty
       , lowerBoundaryProperty
       , upperBoundaryProperty
+      , showUnclassifiedProperty
       , repaintProperty
     ) ++ mutTimeSettings.allProps

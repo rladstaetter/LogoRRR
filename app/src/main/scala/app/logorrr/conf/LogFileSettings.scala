@@ -17,6 +17,7 @@ object LogFileSettings:
   private val DefaultLastViewIndex = 0
   val DefaultLowerTimestamp: Int = 0
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
+  val ShowUnclassified = true
 
   def mk(fileId: FileId, searchTermGroup: SearchTermGroup): LogFileSettings =
     val now = Instant.now().toEpochMilli
@@ -32,7 +33,8 @@ object LogFileSettings:
       , DefaultFirstViewIndex
       , DefaultLastViewIndex
       , DefaultLowerTimestamp
-      , now)
+      , now
+      , ShowUnclassified)
 
 
 /**
@@ -56,6 +58,7 @@ object LogFileSettings:
  * @param lastVisibleTextCellIndex  which index is the last visible on the screen (depending on resolution, window size ...)
  * @param lowerTimestamp            position of lower slider
  * @param upperTimestamp            position of upper slider
+ * @param showUnclassified          show unclassified elements (defaults to true)
  */
 case class LogFileSettings(fileId: FileId
                            , selectedLineNumber: Int
@@ -69,7 +72,8 @@ case class LogFileSettings(fileId: FileId
                            , firstVisibleTextCellIndex: Int
                            , lastVisibleTextCellIndex: Int
                            , lowerTimestamp: Long
-                           , upperTimestamp: Long) derives ReadWriter:
+                           , upperTimestamp: Long
+                           , showUnclassified: Boolean) derives ReadWriter:
 
   lazy val path: Path = fileId.asPath.toAbsolutePath
 

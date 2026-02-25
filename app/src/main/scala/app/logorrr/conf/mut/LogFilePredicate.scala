@@ -18,11 +18,11 @@ object LogFilePredicate:
 
 
 class LogFilePredicate(mutSearchTerms: ObservableList[MutableSearchTerm]
+                       , showUnclassifiedProperty: SimpleBooleanProperty
                        , lowerBoundery: SimpleLongProperty
                        , upperBoundary: SimpleLongProperty
                       ) extends Predicate[LogEntry] {
 
-  val showUnclassifiedProperty = new SimpleBooleanProperty(true)
 
   override def test(logEntry: LogEntry): Boolean = {
     val timeCondition =

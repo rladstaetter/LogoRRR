@@ -32,11 +32,12 @@ class UnclassifiedToggleButton(entries: ObservableList[LogEntry]
 
   override def init(fileIdProperty: ObjectPropertyBase[FileId], visibleBinding: BooleanBinding, mutSearchTerm: MutableSearchTerm): Unit = {
     super.init(fileIdProperty, visibleBinding, mutSearchTerm)
-    logFilePredicate.showUnclassifiedProperty.bind(selectedProperty())
+    setSelected(unclassifiedProperty.get())
+    unclassifiedProperty.bind(selectedProperty())
   }
 
   override def shutdown(activeProperty: BooleanProperty): Unit = {
     super.shutdown(activeProperty)
-    logFilePredicate.showUnclassifiedProperty.unbind()
+    unclassifiedProperty.unbind()
   }
 

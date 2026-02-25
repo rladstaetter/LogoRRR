@@ -43,7 +43,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
   val unclassifiedButton =
     new UnclassifiedToggleButton(entries
       , mutLogFileSettings.mutSearchTerms
-      , mutLogFileSettings.showPredicate.showUnclassifiedProperty
+      , mutLogFileSettings.showUnclassifiedProperty
       , predicateProperty
       , mutLogFileSettings.showPredicate
     )
