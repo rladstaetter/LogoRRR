@@ -12,9 +12,9 @@ object LogFileSettingsSpec:
     firstOpened <- Gen.posNum[Long]
     dPos <- Gen.posNum[Double]
     filters <- Gen.listOf(searchTermGen)
-    leif <- TimestampSettingsSpec.gen
+    leif <- TimeSettingsSpec.gen
     someLogEntryInstantFormat <- Gen.oneOf(None, Option(leif))
-    blockSettings <- BlockSettingsSpec.gen
+    blockSize <- Gen.posNum[Int]
     fontSize <- Gen.posNum[Int]
     autoScroll <- CoreGen.booleanGen
   yield LogFileSettings(fileId
@@ -23,7 +23,7 @@ object LogFileSettingsSpec:
     , dPos
     , fontSize
     , filters
-    , blockSettings
+    , blockSize
     , someLogEntryInstantFormat
     , autoScroll
     , 0

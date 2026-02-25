@@ -2,7 +2,7 @@ package app.logorrr.views.settings.timestamp
 
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.conf.{FileId, LogoRRRGlobals, TimestampSettings}
+import app.logorrr.conf.{FileId, LogoRRRGlobals, TimeSettings}
 import app.logorrr.model.{BoundId, DateFilterEvent, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.logfiletab.LogFilePane
@@ -38,10 +38,10 @@ class TimestampFormatSetButton(logFilePane: LogFilePane
         // startcol has to be smaller than endCol (and also of a certain size)
         // and the timeFormat is set to something
         case Some((startCol, endCol), timeFormat) if startCol < endCol && timeFormat.nonEmpty =>
-          logFilePane.fireEvent(DateFilterEvent(TimestampSettings(startCol, endCol, timeFormat)))
+          logFilePane.fireEvent(DateFilterEvent(TimeSettings(startCol, endCol, timeFormat)))
         // on any other case just return None
         case _ =>
-          mutLogFileSettings.setSomeTimestampSettings(None)
+          mutLogFileSettings.setTimeSettings(TimeSettings.Invalid)
       }
       closeStage
 

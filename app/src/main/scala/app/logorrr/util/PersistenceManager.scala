@@ -26,13 +26,15 @@ class PersistenceManager extends TinyLog {
   scheduler.setOnFinished(_ => persist())
 
   def init(obs: Set[Property[?]]): Unit = {
-    this.subscriptions.addAll(reschedule(obs).toSeq *)
+    this.subscriptions.addAll(subscribe(obs).toSeq *)
   }
 
-  def init(fileId: FileId, obs: Set[Property[?]]): Unit =
-    this.map.put(fileId, reschedule(obs))
+  def init(fileId: FileId, obs: Set[Property[?]]): Unit = {
+    println(s"Adding props for : ${fileId.fileName}")
+    this.map.put(fileId, subscribe(obs))
+  }
 
-  private def reschedule(obs: Set[Property[?]]): Set[Subscription] = {
+  private def subscribe(obs: Set[Property[?]]): Set[Subscription] = {
     obs.map(o => o.subscribe(() => {
       logTrace(s"Property changed ${o.getValue} - resetting timer")
       scheduler.playFromStart()

@@ -1,9 +1,6 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.conf.*
-import app.logorrr.conf.LogoRRRGlobals.{mutSettings, setHostServices, setTimestampSettings}
-import javafx.beans.property.{SimpleMapProperty, SimpleObjectProperty}
-import javafx.collections.FXCollections
 import javafx.beans.property.{Property, SimpleBooleanProperty, SimpleMapProperty, SimpleObjectProperty}
 import javafx.collections.{FXCollections, MapChangeListener}
 import javafx.stage.Window
@@ -39,7 +36,7 @@ class MutSettings {
   val someActiveLogProperty: SimpleObjectProperty[Option[FileId]] = new SimpleObjectProperty[Option[FileId]](None)
 
   /** settings can be either all undefined (None) or have some value */
-  private val timeStampSettingsProperty = new SimpleObjectProperty[MutTimestampSettings]()
+  val timeSettings = new MutTimeSettings
 
   /** remembers last opened directory for the next execution */
   val lastUsedDirectoryProperty = new SimpleObjectProperty[Option[Path]](None)
@@ -68,13 +65,12 @@ class MutSettings {
 
   def getSomeActiveLogFile: Option[FileId] = someActiveLogProperty.get()
 
-  def setTimestampSettings(settings: MutTimestampSettings): Unit = timeStampSettingsProperty.set(settings)
-
-  def getTimestampSettings: MutTimestampSettings = timeStampSettingsProperty.get()
+  def setTimeSettings(settings: MutTimeSettings): Unit = timeSettings.set(settings)
 
   def getSomeLastUsedDirectory: Option[Path] = lastUsedDirectoryProperty.get()
 
   def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit = lastUsedDirectoryProperty.set(someDirectory)
+
   def add(stg: MutSearchTermGroup): Unit = mutSearchTermGroupSettings.add(stg)
 
   def clearSearchTermGroups(): Unit = mutSearchTermGroupSettings.clear()
@@ -130,11 +126,12 @@ class MutSettings {
       , getSomeActiveLogFile
       , getSomeLastUsedDirectory
       , mutSearchTermGroupSettings.mkImmutable()
-      , Option(getTimestampSettings).map(_.mkImmutable()))
+      , if timeSettings.validBinding.get() then Option(timeSettings.mkImmutable()) else None)
 
 
   val allProps: Set[Property[?]] =
     mutStageSettings.allProps ++
       mutSearchTermGroupSettings.allProps ++
-        Seq(someActiveLogProperty, timeStampSettingsProperty, lastUsedDirectoryProperty, mapDirtyPulse)
+      timeSettings.allProps ++
+      Seq(someActiveLogProperty, lastUsedDirectoryProperty, mapDirtyPulse)
 }

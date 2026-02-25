@@ -1,17 +1,14 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.clv.ChunkListView
-import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.conf.{FileId, LogoRRRGlobals, TimestampSettings}
-import app.logorrr.model.{BoundId, IntStringBinding, LogEntry}
+import app.logorrr.conf.mut.{MutLogFileSettings, MutTimeSettings}
+import app.logorrr.conf.{LogoRRRGlobals, TimeSettings}
+import app.logorrr.model.LogEntry
 import app.logorrr.views.logfiletab.LogFilePane
 import app.logorrr.views.search.TimestampSettingsRegion
-import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 import javafx.collections.{FXCollections, ObservableList}
-import javafx.geometry.{Insets, Pos}
-import javafx.scene.control.*
-import javafx.scene.layout.{BorderPane, HBox, VBox}
+import javafx.scene.layout.BorderPane
 import net.ladstatt.util.log.TinyLog
 
 
@@ -45,17 +42,17 @@ class TimestampSettingsBorderPane(logFilePane: LogFilePane
 
   private val footer = new TimeSettingsFooter(logFilePane, mutLogFileSettings, logEntries, chunkListView, tsRegion, closeStage)
 
-  def updateSettings(settings: TimestampSettings): Unit = {
-    timerSettingsLogTextView.startColProperty.set(settings.startCol)
-    timerSettingsLogTextView.endColProperty.set(settings.endCol)
-    footer.initDateTimePattern(settings.dateTimePattern)
+  def updateSettings(settings: MutTimeSettings): Unit = {
+    timerSettingsLogTextView.startColProperty.set(settings.getStartCol)
+    timerSettingsLogTextView.endColProperty.set(settings.getEndCol)
+    footer.initDateTimePattern(settings.getDateTimePattern)
   }
 
-  private def initSettings(globalSettings: Option[TimestampSettings]
-                           , localSettings: Option[TimestampSettings]): Unit = {
-    (globalSettings, localSettings) match {
-      case (_, Some(s)) => updateSettings(s)
-      case (Some(s), _) => updateSettings(s)
+  private def initSettings(globalSettings: MutTimeSettings
+                           , localSettings: MutTimeSettings): Unit = {
+    (globalSettings.validBinding.get(), localSettings.validBinding.get()) match {
+      case (_, true) => updateSettings(localSettings)
+      case (true, _) => updateSettings(globalSettings)
       case _ =>
     }
   }
@@ -63,14 +60,14 @@ class TimestampSettingsBorderPane(logFilePane: LogFilePane
   def initBindings(): Unit =
     sideBar.init(mutLogFileSettings.fileIdProperty, startColProperty, endColProperty)
     timerSettingsLogTextView.init(mutLogFileSettings.fileIdProperty
-      , mutLogFileSettings.getSomeTimestampSettings
-      , LogoRRRGlobals.getTimestampSettings.map(_.mkImmutable())
+      , mutLogFileSettings.mutTimeSettings
+      , LogoRRRGlobals.timeSettings
       , startColProperty
       , endColProperty)
     footer.init(startColProperty, endColProperty)
 
-  def init(globalSettings: Option[TimestampSettings]
-           , localSettings: Option[TimestampSettings]): Unit =
+  def init(globalSettings: MutTimeSettings
+           , localSettings: MutTimeSettings): Unit =
     initBindings()
     initSettings(globalSettings, localSettings)
     setLeft(sideBar)

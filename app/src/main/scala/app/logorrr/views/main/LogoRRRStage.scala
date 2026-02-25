@@ -33,7 +33,6 @@ object LogoRRRStage extends TinyLog:
     // global mutable Settings
     val settings = LogoRRRGlobals.getSettings
 
-
     val updatedSettings: Map[String, LogFileSettings] =
       (for (FileIdDividerSearchTerm(p, sTerms, dPos) <- logSource.ui.getInfos) yield
         p.absolutePathAsString -> settings.fileSettings(p.absolutePathAsString).copy(searchTerms = sTerms, dividerPosition = dPos)).toMap

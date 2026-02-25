@@ -1,19 +1,16 @@
 package app.logorrr.conf
 
 import app.logorrr.LogoRRRApp
-import app.logorrr.conf.mut.{MutLogFileSettings, MutSearchTermGroup, MutSettings, MutTimestampSettings}
+import app.logorrr.conf.mut.{MutLogFileSettings, MutSearchTermGroup, MutSettings, MutTimeSettings}
 import app.logorrr.io.{OsxBridgeHelper, SettingsFileIO}
 import app.logorrr.services.hostservices.LogoRRRHostServices
 import app.logorrr.util.PersistenceManager
-import javafx.beans.property.{Property, SimpleObjectProperty}
-import javafx.beans.property.{SimpleListProperty, SimpleObjectProperty}
-import javafx.collections.ObservableList
+import javafx.beans.property.{Property, SimpleListProperty, SimpleObjectProperty}
 import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
 import java.nio.file.Path
-import scala.jdk.CollectionConverters.*
 
 
 /**
@@ -69,9 +66,11 @@ object LogoRRRGlobals extends TinyLog:
 
   def set(settings: Settings, hostServices: LogoRRRHostServices): Unit =
     mutSettings.set(settings)
-    settings.someTimestampSettings match {
-      case Some(timestampSettings) => setTimestampSettings(MutTimestampSettings(timestampSettings))
-      case None => setTimestampSettings(null)
+    settings.fileSettings.values.foreach(fs => persistenceManager.init(fs.fileId, allProps))
+
+    settings.someTimeSettings match {
+      case Some(timestampSettings) => setTimeSettings(MutTimeSettings(timestampSettings))
+      case None => setTimeSettings(MutTimeSettings(TimeSettings.Invalid))
     }
     setHostServices(hostServices)
 
@@ -111,9 +110,9 @@ object LogoRRRGlobals extends TinyLog:
 
   val searchTermGroupEntries: SimpleListProperty[MutSearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
 
-  def getTimestampSettings: Option[MutTimestampSettings] = Option(mutSettings.getTimestampSettings)
+  def timeSettings: MutTimeSettings = mutSettings.timeSettings
 
-  def setTimestampSettings(timestampSettings: MutTimestampSettings): Unit = mutSettings.setTimestampSettings(timestampSettings)
+  def setTimeSettings(timesettings: MutTimeSettings): Unit = mutSettings.setTimeSettings(timesettings)
 
   val allProps: Set[Property[?]] =
     mutSettings.allProps

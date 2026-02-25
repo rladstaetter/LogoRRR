@@ -43,14 +43,14 @@ object Settings extends TinyLog:
  * @param someActive            which logfile is active (or none)
  * @param someLastUsedDirectory which directory was last accessed (for open file ...)
  * @param searchTermGroups      global search term groups
- * @param someTimestampSettings global defaults for timestamp settings
+ * @param someTimeSettings global defaults for timestamp settings
  */
 case class Settings(stageSettings: StageSettings
                     , fileSettings: Map[String, LogFileSettings]
                     , someActive: Option[FileId]
                     , someLastUsedDirectory: Option[Path] = None
                     , searchTermGroups: Seq[SearchTermGroup]
-                    , someTimestampSettings: Option[TimestampSettings] = None) derives ReadWriter {
+                    , someTimeSettings: Option[TimeSettings] = None) derives ReadWriter {
 
   /** updates recent files with given log setting */
   def update(logFileSetting: LogFileSettings): Settings =

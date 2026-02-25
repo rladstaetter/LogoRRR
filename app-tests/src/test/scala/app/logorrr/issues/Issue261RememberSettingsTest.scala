@@ -26,8 +26,8 @@ class Issue261RememberSettingsTest extends SingleFileApplicationTest(TestFiles.t
     StageSettings(JfxUtils.calcDefaultScreenPosition())
     , Map(TestFiles.timedLog.value ->
       LogFileSettings.mk(TestFiles.timedLog, TestSettings.DefaultGroups.searchTermGroups.tail.head)
-        .copy(blockSettings = BlockSettings(50)
-          , someTimestampSettings = Option(TimestampSettings(0, 23, "yyyy-MM-dd HH:mm:ss,SSS"))))
+        .copy(blockSize = 50
+          , someTimeSettings = Option(TimeSettings(0, 23, "yyyy-MM-dd HH:mm:ss,SSS"))))
     , None
     , None
     , TestSettings.Groups
@@ -36,7 +36,7 @@ class Issue261RememberSettingsTest extends SingleFileApplicationTest(TestFiles.t
 
   @Test def checkVisibilityOfSlidersAndLabelText(): Unit =
     val logFileSettings: MutLogFileSettings = LogoRRRGlobals.getLogFileSettings(fileId)
-    assert(logFileSettings.hasTimestampSetting.get())
+    assert(logFileSettings.mutTimeSettings.validBinding.get())
 
     // check existence of sliders
     waitForVisibility(SliderVBox.uiNode(fileId, Pos.CENTER_LEFT))

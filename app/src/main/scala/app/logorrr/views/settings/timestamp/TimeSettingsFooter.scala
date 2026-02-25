@@ -1,7 +1,7 @@
 package app.logorrr.views.settings.timestamp
 
 import app.logorrr.clv.ChunkListView
-import app.logorrr.conf.TimestampSettings
+import app.logorrr.conf.TimeSettings
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
 import app.logorrr.views.logfiletab.LogFilePane
@@ -24,7 +24,7 @@ class TimeSettingsFooter(logFilePane: LogFilePane
   setStyle("-fx-background-color: #eee; -fx-border-color: #ccc; -fx-border-width: 1 0 0 0;")
 
   private val hyperlink: Hyperlink =
-    val hl = TimestampSettings.dateFormatterHLink.mkHyperLink()
+    val hl = TimeSettings.dateFormatterHLink.mkHyperLink()
     hl.setAlignment(Pos.CENTER)
     hl.setPrefWidth(150)
     hl
@@ -37,7 +37,7 @@ class TimeSettingsFooter(logFilePane: LogFilePane
 
   private val rangeProperty = new SimpleObjectProperty[(Int, Int)]()
 
-  private val resetTimestampFormatButton = new TimestampFormatResetButton(mutLogFileSettings, chunkListView, logEntries, tsRegion, closeStage)
+  private val resetTimestampFormatButton = new TimestampFormatResetButton(logFilePane, closeStage)
 
   private val applyAndCloseButton = new TimestampFormatSetButton(logFilePane, mutLogFileSettings, rangeProperty, timeFormatTf, chunkListView, logEntries, tsRegion, closeStage)
 

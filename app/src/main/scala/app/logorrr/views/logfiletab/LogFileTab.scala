@@ -1,7 +1,7 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.{FileId, LogoRRRGlobals}
-import app.logorrr.conf.{FileId, TimestampSettings}
+import app.logorrr.conf.{FileId, TimeSettings}
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.{FileIdDividerSearchTerm, FileIdPropertyHolder, LogEntry, LogorrrModel}
 import app.logorrr.views.LogoRRRAccelerators
@@ -60,12 +60,14 @@ class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries:
     with FileIdPropertyHolder
     with TinyLog:
 
+  
+  
   private val selectedSubscription =
     selectedProperty.subscribe(new Consumer[java.lang.Boolean] {
       def accept(newVal: java.lang.Boolean): Unit =
         if newVal then {
           initContextMenu()
-          LogoRRRAccelerators.setActiveSearchTextField(logPane.opsToolBar.searchRegion.searchTextField)
+          LogoRRRAccelerators.setActiveSearchTextField(logPane.searchTextField)
         } else {
           setContextMenu(null)
           LogoRRRAccelerators.setActiveSearchTextField(null)
@@ -133,6 +135,6 @@ class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries:
 
   def getInfo = FileIdDividerSearchTerm(getFileId, logPane.activeSearchTerms, logPane.getDividerPosition)
 
-  def applyTimeSettings(timestampSettings: TimestampSettings) : Unit =
-    logPane.applyTimeSettings(timestampSettings)
+  def applyTimeSettings(timeSettings: TimeSettings) : Unit =
+    logPane.applyTimeSettings(timeSettings)
 

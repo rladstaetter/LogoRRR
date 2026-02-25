@@ -1,7 +1,7 @@
 package app.logorrr.views.settings
 
-import app.logorrr.conf.mut.MutTimestampSettings
-import app.logorrr.conf.{LogoRRRGlobals, TimestampSettings}
+import app.logorrr.conf.mut.MutTimeSettings
+import app.logorrr.conf.{LogoRRRGlobals, TimeSettings}
 import app.logorrr.views.a11y.UiNode
 import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property.{SimpleIntegerProperty, SimpleStringProperty}
@@ -16,7 +16,7 @@ object TimestampSettingsEditor:
   val StartColTextField = UiNode("TimestampSettingsEditor_StartColTextField")
   val EndColTextField = UiNode("TimestampSettingsEditor_EndColTextField")
 
-class TimestampSettingsEditor(someTimestampSettings: Option[MutTimestampSettings]) extends StackPane {
+class TimestampSettingsEditor(timestampSettings: MutTimeSettings) extends StackPane {
 
   private val converter = new NumberStringConverter()
 
@@ -24,19 +24,19 @@ class TimestampSettingsEditor(someTimestampSettings: Option[MutTimestampSettings
   val endColProperty = new SimpleIntegerProperty()
   val patternProperty = new SimpleStringProperty()
 
-  someTimestampSettings.foreach(set)
+  set(timestampSettings)
 
-  def set(timestampSetting : MutTimestampSettings) : Unit =
+  def set(timestampSetting: MutTimeSettings): Unit =
     startColProperty.set(timestampSetting.getStartCol)
     endColProperty.set(timestampSetting.getEndCol)
-    patternProperty.set(timestampSetting.getDateTimePatternCol)
+    patternProperty.set(timestampSetting.getDateTimePattern)
 
-  val timeSettingProperty = new ObjectBinding[TimestampSettings] {
+  val timeSettingProperty = new ObjectBinding[TimeSettings] {
 
     bind(startColProperty, endColProperty, patternProperty)
 
-    override def computeValue(): TimestampSettings =
-      TimestampSettings(startColProperty.get, endColProperty.get, patternProperty.get)
+    override def computeValue(): TimeSettings =
+      TimeSettings(startColProperty.get, endColProperty.get, patternProperty.get)
   }
 
   // --- 1. The Editor UI ---
@@ -45,7 +45,7 @@ class TimestampSettingsEditor(someTimestampSettings: Option[MutTimestampSettings
     setPrefWidth(300)
     textProperty().bindBidirectional(patternProperty)
 
-  private val patternHyperlink = TimestampSettings.dateFormatterHLink.mkHyperLink()
+  private val patternHyperlink = TimeSettings.dateFormatterHLink.mkHyperLink()
 
   private val startColField = new TextField():
     setId(TimestampSettingsEditor.StartColTextField.value)
@@ -93,19 +93,19 @@ class TimestampSettingsEditor(someTimestampSettings: Option[MutTimestampSettings
 
     // Action to handle enabling (This would usually call a parent method)
     enableBtn.setOnAction(_ => {
-      val settings = MutTimestampSettings(TimestampSettings.Default)
-      LogoRRRGlobals.setTimestampSettings(settings)
-      updateSettings(Option(settings))
+      val settings = MutTimeSettings(TimeSettings.Default)
+      LogoRRRGlobals.setTimeSettings(settings)
+      updateSettings(settings)
     })
   }
 
   // --- Initialization ---
   getChildren.addAll(editorView, placeholderView)
-  updateSettings(someTimestampSettings)
+  updateSettings(timestampSettings)
 
-  def getTimeSettings(): TimestampSettings = timeSettingProperty.get()
+  def getTimeSettings(): TimeSettings = timeSettingProperty.get()
 
-  def shutdown() : Unit = {
+  def shutdown(): Unit = {
     startColField.textProperty().unbindBidirectional(startColProperty)
     endColField.textProperty().unbindBidirectional(endColProperty)
     patternField.textProperty().unbindBidirectional(patternProperty)
@@ -114,17 +114,13 @@ class TimestampSettingsEditor(someTimestampSettings: Option[MutTimestampSettings
   /**
    * Logic to switch between states
    */
-  def updateSettings(settingsOpt: Option[MutTimestampSettings]): Unit = {
-    settingsOpt match {
-      case Some(settings) =>
-        placeholderView.setVisible(false)
-        editorView.setVisible(true)
-
-      case None =>
-        editorView.setVisible(false)
-        placeholderView.setVisible(true)
-
-        set(MutTimestampSettings(TimestampSettings.Default))
-    }
+  def updateSettings(settings: MutTimeSettings): Unit = {
+    if settings.validBinding.get() then
+      placeholderView.setVisible(false)
+      editorView.setVisible(true)
+    else
+      editorView.setVisible(false)
+      placeholderView.setVisible(true)
+      set(MutTimeSettings(TimeSettings.Default))
   }
 }

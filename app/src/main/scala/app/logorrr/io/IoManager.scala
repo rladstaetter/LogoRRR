@@ -1,7 +1,8 @@
 package app.logorrr.io
 
-import app.logorrr.conf.{FileId, TimestampSettings}
+import app.logorrr.conf.{FileId, TimeSettings}
 import app.logorrr.model.LogEntry
+import app.logorrr.util.TimeUtil
 import javafx.collections.{FXCollections, ObservableList}
 import net.ladstatt.util.io.TinyIo
 import net.ladstatt.util.log.TinyLog
@@ -68,29 +69,24 @@ object IoManager extends TinyIo with TinyLog:
     FXCollections.observableList(arraylist)
 
   def from(logFile: Path
-           , logEntryTimeFormat: TimestampSettings): ObservableList[LogEntry] =
+           , logEntryTimeFormat: TimeSettings): ObservableList[LogEntry] =
     var lineNumber: Int = 0
     var someFirstEntryTimestamp: Option[Instant] = None
     val arraylist = new util.ArrayList[LogEntry]()
     fromPathUsingSecurityBookmarks(logFile).map(l => {
       lineNumber = lineNumber + 1
-      val someInstant: Option[Instant] = TimestampSettings.parseInstant(l, logEntryTimeFormat)
+      val someInstant: Option[Instant] = TimeUtil.parseInstant(l, logEntryTimeFormat)
       if someFirstEntryTimestamp.isEmpty then {
         someFirstEntryTimestamp = someInstant
       }
-
-      val someDiffFromStart: Option[Duration] = for
-        firstEntry <- someFirstEntryTimestamp
-        instant <- someInstant
-      yield Duration.between(firstEntry, instant)
       val entry = LogEntry(lineNumber, l, someInstant.map(_.toEpochMilli))
       arraylist.add(entry)
     })
     FXCollections.observableList(arraylist)
 
-  def readEntries(path: Path, someTimestampSettings: Option[TimestampSettings]): ObservableList[LogEntry] =
+  def readEntries(path: Path, someTimeSettings: Option[TimeSettings]): ObservableList[LogEntry] =
     if isPathValid(path) then
-      Try(someTimestampSettings match {
+      Try(someTimeSettings match {
         case None => IoManager.from(path)
         case Some(instantFormat) => from(path, instantFormat)
       }) match

@@ -55,7 +55,7 @@ class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
 
         val fileBasedSettings: Seq[Future[Option[LogorrrModel]]] = fileSettings.map(lfs => Future {
           timeR({
-            val entries: ObservableList[LogEntry] = IoManager.readEntries(lfs.path, lfs.someTimestampSettings)
+            val entries: ObservableList[LogEntry] = IoManager.readEntries(lfs.path, lfs.someTimeSettings)
             val mutLogFileSettings = LogoRRRGlobals.getLogFileSettings(lfs.fileId)
             Option(LogorrrModel(mutLogFileSettings, entries))
           }, s"Loaded '${lfs.fileId.absolutePathAsString}' from filesystem ...")
@@ -121,7 +121,7 @@ class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
 
   def addFileId(fileId: FileId): Unit = timeR({
     val settings = LogFileSettings.mk(fileId, mkSearchTermGroup)
-    val entries = IoManager.readEntries(settings.path, settings.someTimestampSettings)
+    val entries = IoManager.readEntries(settings.path, settings.someTimeSettings)
     addEntries(settings, entries)
   }, s"addFile ${fileId.absolutePathAsString}")
 

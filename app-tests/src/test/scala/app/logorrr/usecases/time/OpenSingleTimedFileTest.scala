@@ -1,7 +1,7 @@
 package app.logorrr.usecases.time
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.{FileId, LogoRRRGlobals, TimestampSettings}
+import app.logorrr.conf.{FileId, LogoRRRGlobals, TimeSettings}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.ops.time.{SliderVBox, TimerSlider, TimestampSettingsButton}
 import app.logorrr.views.settings.timestamp.{LogViewLabel, TimeFormatTextField, TimestampFormatResetButton, TimestampFormatSetButton}
@@ -29,7 +29,7 @@ class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedL
 
     clickOn(TimestampFormatResetButton.uiNode(fileId))
     // settings aren't set after click on reset button
-    assert(LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.not.get())
+    assert(LogoRRRGlobals.getLogFileSettings(fileId).mutTimeSettings.validBinding.not.get())
 
   // just click on the setFormat button, no position given
   // this test shows that "nothing happens" if user doesn't choose region or text
@@ -38,7 +38,7 @@ class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedL
     clickOnSetFormatButton()
 
     // settings aren't set after click on set button with invalid settings
-    assert(!LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.get())
+    assert(!LogoRRRGlobals.getLogFileSettings(fileId).mutTimeSettings.validBinding.get())
 
   /**
    * this test sets the columns correctly but doesn't specify the format.
@@ -49,19 +49,19 @@ class OpenSingleTimedFileTest extends SingleFileApplicationTest(TestFiles.timedL
     clickOnSetFormatButton()
 
     // settings aren't set after click on set button with invalid settings
-    assert(!LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.get())
+    assert(!LogoRRRGlobals.getLogFileSettings(fileId).mutTimeSettings.validBinding.get())
 
 
   @Test def setPositionAndFormatTest(): Unit =
     setCorrectStartAndEndColumns()
 
     // set format for this log file - it differs to the default setting a little bit
-    waitAndClickVisibleItem(TimeFormatTextField.uiNode(fileId)).write(TimestampSettings.DefaultPattern).eraseText(4).write(",SSS")
+    waitAndClickVisibleItem(TimeFormatTextField.uiNode(fileId)).write(TimeSettings.DefaultPattern).eraseText(4).write(",SSS")
 
     // set format and close stage
     waitAndClickVisibleItem(TimestampFormatSetButton.uiNode(fileId))
 
-    assert(LogoRRRGlobals.getLogFileSettings(fileId).hasTimestampSetting.get())
+    assert(LogoRRRGlobals.getLogFileSettings(fileId).mutTimeSettings.validBinding.get())
 
     val earilestTimestamp = "2023-08-02 21:16:33,193"
     val latestTimestamp = "2023-08-02 21:16:38,656"

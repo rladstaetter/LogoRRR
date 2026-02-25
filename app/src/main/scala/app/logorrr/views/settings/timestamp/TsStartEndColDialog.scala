@@ -1,7 +1,7 @@
 package app.logorrr.views.settings.timestamp
 
-import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.conf.{FileId, TimestampSettings}
+import app.logorrr.conf.mut.{MutLogFileSettings, MutTimeSettings}
+import app.logorrr.conf.{FileId, TimeSettings}
 import app.logorrr.model.{BoundId, LogEntry}
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.property.{ObjectProperty, ObjectPropertyBase, SimpleObjectProperty}
@@ -24,17 +24,15 @@ class TsStartEndColDialog(mutLogFileSettings: MutLogFileSettings
   val startColProperty: ObjectProperty[java.lang.Integer] = new SimpleObjectProperty[java.lang.Integer](null)
   val endColProperty: ObjectProperty[java.lang.Integer] = new SimpleObjectProperty[java.lang.Integer](null)
 
-  private def setInitialValues(someLocalTs: Option[TimestampSettings], someGlobalTs: Option[TimestampSettings]): Unit =
-    someLocalTs match
-      case Some(s) =>
-        setStartCol(s.startCol)
-        setEndCol(s.endCol)
-      case None =>
-        someGlobalTs match
-          case Some(s) =>
-            setStartCol(s.startCol)
-            setEndCol(s.endCol)
-          case None =>
+  private def setInitialValues(someLocalTs: MutTimeSettings, someGlobalTs: MutTimeSettings): Unit = {
+    if (someLocalTs.validBinding.get()) {
+      setStartCol(someLocalTs.getStartCol)
+      setEndCol(someLocalTs.getEndCol)
+    } else if (someGlobalTs.validBinding.get()) {
+      setStartCol(someGlobalTs.getStartCol)
+      setEndCol(someGlobalTs.getEndCol)
+    }
+  }
 
   /** 'pragmatic way' to determine width of max elems in this view */
   val maxLength: Int = logEntries.size().toString.length
@@ -53,15 +51,15 @@ class TsStartEndColDialog(mutLogFileSettings: MutLogFileSettings
   def setEndCol(i: Int): Unit = endColProperty.set(i)
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
-           , someLocalTimestampSettings: Option[TimestampSettings]
-           , someGlobalTimestampSettings: Option[TimestampSettings]
+           , someLocalTimeSettings: MutTimeSettings
+           , someGlobalTimeSettings: MutTimeSettings
            , startColProperty: SimpleObjectProperty[java.lang.Integer]
            , endColProperty: SimpleObjectProperty[java.lang.Integer]
           ): Unit =
     bindIdProperty(fileIdProperty)
     startColProperty.bind(this.startColProperty)
     endColProperty.bind(this.endColProperty)
-    setInitialValues(someLocalTimestampSettings, someGlobalTimestampSettings)
+    setInitialValues(someLocalTimeSettings, someGlobalTimeSettings)
 
   def shutdown(startColProperty: SimpleObjectProperty[java.lang.Integer]
                , endColProperty: SimpleObjectProperty[java.lang.Integer]): Unit = {

@@ -58,3 +58,5 @@ class OpsToolBar(owner: Window
     otherItemsRegion.shutdown(autoScrollProperty, logEntries, filteredList)
     timestampSettingsRegion.shutdown()
   }
+
+  val searchTextField: SearchTextField = searchRegion.searchTextField

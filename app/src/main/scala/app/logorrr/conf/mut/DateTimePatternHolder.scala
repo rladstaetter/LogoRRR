@@ -12,7 +12,7 @@ import scala.util.{Failure, Success, Try}
 trait DateTimePatternHolder:
   val dateTimePatternProperty: SimpleStringProperty = new SimpleStringProperty()
 
-  def getDateTimePatternCol: String = dateTimePatternProperty.get()
+  def getDateTimePattern: String = dateTimePatternProperty.get()
 
   def setDateTimePattern(dateTimePattern: String): Unit = dateTimePatternProperty.set(dateTimePattern)
 

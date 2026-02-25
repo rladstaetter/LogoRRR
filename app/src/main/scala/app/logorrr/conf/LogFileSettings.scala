@@ -10,8 +10,8 @@ object LogFileSettings:
 
   private val DefaultSelectedIndex = 0
   private val DefaultDividerPosition = 0.5
-  private val DefaultBlockSettings = BlockSettings(10)
-  private val DefaultLogFormat: Option[TimestampSettings] = None
+  private val DefaultBlockSize = 10
+  private val DefaultLogFormat: Option[TimeSettings] = None
   private val DefaultAutoScroll = false
   private val DefaultFirstViewIndex = 0
   private val DefaultLastViewIndex = 0
@@ -26,7 +26,7 @@ object LogFileSettings:
       , DefaultDividerPosition
       , TextConstants.DefaultFontSize
       , searchTermGroup.terms
-      , DefaultBlockSettings
+      , DefaultBlockSize
       , DefaultLogFormat
       , DefaultAutoScroll
       , DefaultFirstViewIndex
@@ -50,7 +50,7 @@ object LogFileSettings:
  * @param fontSize                    font size to use
  * @param searchTerms                 elements to be searched for, with their coloring and activation
  * @param blockSettings               settings for the left view
- * @param someTimestampSettings       used timestamp format
+ * @param someTimeSettings       used timestamp format
  * @param autoScroll                  true if 'follow mode' is active
  * @param firstVisibleTextCellIndex   which index is the first visible on the screen (depending on resolution, window size ...)
  * @param lastVisibleTextCellIndex    which index is the last visible on the screen (depending on resolution, window size ...)
@@ -62,8 +62,8 @@ case class LogFileSettings(fileId: FileId
                            , dividerPosition: Double
                            , fontSize: Int
                            , searchTerms: Seq[SearchTerm]
-                           , blockSettings: BlockSettings
-                           , someTimestampSettings: Option[TimestampSettings] = None
+                           , blockSize: Int
+                           , someTimeSettings: Option[TimeSettings] = None
                            , autoScroll: Boolean
                            , firstVisibleTextCellIndex: Int
                            , lastVisibleTextCellIndex: Int

@@ -1,6 +1,6 @@
 package app.logorrr.views.ops.time
 
-import javafx.beans.binding.BooleanBinding
+import javafx.beans.binding.{BooleanBinding, ObjectBinding}
 import javafx.beans.property.{DoubleProperty, SimpleObjectProperty}
 import javafx.scene.control.Label
 
@@ -11,7 +11,7 @@ class TimestampSliderLabel extends Label:
 
   def init(hasTimestampBinding: BooleanBinding
            , valueProperty: DoubleProperty
-           , dateTimeFormatterProperty: SimpleObjectProperty[DateTimeFormatter]): Unit = {
+           , dateTimeFormatterProperty: ObjectBinding[DateTimeFormatter]): Unit = {
     visibleProperty().bind(hasTimestampBinding)
     textProperty.bind(new DateTimeFormatterBinding(valueProperty, dateTimeFormatterProperty))
   }

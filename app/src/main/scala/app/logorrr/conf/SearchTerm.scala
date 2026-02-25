@@ -87,15 +87,11 @@ object SearchTerm:
    * @return A `Color` interpolated from the colors of the matched search strings, or `ColorMatcher.Unclassified`.
    */
   def calc(element: String, searchStrings: Set[SearchTerm]): Color =
-    // Filter for active search strings
-    val activeSearchStrings = searchStrings.filter(_.active)
-
-    // If there are no active search strings, return Unclassified
-    if element.isEmpty || activeSearchStrings.isEmpty then
+    if element.isEmpty || searchStrings.isEmpty then
       MutableSearchTerm.UnclassifiedColor
     else
       // Map each active search string to its occurrence count
-      val counts = activeSearchStrings.map { case SearchTerm(str, color, _) =>
+      val counts = searchStrings.map { case SearchTerm(str, color, _) =>
         val count = str.r.findAllIn(element).length
         (color, count)
       }.toMap
