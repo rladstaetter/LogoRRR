@@ -10,6 +10,7 @@ object DataModelEvent:
   val AddSearchTermButtonEvent: EventType[AddSearchTermButtonEvent] = new EventType(Event.ANY, "ADD_SEARCHTERM_BUTTON")
   val RemoveSearchTermButtonEvent: EventType[RemoveSearchTermButtonEvent] = new EventType(Event.ANY, "REMOVE_SEARCHTERM_BUTTON")
   val UpdateLogFilePredicate: EventType[UpdateLogFilePredicate] = new EventType(Event.ANY, "UPDATE_LOGFILE_PREDICATE")
+  val ScrollToActiveLogEntry: EventType[ScrollToActiveLogEntry] = new EventType(Event.ANY, "SCROLL_TO_ACTIVE_ENTRY")
 
 case class DateFilterEvent(timeSettings: TimeSettings) extends Event(DataModelEvent.DateFilterEvent)
 
@@ -20,3 +21,5 @@ case class RemoveSearchTermButtonEvent(mutableSearchTerm: MutableSearchTerm) ext
 class RemoveDateFilterEvent extends Event(DataModelEvent.RemoveDateFilterEvent)
 
 class UpdateLogFilePredicate extends Event(DataModelEvent.UpdateLogFilePredicate)
+
+class ScrollToActiveLogEntry extends Event(DataModelEvent.ScrollToActiveLogEntry)
