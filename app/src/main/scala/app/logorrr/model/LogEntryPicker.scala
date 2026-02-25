@@ -7,9 +7,5 @@ import javafx.scene.paint.Color
 
 class LogEntryPicker(settings: MutLogFileSettings) extends ColorPicker[LogEntry]:
 
-  var searchTerms: Set[SearchTerm] = settings.getSearchTerms.toSet
+  override def calc(e: LogEntry): Color = SearchTerm.calc(e.value, settings.activeSearchTermsBinding.get())
 
-  override def calc(e: LogEntry): Color = SearchTerm.calc(e.value, searchTerms)
-
-  override def init(): Unit =
-    searchTerms = settings.getSearchTerms.toSet

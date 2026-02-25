@@ -2,7 +2,7 @@ package app.logorrr.views.search.st
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTerm}
-import app.logorrr.model.{BoundId, LogEntry}
+import app.logorrr.model.{AddSearchTermButtonEvent, BoundId, LogEntry, UpdateLogFilePredicate}
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.stg.AddToFavoritesButton
@@ -28,10 +28,9 @@ object SearchTermToolBar extends UiNodeFileIdAware:
  *
  * Unclassified toggle button is calculated based on the other search terms.
  */
-class SearchTermToolBar(
-                         mutLogFileSettings: MutLogFileSettings
-                         , entries: ObservableList[LogEntry]
-                         , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]])
+class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings
+                        , entries: ObservableList[LogEntry]
+                        , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]])
   extends ToolBar with TinyLog with BoundId(SearchTermToolBar.uiNode(_).value):
 
   private val unclassifiedSearchTerm = MutableSearchTerm.mkUnclassified(Set())
@@ -44,7 +43,7 @@ class SearchTermToolBar(
   val unclassifiedButton =
     new UnclassifiedToggleButton(entries
       , mutLogFileSettings.mutSearchTerms
-      , mutLogFileSettings.showPredicate.showUnclassifiedProperty
+      , mutLogFileSettings.showUnclassifiedProperty
       , predicateProperty
       , mutLogFileSettings.showPredicate
     )
@@ -66,10 +65,7 @@ class SearchTermToolBar(
     mutLogFileSettings.mutSearchTerms.forEach(addSearchTermButton)
     getItems.addAll(immutableRightNodes *)
     mutLogFileSettings.mutSearchTerms.addListener(listChangeListener)
-    unclassifiedButton.init(mutLogFileSettings.fileIdProperty
-      , () => false
-      , unclassifiedSearchTerm
-      , mutLogFileSettings.mutSearchTerms)
+    unclassifiedButton.init(mutLogFileSettings.fileIdProperty, () => false, unclassifiedSearchTerm)
 
 
   def shutdown(): Unit =
@@ -91,28 +87,28 @@ class SearchTermToolBar(
 
   private def addSearchTermButton(mutSearchTerm: MutableSearchTerm): Unit =
 
-    def addButton = {
-      val button = new SearchTermToggleButton(entries, predicateProperty, mutLogFileSettings.showPredicate)
-      button.init(mutLogFileSettings.fileIdProperty
-        , () => true
-        , mutSearchTerm
-        , mutLogFileSettings.mutSearchTerms)
+    def addButton() = {
+      val button = new SearchTermToggleButton(entries)
+      button.init(mutLogFileSettings.fileIdProperty, () => true, mutSearchTerm)
       getItems.add(button)
     }
-
+    // handle favorite 'star' at the end
     if getItems.get(getItems.size - 1).isInstanceOf[AddToFavoritesButton] then
       val favButton = getItems.remove(getItems.size - 1)
       val spacer = getItems.remove(getItems.size - 1)
-      addButton
+      addButton()
       getItems.addAll(spacer, favButton)
     else
-      addButton
+      addButton()
+
+    fireEvent(AddSearchTermButtonEvent(mutSearchTerm)) // update LogEntry
 
   private def removeSearchTermButton(mutSearchTerm: MutableSearchTerm): Unit =
     getSearchTermButtons.find(_.getValue == mutSearchTerm.getValue).foreach(b =>
       getItems.remove(b)
       b.shutdown(mutSearchTerm.activeProperty)
     )
+    fireEvent(UpdateLogFilePredicate())
 
   def activeSearchTerms(): Seq[SearchTerm] = getSearchTermButtons.map(_.asSearchTerm)
 

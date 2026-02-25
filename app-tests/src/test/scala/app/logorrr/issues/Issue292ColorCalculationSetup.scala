@@ -29,8 +29,8 @@ abstract class Issue292ColorCalculationSetup(desiredColor: Color
     , Map(TestFiles.simpleLog5.value ->
       LogFileSettings.mk(TestFiles.simpleLog5, TestSettings.DefaultGroups.searchTermGroups.tail.head)
         .copy(
-          searchTerms = Seq()
-          , blockSettings = BlockSettings(50)
+          searchTerms = searchTerms
+          , blockSize= 50
           , dividerPosition = 0.599))
     , None
     , None

@@ -28,7 +28,7 @@ class LogoRRRMain(stage: Stage
 
   def shutdown(): Unit = logSource.ui.shutdown()
 
-  addEventHandler(DataModelEvent.AddTimeRangeFilterEvent, (e: DateFilterEvent) => {
-    logSource.ui.applyTimeSettings(e.timestampSettings)
+  addEventHandler(DataModelEvent.DateFilterEvent, (e: DateFilterEvent) => {
+    logSource.ui.applyTimeSettings(e.timeSettings)
     e.consume()
   })

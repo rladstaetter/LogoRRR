@@ -10,13 +10,14 @@ object LogFileSettings:
 
   private val DefaultSelectedIndex = 0
   private val DefaultDividerPosition = 0.5
-  private val DefaultBlockSettings = BlockSettings(10)
-  private val DefaultLogFormat: Option[TimestampSettings] = None
+  private val DefaultBlockSize = 10
+  private val DefaultLogFormat: Option[TimeSettings] = None
   private val DefaultAutoScroll = false
   private val DefaultFirstViewIndex = 0
   private val DefaultLastViewIndex = 0
   val DefaultLowerTimestamp: Int = 0
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
+  val ShowUnclassified = true
 
   def mk(fileId: FileId, searchTermGroup: SearchTermGroup): LogFileSettings =
     val now = Instant.now().toEpochMilli
@@ -26,13 +27,14 @@ object LogFileSettings:
       , DefaultDividerPosition
       , TextConstants.DefaultFontSize
       , searchTermGroup.terms
-      , DefaultBlockSettings
+      , DefaultBlockSize
       , DefaultLogFormat
       , DefaultAutoScroll
       , DefaultFirstViewIndex
       , DefaultLastViewIndex
       , DefaultLowerTimestamp
-      , now)
+      , now
+      , ShowUnclassified)
 
 
 /**
@@ -43,18 +45,20 @@ object LogFileSettings:
  *
  * Filters define which keywords are relevant for this given log file.
  *
- * @param fileId                      wraps file reference
- * @param selectedLineNumber          which line number was selected
- * @param firstOpened                 used to sort log files in tabs
- * @param dividerPosition             position of divider for this view
- * @param fontSize                    font size to use
- * @param searchTerms                 elements to be searched for, with their coloring and activation
- * @param blockSettings               settings for the left view
- * @param someTimestampSettings       used timestamp format
- * @param autoScroll                  true if 'follow mode' is active
- * @param firstVisibleTextCellIndex   which index is the first visible on the screen (depending on resolution, window size ...)
- * @param lastVisibleTextCellIndex    which index is the last visible on the screen (depending on resolution, window size ...)
- * @param someSelectedSearchTermGroup selected search term group, if any
+ * @param fileId                    wraps file reference
+ * @param selectedLineNumber        which line number was selected
+ * @param firstOpened               used to sort log files in tabs
+ * @param dividerPosition           position of divider for this view
+ * @param fontSize                  font size to use
+ * @param searchTerms               elements to be searched for, with their coloring and activation
+ * @param blockSize                 settings for the left view
+ * @param someTimeSettings          used timestamp format
+ * @param autoScroll                true if 'follow mode' is active
+ * @param firstVisibleTextCellIndex which index is the first visible on the screen (depending on resolution, window size ...)
+ * @param lastVisibleTextCellIndex  which index is the last visible on the screen (depending on resolution, window size ...)
+ * @param lowerTimestamp            position of lower slider
+ * @param upperTimestamp            position of upper slider
+ * @param showUnclassified          show unclassified elements (defaults to true)
  */
 case class LogFileSettings(fileId: FileId
                            , selectedLineNumber: Int
@@ -62,13 +66,14 @@ case class LogFileSettings(fileId: FileId
                            , dividerPosition: Double
                            , fontSize: Int
                            , searchTerms: Seq[SearchTerm]
-                           , blockSettings: BlockSettings
-                           , someTimestampSettings: Option[TimestampSettings] = None
+                           , blockSize: Int
+                           , someTimeSettings: Option[TimeSettings] = None
                            , autoScroll: Boolean
                            , firstVisibleTextCellIndex: Int
                            , lastVisibleTextCellIndex: Int
                            , lowerTimestamp: Long
-                           , upperTimestamp: Long) derives ReadWriter:
+                           , upperTimestamp: Long
+                           , showUnclassified: Boolean) derives ReadWriter:
 
   lazy val path: Path = fileId.asPath.toAbsolutePath
 

@@ -2,7 +2,7 @@ package app.logorrr.views.settings.timestamp
 
 import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.mut.MutLogFileSettings
-import app.logorrr.conf.{LogoRRRGlobals, TimestampSettings}
+import app.logorrr.conf.{LogoRRRGlobals, TimeSettings}
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.logfiletab.LogFilePane
@@ -18,7 +18,7 @@ object TimestampSettingStage:
 
 
 class TimestampSettingStage(logFilePane: LogFilePane
-                            , settings: MutLogFileSettings
+                            , mutLogFileSettings: MutLogFileSettings
                             , chunkListView: ChunkListView[LogEntry]
                             , logEntries: ObservableList[LogEntry]
                             , tsRegion: TimestampSettingsRegion) extends Stage:
@@ -27,7 +27,7 @@ class TimestampSettingStage(logFilePane: LogFilePane
   setTitle(s"Specifiy timestamp pattern and position")
 
   private val timeStampSettingsBorderPane = new TimestampSettingsBorderPane(logFilePane
-    , settings
+    , mutLogFileSettings
     , logEntries
     , chunkListView
     , tsRegion
@@ -40,7 +40,7 @@ class TimestampSettingStage(logFilePane: LogFilePane
 
   def init(owner: Window): Unit =
     initOwner(owner)
-    timeStampSettingsBorderPane.init(LogoRRRGlobals.getTimestampSettings.map(_.mkImmutable()), settings.getSomeTimestampSettings)
+    timeStampSettingsBorderPane.init(LogoRRRGlobals.timeSettings, mutLogFileSettings.mutTimeSettings)
     setScene(new Scene(timeStampSettingsBorderPane, TimestampSettingStage.width, TimestampSettingStage.height))
 
   def shutdown(): Unit = timeStampSettingsBorderPane.shutdown()

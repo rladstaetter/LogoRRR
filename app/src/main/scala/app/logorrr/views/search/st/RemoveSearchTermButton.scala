@@ -2,16 +2,18 @@ package app.logorrr.views.search.st
 
 import app.logorrr.clv.color.ColorUtil
 import app.logorrr.conf.FileId
+import app.logorrr.model.RemoveSearchTermButtonEvent
 import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
 import app.logorrr.views.search.MutableSearchTerm
-import app.logorrr.views.search.st.RemoveSearchTermButton.{buttonCssStyle, cssStyle}
+import app.logorrr.views.search.st.RemoveSearchTermButton.cssStyle
 import app.logorrr.views.util.GfxElements
 import javafx.beans.binding.{Bindings, BooleanBinding}
 import javafx.beans.property.ObjectPropertyBase
 import javafx.collections.ObservableList
 import javafx.scene.control.Button
-import javafx.scene.paint.{Color, Paint}
+import javafx.scene.paint.Color
+import org.kordamp.ikonli.javafx.FontIcon
 
 
 object RemoveSearchTermButton extends UiNodeSearchTermAware:
@@ -46,18 +48,17 @@ object RemoveSearchTermButton extends UiNodeSearchTermAware:
  * If clicked, removes a search term group from
  */
 class RemoveSearchTermButton extends Button:
-  val icon = GfxElements.Icons.windowClose
+  val icon: FontIcon = GfxElements.Icons.windowClose
   setGraphic(icon)
   setTooltip(GfxElements.ToolTips.mkRemove)
   setStyle(cssStyle)
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , visibleBinding: BooleanBinding
-           , mutableSearchTerm: MutableSearchTerm
-           , mutSearchTerms: ObservableList[MutableSearchTerm]): Unit =
+           , mutableSearchTerm: MutableSearchTerm): Unit =
     visibleProperty().bind(visibleBinding)
-    // TODO implement via bubble event
-    setOnAction(e => mutSearchTerms.remove(mutableSearchTerm))
+    setOnAction(e => fireEvent(RemoveSearchTermButtonEvent(mutableSearchTerm)))
+
     idProperty.bind(Bindings.createStringBinding(
       () =>
         (for fileId <- Option(fileIdProperty.get())

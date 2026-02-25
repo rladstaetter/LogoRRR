@@ -11,7 +11,8 @@ import javafx.scene.paint.Color
 
 import scala.jdk.CollectionConverters.*
 
-class LogEntryListCell(filteredList: FilteredList[LogEntry]
+class LogEntryListCell(logTextView: LogTextView
+                       , filteredList: FilteredList[LogEntry]
                        , searchTermsAndColors: ObservableList[(String, Color)]
                        , selectedLineNumberProperty: SimpleIntegerProperty
                        , scrollToActiveLogEntry: () => Unit
@@ -34,10 +35,11 @@ class LogEntryListCell(filteredList: FilteredList[LogEntry]
         setGraphic(entry)
 
         val copySelectionMenuItem = new CopyEntriesMenuItem(getListView.getSelectionModel)
-        val ignoreAboveMenuItem = new IgnoreAboveMenuItem(selectedLineNumberProperty
+        val ignoreAboveMenuItem = new IgnoreAboveMenuItem(
+          logTextView
+          , selectedLineNumberProperty
           , e
-          , filteredList
-          , scrollToActiveLogEntry)
+          , filteredList)
         val ignoreBelowMenuItem = new IgnoreBelowMenuItem(e, filteredList)
         val menu = new ContextMenu(copySelectionMenuItem, ignoreAboveMenuItem, ignoreBelowMenuItem)
         setContextMenu(menu)

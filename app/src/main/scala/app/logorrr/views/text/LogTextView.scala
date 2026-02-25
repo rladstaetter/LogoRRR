@@ -1,14 +1,15 @@
 package app.logorrr.views.text
 
 import app.logorrr.conf.FileId
-import app.logorrr.model.{BoundId, LogEntry}
+import app.logorrr.model.{BoundId, DataModelEvent, LogEntry, ScrollToActiveLogEntry}
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.Bindings
-import javafx.beans.property.{ObjectPropertyBase, Property, SimpleIntegerProperty, SimpleObjectProperty}
+import javafx.beans.property.{ObjectPropertyBase, Property, SimpleIntegerProperty}
+import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.transformation.FilteredList
-import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.control.*
 import javafx.scene.paint.Color
 import javafx.util.Subscription
@@ -80,6 +81,8 @@ class LogTextView(filteredList: FilteredList[LogEntry])
             // to trigger ChunkListView scrollTo and repaint
             selectedLineNumberProperty.set(selectedEntry.lineNumber)
           case None => // do nothing
+    else
+      logTrace("height was 0")
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , selectedLineNumberProperty: Property[Number]
@@ -88,22 +91,33 @@ class LogTextView(filteredList: FilteredList[LogEntry])
            , lastVisibleTextCellIndexProperty: Property[Number]
            , mutSearchTerms: ObservableList[MutableSearchTerm]
           ): Unit =
+    getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
+
     bindIdProperty(fileIdProperty)
     val activeSearchTerms = new FilteredList[MutableSearchTerm](mutSearchTerms, _.isActive)
-    activeSearchTerms.forEach(st => searchTermsAndColors.add((st.getValue,st.getColor)))
-
+    activeSearchTerms.forEach(st => searchTermsAndColors.add((st.getValue, st.getColor)))
     this.searchTermChangeListener = new MutableSearchTermListener(activeSearchTerms, searchTermsAndColors, this)
     mutSearchTerms.addListener(searchTermChangeListener)
     this.selectedLineNumberProperty.bindBidirectional(selectedLineNumberProperty)
     this.fontsizeProperty.bind(fontsizeProperty)
     this.firstVisibleTextCellIndexProperty.bindBidirectional(firstVisibleTextCellIndexProperty)
     this.lastVisibleTextCellIndexProperty.bindBidirectional(lastVisibleTextCellIndexProperty)
-    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell(filteredList, this.searchTermsAndColors, this.selectedLineNumberProperty, scrollToActiveLogEntry, this.fontsizeProperty, this.maxSizeProperty))
+    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell(this, filteredList, this.searchTermsAndColors, this.selectedLineNumberProperty, scrollToActiveLogEntry, this.fontsizeProperty, this.maxSizeProperty))
     setItems(filteredList)
     getSelectionModel.setSelectionMode(SelectionMode.MULTIPLE)
-    getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
+    getSelectionModel.select(this.selectedLineNumberProperty.getValue.intValue() - 1)
 
-
+    // hack to delay calling scrollToActiveLogEntry only after listview has a nonzero height
+    val heightListener = new ChangeListener[Number] {
+      override def changed(obs: ObservableValue[? <: Number], oldVal: Number, newVal: Number): Unit = {
+        if (newVal.doubleValue() > 0) {
+          scrollToActiveLogEntry()
+          // Unregister self so we don't scroll every time the window is resized
+          heightProperty().removeListener(this)
+        }
+      }
+    }
+    heightProperty.addListener(heightListener)
   /** clean up listeners */
   def shutdown(selectedLineNumberProperty: Property[Number]
                , firstVisibleTextCellIndexProperty: Property[Number]
@@ -123,5 +137,9 @@ class LogTextView(filteredList: FilteredList[LogEntry])
     this.someScrollBarSubscription.foreach(_.unsubscribe())
     this.maxSizeProperty.unbind()
 
+  addEventHandler(DataModelEvent.ScrollToActiveLogEntry, (e: ScrollToActiveLogEntry) =>
+    scrollToActiveLogEntry()
+    e.consume()
+  )
 
 

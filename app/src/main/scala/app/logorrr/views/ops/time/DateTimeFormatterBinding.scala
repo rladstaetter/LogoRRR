@@ -1,13 +1,13 @@
 package app.logorrr.views.ops.time
 
-import javafx.beans.binding.StringBinding
+import javafx.beans.binding.{ObjectBinding, StringBinding}
 import javafx.beans.property.{DoubleProperty, SimpleObjectProperty}
 
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId}
 
 class DateTimeFormatterBinding(valueProperty: DoubleProperty
-                               , dateTimeFormatter: SimpleObjectProperty[DateTimeFormatter]) extends StringBinding {
+                               , dateTimeFormatter: ObjectBinding[DateTimeFormatter]) extends StringBinding {
   bind(valueProperty, dateTimeFormatter)
 
   override def computeValue(): String =

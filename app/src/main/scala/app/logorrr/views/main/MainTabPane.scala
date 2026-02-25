@@ -1,7 +1,7 @@
 package app.logorrr.views.main
 
-import app.logorrr.conf.{FileId, LogoRRRGlobals, TimestampSettings}
-import app.logorrr.model.{FileIdDividerSearchTerm, LogorrrModel, UiTarget}
+import app.logorrr.conf.{FileId, LogoRRRGlobals, TimeSettings}
+import app.logorrr.model.{LogorrrModel, UiTarget}
 import app.logorrr.views.a11y.uinodes.UiNodes
 import app.logorrr.views.logfiletab.{LogFileTab, TabControlEvent}
 import javafx.beans.binding.Bindings
@@ -11,7 +11,6 @@ import net.ladstatt.util.log.TinyLog
 import java.awt.Desktop
 import java.util
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
 object MainTabPane:
@@ -46,7 +45,7 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
 
   private def getByFileId(fileId: FileId): Option[LogFileTab] = getLogFileTabs.find(_.getFileId == fileId)
 
-  override def getInfos: Seq[FileIdDividerSearchTerm] = getLogFileTabs.map(_.getInfo).toSeq
+  override def contains(p: FileId): Boolean = getLogFileTabs.exists(lr => lr.getFileId == p)
 
   override def selectLastLogFile(): Unit = getSelectionModel.selectLast()
 
@@ -54,8 +53,6 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
     getByFileId(fileId) match
       case Some(logFileTab) => getSelectionModel.select(logFileTab)
       case None => selectLastLogFile()
-
-  override def contains(p: FileId): Boolean = getLogFileTabs.exists(lr => lr.getFileId == p)
 
   /** Adds a new logfile to display and initializes bindings and listeners */
   override def addData(model: LogorrrModel): Unit =
@@ -73,7 +70,7 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
 
   def getSelectedTab: LogFileTab = getSelectionModel.getSelectedItem.asInstanceOf[LogFileTab]
 
-  def applyTimeSettings(timeSettings: TimestampSettings): Unit =
+  def applyTimeSettings(timeSettings: TimeSettings): Unit =
     getLogFileTabs.foreach(lf => lf.applyTimeSettings(timeSettings))
 
   // --- event handlers ---------------------------------------------------

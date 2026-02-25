@@ -1,16 +1,12 @@
 package app.logorrr.conf.mut
 
 import app.logorrr.conf.*
-import app.logorrr.model.LogEntry
 import app.logorrr.util.JetbrainsMonoFontStyleBinding
 import app.logorrr.views.search.MutableSearchTerm
-import app.logorrr.views.search.st.ASearchTermToggleButton
-import javafx.beans.binding.{BooleanBinding, StringBinding}
+import javafx.beans.binding.{ObjectBinding, StringBinding}
 import javafx.beans.property.*
-import javafx.collections.transformation.FilteredList
 import javafx.collections.{FXCollections, ObservableList}
 
-import java.time.format.DateTimeFormatter
 import java.util.function.Predicate
 import scala.jdk.CollectionConverters.*
 
@@ -18,70 +14,56 @@ object MutLogFileSettings:
 
   def apply(logFileSettings: LogFileSettings): MutLogFileSettings =
     val s = new MutLogFileSettings
-    s.setFileId(logFileSettings.fileId)
-    s.setSelectedLineNumber(logFileSettings.selectedLineNumber)
-    s.setFontSize(logFileSettings.fontSize)
-    s.setBlockSettings(logFileSettings.blockSettings)
+    s.fileIdProperty.set(logFileSettings.fileId)
+    s.selectedLineNumberProperty.set(logFileSettings.selectedLineNumber)
+    s.fontSizeProperty.set(logFileSettings.fontSize)
+    s.blockSizeProperty.set(logFileSettings.blockSize)
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
-    s.setDividerPosition(logFileSettings.dividerPosition)
+    s.dividerPositionProperty.set(logFileSettings.dividerPosition)
     s.setMutableSearchTerms(logFileSettings.searchTerms.map(f => MutableSearchTerm(f)))
-    s.someTimestampSettings.set(logFileSettings.someTimestampSettings)
-    logFileSettings.someTimestampSettings match
-      case Some(sts) => s.setDateTimeFormatter(sts.dateTimeFormatter)
-      case None =>
-    s.setAutoScroll(logFileSettings.autoScroll)
-    s.setLowerTimestampValue(logFileSettings.lowerTimestamp)
-    s.setUpperTimestampValue(logFileSettings.upperTimestamp)
+    s.autoScrollActiveProperty.set(logFileSettings.autoScroll)
+    s.lowerBoundaryProperty.set(logFileSettings.lowerTimestamp)
+    s.upperBoundaryProperty.set(logFileSettings.upperTimestamp)
+    logFileSettings.someTimeSettings.foreach(s.mutTimeSettings.set)
+    s.showUnclassifiedProperty.set(logFileSettings.showUnclassified)
     s
 
 
 class MutLogFileSettings:
 
   /** with the extractor the changelistener also fires if an element is changed */
+  val autoScrollActiveProperty = new SimpleBooleanProperty(this, "autoScrollActiveProperty")
+  val blockSizeProperty = new SimpleIntegerProperty(this, "blockSizeProperty")
+  val dividerPositionProperty = new SimpleDoubleProperty(this, "dividerProperty")
+  val fileIdProperty = new SimpleObjectProperty[FileId](this, "fileIdProperty")
+  val firstOpenedProperty = new SimpleLongProperty(this, "firstOpenedProperty")
+  val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty(this, "firstVisibleTextCellIndexProperty")
+  val fontSizeProperty = new SimpleIntegerProperty(this, "fontSizeProperty")
+  val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty(this, "lastVisibleTextCellIndexProperty")
   val mutSearchTerms: ObservableList[MutableSearchTerm] = FXCollections.observableArrayList[MutableSearchTerm](MutableSearchTerm.extractor)
+  val selectedLineNumberProperty = new SimpleIntegerProperty(this, "selectedLineNumberProperty")
+  val lowerBoundaryProperty = new SimpleLongProperty(this, "lowerBoundaryProperty")
+  val upperBoundaryProperty = new SimpleLongProperty(this, "upperBoundaryProperty")
+  val showUnclassifiedProperty = new SimpleBooleanProperty(true, "showUnclassifiedProperty")
+  val mutTimeSettings = new MutTimeSettings
 
-  val showPredicate = new LogFilePredicate(mutSearchTerms)
-  var someUnclassifiedSearchTerm: Option[ASearchTermToggleButton] = None
+  /** is reset on various user interface action which should trigger a configuration save action */
+  val repaintProperty = new SimpleBooleanProperty(this, "repaintProperty", false)
 
-  val fileIdProperty = new SimpleObjectProperty[FileId]()
-  private val firstOpenedProperty = new SimpleLongProperty()
-  val dateTimeFormatterProperty = new SimpleObjectProperty[DateTimeFormatter](TimestampSettings.DefaultFormatter)
+  val activeSearchTermsBinding: ObjectBinding[Set[SearchTerm]] = new ObjectBinding[Set[SearchTerm]] {
 
-  val fontSizeProperty = new SimpleIntegerProperty()
-  val blockSizeProperty = new SimpleIntegerProperty()
-  val selectedLineNumberProperty = new SimpleIntegerProperty()
-  val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty()
-  val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
+    bind(mutSearchTerms)
 
-  private val someTimestampSettings = new SimpleObjectProperty[Option[TimestampSettings]](None)
+    override def computeValue(): Set[SearchTerm] = mutSearchTerms.filtered((t: MutableSearchTerm) => t.isActive).asScala.map(_.asSearchTerm).toSet
+  }
 
-  val dividerPositionProperty = new SimpleDoubleProperty()
-  val autoScrollActiveProperty = new SimpleBooleanProperty()
-
-
-  def setLowerTimestampValue(lowerValue: Long): Unit = showPredicate.lowerTimestampValueProperty.set(lowerValue)
-
-  def getLowerTimestampValue: Long = showPredicate.lowerTimestampValueProperty.get()
-
-  def setUpperTimestampValue(upperValue: Long): Unit = showPredicate.upperTimestampValueProperty.set(upperValue)
-
-  def getUpperTimestampValue: Long = showPredicate.upperTimestampValueProperty.get()
-
-  def getSomeTimestampSettings: Option[TimestampSettings] = someTimestampSettings.get()
-
-  def getDateTimeFormatter: DateTimeFormatter = dateTimeFormatterProperty.get()
-
-  def setDateTimeFormatter(dateTimeFormatter: DateTimeFormatter): Unit = dateTimeFormatterProperty.set(dateTimeFormatter)
+  val showPredicate = new LogFilePredicate(mutSearchTerms
+    , showUnclassifiedProperty
+    , lowerBoundaryProperty
+    , upperBoundaryProperty)
 
   def setMutableSearchTerms(mutableSearchTerms: Seq[MutableSearchTerm]): Unit =
     mutSearchTerms.setAll(mutableSearchTerms *)
-
-
-  val hasTimestampSetting: BooleanBinding = new BooleanBinding:
-    bind(someTimestampSettings)
-
-    override def computeValue(): Boolean =
-      Option(someTimestampSettings.get()).exists(_.isDefined)
 
   def setFirstVisibleTextCellIndex(value: Int): Unit = firstVisibleTextCellIndexProperty.set(value)
 
@@ -89,33 +71,15 @@ class MutLogFileSettings:
 
   val fontStyleBinding: StringBinding = new JetbrainsMonoFontStyleBinding(fontSizeProperty)
 
-  def setSomeTimestampSettings(timestampSettings: Option[TimestampSettings]): Unit =
-    someTimestampSettings.set(timestampSettings)
-    timestampSettings match
-      case Some(value) => setDateTimeFormatter(value.dateTimeFormatter)
-      case None => setDateTimeFormatter(null)
-
-  def setAutoScroll(autoScroll: Boolean): Unit = autoScrollActiveProperty.set(autoScroll)
+  def setTimeSettings(timeSettings: TimeSettings): Unit = mutTimeSettings.set(timeSettings)
 
   def isAutoScrollActive: Boolean = autoScrollActiveProperty.get()
 
   def getFontSize: Int = fontSizeProperty.get()
 
-  def setBlockSettings(bs: BlockSettings): Unit = blockSizeProperty.set(bs.size)
-
   def getBlockSize: Int = blockSizeProperty.get()
 
-  def setFileId(path: FileId): Unit = fileIdProperty.set(path)
-
   def getFileId: FileId = fileIdProperty.get()
-
-  def setSelectedLineNumber(lineNumber: Int): Unit = selectedLineNumberProperty.set(lineNumber)
-
-  def setFontSize(fontSize: Int): Unit = fontSizeProperty.set(fontSize)
-
-  def setDividerPosition(dividerPosition: Double): Unit = dividerPositionProperty.set(dividerPosition)
-
-  def getDividerPosition: Double = dividerPositionProperty.get()
 
   def getFirstOpened: Long = firstOpenedProperty.get()
 
@@ -126,15 +90,33 @@ class MutLogFileSettings:
       , dividerPositionProperty.get()
       , fontSizeProperty.get()
       , getSearchTerms
-      , BlockSettings(blockSizeProperty.get())
-      , someTimestampSettings.get()
+      , blockSizeProperty.get()
+      , if mutTimeSettings.validBinding.get() then Option(mutTimeSettings.mkImmutable()) else None
       , autoScrollActiveProperty.get()
       , firstVisibleTextCellIndexProperty.get()
       , lastVisibleTextCellIndexProperty.get()
-      , showPredicate.lowerTimestampValueProperty.get()
-      , showPredicate.upperTimestampValueProperty.get()
+      , lowerBoundaryProperty.get()
+      , upperBoundaryProperty.get()
+      , showUnclassifiedProperty.get()
     )
+
 
   def getSearchTerms: Seq[SearchTerm] =
     mutSearchTerms.asScala.toSeq.map(f => SearchTerm(f.getValue, f.getColor, f.isActive))
 
+  def allProps: Set[Property[?]] =
+    Set(
+      autoScrollActiveProperty
+      , blockSizeProperty
+      , dividerPositionProperty
+      , fileIdProperty
+      , firstOpenedProperty
+      , firstVisibleTextCellIndexProperty
+      , fontSizeProperty
+      , lastVisibleTextCellIndexProperty
+      , selectedLineNumberProperty
+      , lowerBoundaryProperty
+      , upperBoundaryProperty
+      , showUnclassifiedProperty
+      , repaintProperty
+    ) ++ mutTimeSettings.allProps

@@ -1,7 +1,7 @@
 package app.logorrr.views.settings
 
 import app.logorrr.conf.*
-import app.logorrr.conf.mut.{MutSearchTermGroup, MutTimestampSettings}
+import app.logorrr.conf.mut.{MutSearchTermGroup, MutTimeSettings}
 import app.logorrr.model.DateFilterEvent
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.uinodes.SettingsEditor
@@ -29,7 +29,7 @@ class SettingsEditor(owner: Stage
   private val searchTermGroupEditor =
     SettingsManageStgEditor(fileId, LogoRRRGlobals.searchTermGroupEntries)
 
-  private val timeSettingsEditor = TimestampSettingsEditor(LogoRRRGlobals.getTimestampSettings)
+  private val timeSettingsEditor = TimestampSettingsEditor(LogoRRRGlobals.timeSettings)
 
   private val contentLayout = new VBox(10)
   VBox.setVgrow(contentLayout, Priority.ALWAYS)
@@ -39,8 +39,8 @@ class SettingsEditor(owner: Stage
   resetButton.setOnAction(_ => {
     LogoRRRGlobals.clearSearchTermGroups()
     Settings.DefaultSearchTermGroups.map(MutSearchTermGroup.apply).foreach(LogoRRRGlobals.add)
-    LogoRRRGlobals.setTimestampSettings(null)
-    timeSettingsEditor.updateSettings(None)
+    LogoRRRGlobals.setTimeSettings(MutTimeSettings(TimeSettings.Invalid))
+    timeSettingsEditor.updateSettings(MutTimeSettings(TimeSettings.Invalid))
   })
 
   private val applyAndCloseButton: Button = new ApplyAndCloseSettingsEditorButton(this, main, timeSettingsEditor)
@@ -71,7 +71,7 @@ class ApplyAndCloseSettingsEditorButton(stage: Stage
   setId(SettingsEditor.CloseButton.value)
   setOnAction(_ =>
     val settings = timeSettingsEditor.getTimeSettings()
-    LogoRRRGlobals.setTimestampSettings(MutTimestampSettings(settings))
+    LogoRRRGlobals.setTimeSettings(MutTimeSettings(settings))
     main.fireEvent(DateFilterEvent(settings))
     stage.close())
 }

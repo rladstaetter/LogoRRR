@@ -31,15 +31,13 @@ object ASearchTermToggleButton extends UiNodeSearchTermAware:
 /**
  * Displays a search term and triggers displaying the results.
  */
-abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]
-                                       , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]
-                                       , logFilePredicate: LogFilePredicate) extends ToggleButton
+abstract class ASearchTermToggleButton extends ToggleButton
   with ValuePropertyHolder
   with ColorPropertyHolder
   with FileIdPropertyHolder:
 
   private val updateLogFilePredicate: ChangeListener[lang.Boolean] = JfxUtils.onNew[java.lang.Boolean](e => {
-    LogFilePredicate.update(predicateProperty, logFilePredicate)
+    fireEvent(UpdateLogFilePredicate())
   })
 
   private val origColorProperty = new SimpleObjectProperty[Color]()
@@ -70,15 +68,14 @@ abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , visibleBinding: BooleanBinding
-           , mutSearchTerm: MutableSearchTerm
-           , mutSearchTerms: ObservableList[MutableSearchTerm]): Unit = {
+           , mutSearchTerm: MutableSearchTerm): Unit = {
+    selectedProperty().bindBidirectional(mutSearchTerm.activeProperty)
     selectedProperty().addListener(updateLogFilePredicate)
     setOrigColor(mutSearchTerm.getColor)
     bindFileIdProperty(fileIdProperty)
     idProperty.bind(Bindings.createStringBinding(() => ASearchTermToggleButton.uiNode(getFileId, getValue).value, fileIdProperty, valueProperty))
     styleProperty().bind(CssBindingUtil.mkGradientStyleBinding(selectedProperty, colorProperty))
     hitsLabel.init(contrastColorProperty, hitsProperty)
-
 
     valueProperty.bind(mutSearchTerm.valueProperty)
     searchTermLabel.init(contrastColorProperty, valueProperty)
@@ -87,12 +84,10 @@ abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]
       if isSelected then getOrigColor else getOrigColor
     }, selectedProperty))
 
-    selectedProperty().bindBidirectional(mutSearchTerm.activeProperty)
     removeSearchTermButton.init(
       fileIdProperty
       , visibleBinding
-      , mutSearchTerm
-      , mutSearchTerms)
+      , mutSearchTerm)
 
     contrastColorProperty.bind(CssBindingUtil.mkContrastPropertyBinding(selectedProperty(), colorProperty))
     contrastColorProperty.addListener(colorListener)
@@ -100,10 +95,10 @@ abstract class ASearchTermToggleButton(entries: ObservableList[LogEntry]
 
   def shutdown(activeProperty: BooleanProperty): Unit = {
     selectedProperty().removeListener(updateLogFilePredicate)
+    selectedProperty().unbindBidirectional(activeProperty)
     contrastColorProperty.unbind()
     contrastColorProperty.removeListener(colorListener)
     removeSearchTermButton.shutdown()
-    selectedProperty().unbindBidirectional(activeProperty)
     colorProperty.unbind()
     hitsProperty.unbind()
     hitsLabel.shutdown()

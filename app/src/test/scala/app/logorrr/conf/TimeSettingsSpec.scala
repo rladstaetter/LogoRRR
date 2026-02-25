@@ -1,24 +1,25 @@
 package app.logorrr.conf
 
+import app.logorrr.util.TimeUtil
 import org.scalacheck.Gen
 import org.scalatest.wordspec.AnyWordSpec
 
 import java.time.Instant
 import scala.util.{Random, Try}
 
-object TimestampSettingsSpec:
-  val gen: Gen[TimestampSettings] = for
+object TimeSettingsSpec:
+  val gen: Gen[TimeSettings] = for
     start <- Gen.posNum[Int]
     end <- Gen.chooseNum(start, Random.nextInt(start + 100) + start)
-    dtp <- Gen.const(TimestampSettings.DefaultPattern)
-  yield TimestampSettings(start, end, dtp)
+    dtp <- Gen.const(TimeSettings.DefaultPattern)
+  yield TimeSettings(start, end, dtp)
 
 
-class TimestampSettingsSpec extends AnyWordSpec:
+class TimeSettingsSpec extends AnyWordSpec:
 
   "Log Format Tests" should :
     "parse valid timestamp" in :
-      val t: Option[Instant] = TimestampSettings.parseInstant("2024-08-11 12:38:00", TimestampSettings(0, 19, "yyyy-MM-dd HH:mm:ss"))
+      val t: Option[Instant] = TimeUtil.parseInstant("2024-08-11 12:38:00", TimeSettings(0, 19, "yyyy-MM-dd HH:mm:ss"))
       assert(t.isDefined)
       assert(t.exists(_.toEpochMilli == 1723372680000L))
     "Instant.MIN.toEpocMilli throws exception" in assert(Try(Instant.MIN.toEpochMilli).isFailure)

@@ -243,7 +243,6 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
             ): Unit =
     if shape.getWidth > blockSize then
       // do this once for all paint operations
-      elementColorPicker.init()
       if blockSize > 1 then
         paintRects(pixelBuffer, entries, shape, blockSize)
       else

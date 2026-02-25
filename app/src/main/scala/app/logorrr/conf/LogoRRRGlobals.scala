@@ -1,17 +1,16 @@
 package app.logorrr.conf
 
 import app.logorrr.LogoRRRApp
-import app.logorrr.conf.mut.{MutLogFileSettings, MutSearchTermGroup, MutSettings, MutTimestampSettings}
+import app.logorrr.conf.mut.{MutLogFileSettings, MutSearchTermGroup, MutSettings, MutTimeSettings}
 import app.logorrr.io.{OsxBridgeHelper, SettingsFileIO}
 import app.logorrr.services.hostservices.LogoRRRHostServices
-import javafx.beans.property.{SimpleListProperty, SimpleObjectProperty}
-import javafx.collections.ObservableList
+import app.logorrr.util.PersistenceManager
+import javafx.beans.property.{Property, SimpleListProperty, SimpleObjectProperty}
 import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
 import java.nio.file.Path
-import scala.jdk.CollectionConverters.*
 
 
 /**
@@ -20,6 +19,8 @@ import scala.jdk.CollectionConverters.*
  * The user can change certain values via interacting or explicitly setting values in the preferences dialog.
  */
 object LogoRRRGlobals extends TinyLog:
+
+  val persistenceManager = new PersistenceManager()
 
   val mutSettings = new MutSettings
 
@@ -47,7 +48,9 @@ object LogoRRRGlobals extends TinyLog:
 
   def clearSearchTermGroups(): Unit = mutSettings.clearSearchTermGroups()
 
-  def unbindWindow(): Unit = mutSettings.unbindWindow()
+  def shutdown(): Unit =
+    mutSettings.unbindWindow()
+    persistenceManager.shutdown()
 
   def getStageWidth: Int = mutSettings.getStageWidth
 
@@ -62,10 +65,11 @@ object LogoRRRGlobals extends TinyLog:
   def getHostServices: LogoRRRHostServices = hostServicesProperty.get()
 
   def set(settings: Settings, hostServices: LogoRRRHostServices): Unit =
-    mutSettings.set(settings)
-    settings.someTimestampSettings match {
-      case Some(timestampSettings) => setTimestampSettings(MutTimestampSettings(timestampSettings))
-      case None => setTimestampSettings(null)
+    mutSettings.set(persistenceManager, settings)
+
+    settings.someTimeSettings match {
+      case Some(timestampSettings) => setTimeSettings(MutTimeSettings(timestampSettings))
+      case None => setTimeSettings(MutTimeSettings(TimeSettings.Invalid))
     }
     setHostServices(hostServices)
 
@@ -95,12 +99,19 @@ object LogoRRRGlobals extends TinyLog:
 
   def clearLogFileSettings(): Unit = mutSettings.clearLogFileSettings()
 
-  def registerSettings(fs: LogFileSettings): Unit = mutSettings.putMutLogFileSetting(MutLogFileSettings(fs))
+  def registerSettings(fs: LogFileSettings): Unit = {
+    val settings = MutLogFileSettings(fs)
+    persistenceManager.init(fs.fileId, settings.allProps)
+    mutSettings.putMutLogFileSetting(settings)
+  }
 
   def getLogFileSettings(fileId: FileId): MutLogFileSettings = mutSettings.getMutLogFileSetting(fileId)
 
   val searchTermGroupEntries: SimpleListProperty[MutSearchTermGroup] = mutSettings.mutSearchTermGroupSettings.searchTermGroupEntries
 
-  def getTimestampSettings: Option[MutTimestampSettings] = Option(mutSettings.getTimestampSettings)
+  def timeSettings: MutTimeSettings = mutSettings.timeSettings
 
-  def setTimestampSettings(timestampSettings: MutTimestampSettings): Unit = mutSettings.setTimestampSettings(timestampSettings)
+  def setTimeSettings(timesettings: MutTimeSettings): Unit = mutSettings.setTimeSettings(timesettings)
+
+  val allProps: Set[Property[?]] =
+    mutSettings.allProps
