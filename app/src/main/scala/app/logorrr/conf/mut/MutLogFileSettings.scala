@@ -26,6 +26,7 @@ object MutLogFileSettings:
     s.upperBoundaryProperty.set(logFileSettings.upperTimestamp)
     logFileSettings.someTimeSettings.foreach(s.mutTimeSettings.set)
     s.showUnclassifiedProperty.set(logFileSettings.showUnclassified)
+    s.logFilePositionProperty.set(logFileSettings.logFilePosition)
     s
 
 
@@ -45,6 +46,7 @@ class MutLogFileSettings:
   val lowerBoundaryProperty = new SimpleLongProperty(this, "lowerBoundaryProperty")
   val upperBoundaryProperty = new SimpleLongProperty(this, "upperBoundaryProperty")
   val showUnclassifiedProperty = new SimpleBooleanProperty(true, "showUnclassifiedProperty")
+  val logFilePositionProperty = new SimpleLongProperty(this, "logFilePosition")
   val mutTimeSettings = new MutTimeSettings
 
   /** is reset on various user interface action which should trigger a configuration save action */
@@ -98,6 +100,7 @@ class MutLogFileSettings:
       , lowerBoundaryProperty.get()
       , upperBoundaryProperty.get()
       , showUnclassifiedProperty.get()
+      , logFilePositionProperty.get()
     )
 
 

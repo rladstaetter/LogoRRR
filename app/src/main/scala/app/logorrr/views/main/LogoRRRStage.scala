@@ -28,6 +28,9 @@ object LogoRRRStage extends TinyLog:
 
 
   def shutdown(stage: Stage, logSource: LogSource): Unit =
+    // save last known state additionally to the property triggered saves
+    // before unbinding takes place
+    LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
     logSource.ui.shutdown()
     LogoRRRGlobals.shutdown()
     stage.getScene.windowProperty().removeListener(MutStageSettings.windowListener)

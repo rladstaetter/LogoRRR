@@ -30,4 +30,5 @@ object LogFileSettingsSpec:
     , 10
     , LogFileSettings.DefaultLowerTimestamp
     , LogFileSettings.DefaultUpperTimestamp
-    , true)
+    , true
+    , 0L)

@@ -9,13 +9,13 @@ import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.block.BlockConstants
 import app.logorrr.views.ops.*
 import app.logorrr.views.search.st.SearchTermToolBar
-import app.logorrr.views.search.{MutableSearchTerm, OpsToolBar, SearchTextField}
+import app.logorrr.views.search.{OpsToolBar, SearchTextField}
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
-import javafx.beans.property.{ObjectPropertyBase, SimpleBooleanProperty}
+import javafx.beans.property.{ObjectPropertyBase, SimpleBooleanProperty, SimpleLongProperty}
 import javafx.beans.{InvalidationListener, Observable}
+import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
-import javafx.collections.{ListChangeListener, ObservableList}
 import javafx.scene.control.SplitPane
 import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
@@ -23,9 +23,7 @@ import javafx.stage.Window
 import javafx.util.Subscription
 import net.ladstatt.util.log.TinyLog
 
-import java.util
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.compiletime.uninitialized
 
 object LogFilePane extends UiNodeFileIdAware:
 
@@ -50,8 +48,7 @@ class LogFilePane(owner: Window
 
 
   /** if autoscroll checkbox is enabled, monitor given log file for changes. if there are any, this will be reflected in the ui */
-  private val autoScrollSubscription: Subscription =
-    autoScrollActiveProperty.subscribe((old: java.lang.Boolean, newVal: java.lang.Boolean) => enableAutoscroll(newVal))
+  private var autoScrollSubscription: Subscription = uninitialized
 
   /** list which holds all entries, default to display all (can be changed via buttons) */
   private val filteredEntries = new FilteredList[LogEntry](entries, mutLogFileSettings.showPredicate)
@@ -93,13 +90,16 @@ class LogFilePane(owner: Window
 
   def activeSearchTerms: Seq[SearchTerm] = searchTermToolBar.activeSearchTerms()
 
-  def enableAutoscroll(enabled: Boolean): Unit =
-    if enabled then
-      filteredEntries.addListener(autoScrollEventListener)
-      logTailer.start()
-    else
-      filteredEntries.removeListener(autoScrollEventListener)
-      logTailer.stop()
+  def enableFollowMode(logFilePositionProperty: SimpleLongProperty): Unit =
+    filteredEntries.addListener(autoScrollEventListener)
+    logTailer.start(logFilePositionProperty.get())
+
+  def disableFollowMode(logFilePositionProperty: SimpleLongProperty): Unit =
+    filteredEntries.removeListener(autoScrollEventListener)
+    val l = logTailer.stop()
+    // calculating length of file to be sure, don't trust logTailer
+    logFilePositionProperty.set(fileIdProperty.get().asPath.toFile.length())
+
 
 
   private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, searchTermToolBar)
@@ -123,9 +123,16 @@ class LogFilePane(owner: Window
     chunkPane.init(fileIdProperty, mutLogFileSettings.blockSizeProperty)
     textSizeSlider.bindIdProperty(fileIdProperty)
     blockSizeSlider.bindIdProperty(fileIdProperty)
+    logTailer.init(fileIdProperty, entries)
+    autoScrollSubscription = autoScrollActiveProperty.subscribe(
+      (old: java.lang.Boolean, newVal: java.lang.Boolean) =>
+        if newVal then
+          enableFollowMode(mutLogFileSettings.logFilePositionProperty)
+        else
+          disableFollowMode(mutLogFileSettings.logFilePositionProperty))
+
     autoScrollActiveProperty.bind(mutLogFileSettings.autoScrollActiveProperty)
     pane.getDividers.get(0).positionProperty().bindBidirectional(mutLogFileSettings.dividerPositionProperty)
-    logTailer.init(fileIdProperty, entries)
     setTop(opsRegion)
     setCenter(pane)
     logTextView.init(fileIdProperty
@@ -136,7 +143,6 @@ class LogFilePane(owner: Window
       , mutLogFileSettings.mutSearchTerms
     )
     chunkListView.init(fileIdProperty)
-    enableAutoscroll(mutLogFileSettings.isAutoScrollActive)
 
   private def divider: SplitPane.Divider = pane.getDividers.get(0)
 
@@ -145,7 +151,6 @@ class LogFilePane(owner: Window
   }
 
   def shutdown(): Unit =
-    LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
     searchTermToolBar.shutdown()
     opsToolBar.shutdown(mutLogFileSettings.autoScrollActiveProperty, mutLogFileSettings.mutSearchTerms, filteredEntries)
     textPane.shutdown(mutLogFileSettings.fontSizeProperty)
@@ -155,7 +160,7 @@ class LogFilePane(owner: Window
     autoScrollActiveProperty.unbind()
     pane.getDividers.get(0).positionProperty().unbindBidirectional(mutLogFileSettings.dividerPositionProperty)
     logTailer.shutdown(fileIdProperty, entries)
-    if mutLogFileSettings.isAutoScrollActive then enableAutoscroll(false)
+    disableFollowMode(mutLogFileSettings.logFilePositionProperty)
     logTextView.shutdown(
       mutLogFileSettings.selectedLineNumberProperty
       , mutLogFileSettings.firstVisibleTextCellIndexProperty
