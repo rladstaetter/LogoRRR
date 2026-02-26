@@ -96,10 +96,9 @@ class LogFilePane(owner: Window
 
   def disableFollowMode(logFilePositionProperty: SimpleLongProperty): Unit =
     filteredEntries.removeListener(autoScrollEventListener)
-    val l = logTailer.stop()
+    logTailer.stop()
     // calculating length of file to be sure, don't trust logTailer
     logFilePositionProperty.set(fileIdProperty.get().asPath.toFile.length())
-
 
 
   private val opsRegion: OpsRegion = new OpsRegion(opsToolBar, searchTermToolBar)
