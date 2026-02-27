@@ -1,6 +1,5 @@
 package app.logorrr.views.search.st
 
-import app.logorrr.conf.mut.LogFilePredicate
 import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.model.*
 import app.logorrr.util.{HashUtil, JfxUtils}
@@ -11,13 +10,11 @@ import app.logorrr.views.util.CssBindingUtil
 import javafx.beans.binding.{Bindings, BooleanBinding}
 import javafx.beans.property.*
 import javafx.beans.value.ChangeListener
-import javafx.collections.ObservableList
 import javafx.scene.control.ToggleButton
 import javafx.scene.layout.{HBox, Priority, Region, VBox}
 import javafx.scene.paint.Color
 
 import java.lang
-import java.util.function.Predicate
 
 
 object ASearchTermToggleButton extends UiNodeSearchTermAware:
@@ -42,7 +39,7 @@ abstract class ASearchTermToggleButton extends ToggleButton
 
   private val origColorProperty = new SimpleObjectProperty[Color]()
   val hitsProperty = new SimpleLongProperty()
-  private val searchTermLabel: SearchTermLabel = new SearchTermLabel
+  protected val searchTermLabel: SearchTermLabel = new SearchTermLabel
   private val hitsLabel: SearchTermHitsLabel = new SearchTermHitsLabel
 
   private val removeSearchTermButton: RemoveSearchTermButton = new RemoveSearchTermButton
@@ -68,8 +65,9 @@ abstract class ASearchTermToggleButton extends ToggleButton
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , visibleBinding: BooleanBinding
-           , mutSearchTerm: MutableSearchTerm): Unit = {
-    selectedProperty().bindBidirectional(mutSearchTerm.activeProperty)
+           , mutSearchTerm: MutableSearchTerm
+           , activeProperty: BooleanProperty): Unit = {
+    selectedProperty().bindBidirectional(activeProperty)
     selectedProperty().addListener(updateLogFilePredicate)
     setOrigColor(mutSearchTerm.getColor)
     bindFileIdProperty(fileIdProperty)

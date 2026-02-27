@@ -1,24 +1,21 @@
 package app.logorrr.views.search.st
 
 import app.logorrr.conf.FileId
-import app.logorrr.conf.mut.LogFilePredicate
 import app.logorrr.model.LogEntry
-import app.logorrr.util.JfxUtils
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.{Bindings, BooleanBinding}
-import javafx.beans.property.{BooleanProperty, ObjectProperty, ObjectPropertyBase}
-import javafx.beans.value.ChangeListener
+import javafx.beans.property.{BooleanProperty, ObjectPropertyBase}
 import javafx.collections.ObservableList
 
-import java.lang
 import java.util.function.Predicate
 
 class SearchTermToggleButton(entries: ObservableList[LogEntry]) extends ASearchTermToggleButton:
 
   override def init(fileIdProperty: ObjectPropertyBase[FileId]
                     , visibleBinding: BooleanBinding
-                    , mutSearchTerm: MutableSearchTerm): Unit = {
-    super.init(fileIdProperty, visibleBinding, mutSearchTerm)
+                    , mutSearchTerm: MutableSearchTerm
+                    , activeProperty: BooleanProperty): Unit = {
+    super.init(fileIdProperty, visibleBinding, mutSearchTerm, activeProperty)
     hitsProperty.bind(Bindings.createLongBinding(() => entries.stream().filter(t => t.value.contains(getValue)).count, entries))
   }
 

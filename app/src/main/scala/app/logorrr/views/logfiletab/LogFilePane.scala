@@ -61,7 +61,7 @@ class LogFilePane(owner: Window
 
   val opsToolBar = new OpsToolBar(owner, this, mutLogFileSettings, chunkListView, entries)
 
-  private val searchTermToolBar = new SearchTermToolBar(mutLogFileSettings, entries, filteredEntries.predicateProperty())
+  private val searchTermToolBar = new SearchTermToolBar(mutLogFileSettings, entries)
 
   private val textSizeSlider = new TextSizeSlider
 

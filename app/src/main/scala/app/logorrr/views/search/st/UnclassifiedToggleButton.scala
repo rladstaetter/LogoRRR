@@ -1,17 +1,13 @@
 package app.logorrr.views.search.st
 
 import app.logorrr.conf.FileId
-import app.logorrr.conf.mut.LogFilePredicate
 import app.logorrr.model.LogEntry
-import app.logorrr.util.JfxUtils
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.BooleanBinding
-import javafx.beans.property.{BooleanProperty, ObjectProperty, ObjectPropertyBase}
-import javafx.beans.value.ChangeListener
-import javafx.collections.ObservableList
+import javafx.beans.property.{BooleanProperty, ObjectPropertyBase}
 
+import java.util
 import java.util.function.Predicate
-import java.{lang, util}
 
 class UnclassifiedPredicate(selectedProperty: BooleanProperty, activeSearchTerms: util.HashSet[String]) extends Predicate[LogEntry] {
   override def test(t: LogEntry): Boolean = {
@@ -23,21 +19,17 @@ class UnclassifiedPredicate(selectedProperty: BooleanProperty, activeSearchTerms
 }
 
 
-class UnclassifiedToggleButton(entries: ObservableList[LogEntry]
-                               , mutSearchTerms: ObservableList[MutableSearchTerm]
-                               , unclassifiedProperty: BooleanProperty
-                               , predicateProperty: ObjectProperty[Predicate[? >: LogEntry]]
-                               , logFilePredicate: LogFilePredicate)
-  extends ASearchTermToggleButton:
+class UnclassifiedToggleButton extends ASearchTermToggleButton:
 
-  override def init(fileIdProperty: ObjectPropertyBase[FileId], visibleBinding: BooleanBinding, mutSearchTerm: MutableSearchTerm): Unit = {
-    super.init(fileIdProperty, visibleBinding, mutSearchTerm)
-    setSelected(unclassifiedProperty.get())
-    unclassifiedProperty.bind(selectedProperty())
+  override def init(fileIdProperty: ObjectPropertyBase[FileId]
+                    , visibleBinding: BooleanBinding
+                    , mutSearchTerm: MutableSearchTerm
+                    , activeProperty: BooleanProperty): Unit = {
+    super.init(fileIdProperty, visibleBinding, mutSearchTerm, activeProperty)
+
   }
 
   override def shutdown(activeProperty: BooleanProperty): Unit = {
     super.shutdown(activeProperty)
-    unclassifiedProperty.unbind()
   }
 
