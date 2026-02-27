@@ -36,8 +36,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings, entries: Observa
   HBox.setHgrow(spacer, Priority.ALWAYS)
   private val addToFavoritesButton = new AddToFavoritesButton(activeSearchTerms)
 
-  val unclassifiedButton =
-    new UnclassifiedToggleButton()
+  val unclassifiedButton = new UnclassifiedToggleButton()
 
   private val immutableLeftNodes = Seq(favoritesChoiceBox, unclassifiedButton)
   private val immutableRightNodes = Seq(spacer, addToFavoritesButton)
@@ -56,7 +55,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings, entries: Observa
     mutLogFileSettings.mutSearchTerms.forEach(addSearchTermButton)
     getItems.addAll(immutableRightNodes *)
     mutLogFileSettings.mutSearchTerms.addListener(listChangeListener)
-    unclassifiedButton.init(mutLogFileSettings.fileIdProperty, () => false, unclassifiedSearchTerm, mutLogFileSettings.showUnclassifiedProperty)
+    unclassifiedButton.init(mutLogFileSettings.fileIdProperty, () => false, unclassifiedSearchTerm, unclassifiedSearchTerm.valueProperty, unclassifiedSearchTerm.colorProperty, mutLogFileSettings.showUnclassifiedProperty)
 
 
   def shutdown(): Unit =
@@ -80,7 +79,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings, entries: Observa
 
     def addButton() = {
       val button = new SearchTermToggleButton(entries)
-      button.init(mutLogFileSettings.fileIdProperty, () => true, mutSearchTerm, mutSearchTerm.activeProperty)
+      button.init(mutLogFileSettings.fileIdProperty, () => true, mutSearchTerm, mutSearchTerm.valueProperty, mutSearchTerm.colorProperty, mutSearchTerm.activeProperty)
       getItems.add(button)
     }
     // handle favorite 'star' at the end

@@ -1,7 +1,6 @@
 package app.logorrr.views.search.st
 
 import app.logorrr.views.util.CssBindingUtil
-import javafx.beans.binding.StringBinding
 import javafx.beans.property.{ObjectPropertyBase, StringProperty}
 import javafx.scene.control.Label
 import javafx.scene.paint.Color

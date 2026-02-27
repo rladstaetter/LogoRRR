@@ -4,7 +4,10 @@ import app.logorrr.conf.FileId
 import app.logorrr.model.LogEntry
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.BooleanBinding
-import javafx.beans.property.{BooleanProperty, ObjectPropertyBase}
+import javafx.beans.property.{BooleanProperty, ObjectPropertyBase, StringProperty}
+import javafx.scene.control.Label
+import javafx.scene.layout.{HBox, Priority, Region, VBox}
+import javafx.scene.paint.Color
 
 import java.util
 import java.util.function.Predicate
@@ -21,11 +24,16 @@ class UnclassifiedPredicate(selectedProperty: BooleanProperty, activeSearchTerms
 
 class UnclassifiedToggleButton extends ASearchTermToggleButton:
 
+  searchTermLabel.setMinHeight(36)
+  setGraphic(searchTermLabel)
+
   override def init(fileIdProperty: ObjectPropertyBase[FileId]
                     , visibleBinding: BooleanBinding
                     , mutSearchTerm: MutableSearchTerm
+                    , valProperty: StringProperty
+                    , colorProperty: ObjectPropertyBase[Color]
                     , activeProperty: BooleanProperty): Unit = {
-    super.init(fileIdProperty, visibleBinding, mutSearchTerm, activeProperty)
+    super.init(fileIdProperty, visibleBinding, mutSearchTerm, valProperty, colorProperty, activeProperty)
 
   }
 

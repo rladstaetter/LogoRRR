@@ -88,8 +88,6 @@ class LogFilePane(owner: Window
     logTextView.scrollTo(logTextView.getItems.size)
   }
 
-  def activeSearchTerms: Seq[SearchTerm] = searchTermToolBar.activeSearchTerms()
-
   def enableFollowMode(logFilePositionProperty: SimpleLongProperty): Unit =
     filteredEntries.addListener(autoScrollEventListener)
     logTailer.start(logFilePositionProperty.get())

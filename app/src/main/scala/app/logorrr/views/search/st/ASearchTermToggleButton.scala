@@ -2,19 +2,19 @@ package app.logorrr.views.search.st
 
 import app.logorrr.conf.{FileId, SearchTerm}
 import app.logorrr.model.*
-import app.logorrr.util.{HashUtil, JfxUtils}
+import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
 import app.logorrr.views.search.*
 import app.logorrr.views.search.st.RemoveSearchTermButton.buttonCssStyle
 import app.logorrr.views.util.CssBindingUtil
-import javafx.beans.binding.{Bindings, BooleanBinding}
+import javafx.beans.binding.{Bindings, BooleanBinding, ObjectBinding}
 import javafx.beans.property.*
-import javafx.beans.value.ChangeListener
 import javafx.scene.control.ToggleButton
 import javafx.scene.layout.{HBox, Priority, Region, VBox}
 import javafx.scene.paint.Color
+import javafx.util.Subscription
 
-import java.lang
+import scala.compiletime.uninitialized
 
 
 object ASearchTermToggleButton extends UiNodeSearchTermAware:
@@ -33,80 +33,51 @@ abstract class ASearchTermToggleButton extends ToggleButton
   with ColorPropertyHolder
   with FileIdPropertyHolder:
 
-  private val updateLogFilePredicate: ChangeListener[lang.Boolean] = JfxUtils.onNew[java.lang.Boolean](e => {
-    fireEvent(UpdateLogFilePredicate())
-  })
+  var selectedSubscription: Subscription = uninitialized
 
-  private val origColorProperty = new SimpleObjectProperty[Color]()
-  val hitsProperty = new SimpleLongProperty()
   protected val searchTermLabel: SearchTermLabel = new SearchTermLabel
-  private val hitsLabel: SearchTermHitsLabel = new SearchTermHitsLabel
 
-  private val removeSearchTermButton: RemoveSearchTermButton = new RemoveSearchTermButton
+  protected val contrastColorProperty: SimpleObjectProperty[Color] = new SimpleObjectProperty[Color]()
 
-  // hack to circumvent warnings in iconli code
-  private val colorListener = JfxUtils.onNew[Color](c => removeSearchTermButton.icon.setStyle(buttonCssStyle(c)))
+  val searchTermBinding: ObjectBinding[SearchTerm] = new ObjectBinding[SearchTerm] {
+    bind(valueProperty, selectedProperty, colorProperty)
 
-  lazy val contrastColorProperty: SimpleObjectProperty[Color] = new SimpleObjectProperty[Color]()
+    override def computeValue(): SearchTerm = SearchTerm(valueProperty.get(), getColor, isSelected)
+  }
 
-  private val hbox: HBox =
-    val spacer: Region = new Region
-    spacer.setMinWidth(30)
-    HBox.setHgrow(spacer, Priority.ALWAYS)
-    val hb = new HBox(searchTermLabel, spacer, removeSearchTermButton)
-    hb.setMaxWidth(Double.MaxValue)
-    hb
-
-  setGraphic(new VBox(hbox, hitsLabel))
-
-  def setOrigColor(color: Color): Unit = origColorProperty.set(color)
-
-  def getOrigColor: Color = origColorProperty.get()
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , visibleBinding: BooleanBinding
            , mutSearchTerm: MutableSearchTerm
+           , valProperty: StringProperty
+           , colorProperty: ObjectPropertyBase[Color]
            , activeProperty: BooleanProperty): Unit = {
-    selectedProperty().bindBidirectional(activeProperty)
-    selectedProperty().addListener(updateLogFilePredicate)
-    setOrigColor(mutSearchTerm.getColor)
-    bindFileIdProperty(fileIdProperty)
     idProperty.bind(Bindings.createStringBinding(() => ASearchTermToggleButton.uiNode(getFileId, getValue).value, fileIdProperty, valueProperty))
+    bindFileIdProperty(fileIdProperty)
+    selectedProperty().bindBidirectional(activeProperty)
+    this.selectedSubscription = selectedProperty().subscribe(e => fireEvent(UpdateLogFilePredicate()))
+    this.colorProperty.bind(colorProperty)
+    this.contrastColorProperty.bind(CssBindingUtil.mkContrastPropertyBinding(selectedProperty(), colorProperty))
     styleProperty().bind(CssBindingUtil.mkGradientStyleBinding(selectedProperty, colorProperty))
-    hitsLabel.init(contrastColorProperty, hitsProperty)
 
-    valueProperty.bind(mutSearchTerm.valueProperty)
-    searchTermLabel.init(contrastColorProperty, valueProperty)
+    this.valueProperty.bind(valProperty)
+    searchTermLabel.init(contrastColorProperty, this.valueProperty)
 
-    colorProperty.bind(Bindings.createObjectBinding[Color](() => {
-      if isSelected then getOrigColor else getOrigColor
-    }, selectedProperty))
-
-    removeSearchTermButton.init(
-      fileIdProperty
-      , visibleBinding
-      , mutSearchTerm)
-
-    contrastColorProperty.bind(CssBindingUtil.mkContrastPropertyBinding(selectedProperty(), colorProperty))
-    contrastColorProperty.addListener(colorListener)
   }
 
   def shutdown(activeProperty: BooleanProperty): Unit = {
-    selectedProperty().removeListener(updateLogFilePredicate)
-    selectedProperty().unbindBidirectional(activeProperty)
-    contrastColorProperty.unbind()
-    contrastColorProperty.removeListener(colorListener)
-    removeSearchTermButton.shutdown()
-    colorProperty.unbind()
-    hitsProperty.unbind()
-    hitsLabel.shutdown()
-    searchTermLabel.shutdown()
-    valueProperty.unbind()
-    styleProperty().unbind()
     idProperty().unbind()
+    fileIdProperty.unbind()
+    selectedProperty().unbindBidirectional(activeProperty)
+    selectedSubscription.unsubscribe()
+    colorProperty.unbind()
+    contrastColorProperty.unbind()
+    styleProperty().unbind()
+    valueProperty.unbind()
+    searchTermLabel.shutdown()
   }
 
-  def asSearchTerm: SearchTerm = SearchTerm(getValue, getOrigColor, isSelected)
+  def asSearchTerm: SearchTerm = searchTermBinding.get()
 
 
 
