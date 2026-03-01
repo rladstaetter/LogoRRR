@@ -42,7 +42,7 @@ object SettingsStgListViewCell:
  */
 class SettingsStgListViewCell(toggleGroup: ToggleGroup) extends ListCell[MutSearchTermGroup]:
 
-  getStylesheets.add(getClass.getResource("/app/logorrr/SettingsStgListViewCell.css").toExternalForm)
+  getStylesheets.add(getClass.getResource("/app/logorrr/css/SettingsStgListViewCell.css").toExternalForm)
 
   private val radioButton = new RadioButton():
     setPadding(new Insets(0, 10, 0, 10))

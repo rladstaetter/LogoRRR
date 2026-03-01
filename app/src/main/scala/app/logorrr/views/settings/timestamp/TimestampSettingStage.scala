@@ -24,7 +24,7 @@ class TimestampSettingStage(logFilePane: LogFilePane
                             , tsRegion: TimestampSettingsRegion) extends Stage:
 
   initModality(Modality.WINDOW_MODAL)
-  setTitle(s"Specifiy timestamp pattern and position")
+  setTitle(s"Specify timestamp pattern and position")
 
   private val timeStampSettingsBorderPane = new TimestampSettingsBorderPane(logFilePane
     , mutLogFileSettings
