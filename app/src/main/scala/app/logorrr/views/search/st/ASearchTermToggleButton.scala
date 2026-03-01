@@ -6,7 +6,7 @@ import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
 import app.logorrr.views.search.*
 import app.logorrr.views.search.st.RemoveSearchTermButton.buttonCssStyle
-import app.logorrr.views.util.CssBindingUtil
+import app.logorrr.views.util.CssUtil
 import javafx.beans.binding.{Bindings, BooleanBinding, ObjectBinding}
 import javafx.beans.property.*
 import javafx.scene.control.ToggleButton
@@ -57,8 +57,8 @@ abstract class ASearchTermToggleButton extends ToggleButton
     selectedProperty().bindBidirectional(activeProperty)
     this.selectedSubscription = selectedProperty().subscribe(e => fireEvent(UpdateLogFilePredicate()))
     this.colorProperty.bind(colorProperty)
-    this.contrastColorProperty.bind(CssBindingUtil.mkContrastPropertyBinding(selectedProperty(), colorProperty))
-    styleProperty().bind(CssBindingUtil.mkGradientStyleBinding(selectedProperty, colorProperty))
+    this.contrastColorProperty.bind(CssUtil.mkContrastPropertyBinding(selectedProperty(), colorProperty))
+    styleProperty().bind(CssUtil.mkGradientStyleBinding(selectedProperty, colorProperty))
 
     this.valueProperty.bind(valProperty)
     searchTermLabel.init(contrastColorProperty, this.valueProperty)

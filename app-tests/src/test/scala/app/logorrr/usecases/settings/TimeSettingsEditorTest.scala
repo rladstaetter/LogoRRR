@@ -24,6 +24,7 @@ class TimeSettingsEditorTest extends SingleFileApplicationTest(TestFiles.simpleL
    * - check against global settings again
    */
   @Test def checkGeneralTimestampsettingsDialogue(): Unit =
+    openFile(fileId)
     val customPattern = TimeSettings.DefaultPattern.replace(".", ",")
     val customStartCol = 22
     val customEndCol = customStartCol + customPattern.length

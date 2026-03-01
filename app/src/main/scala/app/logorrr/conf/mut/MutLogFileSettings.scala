@@ -7,6 +7,7 @@ import javafx.beans.binding.{ObjectBinding, StringBinding}
 import javafx.beans.property.*
 import javafx.collections.{FXCollections, ObservableList}
 
+import java.util.Comparator
 import java.util.function.Predicate
 import scala.jdk.CollectionConverters.*
 
@@ -103,6 +104,7 @@ class MutLogFileSettings:
       , logFilePositionProperty.get()
     )
 
+  def path = fileIdProperty.get().asPath
 
   def getSearchTerms: Seq[SearchTerm] =
     mutSearchTerms.asScala.toSeq.map(f => SearchTerm(f.getValue, f.getColor, f.isActive))

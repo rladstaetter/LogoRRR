@@ -3,7 +3,7 @@ package app.logorrr.steps
 import app.logorrr.conf.FileId
 import app.logorrr.usecases.TestFxBaseApplicationTest
 import app.logorrr.views.a11y.uinodes.FileMenu
-import app.logorrr.views.logfiletab.LogFileTab
+import app.logorrr.views.search.SearchTextField
 import org.testfx.api.FxRobotInterface
 
 /**
@@ -15,7 +15,7 @@ trait FileMenuActions extends VisibleItemActions:
   protected def openFile(fileId: FileId): Unit =
     waitAndClickVisibleItem(FileMenu.Self)
     waitAndClickVisibleItem(FileMenu.OpenFile)
-    waitForVisibility(LogFileTab.uiNode(fileId))
+    waitForVisibility(SearchTextField.uiNode(fileId))
 
   protected def closeAllFiles(): FxRobotInterface =
     clickOn(FileMenu.Self)

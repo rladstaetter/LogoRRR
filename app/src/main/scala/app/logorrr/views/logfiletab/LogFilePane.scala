@@ -1,7 +1,7 @@
 package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.{LogFilePredicate, MutLogFileSettings}
-import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTerm, TimeSettings}
+import app.logorrr.conf.{FileId, LogoRRRGlobals, TimeSettings}
 import app.logorrr.model.*
 import app.logorrr.util.*
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
@@ -30,23 +30,20 @@ object LogFilePane extends UiNodeFileIdAware:
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogFilePane])
 
 
-class LogFilePane(owner: Window
-                  , mutLogFileSettings: MutLogFileSettings
+class LogFilePane(val mutLogFileSettings: MutLogFileSettings
                   , val entries: ObservableList[LogEntry])
-  extends BorderPane with UiTarget
+  extends BorderPane
     with FileIdPropertyHolder
     with TinyLog
     with BoundId(LogFilePane.uiNode(_).value):
+
+  val initializedProperty = new SimpleBooleanProperty(false)
 
   setStyle("-fx-background-color: white;")
   /** provides a tool to observe log files */
   private val logTailer = new LogTailer
 
   private val autoScrollActiveProperty = new SimpleBooleanProperty()
-
-  /** if a search term is added or removed this will be saved to disc */
-
-
   /** if autoscroll checkbox is enabled, monitor given log file for changes. if there are any, this will be reflected in the ui */
   private var autoScrollSubscription: Subscription = uninitialized
 
@@ -59,7 +56,7 @@ class LogFilePane(owner: Window
   // graphical display to the left
   private val chunkListView: LogoRRRChunkListView = LogoRRRChunkListView(mutLogFileSettings, filteredEntries, logTextView.scrollToItem, widthProperty)
 
-  val opsToolBar = new OpsToolBar(owner, this, mutLogFileSettings, chunkListView, entries)
+  val opsToolBar = new OpsToolBar(this, mutLogFileSettings, chunkListView, entries)
 
   private val searchTermToolBar = new SearchTermToolBar(mutLogFileSettings, entries)
 
@@ -80,7 +77,6 @@ class LogFilePane(owner: Window
     , PaneDefinition(prop => IncreaseBlockSizeButton.uiNode(prop.get).value, RectButton.mkR(IncreaseBlockSizeButton.Size, IncreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MaxBlockSize)
     , PaneDefinition(prop => DecreaseBlockSizeButton.uiNode(prop.get).value, RectButton.mkR(DecreaseBlockSizeButton.Size, DecreaseBlockSizeButton.Size, Color.GRAY), BlockConstants.BlockSizeStep, BlockConstants.MinBlockSize)
   )
-
 
   // if active scroll automatically to the end of the list
   private lazy val autoScrollEventListener: InvalidationListener = (_: Observable) => {
@@ -105,41 +101,46 @@ class LogFilePane(owner: Window
 
   val searchTextField: SearchTextField = opsToolBar.searchTextField
 
-  def init(window: Window
+  def init(owner: Window
            , fileIdProperty: ObjectPropertyBase[FileId]): Unit =
-    bindFileIdProperty(fileIdProperty)
-    bindIdProperty(fileIdProperty)
-    searchTermToolBar.init(window)
-    opsToolBar.init(
-      fileIdProperty
-      , mutLogFileSettings.autoScrollActiveProperty
-      , mutLogFileSettings.mutSearchTerms
-      , filteredEntries
-    )
-    textPane.init(fileIdProperty, mutLogFileSettings.fontSizeProperty)
-    chunkPane.init(fileIdProperty, mutLogFileSettings.blockSizeProperty)
-    textSizeSlider.bindIdProperty(fileIdProperty)
-    blockSizeSlider.bindIdProperty(fileIdProperty)
-    logTailer.init(fileIdProperty, entries)
-    autoScrollSubscription = autoScrollActiveProperty.subscribe(
-      (old: java.lang.Boolean, newVal: java.lang.Boolean) =>
-        if newVal then
-          enableFollowMode(mutLogFileSettings.logFilePositionProperty)
-        else
-          disableFollowMode(mutLogFileSettings.logFilePositionProperty))
+    if (!initializedProperty.get()) {
+      bindFileIdProperty(fileIdProperty)
+      bindIdProperty(fileIdProperty)
+      searchTermToolBar.init(owner)
+      opsToolBar.init(owner
+        , fileIdProperty
+        , mutLogFileSettings.autoScrollActiveProperty
+        , mutLogFileSettings.mutSearchTerms
+        , filteredEntries
+      )
+      textPane.init(fileIdProperty, mutLogFileSettings.fontSizeProperty)
+      chunkPane.init(fileIdProperty, mutLogFileSettings.blockSizeProperty)
+      textSizeSlider.bindIdProperty(fileIdProperty)
+      blockSizeSlider.bindIdProperty(fileIdProperty)
+      logTailer.init(fileIdProperty, entries)
+      autoScrollSubscription = autoScrollActiveProperty.subscribe(
+        (old: java.lang.Boolean, newVal: java.lang.Boolean) =>
+          if newVal then
+            enableFollowMode(mutLogFileSettings.logFilePositionProperty)
+          else
+            disableFollowMode(mutLogFileSettings.logFilePositionProperty))
 
-    autoScrollActiveProperty.bind(mutLogFileSettings.autoScrollActiveProperty)
-    pane.getDividers.get(0).positionProperty().bindBidirectional(mutLogFileSettings.dividerPositionProperty)
-    setTop(opsRegion)
-    setCenter(pane)
-    logTextView.init(fileIdProperty
-      , mutLogFileSettings.selectedLineNumberProperty
-      , mutLogFileSettings.fontSizeProperty
-      , mutLogFileSettings.firstVisibleTextCellIndexProperty
-      , mutLogFileSettings.lastVisibleTextCellIndexProperty
-      , mutLogFileSettings.mutSearchTerms
-    )
-    chunkListView.init(fileIdProperty)
+      autoScrollActiveProperty.bind(mutLogFileSettings.autoScrollActiveProperty)
+      pane.getDividers.get(0).positionProperty().bindBidirectional(mutLogFileSettings.dividerPositionProperty)
+      setTop(opsRegion)
+      setCenter(pane)
+      logTextView.init(fileIdProperty
+        , mutLogFileSettings.selectedLineNumberProperty
+        , mutLogFileSettings.fontSizeProperty
+        , mutLogFileSettings.firstVisibleTextCellIndexProperty
+        , mutLogFileSettings.lastVisibleTextCellIndexProperty
+        , mutLogFileSettings.mutSearchTerms
+      )
+      chunkListView.init(fileIdProperty)
+      initializedProperty.set(true)
+    } else {
+      logTrace(s"LogFilePane ${fileIdProperty.get().asPath} already initialized, skipping.")
+    }
 
   private def divider: SplitPane.Divider = pane.getDividers.get(0)
 
@@ -168,14 +169,6 @@ class LogFilePane(owner: Window
     LogoRRRGlobals.removeLogFile(fileIdProperty.get())
     unbindFileIdProperty()
     unbindIdProperty()
-
-  override def addData(model: LogorrrModel): Unit = () // TOOD IMPLEMENT ME
-
-  override def contains(fileId: FileId): Boolean = fileId.equals(fileIdProperty.get())
-
-  override def selectFile(fileId: FileId): Unit = ()
-
-  override def selectLastLogFile(): Unit = ()
 
   def applyTimeSettings(timeSettings: TimeSettings): Unit =
     TimeUtil.calculate(mutLogFileSettings, chunkListView, entries, timeSettings, opsToolBar.timestampSettingsRegion)

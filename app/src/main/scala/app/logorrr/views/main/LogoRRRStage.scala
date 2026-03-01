@@ -31,7 +31,7 @@ object LogoRRRStage extends TinyLog:
     // save last known state additionally to the property triggered saves
     // before unbinding takes place
     LogoRRRGlobals.persist(LogoRRRGlobals.getSettings)
-    logSource.ui.shutdown()
+    logSource.getUi().shutdown()
     LogoRRRGlobals.shutdown()
     stage.getScene.windowProperty().removeListener(MutStageSettings.windowListener)
     stage.sceneProperty.removeListener(LogoRRRStage.sceneListener)

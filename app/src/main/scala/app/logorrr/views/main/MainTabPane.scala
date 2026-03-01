@@ -1,11 +1,13 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.{FileId, LogoRRRGlobals, TimeSettings}
-import app.logorrr.model.{LogorrrModel, UiTarget}
+import app.logorrr.model.UiTarget
 import app.logorrr.views.a11y.uinodes.UiNodes
-import app.logorrr.views.logfiletab.{LogFileTab, TabControlEvent}
+import app.logorrr.views.logfiletab.{LogFilePane, LogFileTab, TabControlEvent}
+import app.logorrr.views.util.CssUtil
 import javafx.beans.binding.Bindings
 import javafx.scene.control.{Tab, TabPane}
+import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 
 import java.awt.Desktop
@@ -13,23 +15,10 @@ import java.util
 import scala.collection.mutable
 import scala.jdk.CollectionConverters.*
 
-object MainTabPane:
-
-  private val BackgroundStyle: String =
-    """
-      |-fx-background-image: url(/app/logorrr/drop-files-here.png);
-      |-fx-background-position: center center;
-      |-fx-background-repeat: no-repeat;
-      |-fx-background-color: linear-gradient(to bottom, #f5f5dc, #d2b48c);
-      |-fx-background-size: auto;
-      |""".stripMargin
-
-
 class MainTabPane extends TabPane with UiTarget with TinyLog:
 
-  // -- bindings
-  styleProperty().bind(Bindings.createStringBinding(() => MainTabPane.BackgroundStyle))
   idProperty().bind(Bindings.createStringBinding(() => UiNodes.MainTabPane.value))
+  styleProperty().bind(Bindings.createStringBinding(() => CssUtil.BackgroundStyle))
 
   LogoRRRGlobals.mutSettings.someActiveLogProperty.bind(Bindings.createObjectBinding[Option[FileId]](() => {
     getSelectionModel.getSelectedItem match {
@@ -54,10 +43,10 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
       case Some(logFileTab) => getSelectionModel.select(logFileTab)
       case None => selectLastLogFile()
 
-  /** Adds a new logfile to display and initializes bindings and listeners */
-  override def addData(model: LogorrrModel): Unit =
-    val tab = LogFileTab(getScene.getWindow, model)
-    tab.init(getScene.getWindow, model.mutLogFileSettings)
+  override def addData(owner: Window, logFilePane: LogFilePane): Unit =
+    val tab = new LogFileTab()
+    tab.setLogFilePane(logFilePane)
+    tab.init(owner, logFilePane.mutLogFileSettings)
     getTabs.add(tab)
     tab.initContextMenu()
 
@@ -67,6 +56,9 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
     idProperty().unbind()
     getLogFileTabs.foreach(_.shutdown())
     getTabs.clear()
+    setOnDragDropped(null)
+    setOnDragOver(null)
+
 
   def getSelectedTab: LogFileTab = getSelectionModel.getSelectedItem.asInstanceOf[LogFileTab]
 
@@ -118,7 +110,6 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
     e.consume()
   })
 
-
   private def traverseAndRemove(selectedTab: LogFileTab, it: util.Iterator[Tab]): Unit = {
     var delete = true
     val lb = new util.ArrayList[Tab]()
@@ -131,3 +122,4 @@ class MainTabPane extends TabPane with UiTarget with TinyLog:
     getTabs.removeAll(lb)
     selectedTab.initContextMenu()
   }
+

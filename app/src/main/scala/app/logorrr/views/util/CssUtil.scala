@@ -9,7 +9,17 @@ import javafx.scene.paint.Color
 
 import java.util.concurrent.Callable
 
-object CssBindingUtil:
+object CssUtil:
+
+  val BackgroundStyle: String =
+    """
+      |-fx-background-image: url(/app/logorrr/drop-files-here.png);
+      |-fx-background-position: center center;
+      |-fx-background-repeat: no-repeat;
+      |-fx-background-color: linear-gradient(to bottom, #f5f5dc, #d2b48c);
+      |-fx-background-size: auto;
+      |""".stripMargin
+
 
   def mkTextStyleCallable(colorProperty: ObjectPropertyBase[Color]): Callable[String] =
     () =>

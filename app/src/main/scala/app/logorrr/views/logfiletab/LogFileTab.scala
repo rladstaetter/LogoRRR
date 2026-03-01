@@ -2,11 +2,11 @@ package app.logorrr.views.logfiletab
 
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.{FileId, LogoRRRGlobals, TimeSettings}
-import app.logorrr.model.{FileIdPropertyHolder, LogEntry, LogorrrModel}
+import app.logorrr.model.FileIdPropertyHolder
 import app.logorrr.views.LogoRRRAccelerators
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import javafx.beans.binding.Bindings
-import javafx.collections.ObservableList
+import javafx.beans.property.SimpleObjectProperty
 import javafx.event.Event
 import javafx.scene.control.*
 import javafx.stage.Window
@@ -43,9 +43,6 @@ object LogFileTab extends UiNodeFileIdAware:
 
   override def uiNode(id: FileId): UiNode = UiNode(id, classOf[LogFileTab])
 
-  def apply(window: Window, model: LogorrrModel): LogFileTab =
-    new LogFileTab(window, model.mutLogFileSettings, model.entries)
-
 /**
  * Represents a single 'document' UI approach for a log file.
  *
@@ -54,33 +51,33 @@ object LogFileTab extends UiNodeFileIdAware:
  * @param mutLogFileSettings settings for given log file
  * @param entries            report instance holding information of log file to be analyzed
  * */
-class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries: ObservableList[LogEntry])
-  extends Tab
-    with FileIdPropertyHolder
-    with TinyLog:
+class LogFileTab extends Tab with FileIdPropertyHolder with TinyLog:
 
+  private val logPaneProperty = new SimpleObjectProperty[LogFilePane]()
+
+  def setLogFilePane(logPane: LogFilePane): Unit = logPaneProperty.set(logPane)
+
+  def getLogFilePane(): LogFilePane = logPaneProperty.get()
 
   private val selectedSubscription =
     selectedProperty.subscribe(new Consumer[java.lang.Boolean] {
       def accept(newVal: java.lang.Boolean): Unit =
         if newVal then {
           initContextMenu()
-          LogoRRRAccelerators.setActiveSearchTextField(logPane.searchTextField)
+          LogoRRRAccelerators.setActiveSearchTextField(getLogFilePane().searchTextField)
         } else {
           setContextMenu(null)
           LogoRRRAccelerators.setActiveSearchTextField(null)
         }
     })
 
-  val logPane = new LogFilePane(owner, mutLogFileSettings, entries)
+
   val logFileTabToolTip = new LogFileTabToolTip
 
-  def init(window: Window
+  def init(owner: Window
            , mutLogFileSettings: MutLogFileSettings): Unit =
     bindFileIdProperty(mutLogFileSettings.fileIdProperty)
-    idProperty().bind(Bindings.createStringBinding(() => {
-      LogFileTab.uiNode(fileIdProperty.get).value
-    }, fileIdProperty))
+    idProperty().bind(Bindings.createStringBinding(() => LogFileTab.uiNode(fileIdProperty.get).value, fileIdProperty))
 
 
     // set style depending on type and selected status
@@ -98,12 +95,10 @@ class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries:
       , mutLogFileSettings.fileIdProperty))
     // setup bindings end ----
 
-    logFileTabToolTip.init(mutLogFileSettings.fileIdProperty, entries)
-
-
+    logFileTabToolTip.init(mutLogFileSettings.fileIdProperty, getLogFilePane().entries)
     setTooltip(logFileTabToolTip)
-    logPane.init(window, mutLogFileSettings.fileIdProperty)
-    setContent(logPane)
+    getLogFilePane().init(owner, mutLogFileSettings.fileIdProperty)
+    setContent(getLogFilePane())
     setOnCloseRequest((_: Event) => shutdown())
 
 
@@ -127,10 +122,9 @@ class LogFileTab(owner: Window, mutLogFileSettings: MutLogFileSettings, entries:
     // remove subscriptions
     selectedSubscription.unsubscribe()
     // shutdown pane
-    logPane.shutdown()
+    getLogFilePane().shutdown()
     idProperty.unbind()
     unbindFileIdProperty()
 
-  def applyTimeSettings(timeSettings: TimeSettings): Unit =
-    logPane.applyTimeSettings(timeSettings)
+  def applyTimeSettings(timeSettings: TimeSettings): Unit = getLogFilePane().applyTimeSettings(timeSettings)
 

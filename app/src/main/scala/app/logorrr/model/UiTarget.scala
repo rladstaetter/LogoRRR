@@ -1,8 +1,8 @@
 package app.logorrr.model
 
 import app.logorrr.conf.{FileId, TimeSettings}
-import javafx.beans.property.ObjectPropertyBase
-import javafx.scene.{Node, Scene}
+import app.logorrr.views.logfiletab.LogFilePane
+import javafx.scene.Node
 import javafx.stage.Window
 
 trait UiTarget extends Node:
@@ -11,11 +11,11 @@ trait UiTarget extends Node:
 
   def selectFile(fileId: FileId): Unit
 
-  def addData(model: LogorrrModel): Unit
+  def addData(owner : Window, logFilePane : LogFilePane): Unit
 
   def selectLastLogFile(): Unit
 
-  def applyTimeSettings(timesettings: TimeSettings): Unit
+  def applyTimeSettings(timeSettings: TimeSettings): Unit
 
   def shutdown(): Unit
 
