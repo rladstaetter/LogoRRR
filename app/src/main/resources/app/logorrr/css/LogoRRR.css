@@ -1668,10 +1668,10 @@ Text {
 .list-view {
     -color-cell-bg: -color-bg-default;
     -color-cell-fg: -color-fg-default;
-    -color-cell-bg-selected: -color-base-1;
-    -color-cell-fg-selected: -color-fg-default;
-    -color-cell-bg-selected-focused: -color-base-1;
-    -color-cell-fg-selected-focused: -color-fg-default;
+    -color-cell-bg-selected: -color-logorrr-selected;
+    -color-cell-fg-selected: -color-logorrr-selected;
+    -color-cell-bg-selected-focused: -color-logorrr-selected;
+    -color-cell-fg-selected-focused: -color-logorrr-selected;
     -color-cell-bg-odd: -color-bg-subtle;
     -color-cell-border: -color-border-default;
     -color-disclosure: -color-fg-muted;
