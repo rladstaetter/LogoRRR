@@ -1863,10 +1863,13 @@
       "glob": "app/logorrr/LogoRRR.bss"
     },
     {
-      "glob": "app/logorrr/LogoRRR.css"
+      "glob": "app/logorrr/css/LogoRRR.css"
     },
     {
-      "glob": "app/logorrr/clv/ChunkListView.css"
+      "glob": "app/logorrr/css/SettingsStgListViewCell.css"
+    },
+    {
+      "glob": "app/logorrr/css/ChunkListView.css"
     },
     {
       "glob": "app/logorrr/drop-files-here.png"

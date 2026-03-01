@@ -40,7 +40,7 @@ object LogoRRRApp extends TinyLog:
     System.setProperty("user.language", "en")
     LogoRRRNative.loadNativeLibraries()
     // make sure to set css before anything is initialized otherwise the rules won't apply
-    Application.setUserAgentStylesheet("/app/logorrr/LogoRRR.css")
+    Application.setUserAgentStylesheet("/app/logorrr/css/LogoRRR.css")
 
     LogoRRRGlobals.set(services.settings, services.hostServices)
     val groups: DefaultSearchTermGroups = DefaultSearchTermGroups(services.settings.searchTermGroups)

@@ -120,7 +120,7 @@ class ChunkListView[A](val elements: ObservableList[A]
   var recalculateScheduled = false
 
   def init(): Unit =
-    getStylesheets.add(getClass.getResource("/app/logorrr/clv/ChunkListView.css").toExternalForm)
+    getStylesheets.add(getClass.getResource("/app/logorrr/css/ChunkListView.css").toExternalForm)
     setCellFactory((_: ListView[Chunk[A]]) => {
       new ChunkListCell(
         blockSizeProperty

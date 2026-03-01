@@ -91,7 +91,6 @@ class LogTextView(filteredList: FilteredList[LogEntry])
            , lastVisibleTextCellIndexProperty: Property[Number]
            , mutSearchTerms: ObservableList[MutableSearchTerm]
           ): Unit =
-    getStylesheets.add(getClass.getResource("/app/logorrr/LogTextView.css").toExternalForm)
 
     bindIdProperty(fileIdProperty)
     val activeSearchTerms = new FilteredList[MutableSearchTerm](mutSearchTerms, _.isActive)
