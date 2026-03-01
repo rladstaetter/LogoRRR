@@ -21,6 +21,7 @@
         <module>graal-linux</module>
         <module>flatpak</module>
         <module>deb</module>
+        <module>rpm</module>
     </modules>
 
 
