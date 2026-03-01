@@ -1,11 +1,15 @@
 package app.logorrr.model
 
-import app.logorrr.conf.mut.MutSearchTermGroup
+import app.logorrr.conf.mut.{MutLogFileSettings, MutSearchTermGroup}
 import app.logorrr.conf.{FileId, LogFileSettings, LogoRRRGlobals, SearchTermGroup}
 import app.logorrr.io.IoManager
 import app.logorrr.util.DndUtil
+import app.logorrr.views.logfiletab.LogFilePane
+import app.logorrr.views.main.MainTabPane
+import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import javafx.scene.input.DragEvent
+import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 
 import java.nio.file.{Files, Path}
@@ -16,61 +20,76 @@ import scala.concurrent.{Await, Future}
 import scala.jdk.CollectionConverters.*
 
 class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
-                , settings: Seq[LogFileSettings]
+                , settings: ObservableList[MutLogFileSettings]
                 , someActiveFile: Option[FileId]
-                , val ui: UiTarget) extends TinyLog:
+                , mainTabPane: MainTabPane) extends TinyLog:
 
-  /** setup Drag'n drop */
-  ui.setOnDragOver(DndUtil.onDragAcceptAll)
-  ui.setOnDragDropped(onDragDropped)
+  def getUi(): UiTarget = mainTabPane
 
-  def loadLogFiles(): Unit =
+  val ownerProperty = new SimpleObjectProperty[Window]()
+
+  def init(owner: Window): Unit = {
+    ownerProperty.set(owner)
+    // sets ui to either single or multi
+    mainTabPane.setOnDragOver(DndUtil.onDragAcceptAll)
+    mainTabPane.setOnDragDropped(onDragDropped)
+    loadSettingsFromDisc(owner)
+  }
+
+  def loadSettingsFromDisc(owner: Window): Unit = {
     if (settings.isEmpty)
       ()
     else
-      val (zipSettings, fileSettings) = settings.partition(p => p.fileId.isZipEntry)
-      val zipSettingsMap: Map[FileId, LogFileSettings] = zipSettings.map(s => s.fileId -> s).toMap
+      val (zipSettings, fileSettings) = settings.asScala.toSeq.partition(p => p.getFileId.isZipEntry)
+      val zipSettingsMap: Map[FileId, MutLogFileSettings] = zipSettings.map(s => s.getFileId -> s).toMap
 
       val zips: Map[FileId, Seq[FileId]] = FileId.reduceZipFiles(zipSettingsMap.keys.toSeq)
 
-      val futures: Future[Seq[Option[LogorrrModel]]] = Future.sequence:
-
-        // load zip files also in parallel
-        val zipFutures: Seq[Future[Option[LogorrrModel]]] =
-          zips.keys.toSeq.flatMap(f => {
-            timeR({
-              IoManager.unzip(f.asPath, zips(f).toSet).map {
-                // only if settings contains given fileId - user could have removed it by closing the tab - load this file
-                case (fileId, entries) =>
-                  Future {
-                    if zipSettingsMap.contains(fileId) then {
-                      val settingz = zipSettingsMap(fileId)
-                      LogoRRRGlobals.registerSettings(settingz)
-                      Option(LogorrrModel(LogoRRRGlobals.getLogFileSettings(fileId), entries))
-                    } else None
-                  }
-              }
-            }, s"Loaded zip file '${f.absolutePathAsString}'.")
-          })
-
-        val fileBasedSettings: Seq[Future[Option[LogorrrModel]]] = fileSettings.map(lfs => Future {
-          timeR({
-            val entries: ObservableList[LogEntry] = IoManager.readEntries(lfs.path, lfs.someTimeSettings)
-            val mutLogFileSettings = LogoRRRGlobals.getLogFileSettings(lfs.fileId)
-            Option(LogorrrModel(mutLogFileSettings, entries))
-          }, s"Loaded '${lfs.fileId.absolutePathAsString}' from filesystem ...")
-        })
-        zipFutures ++ fileBasedSettings
-
+      val futures: Future[Seq[Option[LogorrrModel]]] = Future.sequence(loadZips(zips, zipSettingsMap) ++ loadFiles(fileSettings))
       val models = Await.result(futures, Duration.Inf).flatten
-
-      models.foreach(model => ui.addData(LogorrrModel(model.mutLogFileSettings, model.entries)))
+      models.foreach(model => {
+        val p = new LogFilePane(model.mutLogFileSettings, model.entries)
+        mainTabPane.addData(owner, p)
+      })
       someActiveFile match {
-        case Some(value) if ui.contains(value) => ui.selectFile(value)
-        case _ => ui.selectLastLogFile()
+        case Some(value) if mainTabPane.contains(value) => mainTabPane.selectFile(value)
+        case _ => mainTabPane.selectLastLogFile()
       }
+  }
 
-  private def onDragDropped(event: DragEvent): Unit =
+  private def loadFiles(fileSettings: Seq[MutLogFileSettings]) = {
+    fileSettings.map(lfs => Future {
+      timeR({
+        val entries: ObservableList[LogEntry] = IoManager.readEntries(lfs.path, if lfs.mutTimeSettings.validBinding.get() then Option(lfs.mutTimeSettings.mkImmutable()) else None)
+        Option(LogorrrModel(lfs, entries))
+      }, s"Loaded '${lfs.getFileId.absolutePathAsString}' from filesystem ...")
+    })
+  }
+
+  private def loadZips(zips: Map[FileId, Seq[FileId]]
+                       , zipSettingsMap: Map[FileId, MutLogFileSettings]): Seq[Future[Option[LogorrrModel]]] = {
+    zips.keys.toSeq.flatMap(f => {
+      timeR({
+        IoManager.unzip(f.asPath, zips(f).toSet).map {
+          // only if settings contains given fileId - user could have removed it by closing the tab - load this file
+          case (fileId, entries) =>
+            Future {
+              if zipSettingsMap.contains(fileId) then {
+                val settingz: MutLogFileSettings = zipSettingsMap(fileId)
+                LogoRRRGlobals.registerSettings(settingz)
+                Option(LogorrrModel(settingz, entries))
+              } else None
+            }
+        }
+      }, s"Loaded zip file '${f.absolutePathAsString}'.")
+    })
+  }
+
+  def shutdown(): Unit =
+    mainTabPane.shutdown()
+
+
+  private def onDragDropped(event: DragEvent): Unit = {
     event.getDragboard.getFiles.forEach(f => {
       val path = f.toPath
       if Files.isDirectory(path) then {
@@ -81,10 +100,11 @@ class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
         addFile(path)
       }
     })
+  }
 
   def openFile(fileId: FileId): Unit = {
-    if (ui.contains(fileId)) {
-      ui.selectFile(fileId)
+    if (mainTabPane.contains(fileId)) {
+      mainTabPane.selectFile(fileId)
     } else if (!IoManager.isZip(fileId.asPath)) {
       addFileId(fileId)
     } else {
@@ -109,15 +129,17 @@ class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
   def addZip(path: Path): Unit =
     IoManager.unzip(path).foreach:
       case (fileId, entries) =>
-        if !ui.contains(fileId) then
+        if !mainTabPane.contains(fileId) then
           val settings = LogFileSettings.mk(fileId, mkSearchTermGroup)
           addEntries(settings, entries)
-        else ui.selectFile(fileId)
+        else mainTabPane.selectFile(fileId)
 
   def addFile(path: Path): Unit =
     val fileId = FileId(path)
-    if !ui.contains(fileId) then addFileId(fileId)
-    else ui.selectFile(fileId)
+    if !mainTabPane.contains(fileId) then
+      addFileId(fileId)
+    else
+      mainTabPane.selectFile(fileId)
 
   def addFileId(fileId: FileId): Unit = timeR({
     val settings = LogFileSettings.mk(fileId, mkSearchTermGroup)
@@ -127,10 +149,11 @@ class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
 
   private def addEntries(settings: LogFileSettings, entries: ObservableList[LogEntry]): Unit =
     val fileId = settings.fileId
-    LogoRRRGlobals.registerSettings(settings)
-    ui.addData(LogorrrModel(LogoRRRGlobals.getLogFileSettings(fileId), entries))
-    ui.selectFile(fileId)
+    val mutLogFileSettings = LogoRRRGlobals.registerSettings(settings)
+    val p = new LogFilePane(mutLogFileSettings, entries)
+    mainTabPane.addData(ownerProperty.get(), p)
+    mainTabPane.selectFile(fileId)
 
   def closeAllLogFiles(): Unit =
-    ui.shutdown()
+    mainTabPane.shutdown()
     LogoRRRGlobals.clearLogFileSettings()

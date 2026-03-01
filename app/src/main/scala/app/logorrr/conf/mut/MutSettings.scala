@@ -2,13 +2,13 @@ package app.logorrr.conf.mut
 
 import app.logorrr.conf.*
 import app.logorrr.util.PersistenceManager
-import javafx.beans.property.{Property, SimpleBooleanProperty, SimpleMapProperty, SimpleObjectProperty}
-import javafx.collections.{FXCollections, MapChangeListener}
+import javafx.beans.binding.ObjectBinding
+import javafx.beans.property.{Property, SimpleBooleanProperty, SimpleObjectProperty}
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.stage.Window
 import net.ladstatt.util.os.OsUtil
 
 import java.nio.file.Path
-import java.util
 import scala.jdk.CollectionConverters.*
 
 object MutSettings:
@@ -42,17 +42,19 @@ class MutSettings {
   /** remembers last opened directory for the next execution */
   val lastUsedDirectoryProperty = new SimpleObjectProperty[Option[Path]](None)
 
-  /** contains mutable state information for all log files */
-  private val mutLogFileSettingsMapProperty = new SimpleMapProperty[FileId, MutLogFileSettings](FXCollections.observableMap(new util.HashMap()))
-
   private val mapDirtyPulse = new SimpleBooleanProperty(false)
 
-  mutLogFileSettingsMapProperty.addListener(new MapChangeListener[FileId, MutLogFileSettings] {
-    override def onChanged(change: MapChangeListener.Change[? <: FileId, ? <: MutLogFileSettings]): Unit = {
-      // If an entry is added, you might want to start listening to its internal properties too (see Step 2)
-      mapDirtyPulse.set(!mapDirtyPulse.get())
-    }
-  })
+  /**
+   * Contains mutable state information for all log files, sorted after firstOpened
+   *
+   * */
+  // TODO remove listener
+  private val mutLogFileSettings = FXCollections.observableList(new java.util.ArrayList[MutLogFileSettings]())
+  mutLogFileSettings.addListener(_ => mapDirtyPulse.set(!mapDirtyPulse.get))
+
+
+  def contains(fileId: FileId): Boolean = mutLogFileSettings.stream.anyMatch(_.getFileId.equals(fileId))
+
 
   def set(persistenceManager: PersistenceManager, settings: Settings): Unit =
     setStageSettings(settings.stageSettings)
@@ -62,7 +64,6 @@ class MutSettings {
     mutSearchTermGroupSettings.searchTermGroupEntries.setAll(
       settings.searchTermGroups.map(MutSearchTermGroup.apply).asJava
     )
-
 
   def getSomeActiveLogFile: Option[FileId] = someActiveLogProperty.get()
 
@@ -76,28 +77,25 @@ class MutSettings {
 
   def clearSearchTermGroups(): Unit = mutSearchTermGroupSettings.clear()
 
-  // def removeSearchTermGroup(name: String): Unit = mutSearchTermGroupSettings.remove(name)
-
   def getMutLogFileSetting(key: FileId): MutLogFileSettings =
-    mutLogFileSettingsMapProperty.get(key)
+    mutLogFileSettings.stream.filter(_.getFileId.equals(key)).findFirst().get
 
-  def putMutLogFileSetting(mutLogFileSettings: MutLogFileSettings): Unit =
-    mutLogFileSettingsMapProperty.put(mutLogFileSettings.getFileId, mutLogFileSettings)
+  def add(settings: MutLogFileSettings): Unit = this.mutLogFileSettings.add(settings)
 
-  def removeLogFileSetting(fileId: FileId): Unit = mutLogFileSettingsMapProperty.remove(fileId)
+  def removeLogFile(fileId: FileId): Unit = mutLogFileSettings.removeIf(_.getFileId == fileId)
 
-  def setLogFileSettings(persistenceManager: PersistenceManager, logFileSettings: Map[String, LogFileSettings]): Unit =
-    val m = for (k, settings) <- logFileSettings yield {
+  def setLogFileSettings(persistenceManager: PersistenceManager, logFileSettings: Map[String, LogFileSettings]): Unit = {
+    mutLogFileSettings.clear()
+    val sortedByFirstOpened: Seq[LogFileSettings] = logFileSettings.values.toSeq.sortWith((a, b) => a.firstOpened < b.firstOpened)
+
+    for (settings <- sortedByFirstOpened) {
       val s = MutLogFileSettings(settings)
-      val fileId = FileId(k)
-      persistenceManager.init(fileId, s.allProps)
-      fileId -> s
+      persistenceManager.init(s.getFileId, s.allProps)
+      mutLogFileSettings.add(s)
     }
+  }
 
-    mutLogFileSettingsMapProperty.putAll(m.asJava)
-
-
-  def clearLogFileSettings(): Unit = mutLogFileSettingsMapProperty.clear()
+  def clearLogFileSettings(): Unit = mutLogFileSettings.clear()
 
   def setStageSettings(stageSettings: StageSettings): Unit = mutStageSettings.set(stageSettings)
 
@@ -119,14 +117,21 @@ class MutSettings {
 
   def getStageWidth: Int = mutStageSettings.getWidth
 
-  def getOrderedLogFileSettings: Seq[LogFileSettings] =
-    val seq = mutLogFileSettingsMapProperty.get().values.asScala.toSeq
-    seq.sortWith((lt, gt) => lt.getFirstOpened < gt.getFirstOpened).map(_.mkImmutable())
+  def fileIds: ObjectBinding[Set[FileId]] = new ObjectBinding[Set[FileId]] {
+    bind(mutLogFileSettings)
+
+    override def computeValue(): Set[FileId] = mutLogFileSettings.stream.map(_.getFileId).toList.asScala.toSet
+  }
+
+  def getMutLogFileSettings: ObservableList[MutLogFileSettings] = mutLogFileSettings
+
 
   def mkImmutable(): Settings =
-    val logFileSettings: Map[String, LogFileSettings] = (for (k, v) <- mutLogFileSettingsMapProperty.get.asScala yield {
-      k.absolutePathAsString -> v.mkImmutable()
-    }).toMap
+    val logFileSettings: Map[String, LogFileSettings] =
+      (for s <- mutLogFileSettings.asScala yield {
+        s.getFileId.absolutePathAsString -> s.mkImmutable()
+      }).toMap
+
     Settings(mutStageSettings.mkImmutable()
       , logFileSettings
       , getSomeActiveLogFile

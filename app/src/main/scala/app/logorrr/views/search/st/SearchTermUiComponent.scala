@@ -2,7 +2,7 @@ package app.logorrr.views.search.st
 
 import app.logorrr.conf.FileId
 import app.logorrr.views.search.MutableSearchTerm
-import app.logorrr.views.util.CssBindingUtil
+import app.logorrr.views.util.CssUtil
 import javafx.beans.binding.{Bindings, StringBinding}
 import javafx.beans.property.{SimpleIntegerProperty, SimpleObjectProperty, SimpleStringProperty}
 import javafx.beans.{InvalidationListener, Observable}

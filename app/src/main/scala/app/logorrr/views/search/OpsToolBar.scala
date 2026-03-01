@@ -4,13 +4,12 @@ import app.logorrr.clv.ChunkListView
 import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.LogEntry
-import javafx.beans.property.{ObjectProperty, ObjectPropertyBase, Property}
+import app.logorrr.views.logfiletab.LogFilePane
+import javafx.beans.property.{ObjectPropertyBase, Property}
 import javafx.collections.ObservableList
 import javafx.scene.control.*
 import javafx.stage.Window
 import net.ladstatt.util.os.OsUtil
-import app.logorrr.views.logfiletab.LogFilePane
-import java.util.function.Predicate
 
 
 object OpsToolBar:
@@ -23,8 +22,7 @@ object OpsToolBar:
 /**
  * Groups search ui widgets together.
  */
-class OpsToolBar(owner: Window
-                 , logFilePane: LogFilePane
+class OpsToolBar(logFilePane: LogFilePane
                  , mutLogFileSettings: MutLogFileSettings
                  , chunkListView: ChunkListView[LogEntry]
                  , logEntries: ObservableList[LogEntry]) extends ToolBar:
@@ -37,17 +35,18 @@ class OpsToolBar(owner: Window
 
   val searchRegion = new SearchRegion
   private val otherItemsRegion = new OtherItemsRegion
-  val timestampSettingsRegion = new TimestampSettingsRegion(owner, logFilePane, mutLogFileSettings, chunkListView, logEntries)
+  val timestampSettingsRegion = new TimestampSettingsRegion(logFilePane, mutLogFileSettings, chunkListView, logEntries)
 
   getItems.addAll(searchRegion.items ++ otherItemsRegion.items ++ timestampSettingsRegion.items *)
 
-  def init(fileIdProperty: ObjectPropertyBase[FileId]
+  def init(owner: Window
+           , fileIdProperty: ObjectPropertyBase[FileId]
            , autoScrollProperty: Property[java.lang.Boolean]
            , mutSearchTerms: ObservableList[MutableSearchTerm]
            , filteredList: ObservableList[LogEntry]): Unit = {
     searchRegion.init(fileIdProperty, mutSearchTerms)
     otherItemsRegion.init(fileIdProperty, autoScrollProperty, logEntries, filteredList)
-    timestampSettingsRegion.init()
+    timestampSettingsRegion.init(owner)
   }
 
   def shutdown(autoScrollProperty: Property[java.lang.Boolean]

@@ -6,6 +6,7 @@ import app.logorrr.io.{OsxBridgeHelper, SettingsFileIO}
 import app.logorrr.services.hostservices.LogoRRRHostServices
 import app.logorrr.util.PersistenceManager
 import javafx.beans.property.{Property, SimpleListProperty, SimpleObjectProperty}
+import javafx.collections.ObservableList
 import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
@@ -33,7 +34,9 @@ object LogoRRRGlobals extends TinyLog:
 
   def persist(settings: Settings): Unit = SettingsFileIO.toFile(settings, LogoRRRApp.paths.settingsFile)
 
-  def getOrderedLogFileSettings: Seq[LogFileSettings] = mutSettings.getOrderedLogFileSettings
+  def fileIds: Set[FileId] = mutSettings.fileIds.get()
+
+  def getMutLogFileSettings: ObservableList[MutLogFileSettings] = mutSettings.getMutLogFileSettings
 
   def bindWindow(window: Window): Unit =
     window.setX(LogoRRRGlobals.getStageX)
@@ -66,7 +69,6 @@ object LogoRRRGlobals extends TinyLog:
 
   def set(settings: Settings, hostServices: LogoRRRHostServices): Unit =
     mutSettings.set(persistenceManager, settings)
-
     settings.someTimeSettings match {
       case Some(timestampSettings) => setTimeSettings(MutTimeSettings(timestampSettings))
       case None => setTimeSettings(MutTimeSettings(TimeSettings.Invalid))
@@ -82,11 +84,13 @@ object LogoRRRGlobals extends TinyLog:
   def setSomeLastUsedDirectory(someDirectory: Option[Path]): Unit = mutSettings.setSomeLastUsedDirectory(someDirectory)
 
   def removeLogFile(fileId: FileId): Unit = {
-    mutSettings.removeLogFileSetting(fileId)
+    mutSettings.removeLogFile(fileId)
     if OsUtil.enableSecurityBookmarks then {
       if fileId.isZipEntry then {
         val zipInQuestion = fileId.extractZipFileId
-        if !LogoRRRGlobals.getOrderedLogFileSettings.map(_.fileId.extractZipFileId).contains(zipInQuestion) then {
+        // if !LogoRRRGlobals.getOrderedLogFileSettings.map(_.fileId.extractZipFileId).contains(zipInQuestion) then {
+        // only if this is the last zip entry release the zip
+        if !LogoRRRGlobals.fileIds.map(f => f.extractZipFileId).exists(_.equals(zipInQuestion)) then {
           val zipPath = fileId.extractZipFileId.asPath
           OsxBridgeHelper.releasePath(zipPath)
         }
@@ -99,11 +103,16 @@ object LogoRRRGlobals extends TinyLog:
 
   def clearLogFileSettings(): Unit = mutSettings.clearLogFileSettings()
 
-  def registerSettings(fs: LogFileSettings): Unit = {
-    val settings = MutLogFileSettings(fs)
-    persistenceManager.init(fs.fileId, settings.allProps)
-    mutSettings.putMutLogFileSetting(settings)
+  def registerSettings(fs: LogFileSettings): MutLogFileSettings = {
+    val mutSettings = MutLogFileSettings(fs)
+    registerSettings(mutSettings)
+    mutSettings
   }
+
+  def registerSettings(settings: MutLogFileSettings): Unit =
+    persistenceManager.init(settings.getFileId, settings.allProps)
+    mutSettings.add(settings)
+
 
   def getLogFileSettings(fileId: FileId): MutLogFileSettings = mutSettings.getMutLogFileSetting(fileId)
 

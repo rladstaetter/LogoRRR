@@ -25,8 +25,6 @@ class LogTailer extends TinyLog {
 
   val entriesProperty = new SimpleListProperty[LogEntry](FXCollections.observableArrayList())
 
-  def getFileId: FileId = fileIdProperty.get()
-
   def logFile: File = Option(fileIdProperty.get()).map(_.asPath.toFile).orNull
 
   def init(fileIdProperty: ObjectPropertyBase[FileId], entries: ObservableList[LogEntry]): Unit = {
@@ -46,7 +44,7 @@ class LogTailer extends TinyLog {
       val currentLength = logFile.length()
       // Handle File Rotation: If the file size has drastically shrunk, clear and reset.
       if currentLength < lastPosition then
-        logInfo(s"Log file ${getFileId.value} rotated. Clearing entries.")
+        logInfo(s"Log file ${fileIdProperty.get().value} rotated. Clearing entries.")
         lastPosition = 0L // Reset position to start of the new file
         javafx.application.Platform.runLater(() => entriesProperty.clear())
 
@@ -74,7 +72,7 @@ class LogTailer extends TinyLog {
           lastPosition = raf.getFilePointer
 
         catch
-          case e: Exception => logException(s"Error while reading new lines from ${getFileId.value}", e)
+          case e: Exception => logException(s"Error while reading new lines from ${fileIdProperty.get().value}", e)
         finally
           if raf != null then raf.close()
 
@@ -84,12 +82,12 @@ class LogTailer extends TinyLog {
     })
 
   /** Start observing log file for changes */
-  def start(): Unit = synchronized:
+  def start(lastLogFilePosition: Long): Unit = synchronized:
     future match
       case Some(_) => logWarn("Not starting new LogTailer, already one in progress ...")
       case None =>
         // 1. Set initial position to the end of the file (TailFromEnd behavior)
-        lastPosition = logFile.length()
+        lastPosition = lastLogFilePosition
 
         val r = new Runnable:
           override def run(): Unit = readNewLines()
@@ -101,16 +99,14 @@ class LogTailer extends TinyLog {
           pollingDelayMs,
           TimeUnit.MILLISECONDS
         ))
-        logInfo(s"Started LogTailer for file ${getFileId.value} with ${pollingDelayMs}ms delay.")
+        logInfo(s"Started LogTailer for file ${fileIdProperty.get().value} with ${pollingDelayMs}ms delay.")
 
   /** Stop observing log file */
   def stop(): Unit = {
-    if (future.isDefined || someScheduler.isDefined) {
       future.foreach(_.cancel(true))
       someScheduler.foreach(_.shutdown())
       someScheduler = None
       future = None
-    }
   }
 
 }

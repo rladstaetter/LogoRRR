@@ -25,8 +25,6 @@ class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
 
   def activate(fileId: FileId, searchTermGroupName: String): Unit =
     openFile(fileId)
-    // matchItems[String](StgChoiceBox.uiNode(fileId), settings.searchTermGroups.keySet.toSeq.sorted)
-    //selectChoiceBoxByValue(StgChoiceBox.uiNode(fileId))(searchTermGroupName)
 
   @Disabled
   @Test def testIssue236(): Unit =

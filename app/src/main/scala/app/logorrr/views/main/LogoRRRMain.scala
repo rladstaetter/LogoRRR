@@ -11,7 +11,7 @@ class LogoRRRMain(stage: Stage
                   , fileIdService: FileIdService
                   , isUnderTest: Boolean
                   , val logSource: LogSource) extends BorderPane with TinyLog:
-
+  
   val bar = new MainMenuBar(stage
     , this
     , fileIdService
@@ -21,14 +21,14 @@ class LogoRRRMain(stage: Stage
 
   def init(): Unit =
     if !OsUtil.isMac || isUnderTest then setTop(bar)
-    setCenter(logSource.ui)
-    logSource.loadLogFiles()
+    logSource.init(stage.getScene.getWindow)
+    setCenter(logSource.getUi())
 
-  def selectLastLogFile(): Unit = logSource.ui.selectLastLogFile()
+  def selectLastLogFile(): Unit = logSource.getUi().selectLastLogFile()
 
-  def shutdown(): Unit = logSource.ui.shutdown()
+  def shutdown(): Unit = logSource.getUi().shutdown()
 
   addEventHandler(DataModelEvent.DateFilterEvent, (e: DateFilterEvent) => {
-    logSource.ui.applyTimeSettings(e.timeSettings)
+    logSource.getUi().applyTimeSettings(e.timeSettings)
     e.consume()
   })

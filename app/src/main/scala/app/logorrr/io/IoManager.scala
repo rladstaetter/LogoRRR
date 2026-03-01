@@ -88,7 +88,7 @@ object IoManager extends TinyIo with TinyLog:
     if isPathValid(path) then
       Try(someTimeSettings match {
         case None => IoManager.from(path)
-        case Some(instantFormat) => from(path, instantFormat)
+        case Some(timesettings) => from(path, timesettings)
       }) match
         case Success(logEntries) => logEntries
         case Failure(ex) =>

@@ -17,7 +17,7 @@ object LogFileSettings:
   private val DefaultLastViewIndex = 0
   val DefaultLowerTimestamp: Int = 0
   val DefaultUpperTimestamp: Long = Instant.now().toEpochMilli
-  val ShowUnclassified = true
+  private val ShowUnclassified = true
 
   def mk(fileId: FileId, searchTermGroup: SearchTermGroup): LogFileSettings =
     val now = Instant.now().toEpochMilli
@@ -34,7 +34,8 @@ object LogFileSettings:
       , DefaultLastViewIndex
       , DefaultLowerTimestamp
       , now
-      , ShowUnclassified)
+      , ShowUnclassified
+      , fileId.asPath.toFile.length())
 
 
 /**
@@ -73,7 +74,8 @@ case class LogFileSettings(fileId: FileId
                            , lastVisibleTextCellIndex: Int
                            , lowerTimestamp: Long
                            , upperTimestamp: Long
-                           , showUnclassified: Boolean) derives ReadWriter:
+                           , showUnclassified: Boolean
+                           , logFilePosition: Long) derives ReadWriter:
 
   lazy val path: Path = fileId.asPath.toAbsolutePath
 

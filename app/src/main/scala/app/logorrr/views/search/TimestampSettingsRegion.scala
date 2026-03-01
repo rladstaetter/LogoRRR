@@ -1,25 +1,22 @@
 package app.logorrr.views.search
 
 import app.logorrr.clv.ChunkListView
-import app.logorrr.conf.mut.{LogFilePredicate, MutLogFileSettings}
+import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.{LogEntry, UpdateLogFilePredicate}
 import app.logorrr.util.TimeUtil
 import app.logorrr.views.logfiletab.LogFilePane
-import app.logorrr.views.ops.time.{SliderVBox, TimeRange, TimestampSettingsButton}
-import javafx.beans.property.ObjectProperty
+import app.logorrr.views.ops.time.{SliderVBox, TimestampSettingsButton}
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.stage.Window
 import javafx.util.Subscription
 
-import java.util.function.Predicate
 import scala.compiletime.uninitialized
 import scala.language.postfixOps
 
 
-class TimestampSettingsRegion(owner: Window
-                              , logFilePane: LogFilePane
+class TimestampSettingsRegion(logFilePane: LogFilePane
                               , mutLogFileSettings: MutLogFileSettings
                               , chunkListView: ChunkListView[LogEntry]
                               , logEntries: ObservableList[LogEntry]):
@@ -27,7 +24,7 @@ class TimestampSettingsRegion(owner: Window
   /**
    * To configure the logformat of the timestamp used in a logfile
    */
-  private val timestampSettingsButton = new TimestampSettingsButton(owner, logFilePane, mutLogFileSettings, chunkListView, logEntries, this)
+  private val timestampSettingsButton = new TimestampSettingsButton(logFilePane, mutLogFileSettings, chunkListView, logEntries, this)
 
   private lazy val lowerSliderVBox = new SliderVBox(Pos.CENTER_LEFT, "Configure earliest timestamp to be displayed")
   private lazy val upperSliderVBox = new SliderVBox(Pos.CENTER_RIGHT, "Configure latest timestamp to be displayed")
@@ -62,7 +59,7 @@ class TimestampSettingsRegion(owner: Window
 
   val items: Seq[Node] = Seq(timestampSettingsButton, lowerSliderVBox, upperSliderVBox)
 
-  def init(): Unit =
+  def init(owner: Window): Unit =
     timeRangeSubscription = logEntries.subscribe(() => {
       val (min, max) = TimeUtil.calcRange(logEntries)
       initializeRanges(min, max)
@@ -91,8 +88,8 @@ class TimestampSettingsRegion(owner: Window
     lowerSliderSub = lowerSlider.valueProperty().subscribe((_, newVal) => updateLowerTimestampSlider(newVal))
     upperSliderSub = upperSlider.valueProperty().subscribe((_, newVal) => updateUpperTimestampSlider(newVal))
 
-    timestampSettingsButton.init(
-      mutLogFileSettings.fileIdProperty
+    timestampSettingsButton.init(owner
+      , mutLogFileSettings.fileIdProperty
       , mutLogFileSettings.mutTimeSettings.validBinding
     )
 

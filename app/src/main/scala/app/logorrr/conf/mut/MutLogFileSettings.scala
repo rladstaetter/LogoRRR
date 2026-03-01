@@ -7,6 +7,7 @@ import javafx.beans.binding.{ObjectBinding, StringBinding}
 import javafx.beans.property.*
 import javafx.collections.{FXCollections, ObservableList}
 
+import java.util.Comparator
 import java.util.function.Predicate
 import scala.jdk.CollectionConverters.*
 
@@ -26,6 +27,7 @@ object MutLogFileSettings:
     s.upperBoundaryProperty.set(logFileSettings.upperTimestamp)
     logFileSettings.someTimeSettings.foreach(s.mutTimeSettings.set)
     s.showUnclassifiedProperty.set(logFileSettings.showUnclassified)
+    s.logFilePositionProperty.set(logFileSettings.logFilePosition)
     s
 
 
@@ -45,6 +47,7 @@ class MutLogFileSettings:
   val lowerBoundaryProperty = new SimpleLongProperty(this, "lowerBoundaryProperty")
   val upperBoundaryProperty = new SimpleLongProperty(this, "upperBoundaryProperty")
   val showUnclassifiedProperty = new SimpleBooleanProperty(true, "showUnclassifiedProperty")
+  val logFilePositionProperty = new SimpleLongProperty(this, "logFilePosition")
   val mutTimeSettings = new MutTimeSettings
 
   /** is reset on various user interface action which should trigger a configuration save action */
@@ -98,8 +101,10 @@ class MutLogFileSettings:
       , lowerBoundaryProperty.get()
       , upperBoundaryProperty.get()
       , showUnclassifiedProperty.get()
+      , logFilePositionProperty.get()
     )
 
+  def path = fileIdProperty.get().asPath
 
   def getSearchTerms: Seq[SearchTerm] =
     mutSearchTerms.asScala.toSeq.map(f => SearchTerm(f.getValue, f.getColor, f.isActive))
