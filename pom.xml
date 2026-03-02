@@ -113,7 +113,7 @@
             </activation>
             <properties>
                 <jfxdownload.os.arch>x64</jfxdownload.os.arch>
-                <rpm.os.arch>amd64</rpm.os.arch>
+                <rpm.os.arch>x86_64</rpm.os.arch>
                 <deb.os.arch>amd64</deb.os.arch>
                 <flatpak.os.arch>amd64</flatpak.os.arch>
                 <graal.os.arch>amd64</graal.os.arch>
