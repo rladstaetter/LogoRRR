@@ -85,6 +85,24 @@ If you don't want to use app stores, installers are provided also for following 
 </td>
 </tr>
 
+<tr>
+<td>Linux</td>
+<td>
+
+[LogoRRR x64 Linux Installer, .rpm](https://github.com/rladstaetter/LogoRRR/releases/download/26.1.1/logorrr-26.2.0-1.x86_64.rpm)
+
+</td>
+</tr>
+
+<tr>
+<td>Linux</td>
+<td>
+
+[LogoRRR aarch Linux Installer, .rpm](https://github.com/rladstaetter/LogoRRR/releases/download/26.1.1/logorrr-26.2.0-1.aarch64.rpm)
+
+</td>
+</tr>
+
 </table>
 
 ## Release Notes 
