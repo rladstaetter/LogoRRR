@@ -1,15 +1,17 @@
 package app.logorrr
 
 import javafx.application.Application
+import javafx.geometry.{Insets, Pos}
 import javafx.scene.Scene
-import javafx.scene.control.{Button, ToolBar}
-import javafx.scene.layout.VBox
-import javafx.scene.input.{TransferMode, ClipboardContent, DragEvent, MouseEvent}
+import javafx.scene.control.{Button, ColorPicker, TextField, ToolBar}
+import javafx.scene.input.{ClipboardContent, DragEvent, MouseEvent, TransferMode}
+import javafx.scene.layout.{HBox, Priority, VBox}
+import javafx.scene.paint.Color
 import javafx.scene.transform.Scale
 import javafx.scene.SnapshotParameters
-import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.animation.FadeTransition
+import javafx.event.EventHandler
 import javafx.util.Duration
 import javafx.scene.Cursor
 
@@ -20,89 +22,113 @@ class FDnD extends Application {
     val tools = List("Select", "Draw", "Erase", "Zoom", "Crop")
 
     tools.foreach { name =>
-      toolbar.getItems.add(createDraggableButton(name, toolbar))
+      toolbar.getItems.add(createToolItem(name, toolbar))
     }
 
-    // --- TOOLBAR LEVEL HANDLERS (Crucial for firing onDragDropped) ---
     toolbar.setOnDragOver((event: DragEvent) => {
-      if (event.getGestureSource.isInstanceOf[Button]) {
+      if (event.getGestureSource.isInstanceOf[HBox]) {
         event.acceptTransferModes(TransferMode.MOVE)
       }
       event.consume()
     })
 
     toolbar.setOnDragDropped((event: DragEvent) => {
-      println("Dropped! Ghost should vanish now.")
-      // This is the signal to the OS to stop the drag animation immediately
       event.setDropCompleted(true)
       event.consume()
     })
 
     val root = new VBox(toolbar)
-    val scene = new Scene(root, 500, 100)
-    primaryStage.setTitle("Animated Reorder - Ghost Version")
+    root.setPadding(new Insets(20))
+    val scene = new Scene(root, 700, 150)
+    primaryStage.setTitle("Fully Editable Animated Toolbox")
     primaryStage.setScene(scene)
     primaryStage.show()
   }
 
-  def createDraggableButton(text: String, parentBar: ToolBar): Button = {
-    val btn = new Button(text)
-    btn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 8 15; -fx-background-radius: 5;")
+  def createToolItem(initialText: String, parentBar: ToolBar): HBox = {
+    val container = new HBox(5)
+    container.setAlignment(Pos.CENTER_LEFT)
+    container.setPadding(new Insets(4, 8, 4, 8))
+    container.setStyle("-fx-background-color: #3498db; -fx-background-radius: 5;")
 
-    btn.setOnDragDetected((event: MouseEvent) => {
-      val db = btn.startDragAndDrop(TransferMode.MOVE)
-      val content = new ClipboardContent()
-      content.putString(text)
-      db.setContent(content)
+    // 1. DRAG HANDLE (Users grab this to move the item)
+    val dragHandle = new Button("☰")
+    dragHandle.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: move; -fx-padding: 0 5 0 0;")
 
-      // --- CREATE THE GHOST ---
-      val params = new SnapshotParameters()
-      params.setFill(Color.TRANSPARENT)
-      // Scale it down slightly for a nicer "picked up" look
-      params.setTransform(new Scale(0.8, 0.8))
-      db.setDragView(btn.snapshot(params, null))
+    // 2. EDITABLE TEXT FIELD
+    val textField = new TextField(initialText)
+    textField.setPrefWidth(100)
+    textField.setStyle("-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-border-width: 0;")
+    HBox.setHgrow(textField, Priority.ALWAYS)
 
-      // Hide the real button so it looks like you are carrying it
-      btn.setOpacity(0.0)
-      btn.getScene.setCursor(Cursor.CLOSED_HAND)
-      event.consume()
-    })
+    // 3. COLOR PICKER BUTTON (Simplified)
+    val colorPicker = new ColorPicker(Color.web("#3498db"))
+    colorPicker.setStyle("-fx-color-label-visible: false; -fx-background-color: transparent;")
+    colorPicker.setPrefWidth(40)
+    colorPicker.setOnAction { _ =>
+      val c = colorPicker.getValue
+      val hex = f"#${(c.getRed * 255).toInt}%02x${(c.getGreen * 255).toInt}%02x${(c.getBlue * 255).toInt}%02x"
+      container.setStyle(s"-fx-background-color: $hex; -fx-background-radius: 5;")
+    }
 
-    btn.setOnDragEntered((event: DragEvent) => {
+    // 4. DELETE BUTTON
+    val delBtn = new Button("✕")
+    delBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;")
+    delBtn.setOnAction(_ => parentBar.getItems.remove(container))
+
+    container.getChildren.addAll(dragHandle, textField, colorPicker, delBtn)
+
+    // --- DRAG AND DROP LOGIC (Bound to the Drag Handle) ---
+
+    val handleDrag = new EventHandler[MouseEvent] {
+
+      override def handle(event: MouseEvent): Unit = {
+        val db = container.startDragAndDrop(TransferMode.MOVE)
+        val content = new ClipboardContent()
+        content.putString(textField.getText)
+        db.setContent(content)
+
+        val params = new SnapshotParameters()
+        params.setFill(Color.TRANSPARENT)
+        params.setTransform(new Scale(0.9, 0.9))
+        db.setDragView(container.snapshot(params, null))
+
+        container.setOpacity(0.0)
+        container.getScene.setCursor(Cursor.CLOSED_HAND)
+        event.consume()
+      }
+    }
+
+    dragHandle.setOnDragDetected(handleDrag)
+
+    container.setOnDragEntered((event: DragEvent) => {
       val source = event.getGestureSource
-      if (source != btn && source.isInstanceOf[Button]) {
+      if (source != container && source.isInstanceOf[HBox]) {
         val items = parentBar.getItems
-        val sourceBtn = source.asInstanceOf[Button]
-        val targetIdx = items.indexOf(btn)
+        val sourceBox = source.asInstanceOf[HBox]
+        val targetIdx = items.indexOf(container)
 
-        if (items.contains(sourceBtn)) {
-          // Reorder the list dynamically
-          items.remove(sourceBtn)
-          items.add(targetIdx, sourceBtn)
+        if (items.contains(sourceBox)) {
+          items.remove(sourceBox)
+          items.add(targetIdx, sourceBox)
         }
       }
       event.consume()
     })
 
-    btn.setOnDragDone((event: DragEvent) => {
-      println("Drag Session Finished")
-      if (btn.getScene != null) btn.getScene.setCursor(Cursor.DEFAULT)
-
-      // Fade the button back in at its new permanent home
-      val ft = new FadeTransition(Duration.millis(250), btn)
+    container.setOnDragDone((event: DragEvent) => {
+      if (container.getScene != null) container.getScene.setCursor(Cursor.DEFAULT)
+      val ft = new FadeTransition(Duration.millis(200), container)
       ft.setFromValue(0.0)
       ft.setToValue(1.0)
       ft.play()
-
       event.consume()
     })
 
-    btn
+    container
   }
 }
 
 object FDnD {
-  def main(args: Array[String]): Unit = {
-    Application.launch(classOf[FDnD], args: _*)
-  }
+  def main(args: Array[String]): Unit = Application.launch(classOf[FDnD], args: _*)
 }
