@@ -20,7 +20,6 @@ class SearchRegion:
     if event.getCode == KeyCode.ENTER then
       searchButton.fire()
 
-
   val items: Seq[Control] = Seq[Control](searchTextField, colorPicker, searchButton)
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]

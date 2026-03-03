@@ -9,7 +9,7 @@ import app.logorrr.views.autoscroll.LogTailer
 import app.logorrr.views.block.BlockConstants
 import app.logorrr.views.ops.*
 import app.logorrr.views.search.st.SearchTermToolBar
-import app.logorrr.views.search.{OpsToolBar, SearchTextField}
+import app.logorrr.views.search.{MutableSearchTerm, OpsToolBar, SearchTextField}
 import app.logorrr.views.text.LogTextView
 import app.logorrr.views.text.toolbaractions.{DecreaseTextSizeButton, IncreaseTextSizeButton}
 import javafx.beans.property.{ObjectPropertyBase, SimpleBooleanProperty, SimpleLongProperty}
@@ -210,6 +210,17 @@ class LogFilePane(val mutLogFileSettings: MutLogFileSettings
     updateDisplay()
     e.consume()
   })
+
+  addEventHandler(DataModelEvent.ReoderSearchTermButtonEvent, (e: ReoderSearchTermButtonEvent) =>
+    val targetIdx = mutLogFileSettings.mutSearchTerms.indexOf(e.targetSearchTerm)
+    if (mutLogFileSettings.mutSearchTerms.contains(e.sourceSearchTerm)) {
+      mutLogFileSettings.mutSearchTerms.remove(e.sourceSearchTerm)
+      mutLogFileSettings.mutSearchTerms.add(targetIdx, e.sourceSearchTerm)
+      updateDisplay()
+    } 
+    e.consume()
+  )
+
 
   addEventHandler(DataModelEvent.UpdateLogFilePredicate, (e: UpdateLogFilePredicate) =>
     updateDisplay()

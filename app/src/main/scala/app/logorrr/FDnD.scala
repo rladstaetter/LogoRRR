@@ -80,26 +80,20 @@ class FDnD extends Application {
 
     // --- DRAG AND DROP LOGIC (Bound to the Drag Handle) ---
 
-    val handleDrag = new EventHandler[MouseEvent] {
+    dragHandle.setOnDragDetected((event: MouseEvent) => {
+      val db = container.startDragAndDrop(TransferMode.MOVE)
+      val content = new ClipboardContent()
+      content.putString(textField.getText)
+      db.setContent(content)
 
-      override def handle(event: MouseEvent): Unit = {
-        val db = container.startDragAndDrop(TransferMode.MOVE)
-        val content = new ClipboardContent()
-        content.putString(textField.getText)
-        db.setContent(content)
-
-        val params = new SnapshotParameters()
-        params.setFill(Color.TRANSPARENT)
-        params.setTransform(new Scale(0.9, 0.9))
-        db.setDragView(container.snapshot(params, null))
-
-        container.setOpacity(0.0)
-        container.getScene.setCursor(Cursor.CLOSED_HAND)
-        event.consume()
-      }
-    }
-
-    dragHandle.setOnDragDetected(handleDrag)
+      val params = new SnapshotParameters()
+      params.setFill(Color.TRANSPARENT)
+      params.setTransform(new Scale(0.9, 0.9))
+      db.setDragView(container.snapshot(params, null))
+      container.setOpacity(0.5)
+      container.getScene.setCursor(Cursor.CLOSED_HAND)
+      event.consume()
+    })
 
     container.setOnDragEntered((event: DragEvent) => {
       val source = event.getGestureSource

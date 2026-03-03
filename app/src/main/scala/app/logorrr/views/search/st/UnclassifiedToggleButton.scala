@@ -27,17 +27,4 @@ class UnclassifiedToggleButton extends ASearchTermToggleButton:
   searchTermLabel.setMinHeight(36)
   setGraphic(searchTermLabel)
 
-  override def init(fileIdProperty: ObjectPropertyBase[FileId]
-                    , visibleBinding: BooleanBinding
-                    , mutSearchTerm: MutableSearchTerm
-                    , valProperty: StringProperty
-                    , colorProperty: ObjectPropertyBase[Color]
-                    , activeProperty: BooleanProperty): Unit = {
-    super.init(fileIdProperty, visibleBinding, mutSearchTerm, valProperty, colorProperty, activeProperty)
-
-  }
-
-  override def shutdown(activeProperty: BooleanProperty): Unit = {
-    super.shutdown(activeProperty)
-  }
 

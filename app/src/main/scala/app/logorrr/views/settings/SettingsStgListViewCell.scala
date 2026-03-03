@@ -67,7 +67,6 @@ class SettingsStgListViewCell(toggleGroup: ToggleGroup) extends ListCell[MutSear
   override def updateItem(group: MutSearchTermGroup, empty: Boolean): Unit =
     super.updateItem(group, empty)
 
-
     val textField = new TextField():
       setPrefWidth(200)
       setMaxWidth(200)
@@ -94,13 +93,11 @@ class SettingsStgListViewCell(toggleGroup: ToggleGroup) extends ListCell[MutSear
         getListView.refresh()
       })
 
-      // 3. Delete Logic
       deleteButton.setOnAction(_ => {
         LogoRRRGlobals.remove(group)
         getListView.getItems.remove(group)
       })
 
-      // don't edit / delete default element
       if MutSearchTermGroup.isDefaultElement(group) then {
         deleteButton.setDisable(true)
         textField.setDisable(true)
@@ -109,7 +106,6 @@ class SettingsStgListViewCell(toggleGroup: ToggleGroup) extends ListCell[MutSear
         textField.setDisable(false)
       }
 
-      // 4. Update the ToolBar
       toolBar.getItems.clear()
       toolBar.getItems.addAll(radioButton, textField)
       toolBar.getItems.addAll(group.termsProperty.stream().map(t => SearchTermLabel(t)).toList)

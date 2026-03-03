@@ -8,18 +8,26 @@ object GfxElements:
 
   object ToolTips:
 
+    def mkColorPicker = new Tooltip("change color")
+
     def mkRemove = new Tooltip("remove")
+
+    def mkDragToReorder = new Tooltip("drag to reorder")
 
     def mkAddToFavorites = new Tooltip("add to favorites")
 
   object Icons:
+    def listAlt = new FontIcon(FontAwesomeRegular.LIST_ALT)
+
+    def listAltDark = new FontIcon(FontAwesomeRegular.LIST_ALT)
+
     def edit = new FontIcon(FontAwesomeRegular.EDIT)
 
     def editDark = new FontIcon(FontAwesomeRegular.EDIT)
 
-    def star = new FontIcon(FontAwesomeRegular.STAR)
+    def star = new FontIcon(FontAwesomeRegular.SUN)
 
-    def starDark = new FontIcon(FontAwesomeSolid.STAR)
+    def starDark = new FontIcon(FontAwesomeSolid.SUN)
 
     def copy = new FontIcon(FontAwesomeRegular.COPY)
 
@@ -32,11 +40,11 @@ object GfxElements:
     def clock = new FontIcon(FontAwesomeRegular.CLOCK)
 
     def plusSquare = new FontIcon(FontAwesomeRegular.PLUS_SQUARE)
-    
+
     def playCircle = new FontIcon(FontAwesomeRegular.PLAY_CIRCLE)
-    
+
     def playCircleDark = new FontIcon(FontAwesomeSolid.PLAY_CIRCLE)
-    
+
     def search = new FontIcon(FontAwesomeSolid.SEARCH)
-    
+
     def stop = new FontIcon(FontAwesomeRegular.STOP_CIRCLE)
