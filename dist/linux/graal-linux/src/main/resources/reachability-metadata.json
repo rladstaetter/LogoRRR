@@ -131,21 +131,10 @@
       ]
     },
     {
-      "type": "app.logorrr.model.LogEntry[]"
-    },
-    {
       "type": "app.logorrr.views.a11y.UiNode",
       "fields": [
         {
           "name": "ref$lzy1"
-        }
-      ]
-    },
-    {
-      "type": "app.logorrr.views.about.AboutDialogBorderPane$",
-      "fields": [
-        {
-          "name": "links$lzy1"
         }
       ]
     },
@@ -195,9 +184,6 @@
           "name": "upperSliderVBox$lzy1"
         }
       ]
-    },
-    {
-      "type": "app.logorrr.views.settings.timestamp.LogViewLabel[]"
     },
     {
       "type": "app.logorrr.views.text.SearchTermCalculator",
@@ -264,34 +250,6 @@
       "methods": [
         {
           "name": "contentChanged",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "com.sun.glass.ui.CommonDialogs",
-      "jniAccessible": true,
-      "methods": [
-        {
-          "name": "createFileChooserResult",
-          "parameterTypes": [
-            "java.lang.String[]",
-            "com.sun.glass.ui.CommonDialogs$ExtensionFilter[]",
-            "int"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "com.sun.glass.ui.CommonDialogs$ExtensionFilter",
-      "jniAccessible": true,
-      "methods": [
-        {
-          "name": "extensionsToArray",
-          "parameterTypes": []
-        },
-        {
-          "name": "getDescription",
           "parameterTypes": []
         }
       ]
@@ -788,6 +746,22 @@
       ]
     },
     {
+      "type": "com.sun.javafx.geom.Path2D",
+      "jniAccessible": true,
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int",
+            "byte[]",
+            "int",
+            "float[]",
+            "int"
+          ]
+        }
+      ]
+    },
+    {
       "type": "com.sun.javafx.logging.PrintLogger",
       "methods": [
         {
@@ -1176,9 +1150,6 @@
       "type": "java.lang.Object[]"
     },
     {
-      "type": "java.lang.Object[][]"
-    },
-    {
       "type": "java.lang.Runnable",
       "jniAccessible": true,
       "methods": [
@@ -1204,12 +1175,6 @@
       "serializable": true,
       "jniAccessible": true,
       "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": [
-            "byte[]"
-          ]
-        },
         {
           "name": "toLowerCase",
           "parameterTypes": [
@@ -1579,6 +1544,12 @@
     },
     {
       "type": "javafx.scene.image.ImageView"
+    },
+    {
+      "type": "javafx.scene.input.Clipboard"
+    },
+    {
+      "type": "javafx.scene.input.Dragboard"
     },
     {
       "type": "javafx.scene.layout.Pane"
@@ -2109,12 +2080,6 @@
       "type": "sun.text.resources.cldr.FormatData_en"
     },
     {
-      "type": "sun.text.resources.cldr.FormatData_en_US"
-    },
-    {
-      "type": "sun.util.resources.cldr.CalendarData"
-    },
-    {
       "type": "sun.util.resources.cldr.TimeZoneNames"
     },
     {
@@ -2214,9 +2179,6 @@
       "glob": "app/logorrr/css/LogoRRR.css"
     },
     {
-      "glob": "app/logorrr/css/SettingsStgListViewCell.css"
-    },
-    {
       "glob": "app/logorrr/drop-files-here.png"
     },
     {
@@ -2229,18 +2191,11 @@
       "glob": "com/sun/javafx/tk/quantum/QuantumMessagesBundle_en.properties"
     },
     {
-      "glob": "logorrr-icon-128.png"
-    },
-    {
       "glob": "logorrr-icon-32.png"
     },
     {
       "module": "java.base",
       "glob": "jdk/internal/icu/impl/data/icudt76b/ubidi.icu"
-    },
-    {
-      "module": "java.base",
-      "glob": "sun/net/www/content-types.properties"
     },
     {
       "module": "java.logging",
