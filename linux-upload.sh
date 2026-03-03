@@ -2,6 +2,9 @@
 
 set -e  # Exit on error, except where overridden
 
+echo "Cleaning everything ..."
+./mvnw clean
+
 source "$(dirname "$0")/scripts/common.sh"
 
 # build everything and upload linux binaries
