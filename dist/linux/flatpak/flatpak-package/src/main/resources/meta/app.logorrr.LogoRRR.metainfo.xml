@@ -62,9 +62,13 @@
         <!--
         <release version="${project.version}" date="${currentDate}"></release>
         -->
-        <release version="26.2.0" date="2026-06-30">
+        <release version="26.2.0" date="2026-03-03">
             <description>
-                <p>Feature Release which contains bugfixes and enhancements.</p>
+                <p>Favourites were redesigned as an ongoing process started with 26.1.0. Now it should be much easier to understand this feature. For this, a new button was added and the Settings dialog was redesigned.</p>
+                <p>Search term groups are now editable—you can change the ordering and color of search terms.</p>
+                <p>Persisting application state was improved as well, leading to a more consistent behavior when continuing user sessions.</p>
+                <p>CSS handling was updated to the latest atlantafx release.</p>
+                <p>RPM Builds for Linux are now available.</p>
             </description>
         </release>
         <release version="26.1.1" date="2026-02-21">

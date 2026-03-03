@@ -39,23 +39,25 @@
           "value": "at "
         }
       ],
-      "blockSettings": {
-        "size": 22
-      },
+      "blockSize" : 10,
       "autoScroll": false,
       "firstVisibleTextCellIndex": 0,
       "lastVisibleTextCellIndex": 0,
       "lowerTimestamp": 0,
-      "upperTimestamp": 1730045438927
+      "upperTimestamp": 1730045438927,
+      "showUnclassified" : true,
+      "logFilePosition" : 0
     }
   },
-  "someActive": "/Users/lad/logfiles/_logorrr/SimpleLog-2.txt",
+  "someActive": "/Users/lad/gh/LogoRRR/docs/src/main/resources/example.log",
   "searchTermGroups": [
     {
+      "name" : "Default",
       "terms": [],
-      "selected": false
+      "selected": true
     },
     {
+      "name": "Java: java.util.logging",
       "terms": [
         {
           "value": "SEVERE",
