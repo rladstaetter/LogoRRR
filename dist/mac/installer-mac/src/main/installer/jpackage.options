@@ -18,7 +18,8 @@
 --mac-package-identifier app.logorrr
 --mac-package-name LogoRRR
 --mac-sign
---mac-signing-key-user-name "${mac.signingkey.username}"
+--mac-app-image-sign-identity "3rd Party Mac Developer Application: ${mac.signingkey.username}"
+--mac-installer-sign-identity "3rd Party Mac Developer Installer: ${mac.signingkey.username}"
 --main-class ${main.launcher.class}
 --main-jar app-${project.version}.jar
 --module-path ../../../../env/target/javafx-jmods-${openjfx.version}

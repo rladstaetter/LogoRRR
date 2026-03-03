@@ -9,7 +9,7 @@
     <description>LogoRRR - explore logs effortlessly.</description>
     <packaging>pom</packaging>
     <properties>
-        <revision>26.2.0</revision>
+        <revision>26.2.1</revision>
         <scala.version>3.8.1</scala.version>
         <java.version>24</java.version>
         <openjfx.version>25</openjfx.version>
@@ -465,7 +465,6 @@
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>3.6.1</version>
                     <executions>
-                        <!--
                         <execution>
                             <id>apply-enforcer-rules</id>
                             <goals>
@@ -481,14 +480,13 @@
                                         </message>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
-                                        <version>24</version>
-                                        <message>JDK 24 or newer is recommended to build LogoRRR</message>
+                                        <version>25</version>
+                                        <message>JDK 25 or newer is recommended to build LogoRRR</message>
                                     </requireJavaVersion>
                                 </rules>
                                 <fail>true</fail>
                             </configuration>
                         </execution>
-                        -->
                     </executions>
                 </plugin>
                 <plugin>

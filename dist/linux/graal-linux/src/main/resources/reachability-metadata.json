@@ -1,6 +1,14 @@
 {
   "reflection": [
     {
+      "type": "app.logorrr.BuildProps$",
+      "fields": [
+        {
+          "name": "Instance$lzy1"
+        }
+      ]
+    },
+    {
       "type": "app.logorrr.LogoRRRApp",
       "methods": [
         {
@@ -16,16 +24,185 @@
       ]
     },
     {
-      "type": "app.logorrr.model.LogEntry[]"
+      "type": "app.logorrr.clv.ChunkShape",
+      "fields": [
+        {
+          "name": "size$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.conf.DefaultSearchTermGroups$",
+      "fields": [
+        {
+          "name": "derived$ReadWriter$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.conf.FileId$",
+      "fields": [
+        {
+          "name": "rw$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.conf.LogFileSettings",
+      "fields": [
+        {
+          "name": "path$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.conf.LogFileSettings$",
+      "fields": [
+        {
+          "name": "derived$ReadWriter$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.conf.SearchTerm$",
+      "fields": [
+        {
+          "name": "derived$ReadWriter$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.conf.SearchTermGroup$",
+      "fields": [
+        {
+          "name": "derived$ReadWriter$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.conf.Settings$",
+      "fields": [
+        {
+          "name": "Default$lzy1"
+        },
+        {
+          "name": "derived$ReadWriter$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.conf.StageSettings$",
+      "fields": [
+        {
+          "name": "derived$ReadWriter$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.conf.TimeSettings$",
+      "fields": [
+        {
+          "name": "derived$ReadWriter$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.conf.mut.MutStageSettings",
+      "fields": [
+        {
+          "name": "allProps$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.io.AppPaths",
+      "fields": [
+        {
+          "name": "pathMap$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.model.LogEntry",
+      "fields": [
+        {
+          "name": "someInstant$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.views.a11y.UiNode",
+      "fields": [
+        {
+          "name": "ref$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.views.about.AboutDialogBorderPane$",
+      "fields": [
+        {
+          "name": "links$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.views.logfiletab.LogFilePane",
+      "fields": [
+        {
+          "name": "autoScrollEventListener$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.views.menubar.FileMenu",
+      "fields": [
+        {
+          "name": "closeAllMenuItem$lzy1"
+        },
+        {
+          "name": "openMenuItem$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "app.logorrr.views.ops.time.TimeRange$",
+      "fields": [
+        {
+          "name": "defaultTimeRange$lzy1"
+        }
+      ]
     },
     {
       "type": "app.logorrr.views.search.MutableSearchTerm[]"
     },
     {
-      "type": "app.logorrr.views.search.stg.SimpleToggleButton[]"
+      "type": "app.logorrr.views.search.TimestampSettingsRegion",
+      "fields": [
+        {
+          "name": "lowerSlider$lzy1"
+        },
+        {
+          "name": "lowerSliderVBox$lzy1"
+        },
+        {
+          "name": "upperSlider$lzy1"
+        },
+        {
+          "name": "upperSliderVBox$lzy1"
+        }
+      ]
     },
     {
-      "type": "app.logorrr.views.settings.timestamp.LogViewLabel[]"
+      "type": "app.logorrr.views.text.SearchTermCalculator",
+      "fields": [
+        {
+          "name": "filteredParts$lzy1"
+        },
+        {
+          "name": "stringColorPairs$lzy1"
+        }
+      ]
     },
     {
       "type": "boolean[]"
@@ -577,6 +754,22 @@
       ]
     },
     {
+      "type": "com.sun.javafx.geom.Path2D",
+      "jniAccessible": true,
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int",
+            "byte[]",
+            "int",
+            "float[]",
+            "int"
+          ]
+        }
+      ]
+    },
+    {
       "type": "com.sun.javafx.logging.PrintLogger",
       "methods": [
         {
@@ -962,6 +1155,9 @@
       ]
     },
     {
+      "type": "java.lang.Object[]"
+    },
+    {
       "type": "java.lang.Runnable",
       "jniAccessible": true,
       "methods": [
@@ -1012,15 +1208,6 @@
       "fields": [
         {
           "name": "TYPE"
-        }
-      ]
-    },
-    {
-      "type": "java.lang.invoke.VarHandle",
-      "methods": [
-        {
-          "name": "releaseFence",
-          "parameterTypes": []
         }
       ]
     },
@@ -1367,10 +1554,19 @@
       "type": "javafx.scene.image.ImageView"
     },
     {
+      "type": "javafx.scene.input.Clipboard"
+    },
+    {
+      "type": "javafx.scene.input.Dragboard"
+    },
+    {
       "type": "javafx.scene.layout.Pane"
     },
     {
       "type": "javafx.scene.layout.Region"
+    },
+    {
+      "type": "javafx.scene.layout.Region[]"
     },
     {
       "type": "javafx.scene.paint.Color",
@@ -1386,6 +1582,9 @@
           ]
         }
       ]
+    },
+    {
+      "type": "javafx.scene.paint.Stop[]"
     },
     {
       "type": "javafx.scene.shape.LineTo"
@@ -1425,6 +1624,9 @@
     },
     {
       "type": "javafx.stage.Window"
+    },
+    {
+      "type": "javafx.util.Subscription[]"
     },
     {
       "type": "javax.management.MBeanOperationInfo"
@@ -1490,6 +1692,12 @@
         {
           "name": "getConnectionId",
           "parameterTypes": []
+        },
+        {
+          "name": "getDefaultDomain",
+          "parameterTypes": [
+            "javax.security.auth.Subject"
+          ]
         },
         {
           "name": "isInstanceOf",
@@ -1582,13 +1790,78 @@
       "type": "org.osgi.framework.BundleContext"
     },
     {
-      "type": "scala.Symbol",
-      "methods": [
+      "type": "scala.Enumeration",
+      "fields": [
         {
-          "name": "apply",
-          "parameterTypes": [
-            "java.lang.String"
-          ]
+          "name": "ValueOrdering$lzy1"
+        },
+        {
+          "name": "ValueSet$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "scala.collection.immutable.ArraySeq$",
+      "fields": [
+        {
+          "name": "emptyImpl$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "scala.concurrent.ExecutionContext$",
+      "fields": [
+        {
+          "name": "global$lzy1"
+        },
+        {
+          "name": "opportunistic$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "scala.io.BufferedSource",
+      "fields": [
+        {
+          "name": "charReader$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "scala.io.Codec$",
+      "fields": [
+        {
+          "name": "fallbackSystemCodec$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "scala.io.Source",
+      "fields": [
+        {
+          "name": "NoPositioner$lzy1"
+        },
+        {
+          "name": "RelaxedPosition$lzy1"
+        },
+        {
+          "name": "RelaxedPositioner$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "scala.math.BigDecimal$",
+      "fields": [
+        {
+          "name": "cache$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "scala.util.matching.Regex$MatchIterator",
+      "fields": [
+        {
+          "name": "scala$util$matching$Regex$MatchData$$nameToIndex$lzy2"
         }
       ]
     },
@@ -1736,6 +2009,14 @@
       ]
     },
     {
+      "type": "sun.misc.Unsafe",
+      "fields": [
+        {
+          "name": "theUnsafe"
+        }
+      ]
+    },
+    {
       "type": "sun.reflect.misc.Trampoline",
       "methods": [
         {
@@ -1820,6 +2101,49 @@
     },
     {
       "type": "sun.util.resources.cldr.TimeZoneNames_en_US"
+    },
+    {
+      "type": "upickle.default$",
+      "fields": [
+        {
+          "name": "ReadWriter$lzy1"
+        },
+        {
+          "name": "Reader$lzy1"
+        },
+        {
+          "name": "TaggedReadWriter$lzy1"
+        },
+        {
+          "name": "TaggedReader$lzy1"
+        },
+        {
+          "name": "TaggedWriter$lzy1"
+        },
+        {
+          "name": "Writer$lzy1"
+        },
+        {
+          "name": "transform$lzy1"
+        },
+        {
+          "name": "upickle$implicits$Readers$$JavaReader$lzy1"
+        },
+        {
+          "name": "upickle$implicits$Writers$$JavaWriter$lzy1"
+        }
+      ]
+    },
+    {
+      "type": "upickle.implicits.ReadersVersionSpecific$CaseClassReader3V2",
+      "fields": [
+        {
+          "name": "$1$$lzy1"
+        },
+        {
+          "name": "hasFlattenOnMap$lzy1"
+        }
+      ]
     }
   ],
   "resources": [
@@ -1857,19 +2181,19 @@
       "glob": "app/logorrr/JetBrainsMono-Regular.ttf"
     },
     {
-      "glob": "app/logorrr/LogTextView.css"
+      "glob": "app/logorrr/conf/default-search-term-groups.json"
     },
     {
-      "glob": "app/logorrr/LogoRRR.bss"
+      "glob": "app/logorrr/css/ChunkListView.css"
+    },
+    {
+      "glob": "app/logorrr/css/LogoRRR.bss"
     },
     {
       "glob": "app/logorrr/css/LogoRRR.css"
     },
     {
       "glob": "app/logorrr/css/SettingsStgListViewCell.css"
-    },
-    {
-      "glob": "app/logorrr/css/ChunkListView.css"
     },
     {
       "glob": "app/logorrr/drop-files-here.png"
@@ -1888,12 +2212,6 @@
     },
     {
       "glob": "logorrr-icon-32.png"
-    },
-    {
-      "glob": "meta.json"
-    },
-    {
-      "glob": "app/logorrr/conf/default-search-term-groups.json"
     },
     {
       "module": "java.base",

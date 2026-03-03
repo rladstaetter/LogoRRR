@@ -29,8 +29,8 @@ object ColorUtil:
 
   val gradientBackground: Background =
     val stops = Seq(
-      new Stop(1, Color.web("#ffffff")),
-      new Stop(0, Color.BEIGE)
+      new Stop(0, Color.web("#f5f5dc")),
+      new Stop(1, Color.web("#d2b48c"))
     )
     val backgroundGradient = new LinearGradient(0, 0, 0, 1, true, NO_CYCLE, stops *)
     ColorUtil.mkBg(backgroundGradient)

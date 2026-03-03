@@ -19,6 +19,6 @@
 --main-jar app-${project.version}.jar
 --module-path ../../../../env/target/javafx-jmods-${openjfx.version}
 --name LogoRRR
---type rpm
+--type deb
 --vendor logorrr.app
 --verbose

@@ -65,9 +65,6 @@ class SearchTermToggleButton(entries: ObservableList[LogEntry]) extends ASearchT
     })
 
     setOnDragDone((event: DragEvent) => {
-      if (getScene != null)
-        getScene.setCursor(Cursor.DEFAULT)
-
       val ft = new FadeTransition(Duration.millis(200), this)
       ft.setFromValue(0.2)
       ft.setToValue(1.0)

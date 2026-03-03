@@ -14,8 +14,10 @@ object SettingsFileIO extends TinyLog:
 
   def fromFile(source: Path): Settings =
     SettingsFileIO.from(source).map(_.filterWithValidPaths()) match {
-      case Failure(_) =>
-        logWarn(s"Could not load settingsFile '${source.toAbsolutePath}', using default settings ...")
+      case Failure(e) =>
+        val msg = s"Could not load settingsFile '${source.toAbsolutePath}', using default settings ..."
+        logException(msg, e)
+        logWarn(msg)
         Settings.Default
       case Success(value) =>
         logConfig(s"Loaded settings from '${source.toAbsolutePath}'.")
