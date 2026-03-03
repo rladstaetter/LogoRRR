@@ -37,6 +37,7 @@ class AboutDialogBorderPane(stage: Stage) extends BorderPane:
 
   private val showLogoButton: Button =
     val b = new Button("", AboutDialogBorderPane.logo.imageView())
+    b.setStyle("-fx-background-color: transparent;")
     b.setOnAction:
       _ =>
         // open website
