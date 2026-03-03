@@ -28,7 +28,6 @@ class DragToReorderButton extends AnIkonliButton(GfxElements.Icons.listAlt, GfxE
       params.setTransform(new Scale(0.9, 0.9))
       db.setDragView(button.snapshot(params, null))
       button.setOpacity(0.5)
-      button.getScene.setCursor(Cursor.CLOSED_HAND)
       event.consume()
     })
 
