@@ -139,6 +139,14 @@
       ]
     },
     {
+      "type": "app.logorrr.views.about.AboutDialogBorderPane$",
+      "fields": [
+        {
+          "name": "links$lzy1"
+        }
+      ]
+    },
+    {
       "type": "app.logorrr.views.logfiletab.LogFilePane",
       "fields": [
         {
@@ -2080,6 +2088,12 @@
       "type": "sun.text.resources.cldr.FormatData_en"
     },
     {
+      "type": "sun.text.resources.cldr.FormatData_en_US"
+    },
+    {
+      "type": "sun.util.resources.cldr.CalendarData"
+    },
+    {
       "type": "sun.util.resources.cldr.TimeZoneNames"
     },
     {
@@ -2179,6 +2193,9 @@
       "glob": "app/logorrr/css/LogoRRR.css"
     },
     {
+      "glob": "app/logorrr/css/SettingsStgListViewCell.css"
+    },
+    {
       "glob": "app/logorrr/drop-files-here.png"
     },
     {
@@ -2191,11 +2208,18 @@
       "glob": "com/sun/javafx/tk/quantum/QuantumMessagesBundle_en.properties"
     },
     {
+      "glob": "logorrr-icon-128.png"
+    },
+    {
       "glob": "logorrr-icon-32.png"
     },
     {
       "module": "java.base",
       "glob": "jdk/internal/icu/impl/data/icudt76b/ubidi.icu"
+    },
+    {
+      "module": "java.base",
+      "glob": "sun/net/www/content-types.properties"
     },
     {
       "module": "java.logging",
