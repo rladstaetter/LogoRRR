@@ -18,9 +18,9 @@ class AddToGlobalSearchTermGroupListButton(fileId: FileId) extends ToggleButton 
     bind(selectedProperty)
     override def computeValue(): Node = {
       if isSelected then {
-        GfxElements.Icons.starDark
+        GfxElements.Icons.settingsDark
       } else {
-        GfxElements.Icons.star
+        GfxElements.Icons.settings
       }
     }
   })

@@ -14,10 +14,10 @@ import javafx.geometry.Insets
 import javafx.scene.Scene
 import javafx.scene.control.{Button, ChoiceBox, ComboBox}
 import javafx.scene.layout.{HBox, Priority, VBox}
-import javafx.stage.{Modality, Stage}
+import javafx.stage.{Modality, Stage, Window}
 
 
-class SettingsEditor(owner: Stage
+class SettingsEditor(owner: Window
                      , fileId: FileId
                      , main: LogoRRRMain) extends Stage:
   initOwner(owner)
@@ -61,9 +61,6 @@ class SettingsEditor(owner: Stage
     timeSettingsEditor.shutdown()
   })
 
-object ApplyAndCloseSettingsEditorButton extends UiNodeFileIdAware:
-
-  override def uiNode(id: FileId): UiNode = UiNode(id, classOf[ApplyAndCloseSettingsEditorButton])
 
 class ApplyAndCloseSettingsEditorButton(stage: Stage
                                         , main: LogoRRRMain
