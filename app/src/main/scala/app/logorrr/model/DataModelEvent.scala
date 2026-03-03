@@ -5,6 +5,7 @@ import app.logorrr.views.search.MutableSearchTerm
 import app.logorrr.views.search.st.SearchTermToggleButton
 import javafx.event.{Event, EventType}
 
+
 object DataModelEvent:
   val DateFilterEvent: EventType[DateFilterEvent] = new EventType(Event.ANY, "ADD_DATE_FILTER")
   val RemoveDateFilterEvent: EventType[RemoveDateFilterEvent] = new EventType(Event.ANY, "REMOVE_DATE_FILTER")

@@ -1,7 +1,9 @@
 package app.logorrr.views.main
 
-import app.logorrr.model.{DataModelEvent, DateFilterEvent, LogSource}
+import app.logorrr.conf.FileId
+import app.logorrr.model.{DataModelEvent, DateFilterEvent, LogSource, OpenSettingsEditorEvent, SettingsEvent}
 import app.logorrr.services.file.FileIdService
+import app.logorrr.views.settings.SettingsEditor
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
 import net.ladstatt.util.log.TinyLog
@@ -31,4 +33,8 @@ class LogoRRRMain(stage: Stage
   addEventHandler(DataModelEvent.DateFilterEvent, (e: DateFilterEvent) => {
     logSource.getUi().applyTimeSettings(e.timeSettings)
     e.consume()
+  })
+
+  addEventHandler(SettingsEvent.OpenSettingsEditorEvent, (e: OpenSettingsEditorEvent) => {
+    new SettingsEditor(stage, FileId(""), this).showAndWait()
   })

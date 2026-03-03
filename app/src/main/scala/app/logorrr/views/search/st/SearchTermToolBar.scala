@@ -6,7 +6,7 @@ import app.logorrr.conf.{FileId, LogoRRRGlobals, SearchTerm}
 import app.logorrr.model.*
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.search.stg.AddToFavoritesButton
+import app.logorrr.views.search.stg.OpenSettingsDialogAndAddFavorites
 import app.logorrr.views.search.{MutableSearchTerm, st}
 import javafx.animation.FadeTransition
 import javafx.beans.binding.BooleanBinding
@@ -36,7 +36,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings, entries: Observa
   private val favoritesChoiceBox = new FavoritesComboBox
   private val spacer = new Pane()
   HBox.setHgrow(spacer, Priority.ALWAYS)
-  private val addToFavoritesButton = new AddToFavoritesButton(activeSearchTerms)
+  private val addToFavoritesButton = new OpenSettingsDialogAndAddFavorites(activeSearchTerms)
 
   val unclassifiedButton = new UnclassifiedToggleButton()
 
@@ -107,7 +107,7 @@ class SearchTermToolBar(mutLogFileSettings: MutLogFileSettings, entries: Observa
 
   private def addSearchTermButton(index: Int, mutSearchTerm: MutableSearchTerm): Unit =
     // handle favorite 'star' at the end
-    if getItems.get(getItems.size - 1).isInstanceOf[AddToFavoritesButton] then
+    if getItems.get(getItems.size - 1).isInstanceOf[OpenSettingsDialogAndAddFavorites] then
       // val favButton = getItems.remove(getItems.size - 1)
       // val spacer = getItems.remove(getItems.size - 1)
       add(index, mutSearchTerm)

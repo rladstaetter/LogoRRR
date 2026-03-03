@@ -25,9 +25,9 @@ object GfxElements:
 
     def editDark = new FontIcon(FontAwesomeRegular.EDIT)
 
-    def star = new FontIcon(FontAwesomeRegular.SUN)
+    def settings = new FontIcon(FontAwesomeRegular.SUN)
 
-    def starDark = new FontIcon(FontAwesomeSolid.SUN)
+    def settingsDark = new FontIcon(FontAwesomeSolid.SUN)
 
     def copy = new FontIcon(FontAwesomeRegular.COPY)
 

@@ -36,6 +36,11 @@ trait FxBaseInterface:
 
   def waitForVisibility(id: UiNode): Unit = waitForVisibility(lookup(id.ref))
 
+  def waitAndClick(node : UiNode) : Unit = {
+    waitForVisibility(node)
+    clickOn(node)
+  }
+
   def waitForVisibility(nodeQuery: NodeQuery, timeout: FiniteDuration = 2.seconds): Unit =
     WaitForAsyncUtils.waitFor(timeout.toSeconds, TimeUnit.SECONDS, new Callable[java.lang.Boolean] {
       override def call(): java.lang.Boolean = nodeQuery.`match`(NodeQueryUtils.isVisible).tryQuery.isPresent
