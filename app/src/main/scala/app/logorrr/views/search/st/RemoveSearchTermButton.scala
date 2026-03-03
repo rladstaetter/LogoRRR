@@ -6,59 +6,28 @@ import app.logorrr.model.RemoveSearchTermButtonEvent
 import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
 import app.logorrr.views.search.MutableSearchTerm
-import app.logorrr.views.search.st.RemoveSearchTermButton.cssStyle
 import app.logorrr.views.util.GfxElements
 import javafx.beans.binding.{Bindings, BooleanBinding}
 import javafx.beans.property.ObjectPropertyBase
-import javafx.collections.ObservableList
-import javafx.scene.control.Button
+import javafx.scene.control.{Button, Tooltip}
 import javafx.scene.paint.Color
 import org.kordamp.ikonli.javafx.FontIcon
 
 
 object RemoveSearchTermButton extends UiNodeSearchTermAware:
 
-  private val cssStyle: String =
-    """
-      |-fx-padding: 0pt;
-      |-fx-spacing: 0pt;
-      |-fx-border-width: 0pt;
-      |-fx-border-radius: 0pt;
-      |-fx-background-radius: 0pt;
-      |-fx-border-color: transparent;
-      |-fx-background-color: transparent;""".stripMargin
-
-
-  /** css gymnastics to make remove button look pretty */
-  def buttonCssStyle(color: Color): String =
-    s"""
-       |-fx-padding: 0;
-       |-fx-border-width: 0pt;
-       |-fx-border-radius: 0pt;
-       |-fx-background-radius: 0pt;
-       |-fx-font-family: 'Font Awesome 6 Free Regular';
-       |-fx-icon-size: 16;
-       |-fx-icon-code: far-window-close;
-       |-fx-icon-color: ${ColorUtil.hexString(color)};
-       |""".stripMargin
-
   override def uiNode(fileId: FileId, searchTerm: String): UiNode = UiNode(classOf[RemoveSearchTermButton].getSimpleName + "-" + HashUtil.md5Sum(fileId.absolutePathAsString + ":" + searchTerm))
 
 /**
  * If clicked, removes a search term group from
  */
-class RemoveSearchTermButton extends Button:
-  val icon: FontIcon = GfxElements.Icons.windowClose
-  setGraphic(icon)
-  setTooltip(GfxElements.ToolTips.mkRemove)
-  setStyle(cssStyle)
+class RemoveSearchTermButton extends AnIkonliButton(GfxElements.Icons.windowClose, GfxElements.ToolTips.mkRemove):
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , visibleBinding: BooleanBinding
            , mutableSearchTerm: MutableSearchTerm): Unit =
-    visibleProperty().bind(visibleBinding)
+    super.init(visibleBinding)
     setOnAction(e => fireEvent(RemoveSearchTermButtonEvent(mutableSearchTerm)))
-
     idProperty.bind(Bindings.createStringBinding(
       () =>
         (for fileId <- Option(fileIdProperty.get())
@@ -66,12 +35,9 @@ class RemoveSearchTermButton extends Button:
         yield RemoveSearchTermButton.uiNode(fileId, searchTerm).value).getOrElse(""),
       fileIdProperty, mutableSearchTerm.valueProperty))
 
-  def shutdown(): Unit = {
-    icon.iconColorProperty().unbind()
+  override def shutdown(): Unit = {
+    super.shutdown()
     idProperty().unbind()
     setOnAction(null)
     visibleProperty().unbind()
   }
-  
-
-

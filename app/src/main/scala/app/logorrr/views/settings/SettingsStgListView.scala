@@ -33,5 +33,4 @@ class SettingsStgListView(searchTermGroups: SimpleListProperty[MutSearchTermGrou
    */
   def getSearchTermGroups: ObservableList[MutSearchTermGroup] = searchTermGroups
 
-  def shutdown(): Unit =
-    itemsProperty().unbind()
+  def shutdown(): Unit = itemsProperty().unbind()

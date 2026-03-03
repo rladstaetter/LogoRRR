@@ -5,7 +5,6 @@ import app.logorrr.model.*
 import app.logorrr.util.HashUtil
 import app.logorrr.views.a11y.{UiNode, UiNodeSearchTermAware}
 import app.logorrr.views.search.*
-import app.logorrr.views.search.st.RemoveSearchTermButton.buttonCssStyle
 import app.logorrr.views.util.CssUtil
 import javafx.beans.binding.{Bindings, BooleanBinding, ObjectBinding}
 import javafx.beans.property.*
@@ -48,7 +47,6 @@ abstract class ASearchTermToggleButton extends ToggleButton
 
   def init(fileIdProperty: ObjectPropertyBase[FileId]
            , visibleBinding: BooleanBinding
-           , mutSearchTerm: MutableSearchTerm
            , valProperty: StringProperty
            , colorProperty: ObjectPropertyBase[Color]
            , activeProperty: BooleanProperty): Unit = {
