@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>app.logorrr.dist.osx</groupId>
-        <artifactId>dist-osx</artifactId>
+        <groupId>app.logorrr.dist.mac</groupId>
+        <artifactId>mac</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
 
-    <artifactId>installer-osx</artifactId>
+    <artifactId>installer-mac</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
 
     <dependencies>

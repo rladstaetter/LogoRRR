@@ -34,7 +34,7 @@
                 </os>
             </activation>
             <modules>
-                <module>dist-osx</module>
+                <module>mac</module>
             </modules>
         </profile>
         <profile>

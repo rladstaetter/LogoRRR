@@ -8,14 +8,14 @@
         <artifactId>dist</artifactId>
         <version>${revision}${changelist}</version>
     </parent>
-    <groupId>app.logorrr.dist.osx</groupId>
-    <artifactId>dist-osx</artifactId>
+    <groupId>app.logorrr.dist.mac</groupId>
+    <artifactId>mac</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Distribution bundle for MacOsX</description>
     <packaging>pom</packaging>
 
     <modules>
-        <module>installer-osx</module>
+        <module>installer-mac</module>
     </modules>
 
 </project>
