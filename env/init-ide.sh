@@ -1,1 +1,0 @@
-mvn generate-resources -Penv.intellij
