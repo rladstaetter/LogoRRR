@@ -13,7 +13,7 @@
     <artifactId>flatpak</artifactId>
 
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>Flatpak build for linux</description>
+    <description>Linux flatpak build</description>
     <packaging>pom</packaging>
 
     <properties>

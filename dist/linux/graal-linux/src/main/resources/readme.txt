@@ -1,5 +1,5 @@
 To generate reachability-metadata.json, add
 
-    -agentlib:native-image-agent=config-output-dir=src/main/resources/
+    -agentlib:native-image-agent=config-output-dir=dist/linux/graal-linux/src/main/resources/
 
-to the run configuration of LogoRRR.
+to the run configuration (VM options) of LogoRRR.
