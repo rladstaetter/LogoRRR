@@ -53,9 +53,8 @@ class ChunkListView[A](val elements: ObservableList[A]
                        , logEntrySelector: ElementSelector[A])
   extends ListView[Chunk[A]] with TinyLog:
 
-  // width of Scrollbars
+  // stores width of vertical scrollbar
   val scrollBarWidthProperty = new SimpleIntegerProperty(ChunkListView.DefaultScrollBarWidth)
-
 
   // returns width - scrollbarwidth if it is > 0, else width
   val chunkListWidthBinding: IntegerBinding = Bindings.createIntegerBinding(
@@ -74,7 +73,6 @@ class ChunkListView[A](val elements: ObservableList[A]
   private val scrollBarVisibilityListener = new ChangeListener[lang.Boolean]:
     override def changed(observableValue: ObservableValue[? <: lang.Boolean], t: lang.Boolean, isVisible: lang.Boolean): Unit =
       if isVisible then setScrollBarWidth(ChunkListView.DefaultScrollBarWidth) else setScrollBarWidth(0)
-      recalculateAndUpdateItems()
 
   // needed to get access to the scrollbar
   private val chunkListViewSkinListener: ChangeListener[Skin[?]] = (_: ObservableValue[? <: Skin[?]], _: Skin[?], currentSkin: Skin[?]) => {
@@ -86,12 +84,6 @@ class ChunkListView[A](val elements: ObservableList[A]
       verticalScrollbar.visibleProperty().addListener(scrollBarVisibilityListener)
   }
 
-  /**
-   * If the observable list changes in any way, recalculate the items in the listview.
-   */
-  private val elementInvalidationListener = JfxUtils.mkInvalidationListener(_ => recalculateAndUpdateItems())
-
-  /** if user selects a new active element, recalculate and implicitly repaint */
   private val anyRp: ChangeListener[java.lang.Boolean] = (_: ObservableValue[? <: java.lang.Boolean], _: java.lang.Boolean, _: java.lang.Boolean) => {
     recalculateAndUpdateItems()
   }
@@ -109,7 +101,9 @@ class ChunkListView[A](val elements: ObservableList[A]
     , lastVisibleTextCellIndexProperty
     , blockSizeProperty
     , widthProperty
-    , heightProperty)
+    , heightProperty
+    , elements
+    , chunkListWidthBinding)
 
 
   /** performance optimisation to debounce calls to the recalculation / repainting operation */
@@ -126,18 +120,10 @@ class ChunkListView[A](val elements: ObservableList[A]
         , logEntrySelector
         , chunkListWidthBinding)
     })
-    addInvalidationListener()
     anyPropProperty.addListener(anyRp)
     skinProperty().addListener(chunkListViewSkinListener)
 
-  /** invalidation listener has to be disabled when manipulating log entries (needed for setting the timestamp for example) */
-  def addInvalidationListener(): Unit = elements.addListener(elementInvalidationListener)
-
-  def removeInvalidationListener(): Unit = elements.removeListener(elementInvalidationListener)
-
-
   def shutdown(): Unit =
-    removeInvalidationListener()
     anyPropProperty.removeListener(anyRp)
     for skin <- Option(getSkin)
         flow <- ChunkListView.lookupVirtualFlow(skin)
@@ -156,5 +142,5 @@ class ChunkListView[A](val elements: ObservableList[A]
         recalculateScheduled = false
       })
 
-  def setScrollBarWidth(width: Int): Unit = scrollBarWidthProperty.set(width)
+  private def setScrollBarWidth(width: Int): Unit = scrollBarWidthProperty.set(width)
 

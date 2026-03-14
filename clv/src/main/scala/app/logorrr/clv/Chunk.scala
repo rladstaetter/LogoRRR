@@ -60,7 +60,6 @@ object Chunk:
                          , listViewHeight: Double
                          , nrChunksPerPage: Int): Unit =
 
-
     if (elements.isEmpty || listViewWidth == 0 || listViewHeight == 0 || blockSize == 0) then {
       chunkList.clear()
     } else

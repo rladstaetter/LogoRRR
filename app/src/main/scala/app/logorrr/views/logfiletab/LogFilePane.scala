@@ -188,14 +188,12 @@ class LogFilePane(val mutLogFileSettings: MutLogFileSettings
   addEventHandler(DataModelEvent.RemoveDateFilterEvent, (e: RemoveDateFilterEvent) => timeR({
     mutLogFileSettings.setTimeSettings(TimeSettings.Invalid)
     // we have to deactivate this listener otherwise
-    chunkListView.removeInvalidationListener()
     val tempList = new java.util.ArrayList[LogEntry]()
     entries.forEach(e => {
       tempList.add(e.withOutTimestamp())
     })
     entries.setAll(tempList)
     // activate listener again
-    chunkListView.addInvalidationListener()
     updateDisplay()
     e.consume()
   }, "updateList"))
