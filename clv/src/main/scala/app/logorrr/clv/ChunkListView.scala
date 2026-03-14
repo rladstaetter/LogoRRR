@@ -84,7 +84,8 @@ class ChunkListView[A](val elements: ObservableList[A]
       verticalScrollbar.visibleProperty().addListener(scrollBarVisibilityListener)
   }
 
-  private val anyRp: ChangeListener[java.lang.Boolean] = (_: ObservableValue[? <: java.lang.Boolean], _: java.lang.Boolean, _: java.lang.Boolean) => {
+
+  private val triggerRepaintListener: ChangeListener[java.lang.Boolean] = (_: ObservableValue[? <: java.lang.Boolean], _: java.lang.Boolean, _: java.lang.Boolean) => {
     recalculateAndUpdateItems()
   }
 
@@ -120,11 +121,11 @@ class ChunkListView[A](val elements: ObservableList[A]
         , logEntrySelector
         , chunkListWidthBinding)
     })
-    anyPropProperty.addListener(anyRp)
+    anyPropProperty.addListener(triggerRepaintListener)
     skinProperty().addListener(chunkListViewSkinListener)
 
   def shutdown(): Unit =
-    anyPropProperty.removeListener(anyRp)
+    anyPropProperty.removeListener(triggerRepaintListener)
     for skin <- Option(getSkin)
         flow <- ChunkListView.lookupVirtualFlow(skin)
         verticalScrollbar <- ChunkListView.lookupScrollBar(flow, Orientation.VERTICAL) do

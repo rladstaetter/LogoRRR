@@ -36,5 +36,9 @@ class LogoRRRMain(stage: Stage
   })
 
   addEventHandler(SettingsEvent.OpenSettingsEditorEvent, (e: OpenSettingsEditorEvent) => {
-    new SettingsEditor(stage, FileId(""), this).showAndWait()
+    val editor = new SettingsEditor(stage, FileId(""), this)
+    if (e.scrollToLast)
+      editor.scrollToLast()
+
+    editor.showAndWait()
   })

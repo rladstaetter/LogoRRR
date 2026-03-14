@@ -2,6 +2,7 @@ package app.logorrr.views.settings
 
 import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutSearchTermGroup
+import app.logorrr.views.util.PulsatingAnimationTimer
 import javafx.beans.property.SimpleListProperty
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
@@ -18,6 +19,8 @@ class SettingsManageStgEditor(fileId: FileId, entries: SimpleListProperty[MutSea
   VBox.setVgrow(groupsListView, Priority.ALWAYS)
 
   getChildren.addAll(title, groupsListView)
+
+  def scrollToLast() : Unit = groupsListView.scrollToAndHighlightLast()
 
 
   def shutdown() : Unit = groupsListView.shutdown()

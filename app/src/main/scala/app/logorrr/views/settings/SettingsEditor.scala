@@ -5,14 +5,10 @@ import app.logorrr.conf.mut.{MutSearchTermGroup, MutTimeSettings}
 import app.logorrr.model.DateFilterEvent
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.uinodes.SettingsEditor
-import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import app.logorrr.views.logfiletab.LogFilePane
 import app.logorrr.views.main.LogoRRRMain
-import app.logorrr.views.search.MutableSearchTerm
-import app.logorrr.views.search.st.FavoritesComboBox
 import javafx.geometry.Insets
 import javafx.scene.Scene
-import javafx.scene.control.{Button, ChoiceBox, ComboBox}
+import javafx.scene.control.Button
 import javafx.scene.layout.{HBox, Priority, VBox}
 import javafx.stage.{Modality, Stage, Window}
 
@@ -30,11 +26,7 @@ class SettingsEditor(owner: Window
     SettingsManageStgEditor(fileId, LogoRRRGlobals.searchTermGroupEntries)
 
   private val timeSettingsEditor = TimestampSettingsEditor(LogoRRRGlobals.timeSettings)
-
-  private val contentLayout = new VBox(10)
-  VBox.setVgrow(contentLayout, Priority.ALWAYS)
-  contentLayout.setPadding(new Insets(10))
-  val resetButton = new Button("reset to factory defaults")
+  private val resetButton = new Button("reset to factory defaults")
   resetButton.setId(SettingsEditor.ResetToDefaultButton.value)
   resetButton.setOnAction(_ => {
     LogoRRRGlobals.clearSearchTermGroups()
@@ -42,6 +34,10 @@ class SettingsEditor(owner: Window
     LogoRRRGlobals.setTimeSettings(MutTimeSettings(TimeSettings.Invalid))
     timeSettingsEditor.updateSettings(MutTimeSettings(TimeSettings.Invalid))
   })
+
+  private val contentLayout = new VBox(10)
+  VBox.setVgrow(contentLayout, Priority.ALWAYS)
+  contentLayout.setPadding(new Insets(10))
 
   private val applyAndCloseButton: Button = new ApplyAndCloseSettingsEditorButton(this, main, timeSettingsEditor)
 
@@ -55,6 +51,10 @@ class SettingsEditor(owner: Window
 
   // --- Final Setup ---
   setScene(new Scene(contentLayout, 960, 720)) // Adjusted size for list view
+
+  def scrollToLast(): Unit =
+    searchTermGroupEditor.scrollToLast()
+
 
   setOnCloseRequest(e => {
     searchTermGroupEditor.shutdown()

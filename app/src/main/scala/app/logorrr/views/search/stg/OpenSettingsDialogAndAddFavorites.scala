@@ -40,7 +40,7 @@ class OpenSettingsDialogAndAddFavorites(activeSearchTerms: () => Seq[SearchTerm]
     _ =>
       LogoRRRGlobals.add(MutSearchTermGroup(SearchTermGroup("Untitled", activeSearchTerms(), false)))
       mkTimer().start()
-      fireEvent(OpenSettingsEditorEvent())
+      fireEvent(OpenSettingsEditorEvent(true))
 
 
   def init(window: Window, fileIdProperty: ObjectPropertyBase[FileId]): Unit =
