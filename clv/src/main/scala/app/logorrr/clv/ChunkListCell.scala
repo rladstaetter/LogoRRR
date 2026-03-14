@@ -145,7 +145,7 @@ object ChunkListCell extends TinyLog:
 /**
  * A listcell which can contain one or more log entries.
  *
- * To see how those cells are populated, see [[Chunk.updateChunks]].
+ * To see how those cells are populated, see [[Chunk.modifyChunkList]].
  */
 class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
                        , scrollTo: A => Unit

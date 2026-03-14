@@ -25,7 +25,8 @@ class ChunkSpec extends AnyWordSpec:
                    , blocksize: Int
                    , listViewHeight: Double): ObservableList[Chunk[LogEntry]] =
     val l = FXCollections.observableArrayList[Chunk[LogEntry]]()
-    Chunk.updateChunks(l, ChunkSpec.mkTestLogEntries(nrEntries), blocksize, width, listViewHeight, Chunk.ChunksPerVisibleViewPort)
+    Chunk.modifyChunkList(l, ChunkSpec.mkTestLogEntries(nrEntries), blocksize, width, listViewHeight, Chunk.ChunksPerVisibleViewPort)
+    l
 
   "Chunk" should:
     val lvh = 1000

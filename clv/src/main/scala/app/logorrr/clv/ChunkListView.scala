@@ -73,12 +73,8 @@ class ChunkListView[A](val elements: ObservableList[A]
    */
   private val scrollBarVisibilityListener = new ChangeListener[lang.Boolean]:
     override def changed(observableValue: ObservableValue[? <: lang.Boolean], t: lang.Boolean, isVisible: lang.Boolean): Unit =
-      if isVisible then
-        setScrollBarWidth(ChunkListView.DefaultScrollBarWidth)
-        recalculateAndUpdateItems()
-      else
-        setScrollBarWidth(0)
-        recalculateAndUpdateItems()
+      if isVisible then setScrollBarWidth(ChunkListView.DefaultScrollBarWidth) else setScrollBarWidth(0)
+      recalculateAndUpdateItems()
 
   // needed to get access to the scrollbar
   private val chunkListViewSkinListener: ChangeListener[Skin[?]] = (_: ObservableValue[? <: Skin[?]], _: Skin[?], currentSkin: Skin[?]) => {
@@ -103,7 +99,7 @@ class ChunkListView[A](val elements: ObservableList[A]
   /** toggle needed such that change listener fires */
   var toggle = false
 
-  // if any of the given properties change, recalculate this binding
+  // if any of the given properties change, switch the value of this binding
   val anyPropProperty: BooleanBinding = Bindings.createBooleanBinding(() => {
     toggle = !toggle
     toggle
@@ -156,7 +152,7 @@ class ChunkListView[A](val elements: ObservableList[A]
     if !recalculateScheduled && widthProperty().get() > 0 && heightProperty.get() > 0 && blockSizeProperty.get() > 0 then
       recalculateScheduled = true
       Platform.runLater(() => {
-        Chunk.updateChunks[A](getItems, elements, blockSizeProperty.get(), chunkListWidthBinding.get(), heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
+        Chunk.modifyChunkList[A](getItems, elements, blockSizeProperty.get(), chunkListWidthBinding.get(), heightProperty.get(), Chunk.ChunksPerVisibleViewPort)
         recalculateScheduled = false
       })
 

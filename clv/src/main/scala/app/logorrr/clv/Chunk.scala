@@ -1,6 +1,6 @@
 package app.logorrr.clv
 
-import javafx.collections.ObservableList
+import javafx.collections.{FXCollections, ObservableList}
 
 import java.util
 
@@ -27,7 +27,7 @@ object Chunk:
                      , chunksPerPage: Int): (Int, Int) =
 
     // to not get into division by zero territory
-    val countElementsPerLine: Int = if listViewWidth < blockSize then 1 else (listViewWidth / blockSize).toInt
+    val numberOfBlocksInXDirection: Int = if listViewWidth < blockSize then 1 else (listViewWidth / blockSize).toInt
 
     // per default, use ChunksPerVisibleViewPort cells per visible page, align height with blocksize
     // such that we don't get artifacts. Further, make sure that the calculated height does not exceed
@@ -41,7 +41,7 @@ object Chunk:
     // and BlockImage.DefaultBlocksPerPage x blocksize as a lower bound, otherwise we'll get problems later
     val h2 = Math.max(heightCandidate, chunksPerPage * blockSize)
     val chunkHeight = Math.min(h2, maxHeight)
-    (countElementsPerLine, chunkHeight)
+    (numberOfBlocksInXDirection, chunkHeight)
 
   /**
    * Depending on the visible area of a listview, partitions the entries list to one or several Chunks and fills them
@@ -51,25 +51,26 @@ object Chunk:
    * @param blockSize      width/height of a block
    * @param listViewWidth  width of listview
    * @param listViewHeight height of listview
-   * @return a sequence of Chunks, filled with the given entries
+   * @return the modified chunkList
    */
-  def updateChunks[A](chunkList: ObservableList[Chunk[A]]
-                      , elements: util.List[A]
-                      , blockSize: Int
-                      , listViewWidth: Int
-                      , listViewHeight: Double
-                      , nrChunksPerPage: Int): ObservableList[Chunk[A]] =
-    chunkList.clear()
+  def modifyChunkList[A](chunkList: ObservableList[Chunk[A]]
+                         , elements: util.List[A]
+                         , blockSize: Int
+                         , listViewWidth: Int
+                         , listViewHeight: Double
+                         , nrChunksPerPage: Int): Unit =
 
-    if (elements.isEmpty || listViewWidth == 0 || listViewHeight == 0 || blockSize == 0) then
-      chunkList
-    else
+
+    if (elements.isEmpty || listViewWidth == 0 || listViewHeight == 0 || blockSize == 0) then {
+      chunkList.clear()
+    } else
       // how many entries fit into a chunk?
-      val (cols, height) = calcDimensions(blockSize, listViewWidth, listViewHeight, nrChunksPerPage)
-      val nrElements = height / blockSize * cols
+      val (lineBlockCount, chunkHeight) = calcDimensions(blockSize, listViewWidth, listViewHeight, nrChunksPerPage)
+      val nrElements = chunkHeight / blockSize * lineBlockCount
 
       val entriesSize = elements.size()
       var curIndex = 0
+      val l = FXCollections.observableArrayList[Chunk[A]]()
 
       while curIndex < entriesSize do
         val end = if curIndex + nrElements < entriesSize then
@@ -78,9 +79,10 @@ object Chunk:
           entriesSize
         val blockViewEntries: util.List[A] = elements.subList(curIndex, end)
         if blockViewEntries.size() > 0 then
-          chunkList.add(new Chunk(chunkList.size, blockViewEntries, cols, height))
+          l.add(new Chunk(l.size, blockViewEntries, lineBlockCount, chunkHeight))
         curIndex = curIndex + nrElements
-      chunkList
+
+      chunkList.setAll(l)
 
 
 /**
