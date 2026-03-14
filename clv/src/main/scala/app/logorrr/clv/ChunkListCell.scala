@@ -184,39 +184,6 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
               case None =>
           case None => // outside of a chunk
 
-
-  // see #262 - until this is fixed don't activate the mousemoved handler
-  /*
-   private lazy val mouseMovedHandler: EventHandler[MouseEvent] = (me: MouseEvent) => {
-     Option(getItem).map(_.cols) match {
-       case Some(cols) =>
-         val index = calcIndex(cols * blockSizeProperty.get(), me)
-         getEntryAt(getItem, index) match {
-           case Some(logEntry) =>
-             Option(getGraphic).map(_.asInstanceOf[ImageView].getImage.asInstanceOf[WritableImage].pixelBuffer) match {
-               case Some(pb) =>
-                 val col = ColorUtil.calcColor(logEntry.value, pb.filters)
-                 pb.paintBlockAtIndexWithColor(index, logEntry.lineNumber, col.darker())
-                 // schedule repaint with original color again some time in the future
-                 val task: Runnable = () => pb.paintBlockAtIndexWithColor(index, logEntry.lineNumber, col)
-
-                 // Create a Timeline that fires once after 250 milliseconds
-                 val timeline = new Timeline(new KeyFrame(Duration.millis(250), (_: ActionEvent) => task.run()))
-                 timeline.setCycleCount(1) // Ensure it runs only once
-                 timeline.play()
-               case None =>
-             }
-           case None => // if no valid item found, ignore
-         }
-       case None => // if outside of a chunk, just ignore
-     }
-   }
-
-   if (false) {
-     setOnMouseMoved(mouseMovedHandler)
-   }
-
-    */
   setOnMouseClicked(mouseClickedHandler)
 
   override def updateItem(chunk: Chunk[A], empty: Boolean): Unit =

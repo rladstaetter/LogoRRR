@@ -3,7 +3,6 @@ package app.logorrr.clv
 import javafx.collections.ObservableList
 
 import java.util
-import scala.math.BigDecimal.RoundingMode
 
 object Chunk:
 
@@ -12,30 +11,37 @@ object Chunk:
   /** defines how many list cells should be rendered per visible ListView space */
   val ChunksPerVisibleViewPort = 6
 
-  private def roundDown(doubleNumber: Double): Int =
-    BigDecimal.double2bigDecimal(doubleNumber).setScale(0, RoundingMode.DOWN).intValue
 
+  /**
+   * Calculates how many blocks are to be painted per line and the height of a Chunkcell.
+   *
+   * @param blockSize      size of a block
+   * @param listViewWidth  visible width
+   * @param listViewHeight visible height
+   * @param chunksPerPage  how many chunks we have for the viewport
+   * @return returns a tuple consisting of 2 Ints : how many blocks exist in x direction, and the height of a Chunk
+   */
   def calcDimensions(blockSize: Int
                      , listViewWidth: Double
                      , listViewHeight: Double
                      , chunksPerPage: Int): (Int, Int) =
 
     // to not get into division by zero territory
-    val cols: Int = if listViewWidth < blockSize then 1 else roundDown(listViewWidth / blockSize)
+    val countElementsPerLine: Int = if listViewWidth < blockSize then 1 else (listViewWidth / blockSize).toInt
 
-    // per default, use 4 cells per visible page, align height with blocksize such that
-    // we don't get artifacts. Further, make sure that the calculated height does not exceed
+    // per default, use ChunksPerVisibleViewPort cells per visible page, align height with blocksize
+    // such that we don't get artifacts. Further, make sure that the calculated height does not exceed
     // MaxHeight of underlying texture painting mechanism.
 
     // DO NOT REMOVE since the first division throws away the remainder and the multiplication
     // yields the best approximation of MaxHeight.
     val maxHeight = (MaxHeight / blockSize) * blockSize
-    val heightCandidate = roundDown((listViewHeight / chunksPerPage) / blockSize) * blockSize
-    // height is constrained by MaxHeight (which is 4096 currently in my experience) and BlockImage.DefaultBlocksPerPage x blocksize
-    // as a lower bound, otherwise we'll get later problems
+    val heightCandidate = ((listViewHeight / chunksPerPage) / blockSize).toInt * blockSize
+    // height is constrained by MaxHeight (which is 4096 currently in my experience)
+    // and BlockImage.DefaultBlocksPerPage x blocksize as a lower bound, otherwise we'll get problems later
     val h2 = Math.max(heightCandidate, chunksPerPage * blockSize)
-    val height = Math.min(h2, maxHeight)
-    (cols, height)
+    val chunkHeight = Math.min(h2, maxHeight)
+    (countElementsPerLine, chunkHeight)
 
   /**
    * Depending on the visible area of a listview, partitions the entries list to one or several Chunks and fills them
@@ -53,13 +59,9 @@ object Chunk:
                       , listViewWidth: Int
                       , listViewHeight: Double
                       , nrChunksPerPage: Int): ObservableList[Chunk[A]] =
-    clearChunks(chunkList)
+    chunkList.clear()
 
-    if
-      elements.isEmpty ||
-        listViewWidth == 0 ||
-        listViewHeight == 0 ||
-        blockSize == 0 then
+    if (elements.isEmpty || listViewWidth == 0 || listViewHeight == 0 || blockSize == 0) then
       chunkList
     else
       // how many entries fit into a chunk?
@@ -79,11 +81,6 @@ object Chunk:
           chunkList.add(new Chunk(chunkList.size, blockViewEntries, cols, height))
         curIndex = curIndex + nrElements
       chunkList
-
-
-  def clearChunks[A](observableList: ObservableList[Chunk[A]]): Unit =
-       observableList.clear()
-
 
 
 /**
