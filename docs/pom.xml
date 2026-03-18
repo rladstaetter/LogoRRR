@@ -17,10 +17,6 @@
         </dependency>
         <dependency>
             <groupId>app.logorrr</groupId>
-            <artifactId>build</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>app.logorrr</groupId>
             <artifactId>app</artifactId>
         </dependency>
         <dependency>

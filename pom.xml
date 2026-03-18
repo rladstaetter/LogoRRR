@@ -12,7 +12,7 @@
         <revision>26.2.1</revision>
         <scala.version>3.8.1</scala.version>
         <java.version>24</java.version>
-        <openjfx.version>25</openjfx.version>
+        <openjfx.version>26</openjfx.version>
         <ikonli.version>12.4.0</ikonli.version>
         <changelist/>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -271,7 +271,6 @@
                 <artifactId>build</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>app.logorrr.dist.linux</groupId>
                 <artifactId>app-image</artifactId>

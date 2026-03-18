@@ -13,19 +13,7 @@
     <artifactId>flatpak</artifactId>
 
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>Flatpak build for linux</description>
+    <description>Linux flatpak build</description>
     <packaging>pom</packaging>
-
-    <properties>
-        <flatpak.output>flatpak-package-${project.version}-${flatpak.os.arch}.tar.gz</flatpak.output>
-        <flatpak.output.checksum>flatpak-package-${project.version}-${flatpak.os.arch}.tar.gz.properties</flatpak.output.checksum>
-        <flatpak.binary>/usr/bin/flatpak-builder</flatpak.binary>
-    </properties>
-
-    <modules>
-        <module>flatpak-yml</module>
-        <module>flatpak-package</module>
-        <module>flatpak-dist</module>
-    </modules>
 
 </project>
