@@ -23,12 +23,6 @@
             <artifactId>atlantafx-base</artifactId>
         </dependency>
         -->
-        <!-- make sure env is initialised before building the app -->
-        <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>env</artifactId>
-            <type>pom</type>
-        </dependency>
         <dependency>
             <groupId>app.logorrr</groupId>
             <artifactId>app-icons</artifactId>
@@ -44,10 +38,6 @@
         <dependency>
             <groupId>com.lihaoyi</groupId>
             <artifactId>upickle_3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>app.logorrr</groupId>
-            <artifactId>build</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
