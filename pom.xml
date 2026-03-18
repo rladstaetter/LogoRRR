@@ -271,7 +271,6 @@
                 <artifactId>build</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>app.logorrr.dist.linux</groupId>
                 <artifactId>app-image</artifactId>
