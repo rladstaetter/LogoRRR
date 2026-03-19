@@ -1,7 +1,9 @@
 package app.logorrr.usecases.settings
 
 import app.logorrr.TestFiles
+import app.logorrr.usecases.MultipleFileApplicationTest
 import app.logorrr.views.settings.SettingsStgListViewCell
+import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.Test
 
 import scala.jdk.CollectionConverters.*
@@ -9,7 +11,7 @@ import scala.jdk.CollectionConverters.*
 /**
  * See https://github.com/rladstaetter/LogoRRR/issues/359#issuecomment-3908219522
  * */
-class AddCustomFavoriteTest extends ASettingsTest:
+class AddCustomFavoriteTest extends MultipleFileApplicationTest(TestFiles.seq):
 
   /**
    * - Loads file
@@ -44,7 +46,7 @@ class AddCustomFavoriteTest extends ASettingsTest:
         val cells = from(settingsListView).lookup(".list-cell").queryAll[SettingsStgListViewCell].asScala
         cells.find(_.getItem.termsProperty.asScala.map(_.value) == searchTerms) match {
           case Some(value) => clickOn(value)
-          case None => ???
+          case None => fail()
         }
 
       }

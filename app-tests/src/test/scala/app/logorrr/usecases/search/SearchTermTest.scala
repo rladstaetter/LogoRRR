@@ -1,13 +1,13 @@
 package app.logorrr.usecases.search
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.{Settings, TestSettings}
-import app.logorrr.steps.{ChoiceBoxActions, SearchTermToolbarActions}
+import app.logorrr.conf.{FileId, Settings, TestSettings}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.views.search.MutableSearchTerm
 import app.logorrr.views.search.st.ASearchTermToggleButton
 import app.logorrr.views.text.LogTextView
 import org.junit.jupiter.api.Test
+import org.testfx.util.WaitForAsyncUtils
 
 /**
  * Shows that enabling/disabling search terms has an impact on the textview.
@@ -16,12 +16,9 @@ import org.junit.jupiter.api.Test
  * hits at least one log line (some - FINE,FINER,FINEST) hit more than once which is perfectly ok.
  *
  * */
-class SearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2)
-  with ChoiceBoxActions
-  with SearchTermToolbarActions:
+class SearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2):
 
-  override protected lazy val settings: Settings =
-    TestSettings.DefaultSettings
+  override protected lazy val settings: Settings = TestSettings.DefaultSettings
 
   // use default search terms
   // list is truncated to fit on screen
@@ -79,15 +76,15 @@ class SearchTermTest extends SingleFileApplicationTest(TestFiles.simpleLog2)
     checkNumberOfShownElements(lineCount)
 
 
-  private def lookupItemSize: Int = lookup(LogTextView.uiNode(fileId).ref).query[LogTextView].getItems.size()
-
+  private def numberOfShownTextEntries(fileId : FileId): Int = lookupLogTextView(fileId).getItems.size()
 
   private def checkNumberOfShownElements(expectedElements: Int): Unit =
-    val iSize: Int = lookupItemSize
+    WaitForAsyncUtils.waitForFxEvents()
+    val iSize: Int = numberOfShownTextEntries(fileId)
     assert(iSize == expectedElements, s"Expected $expectedElements but was $iSize")
 
   private def numberOfShownElementsIsAtLeast(expectedElements: Int): Unit =
-    val iSize: Int = lookupItemSize
+    val iSize: Int = numberOfShownTextEntries(fileId)
     assert(iSize >= expectedElements, s"Expected at least $expectedElements but was $iSize")
 
 

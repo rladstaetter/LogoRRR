@@ -1,7 +1,7 @@
 package app.logorrr.views.main
 
 import app.logorrr.conf.FileId
-import app.logorrr.model.{DataModelEvent, DateFilterEvent, LogSource, OpenSettingsEditorEvent, SettingsEvent}
+import app.logorrr.model.*
 import app.logorrr.services.file.FileIdService
 import app.logorrr.views.settings.SettingsEditor
 import javafx.scene.layout.BorderPane
@@ -13,7 +13,7 @@ class LogoRRRMain(stage: Stage
                   , fileIdService: FileIdService
                   , isUnderTest: Boolean
                   , val logSource: LogSource) extends BorderPane with TinyLog:
-  
+
   val bar = new MainMenuBar(stage
     , this
     , fileIdService
@@ -35,10 +35,10 @@ class LogoRRRMain(stage: Stage
     e.consume()
   })
 
+  val editor = new SettingsEditor(stage, FileId(""), this)
   addEventHandler(SettingsEvent.OpenSettingsEditorEvent, (e: OpenSettingsEditorEvent) => {
-    val editor = new SettingsEditor(stage, FileId(""), this)
     if (e.scrollToLast)
-      editor.scrollToLast()
+     editor.scrollToLast()
 
     editor.showAndWait()
   })

@@ -2,7 +2,6 @@ package app.logorrr.issues
 
 import app.logorrr.TestFiles
 import app.logorrr.conf.{BlockSettings, DefaultSearchTermGroups, LogFileSettings, SearchTerm, Settings, StageSettings, TestSettings}
-import app.logorrr.steps.{SearchTermToolbarActions, TestFxListViewActions}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.util.JfxUtils
 import app.logorrr.views.search.st.ASearchTermToggleButton

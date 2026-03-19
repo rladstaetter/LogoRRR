@@ -1,9 +1,11 @@
 package app.logorrr.usecases.settings
 
+import app.logorrr.TestFiles
 import app.logorrr.conf.Settings
+import app.logorrr.usecases.MultipleFileApplicationTest
 import org.junit.jupiter.api.Test
 
-class ShowEmptySettingsEditorTest extends ASettingsTest:
+class ShowEmptySettingsEditorTest extends  MultipleFileApplicationTest(TestFiles.seq):
 
   /**
    * Opens settings dialog, checks if the number of shown items for search term groups match the default settings.

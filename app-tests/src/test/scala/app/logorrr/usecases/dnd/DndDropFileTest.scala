@@ -1,42 +1,29 @@
 package app.logorrr.usecases.dnd
 
-import app.logorrr.steps.{CheckTabPaneActions, VisibleItemActions}
 import app.logorrr.usecases.StartEmptyApplicationTest
-import app.logorrr.views.a11y.uinodes.UiNodes
+import app.logorrr.views.main.LogoRRRMain
 import app.logorrr.{LogoRRRApp, TestFiles}
-import javafx.scene.Scene
-import javafx.scene.control.ToolBar
-import javafx.scene.input.MouseButton
 import javafx.stage.Stage
-import org.junit.jupiter.api.{BeforeAll, Test}
+import org.junit.jupiter.api.Test
 
-object DndDropFileTest:
-
-  @BeforeAll
-  def setUp(): Unit = ()
-    // necessary for https://github.com/TestFX/TestFX/issues/33
-    // System.setProperty("testfx.robot", "awt")
+import scala.compiletime.uninitialized
 
 
-class DndDropFileTest extends StartEmptyApplicationTest
-  with VisibleItemActions
-  with CheckTabPaneActions:
+class DndDropFileTest extends StartEmptyApplicationTest:
+
+  var logorrrMain: LogoRRRMain = uninitialized
 
   @throws[Exception]
   override def start(stage: Stage): Unit =
-    LogoRRRApp.start(stage, services)
-
-    val dndStage = new Stage()
-    val dropBox = new ToolBar(TestFiles.seq.map(p => new DragSourceButton(p))*)
-    dndStage.setScene(new Scene(dropBox))
-    dndStage.show()
-
+    logorrrMain = LogoRRRApp.start(stage, services)
 
 
   @Test def startupEmpty(): Unit =
     checkForEmptyTabPane()
+
     TestFiles.seq.foreach:
-      fileId => drag(DragSourceButton.uiNode(fileId).ref, MouseButton.PRIMARY).dropTo(UiNodes.MainTabPane.ref)
+      fileId => interacT(logorrrMain.logSource.processDraggedFiles(java.util.List.of(fileId.asPath.toFile)))
+
     expectCountOfOpenFiles(TestFiles.seq.size)
 
 

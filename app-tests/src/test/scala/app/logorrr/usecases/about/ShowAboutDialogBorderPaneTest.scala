@@ -4,16 +4,13 @@ import app.logorrr.conf.Settings
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.EmptyFileIdService
 import app.logorrr.services.hostservices.MockHostServices
-import app.logorrr.steps.{AppActions, VisibleItemActions}
 import app.logorrr.usecases.TestFxBaseApplicationTest
 import app.logorrr.views.a11y.uinodes.{AboutDialog, LogoRRRMenu}
 import app.logorrr.views.about.AboutDialogBorderPane
 import org.junit.jupiter.api.Test
 
 
-class ShowAboutDialogBorderPaneTest extends TestFxBaseApplicationTest
-  with AppActions
-  with VisibleItemActions {
+class ShowAboutDialogBorderPaneTest extends TestFxBaseApplicationTest {
 
   // to get a handle to clicked urls
   val mockHostServices = new MockHostServices

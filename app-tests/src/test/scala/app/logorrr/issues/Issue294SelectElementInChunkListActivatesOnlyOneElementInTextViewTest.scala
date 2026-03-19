@@ -2,7 +2,6 @@ package app.logorrr.issues
 
 import app.logorrr.TestFiles
 import app.logorrr.conf.{LogFileSettings, Settings, StageSettings, TestSettings}
-import app.logorrr.steps.{LogTextViewActions, TestFxListViewActions}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.util.JfxUtils
 import org.junit.jupiter.api.Test
@@ -15,13 +14,11 @@ import org.junit.jupiter.api.Test
  *
  * */
 class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
-  extends SingleFileApplicationTest(TestFiles.simpleLog1)
-    with LogTextViewActions
-    with TestFxListViewActions:
+  extends SingleFileApplicationTest(TestFiles.simpleLog1):
 
   /** setup settings such that the issue is triggered and can be inspected visually */
   override lazy val settings: Settings = Settings(
-    StageSettings(JfxUtils.calcDefaultScreenPosition())
+    StageSettings(TestSettings.stageArea)
     , Map(TestFiles.simpleLog1.value ->
       LogFileSettings.mk(TestFiles.simpleLog1, TestSettings.DefaultGroups.searchTermGroups.tail.head)
         .copy(blockSize = 50, dividerPosition = 0.599))
