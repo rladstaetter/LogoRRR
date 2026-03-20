@@ -6,7 +6,7 @@ import app.logorrr.conf.FileId
 import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.model.*
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
-import javafx.beans.property.{ObjectPropertyBase, ReadOnlyDoubleProperty, SimpleIntegerProperty}
+import javafx.beans.property.{ObjectPropertyBase, ReadOnlyDoubleProperty, SetPropertyBase, SimpleIntegerProperty}
 import javafx.collections.ObservableList
 
 
@@ -18,15 +18,15 @@ object LogoRRRChunkListView extends UiNodeFileIdAware:
             , widthProperty: ReadOnlyDoubleProperty
            ): LogoRRRChunkListView =
     val logEntryVizor = LogEntryVizor(
-      mutLogFileSettings.selectedLineNumberProperty
+      mutLogFileSettings.sharedElementSelection
       , widthProperty
       , mutLogFileSettings.blockSizeProperty
       , mutLogFileSettings.firstVisibleTextCellIndexProperty
       , mutLogFileSettings.lastVisibleTextCellIndexProperty)
-    val logEntrySelector = LogEntrySelector(mutLogFileSettings.selectedLineNumberProperty)
+    val logEntrySelector = LogEntrySelector(mutLogFileSettings.sharedElementSelection)
     val picker = new LogEntryPicker(mutLogFileSettings)
     new LogoRRRChunkListView(entries
-      , mutLogFileSettings.selectedLineNumberProperty
+      , mutLogFileSettings.sharedElementSelection
       , mutLogFileSettings.blockSizeProperty
       , mutLogFileSettings.firstVisibleTextCellIndexProperty
       , mutLogFileSettings.lastVisibleTextCellIndexProperty
@@ -39,7 +39,7 @@ object LogoRRRChunkListView extends UiNodeFileIdAware:
 
 
 class LogoRRRChunkListView(override val elements: ObservableList[LogEntry]
-                           , override val selectedLineNumberProperty: SimpleIntegerProperty
+                           , override val sharedElementSelection: SetPropertyBase[Int]
                            , override val blockSizeProperty: SimpleIntegerProperty
                            , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
                            , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
@@ -49,7 +49,7 @@ class LogoRRRChunkListView(override val elements: ObservableList[LogEntry]
                            , logEntrySelector: ElementSelector[LogEntry])
   extends ChunkListView[LogEntry](
     elements
-    , selectedLineNumberProperty
+    , sharedElementSelection
     , blockSizeProperty
     , firstVisibleTextCellIndexProperty
     , lastVisibleTextCellIndexProperty

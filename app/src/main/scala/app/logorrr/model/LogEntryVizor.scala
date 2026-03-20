@@ -1,15 +1,16 @@
 package app.logorrr.model
 
 import app.logorrr.clv.Vizor
-import javafx.beans.property.{ReadOnlyDoubleProperty, SimpleIntegerProperty}
+import javafx.beans.property.{ReadOnlyDoubleProperty, SetPropertyBase, SimpleIntegerProperty}
 
-case class LogEntryVizor(selectedLineNumberProperty: SimpleIntegerProperty
+case class LogEntryVizor(sharedElementSelection: SetPropertyBase[Int]
                          , widthProperty: ReadOnlyDoubleProperty
                          , blockSizeProperty: SimpleIntegerProperty
                          , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
                          , lastVisibleTextCellIndexProperty: SimpleIntegerProperty) extends Vizor[LogEntry]:
   /** returns true if entry is active (= selected) - typically this entry is highlighted in some form */
-  def isSelected(e: LogEntry): Boolean = e.lineNumber == selectedLineNumberProperty.get()
+  //def isSelected(e: LogEntry): Boolean = e.lineNumber == selectedLineNumberProperty.get()
+  def isSelected(e: LogEntry): Boolean = sharedElementSelection.contains(e.lineNumber)
 
   /** element is the first visible element in the text view (the start of the visible elements) */
   def isFirstVisible(e: LogEntry): Boolean = e.lineNumber == firstVisibleTextCellIndexProperty.get()

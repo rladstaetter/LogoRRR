@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
  * - Open LogoRRR
  * - open fileId
  */
-class StgHelloScenario1 extends SingleFileApplicationTest(TestFiles.simpleLog0) with FavoritesActions:
+class StgHelloScenario1 extends SingleFileApplicationTest(TestFiles.simpleLog0):
 
   @Test def scenario1(): Unit =
     openFile(fileId)

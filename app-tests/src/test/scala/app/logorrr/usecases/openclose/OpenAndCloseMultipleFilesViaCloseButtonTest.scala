@@ -1,7 +1,6 @@
 package app.logorrr.usecases.openclose
 
 import app.logorrr.TestFiles
-import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.MultipleFileApplicationTest
 import app.logorrr.views.a11y.uinodes.UiNodes
 import javafx.scene.layout.StackPane
@@ -13,9 +12,7 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
 /**
  * Check if multiple files can be opened and then closed again via file menu 'close all'
  */
-class OpenAndCloseMultipleFilesViaCloseButtonTest
-  extends MultipleFileApplicationTest(TestFiles.seq)
-    with CheckTabPaneActions:
+class OpenAndCloseMultipleFilesViaCloseButtonTest  extends MultipleFileApplicationTest(TestFiles.seq):
 
   @Test def openFilesAndCloseOneByOneViaTabCloseButton(): Unit =
     files.foreach(openFile)

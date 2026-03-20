@@ -4,15 +4,11 @@ import app.logorrr.conf.Settings
 import app.logorrr.services.LogoRRRServices
 import app.logorrr.services.file.EmptyFileIdService
 import app.logorrr.services.hostservices.MockHostServices
-import app.logorrr.steps.AppActions
-
 
 /**
- * Start LogoRRR empty
+ * Start LogoRRR without any log files loaded
  */
-class StartEmptyApplicationTest
-  extends TestFxBaseApplicationTest
-    with AppActions:
+class StartEmptyApplicationTest extends TestFxBaseApplicationTest:
 
   final def services: LogoRRRServices = LogoRRRServices(Settings.Default
     , new MockHostServices

@@ -15,4 +15,4 @@ class SettingsMenuItem(main: LogoRRRMain) extends MenuItem("Settings...") with T
     setAccelerator(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.META_DOWN))
   else
     setAccelerator(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.CONTROL_DOWN))
-  setOnAction(_ => main.fireEvent(OpenSettingsEditorEvent()))
+  setOnAction(_ => main.fireEvent(OpenSettingsEditorEvent(false)))

@@ -12,7 +12,15 @@ object LColors:
   val yb: Int = ColorUtil.toARGB(yellow.brighter)
   val ybb: Int = ColorUtil.toARGB(yellow.brighter.brighter)
 
-  val color0 = BlockColor(LColors.y, LColors.yb, LColors.yb, LColors.yd, LColors.yd)
-  val color1 = BlockColor(LColors.yb, LColors.ybb, LColors.ybb, LColors.yb, LColors.y)
-  val color2 = BlockColor(LColors.yb, LColors.ybb, LColors.ybb, LColors.y, LColors.y)
-
+  val cyan = ColorUtil.toARGB(Color.CYAN)
+  val turquoise = ColorUtil.toARGB(Color.TURQUOISE)
+  val indigo = ColorUtil.toARGB(Color.INDIGO)
+  
+  val color0 = BlockColor(y, yb, yb, yd, yd)
+  val color1 = BlockColor(turquoise, ybb, ybb, yb, y)
+  val color2 = BlockColor(indigo, ybb, ybb, y, y)
+/*
+val color0 = BlockColor(y, yb, yb, yd, yd)
+val color1 = BlockColor(yb, ybb, ybb, yb, y)
+val color2 = BlockColor(yb, ybb, ybb, y, y)
+*/

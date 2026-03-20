@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test
 /**
  * Tests settings dialogue
  */
-class TimeSettingsEditorTest extends SingleFileApplicationTest(TestFiles.simpleLog0)
-  with SettingsEditorTestActions:
+class TimeSettingsEditorTest extends SingleFileApplicationTest(TestFiles.simpleLog0):
 
   /**
    * Tests timestamp settings:

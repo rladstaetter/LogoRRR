@@ -16,7 +16,7 @@ object MutLogFileSettings:
   def apply(logFileSettings: LogFileSettings): MutLogFileSettings =
     val s = new MutLogFileSettings
     s.fileIdProperty.set(logFileSettings.fileId)
-    s.selectedLineNumberProperty.set(logFileSettings.selectedLineNumber)
+    s.sharedElementSelection.addAll(logFileSettings.selectedLineNumbers.asJava)
     s.fontSizeProperty.set(logFileSettings.fontSize)
     s.blockSizeProperty.set(logFileSettings.blockSize)
     s.firstOpenedProperty.set(logFileSettings.firstOpened)
@@ -43,7 +43,7 @@ class MutLogFileSettings:
   val fontSizeProperty = new SimpleIntegerProperty(this, "fontSizeProperty")
   val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty(this, "lastVisibleTextCellIndexProperty")
   val mutSearchTerms: ObservableList[MutableSearchTerm] = FXCollections.observableArrayList[MutableSearchTerm](MutableSearchTerm.extractor)
-  val selectedLineNumberProperty = new SimpleIntegerProperty(this, "selectedLineNumberProperty")
+  val sharedElementSelection = new SimpleSetProperty[Int](this, "sharedElementSelection", FXCollections.observableSet(new java.util.HashSet[Int]()))
   val lowerBoundaryProperty = new SimpleLongProperty(this, "lowerBoundaryProperty")
   val upperBoundaryProperty = new SimpleLongProperty(this, "upperBoundaryProperty")
   val showUnclassifiedProperty = new SimpleBooleanProperty(true, "showUnclassifiedProperty")
@@ -88,7 +88,7 @@ class MutLogFileSettings:
 
   def mkImmutable(): LogFileSettings =
     LogFileSettings(fileIdProperty.get()
-      , selectedLineNumberProperty.get()
+      , sharedElementSelection.get().asScala.toSet
       , firstOpenedProperty.get()
       , dividerPositionProperty.get()
       , fontSizeProperty.get()
@@ -119,7 +119,7 @@ class MutLogFileSettings:
       , firstVisibleTextCellIndexProperty
       , fontSizeProperty
       , lastVisibleTextCellIndexProperty
-      , selectedLineNumberProperty
+      , sharedElementSelection
       , lowerBoundaryProperty
       , upperBoundaryProperty
       , showUnclassifiedProperty

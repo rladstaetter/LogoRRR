@@ -6,16 +6,18 @@ import app.logorrr.util.JfxUtils
 import app.logorrr.views.a11y.{UiNode, UiNodeFileIdAware}
 import app.logorrr.views.search.MutableSearchTerm
 import javafx.beans.binding.Bindings
-import javafx.beans.property.{ObjectPropertyBase, Property, SimpleIntegerProperty}
+import javafx.beans.property.*
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.transformation.FilteredList
-import javafx.collections.{FXCollections, ObservableList}
+import javafx.collections.{FXCollections, ListChangeListener, ObservableList}
 import javafx.scene.control.*
 import javafx.scene.paint.Color
 import javafx.util.Subscription
 import net.ladstatt.util.log.TinyLog
 
+import java.util
 import java.util.function.Predicate
+import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 import scala.compiletime.uninitialized
 
 object LogTextView extends UiNodeFileIdAware:
@@ -26,22 +28,23 @@ class LogTextView(filteredList: FilteredList[LogEntry])
   extends ListView[LogEntry]
     with TinyLog with BoundId(LogTextView.uiNode(_).value):
 
-  // property which contains selected line number, bidirectionally bound to MutLogFileSettings
-  private val selectedLineNumberProperty = new SimpleIntegerProperty()
-  private val selectedItemSubscription: Subscription =
-    getSelectionModel.selectedItemProperty().subscribe(e => {
-      Option(e) match {
-        case Some(value) => selectedLineNumberProperty.set(value.lineNumber)
-        case None =>
-      }
-    })
+  private val sharedSelectedSelection = new SimpleSetProperty[Int]()
+
+  private lazy val selectedListener: ListChangeListener[LogEntry] = new ListChangeListener[LogEntry] {
+    override def onChanged(c: ListChangeListener.Change[? <: LogEntry]): Unit =
+      println(getSelectionModel.getSelectedItems.asScala.foreach(println))
+      val selectedLines = new util.HashSet[Int]()
+      val selected = getSelectionModel.getSelectedItems.forEach(entry => selectedLines.add(entry.lineNumber))
+      sharedSelectedSelection.retainAll(selectedLines)
+      sharedSelectedSelection.addAll(selectedLines)
+  }
+
 
   private val fontsizeProperty = new SimpleIntegerProperty()
   private val fontsizeSubscription: Subscription = fontsizeProperty.subscribe(_ => refresh())
   private val firstVisibleTextCellIndexProperty = new SimpleIntegerProperty()
   private val lastVisibleTextCellIndexProperty = new SimpleIntegerProperty()
   private var someScrollBarSubscription: Option[Subscription] = None
-
 
   var searchTermChangeListener: MutableSearchTermListener = uninitialized
 
@@ -67,44 +70,55 @@ class LogTextView(filteredList: FilteredList[LogEntry])
 
   def scrollToItem(item: LogEntry): Unit =
     val relativeIndex = getItems.indexOf(item)
-    getSelectionModel.clearAndSelect(relativeIndex)
+    getSelectionModel.select(relativeIndex)
     val cellHeight = fontsizeProperty.get()
     JfxUtils.scrollTo[LogEntry](this, cellHeight, relativeIndex)
 
   def scrollToActiveLogEntry(): Unit =
     if getHeight != 0 then
-      val candidates = filteredList.filtered(l => l.lineNumber == selectedLineNumberProperty.get())
+      val candidates = filteredList.filtered(l => sharedSelectedSelection.contains(l.lineNumber))
       if !candidates.isEmpty then
         Option(candidates.get(0)) match
           case Some(selectedEntry) =>
             scrollToItem(selectedEntry)
             // to trigger ChunkListView scrollTo and repaint
-            selectedLineNumberProperty.set(selectedEntry.lineNumber)
+            sharedSelectedSelection.add(selectedEntry.lineNumber)
           case None => // do nothing
     else
       logTrace("height was 0")
 
+
   def init(fileIdProperty: ObjectPropertyBase[FileId]
-           , selectedLineNumberProperty: Property[Number]
+           , sharedSelectedSelection: SetPropertyBase[Int]
            , fontsizeProperty: Property[Number]
            , firstVisibleTextCellIndexProperty: Property[Number]
            , lastVisibleTextCellIndexProperty: Property[Number]
            , mutSearchTerms: ObservableList[MutableSearchTerm]
           ): Unit =
 
+    fixedCellSizeProperty().bind(Bindings.createDoubleBinding(
+      () => fontsizeProperty.getValue.doubleValue() * 1.2,
+      fontsizeProperty
+    ))
     bindIdProperty(fileIdProperty)
     val activeSearchTerms = new FilteredList[MutableSearchTerm](mutSearchTerms, _.isActive)
     activeSearchTerms.forEach(st => searchTermsAndColors.add((st.getValue, st.getColor)))
     this.searchTermChangeListener = new MutableSearchTermListener(activeSearchTerms, searchTermsAndColors, this)
     mutSearchTerms.addListener(searchTermChangeListener)
-    this.selectedLineNumberProperty.bindBidirectional(selectedLineNumberProperty)
+    this.sharedSelectedSelection.bindBidirectional(sharedSelectedSelection)
     this.fontsizeProperty.bind(fontsizeProperty)
     this.firstVisibleTextCellIndexProperty.bindBidirectional(firstVisibleTextCellIndexProperty)
     this.lastVisibleTextCellIndexProperty.bindBidirectional(lastVisibleTextCellIndexProperty)
-    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell(this, filteredList, this.searchTermsAndColors, this.selectedLineNumberProperty, scrollToActiveLogEntry, this.fontsizeProperty, this.maxSizeProperty))
+    setCellFactory((_: ListView[LogEntry]) => new LogEntryListCell(this, filteredList, this.searchTermsAndColors, this.sharedSelectedSelection, scrollToActiveLogEntry, this.fontsizeProperty, this.maxSizeProperty))
     setItems(filteredList)
     getSelectionModel.setSelectionMode(SelectionMode.MULTIPLE)
-    getSelectionModel.select(this.selectedLineNumberProperty.getValue.intValue() - 1)
+    val selectedIndices: Array[Int] = sharedSelectedSelection.stream.mapToInt(e => e).toArray
+    if (selectedIndices.length > 0) {
+      getSelectionModel.selectIndices(selectedIndices(0), selectedIndices *)
+    }
+    // init selected listener only after having set initial values
+    getSelectionModel.getSelectedItems.addListener(selectedListener)
+
 
     // hack to delay calling scrollToActiveLogEntry only after listview has a nonzero height
     val heightListener = new ChangeListener[Number] {
@@ -117,18 +131,18 @@ class LogTextView(filteredList: FilteredList[LogEntry])
       }
     }
     heightProperty.addListener(heightListener)
+
   /** clean up listeners */
-  def shutdown(selectedLineNumberProperty: Property[Number]
+  def shutdown(sharedElementCollection: SetPropertyBase[Int]
                , firstVisibleTextCellIndexProperty: Property[Number]
                , lastVisibleTextCellIndexProperty: Property[Number]
                , mutableSearchTerms: ObservableList[MutableSearchTerm]
               ): Unit =
     unbindIdProperty()
-
+    fixedCellSizeProperty().unbind()
     mutableSearchTerms.removeListener(searchTermChangeListener)
-    this.selectedItemSubscription.unsubscribe()
     this.fontsizeSubscription.unsubscribe()
-    this.selectedLineNumberProperty.unbindBidirectional(selectedLineNumberProperty)
+    getSelectionModel.getSelectedItems.removeListener(selectedListener)
     this.fontsizeProperty.unbind()
     this.firstVisibleTextCellIndexProperty.unbindBidirectional(firstVisibleTextCellIndexProperty)
     this.lastVisibleTextCellIndexProperty.unbindBidirectional(lastVisibleTextCellIndexProperty)

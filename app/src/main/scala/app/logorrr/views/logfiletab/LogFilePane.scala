@@ -130,7 +130,7 @@ class LogFilePane(val mutLogFileSettings: MutLogFileSettings
       setTop(opsRegion)
       setCenter(pane)
       logTextView.init(fileIdProperty
-        , mutLogFileSettings.selectedLineNumberProperty
+        , mutLogFileSettings.sharedElementSelection
         , mutLogFileSettings.fontSizeProperty
         , mutLogFileSettings.firstVisibleTextCellIndexProperty
         , mutLogFileSettings.lastVisibleTextCellIndexProperty
@@ -160,7 +160,7 @@ class LogFilePane(val mutLogFileSettings: MutLogFileSettings
     logTailer.shutdown(fileIdProperty, entries)
     disableFollowMode(mutLogFileSettings.logFilePositionProperty)
     logTextView.shutdown(
-      mutLogFileSettings.selectedLineNumberProperty
+      mutLogFileSettings.sharedElementSelection
       , mutLogFileSettings.firstVisibleTextCellIndexProperty
       , mutLogFileSettings.lastVisibleTextCellIndexProperty
       , mutLogFileSettings.mutSearchTerms)
@@ -188,14 +188,12 @@ class LogFilePane(val mutLogFileSettings: MutLogFileSettings
   addEventHandler(DataModelEvent.RemoveDateFilterEvent, (e: RemoveDateFilterEvent) => timeR({
     mutLogFileSettings.setTimeSettings(TimeSettings.Invalid)
     // we have to deactivate this listener otherwise
-    chunkListView.removeInvalidationListener()
     val tempList = new java.util.ArrayList[LogEntry]()
     entries.forEach(e => {
       tempList.add(e.withOutTimestamp())
     })
     entries.setAll(tempList)
     // activate listener again
-    chunkListView.addInvalidationListener()
     updateDisplay()
     e.consume()
   }, "updateList"))

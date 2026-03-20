@@ -12,7 +12,9 @@ import javafx.scene.input.DragEvent
 import javafx.stage.Window
 import net.ladstatt.util.log.TinyLog
 
+import java.io.File
 import java.nio.file.{Files, Path}
+import java.util
 import java.util.stream.Collectors
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
@@ -89,8 +91,13 @@ class LogSource(globalSearchTermGroups: ObservableList[MutSearchTermGroup]
     mainTabPane.shutdown()
 
 
-  private def onDragDropped(event: DragEvent): Unit = {
-    event.getDragboard.getFiles.forEach(f => {
+  def onDragDropped(event: DragEvent): Unit = {
+    val files = event.getDragboard.getFiles
+    processDraggedFiles(files)
+  }
+
+  def processDraggedFiles(files: util.List[File]): Unit = {
+    files.forEach(f => {
       val path = f.toPath
       if Files.isDirectory(path) then {
         addDirectory(path)

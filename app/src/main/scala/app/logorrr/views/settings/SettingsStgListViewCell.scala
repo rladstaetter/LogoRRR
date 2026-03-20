@@ -4,12 +4,13 @@ import app.logorrr.conf.LogoRRRGlobals
 import app.logorrr.conf.mut.MutSearchTermGroup
 import app.logorrr.views.a11y.uinodes.SettingsEditor
 import app.logorrr.views.search.stg.{DeleteStgButton, SearchTermLabel}
-import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.animation.*
 import javafx.geometry.Insets
 import javafx.scene.control.*
+import javafx.scene.effect.DropShadow
 import javafx.scene.layout.{HBox, Pane, Priority}
-
-import java.lang
+import javafx.scene.paint.Color
+import javafx.util.Duration
 
 
 object SettingsStgListViewCell:
@@ -63,6 +64,55 @@ class SettingsStgListViewCell(toggleGroup: ToggleGroup) extends ListCell[MutSear
     if !item.isSelected then
       LogoRRRGlobals.setDefaultSearchTermGroup(item)
       getListView.refresh()
+
+  def glowsy(): Unit = {
+    val node = getGraphic
+    if (node != null) {
+      // 1. Create the Glow Effect
+      val glow = new DropShadow()
+      glow.setColor(Color.GOLD) // Or a bright "Comic" yellow
+      glow.setRadius(0)
+      glow.setSpread(0.6)
+      node.setEffect(glow)
+
+      // 2. Scale Effect (The "Pop")
+      val scale = new ScaleTransition(Duration.millis(150), node)
+      scale.setFromX(1.0)
+      scale.setFromY(1.0)
+      scale.setToX(1.15) // Slightly larger
+      scale.setToY(1.15)
+      scale.setAutoReverse(true)
+      scale.setCycleCount(2)
+      scale.setInterpolator(Interpolator.EASE_OUT)
+
+      // 3. Glow Effect (The "Radiance")
+      val glowAnimation = new Timeline(
+        new KeyFrame(Duration.ZERO,
+          new KeyValue(glow.radiusProperty(), 0.0),
+          new KeyValue(glow.colorProperty(), Color.GOLD.deriveColor(0, 1, 1, 0.2))
+        ),
+        new KeyFrame(Duration.millis(200),
+          new KeyValue(glow.radiusProperty(), 30.0),
+          new KeyValue(glow.colorProperty(), Color.GOLD)
+        ),
+        new KeyFrame(Duration.millis(500),
+          new KeyValue(glow.radiusProperty(), 0.0),
+          new KeyValue(glow.colorProperty(), Color.TRANSPARENT)
+        )
+      )
+
+      // 4. Combine and Play
+      val rewardEffect = new ParallelTransition(scale, glowAnimation)
+      rewardEffect.setOnFinished(_ => {
+        node.setEffect(null)
+        node.setScaleX(1.0)
+        node.setScaleY(1.0)
+      })
+
+      rewardEffect.play()
+    }
+  }
+
 
   override def updateItem(group: MutSearchTermGroup, empty: Boolean): Unit =
     super.updateItem(group, empty)

@@ -34,3 +34,22 @@ class SettingsStgListView(searchTermGroups: SimpleListProperty[MutSearchTermGrou
   def getSearchTermGroups: ObservableList[MutSearchTermGroup] = searchTermGroups
 
   def shutdown(): Unit = itemsProperty().unbind()
+
+  def scrollToAndHighlightLast(): Unit =
+    val lastIndex = getItems.size() - 1
+    scrollTo(getItems.size )
+    if 0 < lastIndex then
+      // 2. We must wait for the next "Pulse" so the cell is actually rendered
+      // Using Platform.runLater is usually enough to wait for the layout pass
+      javafx.application.Platform.runLater(() => {
+
+        // 3. Find the cell by its index
+        // We use lookupAll to find all cells and filter by index
+        import scala.jdk.CollectionConverters.*
+
+        // highlight new element
+        this.lookupAll(".list-cell").asScala.collectFirst {
+          case cell: SettingsStgListViewCell if cell.getIndex == lastIndex && !cell.isEmpty =>
+            cell.glowsy()
+        }
+      })

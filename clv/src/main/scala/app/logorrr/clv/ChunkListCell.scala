@@ -42,20 +42,20 @@ object ChunkListCell extends TinyLog:
                      , isFirstVisible: Boolean
                      , isLastVisible: Boolean
                      , isVisibleInTextView: Boolean): BlockColor =
-    val colbrighter = color.brighter()
+    val colbrighter = color.interpolate(Color.WHITE, 0.5)
     val (c, cd, cb, cbb) = (ColorUtil.toARGB(color), ColorUtil.toARGB(color.darker()), ColorUtil.toARGB(colbrighter), ColorUtil.toARGB(colbrighter.brighter()))
     // mystical color setting routine for setting border colors of viewport and blocks correctly
+    val selectedYellow = ColorUtil.toARGB(colbrighter.interpolate(Color.YELLOW, 0.8))
     val blockColor =
-      (isSelected, isFirstVisible, isLastVisible, isVisibleInTextView) match
-        case (false, false, false, false) => BlockColor(c, cb, cb, cd, cd)
-        case (true, false, false, false) => LColors.color0
-        case (false, true, false, false) => BlockColor(cb, LColors.yb, LColors.yb, LColors.y, cd)
-        case (false, false, false, true) => BlockColor(cb, LColors.yb, cbb, LColors.y, cd)
-        case (true, false, false, true) => LColors.color1
-        case (false, false, true, false) => BlockColor(cb, LColors.yb, cbb, LColors.y, LColors.y)
-        case (true, true, false, false) => LColors.color2
-        case (true, false, true, false) => LColors.color2
-        case _ => BlockColor(c, cb, cb, cd, cd) // should never happen (?)
+      if isSelected then
+        // If selected, the block always uses the boosted yellow theme
+        BlockColor(selectedYellow, LColors.yb, LColors.yb, LColors.yb, LColors.yb)
+      else
+        (isFirstVisible, isLastVisible, isVisibleInTextView) match
+          case (true, false, false) => BlockColor(cb, LColors.yb, LColors.yb, LColors.y, cd)
+          case (false, false, true) => BlockColor(cb, LColors.yb, cbb, LColors.y, cd)
+          case (false, true, false) => BlockColor(cb, LColors.yb, cbb, LColors.y, LColors.y)
+          case _ => BlockColor(c, cb, cb, cd, cd)
     blockColor
 
   /**
@@ -141,11 +141,10 @@ object ChunkListCell extends TinyLog:
     }
 
 
-
 /**
  * A listcell which can contain one or more log entries.
  *
- * To see how those cells are populated, see [[Chunk.updateChunks]].
+ * To see how those cells are populated, see [[Chunk.modifyChunkList]].
  */
 class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
                        , scrollTo: A => Unit
@@ -184,39 +183,6 @@ class ChunkListCell[A](blockSizeProperty: SimpleIntegerProperty
               case None =>
           case None => // outside of a chunk
 
-
-  // see #262 - until this is fixed don't activate the mousemoved handler
-  /*
-   private lazy val mouseMovedHandler: EventHandler[MouseEvent] = (me: MouseEvent) => {
-     Option(getItem).map(_.cols) match {
-       case Some(cols) =>
-         val index = calcIndex(cols * blockSizeProperty.get(), me)
-         getEntryAt(getItem, index) match {
-           case Some(logEntry) =>
-             Option(getGraphic).map(_.asInstanceOf[ImageView].getImage.asInstanceOf[WritableImage].pixelBuffer) match {
-               case Some(pb) =>
-                 val col = ColorUtil.calcColor(logEntry.value, pb.filters)
-                 pb.paintBlockAtIndexWithColor(index, logEntry.lineNumber, col.darker())
-                 // schedule repaint with original color again some time in the future
-                 val task: Runnable = () => pb.paintBlockAtIndexWithColor(index, logEntry.lineNumber, col)
-
-                 // Create a Timeline that fires once after 250 milliseconds
-                 val timeline = new Timeline(new KeyFrame(Duration.millis(250), (_: ActionEvent) => task.run()))
-                 timeline.setCycleCount(1) // Ensure it runs only once
-                 timeline.play()
-               case None =>
-             }
-           case None => // if no valid item found, ignore
-         }
-       case None => // if outside of a chunk, just ignore
-     }
-   }
-
-   if (false) {
-     setOnMouseMoved(mouseMovedHandler)
-   }
-
-    */
   setOnMouseClicked(mouseClickedHandler)
 
   override def updateItem(chunk: Chunk[A], empty: Boolean): Unit =

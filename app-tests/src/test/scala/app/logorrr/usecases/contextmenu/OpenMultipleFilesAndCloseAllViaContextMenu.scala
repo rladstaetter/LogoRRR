@@ -1,7 +1,6 @@
 package app.logorrr.usecases.contextmenu
 
 import app.logorrr.TestFiles
-import app.logorrr.steps.CheckTabPaneActions
 import app.logorrr.usecases.MultipleFileApplicationTest
 import app.logorrr.views.a11y.uinodes.UiNodes
 import app.logorrr.views.logfiletab.actions.CloseAllFilesMenuItem
@@ -12,8 +11,7 @@ import org.junit.jupiter.api.Test
 import scala.util.Random
 
 class OpenMultipleFilesAndCloseAllViaContextMenu
-  extends MultipleFileApplicationTest(TestFiles.seq)
-    with CheckTabPaneActions:
+  extends MultipleFileApplicationTest(TestFiles.seq):
 
   @Test def openFilesAndCloseAllViaContextMenuItem(): Unit =
     files.foreach(openFile)

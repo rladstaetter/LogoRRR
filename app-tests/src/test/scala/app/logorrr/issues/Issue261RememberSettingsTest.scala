@@ -1,16 +1,16 @@
 package app.logorrr.issues
 
 import app.logorrr.TestFiles
-import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.conf.*
+import app.logorrr.conf.mut.MutLogFileSettings
 import app.logorrr.usecases.SingleFileApplicationTest
-import app.logorrr.util.JfxUtils
+import app.logorrr.usecases.time.SomeSettingTest
 import app.logorrr.views.ops.time.{SliderVBox, TimerSlider}
-import app.logorrr.views.search.MutableSearchTerm
-import javafx.collections.FXCollections
 import javafx.geometry.Pos
 import javafx.scene.input.MouseButton
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.{Disabled, Test}
+
+
 
 /**
  * Check if LogoRRR starts with certain settings it displays
@@ -20,10 +20,10 @@ import org.junit.jupiter.api.Test
  * - labels display the correct information
  *
  */
-class Issue261RememberSettingsTest extends SingleFileApplicationTest(TestFiles.timedLog):
+class Issue261RememberSettingsTest extends SomeSettingTest:
 
   override protected lazy val settings: Settings = Settings(
-    StageSettings(JfxUtils.calcDefaultScreenPosition())
+    StageSettings(TestSettings.stageArea)
     , Map(TestFiles.timedLog.value ->
       LogFileSettings.mk(TestFiles.timedLog, TestSettings.DefaultGroups.searchTermGroups.tail.head)
         .copy(blockSize = 50
@@ -34,6 +34,7 @@ class Issue261RememberSettingsTest extends SingleFileApplicationTest(TestFiles.t
     , None
   )
 
+
   @Test def checkVisibilityOfSlidersAndLabelText(): Unit =
     val logFileSettings: MutLogFileSettings = LogoRRRGlobals.getLogFileSettings(fileId)
     assert(logFileSettings.mutTimeSettings.validBinding.get())
@@ -42,29 +43,8 @@ class Issue261RememberSettingsTest extends SingleFileApplicationTest(TestFiles.t
     waitForVisibility(SliderVBox.uiNode(fileId, Pos.CENTER_LEFT))
     waitForVisibility(SliderVBox.uiNode(fileId, Pos.CENTER_RIGHT))
 
-    val earilestTimestamp = "2023-08-02 21:16:33,193"
-    val latestTimestamp = "2023-08-02 21:16:38,656"
-
-    // expect lowest and highest timestamp
-    expectLabelText(fileId, Pos.CENTER_LEFT, earilestTimestamp)
-    expectLabelText(fileId, Pos.CENTER_RIGHT, latestTimestamp)
-
-    // now, change the right slider (starting with the middle of the slider)
-    drag(SliderVBox.uiNode(fileId, Pos.CENTER_RIGHT).ref).moveBy(-TimerSlider.Width / 2, 0).release(MouseButton.PRIMARY)
-    expectLabelText(fileId, Pos.CENTER_RIGHT, earilestTimestamp)
-
-    // put right slider back, also move lower slider
-    drag(SliderVBox.uiNode(fileId, Pos.CENTER_RIGHT).ref).moveBy(TimerSlider.Width, 0).release(MouseButton.PRIMARY)
-    expectLabelText(fileId, Pos.CENTER_RIGHT, latestTimestamp)
-
-    // drag lower slider to highest point
-    drag(SliderVBox.uiNode(fileId, Pos.CENTER_LEFT).ref).moveBy(TimerSlider.Width / 2, 0).release(MouseButton.PRIMARY)
-    expectLabelText(fileId, Pos.CENTER_LEFT, latestTimestamp)
+    performActions()
 
 
-  def expectLabelText(fileId: FileId, pos: Pos, expectedText: String): Unit =
-    waitForPredicate[SliderVBox](SliderVBox.uiNode(fileId, pos), classOf[SliderVBox], sliderBox => {
-      sliderBox.label.getText == expectedText
-    })
 
 

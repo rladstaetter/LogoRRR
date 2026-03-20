@@ -2,7 +2,6 @@ package app.logorrr.issues
 
 import app.logorrr.TestFiles
 import app.logorrr.conf.{FileId, TestSettings}
-import app.logorrr.steps.{CheckTabPaneActions, ChoiceBoxActions}
 import app.logorrr.usecases.MultipleFileApplicationTest
 import app.logorrr.views.a11y.UiNode
 import app.logorrr.views.search.st.ASearchTermToggleButton
@@ -19,14 +18,11 @@ import java.util.function.Predicate
  * was changed.
  *
  * */
-class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest
-  extends MultipleFileApplicationTest(TestFiles.seq)
-    with CheckTabPaneActions with ChoiceBoxActions:
+class Issue236OpenMultipleTabsAndChooseDefaultSearchTermTest extends MultipleFileApplicationTest(TestFiles.seq):
 
   def activate(fileId: FileId, searchTermGroupName: String): Unit =
     openFile(fileId)
 
-  @Disabled
   @Test def testIssue236(): Unit =
     // open first file
     val firstFile = TestFiles.simpleLog0

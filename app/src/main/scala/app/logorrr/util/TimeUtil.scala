@@ -55,7 +55,6 @@ object TimeUtil extends TinyLog:
                 , timeSettings: TimeSettings
                 , tsRegion: TimestampSettingsRegion): Unit = {
     mutLogFileSettings.setTimeSettings(timeSettings)
-    chunkListView.removeInvalidationListener()
     var someFirstEntryTimestamp: Option[Instant] = None
 
     val tempList = new util.ArrayList[LogEntry]()
@@ -68,7 +67,6 @@ object TimeUtil extends TinyLog:
       tempList.add(e.copy(someEpochMilli = someInstant.map(_.toEpochMilli)))
     }
     logEntries.setAll(tempList)
-    chunkListView.addInvalidationListener()
     val (min, max) = calcRange(logEntries)
     tsRegion.initializeRanges(min, max)
     tsRegion.setSliderPositions(min, max)

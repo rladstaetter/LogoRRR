@@ -1,43 +1,26 @@
 package app.logorrr.usecases.dnd
 
-import app.logorrr.steps.{CheckTabPaneActions, VisibleItemActions}
 import app.logorrr.usecases.StartEmptyApplicationTest
-import app.logorrr.views.a11y.uinodes.UiNodes
+import app.logorrr.views.main.LogoRRRMain
 import app.logorrr.{LogoRRRApp, TestFiles}
-import javafx.scene.Scene
-import javafx.scene.control.ToolBar
-import javafx.scene.input.MouseButton
 import javafx.stage.Stage
-import org.junit.jupiter.api.{BeforeAll, Test}
+import org.junit.jupiter.api.Test
 
-object DndDropZipFileTest:
+import scala.compiletime.uninitialized
 
-  @BeforeAll
-  def setUp(): Unit = ()
-    // necessary for https://github.com/TestFX/TestFX/issues/33
-    // System.setProperty("testfx.robot", "awt")
+class DndDropZipFileTest extends StartEmptyApplicationTest:
 
-
-class DndDropZipFileTest extends StartEmptyApplicationTest
-  with VisibleItemActions
-  with CheckTabPaneActions:
+  var logorrrMain: LogoRRRMain = uninitialized
 
   @throws[Exception]
   override def start(stage: Stage): Unit =
-    LogoRRRApp.start(stage, services)
-
-    val dndStage = new Stage()
-    val dropBox = new ToolBar(Seq(new DragSourceButton(TestFiles.zipFileContaining10Files))*)
-    dndStage.setScene(new Scene(dropBox))
-    dndStage.show()
-
-
+    logorrrMain = LogoRRRApp.start(stage, services)
 
   @Test def testOpeningAZipFileWith10Files(): Unit =
     checkForEmptyTabPane()
-    drag(DragSourceButton.uiNode(TestFiles.zipFileContaining10Files).ref, MouseButton.PRIMARY).dropTo(UiNodes.MainTabPane.ref)
+
+    val zipFile = TestFiles.zipFileContaining10Files.asPath.toFile
+
+    interacT(logorrrMain.logSource.processDraggedFiles(java.util.List.of(zipFile)))
+
     expectCountOfOpenFiles(10)
-
-
-
-

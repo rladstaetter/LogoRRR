@@ -2,7 +2,6 @@ package app.logorrr.issues
 
 import app.logorrr.TestFiles
 import app.logorrr.conf.*
-import app.logorrr.steps.{SearchTermToolbarActions, TestFxListViewActions}
 import app.logorrr.usecases.SingleFileApplicationTest
 import app.logorrr.util.JfxUtils
 import javafx.scene.paint.Color
@@ -17,15 +16,12 @@ import org.junit.jupiter.api.Test
  * - using three searchterms with given colors (via settings)
  * - checking color of element of chunklistview
  * */
-abstract class Issue292ColorCalculationSetup(desiredColor: Color
-                                             , val searchTerms: Seq[SearchTerm])
-  extends SingleFileApplicationTest(TestFiles.simpleLog5)
-    with TestFxListViewActions
-    with SearchTermToolbarActions:
+abstract class Issue292ColorCalculationSetup(desiredColor: Color, val searchTerms: Seq[SearchTerm])
+  extends SingleFileApplicationTest(TestFiles.simpleLog5):
 
   /** setup settings such that the issue is triggered and can be inspected visually */
   override lazy val settings: Settings = Settings(
-    StageSettings(JfxUtils.calcDefaultScreenPosition())
+    StageSettings(TestSettings.stageArea)
     , Map(TestFiles.simpleLog5.value ->
       LogFileSettings.mk(TestFiles.simpleLog5, TestSettings.DefaultGroups.searchTermGroups.tail.head)
         .copy(

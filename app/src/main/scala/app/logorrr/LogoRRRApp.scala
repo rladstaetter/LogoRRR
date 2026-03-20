@@ -15,6 +15,7 @@ import net.ladstatt.util.log.TinyLog
 import net.ladstatt.util.os.OsUtil
 
 import java.nio.file.{Files, Path, Paths}
+import scala.compiletime.uninitialized
 
 /**
  * Main starting point for LogoRRR Application

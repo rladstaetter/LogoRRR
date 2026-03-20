@@ -55,13 +55,11 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <skipTests>false</skipTests>
-                    <!--
                     <forkCount>1C</forkCount>
                     <reuseForks>false</reuseForks>
-                    -->
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                    <!-- add -Dglass.platform=Headless for headless tests -->
-                    <argLine>--sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED -Djava.library.path=${basedir}/target/native</argLine>
+                    <!-- add -Dglass.platform=headless for headless tests -->
+                    <argLine>-Dglass.platform=headless --sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED -Djava.library.path=${basedir}/target/native</argLine>
                 </configuration>
             </plugin>
         </plugins>
