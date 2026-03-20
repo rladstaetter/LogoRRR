@@ -18,7 +18,7 @@ object LogFileSettingsSpec:
     fontSize <- Gen.posNum[Int]
     autoScroll <- CoreGen.booleanGen
   yield LogFileSettings(fileId
-    , selectedIndex
+    , Set()
     , firstOpened
     , dPos
     , fontSize

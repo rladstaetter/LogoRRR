@@ -5,10 +5,11 @@ import upickle.default.*
 
 import java.nio.file.Path
 import java.time.*
+import java.util
 
 object LogFileSettings:
 
-  private val DefaultSelectedIndex = 0
+  private val DefaultSelectedLines: Set[Int] = Set()
   private val DefaultDividerPosition = 0.5
   private val DefaultBlockSize = 10
   private val DefaultLogFormat: Option[TimeSettings] = None
@@ -22,7 +23,7 @@ object LogFileSettings:
   def mk(fileId: FileId, searchTermGroup: SearchTermGroup): LogFileSettings =
     val now = Instant.now().toEpochMilli
     LogFileSettings(fileId
-      , DefaultSelectedIndex
+      , DefaultSelectedLines
       , now
       , DefaultDividerPosition
       , TextConstants.DefaultFontSize
@@ -62,7 +63,7 @@ object LogFileSettings:
  * @param showUnclassified          show unclassified elements (defaults to true)
  */
 case class LogFileSettings(fileId: FileId
-                           , selectedLineNumber: Int
+                           , selectedLineNumbers: Set[Int]
                            , firstOpened: Long
                            , dividerPosition: Double
                            , fontSize: Int

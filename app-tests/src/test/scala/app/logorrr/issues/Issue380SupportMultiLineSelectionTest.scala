@@ -7,13 +7,12 @@ import app.logorrr.util.JfxUtils
 import org.junit.jupiter.api.Test
 
 /**
- * https://github.com/rladstaetter/LogoRRR/issues/294
+ * https://github.com/rladstaetter/LogoRRR/issues/380
  *
- * Clicking on ChunkListView yielded more than one selection in LogTextView. This
- * test shows that this is not the case anymore.
+ * Clicking on ChunkListView should select more than one element.
  *
  * */
-class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
+class Issue380SupportMultiLineSelectionTest
   extends SingleFileApplicationTest(TestFiles.simpleLog1):
 
   /** setup settings such that the issue is triggered and can be inspected visually */
@@ -61,8 +60,8 @@ class Issue294SelectElementInChunkListActivatesOnlyOneElementInTextViewTest
     // click on another element
     clickOn(screenClickX + 100, screenClickY)
 
-    // assert that still only one element is selected (as opposed to more than one)
-    assert(ltv.getSelectionModel.getSelectedItems.size() == 1)
+    // assert that now two elements are selected (changed with 26.3.0)
+    assert(ltv.getSelectionModel.getSelectedItems.size() == 2)
 
 
 

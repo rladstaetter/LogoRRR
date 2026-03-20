@@ -130,7 +130,7 @@ class LogFilePane(val mutLogFileSettings: MutLogFileSettings
       setTop(opsRegion)
       setCenter(pane)
       logTextView.init(fileIdProperty
-        , mutLogFileSettings.selectedLineNumberProperty
+        , mutLogFileSettings.sharedElementSelection
         , mutLogFileSettings.fontSizeProperty
         , mutLogFileSettings.firstVisibleTextCellIndexProperty
         , mutLogFileSettings.lastVisibleTextCellIndexProperty
@@ -160,7 +160,7 @@ class LogFilePane(val mutLogFileSettings: MutLogFileSettings
     logTailer.shutdown(fileIdProperty, entries)
     disableFollowMode(mutLogFileSettings.logFilePositionProperty)
     logTextView.shutdown(
-      mutLogFileSettings.selectedLineNumberProperty
+      mutLogFileSettings.sharedElementSelection
       , mutLogFileSettings.firstVisibleTextCellIndexProperty
       , mutLogFileSettings.lastVisibleTextCellIndexProperty
       , mutLogFileSettings.mutSearchTerms)

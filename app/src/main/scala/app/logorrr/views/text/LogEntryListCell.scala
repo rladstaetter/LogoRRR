@@ -3,7 +3,7 @@ package app.logorrr.views.text
 import app.logorrr.model.LogEntry
 import app.logorrr.util.JetbrainsMonoFontStyleBinding
 import app.logorrr.views.text.contextactions.{CopyEntriesMenuItem, IgnoreAboveMenuItem, IgnoreBelowMenuItem}
-import javafx.beans.property.{Property, SimpleIntegerProperty}
+import javafx.beans.property.{Property, SetProperty, SetPropertyBase, SimpleIntegerProperty}
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
 import javafx.scene.control.{ContextMenu, ListCell}
@@ -14,7 +14,7 @@ import scala.jdk.CollectionConverters.*
 class LogEntryListCell(logTextView: LogTextView
                        , filteredList: FilteredList[LogEntry]
                        , searchTermsAndColors: ObservableList[(String, Color)]
-                       , selectedLineNumberProperty: SimpleIntegerProperty
+                       , sharedSelection: SetPropertyBase[Int]
                        , scrollToActiveLogEntry: () => Unit
                        , fontSizeProperty: Property[Number]
                        , maxSizeProperty: SimpleIntegerProperty) extends ListCell[LogEntry]:
@@ -37,7 +37,7 @@ class LogEntryListCell(logTextView: LogTextView
         val copySelectionMenuItem = new CopyEntriesMenuItem(getListView.getSelectionModel)
         val ignoreAboveMenuItem = new IgnoreAboveMenuItem(
           logTextView
-          , selectedLineNumberProperty
+          , sharedSelection
           , e
           , filteredList)
         val ignoreBelowMenuItem = new IgnoreBelowMenuItem(e, filteredList)

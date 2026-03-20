@@ -42,20 +42,20 @@ object ChunkListCell extends TinyLog:
                      , isFirstVisible: Boolean
                      , isLastVisible: Boolean
                      , isVisibleInTextView: Boolean): BlockColor =
-    val colbrighter = color.brighter()
+    val colbrighter = color.interpolate(Color.WHITE, 0.5)
     val (c, cd, cb, cbb) = (ColorUtil.toARGB(color), ColorUtil.toARGB(color.darker()), ColorUtil.toARGB(colbrighter), ColorUtil.toARGB(colbrighter.brighter()))
     // mystical color setting routine for setting border colors of viewport and blocks correctly
+    val selectedYellow = ColorUtil.toARGB(colbrighter.interpolate(Color.YELLOW, 0.8))
     val blockColor =
-      (isSelected, isFirstVisible, isLastVisible, isVisibleInTextView) match
-        case (false, false, false, false) => BlockColor(c, cb, cb, cd, cd)
-        case (true, false, false, false) => LColors.color0
-        case (false, true, false, false) => BlockColor(cb, LColors.yb, LColors.yb, LColors.y, cd)
-        case (false, false, false, true) => BlockColor(cb, LColors.yb, cbb, LColors.y, cd)
-        case (true, false, false, true) => LColors.color1
-        case (false, false, true, false) => BlockColor(cb, LColors.yb, cbb, LColors.y, LColors.y)
-        case (true, true, false, false) => LColors.color2
-        case (true, false, true, false) => LColors.color2
-        case _ => BlockColor(c, cb, cb, cd, cd) // should never happen (?)
+      if isSelected then
+        // If selected, the block always uses the boosted yellow theme
+        BlockColor(selectedYellow, LColors.yb, LColors.yb, LColors.yb, LColors.yb)
+      else
+        (isFirstVisible, isLastVisible, isVisibleInTextView) match
+          case (true, false, false) => BlockColor(cb, LColors.yb, LColors.yb, LColors.y, cd)
+          case (false, false, true) => BlockColor(cb, LColors.yb, cbb, LColors.y, cd)
+          case (false, true, false) => BlockColor(cb, LColors.yb, cbb, LColors.y, LColors.y)
+          case _ => BlockColor(c, cb, cb, cd, cd)
     blockColor
 
   /**
@@ -139,7 +139,6 @@ object ChunkListCell extends TinyLog:
     else {
       //      logWarn(s"tried to paint outside allowed index. [endIdx = maxHeight * canvasWidth + x + length] ($endIdx = $maxHeight * $canvasWidth + $x + $length) ")
     }
-
 
 
 /**

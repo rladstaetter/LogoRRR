@@ -3,7 +3,7 @@ package app.logorrr.clv
 import app.logorrr.clv.color.ColorPicker
 import javafx.application.Platform
 import javafx.beans.binding.{Bindings, BooleanBinding, IntegerBinding}
-import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.{SetPropertyBase, SimpleIntegerProperty}
 import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.collections.ObservableList
 import javafx.geometry.Orientation
@@ -37,13 +37,9 @@ object ChunkListView:
  * Those chunks group LogEntries; this grouping serves no other purpose than to optimize painting
  * all entries via a ListView. In this way we get a stable and proven virtual flow implementation
  * under the hood and we don't have to reinvent this again.
- *
- * @param elements                   log entries to display
- * @param selectedLineNumberProperty which line is selected by the user
- * @param blockSizeProperty          size of blocks to display
  */
 class ChunkListView[A](val elements: ObservableList[A]
-                       , val selectedLineNumberProperty: SimpleIntegerProperty
+                       , val sharedElementSelection: SetPropertyBase[Int]
                        , val blockSizeProperty: SimpleIntegerProperty
                        , firstVisibleTextCellIndexProperty: SimpleIntegerProperty
                        , lastVisibleTextCellIndexProperty: SimpleIntegerProperty
@@ -96,8 +92,7 @@ class ChunkListView[A](val elements: ObservableList[A]
   val anyPropProperty: BooleanBinding = Bindings.createBooleanBinding(() => {
     toggle = !toggle
     toggle
-  },
-    selectedLineNumberProperty
+  }, sharedElementSelection
     , firstVisibleTextCellIndexProperty
     , lastVisibleTextCellIndexProperty
     , blockSizeProperty
