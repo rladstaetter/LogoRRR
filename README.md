@@ -1,11 +1,5 @@
 # `LogoRRR`
 
-[Watch a video of LogoRRR's features](https://www.logorrr.app)
-[Get it on Windows App Store](https://apps.microsoft.com/)
-[Get it on Apple App Store](https://apps.apple.com/)
-[Get it on Flathub](https://flathub.org/)
-[Get it on Snapcraft](https://snapcraft.io/)
-
 LogoRRR is a desktop log viewer and text analysis tool designed to help you spot recurring patterns, isolate events of interest, and work through large text files faster.
 
 ## Project Status
