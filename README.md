@@ -1,130 +1,75 @@
 # `LogoRRR`
 
-[![Watch a video of LogoRRRs features](docs/releases/26.2.0/1440x900.png)](https://youtu.be/5ogC95PX0Ag)
+[Watch a video of LogoRRR's features](https://www.logorrr.app)
+[Get it on Windows App Store](https://apps.microsoft.com/)
+[Get it on Apple App Store](https://apps.apple.com/)
+[Get it on Flathub](https://flathub.org/)
+[Get it on Snapcraft](https://snapcraft.io/)
 
+LogoRRR is a desktop log viewer and text analysis tool designed to help you spot recurring patterns, isolate events of interest, and work through large text files faster.
 
-<table>
-  <tr>
-    <td>
+## Project Status
 
-[![Get it on Windows App Store](docs/appstores/win/windows-store.png)](https://aka.ms/AAr3sxs)
+`26.2.0` is the final open-source release of LogoRRR under the Apache License 2.0.
 
-</td>
-<td>
+This repository remains public as the historical source repository for the open-source LogoRRR line up to and including `26.2.0`. Future LogoRRR releases are developed separately and are not published from this repository.
 
-[![Get it on Apple App Store](docs/appstores/mac/apple-store.png)](https://apps.apple.com/at/app/logorrr/id1583786769)
+For current product information, downloads, and release announcements, visit:
 
-</td>
-<td>
+[https://www.logorrr.app](https://www.logorrr.app)
 
-[![Get it on Flathub](docs/appstores/flathub/flathub.png)](https://flathub.org/apps/app.logorrr.LogoRRR)
+## Downloads
 
-</td>
-<td>
+Source code and binary downloads for the final open-source release are available here:
 
-[![Get it on Snapcraft](https://snapcraft.io/en/dark/install.svg)](https://snapcraft.io/logorrr)
+[https://logorrr.app/downloads/26.2.0/](https://logorrr.app/downloads/26.2.0/)
 
-</td>
-</tr>
-</table>
+That page includes:
+- Source code for `26.2.0`
+- Binary downloads for supported platforms
+- Release-specific assets and notes
 
-LogoRRR is a powerful desktop application designed to simplify the analysis of text files for recurring patterns.
-Whether you’re searching for specific events in log files or analysing any other type of text file, LogoRRR makes the
-process effortless and efficient.
+## Open-Source Release Scope
 
-* **Easy Pattern Recognition**: Quickly identify recurring patterns in your text files.
-* **Versatile Application**: Perfect for log file analysis, but adaptable to any text file.
-* **User-Friendly Interface**: Designed with simplicity and ease of use in mind.
+The Apache-2.0 license applies to the contents of this repository and to the released open-source versions through `26.2.0`.
 
-Visit the [www.logorrr.app](https://www.logorrr.app/) for more information.
+This repository is kept available for:
+- users who want to build or study the final open-source version
+- historical reference
+- forks and downstream use permitted by Apache-2.0
 
-## Standalone installers
+## Features In `26.2.0`
 
-If you don't want to use app stores, installers are provided also for following platforms:
+- Cross-platform support for Windows, macOS, and Linux
+- Drag and drop for log files, directories, and zip files
+- Interactive filtering for fast log exploration
+- Multi-file viewing
+- Zip file support without manual extraction
+- Real-time monitoring similar to `tail -f`
+- Keyboard-driven search
+- Export of filtered snippets for sharing
+- Remembered files and settings across restarts
 
-<table>
-<tr>
-<th>Platform</th>
-<th>Installer</th>
-</tr>
+More screenshots:
+[Screenshots](./Screenshots.md)
 
-<tr>
-<td>Windows</td>
-<td>
+## Releases
 
-[LogoRRR Windows 10+ Installer, x64, msi](https://github.com/rladstaetter/LogoRRR/releases/download/26.2.0/LogoRRR-26.2.0-installer.msi)
+The latest and final open-source release is:
 
-</td>
-</tr>
+[`26.2.0`](https://github.com/rladstaetter/LogoRRR/releases/tag/26.2.0)
 
-<tr>
-<td>Windows</td>
-<td>
-
-[LogoRRR Windows 10+ Installer, x64, exe](https://github.com/rladstaetter/LogoRRR/releases/download/26.2.0/LogoRRR-26.2.0-installer.exe)
-
-</td>
-</tr>
-
-
-<tr>
-<td>Linux</td>
-<td>
-
-[LogoRRR x64 Linux Installer, .deb](https://github.com/rladstaetter/LogoRRR/releases/download/26.2.0/logorrr_26.2.0_amd64.deb)
-
-</td>
-</tr>
-
-<tr>
-<td>Linux</td>
-<td>
-
-[LogoRRR aarch Linux Installer, .deb](https://github.com/rladstaetter/LogoRRR/releases/download/26.2.0/logorrr_26.2.0_arm64.deb)
-
-</td>
-</tr>
-
-<tr>
-<td>Linux</td>
-<td>
-
-[LogoRRR x64 Linux Installer, .rpm](https://github.com/rladstaetter/LogoRRR/releases/download/26.2.0/logorrr-26.2.0-1.x86_64.rpm)
-
-</td>
-</tr>
-
-<tr>
-<td>Linux</td>
-<td>
-
-[LogoRRR aarch Linux Installer, .rpm](https://github.com/rladstaetter/LogoRRR/releases/download/26.2.0/logorrr-26.2.0-1.aarch64.rpm)
-
-</td>
-</tr>
-
-</table>
-
-## Release Notes 
-
-[Click here](https://github.com/rladstaetter/LogoRRR/releases/tag/26.2.0) to view the [release notes](https://github.com/rladstaetter/LogoRRR/releases/tag/26.2.0) of the latest release.
-
-
-## Features
-
-- **Cross-Platform Compatibility**: LogoRRR runs on **Windows, macOS, Linux**.
-- **Drag and Drop**: LogoRRR supports Drag'n Drop to load log files, directories or zip files. 
-- **Interactive Filtering**: Effortlessly filter log entries to find exactly what you need.
-- **Multi-File Handling**: Manage and view multiple log files simultaneously.
-- **Zip File Support**: Directly work with zip files - no need to unpack data before analyzing.
-- **Real-Time Monitoring**: Stay updated with Unix `tail -f` like functionality for ongoing events.
-- **Keyboard shortcuts**:  streamline your workflow by using STRG/CMD - F to search
-- **Export filtered data**: Use LogoRRR to create snippets of your log files and export those snippets to other applications (email, Slack, Teams ...) to share it with your team. 
-- **Remembers settings**: `LogoRRR` smartly recalls your last files and settings on restart.
-
-More [Screenshots](Screenshots.md).
+Release notes:
+[GitHub Releases](https://github.com/rladstaetter/LogoRRR/releases)
 
 ## License
 
-This software is licensed under Apache-2 License.
+This repository is licensed under the Apache License 2.0.
+See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
 
+## About
+
+LogoRRR helps you inspect logs and other text files in a clear, visual, and efficient way.
+
+Website:
+[https://www.logorrr.app](https://www.logorrr.app)
